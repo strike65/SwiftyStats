@@ -60,7 +60,7 @@ public enum SSCumulativeFrequencyTableFormat {
     case eachItem
 }
 
-/// Defines the level of measurement
+/// Defines the level of measurement. In future versions this setting will be used to determine the available statistics.
 public enum SSLevelOfMeasurement: Int {
     case nominal
     case ordinal
@@ -69,6 +69,7 @@ public enum SSLevelOfMeasurement: Int {
 }
 
 
+/// Defines the sorting order of the elements.
 public enum SSSortUniqeItems {
     /// Ascending order
     case ascending
@@ -223,7 +224,9 @@ public enum SSStandardDeviationType: Int {
 
 /// Defines type of kurtosis
 public enum SSKurtosisType {
-    case platykurtic, mesokurtic, leptokurtic
+    case platykurtic // kurtosisExecs < 0
+    case mesokurtic  // kurtosisExces == 0
+    case leptokurtic  // kurtosisExcess > 0
 }
 
 
