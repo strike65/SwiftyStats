@@ -31,6 +31,7 @@
 
 import Foundation
 import os.log
+
 /// SSExamine
 /// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data meet the protocols "Hashable" and "Comparable".
 /// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.

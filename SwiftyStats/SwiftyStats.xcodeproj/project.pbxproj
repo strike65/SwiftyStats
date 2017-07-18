@@ -18,6 +18,7 @@
 		9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C21F1E8F57001BFC9D /* SSProtocols.swift */; };
 		9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */; };
 		9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */; };
+		9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		9F82D3C21F1E8F57001BFC9D /* SSProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSProtocols.swift; sourceTree = "<group>"; };
 		9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSwiftyStatsError.swift; sourceTree = "<group>"; };
 		9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSUtils.swift; sourceTree = "<group>"; };
+		9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStats-EnumsStructs.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		9F82D3A51F1E8F19001BFC9D /* SwiftyStats */ = {
 			isa = PBXGroup;
 			children = (
+				9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */,
 				9F82D3BD1F1E8F57001BFC9D /* SSConstants.swift */,
 				9F82D3BE1F1E8F57001BFC9D /* SSExamine.swift */,
 				9F82D3BF1F1E8F57001BFC9D /* SSFrequencyTables.swift */,
@@ -228,6 +231,7 @@
 				9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */,
 				9F82D3C61F1E8F57001BFC9D /* SSExamine.swift in Sources */,
 				9F82D3C81F1E8F57001BFC9D /* SSLogging.swift in Sources */,
+				9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
