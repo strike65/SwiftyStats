@@ -38,7 +38,7 @@ import os.log
 public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSCoding where SSElement: Hashable, SSElement: Comparable {
    
     // MARK: OPEN/PUBLIC VARS
-    
+
     /// User defined tag to identify the instance
     public var tag: Any?
 
@@ -1510,6 +1510,67 @@ extension SSExamine {
                     return m3 / pow(s3, 3)
                 }
                 else {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the type of skewness
+    public var skewnessType: SSSkewness? {
+        get {
+            if let sk = skewness {
+                if sk < 0 {
+                    return .leftSkewed
+                }
+                else if sk.isZero {
+                    return .symmetric
+                }
+                else {
+                    return .rightSkewed
+                }
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    /// Returns the alpha-confidence interval of the mean
+    /// - Parameter a: Alpha
+    /// - Parameter type: .normal or .student
+    public func confidenceIntervalMean(alpha a: Double!, type: SSCIType) -> SSConfIntv? {
+        if !isEmpty {
+            if numeric {
+                var upper: Double
+                var lower: Double
+                var width: Double
+                var m: Double
+                switch type {
+                case .normal:
+                    var u: Double
+                    m = arithmeticMean
+                    if let s = standardDeviation(type: .biased) {
+                        do {
+                            u = try SSProbabilityDistributions.inverseCDFStandardNormalDist(p: 1.0 - alpha)
+                            upper = m + u * s / sqrt(Double(self.sampleSize))
+                            lower = m - u * s / sqrt(Double(self.sampleSize))
+                            width = u * s / sqrt(Double(self.sampleSize))
+                            return SSConfIntv(lower: lower, upper: upper, width: width)
+                        }
+                        catch {
+                            return nil
+                        }
+                    }
+                    return nil
+// TODO: Add .student case using the Student's T distribution for unknown variance
+                case .student:
                     return nil
                 }
             }

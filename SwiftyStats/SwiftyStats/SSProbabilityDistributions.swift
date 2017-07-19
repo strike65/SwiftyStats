@@ -268,7 +268,7 @@ class SSProbabilityDistributions {
     */
     /// Returns the inverse CDF of the standard Gaussian distribution. Uses the algorithm at
     /// http://lib.stat.cmu.edu/apstat/241 (ALGORITHM AS241  APPL. STATIST. (1988) VOL. 37, NO. 3, 477-484.)
-    /// - Parameter p: P    /// Returns the CDF of a Gaussian distribution
+    /// - Parameter p: P
     /// - Throws: Throws an error if p < 0.0 or p > 1
     public class func inverseCDFStandardNormalDist(p: Double!) throws -> Double {
         if (p == 0.0) {

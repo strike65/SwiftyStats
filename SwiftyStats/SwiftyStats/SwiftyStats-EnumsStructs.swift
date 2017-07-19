@@ -31,6 +31,15 @@
 
 import Foundation
 
+
+/// Type of confidence interval
+public enum SSCIType {
+    /// To use in cases were the unbiased standard deviation is known
+    case normal
+    /// To use in cases were the unbiased standard deviation is unknown
+    case student
+}
+
 /// Confidence interval struct
 public struct SSConfIntv {
     /// Upper bound of the CI
@@ -226,5 +235,14 @@ public enum SSKurtosisType {
     case platykurtic, mesokurtic, leptokurtic
 }
 
+/// Skewness type
+public enum SSSkewness {
+    /// skewness < 0
+    case leftSkewed
+    /// skewness > 0
+    case rightSkewed
+    /// skewness == 0
+    case symmetric
+}
 
 
