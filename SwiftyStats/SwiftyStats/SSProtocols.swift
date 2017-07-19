@@ -30,9 +30,11 @@
  */
 
 import Foundation
-
+/// Defines a protocol to conform by SSExamine subclasses.
 public protocol SSExamineContainer {
     associatedtype Item
+    /// The sample size
+    var sampleSize: Int { get }
     /// The "length" of the container. I.e. the number of unique items
     var length: Int { get }
     /// Contains the container any items

@@ -31,6 +31,14 @@
 
 import Foundation
 
+ /*
+ Some numerical constants computed by Mathematica (R). Originaly defined for ObjC version of the framework
+ */
+
+// TODO:
+// make constants availablr as Float80 (make it sense?)
+
+
 /// The extension for archives
 public let SSExamineFileExtension = "SSexamine"
 
@@ -45,13 +53,9 @@ public let  TWOOPIL : Float80 = 0.636619772367581343075535053490057448139
 public let  PIQUARTL : Float80 = 0.785398163397448309615660845819875721049
 // 3 Pi / 4
 public let  THREEPIQUARTL : Float80 = 2.356194490192344928846982537459627163148
-/*!
- Euler's gamma
- */
+// Euler Gamma
 public let  EULERGAMMAL : Float80 = 0.577215664901532860606512090082402431042
-/*!
- sqrt(pi)
- */
+// sqrt(pi)
 public let  SQRTPIL : Float80 = 1.772453850905516027298167483341145182798
 // pi
 public let  PILL : Float80 = 3.141592653589793238462643383279502884197
@@ -97,7 +101,6 @@ public let  OO6L : Float80 = 0.166666666666666666666666666666666666667
 public let  TWOO3L : Float80 = 0.666666666666666666666666666666666666666
 // 2^(1/4)
 public let  TWOEXPQUARTL : Float80 = 1.189207115002721066717499970560475915293
-
 // sqrt(2/pi)
 public let  SQRT2OPI : Double = 0.797884560802865355879892119868763736952;
 // 2 / pi
@@ -155,6 +158,6 @@ public let  OO3 : Double =	0.333333333333333333333333333333333333333;
 // 1/ 6
 public let  OO6 : Double = 0.166666666666666666666666666666666666667;
 // 2/3
-public let  TWOO3 : Double =			0.666666666666666666666666666666666666666;
+public let  TWOO3 : Double = 0.666666666666666666666666666666666666666;
 // 2^(1/4)
 public let  TWOEXPQUART : Double =	1.189207115002721066717499970560475915293;
