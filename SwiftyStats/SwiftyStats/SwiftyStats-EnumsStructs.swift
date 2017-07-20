@@ -49,16 +49,20 @@ public struct SSConfIntv {
     /// Range of the CI
     var intervalWidth: Double
     
-    init(lower: Double, upper: Double, width: Double) {
+    var type: SSCIType
+    
+    init(lower: Double, upper: Double, width: Double, type: SSCIType) {
         upperBound = upper
         lowerBound = lower
         intervalWidth = width
+        self.type = type
     }
     
     init() {
         upperBound = 0
         lowerBound = 0
         intervalWidth = 0
+        self.type = .normal
     }
 }
 /// Defines the format of the Cumulative Frequency Table

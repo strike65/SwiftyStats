@@ -71,3 +71,13 @@ func isNumeric<T>(_ value: T) -> Bool {
         return false
     }
 }
+
+
+extension Double {
+    func sgn() -> Int {
+        let result = (self < Double(0) ? -1 : 1)
+        return result
+    }
+}
+
+

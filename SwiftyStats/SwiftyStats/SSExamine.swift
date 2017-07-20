@@ -1268,7 +1268,7 @@ extension SSExamine {
         }
     }
 
-    /// Returns the mean after replacing given fraction (alpha) at the high and low end with the most extreme remaining values.
+    /// Returns the mean after replacing a given fraction (alpha) at the high and low end with the most extreme remaining values.
     /// - Parameter alpha: Fraction
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func winsorizedMean(alpha: Double) throws -> Double? {
@@ -1542,35 +1542,64 @@ extension SSExamine {
         }
     }
     
-    /// Returns the alpha-confidence interval of the mean
+    /// Returns the alpha-confidence interval of the mean when the population variance is known
     /// - Parameter a: Alpha
-    /// - Parameter type: .normal or .student
-    public func confidenceIntervalMean(alpha a: Double!, type: SSCIType) -> SSConfIntv? {
+    /// - Parameter sd: Standard deviation of the population
+    public func normalCI(alpha a: Double!, populationSD sd: Double!) -> SSConfIntv? {
+        if alpha <= 0.0 || alpha >= 1.0 {
+            return nil
+        }
+        if !isEmpty {
+            if numeric {
+                var upper: Double
+                var lower: Double
+                var width: Double
+                var t1: Double
+                var u: Double
+                do {
+                    let m = self.arithmeticMean
+                    u = try SSProbabilityDistributions.inverseCDFStandardNormalDist(p: 1.0 - alpha / 2.0)
+                    t1 = sd / sqrt(Double(self.sampleSize))
+                    width = u * t1
+                    upper = m + width
+                    lower = m - width
+                    return SSConfIntv(lower: lower, upper: upper, width: width, type: .normal)
+                }
+                catch {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the alpha-confidence interval of the mean when the population variance is unknown
+    /// - Parameter a: Alpha
+    public func studentTCI(alpha a: Double!) -> SSConfIntv? {
+        if alpha <= 0.0 || alpha >= 1.0 {
+            return nil
+        }
         if !isEmpty {
             if numeric {
                 var upper: Double
                 var lower: Double
                 var width: Double
                 var m: Double
-                switch type {
-                case .normal:
-                    var u: Double
-                    m = arithmeticMean
-                    if let s = standardDeviation(type: .biased) {
-                        do {
-                            u = try SSProbabilityDistributions.inverseCDFStandardNormalDist(p: 1.0 - alpha)
-                            upper = m + u * s / sqrt(Double(self.sampleSize))
-                            lower = m - u * s / sqrt(Double(self.sampleSize))
-                            width = u * s / sqrt(Double(self.sampleSize))
-                            return SSConfIntv(lower: lower, upper: upper, width: width)
-                        }
-                        catch {
-                            return nil
-                        }
-                    }
-                    return nil
-// TODO: Add .student case using the Student's T distribution for unknown variance
-                case .student:
+                var u: Double
+                m = arithmeticMean
+                if let s = self.standardDeviation(type: .unbiased) {
+                    u = SSProbabilityDistributions.inverseCDFStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                    lower = m - u * s / sqrt(Double(self.sampleSize))
+                    upper = m + u * s / sqrt(Double(self.sampleSize))
+                    width = u * s / sqrt(Double(self.sampleSize))
+                    return SSConfIntv(lower: lower, upper: upper, width: width, type: .student)
+                }
+                else {
                     return nil
                 }
             }

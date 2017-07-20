@@ -443,4 +443,98 @@ class SSProbabilityDistributions {
             return Double.nan
         }
     }
+
+    /// Returns the pdf of Student's t-distribution
+    /// - Parameter t: t
+    /// - Paremeter df: Degrees of freedom
+    public class func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        return exp( lgamma( 0.5 * ( df + 1.0 ) ) - 0.5 * log( df * Double.pi ) - lgamma( 0.5 * df ) - ( ( df + 1.0 ) / 2.0 * log( 1.0 + t * t / df ) ) )
+    }
+
+    /// Returns the cdf of Student's t-distribution
+    /// - Parameter t: t
+    /// - Paremeter df: Degrees of freedom
+    public class func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        var correctedDoF: Double
+        var halfDoF: Double
+        var constant: Double
+        var result: Double
+        halfDoF = df / 2.0
+        correctedDoF = df / ( df + ( t * t ) )
+        constant = 0.5
+        let t1 = betaNormalized(x: 1.0, a: halfDoF, b: constant)
+        let t2 = betaNormalized(x: correctedDoF, a: halfDoF, b: constant)
+        result = 0.5 * (1.0 + (t1 - t2) * Double(t.sgn()))
+        return result
+    }
+    
+    /// Returns the inverse cdf of Student's t-distribution
+    ///  adapted from: http://rapidq.phatcode.net/examples/Math
+    /// - Parameter p: p
+    /// - Paremeter df: Degrees of freedom
+    public class func inverseCDFStudentTDist(p: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if p < 0.0 || p > 1.0 {
+            os_log("p must be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
+         * coded in C by Gary Perlman
+         * coded in Basic by Michaek Zito 2003
+         * coded in C# by Volker Thieme 2005
+         */
+        let eps: Double = 1E-15
+        if fabs( p - 1.0 ) <= eps  {
+            return Double.infinity
+        }
+        if fabs(p) <= eps {
+            return -Double.infinity
+        }
+        if fabs(p - 0.5) <= eps {
+            return 0.0
+        }
+        var minT: Double
+        var maxT: Double
+        var result: Double
+        var tVal: Double
+        var b1: Bool = false
+        var pp: Double
+        var _p: Double
+        if p < 0.5 {
+            _p = 1.0 - p
+            b1 = true
+        }
+        else {
+            _p = p
+        }
+        minT = 0.0
+        maxT = 1000.0
+        tVal = 500.0
+        while (maxT - minT > (2.0 * eps)) {
+            pp = SSProbabilityDistributions.cdfStudentTDist(t: tVal, degreesOfFreedom: df)
+            if pp > _p {
+                maxT = tVal
+            }
+            else {
+                minT = tVal
+            }
+            tVal = (maxT + minT) * 0.5
+        }
+        result = tVal
+        if b1 {
+            result = result * -1.0
+        }
+        return result
+    }
 }
