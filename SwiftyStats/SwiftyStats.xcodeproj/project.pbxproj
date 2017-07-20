@@ -19,6 +19,7 @@
 		9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */; };
 		9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */; };
 		9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */; };
+		9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */; };
 		9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */; };
 		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 		9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSwiftyStatsError.swift; sourceTree = "<group>"; };
 		9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSUtils.swift; sourceTree = "<group>"; };
 		9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStats-EnumsStructs.swift"; sourceTree = "<group>"; };
+		9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHypothesisTesting.swift; sourceTree = "<group>"; };
 		9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSContFrac.swift; sourceTree = "<group>"; };
 		9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +112,7 @@
 				9F82D3A71F1E8F19001BFC9D /* Info.plist */,
 				9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */,
 				9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */,
+				9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */,
 			);
 			path = SwiftyStats;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				9F82D3C51F1E8F57001BFC9D /* SSConstants.swift in Sources */,
 				9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */,
 				9F82D3C91F1E8F57001BFC9D /* SSProbabilityDistributions.swift in Sources */,
+				9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */,
 				9F82D3C71F1E8F57001BFC9D /* SSFrequencyTables.swift in Sources */,
 				9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */,
 				9F82D3C61F1E8F57001BFC9D /* SSExamine.swift in Sources */,

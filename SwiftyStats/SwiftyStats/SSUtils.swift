@@ -72,6 +72,15 @@ func isNumeric<T>(_ value: T) -> Bool {
     }
 }
 
+func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
+    if t1 > t2 {
+        return t1
+    }
+    else {
+        return t2
+    }
+}
+
 
 extension Double {
     func sgn() -> Int {

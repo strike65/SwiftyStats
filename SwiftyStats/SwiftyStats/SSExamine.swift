@@ -1786,6 +1786,26 @@ extension SSExamine {
             return nil
         }
     }
-    
+    /// Returns true, if there are outliers.
+    /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
+    public func hasOutliers(testType: SSOutlierTest) -> Bool? {
+        if !isEmpty {
+            if numeric {
+                switch testType {
+                case .grubbs:
+                    let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
+                    if let res = HypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
+                        return res.hasOutliers
+                    }
+                    else {
+                        return nil
+                    }
+                case .esd:
+                    return nil
+                }
+            }
+        }
+        return nil
+    }
     
 }

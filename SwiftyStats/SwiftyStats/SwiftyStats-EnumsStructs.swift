@@ -260,3 +260,71 @@ public enum SSSemiVariance {
     case upper
 }
 
+public enum SSOutlierTest {
+    case grubbs
+    case esd
+}
+
+
+public struct SSGrubbsTestResult {
+    public var name: String!
+    public var criticalValue: Double!
+    public var largest: Double!
+    public var smallest: Double!
+    public var sampleSize: Int!
+    public var maxDiff: Double!
+    public var mean: Double!
+    public var G: Double!
+    public var stdDev: Double!
+    public var hasOutliers: Bool!
+    
+    public init() {
+        name = ""
+        criticalValue = Double.nan
+        largest = Double.nan
+        smallest = Double.nan
+        sampleSize = Int.max
+        maxDiff = Double.nan
+        mean = Double.nan
+        G = Double.nan
+        stdDev = Double.nan
+        hasOutliers = false
+    }
+}
+
+public enum SSESDTestType {
+    case lowerTail
+    case upperTail
+    case bothTails
+}
+
+
+public struct SSESDTestResult {
+    var name: String
+    var stdDeviations: Array<Double>?
+    var itemsRemoved: Array<Double>?
+    var testStatistics: Array<Double>?
+    var lambdas: Array<Double>?
+    var countOfOutliers: Int?
+    var outliers: Array<Double>?
+    var alpha: Double?
+    var maxOutliers: Int?
+    var testType: SSESDTestType
+    var means: Array<Double>?
+    
+    init() {
+        name = ""
+        stdDeviations = nil
+        itemsRemoved = nil
+        testStatistics = nil
+        lambdas = nil
+        countOfOutliers = nil
+        outliers = nil
+        alpha = nil
+        maxOutliers = nil
+        testType = .bothTails
+        means = nil
+    }
+}
+
+
