@@ -252,4 +252,11 @@ public enum SSSkewness {
     case symmetric
 }
 
+/// Type of semi variance
+public enum SSSemiVariance {
+    /// lower semi-variance
+    case lower
+    /// upper semi-variance
+    case upper
+}
 

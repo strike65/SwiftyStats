@@ -115,14 +115,12 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     }
 
 
-    /// Returns all unique elements as a Dictionary
-    /// key: item
-    /// value: absolute frequency
+    /// Returns all unique elements as a Dictionary<element<SSElement>:frequency<Int>>
     public var elements: Dictionary<SSElement, Int> {
         return items
     }
     
-    /// Returns a dictionary containing an array for each element. The array contains the order in which the elements were appended.
+    /// Returns a dictionary containing one array for each element. This array contains the order in which the elements were appended.
     public var sequences: Dictionary<SSElement, Array<Int>> {
         return sequence
     }
@@ -150,7 +148,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// Initializes a SSExamine instance using a string or an array<SSElement>
     /// Throws an error, if object is not a string or an array<SSElement>
     /// - Parameter object: The object used
-    /// - Parameter characterSet: Set containing all characters to include by string analysis
+    /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     /// - Throws: SSSwiftyStatsError.missingData
     public init(withObject object: Any!, levelOfMeasurement lom: SSLevelOfMeasurement! ,characterSet: CharacterSet?) throws {
         // allow only arrays an strings as 'object'
@@ -171,7 +169,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns: New table by analyzing string. Taking characterSet into account, when set
     /// - Parameter array: The array containing the elements
-    /// - Parameter characterSet: Set containing all characters to include by string analysis. Ignored, if elements are numeric.
+    /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     public init(withArray array: Array<SSElement>!, characterSet: CharacterSet?) {
         super.init()
         self.initializeWithArray(array: array)
@@ -519,7 +517,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Appends the characters of the given string. Only characters contained in the character set are appended.
     /// - Parameter text: The text
-    /// - Parameter characterSet: A CharacterSet containing the characters to include
+    /// - Parameter characterSet: A CharacterSet containing the characters to include. If nil, all characters of text will be appended.
     public func append(text: String!, characterSet: CharacterSet?) throws {
         if !(SSElement.self is String.Type) {
             os_log("Can only append strings", log: log_stat, type: .error)
@@ -687,29 +685,20 @@ extension SSExamine {
         if !isEmpty {
             var temp: Array<SSElement> = Array<SSElement>()
             var result: Array<SSElement>
+            for (item, freq) in self.elements {
+                for _ in 1...freq {
+                    temp.append(item)
+                }
+            }
             switch sortOrder {
             case .ascending:
-                for (item, freq) in self.elements {
-                    for _ in 1...freq {
-                       temp.append(item)
-                    }
-                }
                 result = temp.sorted(by: {$0 < $1})
             case .descending:
-                for (item, freq) in self.elements {
-                    for _ in 1...freq {
-                        temp.append(item)
-                    }
-                }
                 result = temp.sorted(by: {$0 > $1})
             case .none:
-                for (item, freq) in self.elements {
-                    for _ in 1...freq {
-                        temp.append(item)
-                    }
-                }
                 result = temp
             case .original:
+                temp.removeAll(keepingCapacity: true)
                 for _ in 1...self.sampleSize {
                     temp.append(self.elements.keys[self.elements.keys.startIndex])
                 }
@@ -1123,6 +1112,40 @@ extension SSExamine {
             }
         }
     }
+    /// Returns the quartile devation (interquartile range / 2.0)
+    public var quartileDeviation: Double? {
+        if let _ = self.interquartileRange {
+            return self.interquartileRange! / 2.0
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the relative quartile distance
+    public var relativeQuartileDistance: Double? {
+        if let q: SSQuartile = self.quartile {
+            return (q.q75 - q.q25) / q.q50
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the mid-range
+    public var midRange: Double? {
+        if !isEmpty {
+            if numeric {
+                return ((self.maximum as! Double) + (self.minimum as! Double)) / 2.0
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
     
     
     /// Returns the interquartile range
@@ -1502,6 +1525,8 @@ extension SSExamine {
         }
     }
     
+    
+    
     /// Returns the skewness.
     public var skewness: Double? {
         if !isEmpty {
@@ -1601,6 +1626,156 @@ extension SSExamine {
                 }
                 else {
                     return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the 0.95-confidence interval of the mean using Student's T distribution.
+    public var meanCI: SSConfIntv? {
+        get {
+            return self.studentTCI(alpha: 0.05)
+        }
+    }
+    
+    /// Returns the coefficient of variation. A shorctut for coefficientOfVariation:
+    public var cv: Double? {
+        return coefficientOfVariation
+    }
+    
+    
+    /// Returns the coefficient of variation
+    public var coefficientOfVariation: Double? {
+        if !isEmpty {
+            if numeric {
+                if let s = self.standardDeviation(type: .unbiased) {
+                    return s / arithmeticMean
+                }
+                else {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the mean absolute difference
+    public var meanDifference: Double? {
+        if !isEmpty {
+            if numeric {
+                if self.sampleSize < 2 {
+                    return nil
+                }
+                var s1: Double = 0.0
+                var s2: Double = 0.0
+                let c: Double = Double(self.sampleSize)
+                let a = elementsAsArray(sortOrder: .ascending)!
+                var v: Int = 1
+                var k: Int
+                var t1: Double
+                var t2: Double
+                while v <= (self.sampleSize - 1) {
+                    k = v + 1
+                    while k <= self.sampleSize {
+                        t1 = a[v - 1] as! Double
+                        t2 = a[k - 1] as! Double
+                        s1 = s1 + fabs(t1 - t2)
+                        k = k + 1
+                    }
+                    s2 = s2 + s1
+                    s1 = 0.0
+                    v = v + 1
+                }
+                return (s2 * 2.0 / (c * (c - 1.0)))
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the relative mean absolute difference
+    public var meanRelativeDifference: Double? {
+        if let md = meanDifference {
+            return md / arithmeticMean
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the Gini coefficient
+    public var giniCoeff: Double? {
+        if let md = meanDifference {
+            return md / (2.0 * arithmeticMean)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the semi-variance
+    /// - Parameter type: SSSemiVariance.lower or SSSemiVariance.upper
+    public func semiVariance(type: SSSemiVariance) -> Double? {
+        if !isEmpty {
+            if numeric {
+                switch type {
+                case .lower:
+                    if let a = self.elementsAsArray(sortOrder: .ascending) {
+                        let m = self.arithmeticMean
+                        var t: Double
+                        var s = 0.0
+                        var k: Double = 0
+                        for itm in a {
+                            t = itm as! Double
+                            if t < m {
+                                s = s + pow(t - m, 2.0)
+                                k = k + 1.0
+                            }
+                            else {
+                                break
+                            }
+                        }
+                        return s / k
+                    }
+                    else {
+                        return nil
+                    }
+                case .upper:
+                    if let a = self.elementsAsArray(sortOrder: .descending) {
+                        let m = self.arithmeticMean
+                        var t: Double
+                        var s = 0.0
+                        var k: Double = 0
+                        for itm in a {
+                            t = itm as! Double
+                            if t > m {
+                                s = s + pow(t - m, 2.0)
+                                k = k + 1.0
+                            }
+                            else {
+                                break
+                            }
+                        }
+                        return s / k
+                    }
+                    else {
+                        return nil
+                    }
                 }
             }
             else {
