@@ -97,9 +97,9 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqualWithAccuracy(SSProbabilityDistributions.cdfStudentTDist(t: -5, degreesOfFreedom: 23), 0.000023321665771033846, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(SSProbabilityDistributions.cdfStudentTDist(t: 5, degreesOfFreedom: 23), 0.99997667833422897, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(SSProbabilityDistributions.cdfStudentTDist(t: 0, degreesOfFreedom: 23), 0.5, accuracy: 1E-14)
-            XCTAssertEqual(SSProbabilityDistributions.inverseCDFStudentTDist(p: 0, degreesOfFreedom: 23), -Double.infinity)
-            XCTAssertEqual(SSProbabilityDistributions.inverseCDFStudentTDist(p: 1, degreesOfFreedom: 23), Double.infinity)
-            XCTAssertEqualWithAccuracy(SSProbabilityDistributions.inverseCDFStudentTDist(p: 0.05, degreesOfFreedom: 23), -1.7138715277470481, accuracy: 1E-14)
+            XCTAssertEqual(SSProbabilityDistributions.quantileStudentTDist(p: 0, degreesOfFreedom: 23), -Double.infinity)
+            XCTAssertEqual(SSProbabilityDistributions.quantileStudentTDist(p: 1, degreesOfFreedom: 23), Double.infinity)
+            XCTAssertEqualWithAccuracy(SSProbabilityDistributions.quantileStudentTDist(p: 0.05, degreesOfFreedom: 23), -1.7138715277470481, accuracy: 1E-14)
             if let s = double1.standardDeviation(type: .unbiased) {
                 let m = double1.arithmeticMean
                 do {
