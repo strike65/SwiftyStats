@@ -31,7 +31,7 @@ public class HypothesisTesting {
         if let s = examine.standardDeviation(type: .unbiased) {
             maxDiff = maximum(t1: fabs(examine.maximum! - mean), t2: fabs(examine.minimum! - mean))
             g = maxDiff / s
-            let t2 = pow(SSProbabilityDistributions.inverseCDFStudentTDist(p: alpha / (2.0 * Double(examine.sampleSize)), degreesOfFreedom: Double(examine.sampleSize) - 2.0), 2.0)
+            let t2 = pow(SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(examine.sampleSize)), degreesOfFreedom: Double(examine.sampleSize) - 2.0), 2.0)
             let t = ( Double(examine.sampleSize) - 1.0 ) * sqrt(t2 / (Double(examine.sampleSize) - 2.0 + t2)) / sqrt(Double(examine.sampleSize))
             var res:SSGrubbsTestResult = SSGrubbsTestResult()
             res.sampleSize = examine.sampleSize
@@ -50,19 +50,26 @@ public class HypothesisTesting {
         }
     }
 
-    fileprivate class func rosnerP(alpha: Double!, sampleSize: Int!, run: Int!) -> Double! {
-        return 1.0 - ( alpha / ( 2.0 * (Double(sampleSize) - Double(run) + 1.0 ) ) )
+    /// Returns p for run i
+    fileprivate class func rosnerP(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
+        return 1.0 - ( alpha / ( 2.0 * (Double(sampleSize) - Double(i) + 1.0 ) ) )
     }
     
-    fileprivate class func rosnerLambdaRun(alpha: Double!, sampleSize: Int!, run: Int!) -> Double! {
-        let p = rosnerP(alpha: alpha, sampleSize: sampleSize, run: run)
-        let df = Double(sampleSize - run) - 1.0
-        let cdfStudent = SSProbabilityDistributions.inverseCDFStudentTDist(p: p, degreesOfFreedom: df)
-        let num = Double(sampleSize - run) * cdfStudent
-        let denom = sqrt((Double(sampleSize - run) - 1.0 + pow( cdfStudent, 2.0 ) ) * ( df + 2.0 ) )
+    fileprivate class func rosnerLambdaRun(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
+        let p = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
+        let df = Double(sampleSize - i) - 1.0
+        let cdfStudent = SSProbabilityDistributions.quantileStudentTDist(p: p, degreesOfFreedom: df)
+        let num = Double(sampleSize - i) * cdfStudent
+        let denom = sqrt((Double(sampleSize - i) - 1.0 + pow( cdfStudent, 2.0 ) ) * ( df + 2.0 ) )
         return num / denom
     }
     
+    
+    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test ist more accurate than the Grubbs test (For Grubbs test the suspected number of outliers must be specified exactly.)
+    /// - Parameter data: Array<Double>
+    /// - Parameter alpha: Alpha
+    /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
+    /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
     public class func esdOutlierTest(data: Array<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
         if data.count == 0 {
             return nil
@@ -141,11 +148,15 @@ public class HypothesisTesting {
         while i < testStats.count {
             if testStats[i] > lambdas[i] {
                 countOfOL = countOfOL + 1
+                break
             }
+            countOfOL = countOfOL + 1
             i = i + 1
         }
-        for outlier in itemsRemoved {
-            outliers.append(outlier)
+        i = 0
+        while i < countOfOL {
+            outliers.append(itemsRemoved[i])
+            i = i + 1
         }
         var res = SSESDTestResult()
         res.alpha = alpha

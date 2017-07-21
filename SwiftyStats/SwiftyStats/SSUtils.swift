@@ -80,13 +80,21 @@ func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
         return t2
     }
 }
+//
+//extension Comparable where Self: SignedNumber {
+//    var sign: Int {
+//        guard self != -self else {
+//            return 0
+//        }
+//        return self > -self ? 1 : -1
+//    }
+//}
 
 
+/// Adds the function sgn()
 extension Double {
     func sgn() -> Int {
         let result = (self < Double(0) ? -1 : 1)
         return result
     }
 }
-
-

@@ -36,12 +36,12 @@ import os.log
 /// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data meet the protocols "Hashable" and "Comparable".
 /// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.
 public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSCoding where SSElement: Hashable, SSElement: Comparable {
-   
+    
     // MARK: OPEN/PUBLIC VARS
-
+    
     /// User defined tag to identify the instance
     public var tag: Any?
-
+    
     /// Human readable description
     public var descriptionString: String?
     
@@ -69,7 +69,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     public var isEmpty: Bool {
         return count == 0
     }
-
+    
     /// The total number pf observations (= sum of all absolute frequencies)
     public var sampleSize: Int {
         return count
@@ -113,8 +113,8 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             return false
         }
     }
-
-
+    
+    
     /// Returns all unique elements as a Dictionary<element<SSElement>:frequency<Int>>
     public var elements: Dictionary<SSElement, Int> {
         return items
@@ -144,7 +144,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         super.init()
         initializeSSExamine()
     }
-
+    
     /// Initializes a SSExamine instance using a string or an array<SSElement>
     /// Throws an error, if object is not a string or an array<SSElement>
     /// - Parameter object: The object used
@@ -174,7 +174,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         super.init()
         self.initializeWithArray(array: array)
     }
-
+    
     
     /// Loads the content of a file interpreting the elements separated by separator as double values using the specified encoding.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
@@ -303,7 +303,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
                 }
             }
         }
-   }
+    }
     
     
     /// Initializes a new instance using an array
@@ -322,7 +322,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             }
         }
     }
-
+    
     
     /// Sets default values
     fileprivate func initializeSSExamine() {
@@ -512,7 +512,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
                 append(item)
             }
         }
-//        updateCumulativeFrequencies()
+        //        updateCumulativeFrequencies()
     }
     
     /// Appends the characters of the given string. Only characters contained in the character set are appended.
@@ -584,13 +584,13 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         hasChanges = true
     }
     
-
-
+    
+    
 }
 
 // MARK: Management
 extension SSExamine {
-
+    
     /// Saves the table to filePath using NSKeyedArchiver.
     /// - Parameter path: The full qualified filename.
     /// - Parameter overwrite: If yes an existing file will be overwritten.
@@ -633,7 +633,7 @@ extension SSExamine {
         result = NSKeyedArchiver.archiveRootObject(self, toFile: fullFilename)
         return result
     }
-   
+    
     /// Initializes a new table from an archive saved by archiveTo(filePath path:overwrite:).
     /// - Parameter path: The full qualified filename.
     /// - Throws: SSSwiftyStatError.fileNotReadable
@@ -836,7 +836,7 @@ extension SSExamine {
         }
         else {
             if isEmpty {
-               return Double.nan
+                return Double.nan
             }
             else {
                 return 0.0
@@ -885,16 +885,16 @@ extension SSExamine {
                 result.append(tableItem)
             }
             switch sortOrder {
-                case .none:
-                    return result
-                case .valueAscending:
-                    return result.sorted(by: { $0.item < $1.item})
-                case .valueDescending:
-                    return result.sorted(by: { $0.item > $1.item})
-                case .frequencyAscending:
-                    return result.sorted(by: { $0.frequency < $1.frequency})
-                case .frequencyDescending:
-                    return result.sorted(by: { $0.frequency > $1.frequency})
+            case .none:
+                return result
+            case .valueAscending:
+                return result.sorted(by: { $0.item < $1.item})
+            case .valueDescending:
+                return result.sorted(by: { $0.item > $1.item})
+            case .frequencyAscending:
+                return result.sorted(by: { $0.frequency < $1.frequency})
+            case .frequencyDescending:
+                return result.sorted(by: { $0.frequency > $1.frequency})
             }
         }
         else {
@@ -947,7 +947,7 @@ extension SSExamine {
             }
         }
     }
-
+    
     /// The smallest item. Can be nil for empty tables.
     public var minimum: SSElement? {
         get {
@@ -964,7 +964,7 @@ extension SSExamine {
             }
         }
     }
-
+    
     /// The difference between maximum and minimum. Can be nil for empty tables.
     public var range: Double? {
         get {
@@ -1064,6 +1064,11 @@ extension SSExamine {
         }
     }
     
+    /// The most common value. Same as mode. Can contain more than one item. Can be nil for empty tables.
+    public var commonest: Array<SSElement>? {
+        return mode
+    }
+    
     /// Returns the q-quantile.
     /// Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric.
     public func quantile(q: Double) throws -> Double? {
@@ -1091,7 +1096,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
     public var quartile: SSQuartile? {
         get {
@@ -1290,7 +1295,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Returns the mean after replacing a given fraction (alpha) at the high and low end with the most extreme remaining values.
     /// - Parameter alpha: Fraction
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
@@ -1299,21 +1304,16 @@ extension SSExamine {
             os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !isEmpty {
-            if numeric {
-                if let a = self.elementsAsArray(sortOrder: .ascending) {
-                    let l = a.count
-                    let v = floor(Double(l) * alpha)
-                    var s = 0.0
-                    for i in Int(v)...l - Int(v) - 1  {
-                        s = s + (a[i] as! Double)
-                    }
-                    s = s + v * ((a[Int(v)] as! Double) + (a[Int(l - Int(v) - 1)] as! Double))
-                    return s / Double(self.sampleSize)
+        if !isEmpty && numeric {
+            if let a = self.elementsAsArray(sortOrder: .ascending) {
+                let l = a.count
+                let v = floor(Double(l) * alpha)
+                var s = 0.0
+                for i in Int(v)...l - Int(v) - 1  {
+                    s = s + (a[i] as! Double)
                 }
-                else {
-                    return nil
-                }
+                s = s + v * ((a[Int(v)] as! Double) + (a[Int(l - Int(v) - 1)] as! Double))
+                return s / Double(self.sampleSize)
             }
             else {
                 return nil
@@ -1343,41 +1343,31 @@ extension SSExamine {
     /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     private func centralMoment(r: Int!) -> Double? {
-        if !isEmpty {
-            if numeric {
-                let m = self.arithmeticMean
-                var diff = 0.0
-                var sum = 0.0
-                for (item, freq) in self.elements {
-                    diff = (item as! Double) - m
-                    sum = sum + pow(diff, Double(r)) * Double(freq)
-                }
-                return sum / Double(self.sampleSize)
+        if !isEmpty && numeric {
+            let m = self.arithmeticMean
+            var diff = 0.0
+            var sum = 0.0
+            for (item, freq) in self.elements {
+                diff = (item as! Double) - m
+                sum = sum + pow(diff, Double(r)) * Double(freq)
             }
-            else {
-                return nil
-            }
+            return sum / Double(self.sampleSize)
         }
         else {
             return nil
         }
     }
-
+    
     
     /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     private func originMoment(r: Int!) -> Double? {
-        if !isEmpty {
-            if numeric {
-                var sum = 0.0
-                for (item, freq) in self.elements {
-                    sum = sum + pow((item as! Double), Double(r)) * Double(freq)
-                }
-                return sum / Double(self.sampleSize)
+        if !isEmpty && numeric {
+            var sum = 0.0
+            for (item, freq) in self.elements {
+                sum = sum + pow((item as! Double), Double(r)) * Double(freq)
             }
-            else {
-                return nil
-            }
+            return sum / Double(self.sampleSize)
         }
         else {
             return nil
@@ -1386,20 +1376,15 @@ extension SSExamine {
     
     /// Returns then r_th standardized moment.
     private func standardizedMoment(r: Int!) -> Double? {
-        if !isEmpty {
-            if numeric {
-                var sum = 0.0
-                let m = self.arithmeticMean
-                if let sd = self.standardDeviation(type: .biased) {
-                    if !sd.isZero {
-                        for (item, freq) in self.elements {
-                            sum = sum + pow( ( (item as! Double) - m ) / sd, Double(r)) * Double(freq)
-                        }
-                        return sum / Double(self.sampleSize)
+        if !isEmpty && numeric {
+            var sum = 0.0
+            let m = self.arithmeticMean
+            if let sd = self.standardDeviation(type: .biased) {
+                if !sd.isZero {
+                    for (item, freq) in self.elements {
+                        sum = sum + pow( ( (item as! Double) - m ) / sd, Double(r)) * Double(freq)
                     }
-                    else {
-                        return nil
-                    }
+                    return sum / Double(self.sampleSize)
                 }
                 else {
                     return nil
@@ -1421,27 +1406,22 @@ extension SSExamine {
         case .biased:
             return moment(r: 2, type: .central)
         case .unbiased:
-            if !isEmpty {
-                if numeric {
-                    let m = self.arithmeticMean
-                    var diff = 0.0
-                    var sum = 0.0
-                    for (item, freq) in self.elements {
-                        diff = (item as! Double) - m
-                        sum = sum + diff * diff * Double(freq)
-                    }
-                    return sum / Double(self.sampleSize - 1)
+            if !isEmpty && numeric {
+                let m = self.arithmeticMean
+                var diff = 0.0
+                var sum = 0.0
+                for (item, freq) in self.elements {
+                    diff = (item as! Double) - m
+                    sum = sum + diff * diff * Double(freq)
                 }
-                else {
-                    return nil
-                }
+                return sum / Double(self.sampleSize - 1)
             }
             else {
                 return nil
             }
         }
     }
-
+    
     /// Returns the sample standard deviation.
     /// - Parameter type: .biased or .unbiased
     public func standardDeviation(type: SSStandardDeviationType) -> Double? {
@@ -1455,36 +1435,26 @@ extension SSExamine {
     
     /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
     public var contraharmonicMean: Double? {
-        if !isEmpty {
-            if numeric {
-                let sqM = self.squareTotal / Double(self.sampleSize)
-                let m = self.arithmeticMean
-                if !m.isZero {
-                    return sqM / m
-                }
-                else {
-                    return Double.infinity * (-1.0)
-                }
+        if !isEmpty && numeric {
+            let sqM = self.squareTotal / Double(self.sampleSize)
+            let m = self.arithmeticMean
+            if !m.isZero {
+                return sqM / m
             }
             else {
-                return nil
+                return Double.infinity * (-1.0)
             }
         }
         else {
             return nil
         }
     }
-
+    
     /// Returns the kurtosis excess
     public var kurtosisExcess: Double? {
-        if !isEmpty {
-            if numeric {
-                if let m4 = moment(r: 4, type: .central), let m2 = moment(r: 2, type: .central) {
-                    return m4 / pow(m2, 2) - 3.0
-                }
-                else {
-                    return nil
-                }
+        if !isEmpty && numeric {
+            if let m4 = moment(r: 4, type: .central), let m2 = moment(r: 2, type: .central) {
+                return m4 / pow(m2, 2) - 3.0
             }
             else {
                 return nil
@@ -1529,14 +1499,9 @@ extension SSExamine {
     
     /// Returns the skewness.
     public var skewness: Double? {
-        if !isEmpty {
-            if numeric {
-                if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
-                    return m3 / pow(s3, 3)
-                }
-                else {
-                    return nil
-                }
+        if !isEmpty && numeric {
+            if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
+                return m3 / pow(s3, 3)
             }
             else {
                 return nil
@@ -1574,27 +1539,22 @@ extension SSExamine {
         if alpha <= 0.0 || alpha >= 1.0 {
             return nil
         }
-        if !isEmpty {
-            if numeric {
-                var upper: Double
-                var lower: Double
-                var width: Double
-                var t1: Double
-                var u: Double
-                do {
-                    let m = self.arithmeticMean
-                    u = try SSProbabilityDistributions.inverseCDFStandardNormalDist(p: 1.0 - alpha / 2.0)
-                    t1 = sd / sqrt(Double(self.sampleSize))
-                    width = u * t1
-                    upper = m + width
-                    lower = m - width
-                    return SSConfIntv(lower: lower, upper: upper, width: width, type: .normal)
-                }
-                catch {
-                    return nil
-                }
+        if !isEmpty && numeric {
+            var upper: Double
+            var lower: Double
+            var width: Double
+            var t1: Double
+            var u: Double
+            do {
+                let m = self.arithmeticMean
+                u = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1.0 - alpha / 2.0)
+                t1 = sd / sqrt(Double(self.sampleSize))
+                width = u * t1
+                upper = m + width
+                lower = m - width
+                return SSConfIntv(lower: lower, upper: upper, width: width, type: .normal)
             }
-            else {
+            catch {
                 return nil
             }
         }
@@ -1609,24 +1569,19 @@ extension SSExamine {
         if alpha <= 0.0 || alpha >= 1.0 {
             return nil
         }
-        if !isEmpty {
-            if numeric {
-                var upper: Double
-                var lower: Double
-                var width: Double
-                var m: Double
-                var u: Double
-                m = arithmeticMean
-                if let s = self.standardDeviation(type: .unbiased) {
-                    u = SSProbabilityDistributions.inverseCDFStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
-                    lower = m - u * s / sqrt(Double(self.sampleSize))
-                    upper = m + u * s / sqrt(Double(self.sampleSize))
-                    width = u * s / sqrt(Double(self.sampleSize))
-                    return SSConfIntv(lower: lower, upper: upper, width: width, type: .student)
-                }
-                else {
-                    return nil
-                }
+        if !isEmpty && numeric {
+            var upper: Double
+            var lower: Double
+            var width: Double
+            var m: Double
+            var u: Double
+            m = arithmeticMean
+            if let s = self.standardDeviation(type: .unbiased) {
+                u = SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                lower = m - u * s / sqrt(Double(self.sampleSize))
+                upper = m + u * s / sqrt(Double(self.sampleSize))
+                width = u * s / sqrt(Double(self.sampleSize))
+                return SSConfIntv(lower: lower, upper: upper, width: width, type: .student)
             }
             else {
                 return nil
@@ -1652,14 +1607,9 @@ extension SSExamine {
     
     /// Returns the coefficient of variation
     public var coefficientOfVariation: Double? {
-        if !isEmpty {
-            if numeric {
-                if let s = self.standardDeviation(type: .unbiased) {
-                    return s / arithmeticMean
-                }
-                else {
-                    return nil
-                }
+        if !isEmpty && numeric {
+            if let s = self.standardDeviation(type: .unbiased) {
+                return s / arithmeticMean
             }
             else {
                 return nil
@@ -1672,36 +1622,31 @@ extension SSExamine {
     
     /// Returns the mean absolute difference
     public var meanDifference: Double? {
-        if !isEmpty {
-            if numeric {
-                if self.sampleSize < 2 {
-                    return nil
-                }
-                var s1: Double = 0.0
-                var s2: Double = 0.0
-                let c: Double = Double(self.sampleSize)
-                let a = elementsAsArray(sortOrder: .ascending)!
-                var v: Int = 1
-                var k: Int
-                var t1: Double
-                var t2: Double
-                while v <= (self.sampleSize - 1) {
-                    k = v + 1
-                    while k <= self.sampleSize {
-                        t1 = a[v - 1] as! Double
-                        t2 = a[k - 1] as! Double
-                        s1 = s1 + fabs(t1 - t2)
-                        k = k + 1
-                    }
-                    s2 = s2 + s1
-                    s1 = 0.0
-                    v = v + 1
-                }
-                return (s2 * 2.0 / (c * (c - 1.0)))
-            }
-            else {
+        if !isEmpty && numeric {
+            if self.sampleSize < 2 {
                 return nil
             }
+            var s1: Double = 0.0
+            var s2: Double = 0.0
+            let c: Double = Double(self.sampleSize)
+            let a = elementsAsArray(sortOrder: .ascending)!
+            var v: Int = 1
+            var k: Int
+            var t1: Double
+            var t2: Double
+            while v <= (self.sampleSize - 1) {
+                k = v + 1
+                while k <= self.sampleSize {
+                    t1 = a[v - 1] as! Double
+                    t2 = a[k - 1] as! Double
+                    s1 = s1 + fabs(t1 - t2)
+                    k = k + 1
+                }
+                s2 = s2 + s1
+                s1 = 0.0
+                v = v + 1
+            }
+            return (s2 * 2.0 / (c * (c - 1.0)))
         }
         else {
             return nil
@@ -1731,51 +1676,103 @@ extension SSExamine {
     /// Returns the semi-variance
     /// - Parameter type: SSSemiVariance.lower or SSSemiVariance.upper
     public func semiVariance(type: SSSemiVariance) -> Double? {
-        if !isEmpty {
-            if numeric {
-                switch type {
-                case .lower:
-                    if let a = self.elementsAsArray(sortOrder: .ascending) {
-                        let m = self.arithmeticMean
-                        var t: Double
-                        var s = 0.0
-                        var k: Double = 0
-                        for itm in a {
-                            t = itm as! Double
-                            if t < m {
-                                s = s + pow(t - m, 2.0)
-                                k = k + 1.0
-                            }
-                            else {
-                                break
-                            }
+        if !isEmpty && numeric {
+            switch type {
+            case .lower:
+                if let a = self.elementsAsArray(sortOrder: .ascending) {
+                    let m = self.arithmeticMean
+                    var t: Double
+                    var s = 0.0
+                    var k: Double = 0
+                    for itm in a {
+                        t = itm as! Double
+                        if t < m {
+                            s = s + pow(t - m, 2.0)
+                            k = k + 1.0
                         }
-                        return s / k
+                        else {
+                            break
+                        }
+                    }
+                    return s / k
+                }
+                else {
+                    return nil
+                }
+            case .upper:
+                if let a = self.elementsAsArray(sortOrder: .descending) {
+                    let m = self.arithmeticMean
+                    var t: Double
+                    var s = 0.0
+                    var k: Double = 0
+                    for itm in a {
+                        t = itm as! Double
+                        if t > m {
+                            s = s + pow(t - m, 2.0)
+                            k = k + 1.0
+                        }
+                        else {
+                            break
+                        }
+                    }
+                    return s / k
+                }
+                else {
+                    return nil
+                }
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns true, if there are outliers.
+    /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
+    public func hasOutliers(testType: SSOutlierTest) -> Bool? {
+        if !isEmpty && numeric {
+            switch testType {
+            case .grubbs:
+                let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
+                if let res = HypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
+                    return res.hasOutliers
+                }
+                else {
+                    return nil
+                }
+            case .esd:
+                let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
+                if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                    if res.countOfOutliers! > 0 {
+                        return true
                     }
                     else {
-                        return nil
+                        return false
                     }
-                case .upper:
-                    if let a = self.elementsAsArray(sortOrder: .descending) {
-                        let m = self.arithmeticMean
-                        var t: Double
-                        var s = 0.0
-                        var k: Double = 0
-                        for itm in a {
-                            t = itm as! Double
-                            if t > m {
-                                s = s + pow(t - m, 2.0)
-                                k = k + 1.0
-                            }
-                            else {
-                                break
-                            }
-                        }
-                        return s / k
-                    }
-                    else {
-                        return nil
-                    }
+                }
+                else {
+                    return nil
+                }
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns an Array containing outliers if those exist. Uses the ESD statistics,
+    /// - Parameter alpha: Alpha
+    /// - Parameter max: Maximum number of outliers to return
+    /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
+    public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
+        if !isEmpty && numeric {
+            let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
+            if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
+                if res.countOfOutliers! > 0 {
+                    return res.outliers as? Array<SSElement>
+                }
+                else {
+                    return nil
                 }
             }
             else {
@@ -1786,26 +1783,8 @@ extension SSExamine {
             return nil
         }
     }
-    /// Returns true, if there are outliers.
-    /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
-    public func hasOutliers(testType: SSOutlierTest) -> Bool? {
-        if !isEmpty {
-            if numeric {
-                switch testType {
-                case .grubbs:
-                    let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
-                    if let res = HypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
-                        return res.hasOutliers
-                    }
-                    else {
-                        return nil
-                    }
-                case .esd:
-                    return nil
-                }
-            }
-        }
-        return nil
-    }
+    
+    
+    
     
 }

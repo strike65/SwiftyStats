@@ -139,9 +139,14 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqual(double1.semiVariance(type: .upper), 65.467428319137056)
             XCTAssert(!double1.hasOutliers(testType: .grubbs)!)
             let double2 = try SSExamine<Double>.init(withObject: rosnerData, levelOfMeasurement: .interval, characterSet: nil)
-            XCTAssert(double2.hasOutliers(testType: .grubbs)!)
-            var esd: SSESDTestResult = HypothesisTesting.esdOutlierTest(data: double2.elementsAsArray(sortOrder: .original)!, alpha: 0.05, maxOutliers: 10, testType: .lowerTail)!
-            print("done")
+            XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
+            let esd: SSESDTestResult = HypothesisTesting.esdOutlierTest(data: double2.elementsAsArray(sortOrder: .original)!, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
+            XCTAssert(esd.countOfOutliers == 3)
+            let double3 = try SSExamine<Double>.init(withObject: doubleData1, levelOfMeasurement: .interval, characterSet: nil)
+            XCTAssert(double3.hasOutliers(testType: .grubbs)!)
+            XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
+            XCTAssert(double3.hasOutliers(testType: .esd)!)
+            XCTAssert(double2.outliers(alpha: 0.05, max: 10, testType: .bothTails)!.elementsEqual([6.01,5.42,5.34]))
         }
         catch {
             
