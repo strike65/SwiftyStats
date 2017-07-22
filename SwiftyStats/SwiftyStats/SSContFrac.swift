@@ -45,15 +45,15 @@ public class SSContFrac: NSObject {
     /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
     public func compute(x: Double!, eps: Double!, maxIter: Int!, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> Double {
         var n: Int = 1
-        var HBefore: Double
-        let small: Double = 1E-50
-        HBefore = self.a_N(n:0, point:x)
-        if (HBefore == 0) {
-            HBefore = small
+        var hPrev: Double
+        let tiny: Double = 1E-50
+        hPrev = self.a_N(n:0, point:x)
+        if (hPrev == 0) {
+            hPrev = tiny
         }
-        var DBefore: Double = 0
-        var CBefore: Double = HBefore
-        var HN: Double = HBefore
+        var dPrev: Double = 0
+        var cPrev: Double = hPrev
+        var HN: Double = hPrev
         var aN: Double
         var bN: Double
         var DN: Double
@@ -63,19 +63,19 @@ public class SSContFrac: NSObject {
         while (n < maxIter) {
             aN = self.a_N(n: n, point: x)
             bN = self.b_N(n: n, point: x)
-            DN = aN + bN * DBefore;
+            DN = aN + bN * dPrev;
             Delta = fabs(DN);
             if (Delta <= eps) {
-                DN = small;
+                DN = tiny;
             }
-            CN = aN + bN / CBefore;
-            Delta = fabs(CN);
+            CN = aN + bN / cPrev
+            Delta = fabs(CN)
             if (CN <= eps) {
-                CN = small;
+                CN = tiny
             }
-            DN = 1.0 / DN;
-            DeltaN = DN * CN;
-            HN = HBefore * DeltaN;
+            DN = 1.0 / DN
+            DeltaN = DN * CN
+            HN = hPrev * DeltaN
             if (HN.isInfinite) {
                 converged.pointee = false;
                 return Double.nan;
@@ -89,9 +89,9 @@ public class SSContFrac: NSObject {
                 iterations.pointee = n;
                 return HN;
             }
-            DBefore = DN;
-            CBefore = CN;
-            HBefore = HN;
+            dPrev = DN;
+            cPrev = CN;
+            hPrev = HN;
             n = n + 1
         }
         if (n >= maxIter) {

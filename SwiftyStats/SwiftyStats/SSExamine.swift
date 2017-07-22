@@ -1577,7 +1577,12 @@ extension SSExamine {
             var u: Double
             m = arithmeticMean
             if let s = self.standardDeviation(type: .unbiased) {
-                u = SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                do {
+                    u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                }
+                catch {
+                    return nil
+                }
                 lower = m - u * s / sqrt(Double(self.sampleSize))
                 upper = m + u * s / sqrt(Double(self.sampleSize))
                 width = u * s / sqrt(Double(self.sampleSize))

@@ -29,10 +29,17 @@ public class SSHypothesisTesting {
         var g: Double
         var maxDiff = 0.0
         let mean = examine.arithmeticMean
+        let quantile: Double
         if let s = examine.standardDeviation(type: .unbiased) {
             maxDiff = maximum(t1: fabs(examine.maximum! - mean), t2: fabs(examine.minimum! - mean))
             g = maxDiff / s
-            let t2 = pow(SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(examine.sampleSize)), degreesOfFreedom: Double(examine.sampleSize) - 2.0), 2.0)
+            do {
+                quantile = try SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(examine.sampleSize)), degreesOfFreedom: Double(examine.sampleSize) - 2.0)
+            }
+            catch {
+                return nil
+            }
+            let t2 = pow(quantile, 2.0)
             let t = ( Double(examine.sampleSize) - 1.0 ) * sqrt(t2 / (Double(examine.sampleSize) - 2.0 + t2)) / sqrt(Double(examine.sampleSize))
             var res:SSGrubbsTestResult = SSGrubbsTestResult()
             res.sampleSize = examine.sampleSize
@@ -61,9 +68,15 @@ public class SSHypothesisTesting {
     fileprivate class func rosnerLambdaRun(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
         let p = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
         let df = Double(sampleSize - i) - 1.0
-        let cdfStudent = SSProbabilityDistributions.quantileStudentTDist(p: p, degreesOfFreedom: df)
-        let num = Double(sampleSize - i) * cdfStudent
-        let denom = sqrt((Double(sampleSize - i) - 1.0 + pow( cdfStudent, 2.0 ) ) * ( df + 2.0 ) )
+        let cdfStudentT: Double
+        do {
+            cdfStudentT = try SSProbabilityDistributions.quantileStudentTDist(p: p, degreesOfFreedom: df)
+        }
+        catch {
+            return Double.nan
+        }
+        let num = Double(sampleSize - i) * cdfStudentT
+        let denom = sqrt((Double(sampleSize - i) - 1.0 + pow(cdfStudentT, 2.0 ) ) * ( df + 2.0 ) )
         return num / denom
     }
     
