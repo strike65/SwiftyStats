@@ -21,3 +21,4 @@ let testString = "This string must be analyzed!"
 let stringAnalyze = VTExamine<String>(withObject: data, levelOfMeasurement: .nominal, characterSet: CharacterSet.alphanumerics)
 print("\(stringAnalyze.frequency("i")")
 ```
+
