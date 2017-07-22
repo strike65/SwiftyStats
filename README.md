@@ -10,6 +10,8 @@ To include the framework in your project, just clone the repo an add SwiftyStats
 # Example
 The basic class of the framework is called SSExamine. To instantiate a new object just call
 ```Swift
+import SwiftyStats
+
 let data: Array<Double> = [3.14,1.21,5.6]
 let test = SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
 // prints out the arithmetic mean
