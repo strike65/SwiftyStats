@@ -19,6 +19,9 @@
 		9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */; };
 		9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */; };
 		9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */; };
+		9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */; };
+		9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */; };
+		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStats.h; sourceTree = "<group>"; };
 		9F82D3A71F1E8F19001BFC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,6 +52,9 @@
 		9F82D3C31F1E8F57001BFC9D /* SSSwiftyStatsError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSwiftyStatsError.swift; sourceTree = "<group>"; };
 		9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSUtils.swift; sourceTree = "<group>"; };
 		9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStats-EnumsStructs.swift"; sourceTree = "<group>"; };
+		9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHypothesisTesting.swift; sourceTree = "<group>"; };
+		9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSContFrac.swift; sourceTree = "<group>"; };
+		9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,8 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
+				9F368BE71F20F340004A5193 /* LICENSE */,
+				9F368BE81F20F340004A5193 /* README.md */,
 				9F82D3A51F1E8F19001BFC9D /* SwiftyStats */,
 				9F82D3B01F1E8F19001BFC9D /* SwiftyStatsTests */,
 				9F82D3A41F1E8F19001BFC9D /* Products */,
@@ -100,6 +110,9 @@
 				9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */,
 				9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */,
 				9F82D3A71F1E8F19001BFC9D /* Info.plist */,
+				9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */,
+				9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */,
+				9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */,
 			);
 			path = SwiftyStats;
 			sourceTree = "<group>";
@@ -226,11 +239,14 @@
 			files = (
 				9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */,
 				9F82D3C51F1E8F57001BFC9D /* SSConstants.swift in Sources */,
+				9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */,
 				9F82D3C91F1E8F57001BFC9D /* SSProbabilityDistributions.swift in Sources */,
+				9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */,
 				9F82D3C71F1E8F57001BFC9D /* SSFrequencyTables.swift in Sources */,
 				9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */,
 				9F82D3C61F1E8F57001BFC9D /* SSExamine.swift in Sources */,
 				9F82D3C81F1E8F57001BFC9D /* SSLogging.swift in Sources */,
+				9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */,
 				9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */,
 			);
@@ -441,6 +457,7 @@
 				9F82D3B91F1E8F19001BFC9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9F82D3BA1F1E8F19001BFC9D /* Build configuration list for PBXNativeTarget "SwiftyStatsTests" */ = {
 			isa = XCConfigurationList;
@@ -449,6 +466,7 @@
 				9F82D3BC1F1E8F19001BFC9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

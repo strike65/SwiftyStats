@@ -71,3 +71,30 @@ func isNumeric<T>(_ value: T) -> Bool {
         return false
     }
 }
+
+func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
+    if t1 > t2 {
+        return t1
+    }
+    else {
+        return t2
+    }
+}
+//
+//extension Comparable where Self: SignedNumber {
+//    var sign: Int {
+//        guard self != -self else {
+//            return 0
+//        }
+//        return self > -self ? 1 : -1
+//    }
+//}
+
+
+/// Adds the function sgn()
+extension Double {
+    func sgn() -> Int {
+        let result = (self < Double(0) ? -1 : 1)
+        return result
+    }
+}

@@ -10,6 +10,8 @@ import Foundation
 import os.log
 
 class SSProbabilityDistributions {
+
+// MARK: GAUSSIAN
     
     /// Returns the CDF of a Gaussian distribution
     /// - Parameter m: Mean
@@ -266,11 +268,11 @@ class SSProbabilityDistributions {
      END IF
      END
     */
-    /// Returns the inverse CDF of the standard Gaussian distribution. Uses the algorithm at
+    /// Returns the quantile function of the standard Gaussian distribution. Uses the algorithm at
     /// http://lib.stat.cmu.edu/apstat/241 (ALGORITHM AS241  APPL. STATIST. (1988) VOL. 37, NO. 3, 477-484.)
     /// - Parameter p: P
     /// - Throws: Throws an error if p < 0.0 or p > 1
-    public class func inverseCDFStandardNormalDist(p: Double!) throws -> Double {
+    public class func quantileStandardNormalDist(p: Double!) throws -> Double {
         if (p == 0.0) {
             return -Double.infinity
         }
@@ -373,7 +375,7 @@ class SSProbabilityDistributions {
 
     }
     
-    /// Returns the inverse CDF of a Gaussian distribution
+    /// Returns the quantile function of a Gaussian distribution
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation
     /// - Throws: Throws an error if sd <= 0.0
@@ -396,7 +398,7 @@ class SSProbabilityDistributions {
         }
     }
 
-    /// Returns the inverse CDF of a Gaussian distribution
+    /// Returns the quantile function of a Gaussian distribution
     /// - Parameter m: Mean
     /// - Parameter v: Variance
     /// - Throws: Throws an error if v <= 0.0
@@ -435,12 +437,224 @@ class SSProbabilityDistributions {
         }
         let x = (z + 1.0) / 2.0
         do {
-            let invCDF = try SSProbabilityDistributions.inverseCDFStandardNormalDist(p: x)
+            let invCDF = try SSProbabilityDistributions.quantileStandardNormalDist(p: x)
             let result = invCDF / SQRTTWO
             return result
         }
         catch {
             return Double.nan
         }
+    }
+    
+    // MARK: STUDENT's T
+
+
+    /// Returns the pdf of Student's t-distribution
+    /// - Parameter t: t
+    /// - Paremeter df: Degrees of freedom
+    public class func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        return exp( lgamma( 0.5 * ( df + 1.0 ) ) - 0.5 * log( df * Double.pi ) - lgamma( 0.5 * df ) - ( ( df + 1.0 ) / 2.0 * log( 1.0 + t * t / df ) ) )
+    }
+
+    /// Returns the cdf of Student's t-distribution
+    /// - Parameter t: t
+    /// - Paremeter df: Degrees of freedom
+    public class func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        var correctedDoF: Double
+        var halfDoF: Double
+        var constant: Double
+        var result: Double
+        halfDoF = df / 2.0
+        correctedDoF = df / ( df + ( t * t ) )
+        constant = 0.5
+        let t1 = betaNormalized(x: 1.0, a: halfDoF, b: constant)
+        let t2 = betaNormalized(x: correctedDoF, a: halfDoF, b: constant)
+        result = 0.5 * (1.0 + (t1 - t2) * Double(t.sgn()))
+        return result
+    }
+    
+    /// Returns the quantile function of Student's t-distribution
+    ///  adapted from: http://rapidq.phatcode.net/examples/Math
+    /// - Parameter p: p
+    /// - Paremeter df: Degrees of freedom
+    public class func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) -> Double {
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if p < 0.0 || p > 1.0 {
+            os_log("p must be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
+         * coded in C by Gary Perlman
+         * coded in Basic by Michaek Zito 2003
+         * coded in C# by Volker Thieme 2005
+         */
+        let eps: Double = 1E-15
+        if fabs( p - 1.0 ) <= eps  {
+            return Double.infinity
+        }
+        if fabs(p) <= eps {
+            return -Double.infinity
+        }
+        if fabs(p - 0.5) <= eps {
+            return 0.0
+        }
+        var minT: Double
+        var maxT: Double
+        var result: Double
+        var tVal: Double
+        var b1: Bool = false
+        var pp: Double
+        var _p: Double
+        if p < 0.5 {
+            _p = 1.0 - p
+            b1 = true
+        }
+        else {
+            _p = p
+        }
+        minT = 0.0
+        maxT = 1000.0
+        tVal = 500.0
+        while (maxT - minT > (2.0 * eps)) {
+            pp = SSProbabilityDistributions.cdfStudentTDist(t: tVal, degreesOfFreedom: df)
+            if pp > _p {
+                maxT = tVal
+            }
+            else {
+                minT = tVal
+            }
+            tVal = (maxT + minT) * 0.5
+        }
+        result = tVal
+        if b1 {
+            result = result * -1.0
+        }
+        return result
+    }
+    
+    
+    // MARK: F-RATIO
+    /// Returns the pdf of the F-ratio distribution.
+    /// - Parameter f: f-value
+    /// - Parameter df1: numerator degrees of freedom
+    /// - Parameter df2: denominator degrees of freedom
+    public class func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) -> Double {
+        if df1 <= 0 {
+            os_log("numerator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if df2 <= 0 {
+            os_log("denominator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        var result: Double
+        var f1: Double
+        var f2: Double
+        var f3: Double
+        var f4: Double
+        var f5: Double
+        var f6: Double
+        var f7: Double
+        var f8: Double
+        var f9: Double
+        var lg1: Double
+        var lg2: Double
+        var lg3: Double
+        if f >= 0.0 {
+            f1 = (df1 + df2) / 2.0
+            f2 = df1 / 2.0
+            f3 = df2 / 2.0
+            lg1 = lgamma(f1)
+            lg2 = lgamma(f2)
+            lg3 = lgamma(f3)
+            f4 = (df1 / 2.0) * log(df1 / df2)
+            f5 = (df1 / 2.0 - 1.0) * log(f)
+            f6 = ((df1 + df2)/2.0) * log(1.0 + df1 * f / df2)
+            f7 = lg1 - (lg2 + lg3) + f4
+            f8 = f5 - f6
+            f9 = f7 + f8
+            result = exp(f9)
+        }
+        else {
+            result = 0.0
+        }
+        return result
+    }
+    
+    /// Returns the cdf of the F-ratio distribution. (http://mathworld.wolfram.com/F-Distribution.html)
+    /// - Parameter f: f-value
+    /// - Parameter df1: numerator degrees of freedom
+    /// - Parameter df2: denominator degrees of freedom
+    public class func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) -> Double {
+        if f <= 0.0 {
+            return 0.0
+        }
+        if df1 <= 0 {
+            os_log("numerator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if df2 <= 0 {
+            os_log("denominator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        let result = betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2.0, b: df2 / 2.0)
+        return result
+    }
+    
+    /// Returns the quantile function of the F-ratio distribution.
+    /// - Parameter p: quantile
+    /// - Parameter df1: numerator degrees of freedom
+    /// - Parameter df2: denominator degrees of freedom
+    public class func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorDF df2: Double!) -> Double {
+        if df1 <= 0 {
+            os_log("numerator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if df2 <= 0 {
+            os_log("denominator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        let eps: Double = 1E-15
+        if fabs( p - 1.0 ) <= eps  {
+            return Double.infinity
+        }
+        if fabs(p) <= eps {
+            return 0.0
+        }
+        var fVal: Double
+        var maxF: Double
+        var minF: Double
+        maxF = 9999.0
+        minF = 0.0
+        fVal = 1.0 / p
+        var it: Int = 0
+        var temp_p: Double
+        while((maxF - minF) > 1.0E-12)
+        {
+            if it == 1000 {
+                break
+            }
+            temp_p = SSProbabilityDistributions.cdfFRatio(f: fVal, numeratorDF: df1, denominatorDF: df2)
+            if temp_p > p {
+                maxF = fVal
+            }
+            else {
+                minF = fVal
+            }
+            fVal = (maxF + minF) * 0.5
+            it = it + 1
+        }
+        return fVal
     }
 }
