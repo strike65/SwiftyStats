@@ -140,7 +140,7 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(!double1.hasOutliers(testType: .grubbs)!)
             let double2 = try SSExamine<Double>.init(withObject: rosnerData, levelOfMeasurement: .interval, characterSet: nil)
             XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
-            let esd: SSESDTestResult = HypothesisTesting.esdOutlierTest(data: double2.elementsAsArray(sortOrder: .original)!, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
+            let esd: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: double2.elementsAsArray(sortOrder: .original)!, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
             XCTAssert(esd.countOfOutliers == 3)
             let double3 = try SSExamine<Double>.init(withObject: doubleData1, levelOfMeasurement: .interval, characterSet: nil)
             XCTAssert(double3.hasOutliers(testType: .grubbs)!)

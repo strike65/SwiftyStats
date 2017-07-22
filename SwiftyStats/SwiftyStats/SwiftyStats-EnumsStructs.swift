@@ -206,10 +206,10 @@ public struct SSContProbDistParams {
         self.kurtosis = kurtosis
     }
     init() {
-        self.mean = 0
-        self.variance = 0
-        self.skewness = 0
-        self.kurtosis = 0
+        self.mean = Double.nan
+        self.variance = Double.nan
+        self.skewness = Double.nan
+        self.kurtosis = Double.nan
     }
 }
 

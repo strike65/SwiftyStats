@@ -446,8 +446,32 @@ class SSProbabilityDistributions {
         }
     }
     
+    
     // MARK: STUDENT's T
 
+    
+    public class func paraStudentT(degreesOfFreedom df: Double!) -> SSContProbDistParams {
+        var result = SSContProbDistParams()
+        if df < 0.0 {
+            os_log("Degrees of freedom must be > 0", log: log_stat, type: .error)
+            return result
+        }
+        result.mean = 0.0
+        if df > 2 {
+            result.variance = df / (df - 2.0)
+        }
+        else {
+            result.variance = 0.0
+        }
+        result.skewness = 0.0
+        if df > 4 {
+            result.kurtosis = 3.0 + 6.0 / (df - 4.0)
+        }
+        else {
+            result.kurtosis = Double.nan
+        }
+        return result
+    }
 
     /// Returns the pdf of Student's t-distribution
     /// - Parameter t: t
@@ -545,6 +569,44 @@ class SSProbabilityDistributions {
     
     
     // MARK: F-RATIO
+    
+    public class func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!) -> SSContProbDistParams {
+        var result = SSContProbDistParams()
+        if df1 <= 0 {
+            os_log("numerator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return result
+        }
+        if df2 <= 0 {
+            os_log("denominator degrees of freedom must be > 0", log: log_stat, type: .error)
+            return result
+        }
+        if (df2 > 2.0) {
+            result.mean = df2 / (df2 - 2)
+        }
+        else {
+            result.mean = Double.nan
+        }
+        if (df2 > 4.0) {
+            result.variance = (2 * pow(df2, 2.0) * (df1 + df2 - 2.0)) / (df1 * pow(df2 - 2.0,2.0) * (df2 - 4))
+        }
+        else {
+            result.variance = Double.nan
+        }
+        if (df2 > 6.0) {
+            result.skewness = ((2 * df1 + df2 - 2) / (df2 - 6)) * sqrt((8 * (df2 - 4)) / (df1 * (df1 + df2 - 2)))
+        }
+        else {
+            result.skewness = Double.nan
+        }
+        if (df2 > 8.0) {
+            result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
+        }
+        else {
+            result.kurtosis = Double.nan;
+        }
+        return result
+    }
+    
     /// Returns the pdf of the F-ratio distribution.
     /// - Parameter f: f-value
     /// - Parameter df1: numerator degrees of freedom
@@ -657,4 +719,226 @@ class SSProbabilityDistributions {
         }
         return fVal
     }
+    
+    // MARK: Log Normal
+    
+    public class func paraLogNormalDist(mean: Double!, variance v: Double!) -> SSContProbDistParams {
+        var result = SSContProbDistParams()
+        if v <= 0 {
+            os_log("variance > 0", log: log_stat, type: .error)
+            return result
+        }
+        let delta: Double = exp(v)
+        result.mean = exp(mean + v / 2.0)
+        result.variance = exp(2.0 * mean) * delta * (delta - 1.0)
+        result.skewness = (delta + 2.0) * sqrt(delta - 1.0)
+        result.kurtosis = pow(delta, 4.0) + 2.0 * pow(delta, 3.0) + 3.0 * pow(delta, 2.0) - 3.0
+        return result
+    }
+    
+    public class func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) -> Double {
+        if v <= 0 {
+            os_log("variance > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if x < 0 {
+            os_log("x must be >= 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if x.isZero {
+            return 0.0
+        }
+        else {
+            let r = 1.0 / (sqrt(v) * x * sqrt(2.0 * Double.pi)) * exp(-1.0 * pow(log(x) - mean, 2.0) / (2.0 * v))
+            return r
+        }
+    }
+
+    public class func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) -> Double {
+        if v <= 0 {
+            os_log("variance > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if x < 0 {
+            os_log("x must be >= 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        let r = SSProbabilityDistributions.cdfStandardNormalDist(u: (log(x) - mean) / sqrt(v))
+        return r
+    }
+    
+    
+    public class func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) -> Double {
+        if v <= 0 {
+            os_log("variance > 0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        if fabs(p - 1.0) <= 1e-16 {
+            return Double.infinity
+        }
+        else if p.isZero {
+            return 0.0
+        }
+        if p < 0 || p > 1.0 {
+            os_log("p must be >= 0 and <= 1.0", log: log_stat, type: .error)
+            return Double.nan
+        }
+        do {
+            let u = try SSProbabilityDistributions.quantileStandardNormalDist(p: p)
+            return exp( mean + u * sqrt(v))
+        }
+        catch {
+            return Double.nan
+        }
+    }
+    
+    // MARK: Beta
+    
+    public class func paraBetaDist(shapeA a:Double!, shapeB b: Double!) -> SSContProbDistParams {
+        var result = SSContProbDistParams()
+        if (a <= 0.0) {
+            return result
+        }
+        if (b <= 0.0) {
+            return result
+        }
+        result.mean = (a / (a + b))
+        result.variance = (a * b) / (pow(a + b, 2.0) * (a + b + 1.0))
+        result.skewness = ((2.0 * (b - a)) / (a + b - 2.0)) * sqrt((a + b + 1.0) / (a * b))
+        result.kurtosis = (3.0 * (a + b + 1.0) * (pow(a, 2.0) * (b + 2) + pow(b, 2.0) * (a + 2.0) - 2.0 * a * b)) / (a * b * (a + b + 2.0) * (a + b + 3.0))
+        return result
+    }
+    
+    
+    public class func pdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) -> Double {
+        if (a <= 0.0) {
+            return Double.nan
+        }
+        if (b <= 0.0) {
+            return Double.nan
+        }
+        if (x < 0) {
+            return 0.0
+        }
+        if(x >= 1.0) {
+            return 0.0
+        }
+        let result = pow(x, a - 1.0) * pow(1.0 - x, b - 1.0) / betaFunction(a: a, b: b)
+        return result
+    }
+    
+    public class func cdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) -> Double {
+        if (a <= 0.0) {
+            return Double.nan
+        }
+        if (b <= 0.0) {
+            return Double.nan
+        }
+        if (x <= 0) {
+            return 0.0
+        }
+        else if (x > 1.0) {
+            return 1.0
+        }
+        else {
+            let result = betaNormalized(x: x, a: a, b: b)
+            return result
+        }
+    }
+    
+    public class func quantileBetaDist(p: Double!, shapeA a: Double!, shapeB b: Double!) -> Double {
+        if (a <= 0.0) {
+            return Double.nan
+        }
+        if (b <= 0.0) {
+            return Double.nan
+        }
+        if (p < 0) || (p > 1.0) {
+            return Double.nan
+        }
+        if fabs(p - 1.0) < 1E-12 {
+            return 1.0
+        }
+        else if p.isZero {
+            return 0.0
+        }
+        var bVal: Double
+        var maxB: Double
+        var minB: Double
+        var it: Int = 0
+        maxB = 1.0
+        minB = 0.0
+        bVal = 0.5
+        while (maxB - minB) > 1E-12 {
+            if it > 500 {
+                break
+            }
+            if cdfBetaDist(x: bVal, shapeA: a, shapeB: b) > p {
+                maxB = bVal
+            }
+            else {
+                minB = bVal
+            }
+            bVal = (maxB + minB) / 2.0
+            it = it + 1
+        }
+        return bVal
+    }
+    
+    
+    // MARK: Cauchy
+    
+    public class func paraCauchyDist(location a: Double!, shape b: Double!) -> SSContProbDistParams {
+        return SSContProbDistParams()
+    }
+    
+    public class func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) -> Double {
+        if b <= 0 {
+            return Double.nan
+        }
+        let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
+        return result
+    }
+    
+    public class func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) -> Double {
+        if b <= 0 {
+            return Double.nan
+        }
+        let result = 0.5 + 1.0 / Double.pi * atan((x - a) / b)
+        return result
+    }
+    
+    public class func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) -> Double {
+        if p < 0.0 || p > 1.0 {
+            return Double.nan
+        }
+        if p.isZero {
+            return -Double.infinity
+        }
+        if fabs(p - 1.0) > 1E-12 {
+            return Double.infinity
+        }
+        if b <= 0 {
+            return Double.nan
+        }
+        let result = a + b * tan((-0.5 + p) * Double.pi)
+        return result
+    }
+    
+    // MARK: Laplace
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

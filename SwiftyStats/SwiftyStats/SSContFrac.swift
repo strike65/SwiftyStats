@@ -34,7 +34,7 @@ public class SSContFrac: NSObject {
         return Double.nan
     }
     
-    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the iteration count is reached or one of the convergents is NAN.
+    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the max iteration count is reached or one of the convergents is NAN.
     /// Algorithm according to Lentz, modified by Thompson and Barnett
     /// http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf
     /// - Parameter x: x
@@ -42,6 +42,7 @@ public class SSContFrac: NSObject {
     /// - Parameter maxIter:     Maximum number of iterations
     /// - Parameter converged: TRUE if the result is valid
     /// - Parameter iterations:        On return it contains the number of iterations needed.
+    /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
     public func compute(x: Double!, eps: Double!, maxIter: Int!, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> Double {
         var n: Int = 1
         var HBefore: Double

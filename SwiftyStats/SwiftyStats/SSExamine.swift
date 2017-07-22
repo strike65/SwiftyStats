@@ -1734,7 +1734,7 @@ extension SSExamine {
             switch testType {
             case .grubbs:
                 let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
-                if let res = HypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
+                if let res = SSHypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
                     return res.hasOutliers
                 }
                 else {
@@ -1742,7 +1742,7 @@ extension SSExamine {
                 }
             case .esd:
                 let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-                if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
                         return true
                     }
@@ -1767,7 +1767,7 @@ extension SSExamine {
     public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if !isEmpty && numeric {
             let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-            if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
+            if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
                     return res.outliers as? Array<SSElement>
                 }

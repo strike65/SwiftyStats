@@ -1,5 +1,5 @@
 //
-//  SSHypothesisTesting.swift
+//  SSSSHypothesisTesting.swift
 //  SwiftyStats
 //
 //  Created by volker on 20.07.17.
@@ -9,9 +9,10 @@
 import Foundation
 import os.log
 
-public class HypothesisTesting {
-    // define structs and enums
-
+public class SSHypothesisTesting {
+    
+    // MARK: Grubbs test
+    
     /// Performs the Grubbs outlier test
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
@@ -49,6 +50,8 @@ public class HypothesisTesting {
             return nil
         }
     }
+
+    // MARK: ESD test
 
     /// Returns p for run i
     fileprivate class func rosnerP(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
@@ -173,6 +176,6 @@ public class HypothesisTesting {
         return res
     }
     
-    
+    // MARK: GoF test
     
 }
