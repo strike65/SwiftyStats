@@ -1,0 +1,1 @@
+- make error handling consistent (throw errors or return nan)

@@ -5,6 +5,23 @@
 //  Created by volker on 19.07.17.
 //  Copyright © 2017 VTSoftware. All rights reserved.
 //
+/*
+ Copyright (c) 2017 Volker Thieme
+ 
+ GNU GPL 3+
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, version 3 of the License.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 import Foundation
 
@@ -34,7 +51,7 @@ public class SSContFrac: NSObject {
         return Double.nan
     }
     
-    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the iteration count is reached or one of the convergents is NAN.
+    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the max iteration count is reached or one of the convergents is NAN.
     /// Algorithm according to Lentz, modified by Thompson and Barnett
     /// http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf
     /// - Parameter x: x
@@ -42,17 +59,18 @@ public class SSContFrac: NSObject {
     /// - Parameter maxIter:     Maximum number of iterations
     /// - Parameter converged: TRUE if the result is valid
     /// - Parameter iterations:        On return it contains the number of iterations needed.
+    /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
     public func compute(x: Double!, eps: Double!, maxIter: Int!, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> Double {
         var n: Int = 1
-        var HBefore: Double
-        let small: Double = 1E-50
-        HBefore = self.a_N(n:0, point:x)
-        if (HBefore == 0) {
-            HBefore = small
+        var hPrev: Double
+        let tiny: Double = 1E-50
+        hPrev = self.a_N(n:0, point:x)
+        if (hPrev == 0) {
+            hPrev = tiny
         }
-        var DBefore: Double = 0
-        var CBefore: Double = HBefore
-        var HN: Double = HBefore
+        var dPrev: Double = 0
+        var cPrev: Double = hPrev
+        var HN: Double = hPrev
         var aN: Double
         var bN: Double
         var DN: Double
@@ -62,19 +80,19 @@ public class SSContFrac: NSObject {
         while (n < maxIter) {
             aN = self.a_N(n: n, point: x)
             bN = self.b_N(n: n, point: x)
-            DN = aN + bN * DBefore;
+            DN = aN + bN * dPrev;
             Delta = fabs(DN);
             if (Delta <= eps) {
-                DN = small;
+                DN = tiny;
             }
-            CN = aN + bN / CBefore;
-            Delta = fabs(CN);
+            CN = aN + bN / cPrev
+            Delta = fabs(CN)
             if (CN <= eps) {
-                CN = small;
+                CN = tiny
             }
-            DN = 1.0 / DN;
-            DeltaN = DN * CN;
-            HN = HBefore * DeltaN;
+            DN = 1.0 / DN
+            DeltaN = DN * CN
+            HN = hPrev * DeltaN
             if (HN.isInfinite) {
                 converged.pointee = false;
                 return Double.nan;
@@ -88,9 +106,9 @@ public class SSContFrac: NSObject {
                 iterations.pointee = n;
                 return HN;
             }
-            DBefore = DN;
-            CBefore = CN;
-            HBefore = HN;
+            dPrev = DN;
+            cPrev = CN;
+            hPrev = HN;
             n = n + 1
         }
         if (n >= maxIter) {
@@ -135,4 +153,24 @@ public class SSBetaRegularized: SSContFrac {
         return res
     }
     
+}
+
+/// Computes a(n) and b(n) for GammaQ
+public class SSGammaQ: SSContFrac {
+    
+    public var a: Double = Double.nan
+    
+    override public init() {
+        super.init()
+        self.a = Double.nan
+    }
+    
+    override public func a_N(n: Int!, point x: Double!) -> Double {
+        return Double(n + n) + 1.0 - self.a + x
+    }
+    
+    
+    override public func b_N(n: Int!, point x: Double?) -> Double {
+        return Double(n) * self.a - Double(n * n)
+    }
 }

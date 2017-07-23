@@ -6,35 +6,30 @@
 //  Copyright © 2017 VTSoftware. All rights reserved.
 //
 /*
- MIT License
- 
  Copyright (c) 2017 Volker Thieme
  
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
+ GNU GPL 3+
  
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, version 3 of the License.
  
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
  */
 
 import Foundation
 import os.log
 
 /// SSExamine
-/// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data meet the protocols "Hashable" and "Comparable".
-/// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.
+/// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data conform to the protocols "Hashable" and "Comparable".
+/// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type actually being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.
 public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSCoding where SSElement: Hashable, SSElement: Comparable {
     
     // MARK: OPEN/PUBLIC VARS
@@ -1577,7 +1572,12 @@ extension SSExamine {
             var u: Double
             m = arithmeticMean
             if let s = self.standardDeviation(type: .unbiased) {
-                u = SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                do {
+                    u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                }
+                catch {
+                    return nil
+                }
                 lower = m - u * s / sqrt(Double(self.sampleSize))
                 upper = m + u * s / sqrt(Double(self.sampleSize))
                 width = u * s / sqrt(Double(self.sampleSize))
@@ -1652,6 +1652,23 @@ extension SSExamine {
             return nil
         }
     }
+    
+    
+    public func meanDeviation(fromReferencePoint rp: Double!) -> Double? {
+        if isEmpty && !numeric && !rp.isNaN {
+            return nil
+        }
+        var sum: Double = 0.0
+        var t1: Double
+        var f1: Double
+        for (item, freq) in self.elements {
+            t1 = item as! Double
+            f1 = Double(freq)
+            sum = sum + fabs(t1 - rp) * f1
+        }
+        return sum / Double(self.sampleSize)
+    }
+    
     
     /// Returns the relative mean absolute difference
     public var meanRelativeDifference: Double? {
@@ -1734,7 +1751,7 @@ extension SSExamine {
             switch testType {
             case .grubbs:
                 let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
-                if let res = HypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
+                if let res = SSHypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
                     return res.hasOutliers
                 }
                 else {
@@ -1742,7 +1759,7 @@ extension SSExamine {
                 }
             case .esd:
                 let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-                if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
                         return true
                     }
@@ -1767,7 +1784,7 @@ extension SSExamine {
     public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if !isEmpty && numeric {
             let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-            if let res = HypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
+            if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
                     return res.outliers as? Array<SSElement>
                 }
@@ -1784,7 +1801,37 @@ extension SSExamine {
         }
     }
     
+    public var isGaussian: Bool? {
+        if isEmpty || !numeric {
+            return nil
+        }
+        else {
+            do {
+                if let r = try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: .gaussian) {
+                    return r.pValue! > self.alpha
+                }
+                else {
+                    return nil
+                }
+            }
+            catch {
+                return nil
+            }
+        }
+    }
     
-    
+    public func testForDistribution(targetDistribution: SSGoFTarget) throws -> SSKSTestResult? {
+        if isEmpty || !numeric {
+            return nil
+        }
+        else {
+            do {
+                return try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: targetDistribution)
+            }
+            catch {
+                throw error
+            }
+        }
+    }
     
 }

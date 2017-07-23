@@ -6,27 +6,22 @@
 //  Copyright © 2017 VTSoftware. All rights reserved.
 //
 /*
- MIT License
- 
  Copyright (c) 2017 Volker Thieme
  
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
+ GNU GPL 3+
  
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, version 3 of the License.
  
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
  */
 
 import Foundation
@@ -206,10 +201,10 @@ public struct SSContProbDistParams {
         self.kurtosis = kurtosis
     }
     init() {
-        self.mean = 0
-        self.variance = 0
-        self.skewness = 0
-        self.kurtosis = 0
+        self.mean = Double.nan
+        self.variance = Double.nan
+        self.skewness = Double.nan
+        self.kurtosis = Double.nan
     }
 }
 
@@ -325,6 +320,57 @@ public struct SSESDTestResult {
         testType = .bothTails
         means = nil
     }
+}
+
+
+// GoF test structures/enums
+
+public enum SSGoFTarget {
+    case gaussian
+    case studentT
+    case laplace
+    case exponential
+    case uniform
+    case none
+}
+
+public struct SSKSTestResult {
+    var estimatedMean: Double?
+    var estimatedSd: Double?
+    var estimatedVar: Double?
+    var estimatedLowerBound: Double?
+    var estimatedUpperBound: Double?
+    var estimatedDegreesOfFreedom: Double?
+    var estimatedShapeParam: Double?
+    var estimatedScaleParam: Double?
+    var targetDistribution: SSGoFTarget
+    var pValue: Double?
+    var maxAbsDifference: Double?
+    var maxPosDifference: Double?
+    var maxNegDifference: Double?
+    var zStatistics: Double?
+    var sampleSize: Int?
+    var infoString: String?
+    
+    public init() {
+        estimatedSd = nil
+        estimatedMean = nil
+        estimatedDegreesOfFreedom = nil
+        estimatedVar = nil
+        estimatedLowerBound = nil
+        estimatedUpperBound = nil
+        estimatedShapeParam = nil
+        estimatedScaleParam = nil
+        targetDistribution = .none
+        pValue = nil
+        maxAbsDifference = nil
+        maxPosDifference = nil
+        maxNegDifference = nil
+        zStatistics = nil
+        sampleSize = nil
+        infoString = nil
+    }
+    
 }
 
 
