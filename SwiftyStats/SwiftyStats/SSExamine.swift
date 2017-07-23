@@ -1658,6 +1658,23 @@ extension SSExamine {
         }
     }
     
+    
+    public func meanDeviation(fromReferencePoint rp: Double!) -> Double? {
+        if isEmpty && !numeric && !rp.isNaN {
+            return nil
+        }
+        var sum: Double = 0.0
+        var t1: Double
+        var f1: Double
+        for (item, freq) in self.elements {
+            t1 = item as! Double
+            f1 = Double(freq)
+            sum = sum + fabs(t1 - rp) * f1
+        }
+        return sum / Double(self.sampleSize)
+    }
+    
+    
     /// Returns the relative mean absolute difference
     public var meanRelativeDifference: Double? {
         if let md = meanDifference {
@@ -1789,7 +1806,37 @@ extension SSExamine {
         }
     }
     
+    public var isGaussian: Bool? {
+        if isEmpty || !numeric {
+            return nil
+        }
+        else {
+            do {
+                if let r = try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: .gaussian) {
+                    return r.pValue! > self.alpha
+                }
+                else {
+                    return nil
+                }
+            }
+            catch {
+                return nil
+            }
+        }
+    }
     
-    
+    public func testForDistribution(targetDistribution: SSGoFTarget) throws -> SSKSTestResult? {
+        if isEmpty || !numeric {
+            return nil
+        }
+        else {
+            do {
+                return try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: targetDistribution)
+            }
+            catch {
+                throw error
+            }
+        }
+    }
     
 }

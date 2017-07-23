@@ -190,5 +190,295 @@ public class SSHypothesisTesting {
     }
     
     // MARK: GoF test
+
+    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
+    /// - Parameter data: Array<Double>
+    /// - Parameter target: Distribution to test for
+    public class func ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+        // error handling
+        if data.count < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let _data: SSExamine<Double>
+        do {
+            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+        }
+        catch {
+            os_log("unable to create examine object", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let sortedData = _data.uniqueElements(sortOrder: .ascending)! 
+        var dz: Double = 0.0
+        var dD: Double = 0.0
+        var dtestCDF: Double = 0.0
+        var dtemp1: Double = 0.0
+        var dmax1n: Double = 0.0
+        var dmax2n: Double = 0.0
+        var dmax1p: Double = 0.0
+        var dmax2p: Double = 0.0
+        var dmaxn: Double = 0.0
+        var dmaxp: Double = 0.0
+        var dest1: Double = 0.0
+        var dest2: Double = 0.0
+        var dest3: Double = 0.0
+        var ii: Int = 0
+        var ik: Int = 0
+        var bok: Bool = false
+        var bok1 = true
+        var nt: Double
+        var ecdf: Dictionary<Double, Double> = Dictionary<Double,Double>()
+        var lds: Double = 0.0
+        switch target {
+        case .gaussian:
+            dest1 = _data.arithmeticMean
+            if let test = _data.standardDeviation(type: .unbiased) {
+                dest2 = test
+            }
+        case .exponential:
+            dest3 = 0.0
+            ik = 0
+            for value in sortedData {
+                if value <= 0 {
+                    ik = ik + _data.frequency(item: value)
+                    dest3 = Double(ik) * value
+                }
+            }
+            for value in sortedData {
+                if value < 0 {
+                    lds = 0;
+                }
+                else {
+                    lds = lds + Double(_data.frequency(item: value)) / (Double(_data.sampleSize) - Double(ik))
+                }
+                ecdf[value] = lds
+            }
+            if lds == 0.0 || ik > (_data.sampleSize - 2) {
+                bok1 = false
+            }
+            dest1 = (Double(_data.sampleSize) - Double(ik)) / (_data.total - dest3)
+        case .uniform:
+            dest1 = _data.minimum!
+            dest2 = _data.maximum!
+            ik = 0
+        case .studentT:
+            dest1 = Double(_data.sampleSize)
+            ik = 0
+        case .laplace:
+            dest1 = _data.median!
+            dest2 = _data.meanDeviation(fromReferencePoint: dest1)!
+            ik = 0
+        case .none:
+            return nil
+        }
+        ii = 0
+        for value in sortedData {
+            switch target {
+            case .gaussian:
+                do {
+                   dtestCDF = try SSProbabilityDistributions.cdfNormalDist(x: (value - dest1) / dest2, mean: 0, variance: 1)
+                    bok = true
+                }
+                catch {
+                    throw error
+                }
+            case .exponential:
+                do {
+                    dtestCDF = try SSProbabilityDistributions.cdfExponentialDist(x: value, lambda: dest1)
+                    bok = true
+                }
+                catch {
+                    throw error
+                }
+            case .uniform:
+                do {
+                    dtestCDF = try SSProbabilityDistributions.cdfUniformDist(x: value, lowerBound: dest1, upperBound: dest2)
+                    bok = true
+                }
+                catch {
+                    throw error
+                }
+            case .studentT:
+                do {
+                    dtestCDF = try SSProbabilityDistributions.cdfStudentTDist(t: value, degreesOfFreedom: dest1)
+                    bok = true
+                }
+                catch {
+                    throw error
+                }
+            case .laplace:
+                do {
+                    dtestCDF = try SSProbabilityDistributions.cdfLaplaceDist(x: value, mean: dest1, scale: dest2)
+                    bok = true
+                }
+                catch {
+                    throw error
+                }
+            case .none:
+                return nil
+            }
+            if bok {
+                if target == .exponential {
+                    dtemp1 = ecdf[value]! - dtestCDF
+                }
+                else {
+                    dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
+                }
+                if dtemp1 > dmax1n {
+                    dmax1n = dtemp1
+                }
+                if dtemp1 > dmax1p {
+                    dmax1p = dtemp1
+                }
+                if ii > 0 {
+                    nt = sortedData[ii - 1]
+                    if target == .exponential {
+                        dtemp1 = ecdf[nt]! - dtestCDF
+                    }
+                    else {
+                        dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
+                    }
+                }
+                else {
+                    dtemp1 = -dtestCDF
+                }
+                if dtemp1 > dmax2n {
+                    dmax2n = dtemp1
+                }
+                if dtemp1 > dmax2p {
+                    dmax2p = dtemp1
+                }
+            }
+            ii = ii + 1
+        }
+        dmaxn = maximum(t1: fabs(dmax1n), t2: fabs(dmax2n))
+        dmaxp = maximum(t1: dmax1p, t2: dmax2p)
+        dD = maximum(t1: fabs(dmaxn), t2: dmaxp)
+        var dp: Double
+        var dq: Double
+        // according to Smirnov, not as accurate as possible but simple
+        if (!dD.isNaN)
+        {
+            dz = sqrt(Double(_data.sampleSize - ik)) * dD
+            dp = 0.0;
+            if ((dz >= 0) && (dz < 0.27)) {
+                dp = 1.0
+            }
+            else if ((dz >= 0.27) && (dz < 1.0)) {
+                dq = exp(-1.233701 * pow(dz, -2.0))
+                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
+            }
+            else if ((dz >= 1.0) && (dz < 3.1)) {
+                dq = exp(-2.0 * pow(dz, 2.0))
+                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
+            } else if (dz > 3.1) {
+                dp = 0.0
+            }
+        }
+        else {
+            dp = Double.nan
+        }
+        var result = SSKSTestResult()
+        switch target {
+        case .gaussian:
+            result.targetDistribution = .gaussian
+            result.estimatedMean = dest1
+            result.estimatedSd = dest2
+            result.estimatedVar = dest2 * dest2
+            result.pValue = dp
+            result.maxAbsDifference = dD
+            result.maxNegDifference = dmaxn
+            result.maxPosDifference = dmaxp
+            result.zStatistics = dz
+            result.sampleSize = _data.sampleSize
+
+        case .exponential:
+            result.targetDistribution = .exponential
+            if bok1 {
+                result.estimatedMean = 1.0 / dest1
+            }
+            if ik > 0 {
+                result.infoString = "\(ik) elements skipped. User result with care!"
+            }
+            result.pValue = dp
+            result.maxAbsDifference = dD
+            result.maxNegDifference = dmaxn
+            result.maxPosDifference = dmaxp
+            result.zStatistics = dz
+            result.sampleSize = _data.sampleSize
+        case .uniform:
+            result.estimatedLowerBound = dest1
+            result.estimatedUpperBound = dest2
+            result.pValue = dp
+            result.maxAbsDifference = dD
+            result.maxNegDifference = dmaxn
+            result.maxPosDifference = dmaxp
+            result.zStatistics = dz
+            result.sampleSize = _data.sampleSize
+        case .studentT:
+            result.estimatedDegreesOfFreedom = dest1
+            result.pValue = dp
+            result.maxAbsDifference = dD
+            result.maxNegDifference = dmaxn
+            result.maxPosDifference = dmaxp
+            result.zStatistics = dz
+            result.sampleSize = _data.sampleSize
+        case .laplace:
+            result.estimatedMean = dest1
+            result.estimatedShapeParam = dest2
+            result.pValue = dp
+            result.maxAbsDifference = dD
+            result.maxNegDifference = dmaxn
+            result.maxPosDifference = dmaxp
+            result.zStatistics = dz
+            result.sampleSize = _data.sampleSize
+        case .none:
+            break
+        }
+        return result
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

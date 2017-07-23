@@ -32,4 +32,4 @@
 import Foundation
 import os.log
 /// Defines the logging subsystem used by the framework
-let log_stat = OSLog(subsystem: "de.volker-thieme.SSSwiftyStats", category: "SSSwiftyStats")
+let log_stat = OSLog(subsystem: "de.swiftystats.SSSwiftyStats", category: "SSSwiftyStats")

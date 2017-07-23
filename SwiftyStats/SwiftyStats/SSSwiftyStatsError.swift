@@ -77,6 +77,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         case fileNotFound
         /// File exists
         case fileExists
+        /// Can't create object
+        case errorCreatingObject
     }
 
     /// A string describing the error
@@ -118,7 +120,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
             return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotFound:
             return "File does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
-        
+        case .errorCreatingObject:
+            return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
         }
     }
     
@@ -133,7 +136,7 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
     
     /// Init
     public init(type: ErrorType, file: String, line: Int, function: String) {
-        super.init(domain: "de.Volker Thieme-thieme.SSSwiftyStats", code: type.rawValue, userInfo: nil)
+        super.init(domain: "de.swiftystats.SSSwiftyStats", code: type.rawValue, userInfo: nil)
         self.type = type
         self.line = line
         self.function = function

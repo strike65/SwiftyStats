@@ -328,3 +328,54 @@ public struct SSESDTestResult {
 }
 
 
+// GoF test structures/enums
+
+public enum SSGoFTarget {
+    case gaussian
+    case studentT
+    case laplace
+    case exponential
+    case uniform
+    case none
+}
+
+public struct SSKSTestResult {
+    var estimatedMean: Double?
+    var estimatedSd: Double?
+    var estimatedVar: Double?
+    var estimatedLowerBound: Double?
+    var estimatedUpperBound: Double?
+    var estimatedDegreesOfFreedom: Double?
+    var estimatedShapeParam: Double?
+    var estimatedScaleParam: Double?
+    var targetDistribution: SSGoFTarget
+    var pValue: Double?
+    var maxAbsDifference: Double?
+    var maxPosDifference: Double?
+    var maxNegDifference: Double?
+    var zStatistics: Double?
+    var sampleSize: Int?
+    var infoString: String?
+    
+    public init() {
+        estimatedSd = nil
+        estimatedMean = nil
+        estimatedDegreesOfFreedom = nil
+        estimatedVar = nil
+        estimatedLowerBound = nil
+        estimatedUpperBound = nil
+        estimatedShapeParam = nil
+        estimatedScaleParam = nil
+        targetDistribution = .none
+        pValue = nil
+        maxAbsDifference = nil
+        maxPosDifference = nil
+        maxNegDifference = nil
+        zStatistics = nil
+        sampleSize = nil
+        infoString = nil
+    }
+    
+}
+
+
