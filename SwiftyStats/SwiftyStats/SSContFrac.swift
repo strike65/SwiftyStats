@@ -137,3 +137,23 @@ public class SSBetaRegularized: SSContFrac {
     }
     
 }
+
+/// Computes a(n) and b(n) for GammaQ
+public class SSGammaQ: SSContFrac {
+    
+    public var a: Double = Double.nan
+    
+    override public init() {
+        super.init()
+        self.a = Double.nan
+    }
+    
+    override public func a_N(n: Int!, point x: Double!) -> Double {
+        return Double(n + n) + 1.0 - self.a + x
+    }
+    
+    
+    override public func b_N(n: Int!, point x: Double?) -> Double {
+        return Double(n) * self.a - Double(n * n)
+    }
+}

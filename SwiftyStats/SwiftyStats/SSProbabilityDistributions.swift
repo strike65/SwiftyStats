@@ -22,7 +22,7 @@ class SSProbabilityDistributions {
     public class func cdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             os_log("sd is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let u = (x - m) / sd
         return SSProbabilityDistributions.cdfStandardNormalDist(u: u)
@@ -36,7 +36,7 @@ class SSProbabilityDistributions {
     public class func cdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             os_log("v is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let u = (x - m) / sqrt(v)
         return SSProbabilityDistributions.cdfStandardNormalDist(u: u)
@@ -55,7 +55,7 @@ class SSProbabilityDistributions {
     public class func pdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             os_log("sd is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return 1.0 / (sd * SQRT2PI) * exp(-1.0 * pow(x - m, 2.0) / (2.0 * sd * sd))
     }
@@ -68,7 +68,7 @@ class SSProbabilityDistributions {
     public class func pdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             os_log("v is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return 1.0 / (sqrt(v) * SQRT2PI) * exp(-1.0 * pow(x - m, 2.0) / (2.0 * v))
     }
@@ -285,7 +285,7 @@ class SSProbabilityDistributions {
         }
         if ((p < 0) || (p > 1.0)) {
             os_log("p is expected to be > 0.0 and < 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var R: Double
         let ZERO = 0.0;
@@ -387,7 +387,7 @@ class SSProbabilityDistributions {
     public class func quantileCDFNormalDist(p: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             os_log("sd is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 {
             return -Double.infinity
@@ -411,7 +411,7 @@ class SSProbabilityDistributions {
     public class func quantileCDFNormalDist(p: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             os_log("v is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 {
             return -Double.infinity
@@ -439,7 +439,7 @@ class SSProbabilityDistributions {
         }
         if ((z < -1.0) || (z > 1.0)) {
             os_log("z is expected to be > -1.0 and < 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let x = (z + 1.0) / 2.0
         do {
@@ -462,7 +462,7 @@ class SSProbabilityDistributions {
         var result = SSContProbDistParams()
         if df < 0.0 {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         result.mean = 0.0
         if df > 2 {
@@ -488,7 +488,7 @@ class SSProbabilityDistributions {
     public class func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return exp( lgamma( 0.5 * ( df + 1.0 ) ) - 0.5 * log( df * Double.pi ) - lgamma( 0.5 * df ) - ( ( df + 1.0 ) / 2.0 * log( 1.0 + t * t / df ) ) )
     }
@@ -500,7 +500,7 @@ class SSProbabilityDistributions {
     public class func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var correctedDoF: Double
         var halfDoF: Double
@@ -523,11 +523,11 @@ class SSProbabilityDistributions {
     public class func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {
             os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
          * coded in C by Gary Perlman
@@ -594,11 +594,11 @@ class SSProbabilityDistributions {
         var result = SSContProbDistParams()
         if df1 <= 0 {
             os_log("numerator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
             os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (df2 > 2.0) {
             result.mean = df2 / (df2 - 2)
@@ -635,11 +635,11 @@ class SSProbabilityDistributions {
     public class func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
         if df1 <= 0 {
             os_log("numerator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
             os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result: Double
         var f1: Double
@@ -686,11 +686,11 @@ class SSProbabilityDistributions {
         }
         if df1 <= 0 {
             os_log("numerator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
             os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2.0, b: df2 / 2.0)
         return result
@@ -704,15 +704,15 @@ class SSProbabilityDistributions {
     public class func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
         if df1 <= 0 {
             os_log("numerator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
             os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {
             os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let eps: Double = 1E-15
         if fabs( p - 1.0 ) <= eps  {
@@ -762,7 +762,7 @@ class SSProbabilityDistributions {
         var result = SSContProbDistParams()
         if v <= 0 {
             os_log("variance is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let delta: Double = exp(v)
         result.mean = exp(mean + v / 2.0)
@@ -780,7 +780,7 @@ class SSProbabilityDistributions {
     public class func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             os_log("variance is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x <= 0 {
             return 0.0
@@ -799,7 +799,7 @@ class SSProbabilityDistributions {
     public class func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             os_log("variance is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x <= 0 {
             return 0.0
@@ -817,11 +817,11 @@ class SSProbabilityDistributions {
     public class func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             os_log("variance is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1.0 {
             os_log("p is expected to be >= 0 and <= 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if fabs(p - 1.0) <= 1e-16 {
             return Double.infinity
@@ -848,11 +848,11 @@ class SSProbabilityDistributions {
         var result = SSContProbDistParams()
         if (a <= 0.0) {
             os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         result.mean = (a / (a + b))
         result.variance = (a * b) / (pow(a + b, 2.0) * (a + b + 1.0))
@@ -870,11 +870,11 @@ class SSProbabilityDistributions {
     public class func pdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (x <= 0) {
             return 0.0
@@ -894,11 +894,11 @@ class SSProbabilityDistributions {
     public class func cdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (x <= 0) {
             return 0.0
@@ -920,15 +920,15 @@ class SSProbabilityDistributions {
     public class func quantileBetaDist(p: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1.0 {
             os_log("p is expected to be >= 0 and <= 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if fabs(p - 1.0) < 1E-12 {
             return 1.0
@@ -975,7 +975,7 @@ class SSProbabilityDistributions {
     public class func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
             os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return SSContProbDistParams()
     }
@@ -988,7 +988,7 @@ class SSProbabilityDistributions {
     public class func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
         return result
@@ -1002,7 +1002,7 @@ class SSProbabilityDistributions {
     public class func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = 0.5 + 1.0 / Double.pi * atan((x - a) / b)
         return result
@@ -1016,11 +1016,11 @@ class SSProbabilityDistributions {
     public class func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {
             os_log("p is expected to be >= 0 and <= 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p.isZero {
             return -Double.infinity
@@ -1040,7 +1040,7 @@ class SSProbabilityDistributions {
     public class func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
             os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result = SSContProbDistParams()
         result.mean = mean
@@ -1059,7 +1059,7 @@ class SSProbabilityDistributions {
     public class func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = 1.0 / (2.0 * b) * exp(-fabs(x - mean) / b)
         return result
@@ -1073,7 +1073,7 @@ class SSProbabilityDistributions {
     public class func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let xm = x - mean
         let result = 0.5 * (1.0 + xm.sgn() * (1.0 - exp(-fabs(xm) / b)))
@@ -1088,11 +1088,11 @@ class SSProbabilityDistributions {
     public class func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {
             os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result: Double
         if p.isZero {
@@ -1116,7 +1116,7 @@ class SSProbabilityDistributions {
     public class func logit(p: Double!) throws -> Double {
         if p <= 0.0 || p >= 1.0 {
             os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return log1p(p / (1.0 - p))
     }
@@ -1128,7 +1128,7 @@ class SSProbabilityDistributions {
     public class func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
         if b <= 0 {
             os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result = SSContProbDistParams()
         result.mean = mean
@@ -1146,7 +1146,7 @@ class SSProbabilityDistributions {
     public class func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = exp(-(x - mean) / b) / (b * pow(1.0 + exp(-(x - mean) / b), 2.0))
         return result
@@ -1160,7 +1160,7 @@ class SSProbabilityDistributions {
     public class func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = 0.5 * (1.0 + tanh(0.5 * (x - mean) / b))
         return result
@@ -1174,11 +1174,11 @@ class SSProbabilityDistributions {
     public class func quantileLogisticDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1 {
             os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result: Double
         if p.isZero {
@@ -1202,11 +1202,11 @@ class SSProbabilityDistributions {
     public class func paraParetoDist(minimum a: Double!, shape b: Double!) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             os_log("minimum parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result = SSContProbDistParams()
         if b > 1.0 {
@@ -1244,11 +1244,11 @@ class SSProbabilityDistributions {
     public class func pdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("minimum parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = pow(a, b) * b * pow(x, -1.0 - b)
         return result
@@ -1262,11 +1262,11 @@ class SSProbabilityDistributions {
     public class func cdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("minimum parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x <= a {
             return 0.0
@@ -1285,15 +1285,15 @@ class SSProbabilityDistributions {
     public class func quantileParetoDist(p: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             os_log("minimum parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1 {
             os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p.isZero {
             return a
@@ -1314,7 +1314,7 @@ class SSProbabilityDistributions {
     public class func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParams {
         if (l <= 0.0) {
             os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result = SSContProbDistParams()
         result.mean = 1.0 / l
@@ -1331,7 +1331,7 @@ class SSProbabilityDistributions {
     public class func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x < 0.0 {
             return 0.0
@@ -1351,7 +1351,7 @@ class SSProbabilityDistributions {
     public class func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x <= 0.0 {
             return 0.0
@@ -1368,11 +1368,11 @@ class SSProbabilityDistributions {
     public class func quantileExponentialDist(p: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1 {
             os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p == 0.0 {
             return 0.0
@@ -1394,11 +1394,11 @@ class SSProbabilityDistributions {
     public class func paraWaldDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var reault = SSContProbDistParams()
         reault.mean = a;
@@ -1416,11 +1416,11 @@ class SSProbabilityDistributions {
     public class func pdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if x <= 0.0 {
             return 0.0
@@ -1438,11 +1438,11 @@ class SSProbabilityDistributions {
     public class func cdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let n1 = SSProbabilityDistributions.cdfStandardNormalDist(u: sqrt(b / x) * (x / a - 1.0))
         let n2 = SSProbabilityDistributions.cdfStandardNormalDist(u: -sqrt(b / x) * (x / a + 1.0))
@@ -1458,15 +1458,15 @@ class SSProbabilityDistributions {
     public class func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1 {
             os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         
         if fabs(p - 1.0) <= 1e-12 {
@@ -1512,11 +1512,11 @@ class SSProbabilityDistributions {
     public class func paraInverseNormalDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return try! SSProbabilityDistributions.paraWaldDist(mean:a, scale:b)
     }
@@ -1529,11 +1529,11 @@ class SSProbabilityDistributions {
     public class func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return try! SSProbabilityDistributions.pdfWaldDist(x:x, mean:a, scale:b)
     }
@@ -1546,11 +1546,11 @@ class SSProbabilityDistributions {
     public class func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return try! SSProbabilityDistributions.cdfWaldDist(x:x, mean:a, scale:b)
     }
@@ -1563,17 +1563,513 @@ class SSProbabilityDistributions {
     public class func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             os_log("parameter mean is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (b <= 0.0) {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0 || p > 1 {
             os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return try! SSProbabilityDistributions.quantileWaldDist(p:p, mean:a, scale:b)
+    }
+
+    // MARK: Gamma
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Gamma distribution.
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContProbDistParams {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (b <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var result = SSContProbDistParams()
+        result.mean = a * b
+        result.variance = a * b * b
+        result.kurtosis = 3.0 + 6.0 / b
+        result.skewness = 2.0 / sqrt(a)
+        return result
+    }
+
+    
+    /// Returns the pdf of the Gamma distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (b <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if x <= 0.0 {
+            return 0.0
+        }
+        else {
+            return exp(-a * log(b) + (-x / b) + (-1.0 + a) * log(x) - lgamma(a))
+        }
+    }
+
+    /// Returns the cdf of the Gamma distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (b <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var cv: Bool = false
+        let result = gammaNormalizedP(x: x / b, a: a, converged: &cv)
+        if cv {
+            return result
+        }
+        else {
+            os_log("unable to retrieve a result", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .maxNumberOfIterationReached, file: #file, line: #line, function: #function)
+        }
+    }
+
+    /// Returns the quantile of the Gamma distribution.
+    /// - Parameter p: p
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
+    public class func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (b <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p == 0.0 {
+            return 0.0
+        }
+        if p == 1.0 {
+            return Double.infinity
+        }
+        var gVal: Double = 0.0
+        var maxG: Double = 0.0
+        var minG: Double = 0.0
+        maxG = a * b + 4000.0
+        minG = 0.0
+        gVal = a * b
+        var test: Double
+        var i = 1
+        while((maxG - minG) > 1.0E-14) {
+            test = try! cdfGammaDist(x: gVal, shape: a, scale: b)
+            if test > p {
+                maxG = gVal
+            }
+            else {
+                minG = gVal
+            }
+            gVal = (maxG + minG) * 0.5;
+            i = i + 1
+            if i >= 7500 {
+                break
+            }
+        }
+        if((a * b) > 10000) {
+            let t1: Double = gVal * 1E07
+            let ri: UInt64 = UInt64(t1)
+            let rd: Double = Double(ri) / 1E07
+            return rd
+        }
+        else {
+            return gVal
+        }
+    }
+
+    
+    // MARK: Weibull
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Weibull distribution.
+    /// - Parameter a: Location parameter
+    /// - Parameter b: Scale parameter
+    /// - Parameter c: Shape parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Double!) throws -> SSContProbDistParams {
+        if (b <= 0.0) {
+            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= 0.0) {
+            os_log("shape parameter c is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var result = SSContProbDistParams()
+        result.mean = a + b * tgamma(1.0 + (1.0 / c))
+        result.variance = b * b * tgamma(1.0 + (2.0 / c)) - pow(tgamma(1.0 + (1.0 / c)), 2.0)
+        result.kurtosis = Double.nan
+        result.skewness = Double.nan
+        return result
+    }
+
+    /// Returns the pdf of the Weibull distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Location parameter
+    /// - Parameter b: Scale parameter
+    /// - Parameter c: Shape parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+        if (b <= 0.0) {
+            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= 0.0) {
+            os_log("shape parameter c is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if x < a {
+            return 0.0
+        }
+        let result = c / b * pow((x - a) / b, c - 1.0) * exp(-pow((x - a) / b, c))
+        return result
+    }
+
+    /// Returns the cdf of the Weibull distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Location parameter
+    /// - Parameter b: Scale parameter
+    /// - Parameter c: Shape parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
+    public class func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+        if (b <= 0.0) {
+            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= 0.0) {
+            os_log("shape parameter c is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if x < a {
+            return 0.0
+        }
+        let result = 1.0 - exp(-pow((x - a) / b, c))
+        return result
+    }
+
+    /// Returns the quantile of the Weibull distribution.
+    /// - Parameter p: p
+    /// - Parameter a: Location parameter
+    /// - Parameter b: Scale parameter
+    /// - Parameter c: Shape parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
+    public class func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+        if (b <= 0.0) {
+            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= 0.0) {
+            os_log("shape parameter c is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p == 0.0 {
+            return 0.0
+        }
+        if p == 1.0 {
+            return Double.infinity
+        }
+        let result = a + b * pow(-log1p((1.0 - p) - 1.0), 1.0 / c)
+        return result
+    }
+
+    
+    // MARK: UNIFORM
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Uniform distribution.
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var result = SSContProbDistParams()
+        result.mean = (a + b) / 2.0
+        result.variance = 1.0 / 12.0 * (b - a) * (b - a)
+        result.kurtosis = 1.8
+        result.skewness = 0.0
+        return result
+    }
+
+    /// Returns the pdf of the Uniform distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if x < a || x > b {
+            return 0.0
+        }
+        else {
+            return 1.0 / (b - a)
+        }
+    }
+
+    /// Returns the cdf of the Uniform distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if x < a {
+            return 0.0
+        }
+        else if x > b {
+            return 1.0
+        }
+        else {
+            return (x - a) / (b - a)
+        }
+    }
+
+    /// Returns the cdf of the Uniform distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func quantileUniformDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        return a + (b - a) * p
+    }
+
+    // MARK: TRIANGULAR
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Parameter c: Mode
+    /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
+    public class func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> SSContProbDistParams {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= a) {
+            os_log("mode parameter c is expected to be greater than lower bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c >= b) {
+            os_log("mode parameter c is expected to be smaller than upper bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var result = SSContProbDistParams()
+        result.mean = (a + b + c) / 3.0
+        result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
+        result.kurtosis = 2.4
+        let a2 = a * a;
+        let a3 = a2 * a;
+        let b2 = b * b;
+        let b3 = b2 * b;
+        let c2 = c * c;
+        let c3 = c2 * c;
+        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5));
+        return result
+    }
+    
+    /// Returns the pdf of the Triangular distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Parameter c: Mode
+    /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
+    public class func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= a) {
+            os_log("mode parameter c is expected to be greater than lower bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c >= b) {
+            os_log("mode parameter c is expected to be smaller than upper bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if ((x < a) || (x > b)) {
+            return 0.0
+        }
+        else if ((x == a) || ((x > a) && (x <= c))) {
+            return (2.0 * ( x - a)) / (a * (a - b - c) + b * c)
+        }
+        else {
+            return (2.0 * (b - x)) / (b * (-a + b - c) + a * c)
+        }
+    }
+
+    /// Returns the cdf of the Triangular distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Parameter c: Mode
+    /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
+    public class func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= a) {
+            os_log("mode parameter c is expected to be greater than lower bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c >= b) {
+            os_log("mode parameter c is expected to be smaller than upper bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (x < a) {
+            return 0.0
+        }
+        else if (x > b) {
+            return 1.0
+        }
+        else if ((x == a) || ((x > a) && (x <= c))) {
+            return (a * (a - 2.0 * x) + x * x) / (a * (a - b - c) + b * c)
+        }
+        else {
+            return 1.0 - ((b * (b - 2.0 * x) + x * x) / (b * (b - a - c) + a * c))
+        }
+    }
+
+    /// Returns the quantile of the Triangular distribution.
+    /// - Parameter p: p
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Parameter c: Mode
+    /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b || p < 0 || p > 0
+    public class func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c <= a) {
+            os_log("mode parameter c is expected to be greater than lower bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if (c >= b) {
+            os_log("mode parameter c is expected to be smaller than upper bound", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p == 0.0 {
+            return a
+        }
+        let t1 = (-a + c) / (-a + b)
+        if p <= t1 {
+            return a + sqrt((-a + b) * (-a + c) * p)
+        }
+        else {
+            return b - sqrt((-a + b) * (b - c) * (1.0 - p))
+        }
+    }
+
+    // MARK: TRIANGULAR with two params
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        var result = SSContProbDistParams()
+        result.mean = (a + b) / 2.0
+        result.variance = 1.0 / 24.0 * (b - a) * (b - a)
+        result.kurtosis = 2.4
+        result.skewness = 0.0
+        return result
+    }
+    
+    /// Returns the pdf of the Triangular distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        return try! SSProbabilityDistributions.pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+    }
+    
+    /// Returns the cdf of the Triangular distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b
+    public class func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        return try! SSProbabilityDistributions.cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+    }
+    
+    /// Returns the quantile of the Triangular distribution.
+    /// - Parameter p: p
+    /// - Parameter a: Lower bound
+    /// - Parameter b: Upper bound
+    /// - Throws: SSSwiftyStatsError if a >= b || p < 0 || p > 0
+    public class func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+        if (a >= b) {
+            os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        return try! SSProbabilityDistributions.quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
     }
 
 }

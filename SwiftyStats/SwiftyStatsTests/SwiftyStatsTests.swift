@@ -107,8 +107,8 @@ class SwiftyStatsTests: XCTestCase {
                     try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.pdfNormalDist(x: 33, mean: m, standardDeviation: s), 0.0081396502508653989, accuracy: 1E-14)
                     try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.cdfNormalDist(x: 33, mean: m, standardDeviation: s), 0.97823340773523892, accuracy: 1E-14)
                     try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.cdfNormalDist(x: 5, mean: m, standardDeviation: s), 0.0090618277136769177, accuracy: 1E-14)
-                    try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.inverseCDFNormalDist(p: 0.5, mean: m, standardDeviation: s), 20.100806451612903, accuracy: 1E-14)
-                    try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.inverseCDFNormalDist(p: 0.975, mean: m, standardDeviation: s), 32.625566859054832, accuracy: 1E-14)
+                    try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.quantileCDFNormalDist(p: 0.5, mean: m, standardDeviation: s), 20.100806451612903, accuracy: 1E-14)
+                    try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.quantileCDFNormalDist(p: 0.975, mean: m, standardDeviation: s), 32.625566859054832, accuracy: 1E-14)
                 }
                 do {
                     let zarr = try SSExamine<Double>.init(withObject: zarrData, levelOfMeasurement: .interval, characterSet: nil)
@@ -147,6 +147,16 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
             XCTAssert(double3.hasOutliers(testType: .esd)!)
             XCTAssert(double2.outliers(alpha: 0.05, max: 10, testType: .bothTails)!.elementsEqual([6.01,5.42,5.34]))
+            var cv: Bool = false
+            // values computed using Mathematica
+            XCTAssert(gammaNormalizedQ(x: 3, a: 2, converged: &cv) == 0.19914827347145577)
+            XCTAssert(gammaNormalizedQ(x: 3, a: 3, converged: &cv) == 0.42319008112684353)
+            XCTAssertEqualWithAccuracy(gammaNormalizedQ(x: 3, a: 0.3, converged: &cv), 0.0064903726990984344, accuracy: 1E-12)
+            XCTAssertEqualWithAccuracy(gammaNormalizedQ(x: 0.4, a: 0.3, converged: &cv), 0.22361941898336419, accuracy: 1E-12)
+            XCTAssert(gammaNormalizedP(x: 3, a: 2, converged: &cv) == 0.80085172652854423)
+            XCTAssert(gammaNormalizedP(x: 3, a: 3, converged: &cv) == 0.57680991887315648)
+            XCTAssertEqualWithAccuracy(gammaNormalizedP(x: 3, a: 0.3, converged: &cv), 0.99350962730090157, accuracy: 1E-12)
+            XCTAssertEqualWithAccuracy(gammaNormalizedP(x: 0.4, a: 0.3, converged: &cv), 0.77638058101663581, accuracy: 1E-12)
         }
         catch {
             
