@@ -2,7 +2,7 @@
 //  SSSSHypothesisTesting.swift
 //  SwiftyStats
 //
-//  Created by volker on 20.07.17.
+//  Created by Volker Thieme on 20.07.17.
 //  Copyright © 2017 VTSoftware. All rights reserved.
 //
 /*
@@ -338,6 +338,7 @@ public class SSHypothesisTesting {
                     dtemp1 = ecdf[value]! - dtestCDF
                 }
                 else {
+//                    dtemp1 = _data.empiricalCDF(of: value) - dtestCDF
                     dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
                 }
                 if dtemp1 > dmax1n {
@@ -367,9 +368,10 @@ public class SSHypothesisTesting {
             }
             ii = ii + 1
         }
-        dmaxn = maximum(t1: fabs(dmax1n), t2: fabs(dmax2n))
-        dmaxp = maximum(t1: dmax1p, t2: dmax2p)
-        dD = maximum(t1: fabs(dmaxn), t2: dmaxp)
+        dmaxn = (fabs(dmax1n) > fabs(dmax2n)) ? dmax1n : dmax2n
+        dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
+        dD = (fabs(dmaxn) > fabs(dmaxp)) ? dmaxn : dmaxp
+//        dD = maximum(t1: fabs(dmaxn), t2: fabs(dmaxp))
         var dp: Double
         var dq: Double
         // according to Smirnov, not as accurate as possible but simple

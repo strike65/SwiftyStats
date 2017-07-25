@@ -2,7 +2,7 @@
 //  SSSpecialFunctions.swift
 //  SwiftyStats
 //
-//  Created by volker on 19.07.17.
+//  Created by Volker Thieme on 19.07.17.
 //  Copyright © 2017 VTSoftware. All rights reserved.
 //
 /*
