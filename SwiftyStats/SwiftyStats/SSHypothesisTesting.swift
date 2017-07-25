@@ -225,7 +225,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sortedData = _data.uniqueElements(sortOrder: .ascending)! 
-        var dz: Double = 0.0
+        let dz: Double = 0.0
         var dD: Double = 0.0
         var dtestCDF: Double = 0.0
         var dtemp1: Double = 0.0
@@ -398,7 +398,7 @@ public class SSHypothesisTesting {
             dp = Double.nan
         }
  */
-        var dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
+        let dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {
         case .gaussian:
