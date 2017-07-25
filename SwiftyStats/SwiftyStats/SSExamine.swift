@@ -72,6 +72,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns a Dictionary<element : cumulative frequency >
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, Double> {
+        updateCumulativeFrequencies()
         return cumRelFrequencies
     }
     
@@ -433,7 +434,8 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter item: Item
     public func relativeFrequency(item: SSElement) -> Double {
         if contains(item: item) {
-            return relFrequencies[item]!
+            return Double(self.elements[item]!) / Double(self.sampleSize)
+//            return relFrequencies[item]!
         }
         else {
             return 0.0
@@ -455,7 +457,6 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter item: Item
     public func append(_ item: SSElement!) {
         var tempPos: Array<Int>
-        count = count + 1
         let test = items.contains(where: { (key: SSElement, value: Int) in
             if key == item {
                 return true
@@ -466,19 +467,21 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         })
         var currentFrequency: Int
         if test {
-            currentFrequency = items[item]!
-            items.removeValue(forKey: item)
-            relFrequencies.removeValue(forKey: item)
-            items[item] = currentFrequency + 1
+            currentFrequency = items[item]! + 1
+            items[item] = currentFrequency
+            count = count + 1
             // update relative frequencies
-            for key in items.keys {
-                relFrequencies[key] = Double(items[key]!) / Double(self.sampleSize)
+            for (item, freq) in items {
+                relFrequencies[item] = Double(freq) / Double(self.sampleSize)
             }
             sequence[item]!.append(count)
         }
         else {
             items[item] = 1
-            relFrequencies[item] = 1.0 / Double(self.sampleSize)
+            count = count + 1
+            for (item, freq) in items {
+                relFrequencies[item] = Double(freq) / Double(self.sampleSize)
+            }
             tempPos = Array()
             tempPos.append(count)
             sequence[item] = tempPos
