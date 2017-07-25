@@ -262,7 +262,7 @@ public class SSHypothesisTesting {
             }
             for value in sortedData {
                 if value < 0 {
-                    lds = 0;
+                    lds = 0
                 }
                 else {
                     lds = lds + Double(_data.frequency(item: value)) / (Double(_data.sampleSize) - Double(ik))
@@ -372,13 +372,14 @@ public class SSHypothesisTesting {
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
         dD = (fabs(dmaxn) > fabs(dmaxp)) ? dmaxn : dmaxp
 //        dD = maximum(t1: fabs(dmaxn), t2: fabs(dmaxp))
-        var dp: Double
+/*
+ var dp: Double
         var dq: Double
         // according to Smirnov, not as accurate as possible but simple
         if (!dD.isNaN)
         {
             dz = sqrt(Double(_data.sampleSize - ik)) * dD
-            dp = 0.0;
+            dp = 0.0
             if ((dz >= 0) && (dz < 0.27)) {
                 dp = 1.0
             }
@@ -396,6 +397,8 @@ public class SSHypothesisTesting {
         else {
             dp = Double.nan
         }
+ */
+        var dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {
         case .gaussian:

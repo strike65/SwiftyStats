@@ -305,93 +305,93 @@ class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var R: Double
-        let ZERO = 0.0;
-        let ONE = 1.0;
-        let HALF = 0.5;
-        let SPLIT1 = 0.425;
-        let SPLIT2 = 5.0;
-        let CONST1 = 0.180625;
-        let CONST2 = 1.6;
-        let A0 = 3.3871328727963666080;
-        let A1 = 1.3314166789178437745E02;
-        let A2 = 1.9715909503065514427E03;
-        let A3 = 1.3731693765509461125E04;
-        let A4 = 4.5921953931549871457E04;
-        let A5 = 6.7265770927008700853E04;
-        let A6 = 3.3430575583588128105E04;
-        let A7 = 2.5090809287301226727E03;
-        let B1 = 4.2313330701600911252E01;
-        let B2 = 6.8718700749205790830E02;
-        let B3 = 5.3941960214247511077E03;
-        let B4 = 2.1213794301586595867E04;
-        let B5 = 3.9307895800092710610E04;
-        let B6 = 2.8729085735721942674E04;
-        let B7 = 5.2264952788528545610E03;
-        let C0 = 1.42343711074968357734;
-        let C1 = 4.63033784615654529590;
-        let C2 = 5.76949722146069140550;
-        let C3 = 3.64784832476320460504;
-        let C4 = 1.27045825245236838258;
-        let C5 = 2.41780725177450611770E-01;
-        let C6 = 2.27238449892691845833E-02;
-        let C7 = 7.74545014278341407640E-04;
-        let D1 = 2.05319162663775882187;
-        let D2 = 1.67638483018380384940;
-        let D3 = 6.89767334985100004550E-01;
-        let D4 = 1.48103976427480074590E-01;
-        let D5 = 1.51986665636164571966E-02;
-        let D6 = 5.47593808499534494600E-04;
-        let D7 = 1.05075007164441684324E-09;
-        let E0 = 6.65790464350110377720;
-        let E1 = 5.46378491116411436990;
-        let E2 = 1.78482653991729133580;
-        let E3 = 2.96560571828504891230E-01;
-        let E4 = 2.65321895265761230930E-02;
-        let E5 = 1.24266094738807843860E-03;
-        let E6 = 2.71155556874348757815E-05;
-        let E7 = 2.01033439929228813265E-07;
-        let F1 = 5.99832206555887937690E-01;
-        let F2 = 1.36929880922735805310E-01;
-        let F3 = 1.48753612908506148525E-02;
-        let F4 = 7.86869131145613259100E-04;
-        let F5 = 1.84631831751005468180E-05;
-        let F6 = 1.42151175831644588870E-07;
-        let F7 = 2.04426310338993978564E-15;
-        let Q = p - HALF;
+        let ZERO = 0.0
+        let ONE = 1.0
+        let HALF = 0.5
+        let SPLIT1 = 0.425
+        let SPLIT2 = 5.0
+        let CONST1 = 0.180625
+        let CONST2 = 1.6
+        let A0 = 3.3871328727963666080
+        let A1 = 1.3314166789178437745E02
+        let A2 = 1.9715909503065514427E03
+        let A3 = 1.3731693765509461125E04
+        let A4 = 4.5921953931549871457E04
+        let A5 = 6.7265770927008700853E04
+        let A6 = 3.3430575583588128105E04
+        let A7 = 2.5090809287301226727E03
+        let B1 = 4.2313330701600911252E01
+        let B2 = 6.8718700749205790830E02
+        let B3 = 5.3941960214247511077E03
+        let B4 = 2.1213794301586595867E04
+        let B5 = 3.9307895800092710610E04
+        let B6 = 2.8729085735721942674E04
+        let B7 = 5.2264952788528545610E03
+        let C0 = 1.42343711074968357734
+        let C1 = 4.63033784615654529590
+        let C2 = 5.76949722146069140550
+        let C3 = 3.64784832476320460504
+        let C4 = 1.27045825245236838258
+        let C5 = 2.41780725177450611770E-01
+        let C6 = 2.27238449892691845833E-02
+        let C7 = 7.74545014278341407640E-04
+        let D1 = 2.05319162663775882187
+        let D2 = 1.67638483018380384940
+        let D3 = 6.89767334985100004550E-01
+        let D4 = 1.48103976427480074590E-01
+        let D5 = 1.51986665636164571966E-02
+        let D6 = 5.47593808499534494600E-04
+        let D7 = 1.05075007164441684324E-09
+        let E0 = 6.65790464350110377720
+        let E1 = 5.46378491116411436990
+        let E2 = 1.78482653991729133580
+        let E3 = 2.96560571828504891230E-01
+        let E4 = 2.65321895265761230930E-02
+        let E5 = 1.24266094738807843860E-03
+        let E6 = 2.71155556874348757815E-05
+        let E7 = 2.01033439929228813265E-07
+        let F1 = 5.99832206555887937690E-01
+        let F2 = 1.36929880922735805310E-01
+        let F3 = 1.48753612908506148525E-02
+        let F4 = 7.86869131145613259100E-04
+        let F5 = 1.84631831751005468180E-05
+        let F6 = 1.42151175831644588870E-07
+        let F7 = 2.04426310338993978564E-15
+        let Q = p - HALF
         var _res: Double
         if(fabs(Q) <= SPLIT1)
         {
-            R = CONST1 - Q * Q;
-            _res = Q * (((((((A7 * R + A6) * R + A5) * R + A4) * R + A3) * R + A2) * R + A1) * R + A0) / (((((((B7 * R + B6) * R + B5) * R + B4) * R + B3) * R + B2) * R + B1) * R + ONE);
-            return _res;
+            R = CONST1 - Q * Q
+            _res = Q * (((((((A7 * R + A6) * R + A5) * R + A4) * R + A3) * R + A2) * R + A1) * R + A0) / (((((((B7 * R + B6) * R + B5) * R + B4) * R + B3) * R + B2) * R + B1) * R + ONE)
+            return _res
         }
         else
         {
             if(Q < ZERO) {
-                R = p;
+                R = p
             }
             else {
-                R = ONE - p;
+                R = ONE - p
             }
             if(R <= ZERO) {
-                _res = Double.nan;
-                return _res;
+                _res = Double.nan
+                return _res
             }
-            R = sqrt(-log(R));
+            R = sqrt(-log(R))
             if (R <= SPLIT2)
             {
-                R = R - CONST2;
-                _res = (((((((C7 * R + C6) * R + C5) * R + C4) * R + C3) * R + C2) * R + C1) * R + C0) / (((((((D7 * R + D6) * R + D5) * R + D4) * R + D3) * R + D2) * R + D1) * R + ONE);
+                R = R - CONST2
+                _res = (((((((C7 * R + C6) * R + C5) * R + C4) * R + C3) * R + C2) * R + C1) * R + C0) / (((((((D7 * R + D6) * R + D5) * R + D4) * R + D3) * R + D2) * R + D1) * R + ONE)
             }
             else
             {
-                R = R - SPLIT2;
-                _res = (((((((E7 * R + E6) * R + E5) * R + E4) * R + E3) * R + E2) * R + E1) * R + E0) / (((((((F7 * R + F6) * R + F5) * R + F4) * R + F3) * R + F2) * R + F1) * R + ONE);
+                R = R - SPLIT2
+                _res = (((((((E7 * R + E6) * R + E5) * R + E4) * R + E3) * R + E2) * R + E1) * R + E0) / (((((((F7 * R + F6) * R + F5) * R + F4) * R + F3) * R + F2) * R + F1) * R + ONE)
             }
             if(Q < ZERO) {
-                _res = -_res;
+                _res = -_res
             }
-            return _res;
+            return _res
         }
 
     }
@@ -639,7 +639,7 @@ class SSProbabilityDistributions {
             result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
         }
         else {
-            result.kurtosis = Double.nan;
+            result.kurtosis = Double.nan
         }
         return result
     }
@@ -1418,11 +1418,11 @@ class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var reault = SSContProbDistParams()
-        reault.mean = a;
-        reault.variance = (a * a * a) / b;
-        reault.kurtosis = 3.0 + 15.0 * a / b;
-        reault.skewness = 3.0 * sqrt(a / b);
-        return reault;
+        reault.mean = a
+        reault.variance = (a * a * a) / b
+        reault.kurtosis = 3.0 + 15.0 * a / b
+        reault.skewness = 3.0 * sqrt(a / b)
+        return reault
     }
 
     /// Returns the pdf of the Wald (inverse normal) distribution.
@@ -1704,7 +1704,7 @@ class SSProbabilityDistributions {
             else {
                 minG = gVal
             }
-            gVal = (maxG + minG) * 0.5;
+            gVal = (maxG + minG) * 0.5
             i = i + 1
             if i >= 7500 {
                 break
@@ -1919,13 +1919,13 @@ class SSProbabilityDistributions {
         result.mean = (a + b + c) / 3.0
         result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
         result.kurtosis = 2.4
-        let a2 = a * a;
-        let a3 = a2 * a;
-        let b2 = b * b;
-        let b3 = b2 * b;
-        let c2 = c * c;
-        let c3 = c2 * c;
-        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5));
+        let a2 = a * a
+        let a3 = a2 * a
+        let b2 = b * b
+        let b3 = b2 * b
+        let c2 = c * c
+        let c3 = c2 * c
+        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
         return result
     }
     

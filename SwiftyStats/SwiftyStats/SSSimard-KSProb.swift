@@ -203,7 +203,7 @@ fileprivate func KSPlusbarAsymp(_ n: Int, _ x: Double) -> Double {
     if (v >= 1.0) {
         return 1.0
     }
-    return v;
+    return v
 }
 
 
@@ -254,7 +254,7 @@ fileprivate func KSPlusbarUpper(_ n: Int, _ x: Double) -> Double {
         j = j + 1
     }
     
-    j = jmax / jdiv;
+    j = jmax / jdiv
     LogCom = LOGJMAX + log (Double(j + 1) / Double(n - j))
     
     while (j > 0) {
@@ -439,8 +439,8 @@ fileprivate func CalcFloorCeil (
     }
     A[0] = 0.0
     A[1] = 0.0
-    A[2] = z;
-    A[3] = 1 - A[2];
+    A[2] = z
+    A[3] = 1 - A[2]
     for i in stride(from: 4, to: 2 * n + 1, by: 1) {
         A[i] = A[i - 2] + 1.0
     }
@@ -540,9 +540,9 @@ fileprivate func Pomeranz(_ n: Int, _ x: Double) -> Double {
         }
         /* assert (s >= 0, "Pomeranz: s < 0"); */
         
-        minsum = RENO;
-        r1 = (r1 + 1) & 1;          /* i - 1 */
-        r2 = (r2 + 1) & 1;          /* i */
+        minsum = RENO
+        r1 = (r1 + 1) & 1          /* i - 1 */
+        r2 = (r2 + 1) & 1          /* i */
         
         for j in jlow...jup {
             kup = kup0
@@ -642,7 +642,7 @@ public func KScdf(n: Int, x: Double) -> Double {
         return DurbinMatrix (n, x)
     }
     
-    return Pelz(n, x);
+    return Pelz(n, x)
 }
 
 
@@ -682,7 +682,7 @@ fileprivate func fbarSpecial(_ n: Int, _ x: Double) -> Double {
 /*========================================================================*/
 
 public func KSfbar(n: Int, x: Double) -> Double {
-    let w = Double(n) * x * x;
+    let w = Double(n) * x * x
     let v = fbarSpecial(n, x)
     if (v >= 0.0) {
         return v
@@ -811,7 +811,7 @@ fileprivate func mMultiply(_ A: Array<Double>, _ B: Array<Double>, _ C: inout Ar
 
 fileprivate func renormalize(V: inout Array<Double>, m: Int, p: UnsafeMutablePointer<Int>) {
 //    int i;
-    for i in 0...m * m {
+    for i in 0...m * m - 1 {
         V[i] *= INORM
     }
     p.pointee += LOGNORM
@@ -822,11 +822,11 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
     var B: Array<Double>
 //    int eB, i;
     if (n == 1) {
-        for i in 0...m * m {
+        for i in 0...m * m - 1 {
             V[i] = A[i]
         }
         eV.pointee = eA
-        return;
+        return
     }
     mPower(A, eA, &V, eV, m, n / 2)
     B = Array<Double>.init(repeating: 0.0, count: m * m)
@@ -837,10 +837,10 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
     }
     
     if (n % 2 == 0) {
-        for i in 0...m * m {
+        for i in 0...m * m - 1 {
             V[i] = B[i]
         }
-        eV.pointee = eB;
+        eV.pointee = eB
     } else {
         mMultiply(A, B, &V, m: m)
         eV.pointee = eA + eB

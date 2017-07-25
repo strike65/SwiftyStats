@@ -147,8 +147,8 @@ public class SSBetaRegularized: SSContFrac {
             res = ( k * ( self.b - k ) * x ) / ( ( self.a + ( 2.0 * k ) - 1 ) * ( self.a + ( 2.0 * k ) ) )
         }
         else {
-            k = ( Double(n - 1)) / 2.0;
-            res = ( -1.0 ) * ( ( ( self.a + k ) * ( self.a + self.b + k ) * x ) / ( ( self.a + ( 2.0 * k ) ) * ( self.a + ( 2.0 * k ) + 1.0 ) ) );
+            k = ( Double(n - 1)) / 2.0
+            res = ( -1.0 ) * ( ( ( self.a + k ) * ( self.a + self.b + k ) * x ) / ( ( self.a + ( 2.0 * k ) ) * ( self.a + ( 2.0 * k ) + 1.0 ) ) )
         }
         return res
     }
