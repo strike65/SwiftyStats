@@ -223,8 +223,8 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sortedData = _data.uniqueElements(sortOrder: .ascending)! 
-        let dz: Double = 0.0
         var dD: Double = 0.0
+        var dz: Double
         var dtestCDF: Double = 0.0
         var dtemp1: Double = 0.0
         var dmax1n: Double = 0.0
@@ -280,7 +280,7 @@ public class SSHypothesisTesting {
             ik = 0
         case .laplace:
             dest1 = _data.median!
-            dest2 = _data.meanDeviation(fromReferencePoint: dest1)!
+            dest2 = _data.medianAbsoluteDeviation(aroundReferencePoint: dest1)!
             ik = 0
         case .none:
             return nil
@@ -369,6 +369,32 @@ public class SSHypothesisTesting {
         dmaxn = (fabs(dmax1n) > fabs(dmax2n)) ? dmax1n : dmax2n
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
         dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
+        dz = sqrt(Double(_data.sampleSize - ik)) * dD
+//        var dp: Double
+//        var dq: Double
+//        // according to Smirnov, not as accurate as possible but simple
+//        if (!dD.isNaN)
+//        {
+//            dz = sqrt(Double(_data.sampleSize - ik)) * dD
+//            dp = 0.0
+//            if ((dz >= 0) && (dz < 0.27)) {
+//                dp = 1.0
+//            }
+//            else if ((dz >= 0.27) && (dz < 1.0)) {
+//                dq = exp(-1.233701 * pow(dz, -2.0))
+//                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
+//            }
+//            else if ((dz >= 1.0) && (dz < 3.1)) {
+//                dq = exp(-2.0 * pow(dz, 2.0))
+//                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
+//            } else if (dz > 3.1) {
+//                dp = 0.0
+//            }
+//        }
+//        else {
+//            dp = Double.nan
+//        }
+//
         let dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {

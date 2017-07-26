@@ -1083,10 +1083,10 @@ extension SSExamine {
             let k = Double(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
             if ceil(k).isEqual(to: floor(k)) {
-                result = ((a[a.startIndex.advanced(by: Int(k))] as! Double) + (a[a.startIndex.advanced(by: Int(k + 1))] as! Double)) / 2.0
+                result = ((a[a.startIndex.advanced(by: Int(k - 1))] as! Double) + (a[a.startIndex.advanced(by: Int(k))] as! Double)) / 2.0
             }
             else {
-                result = a[a.startIndex.advanced(by: Int(k))] as! Double
+                result = a[a.startIndex.advanced(by: Int(ceil(k - 1)))] as! Double
             }
             return result
         }
@@ -1656,20 +1656,48 @@ extension SSExamine {
         }
     }
     
-    
-    public func meanDeviation(fromReferencePoint rp: Double!) -> Double? {
+    /// Returns the median absolute deviation around the reference point given. If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
+    /// - Parameter rp: Reference point
+    public func medianAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
+        if isEmpty && !numeric && !rp.isNaN {
+            return nil
+        }
+        var diffArray:Array<Double> = Array<Double>()
+        let values = self.elementsAsArray(sortOrder: .ascending)!
+        var t1: Double
+        let result: Double
+        for item in values  {
+            t1 = item as! Double
+            diffArray.append(fabs(t1 - rp))
+        }
+        let sortedDifferences = diffArray.sorted(by: {$0 < $1})
+        let k = Double(sortedDifferences.count) * 0.5
+        if ceil(k).isEqual(to: floor(k)) {
+            result = (sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k - 1))] + sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k))]) / 2.0
+        }
+        else {
+            result = sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(ceil(k - 1)))]
+        }
+        return result
+    }
+
+    /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
+    /// - Parameter rp: Reference point
+    public func meanAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
         if isEmpty && !numeric && !rp.isNaN {
             return nil
         }
         var sum: Double = 0.0
         var t1: Double
         var f1: Double
+        var c: Int = 0
         for (item, freq) in self.elements {
             t1 = item as! Double
             f1 = Double(freq)
             sum = sum + fabs(t1 - rp) * f1
+            c = c + freq
         }
-        return sum / Double(self.sampleSize)
+        return sum / Double(c)
     }
     
     
