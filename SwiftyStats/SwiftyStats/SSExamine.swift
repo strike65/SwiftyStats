@@ -1431,8 +1431,81 @@ extension SSExamine {
         }
     }
     
+    /// Returns the standard error of the sample
+    public var standardError: Double? {
+        if !isEmpty && numeric {
+            let sd = self.standardDeviation(type: .unbiased)!
+            return sd / Double(self.sampleSize)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the entropy of the sample. Defined only for nominal or ordinal data
+    public var entropy: Double? {
+        if !isEmpty && numeric {
+            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
+                var s: Double = 0.0
+                for item in self.uniqueElements(sortOrder: .none)! {
+                    s += self.relativeFrequency(item: item) * log2(self.relativeFrequency(item: item))
+                }
+                return -s
+            }
+            else {
+                // entropy is not defined for levels other than .nominal or .ordinal
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+
+    
+    /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
+    public var relativeEntropy: Double? {
+        if let e = self.entropy {
+            return e / log2(Double(self.sampleSize))
+        }
+        else {
+            return nil
+        }
+    }
+
+    // Returns the Herfindahl index
+    public var herfindahlIndex: Double? {
+        if !isEmpty && numeric {
+            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
+                var s: Double = 0.0
+                var p: Double = 0.0
+                for item in self.uniqueElements(sortOrder: .none)! {
+                    p = self.relativeFrequency(item: item)
+                    s += p * p
+                }
+                return 1.0 - p
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+
+    // Returns the normalized Herfindahl index
+    public var herfindahlIndexNormalized: Double? {
+        if let hi = self.herfindahlIndex {
+            return hi * Double(self.length) / Double(self.length - 1)
+        }
+        else {
+            return nil
+        }
+    }
+    
     /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
-    public var contraharmonicMean: Double? {
+    public var contraHarmonicMean: Double? {
         if !isEmpty && numeric {
             let sqM = self.squareTotal / Double(self.sampleSize)
             let m = self.arithmeticMean
@@ -1832,6 +1905,7 @@ extension SSExamine {
         }
     }
     
+    /// Returns true, if the sammple seems to be drawn from a normally distributed population with mean = mean(sample) and sd = sd(sample)
     public var isGaussian: Bool? {
         if isEmpty || !numeric {
             return nil
@@ -1851,13 +1925,15 @@ extension SSExamine {
         }
     }
     
-    public func testForDistribution(targetDistribution: SSGoFTarget) throws -> SSKSTestResult? {
+    /// Tests, if the sample was drawn from population with a particular distribution function
+    // - Parameter target: Distribution to test
+    public func testForDistribution(targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         if isEmpty || !numeric {
             return nil
         }
         else {
             do {
-                return try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: targetDistribution)
+                return try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: target)
             }
             catch {
                 throw error

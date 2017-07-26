@@ -81,14 +81,18 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(res.pValue!, 0.0948321, accuracy: 1E-5)
         res = try! SSHypothesisTesting.ksGoFTest(data: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
         XCTAssertEqualWithAccuracy(res.pValue!, 0.0771619, accuracy: 1E-5)
-
+        var adRes = try! SSHypothesisTesting.adNormalityTest(data: normalData, alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(adRes.pValue!, 0.93, accuracy: 1E-2)
+        adRes = try! SSHypothesisTesting.adNormalityTest(data: laplaceData, alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(adRes.pValue!, 0.04, accuracy: 1E-2)
     }
     
-    func testExample() {
+    func testDescriptive() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let double1 = SSExamine<Double>(withArray: doubleData, characterSet: nil)
         do {
+            // tests correctness of archiving
             let tempDir = NSTemporaryDirectory()
             let filename = NSUUID().uuidString
             let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
@@ -102,20 +106,26 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(!double1.contains(item: -1))
             XCTAssertEqual(double1.frequency(item: 27), 10)
             XCTAssertEqual(double1.relativeFrequency(item: 27), 10.0 / Double(double1.sampleSize))
+            
+            // elements as string
             XCTAssertEqual(double1.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
+            // Descriptives
             XCTAssertEqual(double1.total, 4985)
             XCTAssertEqualWithAccuracy(double1.inverseTotal, 13.540959278542406, accuracy: 1.0E-14)
             XCTAssert(double1.squareTotal == 110289)
+            
             XCTAssert(double1.quartile!.q25 == 15)
             XCTAssert(double1.quartile!.q50 == 19)
             XCTAssert(double1.quartile!.q75 == 24)
             XCTAssertEqual(double1.median, 19)
             XCTAssert(try double1.quantile(q: 0.1) == 13)
             XCTAssertThrowsError(try double1.quantile(q: 1.5))
+            
             XCTAssert(double1.arithmeticMean == 20.100806451612904)
-            XCTAssertEqual(double1.geometricMean, 19.168086630042282)
             XCTAssert(double1.harmonicMean == 18.314802880545665)
-            XCTAssertEqualWithAccuracy(double1.contraharmonicMean!, 22.124172517552658, accuracy: 1E-14)
+            XCTAssertEqual(double1.geometricMean, 19.168086630042282)
+            XCTAssertEqualWithAccuracy(double1.contraHarmonicMean!, 22.124172517552658, accuracy: 1E-14)
+
             XCTAssertEqualWithAccuracy(double1.poweredTotal(power: 6), 59385072309, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(double1.poweredMean(order: 6)!, 24.919401155182530, accuracy: 1E-10)
             XCTAssertEqual(try double1.trimmedMean(alpha: 0.05), 19.736607142857143)
@@ -130,6 +140,11 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqual(double1.maximum, 39)
             XCTAssertEqual(double1.minimum, 9)
             XCTAssertEqual(double1.range, 30)
+            XCTAssertEqualWithAccuracy(double1.cv!, 0.317912682758119939795, accuracy: 1E-15)
+            
+            XCTAssertEqualWithAccuracy(double1.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
+            XCTAssertEqualWithAccuracy(double1.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
+            
             XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 23), 0.72983870967741935, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 9), 0.0040322580645161290, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 39), 1.0, accuracy: 1E-14)
