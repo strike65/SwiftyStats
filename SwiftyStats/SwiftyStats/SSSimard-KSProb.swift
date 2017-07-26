@@ -167,24 +167,12 @@ fileprivate func rapfac(_ n: Int) -> Double {
 // static double **CreateMatrixD (int N, int M)
 
 fileprivate func createMatrixD(_ N: Int, _ M: Int) -> Array<Array<Double>> {
-//    int i;
-//    double **T2;
-//    T2 = (double **) malloc (N * sizeof (double *));
-//    T2[0] = (double *) malloc (N * M * sizeof (double));
-//    for (i = 1; i < N; i++)
-//      T2[i] = T2[0] + i * M;
-//    let T2:Array<Array<Double>> = Array<Array<Double>>.init(repeating: Array<Double>.init(repeating: 0.0, count: M), count: N)
-//    for i in 1...N-1 {
-//        T2[i].append(T2[0][i] + Double(i) * Double(M))
-//    }
     return Array<Array<Double>>.init(repeating: Array<Double>.init(repeating: 0.0, count: M), count: N)
 }
 
 
 fileprivate func DeleteMatrixD(_ T: inout Array<Array<Double>>) {
     T.removeAll()
-//    free (T[0]);
-//    free (T);
 }
 
 
@@ -203,7 +191,7 @@ fileprivate func KSPlusbarAsymp(_ n: Int, _ x: Double) -> Double {
     if (v >= 1.0) {
         return 1.0
     }
-    return v;
+    return v
 }
 
 
@@ -254,7 +242,7 @@ fileprivate func KSPlusbarUpper(_ n: Int, _ x: Double) -> Double {
         j = j + 1
     }
     
-    j = jmax / jdiv;
+    j = jmax / jdiv
     LogCom = LOGJMAX + log (Double(j + 1) / Double(n - j))
     
     while (j > 0) {
@@ -393,45 +381,63 @@ fileprivate func CalcFloorCeil (
     let ell = Int(t)             /* floor (t) */
     var z: Double = t - Double(ell)            /* t - floor (t) */
     let w = ceil(t) - t
-    
+    var i: Int
     if (z > 0.5) {
-        for i in stride(from: 2, to: 2 * n + 2, by: 2) {
-            Atflo[i] = Double(i) / 2.0 - 2.0 - Double(ell)
+        i = 2
+        while i <= 2 * n + 2 {
+            Atflo[i] = Double(i / 2) - 2.0 - Double(ell)
+            i = i + 2
         }
-        for i in stride(from: 1, to: 2 * n + 2, by: 2) {
-            Atflo[i] = Double(i) / 2.0 - 1.0 - Double(ell)
+        i = 1
+        while i <= 2 * n + 2 {
+            Atflo[i] = Double(i / 2) - 1.0 - Double(ell)
+            i = i + 2
         }
-        
-        for i in stride(from: 2, to: 2 * n + 2, by: 2) {
-            Atcei[i] = Double(i) / 2 + Double(ell)
+        i = 2
+        while i <= 2 * n + 2 {
+            Atcei[i] = Double(i / 2) + Double(ell)
+            i = i + 2
         }
-        for i in stride(from: 1, to: 2 * n + 2, by: 2) {
-            Atcei[i] = Double(i) / 2 + 1 + Double(ell)
+        i = 1
+        while i <= 2 * n + 2 {
+            Atcei[i] = Double(i / 2) + 1 + Double(ell)
+            i = i + 2
         }
         
     } else if (z > 0.0) {
-        for i in stride(from: 1, to: 2 * n + 2, by: 1) {
-            Atflo[i] = Double(i) / 2 - 1 - Double(ell)
+        i = 1
+        while i <= 2 * n + 2 {
+            Atflo[i] = Double(i / 2) - 1 - Double(ell)
+            i = i + 1
         }
         
-        for i in stride(from: 2, to: 2 * n + 2, by: 1) {
-            Atcei[i] = Double(i) / 2 + Double(ell)
+        i = 2
+        while i <= 2 * n + 2 {
+            Atcei[i] = Double(i / 2) + Double(ell)
+            i = i + 1
         }
         Atcei[1] = 1.0 + Double(ell)
         
     } else {                       /* z == 0 */
-        for i in stride(from: 2, to: 2 * n + 2, by: 2) {
-            Atflo[i] = Double(i) / 2 - 1 - Double(ell)
+        i = 2
+        while i <= 2 * n + 2 {
+            Atflo[i] = Double(i / 2) - 1 - Double(ell)
+            i = i + 2
         }
-        for i in stride(from: 1, to: 2 * n + 2, by: 2) {
-            Atflo[i] = Double(i) / 2 - Double(ell)
+        i = 1
+        while i <= 2 * n + 2 {
+            Atflo[i] = Double(i / 2) - Double(ell)
+            i = i + 2
         }
-        
-        for i in stride(from: 2, to: 2 * n + 2, by: 2) {
-            Atcei[i] = Double(i) / 2 - 1 + Double(ell)
+        i = 2
+        while i <= 2 * n + 2 {
+            Atcei[i] = Double(i / 2) - 1 + Double(ell)
+            i = i + 2
         }
-        for i in stride(from: 1, to: 2 * n + 2, by: 2) {
-            Atcei[i] = Double(i) / 2 + Double(ell)
+        i = 1
+        while i <= 2 * n + 2 {
+            Atcei[i] = Double(i / 2) + Double(ell)
+            i = i + 2
         }
     }
     if (w < z) {
@@ -439,10 +445,12 @@ fileprivate func CalcFloorCeil (
     }
     A[0] = 0.0
     A[1] = 0.0
-    A[2] = z;
-    A[3] = 1 - A[2];
-    for i in stride(from: 4, to: 2 * n + 1, by: 1) {
+    A[2] = z
+    A[3] = 1 - A[2]
+    i = 4
+    while i <= 2 * n + 1 {
         A[i] = A[i - 2] + 1.0
+        i += 1
     }
     A[2 * n + 2] = Double(n)
 }
@@ -473,16 +481,22 @@ fileprivate func Pomeranz(_ n: Int, _ x: Double) -> Double {
     var Atcei: Array<Double> = Array<Double>.init(repeating: 0.0, count: 2 * n + 3)
     var V: Array<Array<Double>>
     var H: Array<Array<Double>> /* = pow(w, j) / Factorial(j) */
-    
+    var i: Int
+    var j: Int
+    var k: Int
     V = createMatrixD(2, n + 2)
     H = createMatrixD(4, n + 2)
     
     CalcFloorCeil(n, t, &A, &Atflo, &Atcei)
-    for j in 1...n + 1 {
+    j = 1
+    while j <= n + 1 {
         V[0][j] = 0
+        j += 1
     }
-    for j in 2...n + 1 {
+    j = 2
+    while j <= n + 1 {
         V[1][j] = 0
+        j += 1
     }
     V[1][1] = RENO
     coreno = 1
@@ -490,30 +504,39 @@ fileprivate func Pomeranz(_ n: Int, _ x: Double) -> Double {
     /* Precompute H[][] = (A[j] - A[j-1]^k / k! for speed */
     H[0][0] = 1
     w = 2.0 * A[2] / Double(n)
-    for j in 1...n + 1 {
+    j = 1
+    while j <= n + 1 {
         H[0][j] = w * H[0][j - 1] / Double(j)
+        j += 1
     }
     
     H[1][0] = 1
     w = (1.0 - 2.0 * A[2]) / Double(n)
-    for j in 1...n + 1 {
+    j = 1
+    while j <= n + 1 {
         H[1][j] = w * H[1][j - 1] / Double(j)
+        j += 1
     }
     
     H[2][0] = 1
     w = A[2] / Double(n)
-    for j in 1...n + 1 {
+    j = 1
+    while j <= n + 1 {
         H[2][j] = w * H[2][j - 1] / Double(j)
+        j += 1
     }
     
     H[3][0] = 1
-    for j in 1...n + 1 {
+    j = 1
+    while j <= n + 1 {
         H[3][j] = 0
+        j += 1
     }
     
     r1 = 0
     r2 = 1
-    for i in 2...2 * n + 2 {
+    i = 2
+    while (i <= 2 * n + 2) {
         jlow = 2 + Int(Atflo[i])
         if (jlow < 1) {
             jlow = 1
@@ -532,40 +555,48 @@ fileprivate func Pomeranz(_ n: Int, _ x: Double) -> Double {
         /* Find to which case it corresponds */
         w = (A[i] - A[i - 1]) / Double(n)
         s = -1
-        for j in 0...3 {
+        j = 0
+        while j <= 3 {
             if (fabs(w - H[j][1]) <= EPS) {
                 s = j
                 break
             }
+            j += 1
         }
         /* assert (s >= 0, "Pomeranz: s < 0"); */
         
-        minsum = RENO;
-        r1 = (r1 + 1) & 1;          /* i - 1 */
-        r2 = (r2 + 1) & 1;          /* i */
-        
-        for j in jlow...jup {
+        minsum = RENO
+        r1 = (r1 + 1) & 1          /* i - 1 */
+        r2 = (r2 + 1) & 1          /* i */
+        j = jlow
+        while j <= jup {
             kup = kup0
             if (kup > j) {
                 kup = j
             }
             sum = 0
-            for k in stride(from: kup, to: klow, by: -1) {
+            var k = kup
+            while k >= klow {
                 sum += V[r1][k] * H[s][j - k]
+                k -= 1
             }
             V[r2][j] = sum
             if (sum < minsum) {
                 minsum = sum
             }
+            j += 1
         }
         
         if (minsum < 1.0e-280) {
             /* V is too small: renormalize to avoid underflow of probabilities */
-            for j in jlow...jup {
+            j = jlow
+            while j <= jup {
                 V[r2][j] *= RENO
+                j += 1
             }
             coreno = coreno + 1                /* keep track of log of RENO */
         }
+        i += 1
     }
     
     sum = V[r2][n + 1]
@@ -624,7 +655,7 @@ fileprivate func cdfSpecial (_ n: Int, _ x: Double) -> Double {
 public func KScdf(n: Int, x: Double) -> Double {
     let w = Double(n) * x * x
     let u = cdfSpecial(n, x)
-    if (u >= 0.0) {
+   if (u >= 0.0) {
         return u
     }
     
@@ -642,7 +673,7 @@ public func KScdf(n: Int, x: Double) -> Double {
         return DurbinMatrix (n, x)
     }
     
-    return Pelz(n, x);
+    return Pelz(n, x)
 }
 
 
@@ -682,7 +713,7 @@ fileprivate func fbarSpecial(_ n: Int, _ x: Double) -> Double {
 /*========================================================================*/
 
 public func KSfbar(n: Int, x: Double) -> Double {
-    let w = Double(n) * x * x;
+    let w = Double(n) * x * x
     let v = fbarSpecial(n, x)
     if (v >= 0.0) {
         return v
@@ -748,9 +779,9 @@ fileprivate func DurbinMatrix(_ n: Int, _ d: Double) -> Double {
 //        if (s > 7.24 || (s > 3.76 && n > 99))
 //        return 1 - 2 * exp (-(2.000071 + .331 / sqrt (n) + 1.409 / n) * s);
 //    #endif
-    k = n * Int(d) + 1
+    k = Int(Double(n) * d + 1.0)
     m = 2 * k - 1
-    h = Double(k - n) * d
+    h = Double(k) - Double(n) * d
     H = Array<Double>.init(repeating: 0, count: m * m)
     Q = Array<Double>.init(repeating: 0, count: m * m)
     for i in 0...m - 1 {
@@ -811,7 +842,7 @@ fileprivate func mMultiply(_ A: Array<Double>, _ B: Array<Double>, _ C: inout Ar
 
 fileprivate func renormalize(V: inout Array<Double>, m: Int, p: UnsafeMutablePointer<Int>) {
 //    int i;
-    for i in 0...m * m {
+    for i in 0...m * m - 1 {
         V[i] *= INORM
     }
     p.pointee += LOGNORM
@@ -822,11 +853,11 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
     var B: Array<Double>
 //    int eB, i;
     if (n == 1) {
-        for i in 0...m * m {
+        for i in 0...m * m - 1 {
             V[i] = A[i]
         }
         eV.pointee = eA
-        return;
+        return
     }
     mPower(A, eA, &V, eV, m, n / 2)
     B = Array<Double>.init(repeating: 0.0, count: m * m)
@@ -837,10 +868,10 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
     }
     
     if (n % 2 == 0) {
-        for i in 0...m * m {
+        for i in 0...m * m - 1 {
             V[i] = B[i]
         }
-        eV.pointee = eB;
+        eV.pointee = eB
     } else {
         mMultiply(A, B, &V, m: m)
         eV.pointee = eA + eB
