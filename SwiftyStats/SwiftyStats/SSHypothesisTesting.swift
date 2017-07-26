@@ -176,14 +176,12 @@ public class SSHypothesisTesting {
         }
         var countOfOL = 0
         var outliers: Array<Double> = Array<Double>()
-        i = 0
-        while i < testStats.count {
+        i = maxOutliers
+        for i in stride(from: maxOutliers - 1, to: 0, by: -1) {
             if testStats[i] > lambdas[i] {
-                countOfOL = countOfOL + 1
+                countOfOL = i + 1
                 break
             }
-            countOfOL = countOfOL + 1
-            i = i + 1
         }
         i = 0
         while i < countOfOL {
@@ -341,7 +339,7 @@ public class SSHypothesisTesting {
 //                    dtemp1 = _data.empiricalCDF(of: value) - dtestCDF
                     dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
                 }
-                if dtemp1 > dmax1n {
+                if dtemp1 < dmax1n {
                     dmax1n = dtemp1
                 }
                 if dtemp1 > dmax1p {
@@ -353,13 +351,13 @@ public class SSHypothesisTesting {
                         dtemp1 = ecdf[nt]! - dtestCDF
                     }
                     else {
-                        dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
+                        dtemp1 = _data.cumulativeRelativeFrequencies[nt]! - dtestCDF
                     }
                 }
                 else {
                     dtemp1 = -dtestCDF
                 }
-                if dtemp1 > dmax2n {
+                if dtemp1 < dmax2n {
                     dmax2n = dtemp1
                 }
                 if dtemp1 > dmax2p {
@@ -370,34 +368,7 @@ public class SSHypothesisTesting {
         }
         dmaxn = (fabs(dmax1n) > fabs(dmax2n)) ? dmax1n : dmax2n
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
-        dD = (fabs(dmaxn) > fabs(dmaxp)) ? dmaxn : dmaxp
-//        dD = maximum(t1: fabs(dmaxn), t2: fabs(dmaxp))
-/*
- var dp: Double
-        var dq: Double
-        // according to Smirnov, not as accurate as possible but simple
-        if (!dD.isNaN)
-        {
-            dz = sqrt(Double(_data.sampleSize - ik)) * dD
-            dp = 0.0
-            if ((dz >= 0) && (dz < 0.27)) {
-                dp = 1.0
-            }
-            else if ((dz >= 0.27) && (dz < 1.0)) {
-                dq = exp(-1.233701 * pow(dz, -2.0))
-                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
-            }
-            else if ((dz >= 1.0) && (dz < 3.1)) {
-                dq = exp(-2.0 * pow(dz, 2.0))
-                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
-            } else if (dz > 3.1) {
-                dp = 0.0
-            }
-        }
-        else {
-            dp = Double.nan
-        }
- */
+        dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
         let dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {

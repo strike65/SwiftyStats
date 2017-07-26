@@ -72,7 +72,7 @@ class SwiftyStatsTests: XCTestCase {
         let normal = try! SSExamine<Double>.init(withObject: normalData, levelOfMeasurement: .interval, characterSet: nil)
         let laplace = try! SSExamine<Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, characterSet: nil)
         var res: SSKSTestResult = try! SSHypothesisTesting.ksGoFTest(data: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
-        res = try! SSHypothesisTesting.ksGoFTest(data: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
+        res = try! SSHypothesisTesting.ksGoFTest(data: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
         print(res.pValue!)
 
     }
