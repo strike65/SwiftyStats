@@ -34,7 +34,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     // MARK: OPEN/PUBLIC VARS
     
-    /// User defined tag to identify the instance
+    /// User defined tag
     public var tag: Any?
     
     /// Human readable description
@@ -55,7 +55,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// If true, the instance contains numerical data
     public var numeric: Bool! = true
     
-    /// Returns the count of SSElements
+    /// Returns the count of unique SSElements
     public var length: Int {
         return items.count
     }
@@ -65,12 +65,12 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         return count == 0
     }
     
-    /// The total number pf observations (= sum of all absolute frequencies)
+    /// The total number of observations (= sum of all absolute frequencies)
     public var sampleSize: Int {
         return count
     }
     
-    /// Returns a Dictionary<element : cumulative frequency >
+    /// Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, Double> {
         updateCumulativeFrequencies()
         return cumRelFrequencies
@@ -92,7 +92,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         }
     }
     
-    /// Two SSExamine objects are supposed to be equal, iff the item arrays are equal.
+    /// Two SSExamine objects are supposed to be equal, iff the arrays of all elements are equal.
     /// - Paramater object: The object to compare to
     public override func isEqual(_ object: Any?) -> Bool {
         if let o: SSExamine<SSElement> = object as? SSExamine<SSElement> {
@@ -142,10 +142,9 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     }
     
     /// Initializes a SSExamine instance using a string or an array<SSElement>
-    /// Throws an error, if object is not a string or an array<SSElement>
     /// - Parameter object: The object used
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
-    /// - Throws: SSSwiftyStatsError.missingData
+    /// - Throws: SSSwiftyStatsError.missingData if object is not a string or an array<SSElement>
     public init(withObject object: Any!, levelOfMeasurement lom: SSLevelOfMeasurement! ,characterSet: CharacterSet?) throws {
         // allow only arrays an strings as 'object'
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
@@ -176,6 +175,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.
+    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
     public class func examine(withContentsOfFile path: String!, separator: String!, stringEncoding: String.Encoding!) throws -> SSExamine<Double>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
@@ -227,7 +227,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
-    /// - Throws: An error will be thrown if the file could not be written.
+    /// - Throws: SSSwiftyStatsError if the file could not be written
     public func saveTo(fileName path: String!, atomically: Bool!, overwrite: Bool!, separator: String!, stringEncoding: String.Encoding) throws -> Bool {
         var result = true
         let fileManager = FileManager.default
@@ -435,7 +435,6 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     public func relativeFrequency(item: SSElement) -> Double {
         if contains(item: item) {
             return Double(self.elements[item]!) / Double(self.sampleSize)
-//            return relFrequencies[item]!
         }
         else {
             return 0.0
@@ -516,6 +515,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// Appends the characters of the given string. Only characters contained in the character set are appended.
     /// - Parameter text: The text
     /// - Parameter characterSet: A CharacterSet containing the characters to include. If nil, all characters of text will be appended.
+    /// - Throws: SSSwiftyStatsError if <SSElement> of the receiver is not of type String
     public func append(text: String!, characterSet: CharacterSet?) throws {
         if !(SSElement.self is String.Type) {
             os_log("Can only append strings", log: log_stat, type: .error)
@@ -545,7 +545,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Removes item from the table.
     /// - Parameter item: Item
-    /// - Parameter allOccurences: If false, only the item first found will be removed.
+    /// - Parameter allOccurences: If false, only the first item found will be removed.
     public func remove(_ item: SSElement!, allOccurences all: Bool!) {
         if !isEmpty {
             if contains(item: item) {
@@ -571,7 +571,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         }
     }
     
-    /// Removes all elements leaving an empty table,
+    /// Removes all elements leaving an empty object
     public func removeAll() {
         count = 0
         items.removeAll()
@@ -742,11 +742,11 @@ extension SSExamine {
     }
 }
 
+// MARK: Statistics
 
-// MARK: Descriptive
 extension SSExamine {
     
-    /// Sum over all sqared elements. Returns Double.nan iff data are non-numeric.
+    /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
     public var squareTotal: Double {
         if numeric && !isEmpty {
             var s: Double = 0.0
@@ -787,6 +787,7 @@ extension SSExamine {
             return Double.nan
         }
     }
+    
     /// Returns the sum of all inversed elements
     public var inverseTotal: Double {
         if numeric && !isEmpty {
@@ -842,7 +843,7 @@ extension SSExamine {
         }
     }
     
-    /// The log-Product. Will be Double.nan for non-numeric data or if there is at least one item lower than zerp. Returns +inf if there is at least one item equals to zero.
+    /// The log-Product. Will be Double.nan for non-numeric data or if there is at least one item lower than zero. Returns -inf if there is at least one item equals to zero.
     public var logProduct: Double {
         var sp : Double = 0.0
         var temp: Double
@@ -857,7 +858,7 @@ extension SSExamine {
                         sp = sp + log(temp) * Double(freq)
                     }
                     else if temp.isZero {
-                        return Double.infinity * -1.0
+                        return -Double.infinity
                     }
                     else {
                         return Double.nan
@@ -1171,6 +1172,7 @@ extension SSExamine {
     /// Returns the interquartile range between two quantiles
     /// - Parameter lower: Lower quantile
     /// - Parameter upper: Upper quantile
+    /// - Throws: SSSwiftyStatsError.invalidArgument if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 || upper < lower
     public func interquantileRange(lowerQuantile upper: Double!, upperQuantile lower: Double!) throws -> Double? {
         if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 {
             os_log("lower and upper quantile has to be > 0.0 and < 1.0", log: log_stat, type: .error)
@@ -1181,8 +1183,7 @@ extension SSExamine {
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !numeric {
-            os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
-            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
+            return nil
         }
         if lower.isEqual(to: upper) {
             return 0.0
@@ -1246,7 +1247,7 @@ extension SSExamine {
     
     /// Returns the powered mean of order n
     /// - Parameter n: The order of the powered mean
-    /// Returns: The powered mean, nan if the receiver contains non-numerical data.
+    /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
     public func poweredMean(order: Double) -> Double? {
         if order <= 0.0 || !numeric {
             return nil
@@ -1260,7 +1261,7 @@ extension SSExamine {
         }
     }
     
-    /// Returns the trimmed mean of all elements after droping a fration of alpha of the smallest and largest elements.
+    /// Returns the trimmed mean of all elements after dropping a fraction of alpha of the smallest and largest elements.
     /// - Parameter alpha: Fraction to drop
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func trimmedMean(alpha: Double) throws -> Double? {
