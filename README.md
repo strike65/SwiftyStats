@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.0.1-green.svg) ![Language](https://img.shields.io/badge/language-Swift_3-blue.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg)
+![Version](https://img.shields.io/badge/version-0.0.2-green.svg) ![Language](https://img.shields.io/badge/language-Swift_3-blue.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg)
 # SwiftyStats
 SwiftyStats is a generic statistical framework completely written in Swift 3. The framework is basically a port from an existing Objective C framework I'written years ago. The original framework includes often used statistical routines such as
 - Descriptive Statistics
