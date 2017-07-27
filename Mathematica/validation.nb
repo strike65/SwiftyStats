@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     42663,       1092]
-NotebookOptionsPosition[     39319,        969]
-NotebookOutlinePosition[     39680,        985]
-CellTagsIndexPosition[     39637,        982]
+NotebookDataLength[     44421,       1144]
+NotebookOptionsPosition[     40842,       1014]
+NotebookOutlinePosition[     41204,       1030]
+CellTagsIndexPosition[     41161,       1027]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -965,10 +965,55 @@ Cell[BoxData[
 Cell[BoxData["0.07716190485371788`"], "Output",
  CellChangeTimes->{3.710068956285243*^9, 3.710072347091988*^9, 
   3.7100726312196293`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"chisq", "=", 
+   RowBox[{"ChiSquareDistribution", "[", "20", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.710136348215736*^9, 3.710136357612962*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"chi", " ", "=", " ", "22"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"PDF", "[", 
+    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"InverseCDF", "[", 
+    RowBox[{"chisq", ",", 
+     RowBox[{"1", "/", "2"}]}], "]"}], ",", "21"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7101363627621727`*^9, 3.710136390669496*^9}, {
+  3.710136671338209*^9, 3.710136742465097*^9}}],
+
+Cell[BoxData["0.0542627546491024962783861955535880983253061921552922022581`21.\
+"], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+  3.7101367203860197`*^9, 3.710136744815845*^9}}],
+
+Cell[BoxData["0.6594893575343389527188915568621674150447200359435945793156`21.\
+"], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+  3.7101367203860197`*^9, 3.710136744819964*^9}}],
+
+Cell[BoxData["19.3374292294282623035009644042797563695087254267399065475679`\
+21."], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+  3.7101367203860197`*^9, 3.7101367448222017`*^9}}]
 }, Open  ]]
 },
 WindowSize->{993, 861},
-WindowMargins->{{Automatic, -1070}, {Automatic, 28}},
+WindowMargins->{{Automatic, -2009}, {Automatic, -18}},
 FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
 2015)",
 StyleDefinitions->"Default.nb"
@@ -1093,6 +1138,13 @@ Cell[38678, 948, 112, 1, 28, "Output"]
 Cell[CellGroupData[{
 Cell[38827, 954, 335, 8, 28, "Input"],
 Cell[39165, 964, 138, 2, 28, "Output"]
+}, Open  ]],
+Cell[39318, 969, 187, 4, 28, "Input"],
+Cell[CellGroupData[{
+Cell[39530, 977, 657, 19, 80, "Input"],
+Cell[40190, 998, 209, 3, 28, "Output"],
+Cell[40402, 1003, 209, 3, 28, "Output"],
+Cell[40614, 1008, 212, 3, 28, "Output"]
 }, Open  ]]
 }
 ]

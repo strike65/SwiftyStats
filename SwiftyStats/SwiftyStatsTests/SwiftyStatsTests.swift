@@ -85,6 +85,9 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(adRes.pValue!, 0.93, accuracy: 1E-2)
         adRes = try! SSHypothesisTesting.adNormalityTest(data: laplaceData, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(adRes.pValue!, 0.04, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(try! SSProbabilityDistributions.pdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.0542627546491024962784, accuracy: 1E-12)
+        XCTAssertEqualWithAccuracy(try! SSProbabilityDistributions.cdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.659489357534338952719, accuracy: 1E-12)
+        XCTAssertEqualWithAccuracy(try! SSProbabilityDistributions.quantileChiSquareDist(p: 0.5, degreesOfFreedom: 20), 19.3374292294282623035, accuracy: 1E-12)
     }
     
     func testDescriptive() {
