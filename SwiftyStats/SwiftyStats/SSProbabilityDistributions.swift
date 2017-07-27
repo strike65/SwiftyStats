@@ -401,7 +401,7 @@ class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation
     /// - Throws: SSSwiftyStatsError if sd <= 0.0
-    public class func quantileCDFNormalDist(p: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
+    public class func quantileNormalDist(p: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             os_log("sd is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -425,7 +425,7 @@ class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter v: Variance
     /// - Throws: SSSwiftyStatsError if v <= 0.0
-    public class func quantileCDFNormalDist(p: Double!, mean m: Double!, variance v: Double!) throws -> Double {
+    public class func quantileNormalDist(p: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             os_log("v is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -437,7 +437,7 @@ class SSProbabilityDistributions {
             return Double.infinity
         }
         do {
-            return try SSProbabilityDistributions.quantileCDFNormalDist(p:p, mean:m, standardDeviation: sqrt(v))
+            return try SSProbabilityDistributions.quantileNormalDist(p:p, mean:m, standardDeviation: sqrt(v))
         }
         catch {
             return Double.nan

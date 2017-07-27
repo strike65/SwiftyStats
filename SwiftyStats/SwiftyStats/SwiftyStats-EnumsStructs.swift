@@ -325,6 +325,7 @@ public struct SSESDTestResult {
 
 // GoF test structures/enums
 
+/// Enumarates the target distribution to use for GoF tests
 public enum SSGoFTarget {
     case gaussian
     case studentT
@@ -334,6 +335,7 @@ public enum SSGoFTarget {
     case none
 }
 
+/// Results of the KS one sample test
 public struct SSKSTestResult {
     var estimatedMean: Double?
     var estimatedSd: Double?
@@ -373,6 +375,7 @@ public struct SSKSTestResult {
 }
 
 
+/// Results of the Anderson Darling test
 public struct SSADTestResult {
     var pValue: Double?
     var AD: Double?
@@ -384,7 +387,17 @@ public struct SSADTestResult {
     var isNormal: Bool?
 }
 
-
+/// Result of tests for equality of variances (Bartlett, Levene, Brown-Forsythe)
+public struct SSVarianceEqualityTestResult {
+    var df: Double?
+    var cv90Pct: Double?
+    var cv95Pct: Double?
+    var cv99Pct: Double?
+    var cvAlpha: Double?
+    var pValue: Double?
+    var testStatistic: Double?
+    var equality: Bool?
+}
 
 
 

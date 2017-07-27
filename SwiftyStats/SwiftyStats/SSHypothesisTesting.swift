@@ -44,7 +44,7 @@ public class SSHypothesisTesting {
         let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
         var g: Double
         var maxDiff = 0.0
-        let mean = examine.arithmeticMean
+        let mean = examine.arithmeticMean!
         let quantile: Double
         if let s = examine.standardDeviation(type: .unbiased) {
             maxDiff = maximum(t1: fabs(examine.maximum! - mean), t2: fabs(examine.minimum! - mean))
@@ -112,7 +112,7 @@ public class SSHypothesisTesting {
         let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
         var sortedData = examine.elementsAsArray(sortOrder: .ascending)!
         // var dataRed: Array<Double> = Array<Double>()
-        let orgMean: Double = examine.arithmeticMean
+        let orgMean: Double = examine.arithmeticMean!
         let sd: Double = examine.standardDeviation(type: .unbiased)!
         var maxDiff: Double = 0.0
         var difference: Double = 0.0
@@ -136,7 +136,7 @@ public class SSHypothesisTesting {
             i = 0
             while i <= (sortedData.count - 1) {
                 t = sortedData[i]
-                currentMean = currentData.arithmeticMean
+                currentMean = currentData.arithmeticMean!
                 difference = fabs(t - currentMean)
                 if difference > maxDiff {
                     switch testType {
@@ -159,7 +159,7 @@ public class SSHypothesisTesting {
             }
             itemToRemove = sortedData[currentIndex]
             currentSd = currentData.standardDeviation(type: .unbiased)!
-            currentMean = currentData.arithmeticMean
+            currentMean = currentData.arithmeticMean!
             currentTestStat = maxDiff / currentSd
             currentLambda = rosnerLambdaRun(alpha: alpha, sampleSize: examine.sampleSize, run: k)
             sortedData.remove(at: currentIndex)
@@ -208,6 +208,7 @@ public class SSHypothesisTesting {
     /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
+    /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         // error handling
         if data.count < 2 {
@@ -245,7 +246,7 @@ public class SSHypothesisTesting {
         var lds: Double = 0.0
         switch target {
         case .gaussian:
-            dest1 = _data.arithmeticMean
+            dest1 = _data.arithmeticMean!
             if let test = _data.standardDeviation(type: .unbiased) {
                 dest2 = test
             }
@@ -519,7 +520,6 @@ public class SSHypothesisTesting {
         }
         return ad
     }
-
     
     fileprivate class func PRIV_AD_Prob(_ n: Int,_ z: Double) -> Double {
         var c: Double
@@ -541,10 +541,11 @@ public class SSHypothesisTesting {
         v = -0.00022633 + (6.54034 - (14.6538 - (14.458 - (8.259 - 1.91864 * v) * v) * v) * v) * v
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
-
-    
     
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// - Parameter data: Data
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func adNormalityTest(data: Array<Double>!, alpha: Double!) throws -> SSADTestResult? {
         var ad: Double = 0.0
         var a2: Double
@@ -565,7 +566,7 @@ public class SSHypothesisTesting {
             os_log("unable to create examine object", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        estMean = _data.arithmeticMean
+        estMean = _data.arithmeticMean!
         estSd = _data.standardDeviation(type: .unbiased)!
         n = _data.sampleSize
         tempArray = _data.elementsAsArray(sortOrder: .ascending)! as Array<Double>
@@ -605,38 +606,201 @@ public class SSHypothesisTesting {
     }
     
     
+    // MARK: Equality of variances
+    /// Performs the Bartlett test for two or more samples
+    /// - Parameter data: Array containing samples
+    /// - Paramater alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public class func bartlettTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+        var _N = 0.0
+        var _pS = 0.0
+        var _s1 = 0.0
+        var _s2 = 0.0
+        var _k = 0.0
+        var _df = 0.0
+        var _testStatisticValue = 0.0
+        var _cdfChiSquare = 0.0
+        var _cutoff90Percent = 0.0
+        var _cutoff95Percent = 0.0
+        var _cutoff99Percent = 0.0
+        var _cutoffAlpha = 0.0
+        var _data:Array<SSExamine<Double>> = Array<SSExamine<Double>>()
+        var result: SSVarianceEqualityTestResult
+        if data.count < 2 {
+            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        for array in data {
+            _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+        }
+        _k = Double(_data.count)
+        for examine in _data {
+            _N += Double(examine.sampleSize)
+            if let v = examine.variance(type: .unbiased) {
+                _s1 += (Double(examine.sampleSize) - 1.0) * log(v)
+            }
+            else {
+                os_log("for at least one sample a variance is not obtainable", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+        }
+        for examine in _data {
+            _pS += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)! / (_N - _k)
+            _s2 += 1.0 / (Double(examine.sampleSize) - 1.0)
+        }
+        _testStatisticValue = ((_N - _k) * log(_pS) - _s1) / (1.0 + (1.0 / (3.0 * (_k - 1.0))) * (_s2 - 1.0 / (_N - _k)))
+        do {
+            _cdfChiSquare = try SSProbabilityDistributions.cdfChiSquareDist(chi: _testStatisticValue, degreesOfFreedom: _k - 1.0)
+            _cutoff90Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.9, degreesOfFreedom: _k - 1.0)
+            _cutoff95Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.95, degreesOfFreedom: _k - 1.0)
+            _cutoff99Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.99, degreesOfFreedom: _k - 1.0)
+            _cutoffAlpha = try SSProbabilityDistributions.quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: _k - 1.0)
+            _df = _k - 1.0
+            result = SSVarianceEqualityTestResult()
+            result.testStatistic = _testStatisticValue
+            result.pValue = 1.0 - _cdfChiSquare
+            result.cv90Pct = _cutoff90Percent
+            result.cv95Pct = _cutoff95Percent
+            result.cv99Pct = _cutoff99Percent
+            result.cvAlpha = _cutoffAlpha
+            result.df = _df
+            result.equality = !(_cdfChiSquare > (1.0 - alpha))
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
     
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    /// Performs the Levene / Brown-Forsythe test for two or more samples
+    /// - Parameter data: Array containing samples
+    /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
+    /// - Paramater alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public class func leveneTest(data: Array<Array<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+        var _N = 0.0
+        var _s1 = 0.0
+        var _s2 = 0.0
+        var _t = 0.0
+        var _zMean = 0.0
+        var _cutoff90Percent: Double
+        var _cutoff95Percent: Double
+        var _cutoff99Percent: Double
+        var _cdfFRatio: Double
+        var _cutoffAlpha: Double
+        var _testStatisticValue: Double
+        var _variancesAreEqual = false
+        var _ntemp: Double
+        var _k: Double
+        var _data: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
+        if data.count < 2 {
+            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        for array in data {
+            _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+        }
+        _k = Double(_data.count)
+        var _zi: Array<Double>
+        var _zij: Array<Array<Double>>
+        var _ni: Array<Double>
+        var _y: Array<Array<Double>>
+        var _means: Array<Double>
+        var _temp: Array<Double>
+        var i: Int
+        var j: Int
+        _ni = Array<Double>()
+        _y = Array<Array<Double>>()
+        _means = Array<Double>()
+        do {
+            for examine in _data {
+                _ntemp = Double(examine.sampleSize)
+                _N += _ntemp
+                _ni.append(_ntemp)
+                _y.append(examine.elementsAsArray(sortOrder: .original)!)
+                switch testType {
+                case .mean:
+                    if let m = examine.arithmeticMean {
+                        _means.append(m)
+                    }
+                    else {
+                        return nil
+                    }
+                case .median:
+                    if let m = examine.median {
+                        _means.append(m)
+                    }
+                    else {
+                        return nil
+                    }
+                case .trimmedMean:
+                    if let m = try examine.trimmedMean(alpha: 0.1) {
+                        _means.append(m)
+                    }
+                    else {
+                        return nil
+                    }
+                }
+            }
+            _zi = Array<Double>()
+            _zij = Array<Array<Double>>()
+            _s2 = 0.0
+            i = 0
+            _temp = Array<Double>()
+            while i < Int(_k) {
+                _s1 = 0.0
+                _temp.removeAll()
+                j = 0
+                while j < Int(_ni[i]) {
+                    _t = fabs(_y[i][j] - _means[i])
+                    _temp.append(_t)
+                    _s1 += _t
+                    _s2 += _t
+                    j += 1
+                }
+                _zi.append(_s1 / _ni[i])
+                _zij.append(_temp)
+                i += 1
+            }
+            _zMean = _s2 / _N
+            _s1 = 0.0
+            _s2 = 0.0
+            i = 0
+            while i < Int(_k) {
+                _s1 += _ni[i] * ((_zi[i] - _zMean) * (_zi[i] - _zMean))
+                i += 1
+            }
+            i = 0
+            while i < Int(_k) {
+                j = 0
+                while j < Int(_ni[i]) {
+                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
+                    j += 1
+                }
+                i += 1
+            }
+            _testStatisticValue = ((_N - _k) * _s1) / ((_k - 1.0) * _s2)
+            _cdfFRatio = try SSProbabilityDistributions.cdfFRatio(f: _testStatisticValue, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoffAlpha = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff90Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.9, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff95Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.95, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff99Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.99, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _variancesAreEqual = !(_testStatisticValue > _cutoffAlpha)
+            var result = SSVarianceEqualityTestResult()
+            result.cv90Pct = _cutoff90Percent
+            result.cv99Pct = _cutoff99Percent
+            result.cv95Pct = _cutoff95Percent
+            result.pValue = 1.0 - _cdfFRatio
+            result.cvAlpha = _cutoffAlpha
+            result.testStatistic = _testStatisticValue
+            result.equality = _variancesAreEqual
+            result.df = Double.nan
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
     
     
     

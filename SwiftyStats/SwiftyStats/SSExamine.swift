@@ -809,12 +809,12 @@ extension SSExamine {
     }
     
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
-    public var arithmeticMean: Double {
+    public var arithmeticMean: Double? {
         if numeric && !isEmpty {
             return total / Double(sampleSize)
         }
         else {
-            return Double.nan
+            return nil
         }
     }
     
@@ -1079,10 +1079,10 @@ extension SSExamine {
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var result: Double
-        if !isEmpty {
+        if !isEmpty && self.sampleSize >= 2 {
             let k = Double(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
-            if ceil(k).isEqual(to: floor(k)) {
+            if k.truncatingRemainder(dividingBy: 1).isZero {
                 result = ((a[a.startIndex.advanced(by: Int(k - 1))] as! Double) + (a[a.startIndex.advanced(by: Int(k))] as! Double)) / 2.0
             }
             else {
@@ -1342,7 +1342,7 @@ extension SSExamine {
     /// - Parameter r: r
     private func centralMoment(r: Int!) -> Double? {
         if !isEmpty && numeric {
-            let m = self.arithmeticMean
+            let m = self.arithmeticMean!
             var diff = 0.0
             var sum = 0.0
             for (item, freq) in self.elements {
@@ -1380,7 +1380,7 @@ extension SSExamine {
             if let sd = self.standardDeviation(type: .biased) {
                 if !sd.isZero {
                     for (item, freq) in self.elements {
-                        sum = sum + pow( ( (item as! Double) - m ) / sd, Double(r)) * Double(freq)
+                        sum = sum + pow( ( (item as! Double) - m! ) / sd, Double(r)) * Double(freq)
                     }
                     return sum / Double(self.sampleSize)
                 }
@@ -1404,12 +1404,12 @@ extension SSExamine {
         case .biased:
             return moment(r: 2, type: .central)
         case .unbiased:
-            if !isEmpty && numeric {
+            if !isEmpty && numeric && self.sampleSize >= 2 {
                 let m = self.arithmeticMean
                 var diff = 0.0
                 var sum = 0.0
                 for (item, freq) in self.elements {
-                    diff = (item as! Double) - m
+                    diff = (item as! Double) - m!
                     sum = sum + diff * diff * Double(freq)
                 }
                 return sum / Double(self.sampleSize - 1)
@@ -1508,7 +1508,7 @@ extension SSExamine {
     public var contraHarmonicMean: Double? {
         if !isEmpty && numeric {
             let sqM = self.squareTotal / Double(self.sampleSize)
-            let m = self.arithmeticMean
+            let m = self.arithmeticMean!
             if !m.isZero {
                 return sqM / m
             }
@@ -1621,8 +1621,8 @@ extension SSExamine {
                 u = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1.0 - alpha / 2.0)
                 t1 = sd / sqrt(Double(self.sampleSize))
                 width = u * t1
-                upper = m + width
-                lower = m - width
+                upper = m! + width
+                lower = m! - width
                 return SSConfIntv(lower: lower, upper: upper, width: width, type: .normal)
             }
             catch {
@@ -1646,7 +1646,7 @@ extension SSExamine {
             var width: Double
             var m: Double
             var u: Double
-            m = arithmeticMean
+            m = arithmeticMean!
             if let s = self.standardDeviation(type: .unbiased) {
                 do {
                     u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
@@ -1685,7 +1685,7 @@ extension SSExamine {
     public var coefficientOfVariation: Double? {
         if !isEmpty && numeric {
             if let s = self.standardDeviation(type: .unbiased) {
-                return s / arithmeticMean
+                return s / arithmeticMean!
             }
             else {
                 return nil
@@ -1745,7 +1745,7 @@ extension SSExamine {
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
         let k = Double(sortedDifferences.count) * 0.5
-        if ceil(k).isEqual(to: floor(k)) {
+        if k.truncatingRemainder(dividingBy: 1).isZero {
             result = (sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k - 1))] + sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k))]) / 2.0
         }
         else {
@@ -1777,7 +1777,7 @@ extension SSExamine {
     /// Returns the relative mean absolute difference
     public var meanRelativeDifference: Double? {
         if let md = meanDifference {
-            return md / arithmeticMean
+            return md / arithmeticMean!
         }
         else {
             return nil
@@ -1787,7 +1787,7 @@ extension SSExamine {
     /// Returns the Gini coefficient
     public var giniCoeff: Double? {
         if let md = meanDifference {
-            return md / (2.0 * arithmeticMean)
+            return md / (2.0 * arithmeticMean!)
         }
         else {
             return nil
@@ -1801,7 +1801,7 @@ extension SSExamine {
             switch type {
             case .lower:
                 if let a = self.elementsAsArray(sortOrder: .ascending) {
-                    let m = self.arithmeticMean
+                    let m = self.arithmeticMean!
                     var t: Double
                     var s = 0.0
                     var k: Double = 0
@@ -1822,7 +1822,7 @@ extension SSExamine {
                 }
             case .upper:
                 if let a = self.elementsAsArray(sortOrder: .descending) {
-                    let m = self.arithmeticMean
+                    let m = self.arithmeticMean!
                     var t: Double
                     var s = 0.0
                     var k: Double = 0
