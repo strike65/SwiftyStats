@@ -204,6 +204,28 @@ public class SSHypothesisTesting {
     }
     
     // MARK: GoF test
+    
+    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
+    /// - Parameter data: SSExamine<Double>
+    /// - Parameter target: Distribution to test for
+    /// - Throws: SSSwiftyStatsError if data.count < 2
+    public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+        if !data.isEmpty {
+            do {
+                return try ksGoFTest(data: data.elementsAsArray(sortOrder: .original)!, targetDistribution: target)
+            }
+            catch {
+                throw error
+            }
+        }
+        else {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+
+    }
+    
+    
 
     /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
     /// - Parameter data: Array<Double>
@@ -542,6 +564,27 @@ public class SSHypothesisTesting {
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
     
+
+    /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// - Parameter data: Data as SSExamine object
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2
+    public class func adNormalityTest(data: SSExamine<Double>!, alpha: Double!) throws -> SSADTestResult? {
+        if !data.isEmpty {
+            do {
+                return try adNormalityTest(data: data.elementsAsArray(sortOrder: .original)!, alpha: alpha)
+            }
+            catch {
+                throw error
+            }
+        }
+        else {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+    }
+
+    
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
@@ -607,6 +650,35 @@ public class SSHypothesisTesting {
     
     
     // MARK: Equality of variances
+
+    /// Performs the Bartlett test for two or more samples
+    /// - Parameter data: Array containing samples as SSExamine objects
+    /// - Paramater alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public class func bartlettTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+        if data.count < 2 {
+            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var array: Array<Array<Double>> = Array<Array<Double>>()
+        for examine in data {
+            if !examine.isEmpty {
+                array.append(examine.elementsAsArray(sortOrder: .original)!)
+            }
+            else {
+                os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+        }
+        do {
+            return try bartlettTest(data: array, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+
+    
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples
     /// - Paramater alpha: Alpha
@@ -673,6 +745,35 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the Levene / Brown-Forsythe test for two or more samples
+    /// - Parameter data: Array containing SSExamine objects
+    /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
+    /// - Paramater alpha: Alpha
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public class func leveneTest(data: Array<SSExamine<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+        if data.count < 2 {
+            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var array: Array<Array<Double>> = Array<Array<Double>>()
+        for examine in data {
+            if !examine.isEmpty {
+                array.append(examine.elementsAsArray(sortOrder: .original)!)
+            }
+            else {
+                os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+        }
+        do {
+            return try leveneTest(data: array, testType: testType, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    
+    /// Performs the Levene / Brown-Forsythe test for two or more samples
     /// - Parameter data: Array containing samples
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
     /// - Paramater alpha: Alpha
@@ -698,7 +799,13 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         for array in data {
-            _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+            if array.count >= 2 {
+                _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+            }
+            else {
+                os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
         }
         _k = Double(_data.count)
         var _zi: Array<Double>
@@ -802,7 +909,179 @@ public class SSHypothesisTesting {
         }
     }
     
+    // MARK: t-Tests
     
+    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
+        if sample1.sampleSize < 2 {
+            os_log("sample1 size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if sample2.sampleSize < 2 {
+            os_log("sample2 size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var cdfLeveneMedian: Double = 0.0
+        var cdfLeveneMean: Double
+        var cdfLeveneTrimmedMean: Double
+        var cdfTValueEqualVariances: Double = 0.0
+        var cdfTValueUnequalVariances: Double = 0.0
+        var dfEqualVariances: Double = 0.0
+        var dfUnequalVariances: Double = 0.0
+        var differenceInMeans: Double = 0.0
+        var mean1: Double = 0.0
+        var mean2: Double = 0.0
+        var criticalValueEqualVariances: Double = 0.0
+        var criticalValueUnequalVariances: Double = 0.0
+        var pooledStdDev: Double = 0.0
+        var pooledVariance: Double = 0.0
+        var stdDev1: Double = 0.0
+        var stdDev2: Double = 0.0
+        var tValueEqualVariances: Double = 0.0
+        var tValueUnequalVariances: Double = 0.0
+        var variancesAreEqualMedian: Bool = false
+        var variancesAreEqualMean: Bool
+        var variancesAreEqualTrimmedMean: Bool
+        var twoTailedEV: Double = 0.0
+        var twoTailedUEV: Double = 0.0
+        var oneTailedEV: Double = 0.0
+        var oneTailedUEV: Double = 0.0
+        var var1: Double = 0.0
+        var var2: Double = 0.0
+        let n1 = Double(sample1.sampleSize)
+        let n2 = Double(sample2.sampleSize)
+        var1 = sample1.variance(type: .unbiased)!
+        var2 = sample2.variance(type: .unbiased)!
+        mean1 = sample1.arithmeticMean!
+        mean2 = sample2.arithmeticMean!
+        let k = (var1 / n1) / ((var1 / n1) + (var2 / n2))
+        dfUnequalVariances = ceil( 1.0 / ( ( (k * k) / (n1 - 1.0) ) + ( (1.0 - ( k + k) + k * k) / (n2 - 1.0) ) ) )
+        dfEqualVariances = n1 + n2 - 2.0
+        stdDev1 = sample1.standardDeviation(type: .unbiased)!
+        stdDev2 = sample2.standardDeviation(type: .unbiased)!
+        pooledVariance = ((n1 - 1.0) * var1 + (n2 - 1.0) * var2) / dfEqualVariances
+        pooledStdDev = sqrt(pooledVariance)
+        differenceInMeans = mean1 - mean2
+        tValueEqualVariances = differenceInMeans / (pooledStdDev * sqrt(1.0 / n1 + 1.0 / n2))
+        tValueUnequalVariances = differenceInMeans / sqrt(var1 / n1 + var2 / n2)
+        do {
+            cdfTValueEqualVariances = try SSProbabilityDistributions.cdfStudentTDist(t: tValueEqualVariances, degreesOfFreedom: dfEqualVariances)
+            cdfTValueUnequalVariances = try SSProbabilityDistributions.cdfStudentTDist(t: tValueUnequalVariances, degreesOfFreedom: dfUnequalVariances)
+            criticalValueEqualVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfEqualVariances)
+            criticalValueUnequalVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfUnequalVariances)
+            let lArray:Array<SSExamine<Double>> = [sample1, sample2]
+//            var type: SSLeveneTestType
+//            if let s1 = sample1.skewness, let s2 = sample2.skewness, let k1 = sample1.kurtosisType, let k2 = sample2.kurtosisType {
+//                if k1 == .platykurtic || k2 == .platykurtic {
+//                    type = .trimmedMean
+//                }
+//                else if fabs(s1 - 0.0) > 0.5 || fabs(s2 - 0.0) > 0.5 {
+//                    type = .median
+//                }
+//                else {
+//                    type = .mean
+//                }
+//            }
+//            else {
+//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+//            }
+            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .median, alpha: alpha) {
+                cdfLeveneMedian = leveneResult.pValue!
+                variancesAreEqualMedian = leveneResult.equality!
+            }
+            else {
+                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .mean, alpha: alpha) {
+                cdfLeveneMean = leveneResult.pValue!
+                variancesAreEqualMean = leveneResult.equality!
+            }
+            else {
+                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .trimmedMean, alpha: alpha) {
+                cdfLeveneTrimmedMean = leveneResult.pValue!
+                variancesAreEqualTrimmedMean = leveneResult.equality!
+            }
+            else {
+                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+            if cdfTValueEqualVariances > 0.5 {
+                twoTailedEV = (1.0 - cdfTValueEqualVariances) * 2.0
+                oneTailedEV = 1.0 - cdfTValueEqualVariances
+            }
+            else {
+                twoTailedEV = cdfTValueEqualVariances * 2.0
+                oneTailedEV = cdfTValueEqualVariances
+            }
+            if cdfTValueEqualVariances > 0.5 {
+                twoTailedUEV = (1.0 - cdfTValueUnequalVariances) * 2.0
+                oneTailedUEV = 1.0 - cdfTValueUnequalVariances
+            }
+            else {
+                twoTailedUEV = cdfTValueUnequalVariances * 2.0
+                oneTailedUEV = cdfTValueUnequalVariances
+            }
+            let effectSize_EV = sqrt((tValueEqualVariances * tValueEqualVariances) / ((tValueEqualVariances * tValueEqualVariances) + dfEqualVariances))
+            let effectSize_UEV = sqrt((tValueUnequalVariances * tValueUnequalVariances) / ((tValueUnequalVariances * tValueUnequalVariances) + dfUnequalVariances))
+            // Welch
+            let var1OverN1 = var1 / n1
+            let var2OverN2 = var2 / n2
+            let sumVar = var1OverN1 + var2OverN2
+            let denomnatorWelchDF = (var1 * var1 ) / ( n1 * n1 * (n1 - 1.0)) + ( var2 * var2 ) / ( n2 * n2 * (n2 - 1.0))
+            let welchT = (mean1 - mean2) / sqrt(var1OverN1 + var2OverN2 )
+            let welchDF = (sumVar * sumVar) / denomnatorWelchDF
+            let cdfWelch = try SSProbabilityDistributions.cdfStudentTDist(t: welchT, degreesOfFreedom: welchDF)
+            var twoSidedWelch: Double
+            var oneTailedWelch: Double
+            if cdfWelch > 0.5 {
+                twoSidedWelch = (1.0 - cdfWelch) * 2.0
+                oneTailedWelch = 1.0 - cdfWelch
+            }
+            else {
+                twoSidedWelch = cdfWelch * 2.0
+                oneTailedWelch = cdfWelch
+            }
+            var result: SS2SampleTTestResult = SS2SampleTTestResult()
+            result.p2EQVAR = twoTailedEV
+            result.p2UEQVAR = twoTailedUEV
+            result.p1UEQVAR = oneTailedUEV
+            result.p1EQVAR = oneTailedEV
+            result.mean1 = mean1
+            result.mean2 = mean2
+            result.sampleSize1 = n1
+            result.sampleSize2 = n2
+            result.stdDev1 = stdDev1
+            result.stdDev2 = stdDev2
+            result.pooledStdDev = pooledStdDev
+            result.pooledVariance = pooledVariance
+            result.differenceInMeans  = differenceInMeans
+            result.tEQVAR = tValueEqualVariances
+            result.tUEQVAR = tValueUnequalVariances
+            result.LeveneP = cdfLeveneMedian
+            result.dfEQVAR = dfEqualVariances
+            result.dfUEQVAR = dfUnequalVariances
+            result.mean1GTEmean2 = variancesAreEqualMedian ? ((cdfTValueEqualVariances > (1.0 - alpha)) ? true : false) : ((cdfTValueUnequalVariances > (1.0 - alpha)) ?  true : false)
+            result.mean1LTEmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances < alpha) ? true : false) : ((cdfTValueUnequalVariances < alpha) ? true : false)
+            result.mean1EQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances >= alpha && cdfTValueEqualVariances <= (1.0 - alpha)) ? true : false) : ((cdfTValueUnequalVariances >= alpha && cdfTValueUnequalVariances <= (1.0 - alpha)) ? true : false)
+            result.mean1UEQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances < alpha || cdfTValueEqualVariances > (1.0 - alpha)) ? true : false ) : ((cdfTValueUnequalVariances < alpha || cdfTValueUnequalVariances > (1.0 - alpha)) ? true : false)
+            result.CVEQVAR = criticalValueEqualVariances
+            result.CVUEQVAR = criticalValueUnequalVariances
+            result.rUEQVAR = effectSize_UEV
+            result.rEQVAR = effectSize_EV
+            result.tWelch = welchT
+            result.dfWelch = welchDF
+            result.p2Welch = twoSidedWelch
+            result.p1Welch = oneTailedWelch
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
     
     
     

@@ -398,8 +398,44 @@ public struct SSVarianceEqualityTestResult {
     var testStatistic: Double?
     var equality: Bool?
 }
-
-
+/// Results of the two sample t-Test
+public struct SS2SampleTTestResult {
+    /// one sided p value for equal variances
+    var p1EQVAR: Double?
+    /// one sided p value for unequal variances
+    var p1UEQVAR: Double?
+    /// two sided p value for equal variances
+    var p2EQVAR: Double?
+    /// two sided p value for unequal variances
+    var p2UEQVAR: Double?
+    var mean1: Double?
+    var mean2: Double?
+    var sampleSize1: Double?
+    var sampleSize2: Double?
+    var stdDev1: Double?
+    var stdDev2: Double?
+    var pooledStdDev: Double?
+    var pooledVariance: Double?
+    var differenceInMeans: Double?
+    var tEQVAR: Double?
+    var tUEQVAR: Double?
+    var LeveneP: Double?
+    var dfEQVAR: Double?
+    var dfUEQVAR: Double?
+    var variancesAreEqual: Bool? = false
+    var mean1GTEmean2: Bool? = false
+    var mean1LTEmean2: Bool? = false
+    var mean1EQmean2: Bool? = false
+    var mean1UEQmean2: Bool? = false
+    var CVEQVAR: Double?
+    var CVUEQVAR: Double?
+    var rUEQVAR: Double?
+    var rEQVAR: Double?
+    var tWelch: Double?
+    var dfWelch: Double?
+    var p2Welch: Double?
+    var p1Welch: Double?
+}
 
 
 
