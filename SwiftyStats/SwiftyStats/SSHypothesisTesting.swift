@@ -921,8 +921,8 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var cdfLeveneMedian: Double = 0.0
-        var cdfLeveneMean: Double
-        var cdfLeveneTrimmedMean: Double
+//        var cdfLeveneMean: Double
+//        var cdfLeveneTrimmedMean: Double
         var cdfTValueEqualVariances: Double = 0.0
         var cdfTValueUnequalVariances: Double = 0.0
         var dfEqualVariances: Double = 0.0
@@ -939,8 +939,8 @@ public class SSHypothesisTesting {
         var tValueEqualVariances: Double = 0.0
         var tValueUnequalVariances: Double = 0.0
         var variancesAreEqualMedian: Bool = false
-        var variancesAreEqualMean: Bool
-        var variancesAreEqualTrimmedMean: Bool
+//        var variancesAreEqualMean: Bool
+//        var variancesAreEqualTrimmedMean: Bool
         var twoTailedEV: Double = 0.0
         var twoTailedUEV: Double = 0.0
         var oneTailedEV: Double = 0.0
@@ -993,22 +993,22 @@ public class SSHypothesisTesting {
                 os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
-            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .mean, alpha: alpha) {
-                cdfLeveneMean = leveneResult.pValue!
-                variancesAreEqualMean = leveneResult.equality!
-            }
-            else {
-                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
-                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-            }
-            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .trimmedMean, alpha: alpha) {
-                cdfLeveneTrimmedMean = leveneResult.pValue!
-                variancesAreEqualTrimmedMean = leveneResult.equality!
-            }
-            else {
-                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
-                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-            }
+//            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .mean, alpha: alpha) {
+//                cdfLeveneMean = leveneResult.pValue!
+//                variancesAreEqualMean = leveneResult.equality!
+//            }
+//            else {
+//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+//            }
+//            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .trimmedMean, alpha: alpha) {
+//                cdfLeveneTrimmedMean = leveneResult.pValue!
+//                variancesAreEqualTrimmedMean = leveneResult.equality!
+//            }
+//            else {
+//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+//            }
             if cdfTValueEqualVariances > 0.5 {
                 twoTailedEV = (1.0 - cdfTValueEqualVariances) * 2.0
                 oneTailedEV = 1.0 - cdfTValueEqualVariances
