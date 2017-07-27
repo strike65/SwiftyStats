@@ -336,8 +336,7 @@ public class SSHypothesisTesting {
                     dtemp1 = ecdf[value]! - dtestCDF
                 }
                 else {
-//                    dtemp1 = _data.empiricalCDF(of: value) - dtestCDF
-                    dtemp1 = _data.cumulativeRelativeFrequencies[value]! - dtestCDF
+                    dtemp1 = _data.empiricalCDF(of: value) - dtestCDF
                 }
                 if dtemp1 < dmax1n {
                     dmax1n = dtemp1
@@ -351,7 +350,7 @@ public class SSHypothesisTesting {
                         dtemp1 = ecdf[nt]! - dtestCDF
                     }
                     else {
-                        dtemp1 = _data.cumulativeRelativeFrequencies[nt]! - dtestCDF
+                        dtemp1 = _data.empiricalCDF(of: nt) - dtestCDF
                     }
                 }
                 else {
@@ -457,6 +456,153 @@ public class SSHypothesisTesting {
     }
     
     
+    // Marsaglia et al.: Evaluating the Anderson-Darling Distribution. Journal of
+    // Statistical Software 9 (2), 1–5. February 2004. http://www.jstatsoft.org/v09/i02
+    
+    fileprivate class func PRIV_ADf(_ z: Double!, _ j: Int!) -> Double {
+        var t: Double
+        var f: Double
+        var fnew: Double
+        var a: Double
+        var b: Double
+        var c: Double
+        var r: Double
+        var i: Int
+        t = (4.0 * Double(j) + 1.0) * (4.0 * Double(j) + 1.0) * 1.23370055013617 / z
+        if t > 150 {
+            return 0.0
+        }
+        a = 2.22144146907918 * exp(-t) / sqrt(t)
+        b = 3.93740248643060 * erfc(sqrt(t))
+        r = z * 0.125
+        f = a + b * r
+        // 200
+        i = 1
+        while i < 500 {
+            c = ((Double(i) - 0.5 - t) * b + t * a) / Double(i)
+            a = b
+            b = c
+            r *= z / (8.0 * Double(i) + 8.0)
+            if (fabs(r) < 1E-40 || fabs(c) < 1E-40) {
+                return f
+            }
+            fnew = f + c * r
+            if (f == fnew) {
+                return f
+            }
+            f = fnew
+            i += 1
+        }
+        return f
+    }
+    
+    fileprivate class func PRIV_ADinf(_ z: Double!) -> Double {
+        var j: Int
+        var ad: Double
+        var adnew: Double
+        var r: Double
+        if z < 0.01 {
+            return 0.0
+        }
+        r = 1.0 / z
+        ad = r * PRIV_ADf(z, 0)
+        // 100
+        j = 1
+        while j < 400 {
+            r *= (0.5 - Double(j)) / Double(j)
+            adnew = ad + (4.0 * Double(j) + 1.0) * r * PRIV_ADf(z, j)
+            if ad == adnew {
+                return ad
+            }
+            ad = adnew
+            j += 1
+        }
+        return ad
+    }
+
+    
+    fileprivate class func PRIV_AD_Prob(_ n: Int,_ z: Double) -> Double {
+        var c: Double
+        var v: Double
+        var x: Double
+        x = PRIV_ADinf(z)
+        /* now x=adinf(z). Next, get v=errfix(n,x) and return x+v; */
+        if x > 0.8 {
+            v = (-130.2137 + (745.2337 - (1705.091 - (1950.646 - (1116.360 - 255.7844 * x) * x) * x) * x) * x) / Double(n)
+            return x + v
+        }
+        c = 0.01265 + 0.1757 / Double(n)
+        if x < c {
+            v = x / c
+            v = sqrt(v) * (1.0 - v) * (49.0 * v - 102.0)
+            return x + v * (0.0037 / pow(Double(n), 2.0) + 0.00078 / Double(n) + 0.00006) / Double(n)
+        }
+        v = (x - c)/(0.8 - c)
+        v = -0.00022633 + (6.54034 - (14.6538 - (14.458 - (8.259 - 1.91864 * v) * v) * v) * v) * v
+        return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
+    }
+
+    
+    
+    /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    public class func adNormalityTest(data: Array<Double>!, alpha: Double!) throws -> SSADTestResult? {
+        var ad: Double = 0.0
+        var a2: Double
+        var estMean: Double
+        var estSd: Double
+        var n: Int
+        var tempArray: Array<Double>
+        var pValue: Double
+        if data.count < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let _data: SSExamine<Double>
+        do {
+            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+        }
+        catch {
+            os_log("unable to create examine object", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        estMean = _data.arithmeticMean
+        estSd = _data.standardDeviation(type: .unbiased)!
+        n = _data.sampleSize
+        tempArray = _data.elementsAsArray(sortOrder: .ascending)! as Array<Double>
+        var i = 0
+        var val: Double
+        var val1: Double
+        while i < n {
+            val = tempArray[i]
+            tempArray[i] = (val - estMean) / estSd
+            i += 1
+        }
+        i = 0
+        var k: Double
+        while i < n {
+            val = tempArray[i]
+            val1 = tempArray[n - i - 1]
+            k = Double(i)
+            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(SSProbabilityDistributions.cdfStandardNormalDist(u: val)) + log(1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: val1))))
+            i += 1
+        }
+        a2 = -1.0 * Double(n) - ad
+        ad = a2
+        if n > 8 {
+            a2 = a2 * (1.0 + 0.75 / Double(n) + 2.25 / (Double(n) * Double(n)))
+        }
+        pValue = 1.0 - PRIV_AD_Prob(n, a2)
+        var result: SSADTestResult = SSADTestResult()
+        result.pValue = pValue
+        result.AD = ad
+        result.ADStar = a2
+        result.sampleSize = n
+        result.stdDev = estSd
+        result.variance = estSd * estSd
+        result.mean = estMean
+        result.isNormal = (pValue < alpha)
+        return result
+    }
     
     
     

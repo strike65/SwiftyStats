@@ -483,7 +483,6 @@ fileprivate func Pomeranz(_ n: Int, _ x: Double) -> Double {
     var H: Array<Array<Double>> /* = pow(w, j) / Factorial(j) */
     var i: Int
     var j: Int
-    var k: Int
     V = createMatrixD(2, n + 2)
     H = createMatrixD(4, n + 2)
     

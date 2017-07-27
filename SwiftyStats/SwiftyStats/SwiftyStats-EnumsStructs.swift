@@ -370,7 +370,24 @@ public struct SSKSTestResult {
         sampleSize = nil
         infoString = nil
     }
-    
 }
+
+
+public struct SSADTestResult {
+    var pValue: Double?
+    var AD: Double?
+    var ADStar: Double?
+    var sampleSize: Int?
+    var stdDev: Double?
+    var variance: Double?
+    var mean: Double?
+    var isNormal: Bool?
+}
+
+
+
+
+
+
 
 
