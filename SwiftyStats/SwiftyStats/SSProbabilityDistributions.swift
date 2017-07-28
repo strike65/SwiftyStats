@@ -1762,6 +1762,9 @@ class SSProbabilityDistributions {
             os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
+        if x < 0.0 {
+            return 0.0
+        }
         var cv: Bool = false
         let result = gammaNormalizedP(x: x / b, a: a, converged: &cv)
         if cv {
@@ -1828,6 +1831,78 @@ class SSProbabilityDistributions {
         else {
             return gVal
         }
+    }
+
+    // MARK: Erlang
+    
+    /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0
+    public class func paraErlangDist(shape a: Double!, scale b: UInt!) throws -> SSContProbDistParams {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        let result:SSContProbDistParams = try! paraGammaDist(shape: a, scale: Double(b))
+        return result
+    }
+    
+    
+    /// Returns the pdf of the Erlang distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0
+    public class func pdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        return try! pdfGammaDist(x: x, shape: a, scale: Double(b))
+    }
+    
+    /// Returns the cdf of the Erlang distribution.
+    /// - Parameter x: x
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0
+    public class func cdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        let result: Double
+        do {
+            result = try cdfGammaDist(x: x, shape: a, scale: Double(b))
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    /// Returns the quantile of the Erlang distribution.
+    /// - Parameter p: p
+    /// - Parameter a: Shape parameter
+    /// - Parameter b: Scale parameter
+    /// - Throws: SSSwiftyStatsError if a <= 0 || p < 0 || p > 1
+    public class func quantileErlangDist(p: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+        if (a <= 0.0) {
+            os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p < 0 || p > 1 {
+            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if p == 0.0 {
+            return 0.0
+        }
+        if p == 1.0 {
+            return Double.infinity
+        }
+        return try! quantileGammaDist(p: p, shape: a, scale: Double(b))
     }
 
     

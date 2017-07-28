@@ -195,7 +195,6 @@ public class SSHypothesisTesting {
         res.lambdas = lambdas
         res.maxOutliers = maxOutliers
         res.means = means
-        res.name = "ESD outlier Test"
         res.outliers = outliers
         res.stdDeviations = stdDevs
         res.testStatistics = testStats
@@ -644,7 +643,7 @@ public class SSHypothesisTesting {
         result.stdDev = estSd
         result.variance = estSd * estSd
         result.mean = estMean
-        result.isNormal = (pValue < alpha)
+        result.isNormal = (pValue >= alpha)
         return result
     }
     

@@ -70,9 +70,13 @@ public enum SSCumulativeFrequencyTableFormat {
 
 /// Defines the level of measurement. In future versions this setting will be used to determine the available statistics.
 public enum SSLevelOfMeasurement: Int {
+    /// nominal data (allowed operators: == and !=)
     case nominal
+    /// ordinal data (allowed operators: ==, !=, <, >)
     case ordinal
+    /// interval data (allowed operators: ==, !=, <, >, +, -)
     case interval
+    /// ratio data (allowed operators: ==, !=, <, >, +, -, *, /)
     case ratio
 }
 
@@ -89,10 +93,15 @@ public enum SSSortUniqeItems {
 
 /// Defines the sort order of the Frequency Table
 public enum SSFrequencyTableSortOrder {
+    /// Sorts by frequency ascending
     case frequencyAscending
+    /// Sorts by frequency descending
     case frequencyDescending
+    /// Sorts by value ascending
     case valueAscending
+    /// Sorts by value descending
     case valueDescending
+    /// Undefined
     case none
 }
 /// Defines the sort order of items when exported as an array
@@ -103,7 +112,7 @@ public enum SSDataArraySortOrder {
     case descending
     /// Original order
     case original
-    /// Undefined/not determined
+    /// Undefined
     case none
 }
 /// Defines the
@@ -114,11 +123,6 @@ public enum SSLeveneTestType {
     case mean
     /// Use the trimmed mean
     case trimmedMean
-}
-
-/// Type of the Rosner test for outliers (ESD test)
-public enum SSRosnerTestType {
-    case lowerTail, upperTail, bothTails, none
 }
 
 /// Defines the cutting point used by the Runs test
@@ -262,19 +266,26 @@ public enum SSOutlierTest {
 
 
 public struct SSGrubbsTestResult {
-    public var name: String!
+    /// ciritcal value
     public var criticalValue: Double!
+    /// largest value
     public var largest: Double!
+    /// smalles value
     public var smallest: Double!
+    /// sample size
     public var sampleSize: Int!
+    /// max difference
     public var maxDiff: Double!
+    /// arithmetic mean
     public var mean: Double!
+    /// Grubbs G
     public var G: Double!
+    /// sd
     public var stdDev: Double!
+    /// true iff G > ciriticalValue
     public var hasOutliers: Bool!
     
     public init() {
-        name = ""
         criticalValue = Double.nan
         largest = Double.nan
         smallest = Double.nan
@@ -287,28 +298,40 @@ public struct SSGrubbsTestResult {
     }
 }
 
+/// Type of the Rosner test for outliers (ESD test)
 public enum SSESDTestType {
+    /// consider lower tail only
     case lowerTail
+    /// consider upper tail only
     case upperTail
+    /// consider both tails
     case bothTails
 }
 
 
 public struct SSESDTestResult {
-    var name: String
+    /// sd
     var stdDeviations: Array<Double>?
+    /// number of items removed during procedure
     var itemsRemoved: Array<Double>?
+    /// test statistic
     var testStatistics: Array<Double>?
+    /// array of lamddas
     var lambdas: Array<Double>?
+    /// count of outliers found
     var countOfOutliers: Int?
+    /// array containing outliers found
     var outliers: Array<Double>?
+    /// alpha
     var alpha: Double?
+    /// max number of outliers to search for
     var maxOutliers: Int?
+    /// test type
     var testType: SSESDTestType
+    /// array of the means
     var means: Array<Double>?
     
     init() {
-        name = ""
         stdDeviations = nil
         itemsRemoved = nil
         testStatistics = nil
@@ -327,31 +350,52 @@ public struct SSESDTestResult {
 
 /// Enumarates the target distribution to use for GoF tests
 public enum SSGoFTarget {
+    /// Normal distribution. Estimated parameters: mean and variance
     case gaussian
+    /// Student's t distribution. Estimated parameter: degrees of freedom
     case studentT
+    /// Laplace distribution. Estimated parameters: mean and beta (scale parameter)
     case laplace
+    /// Exponential distribution. Estimated parameter: lambda
     case exponential
+    /// Laplace distribution. Estimated parameters: upper and lower bound
     case uniform
     case none
 }
 
-/// Results of the KS one sample test
+/// Results of the KS one sample test. The fields actually used depend on the target distribution.
 public struct SSKSTestResult {
+    /// emprical mean
     var estimatedMean: Double?
+    /// empirical sd
     var estimatedSd: Double?
+    /// empirical variance
     var estimatedVar: Double?
+    /// empirical lower bound
     var estimatedLowerBound: Double?
+    /// empirical upper bound
     var estimatedUpperBound: Double?
+    /// empirical degrees of freedom
     var estimatedDegreesOfFreedom: Double?
+    /// empirical shape parameter
     var estimatedShapeParam: Double?
+    /// empirical scale parameter
     var estimatedScaleParam: Double?
+    /// target distribution
     var targetDistribution: SSGoFTarget
+    /// p value
     var pValue: Double?
+    /// max absolute difference
     var maxAbsDifference: Double?
+    /// max absolute positive difference
     var maxPosDifference: Double?
+    /// max absolute negative difference
     var maxNegDifference: Double?
+    /// z value
     var zStatistics: Double?
+    /// sample size
     var sampleSize: Int?
+    /// a string containing additional info (for certain distributions)
     var infoString: String?
     
     public init() {
@@ -377,25 +421,41 @@ public struct SSKSTestResult {
 
 /// Results of the Anderson Darling test
 public struct SSADTestResult {
+    /// p value (= (1 - alpha)-quantile of testStatistic
     var pValue: Double?
+    /// Anderson Darling statistics
     var AD: Double?
+    /// AD*
     var ADStar: Double?
+    /// sample size
     var sampleSize: Int?
+    /// standard deviation
     var stdDev: Double?
+    /// variance
     var variance: Double?
+    /// mean
     var mean: Double?
+    /// true iff pValue >= alpha
     var isNormal: Bool?
 }
 
 /// Result of tests for equality of variances (Bartlett, Levene, Brown-Forsythe)
 public struct SSVarianceEqualityTestResult {
+    /// degrees of freedom
     var df: Double?
+    /// critical value for alpha = 0.1
     var cv90Pct: Double?
+    /// critical value for alpha = 0.05
     var cv95Pct: Double?
+    /// critical value for alpha = 0.01
     var cv99Pct: Double?
+    /// critical value for alpha as set by the call
     var cvAlpha: Double?
+    /// p value (= (1 - alpha)-quantile of testStatistic
     var pValue: Double?
+    /// test statistic value
     var testStatistic: Double?
+    /// set to true iff pValue >= alpha
     var equality: Bool?
 }
 /// Results of the two sample t-Test
@@ -408,32 +468,59 @@ public struct SS2SampleTTestResult {
     var p2EQVAR: Double?
     /// two sided p value for unequal variances
     var p2UEQVAR: Double?
+    /// mean of sample 1
     var mean1: Double?
+    /// mean of sample 2
     var mean2: Double?
+    /// n of sample 1
     var sampleSize1: Double?
+    /// n of sample 2
     var sampleSize2: Double?
+    /// sd of sample 1
     var stdDev1: Double?
+    /// sd of sample 1
     var stdDev2: Double?
+    /// pooled sd
     var pooledStdDev: Double?
+    /// pooled variance
     var pooledVariance: Double?
+    /// mean1 - mean2
     var differenceInMeans: Double?
+    /// t Value assuming equal variances
     var tEQVAR: Double?
+    /// t Value assuming unequal variances
     var tUEQVAR: Double?
+    /// p Value of the Levene test
     var LeveneP: Double?
+    /// degrees of freedom assuming equal variances
     var dfEQVAR: Double?
+    /// degrees of freedom assuming unequal variances (Welch)
     var dfUEQVAR: Double?
+    /// s(1) == s(2)
     var variancesAreEqual: Bool? = false
+    /// mean1 >= mean2
     var mean1GTEmean2: Bool? = false
+    /// mean1 <= mean2
     var mean1LTEmean2: Bool? = false
+    /// mean1 == mean2
     var mean1EQmean2: Bool? = false
+    /// mean1 != mean2
     var mean1UEQmean2: Bool? = false
+    /// critical value assuming equal variances
     var CVEQVAR: Double?
+    /// critical value assuming unequal variances
     var CVUEQVAR: Double?
-    var rUEQVAR: Double?
+    /// effect size assuming equal variances
     var rEQVAR: Double?
+    /// effect size assuming unequal variances
+    var rUEQVAR: Double?
+    /// t value according to Welch
     var tWelch: Double?
+    /// degrees of freedom according to Welch
     var dfWelch: Double?
+    /// two sided p value according to Welch
     var p2Welch: Double?
+    /// one sided p value according to Welch
     var p1Welch: Double?
 }
 
