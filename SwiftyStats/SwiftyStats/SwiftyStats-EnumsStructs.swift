@@ -459,7 +459,7 @@ public struct SSVarianceEqualityTestResult {
     var equality: Bool?
 }
 /// Results of the two sample t-Test
-public struct SS2SampleTTestResult {
+public struct SSTwoSampleTTestResult {
     /// one sided p value for equal variances
     var p1EQVAR: Double?
     /// one sided p value for unequal variances
@@ -524,6 +524,42 @@ public struct SS2SampleTTestResult {
     var p1Welch: Double?
 }
 
-
+/// Struct holding the results of the one sample t test
+public struct SSOneSampleTTestResult {
+    /// one sided p value
+    var p1Value: Double?
+    /// one sided p value
+    var p2Value: Double?
+    /// t Value
+    var tStat: Double?
+    /// critical value for alpha = 0.1
+    var cv90Pct: Double?
+    /// critical value for alpha = 0.05
+    var cv95Pct: Double?
+    /// critical value for alpha = 0.01
+    var cv99Pct: Double?
+    /// critical value for alpha as set by the call
+    var cvAlpha: Double?
+    /// mean
+    var mean: Double?
+    /// reference mean
+    var mean0: Double?
+    /// mean - mean0
+    var difference: Double?
+    /// n of sample
+    var sampleSize: Double?
+    /// sd
+    var stdDev: Double?
+    /// standard error
+    var stdErr: Double?
+    /// degrees of freedom
+    var df: Double?
+    /// mean1 >= mean0
+    var meanGTEtestValue: Bool? = false
+    /// mean <= mean0
+    var meanLTEtestValue: Bool? = false
+    /// mean == mean0
+    var meanEQtestValue: Bool? = false
+}
 
 

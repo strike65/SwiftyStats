@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     96097,       2221]
-NotebookOptionsPosition[     92003,       2074]
-NotebookOutlinePosition[     92366,       2090]
-CellTagsIndexPosition[     92323,       2087]
+NotebookDataLength[     98547,       2288]
+NotebookOptionsPosition[     94212,       2133]
+NotebookOutlinePosition[     94575,       2149]
+CellTagsIndexPosition[     94532,       2146]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -481,537 +481,6 @@ Cell[BoxData[
  CellChangeTimes->{{3.710068256713966*^9, 3.7100682678667717`*^9}, {
   3.710068595839981*^9, 3.710068620599072*^9}}],
 
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"AndersonDarlingTest", "[", 
-  RowBox[{"normal", ",", 
-   RowBox[{"NormalDistribution", "[", 
-    RowBox[{
-     RowBox[{"Mean", "[", "normal", "]"}], ",", 
-     RowBox[{"StandardDeviation", "[", "normal", "]"}]}], "]"}], ",", 
-   "\"\<HypothesisTestData\>\""}], "]"}]], "Input",
- CellChangeTimes->{{3.710085370820332*^9, 3.7100854588394413`*^9}, {
-  3.7100854913925533`*^9, 3.710085505777823*^9}}],
-
-Cell[BoxData[
- InterpretationBox[
-  RowBox[{
-   TagBox["HypothesisTestData",
-    "SummaryHead"], "[", 
-   DynamicModuleBox[{Typeset`open$$ = False}, 
-    PanelBox[
-     PaneSelectorBox[{False->GridBox[{
-        {
-         PaneBox[
-          ButtonBox[
-           
-           DynamicBox[FEPrivate`FrontEndResource[
-            "FEBitmaps", "SquarePlusIconMedium"],
-            ImageSizeCache->{12., {0., 12.}}],
-           Appearance->None,
-           ButtonFunction:>(Typeset`open$$ = True),
-           Evaluator->Automatic,
-           Method->"Preemptive"],
-          Alignment->{Center, Center},
-          
-          ImageSize->
-           Dynamic[{
-            Automatic, 3.5 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
-             Magnification]}]], 
-         GraphicsBox[GraphicsComplexBox[CompressedData["
-1:eJxTTMoPSmViYGAwA2IQvV+g6N7//+IHyh7/qMr9uMOO7VZyUp+w2IFfkzYn
-Sh58Z/f9/5/PG/4KH7htIzfPZbOi/dT38+JNuIUOmB3ymyXb6m1/7+Zl7nol
-gQMZNpuWcacV2C9yTOjercBzwDCs3j3VbqL9wyStzVbOHAccTwR7F91faV9i
-6/ztoRDLgZ4iRasJkQfs90qxlOq/+b9ffvGd3Q7y5+2dHy5JlXP4sd/n3Lw9
-E6Ku2T82OSa5+877/Ru23tpo2nHTfsmXDguHkAf75f3161YvvWYvNsdi39f5
-C/f3Rm5wuMtywX7Rd151p+v37C+xnJ1uxHHQnsFk9Sara+/saywuavluXWtf
-4Oz1SfLYd/seR+51+6ZPsjdi+tzx8+d/e4sDRVPXWhfZK/ruua11gdlhc3uy
-xl9Wf/ur8RuuG3xjd9jltzUx46GivcH9SfKlV7kd4veWPWBI+2Q3J0h42Qlm
-AQfhYtWiqpoddl+sTlXzCws56M1lWjdVvMpuQWRF+dd/wg7Ohid4Eh2t7BZJ
-16e6i4g5TDt7qs1T4YMtNPwdPDeu6MsQWwLjH0jZLlQ6c4aNPSw+vI9XlDDK
-BtjD4iPkrcf+e2ZJ8Pjov7jnbGJEETw+1r3m/37NpBEeH4eOZy+78rofHh/M
-fWfi7PfPgsdHX6aSxfEXS+HxwWV2y7Ro8QZ4fLDO/HZputp2eHy0LHnA+J1z
-Pzw+rtv/zTtudBgeH51P9674FnoMHh+acsv3TN1wAh4f5z4H3TdoPwmPj/X1
-pobmp07A40O35vzB6K5j8PjYe9+N71nBYXh8NH4U7n/EvR8eHwEfWhe9Xbfd
-HhYf7kcSN7h3bLCHxUfegdOy63cttYfFR7ef4ONnq2fbw+LDYUfsm8Un+u1h
-8dFwaIvgx0+NMP4BBiiAyaPxccoDAAUJngM=
-           "], {{{}, 
-             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
-              None], GraphicsGroupBox[
-               PolygonBox[{{1, 53, 54, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
-                 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2}}]]}, {}, 
-             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
-              None], GraphicsGroupBox[
-               PolygonBox[{{26, 51, 52, 50, 49, 48, 47, 46, 45, 44, 43, 42, 
-                41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 
-                27}}]]}, {}, {}, {}, {}, {}, {}}, {{}, {}, 
-             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[1.], 
-              LineBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
-               17, 18, 19, 20, 21, 22, 23, 24, 25}]}, 
-             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[1.], 
-              LineBox[{26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}]}}}],
-          AspectRatio->1,
-          Axes->{False, False},
-          AxesLabel->{None, None},
-          AxesOrigin->{0, 0.},
-          Background->GrayLevel[0.93],
-          BaseStyle->{FontFamily -> "Arial"},
-          DisplayFunction->Identity,
-          Frame->{{True, True}, {True, True}},
-          FrameLabel->{{None, None}, {None, None}},
-          FrameStyle->Directive[
-            Thickness[Tiny], 
-            GrayLevel[0.7]],
-          FrameTicks->{{None, None}, {None, None}},
-          GridLines->{None, None},
-          GridLinesStyle->Directive[
-            GrayLevel[0.5, 0.4]],
-          ImageSize->{Automatic, 
-            Dynamic[
-            3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
-              Magnification])]},
-          LabelStyle->{FontFamily -> "Arial"},
-          Method->{"ScalingFunctions" -> None, "AxesInFront" -> True},
-          PlotRange->{All, All},
-          PlotRangeClipping->True,
-          PlotRangePadding->{{0, 0}, {0, 0.1}},
-          Ticks->{Automatic, Automatic}], GridBox[{
-           {
-            RowBox[{
-             TagBox["\<\"Type: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["AndersonDarlingTest",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"p-Value: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["0.9322400199133646`",
-              "SummaryItem"]}]}
-          },
-          AutoDelete->False,
-          
-          BaseStyle->{
-           ShowStringCharacters -> False, NumberMarks -> False, 
-            PrintPrecision -> 3, ShowSyntaxStyles -> False},
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}
-       },
-       AutoDelete->False,
-       BaselinePosition->{1, 1},
-       GridBoxAlignment->{"Rows" -> {{Top}}},
-       GridBoxItemSize->{
-        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], True->
-      GridBox[{
-        {
-         PaneBox[
-          ButtonBox[
-           
-           DynamicBox[FEPrivate`FrontEndResource[
-            "FEBitmaps", "SquareMinusIconMedium"],
-            ImageSizeCache->{12., {0., 12.}}],
-           Appearance->None,
-           ButtonFunction:>(Typeset`open$$ = False),
-           Evaluator->Automatic,
-           Method->"Preemptive"],
-          Alignment->{Center, Center},
-          
-          ImageSize->
-           Dynamic[{
-            Automatic, 3.5 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
-             Magnification]}]], 
-         GraphicsBox[GraphicsComplexBox[CompressedData["
-1:eJxTTMoPSmViYGAwA2IQvV+g6N7//+IHyh7/qMr9uMOO7VZyUp+w2IFfkzYn
-Sh58Z/f9/5/PG/4KH7htIzfPZbOi/dT38+JNuIUOmB3ymyXb6m1/7+Zl7nol
-gQMZNpuWcacV2C9yTOjercBzwDCs3j3VbqL9wyStzVbOHAccTwR7F91faV9i
-6/ztoRDLgZ4iRasJkQfs90qxlOq/+b9ffvGd3Q7y5+2dHy5JlXP4sd/n3Lw9
-E6Ku2T82OSa5+877/Ru23tpo2nHTfsmXDguHkAf75f3161YvvWYvNsdi39f5
-C/f3Rm5wuMtywX7Rd151p+v37C+xnJ1uxHHQnsFk9Sara+/saywuavluXWtf
-4Oz1SfLYd/seR+51+6ZPsjdi+tzx8+d/e4sDRVPXWhfZK/ruua11gdlhc3uy
-xl9Wf/ur8RuuG3xjd9jltzUx46GivcH9SfKlV7kd4veWPWBI+2Q3J0h42Qlm
-AQfhYtWiqpoddl+sTlXzCws56M1lWjdVvMpuQWRF+dd/wg7Ohid4Eh2t7BZJ
-16e6i4g5TDt7qs1T4YMtNPwdPDeu6MsQWwLjH0jZLlQ6c4aNPSw+vI9XlDDK
-BtjD4iPkrcf+e2ZJ8Pjov7jnbGJEETw+1r3m/37NpBEeH4eOZy+78rofHh/M
-fWfi7PfPgsdHX6aSxfEXS+HxwWV2y7Ro8QZ4fLDO/HZputp2eHy0LHnA+J1z
-Pzw+rtv/zTtudBgeH51P9674FnoMHh+acsv3TN1wAh4f5z4H3TdoPwmPj/X1
-pobmp07A40O35vzB6K5j8PjYe9+N71nBYXh8NH4U7n/EvR8eHwEfWhe9Xbfd
-HhYf7kcSN7h3bLCHxUfegdOy63cttYfFR7ef4ONnq2fbw+LDYUfsm8Un+u1h
-8dFwaIvgx0+NMP4BBiiAyaPxccoDAAUJngM=
-           "], {{{}, 
-             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
-              None], GraphicsGroupBox[
-               PolygonBox[{{1, 53, 54, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
-                 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2}}]]}, {}, 
-             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
-              None], GraphicsGroupBox[
-               PolygonBox[{{26, 51, 52, 50, 49, 48, 47, 46, 45, 44, 43, 42, 
-                41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 
-                27}}]]}, {}, {}, {}, {}, {}, {}}, {{}, {}, 
-             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[1.], 
-              LineBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
-               17, 18, 19, 20, 21, 22, 23, 24, 25}]}, 
-             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[1.], 
-              LineBox[{26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}]}}}],
-          AspectRatio->1,
-          Axes->{False, False},
-          AxesLabel->{None, None},
-          AxesOrigin->{0, 0.},
-          Background->GrayLevel[0.93],
-          BaseStyle->{FontFamily -> "Arial"},
-          DisplayFunction->Identity,
-          Frame->{{True, True}, {True, True}},
-          FrameLabel->{{None, None}, {None, None}},
-          FrameStyle->Directive[
-            Thickness[Tiny], 
-            GrayLevel[0.7]],
-          FrameTicks->{{None, None}, {None, None}},
-          GridLines->{None, None},
-          GridLinesStyle->Directive[
-            GrayLevel[0.5, 0.4]],
-          ImageSize->{Automatic, 
-            Dynamic[
-            3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
-              Magnification])]},
-          LabelStyle->{FontFamily -> "Arial"},
-          Method->{"ScalingFunctions" -> None, "AxesInFront" -> True},
-          PlotRange->{All, All},
-          PlotRangeClipping->True,
-          PlotRangePadding->{{0, 0}, {0, 0.1}},
-          Ticks->{Automatic, Automatic}], GridBox[{
-           {
-            RowBox[{
-             TagBox["\<\"Type: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["AndersonDarlingTest",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"p-Value: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["0.9322400199133646`",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"Test: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["\<\"N/A\"\>",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"Test statistic: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["0.30758673863317654`",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"Data: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox["\<\"Univariate\"\>",
-              "SummaryItem"]}]},
-           {
-            RowBox[{
-             TagBox["\<\"Conclusion: \"\>",
-              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
-             TagBox[
-              InterpretationBox[Cell["\<\
-The null hypothesis that the data is distributed according to the \
-NormalDistribution[-0.00747255, 0.967809] is not rejected at the 5 percent \
-level based on the Anderson\[Hyphen]Darling test.\
-\>",
-                CellSize->{300, Automatic}],
-               TextCell[
-               "The null hypothesis that the data is distributed according to \
-the NormalDistribution[-0.00747255, 0.967809] is not rejected at the 5 \
-percent level based on the Anderson\[Hyphen]Darling test.", 
-                CellSize -> {300, Automatic}]],
-              "SummaryItem"]}]}
-          },
-          AutoDelete->False,
-          
-          BaseStyle->{
-           ShowStringCharacters -> False, NumberMarks -> False, 
-            PrintPrecision -> 3, ShowSyntaxStyles -> False},
-          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
-          
-          GridBoxItemSize->{
-           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-          GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}
-       },
-       AutoDelete->False,
-       BaselinePosition->{1, 1},
-       GridBoxAlignment->{"Rows" -> {{Top}}},
-       GridBoxItemSize->{
-        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]}, Dynamic[
-      Typeset`open$$],
-      ImageSize->Automatic],
-     BaselinePosition->Baseline],
-    DynamicModuleValues:>{}], "]"}],
-  HypothesisTestData[AndersonDarlingTest, {CompressedData["
-1:eJwNwws4EwgcAHAtXQ8rGddDSejB6sLl3KXmr0tYUV6nRLnIlR4eF1acSOmG
-Qg+U2GHxJaw8D4s/nQuJFmJezczWbrOFbTLF3f2+72fkH+IeuEBDQyPj/2QB
-77TvDKEx0ey2vTlzDssdKPZM9mfcZXqyUMabxXbFiLxkWI3SUWv9xkE1JhkG
-yI+9mMHZKcI402MGi7fQ67TtZvBpp+XG6HoVbhjKqRpkqfDY8sTo7TEqbH7g
-17GAoEJWt9NBoUyJ7K3aWlWFSnQ+b8tanq5Ecfxsxq5hBXLJTaOhvyiwOs8/
-G5cqcMW3ba3e3CnU9FrxTXnOJM476az1CptEx7bii0SnSTy9LKePu3kCk98X
-xUUzPuLW3MRn/KCPeLnMwv4QT45BT7YqUhvk2PrxwmzFH3IUJCUzf70rww6T
-WIsJ33HcUEBicM5JMMMoJSJs3T8o3HI2KDhBjFpLSn83vytCam5TYaeJCLXJ
-YQaCJCEWrpiKsjATItHGKJyzWYjZeiJKZ+UYfld1vtScNIZ+RKE9O0mAS+nU
-mrQWPpI+a7reLOFj+UoDgmM8H19Zhy6W6I3gGUlEcuNRHlJiNOcnFEPoOMa+
-V3dqEK/84ESfWjSI+xaWnRelDeCaB3F+JlQuRo5k6xTU96Fz4qaotX/3Ione
-p9KK7MXE6gAJa/wd5tRNeTMWv8O/zC4qbol7MAXc+p8V9uBgcHxIlm03nuu7
-XvkytwsF3yekLyN34alwO9K07C1mr7lzN9GHg4anvC0mHTkYYZOm6pF0IGnH
-mM6QUzuG2bR5ZXq0oppadbgloBktrvrQFJ5NOJ4vvpra1IATXw9HuWg3YH/v
-k5rX9jVILbLJ6s+pxD9N9h6nZpbhj+rXzO23yrA22WJ/rRUDOb3ro91W3caO
-znwaeSQFjY2lfk6UJJS/Hyaah1xD3dE4ZyOHfBhQOHyqz3wM7nGm9y0XscFB
-QknvZjRAHsOWEDvTBJeN6YpQQgssXGJ4oHKsA7Lept7wEHHAA0LI7ie7wIMW
-uJrI6gJrL39GemU3tJwx+MllZQ9o3W8sZV/ug1VuujG2r/rg0oOTzBJeH1SF
-eid0aHDhyRTFREefC6XDkXm1h7gwLyv3o9VxobjdbIHl0n7wfBy8Y766H8hz
-1yt82gdAP6jouQF/CDTTBprb5t5DI2vLYW8XHgTe1K7IvMADzsMkzzU+I0BV
-tFRaL+eD0iXrq/0X+cD01ceJA6NQ8fNoav4hAcRem5YI8gRA3daQN9EvhIPG
-nze2E0RAs+wIf6orglktir/SVwSm224UL8wVQeOzL+rqEREUDMWkpGZ8gNa3
-673Vwg8gdTdR7owQg3Km3iU2UgwNjSWuj6LFMJQ77bPbTQoVbwLunT4hhRb/
-h55WvVIoyr+UXuUiA3XCkTt7jsjg6ZtslVmLDEJpvcFsjhwmzTRe7jwzAbtq
-eXmmrpOgP7x33NlIAXQH2srdHgooarIiGuoo4beasRqPOiWEpRZoH3dVQbYr
-PW7fYxUMXlidJbWahsAX5ipF4QxE67Ec+VGzULjMYXNE/Bdo0K04QQycg3Wk
-T0dnOXOgJyM/+rJpHspwnLGn5F9opvn3JhsR7AbVV84+D//Krr1W70g6ZbHd
-f5FTkxw=
-    "], "SampleToNull", 1, 
-    Rational[1, 20], {
-     NormalDistribution[-0.007472552066666716, 0.967809369140923], Automatic},
-     Automatic, {}}, {
-   "Normality" -> 0, "EqualVariance" -> 0, "Symmetry" -> 0}],
-  Editable->False,
-  SelectWithContents->True,
-  Selectable->False]], "Output",
- CellChangeTimes->{3.710085506338766*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"AndersonDarlingTest", "[", 
-    RowBox[{"normal", ",", 
-     RowBox[{"NormalDistribution", "[", 
-      RowBox[{
-       RowBox[{"Mean", "[", "normal", "]"}], ",", 
-       RowBox[{"StandardDeviation", "[", "normal", "]"}]}], "]"}]}], "]"}], 
-   ",", "21"}], "]"}]], "Input",
- CellChangeTimes->{{3.7100857110501823`*^9, 3.710085724554644*^9}}],
-
-Cell[BoxData["0.9322400199133646`"], "Output",
- CellChangeTimes->{3.7100857251745853`*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"KolmogorovSmirnovTest", "[", 
-    RowBox[{"normal", ",", 
-     RowBox[{"NormalDistribution", "[", 
-      RowBox[{
-       RowBox[{"Mean", "[", "normal", "]"}], ",", 
-       RowBox[{"StandardDeviation", "[", "normal", "]"}]}], "]"}]}], "]"}], 
-   ",", "17"}], "]"}]], "Input",
- CellChangeTimes->{{3.710068271379366*^9, 3.710068285763865*^9}, {
-  3.710068420909196*^9, 3.710068478852848*^9}, {3.710068565695352*^9, 
-  3.710068570462019*^9}}],
-
-Cell[BoxData["0.9551262006718464`"], "Output",
- CellChangeTimes->{{3.710068471981312*^9, 3.710068480167049*^9}, 
-   3.710068571144888*^9, 3.71007262837418*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"KolmogorovSmirnovTest", "[", 
-    RowBox[{"normal", ",", 
-     RowBox[{"LaplaceDistribution", "[", 
-      RowBox[{
-       RowBox[{"Median", "[", "normal", "]"}], ",", 
-       RowBox[{"MedianDeviation", "[", "normal", "]"}]}], "]"}]}], "]"}], ",",
-    "17"}], "]"}]], "Input",
- CellChangeTimes->{{3.710072435244186*^9, 3.710072455053463*^9}}],
-
-Cell[BoxData["0.0118438470415404`"], "Output",
- CellChangeTimes->{3.710072458523234*^9, 3.710072629154518*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"laplace", "=", 
-   RowBox[{"{", 
-    RowBox[{
-     RowBox[{"-", "2.03679"}], ",", "0.518416", ",", 
-     RowBox[{"-", "1.72556"}], ",", "3.07248", ",", "1.58415", ",", "0.55357",
-      ",", "1.13785", ",", "2.77352", ",", "0.692562", ",", 
-     RowBox[{"-", "0.246844"}], ",", "1.07308", ",", "0.676815", ",", 
-     "2.61719", ",", "0.839612", ",", "0.657608", ",", "1.60029", ",", 
-     "0.934251", ",", "1.64299", ",", "4.83994", ",", 
-     RowBox[{"-", "0.572193"}], ",", "0.590732", ",", 
-     RowBox[{"-", "2.30579"}], ",", 
-     RowBox[{"-", "3.46328"}], ",", "4.6823", ",", "2.65601", ",", "1.66736", 
-     ",", "0.0644071", ",", "0.561031", ",", "2.19092", ",", "1.10959", ",", 
-     "0.952764", ",", "4.28232", ",", "0.360738", ",", "3.43897", ",", 
-     RowBox[{"-", "0.122254"}], ",", 
-     RowBox[{"-", "3.22326"}], ",", "7.96229", ",", 
-     RowBox[{"-", "5.32675"}], ",", "1.4503", ",", 
-     RowBox[{"-", "2.94508"}], ",", "1.36242", ",", "1.0414", ",", "0.421444",
-      ",", "3.61022", ",", "1.26506", ",", 
-     RowBox[{"-", "3.94449"}], ",", 
-     RowBox[{"-", "0.544188"}], ",", "2.88665", ",", "2.00745", ",", 
-     RowBox[{"-", "3.01688"}], ",", "1.0722", ",", 
-     RowBox[{"-", "0.327354"}], ",", "1.46366", ",", "1.52667", ",", 
-     "3.71474", ",", "1.24921", ",", "2.36462", ",", "2.111", ",", 
-     RowBox[{"-", "0.704057"}], ",", "6.7197", ",", "7.54793", ",", "2.76588",
-      ",", "0.470362", ",", "0.467676", ",", "1.16809", ",", "2.11906", ",", 
-     RowBox[{"-", "3.79051"}], ",", "2.17474", ",", "4.64406", ",", 
-     RowBox[{"-", "1.69926"}], ",", "0.967686", ",", 
-     RowBox[{"-", "3.22085"}], ",", "1.72475", ",", "1.17087", ",", "1.03924",
-      ",", "0.230923", ",", "1.4176", ",", "0.897564", ",", 
-     RowBox[{"-", "6.89486"}], ",", 
-     RowBox[{"-", "5.64721"}], ",", "1.07495", ",", "1.78927", ",", "8.24184",
-      ",", "5.95395", ",", "0.793648", ",", "1.89169", ",", "1.25558", ",", 
-     "4.3064", ",", 
-     RowBox[{"-", "1.33544"}], ",", "5.67814", ",", 
-     RowBox[{"-", "6.36738"}], ",", 
-     RowBox[{"-", "0.372883"}], ",", "0.13142", ",", "0.786708", ",", 
-     RowBox[{"-", "0.0932199"}], ",", 
-     RowBox[{"-", "4.06743"}], ",", "4.07498", ",", 
-     RowBox[{"-", "0.482598"}], ",", 
-     RowBox[{"-", "1.49333"}], ",", "1.61442", ",", 
-     RowBox[{"-", "2.27068"}], ",", "1.55111", ",", 
-     RowBox[{"-", "2.59695"}], ",", "4.47164", ",", 
-     RowBox[{"-", "0.776884"}], ",", "0.884446", ",", "3.70967", ",", 
-     "0.858531", ",", "3.33213", ",", 
-     RowBox[{"-", "7.62385"}], ",", "0.0583429", ",", 
-     RowBox[{"-", "0.148588"}], ",", 
-     RowBox[{"-", "1.24765"}], ",", "8.67548", ",", "0.860613", ",", 
-     "1.36125", ",", 
-     RowBox[{"-", "9.48455"}], ",", 
-     RowBox[{"-", "0.831406"}], ",", 
-     RowBox[{"-", "1.86396"}], ",", "2.10917", ",", "4.551", ",", "1.064", 
-     ",", "1.97283", ",", "3.82057", ",", "2.29935", ",", 
-     RowBox[{"-", "1.74418"}], ",", "0.244115", ",", 
-     RowBox[{"-", "0.837016"}], ",", "2.53457", ",", "1.61", ",", "1.54181", 
-     ",", 
-     RowBox[{"-", "1.54528"}], ",", 
-     RowBox[{"-", "0.943004"}], ",", 
-     RowBox[{"-", "0.738644"}], ",", 
-     RowBox[{"-", "0.680302"}], ",", "0.358243", ",", "5.85945", ",", 
-     "0.920141", ",", "0.645741", ",", "0.675258", ",", "0.833122", ",", 
-     "0.0261111", ",", "0.593711", ",", "1.10065", ",", "0.956418", ",", 
-     RowBox[{"-", "0.194063"}], ",", "3.37702", ",", 
-     RowBox[{"-", "1.40828"}], ",", "0.853448", ",", 
-     RowBox[{"-", "1.26089"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"KolmogorovSmirnovTest", "[", 
-  RowBox[{"laplace", ",", 
-   RowBox[{"NormalDistribution", "[", 
-    RowBox[{
-     RowBox[{"Mean", "[", "laplace", "]"}], ",", 
-     RowBox[{"StandardDeviation", "[", "laplace", "]"}]}], "]"}]}], 
-  "]"}]}], "Input",
- CellChangeTimes->{{3.7100687463051567`*^9, 3.710068827328656*^9}}],
-
-Cell[BoxData["0.09483208704134305`"], "Output",
- CellChangeTimes->{3.710068828657288*^9, 3.7100726301481447`*^9, 
-  3.710085755595088*^9}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"AndersonDarlingTest", "[", 
-    RowBox[{"laplace", ",", 
-     RowBox[{"NormalDistribution", "[", 
-      RowBox[{
-       RowBox[{"Mean", "[", "laplace", "]"}], ",", 
-       RowBox[{"StandardDeviation", "[", "laplace", "]"}]}], "]"}]}], "]"}], 
-   ",", "21"}], "]"}]], "Input",
- CellChangeTimes->{{3.710085766338994*^9, 3.710085787347069*^9}}],
-
-Cell[BoxData["0.04141591197697303`"], "Output",
- CellChangeTimes->{{3.710085775414043*^9, 3.71008578794576*^9}}]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"KolmogorovSmirnovTest", "[", 
-  RowBox[{"laplace", ",", 
-   RowBox[{"LaplaceDistribution", "[", 
-    RowBox[{
-     RowBox[{"Median", "[", "laplace", "]"}], ",", 
-     RowBox[{"MedianDeviation", "[", "laplace", "]"}]}], "]"}]}], 
-  "]"}]], "Input",
- CellChangeTimes->{{3.7100689269476*^9, 3.710068955497407*^9}}],
-
-Cell[BoxData["0.07716190485371788`"], "Output",
- CellChangeTimes->{3.710068956285243*^9, 3.710072347091988*^9, 
-  3.7100726312196293`*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"chisq", "=", 
-   RowBox[{"ChiSquareDistribution", "[", "20", "]"}]}], ";"}]], "Input",
- CellChangeTimes->{{3.710136348215736*^9, 3.710136357612962*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"chi", " ", "=", " ", "22"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"PDF", "[", 
-    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"CDF", "[", 
-    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
-  "]"}], "\[IndentingNewLine]", 
- RowBox[{"N", "[", 
-  RowBox[{
-   RowBox[{"InverseCDF", "[", 
-    RowBox[{"chisq", ",", 
-     RowBox[{"1", "/", "2"}]}], "]"}], ",", "21"}], "]"}]}], "Input",
- CellChangeTimes->{{3.7101363627621727`*^9, 3.710136390669496*^9}, {
-  3.710136671338209*^9, 3.710136742465097*^9}}],
-
-Cell[BoxData["0.0542627546491024962783861955535880983253061921552922022581`21.\
-"], "Output",
- CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
-  3.7101367203860197`*^9, 3.710136744815845*^9}}],
-
-Cell[BoxData["0.6594893575343389527188915568621674150447200359435945793156`21.\
-"], "Output",
- CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
-  3.7101367203860197`*^9, 3.710136744819964*^9}}],
-
-Cell[BoxData["19.3374292294282623035009644042797563695087254267399065475679`\
-21."], "Output",
- CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
-  3.7101367203860197`*^9, 3.7101367448222017`*^9}}]
-}, Open  ]],
-
 Cell[BoxData[{
  RowBox[{
   RowBox[{"normal1", " ", "=", " ", 
@@ -1190,6 +659,540 @@ Cell[BoxData[{
 Cell[CellGroupData[{
 
 Cell[BoxData[
+ RowBox[{"AndersonDarlingTest", "[", 
+  RowBox[{"normal1", ",", 
+   RowBox[{"NormalDistribution", "[", 
+    RowBox[{
+     RowBox[{"Mean", "[", "normal1", "]"}], ",", 
+     RowBox[{"StandardDeviation", "[", "normal1", "]"}]}], "]"}], ",", 
+   "\"\<HypothesisTestData\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.710085370820332*^9, 3.7100854588394413`*^9}, {
+  3.7100854913925533`*^9, 3.710085505777823*^9}, {3.71024479699788*^9, 
+  3.710244800669536*^9}}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox["HypothesisTestData",
+    "SummaryHead"], "[", 
+   DynamicModuleBox[{Typeset`open$$ = False}, 
+    PanelBox[
+     PaneSelectorBox[{False->GridBox[{
+        {
+         PaneBox[
+          ButtonBox[
+           
+           DynamicBox[FEPrivate`FrontEndResource[
+            "FEBitmaps", "SquarePlusIconMedium"],
+            ImageSizeCache->{12., {0., 12.}}],
+           Appearance->None,
+           ButtonFunction:>(Typeset`open$$ = True),
+           Evaluator->Automatic,
+           Method->"Preemptive"],
+          Alignment->{Center, Center},
+          
+          ImageSize->
+           Dynamic[{
+            Automatic, 3.5 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+             Magnification]}]], 
+         GraphicsBox[GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGAwA2IQvV+g6N7//+IHyh7/qMr9uMOO7VZyUp+w2IFfkzYn
+Sh58Z/f9/5/PG/4KH7htIzfPZbOi/dT38+JNuIUOmB3ymyXb6m1/7+Zl7nol
+gQMZNpuWcacV2C9yTOjercBzwDCs3j3VbqL9wyStzVbOHAccTwR7F91faV9i
+6/ztoRDLgZ4iRasJkQfs90qxlOq/+b9ffvGd3Q7y5+2dHy5JlXP4sd/n3Lw9
+E6Ku2T82OSa5+877/Ru23tpo2nHTfsmXDguHkAf75f3161YvvWYvNsdi39f5
+C/f3Rm5wuMtywX7Rd151p+v37C+xnJ1uxHHQnsFk9Sara+/saywuavluXWtf
+4Oz1SfLYd/seR+51+6ZPsjdi+tzx8+d/e4sDRVPXWhfZK/ruua11gdlhc3uy
+xl9Wf/ur8RuuG3xjd9jltzUx46GivcH9SfKlV7kd4veWPWBI+2Q3J0h42Qlm
+AQfhYtWiqpoddl+sTlXzCws56M1lWjdVvMpuQWRF+dd/wg7Ohid4Eh2t7BZJ
+16e6i4g5TDt7qs1T4YMtNPwdPDeu6MsQWwLjH0jZLlQ6c4aNPSw+vI9XlDDK
+BtjD4iPkrcf+e2ZJ8Pjov7jnbGJEETw+1r3m/37NpBEeH4eOZy+78rofHh/M
+fWfi7PfPgsdHX6aSxfEXS+HxwWV2y7Ro8QZ4fLDO/HZputp2eHy0LHnA+J1z
+Pzw+rtv/zTtudBgeH51P9674FnoMHh+acsv3TN1wAh4f5z4H3TdoPwmPj/X1
+pobmp07A40O35vzB6K5j8PjYe9+N71nBYXh8NH4U7n/EvR8eHwEfWhe9Xbfd
+HhYf7kcSN7h3bLCHxUfegdOy63cttYfFR7ef4ONnq2fbw+LDYUfsm8Un+u1h
+8dFwaIvgx0+NMP4BBiiAyaPxccoDAAUJngM=
+           "], {{{}, 
+             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
+              None], GraphicsGroupBox[
+               PolygonBox[{{1, 53, 54, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
+                 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2}}]]}, {}, 
+             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
+              None], GraphicsGroupBox[
+               PolygonBox[{{26, 51, 52, 50, 49, 48, 47, 46, 45, 44, 43, 42, 
+                41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 
+                27}}]]}, {}, {}, {}, {}, {}, {}}, {{}, {}, 
+             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[1.], 
+              LineBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
+               17, 18, 19, 20, 21, 22, 23, 24, 25}]}, 
+             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[1.], 
+              LineBox[{26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}]}}}],
+          AspectRatio->1,
+          Axes->{False, False},
+          AxesLabel->{None, None},
+          AxesOrigin->{0, 0.},
+          Background->GrayLevel[0.93],
+          BaseStyle->{FontFamily -> "Arial"},
+          DisplayFunction->Identity,
+          Frame->{{True, True}, {True, True}},
+          FrameLabel->{{None, None}, {None, None}},
+          FrameStyle->Directive[
+            Thickness[Tiny], 
+            GrayLevel[0.7]],
+          FrameTicks->{{None, None}, {None, None}},
+          GridLines->{None, None},
+          GridLinesStyle->Directive[
+            GrayLevel[0.5, 0.4]],
+          ImageSize->{Automatic, 
+            Dynamic[
+            3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+              Magnification])]},
+          LabelStyle->{FontFamily -> "Arial"},
+          Method->{"ScalingFunctions" -> None, "AxesInFront" -> True},
+          PlotRange->{All, All},
+          PlotRangeClipping->True,
+          PlotRangePadding->{{0, 0}, {0, 0.1}},
+          Ticks->{Automatic, Automatic}], GridBox[{
+           {
+            RowBox[{
+             TagBox["\<\"Type: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["AndersonDarlingTest",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"p-Value: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["0.9873371093654739`",
+              "SummaryItem"]}]}
+          },
+          AutoDelete->False,
+          
+          BaseStyle->{
+           ShowStringCharacters -> False, NumberMarks -> False, 
+            PrintPrecision -> 3, ShowSyntaxStyles -> False},
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+          
+          GridBoxItemSize->{
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+          GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}
+       },
+       AutoDelete->False,
+       BaselinePosition->{1, 1},
+       GridBoxAlignment->{"Rows" -> {{Top}}},
+       GridBoxItemSize->{
+        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], True->
+      GridBox[{
+        {
+         PaneBox[
+          ButtonBox[
+           
+           DynamicBox[FEPrivate`FrontEndResource[
+            "FEBitmaps", "SquareMinusIconMedium"]],
+           Appearance->None,
+           ButtonFunction:>(Typeset`open$$ = False),
+           Evaluator->Automatic,
+           Method->"Preemptive"],
+          Alignment->{Center, Center},
+          
+          ImageSize->
+           Dynamic[{
+            Automatic, 3.5 CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+             Magnification]}]], 
+         GraphicsBox[GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGAwA2IQvV+g6N7//+IHyh7/qMr9uMOO7VZyUp+w2IFfkzYn
+Sh58Z/f9/5/PG/4KH7htIzfPZbOi/dT38+JNuIUOmB3ymyXb6m1/7+Zl7nol
+gQMZNpuWcacV2C9yTOjercBzwDCs3j3VbqL9wyStzVbOHAccTwR7F91faV9i
+6/ztoRDLgZ4iRasJkQfs90qxlOq/+b9ffvGd3Q7y5+2dHy5JlXP4sd/n3Lw9
+E6Ku2T82OSa5+877/Ru23tpo2nHTfsmXDguHkAf75f3161YvvWYvNsdi39f5
+C/f3Rm5wuMtywX7Rd151p+v37C+xnJ1uxHHQnsFk9Sara+/saywuavluXWtf
+4Oz1SfLYd/seR+51+6ZPsjdi+tzx8+d/e4sDRVPXWhfZK/ruua11gdlhc3uy
+xl9Wf/ur8RuuG3xjd9jltzUx46GivcH9SfKlV7kd4veWPWBI+2Q3J0h42Qlm
+AQfhYtWiqpoddl+sTlXzCws56M1lWjdVvMpuQWRF+dd/wg7Ohid4Eh2t7BZJ
+16e6i4g5TDt7qs1T4YMtNPwdPDeu6MsQWwLjH0jZLlQ6c4aNPSw+vI9XlDDK
+BtjD4iPkrcf+e2ZJ8Pjov7jnbGJEETw+1r3m/37NpBEeH4eOZy+78rofHh/M
+fWfi7PfPgsdHX6aSxfEXS+HxwWV2y7Ro8QZ4fLDO/HZputp2eHy0LHnA+J1z
+Pzw+rtv/zTtudBgeH51P9674FnoMHh+acsv3TN1wAh4f5z4H3TdoPwmPj/X1
+pobmp07A40O35vzB6K5j8PjYe9+N71nBYXh8NH4U7n/EvR8eHwEfWhe9Xbfd
+HhYf7kcSN7h3bLCHxUfegdOy63cttYfFR7ef4ONnq2fbw+LDYUfsm8Un+u1h
+8dFwaIvgx0+NMP4BBiiAyaPxccoDAAUJngM=
+           "], {{{}, 
+             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
+              None], GraphicsGroupBox[
+               PolygonBox[{{1, 53, 54, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
+                 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2}}]]}, {}, 
+             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[0.2], EdgeForm[
+              None], GraphicsGroupBox[
+               PolygonBox[{{26, 51, 52, 50, 49, 48, 47, 46, 45, 44, 43, 42, 
+                41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 
+                27}}]]}, {}, {}, {}, {}, {}, {}}, {{}, {}, 
+             {GrayLevel[0.5], AbsoluteThickness[1.5], Opacity[1.], 
+              LineBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
+               17, 18, 19, 20, 21, 22, 23, 24, 25}]}, 
+             {GrayLevel[0.65], AbsoluteThickness[1.5], Opacity[1.], 
+              LineBox[{26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}]}}}],
+          AspectRatio->1,
+          Axes->{False, False},
+          AxesLabel->{None, None},
+          AxesOrigin->{0, 0.},
+          Background->GrayLevel[0.93],
+          BaseStyle->{FontFamily -> "Arial"},
+          DisplayFunction->Identity,
+          Frame->{{True, True}, {True, True}},
+          FrameLabel->{{None, None}, {None, None}},
+          FrameStyle->Directive[
+            Thickness[Tiny], 
+            GrayLevel[0.7]],
+          FrameTicks->{{None, None}, {None, None}},
+          GridLines->{None, None},
+          GridLinesStyle->Directive[
+            GrayLevel[0.5, 0.4]],
+          ImageSize->{Automatic, 
+            Dynamic[
+            3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+              Magnification])]},
+          LabelStyle->{FontFamily -> "Arial"},
+          Method->{"ScalingFunctions" -> None, "AxesInFront" -> True},
+          PlotRange->{All, All},
+          PlotRangeClipping->True,
+          PlotRangePadding->{{0, 0}, {0, 0.1}},
+          Ticks->{Automatic, Automatic}], GridBox[{
+           {
+            RowBox[{
+             TagBox["\<\"Type: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["AndersonDarlingTest",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"p-Value: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["0.9873371093654739`",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"Test: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["\<\"N/A\"\>",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"Test statistic: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["0.21031458369449751`",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"Data: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox["\<\"Univariate\"\>",
+              "SummaryItem"]}]},
+           {
+            RowBox[{
+             TagBox["\<\"Conclusion: \"\>",
+              "SummaryItemAnnotation"], "\[InvisibleSpace]", 
+             TagBox[
+              InterpretationBox[Cell["\<\
+The null hypothesis that the data is distributed according to the \
+NormalDistribution[0.0483976, 0.994243] is not rejected at the 5 percent \
+level based on the Anderson\[Hyphen]Darling test.\
+\>",
+                CellSize->{300, Automatic}],
+               TextCell[
+               "The null hypothesis that the data is distributed according to \
+the NormalDistribution[0.0483976, 0.994243] is not rejected at the 5 percent \
+level based on the Anderson\[Hyphen]Darling test.", 
+                CellSize -> {300, Automatic}]],
+              "SummaryItem"]}]}
+          },
+          AutoDelete->False,
+          
+          BaseStyle->{
+           ShowStringCharacters -> False, NumberMarks -> False, 
+            PrintPrecision -> 3, ShowSyntaxStyles -> False},
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+          
+          GridBoxItemSize->{
+           "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+          GridBoxSpacings->{"Columns" -> {{2}}, "Rows" -> {{Automatic}}}]}
+       },
+       AutoDelete->False,
+       BaselinePosition->{1, 1},
+       GridBoxAlignment->{"Rows" -> {{Top}}},
+       GridBoxItemSize->{
+        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]}, Dynamic[
+      Typeset`open$$],
+      ImageSize->Automatic],
+     BaselinePosition->Baseline],
+    DynamicModuleValues:>{}], "]"}],
+  HypothesisTestData[AndersonDarlingTest, {CompressedData["
+1:eJwBhQN6/CFib1JlAQAAAG8AAADkg57Nqg8DwOVEuwopfwHAl3Mprio7AMBV
+3o5wWjAAwNFcp5GWyv6/CmgibHh6+L8nZr0Yygn4vycxCKwc2ve/B84ZUdqb
+97/iOzHrxVD2v3B31m67UPK/0lJ5O8Lp8b9Bn8iTpGvxvz9SRIZVPPG/M9yA
+zw8j8b+Dhv4JLtbwv6QZi6azk/C/Zvol4q1z77+cFrzoK8jsv1DicyfY/+q/
+g94bQwBw6r+RQln4+trpvxOc+kDyzum/qMe2DDhL6b9C7bd2oqTov29lic4y
+C+i/3ZbIBWfw578Nq3gj80jnv2nFNxQ+W+S/rYbEPZa+478Mkj6tor/hv0dX
+6e46m+C/GvonuFhR3b/8VBUaiGXbv3kj88gfDNq/CcTr+gW7178jvhOzXgzV
+v9tSB3k9mNK/XoJTH0je0b+fc7frpSnRv/vpP2t+/M+/IqtbPSe9z78656c4
+DrzMv8oWSbvRx8a/zqW4quy7xr8A4q5eRUbBv7tRGiCHd7W/pWsm32xzs79y
+A/SxcbOiv48jjFU5o5Q/LR0Y5T7epD/kHgGSn0OxP4RstHehFLg/l8eakUHu
+uj9zEHS0qiW9P1Gk+zkF+b0/lKMAUTBjvj8sflNYqaC+P9DukGKARME/AmIS
+LuQRwj/w2xDjNa/GP7YvoBfuXMo/xR1v8lt0yj/JVpdTAmLMP2x8Jvvnacw/
+FHZR9MDHzD8fLc4Y5gTTP3nqkQa3tdM/4dIx5xn70z9nRGlv8IXUP4xK6gQ0
+EdU/zhd7L75o1j/B4QURqWnYP6p9Oh4zUNo/ryR5ru/D2j/u68A5I0rcP++r
+cqHyr9w/XoQpyqXx4T9kWTDxR1HiPx4YQPhQouI/gczOoncq4z8+dhcoKTDj
+P5q1FJD2P+M/FTduMT+35T+LbOf7qXHmPwG/RpIg3Oo/HzAPmfIh6z9Z3H9k
+OnTrP/eRW5Nuy+s/rcH7qlwo7T8eigJ9Is/tP3dOs0C7w+8/1sdD393K7z9T
+QNr/AOvvPxBAahMn9/E/Hm0csRYf8j8rE36pnzfyP09AE2HD0/Q/Cp3X2CUq
+9T/Fyf0ORYH1P2wE4nX9gvY/WcAEbt3N+D+L/WX35GH5P7NBJhk5i/k/pKoJ
+ou4D+j+gMv59xgX6P9Y5BmSvd/o/2sngKHn1/D/0wwjh0UYAQBWMSuoEtAJA
++fcZFw7EAkA+edQD
+    "], "SampleToNull", 1, 
+    Rational[1, 20], {
+     NormalDistribution[0.04839760810810811, 0.9942426657047634], Automatic}, 
+    Automatic, {}}, {"Normality" -> 0, "EqualVariance" -> 0, "Symmetry" -> 0}],
+  Editable->False,
+  SelectWithContents->True,
+  Selectable->False]], "Output",
+ CellChangeTimes->{3.710085506338766*^9, 3.7102448021707563`*^9, 
+  3.710244920397121*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"AndersonDarlingTest", "[", 
+    RowBox[{"normal1", ",", 
+     RowBox[{"NormalDistribution", "[", 
+      RowBox[{
+       RowBox[{"Mean", "[", "normal1", "]"}], ",", 
+       RowBox[{"StandardDeviation", "[", "normal1", "]"}]}], "]"}]}], "]"}], 
+   ",", "21"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7100857110501823`*^9, 3.710085724554644*^9}, {
+  3.710244868493102*^9, 3.710244873165072*^9}}],
+
+Cell[BoxData["0.9873371093654739`"], "Output",
+ CellChangeTimes->{3.7100857251745853`*^9, 3.710244875961973*^9, 
+  3.710244915615404*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{"normal1", ",", 
+     RowBox[{"NormalDistribution", "[", 
+      RowBox[{
+       RowBox[{"Mean", "[", "normal1", "]"}], ",", 
+       RowBox[{"StandardDeviation", "[", "normal1", "]"}]}], "]"}]}], "]"}], 
+   ",", "21"}], "]"}]], "Input",
+ CellChangeTimes->{{3.710068271379366*^9, 3.710068285763865*^9}, {
+  3.710068420909196*^9, 3.710068478852848*^9}, {3.710068565695352*^9, 
+  3.710068570462019*^9}, {3.7102448789732237`*^9, 3.710244909053529*^9}}],
+
+Cell[BoxData["0.9325513079445729`"], "Output",
+ CellChangeTimes->{{3.710068471981312*^9, 3.710068480167049*^9}, 
+   3.710068571144888*^9, 3.71007262837418*^9, {3.710244884424307*^9, 
+   3.710244909747127*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{"normal1", ",", 
+     RowBox[{"LaplaceDistribution", "[", 
+      RowBox[{
+       RowBox[{"Median", "[", "normal1", "]"}], ",", 
+       RowBox[{"MedianDeviation", "[", "normal1", "]"}]}], "]"}]}], "]"}], 
+   ",", "21"}], "]"}]], "Input",
+ CellChangeTimes->{{3.710072435244186*^9, 3.710072455053463*^9}, {
+  3.710244887781207*^9, 3.710244912069421*^9}, {3.710245140297344*^9, 
+  3.710245171240037*^9}}],
+
+Cell[BoxData["0.23179619523911865`"], "Output",
+ CellChangeTimes->{
+  3.710072458523234*^9, 3.710072629154518*^9, {3.710244892847816*^9, 
+   3.710244912493746*^9}, 3.710245010574552*^9, {3.710245135204711*^9, 
+   3.71024517349396*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"laplace", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "2.03679"}], ",", "0.518416", ",", 
+     RowBox[{"-", "1.72556"}], ",", "3.07248", ",", "1.58415", ",", "0.55357",
+      ",", "1.13785", ",", "2.77352", ",", "0.692562", ",", 
+     RowBox[{"-", "0.246844"}], ",", "1.07308", ",", "0.676815", ",", 
+     "2.61719", ",", "0.839612", ",", "0.657608", ",", "1.60029", ",", 
+     "0.934251", ",", "1.64299", ",", "4.83994", ",", 
+     RowBox[{"-", "0.572193"}], ",", "0.590732", ",", 
+     RowBox[{"-", "2.30579"}], ",", 
+     RowBox[{"-", "3.46328"}], ",", "4.6823", ",", "2.65601", ",", "1.66736", 
+     ",", "0.0644071", ",", "0.561031", ",", "2.19092", ",", "1.10959", ",", 
+     "0.952764", ",", "4.28232", ",", "0.360738", ",", "3.43897", ",", 
+     RowBox[{"-", "0.122254"}], ",", 
+     RowBox[{"-", "3.22326"}], ",", "7.96229", ",", 
+     RowBox[{"-", "5.32675"}], ",", "1.4503", ",", 
+     RowBox[{"-", "2.94508"}], ",", "1.36242", ",", "1.0414", ",", "0.421444",
+      ",", "3.61022", ",", "1.26506", ",", 
+     RowBox[{"-", "3.94449"}], ",", 
+     RowBox[{"-", "0.544188"}], ",", "2.88665", ",", "2.00745", ",", 
+     RowBox[{"-", "3.01688"}], ",", "1.0722", ",", 
+     RowBox[{"-", "0.327354"}], ",", "1.46366", ",", "1.52667", ",", 
+     "3.71474", ",", "1.24921", ",", "2.36462", ",", "2.111", ",", 
+     RowBox[{"-", "0.704057"}], ",", "6.7197", ",", "7.54793", ",", "2.76588",
+      ",", "0.470362", ",", "0.467676", ",", "1.16809", ",", "2.11906", ",", 
+     RowBox[{"-", "3.79051"}], ",", "2.17474", ",", "4.64406", ",", 
+     RowBox[{"-", "1.69926"}], ",", "0.967686", ",", 
+     RowBox[{"-", "3.22085"}], ",", "1.72475", ",", "1.17087", ",", "1.03924",
+      ",", "0.230923", ",", "1.4176", ",", "0.897564", ",", 
+     RowBox[{"-", "6.89486"}], ",", 
+     RowBox[{"-", "5.64721"}], ",", "1.07495", ",", "1.78927", ",", "8.24184",
+      ",", "5.95395", ",", "0.793648", ",", "1.89169", ",", "1.25558", ",", 
+     "4.3064", ",", 
+     RowBox[{"-", "1.33544"}], ",", "5.67814", ",", 
+     RowBox[{"-", "6.36738"}], ",", 
+     RowBox[{"-", "0.372883"}], ",", "0.13142", ",", "0.786708", ",", 
+     RowBox[{"-", "0.0932199"}], ",", 
+     RowBox[{"-", "4.06743"}], ",", "4.07498", ",", 
+     RowBox[{"-", "0.482598"}], ",", 
+     RowBox[{"-", "1.49333"}], ",", "1.61442", ",", 
+     RowBox[{"-", "2.27068"}], ",", "1.55111", ",", 
+     RowBox[{"-", "2.59695"}], ",", "4.47164", ",", 
+     RowBox[{"-", "0.776884"}], ",", "0.884446", ",", "3.70967", ",", 
+     "0.858531", ",", "3.33213", ",", 
+     RowBox[{"-", "7.62385"}], ",", "0.0583429", ",", 
+     RowBox[{"-", "0.148588"}], ",", 
+     RowBox[{"-", "1.24765"}], ",", "8.67548", ",", "0.860613", ",", 
+     "1.36125", ",", 
+     RowBox[{"-", "9.48455"}], ",", 
+     RowBox[{"-", "0.831406"}], ",", 
+     RowBox[{"-", "1.86396"}], ",", "2.10917", ",", "4.551", ",", "1.064", 
+     ",", "1.97283", ",", "3.82057", ",", "2.29935", ",", 
+     RowBox[{"-", "1.74418"}], ",", "0.244115", ",", 
+     RowBox[{"-", "0.837016"}], ",", "2.53457", ",", "1.61", ",", "1.54181", 
+     ",", 
+     RowBox[{"-", "1.54528"}], ",", 
+     RowBox[{"-", "0.943004"}], ",", 
+     RowBox[{"-", "0.738644"}], ",", 
+     RowBox[{"-", "0.680302"}], ",", "0.358243", ",", "5.85945", ",", 
+     "0.920141", ",", "0.645741", ",", "0.675258", ",", "0.833122", ",", 
+     "0.0261111", ",", "0.593711", ",", "1.10065", ",", "0.956418", ",", 
+     RowBox[{"-", "0.194063"}], ",", "3.37702", ",", 
+     RowBox[{"-", "1.40828"}], ",", "0.853448", ",", 
+     RowBox[{"-", "1.26089"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"KolmogorovSmirnovTest", "[", 
+  RowBox[{"laplace", ",", 
+   RowBox[{"NormalDistribution", "[", 
+    RowBox[{
+     RowBox[{"Mean", "[", "laplace", "]"}], ",", 
+     RowBox[{"StandardDeviation", "[", "laplace", "]"}]}], "]"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.7100687463051567`*^9, 3.710068827328656*^9}, 
+   3.710245383768304*^9}],
+
+Cell[BoxData["0.09483208704134305`"], "Output",
+ CellChangeTimes->{3.710068828657288*^9, 3.7100726301481447`*^9, 
+  3.710085755595088*^9, 3.710245185919765*^9, 3.710245405020138*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"AndersonDarlingTest", "[", 
+    RowBox[{"laplace", ",", 
+     RowBox[{"NormalDistribution", "[", 
+      RowBox[{
+       RowBox[{"Mean", "[", "laplace", "]"}], ",", 
+       RowBox[{"StandardDeviation", "[", "laplace", "]"}]}], "]"}]}], "]"}], 
+   ",", "21"}], "]"}]], "Input",
+ CellChangeTimes->{{3.710085766338994*^9, 3.710085787347069*^9}}],
+
+Cell[BoxData["0.04141591197697303`"], "Output",
+ CellChangeTimes->{{3.710085775414043*^9, 3.71008578794576*^9}, 
+   3.710245252366674*^9, 3.710245405917122*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"KolmogorovSmirnovTest", "[", 
+  RowBox[{"laplace", ",", 
+   RowBox[{"LaplaceDistribution", "[", 
+    RowBox[{
+     RowBox[{"Median", "[", "laplace", "]"}], ",", 
+     RowBox[{"MedianDeviation", "[", "laplace", "]"}]}], "]"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.7100689269476*^9, 3.710068955497407*^9}}],
+
+Cell[BoxData["0.07716190485371788`"], "Output",
+ CellChangeTimes->{3.710068956285243*^9, 3.710072347091988*^9, 
+  3.7100726312196293`*^9, 3.710245208118072*^9, 3.710245406725369*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"chisq", "=", 
+   RowBox[{"ChiSquareDistribution", "[", "20", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.710136348215736*^9, 3.710136357612962*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"chi", " ", "=", " ", "22"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"PDF", "[", 
+    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"chisq", ",", "22"}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"InverseCDF", "[", 
+    RowBox[{"chisq", ",", 
+     RowBox[{"1", "/", "2"}]}], "]"}], ",", "21"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7101363627621727`*^9, 3.710136390669496*^9}, {
+  3.710136671338209*^9, 3.710136742465097*^9}}],
+
+Cell[BoxData["0.0542627546491024962783861955535880983253061921552922022581`21.\
+"], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+   3.7101367203860197`*^9, 3.710136744815845*^9}, 3.710245408904229*^9}],
+
+Cell[BoxData["0.6594893575343389527188915568621674150447200359435945793156`21.\
+"], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+   3.7101367203860197`*^9, 3.710136744815845*^9}, 3.71024540891121*^9}],
+
+Cell[BoxData["19.3374292294282623035009644042797563695087254267399065475679`\
+21."], "Output",
+ CellChangeTimes->{{3.71013637233451*^9, 3.710136391159684*^9}, {
+   3.7101367203860197`*^9, 3.710136744815845*^9}, 3.710245408916398*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
  RowBox[{"H", "=", 
   RowBox[{"VarianceEquivalenceTest", "[", 
    RowBox[{
@@ -1204,7 +1207,7 @@ Cell[BoxData[
   RowBox[{
    TagBox["HypothesisTestData",
     "SummaryHead"], "[", 
-   DynamicModuleBox[{Typeset`open$$ = True}, 
+   DynamicModuleBox[{Typeset`open$$ = False}, 
     PanelBox[
      PaneSelectorBox[{False->GridBox[{
         {
@@ -1358,8 +1361,7 @@ NkwHTypfLuL//vP+v7//DWm6HRs=
           ButtonBox[
            
            DynamicBox[FEPrivate`FrontEndResource[
-            "FEBitmaps", "SquareMinusIconMedium"],
-            ImageSizeCache->{12., {0., 12.}}],
+            "FEBitmaps", "SquareMinusIconMedium"]],
            Appearance->None,
            ButtonFunction:>(Typeset`open$$ = False),
            Evaluator->Automatic,
@@ -1606,7 +1608,7 @@ qwXu7LEr8j03A/8HcfRH4A==
   3.710149906046276*^9, 3.710150128553344*^9, {3.710150165283697*^9, 
    3.710150174728627*^9}, 3.710150204992303*^9, 3.710150235281456*^9, 
    3.710150800359631*^9, 3.7101508708242807`*^9, {3.7101509239987593`*^9, 
-   3.710150948981638*^9}}]
+   3.710150948981638*^9}, 3.710245413157454*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1638,7 +1640,8 @@ Cell[BoxData[
  CellChangeTimes->{
   3.7101499263764887`*^9, 3.71015013060236*^9, {3.710150166731534*^9, 
    3.7101501718007593`*^9}, 3.710150206157996*^9, 3.710150237494529*^9, 
-   3.710150802095275*^9, {3.710150925916548*^9, 3.710150950183526*^9}}]
+   3.710150802095275*^9, {3.710150925916548*^9, 3.710150950183526*^9}, 
+   3.710245415316403*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2037,7 +2040,7 @@ l4mKcS4q+IRp1HTwYU+hIF+jm4entXUqe6hDuLxdXY+jzACD1SWQIoYh613t
   SelectWithContents->True,
   Selectable->False]], "Output",
  CellChangeTimes->{{3.710155349231683*^9, 3.710155365378139*^9}, {
-  3.710155406817484*^9, 3.7101554324782*^9}}]
+   3.710155406817484*^9, 3.7101554324782*^9}, 3.710245417770073*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2069,7 +2072,63 @@ Cell[BoxData[
    "Grid"], "DialogStyle",
   StripOnInput->False]], "Output",
  CellChangeTimes->{{3.710155357869416*^9, 3.710155366567485*^9}, {
-  3.710155408368528*^9, 3.710155434469924*^9}}]
+   3.710155408368528*^9, 3.710155434469924*^9}, 3.710245419271804*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"T", "=", 
+  RowBox[{"TTest", "[", 
+   RowBox[{"normal1", ",", "0", ",", "\"\<TestDataTable\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.710251931997799*^9, 3.710252022638124*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"T\"\>", "0.5128531082820161`", "0.6090824562073083`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{3.710252022986191*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"T", "=", 
+  RowBox[{"TTest", "[", 
+   RowBox[{"normal1", ",", 
+    RowBox[{"1", "/", "3"}], ",", "\"\<TestDataTable\>\""}], "]"}]}]], "Input",\
+
+ CellChangeTimes->{{3.710252259312395*^9, 3.710252264960606*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"T\"\>", 
+      RowBox[{"-", "3.0193676517221486`"}], "0.0031491088560991346`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{{3.710252260702614*^9, 3.710252265375627*^9}}]
 }, Open  ]]
 },
 WindowSize->{993, 861},
@@ -2171,57 +2230,65 @@ Cell[13848, 377, 137, 1, 28, "Output"]
 }, Open  ]],
 Cell[14000, 381, 169, 3, 28, "Input"],
 Cell[14172, 386, 4463, 95, 284, "Input"],
+Cell[18638, 483, 8833, 173, 607, "Input"],
 Cell[CellGroupData[{
-Cell[18660, 485, 420, 9, 46, "Input"],
-Cell[19083, 496, 13282, 295, 64, "Output"]
+Cell[27496, 660, 471, 10, 46, "Input"],
+Cell[27970, 672, 12857, 287, 64, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[32402, 796, 397, 10, 28, "Input"],
-Cell[32802, 808, 90, 1, 28, "Output"]
+Cell[40864, 964, 449, 11, 28, "Input"],
+Cell[41316, 977, 137, 2, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[32929, 814, 495, 12, 28, "Input"],
-Cell[33427, 828, 159, 2, 28, "Output"]
+Cell[41490, 984, 546, 12, 46, "Input"],
+Cell[42039, 998, 209, 3, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[33623, 835, 398, 10, 28, "Input"],
-Cell[34024, 847, 110, 1, 28, "Output"]
+Cell[42285, 1006, 499, 12, 46, "Input"],
+Cell[42787, 1020, 235, 4, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[34171, 853, 3928, 74, 284, "Input"],
-Cell[38102, 929, 138, 2, 28, "Output"]
+Cell[43059, 1029, 3954, 75, 284, "Input"],
+Cell[47016, 1106, 182, 2, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[38277, 936, 398, 10, 28, "Input"],
-Cell[38678, 948, 112, 1, 28, "Output"]
+Cell[47235, 1113, 398, 10, 28, "Input"],
+Cell[47636, 1125, 160, 2, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[38827, 954, 335, 8, 28, "Input"],
-Cell[39165, 964, 138, 2, 28, "Output"]
+Cell[47833, 1132, 335, 8, 28, "Input"],
+Cell[48171, 1142, 182, 2, 28, "Output"]
 }, Open  ]],
-Cell[39318, 969, 187, 4, 28, "Input"],
+Cell[48368, 1147, 187, 4, 28, "Input"],
 Cell[CellGroupData[{
-Cell[39530, 977, 657, 19, 80, "Input"],
-Cell[40190, 998, 209, 3, 28, "Output"],
-Cell[40402, 1003, 209, 3, 28, "Output"],
-Cell[40614, 1008, 212, 3, 28, "Output"]
-}, Open  ]],
-Cell[40841, 1014, 8833, 173, 607, "Input"],
-Cell[CellGroupData[{
-Cell[49699, 1191, 354, 8, 28, "Input"],
-Cell[50056, 1201, 20166, 407, 142, "Output"]
+Cell[48580, 1155, 657, 19, 80, "Input"],
+Cell[49240, 1176, 232, 3, 28, "Output"],
+Cell[49475, 1181, 231, 3, 28, "Output"],
+Cell[49709, 1186, 233, 3, 28, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[70259, 1613, 165, 3, 28, "Input"],
-Cell[70427, 1618, 1102, 22, 91, "Output"]
+Cell[49979, 1194, 354, 8, 28, "Input"],
+Cell[50336, 1204, 20143, 406, 64, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[71566, 1645, 333, 8, 28, "Input"],
-Cell[71902, 1655, 18827, 384, 64, "Output"]
+Cell[70516, 1615, 165, 3, 28, "Input"],
+Cell[70684, 1620, 1128, 23, 91, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[90766, 2044, 141, 3, 28, "Input"],
-Cell[90910, 2049, 1077, 22, 105, "Output"]
+Cell[71849, 1648, 333, 8, 28, "Input"],
+Cell[72185, 1658, 18850, 384, 64, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[91072, 2047, 141, 3, 28, "Input"],
+Cell[91216, 2052, 1100, 22, 105, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[92353, 2079, 211, 5, 28, "Input"],
+Cell[92567, 2086, 653, 15, 45, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[93257, 2106, 234, 6, 28, "Input"],
+Cell[93494, 2114, 702, 16, 79, "Output"]
 }, Open  ]]
 }
 ]

@@ -26,7 +26,8 @@ import Foundation
 import os.log
 
 public class SSHypothesisTesting {
-    
+
+    /************************************************************************************************/
     // MARK: Grubbs test
     
     /// Performs the Grubbs outlier test
@@ -74,6 +75,7 @@ public class SSHypothesisTesting {
         }
     }
 
+    /************************************************************************************************/
     // MARK: ESD test
 
     /// Returns p for run i
@@ -202,6 +204,7 @@ public class SSHypothesisTesting {
         return res
     }
     
+    /************************************************************************************************/
     // MARK: GoF test
     
     /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
@@ -223,8 +226,6 @@ public class SSHypothesisTesting {
         }
 
     }
-    
-    
 
     /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
     /// - Parameter data: Array<Double>
@@ -476,10 +477,13 @@ public class SSHypothesisTesting {
         }
         return result
     }
-    
-    
+
+    /************************************************************************************************/
+    /************************************************************************************************/
     // Marsaglia et al.: Evaluating the Anderson-Darling Distribution. Journal of
     // Statistical Software 9 (2), 1–5. February 2004. http://www.jstatsoft.org/v09/i02
+    /************************************************************************************************/
+    /************************************************************************************************/
     
     fileprivate class func PRIV_ADf(_ z: Double!, _ j: Int!) -> Double {
         var t: Double
@@ -562,7 +566,6 @@ public class SSHypothesisTesting {
         v = -0.00022633 + (6.54034 - (14.6538 - (14.458 - (8.259 - 1.91864 * v) * v) * v) * v) * v
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
-    
 
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
     /// - Parameter data: Data as SSExamine object
@@ -647,7 +650,7 @@ public class SSHypothesisTesting {
         return result
     }
     
-    
+    /************************************************************************************************/
     // MARK: Equality of variances
 
     /// Performs the Bartlett test for two or more samples
@@ -907,10 +910,11 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-    
+
+    /************************************************************************************************/
     // MARK: t-Tests
     
-    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
+    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SSTwoSampleTTestResult {
         if sample1.sampleSize < 2 {
             os_log("sample1 size is exptected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1044,7 +1048,7 @@ public class SSHypothesisTesting {
                 twoSidedWelch = cdfWelch * 2.0
                 oneTailedWelch = cdfWelch
             }
-            var result: SS2SampleTTestResult = SS2SampleTTestResult()
+            var result: SSTwoSampleTTestResult = SSTwoSampleTTestResult()
             result.p2EQVAR = twoTailedEV
             result.p2UEQVAR = twoTailedUEV
             result.p1UEQVAR = oneTailedUEV
@@ -1083,7 +1087,75 @@ public class SSHypothesisTesting {
     }
     
     
+    /// Performs the one sample t test
+    /// - Parameter sample: Data as SSExamine<Double>
+    /// - Parameter mean: Reference mean
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
+    public class func oneSampleTTest(sample: SSExamine<Double>, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
+        if sample.sampleSize < 2 {
+            os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var testStatisticValue: Double = 0.0
+        var pValue: Double = 0.0
+        let N = Double(sample.sampleSize)
+        let diffmean = sample.arithmeticMean! - mean
+        let twoTailed: Double
+        let oneTailed: Double
+        do {
+            testStatisticValue = diffmean / (sample.standardDeviation(type: .unbiased)! / sqrt(N))
+            pValue = try SSProbabilityDistributions.cdfStudentTDist(t: testStatisticValue, degreesOfFreedom: N - 1.0)
+            if pValue > 0.5 {
+                twoTailed = (1.0 - pValue) * 2.0
+                oneTailed = 1.0 - pValue
+            }
+            else {
+                twoTailed = pValue * 2.0
+                oneTailed = pValue
+            }
+            var result = SSOneSampleTTestResult()
+            result.p1Value = oneTailed
+            result.p2Value = twoTailed
+            result.tStat = testStatisticValue
+            result.cv90Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.05, degreesOfFreedom: N - 1.0)
+            result.cv95Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.025, degreesOfFreedom: N - 1.0)
+            result.cv99Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.005, degreesOfFreedom: N - 1.0)
+            result.mean = sample.arithmeticMean!
+            result.sampleSize = N
+            result.mean0 = mean
+            result.difference = diffmean
+            result.stdDev = sample.standardDeviation(type: .unbiased)!
+            result.stdErr = sample.standardError!
+            result.df = N - 1.0
+            result.meanEQtestValue = ((pValue < (alpha / 2.0)) || (pValue > (1.0 - (alpha / 2.0)))) ? false : true
+            result.meanLTEtestValue = (pValue < alpha) ? true : false
+            result.meanGTEtestValue = (pValue > (1.0 - alpha)) ? true : false
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
     
+    /// Performs the one sample t test
+    /// - Parameter data: Data as Array<Double>
+    /// - Parameter mean: Reference mean
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
+    public class func oneSampleTTEst(data: Array<Double>!, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
+        if data.count < 2 {
+            os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        do {
+            return try oneSampleTTest(sample: sample, mean: mean, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
     
     
     

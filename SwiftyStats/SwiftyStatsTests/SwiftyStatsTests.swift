@@ -69,12 +69,24 @@ class SwiftyStatsTests: XCTestCase {
         let examine1 = SSExamine<Double>.init(withArray: normal1, characterSet: nil)
         let examine2 = SSExamine<Double>.init(withArray: normal2, characterSet: nil)
         let examine3 = SSExamine<Double>.init(withArray: normal3, characterSet: nil)
+        
         var ttestResult = try! SSHypothesisTesting.twoSampleTTest(sample1: examine1, sample2: examine2, alpha: 0.05)
         XCTAssertEqualWithAccuracy(ttestResult.p2Welch!, 0.366334, accuracy: 1E-6)
+        
         ttestResult = try! SSHypothesisTesting.twoSampleTTest(sample1:examine1 , sample2: examine3, alpha: 0.05)
         XCTAssertTrue(ttestResult.p2Welch!.isZero)
+        
         ttestResult = try! SSHypothesisTesting.twoSampleTTest(sample1:examine2 , sample2: examine3, alpha: 0.05)
         XCTAssertTrue(ttestResult.p2Welch!.isZero)
+        
+        var oneSTTestResult = try! SSHypothesisTesting.oneSampleTTest(sample: examine1, mean: 0.0, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(oneSTTestResult.p2Value!, 0.609082, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(oneSTTestResult.tStat!, 0.512853, accuracy: 1E-6)
+        
+        oneSTTestResult = try! SSHypothesisTesting.oneSampleTTest(sample: examine1, mean: 1.0 / 3.0, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(oneSTTestResult.p2Value!, 0.00314911, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(oneSTTestResult.tStat!, -3.01937, accuracy: 1E-5)
+
     }
     
     func testEqualityOfVariance() {
@@ -82,15 +94,19 @@ class SwiftyStatsTests: XCTestCase {
         var varianceTestResult = try! SSHypothesisTesting.bartlettTest(data: [normal1, normal2], alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.00103845, accuracy: 1E-8)
         XCTAssertEqualWithAccuracy(varianceTestResult.testStatistic!, 10.7577, accuracy: 1E-4)
+
         // with three arrays
         varianceTestResult = try! SSHypothesisTesting.bartlettTest(data: [normal1, normal2, normal3], alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0000156135, accuracy: 1E-10)
         XCTAssertEqualWithAccuracy(varianceTestResult.testStatistic!, 22.1347, accuracy: 1E-4)
         XCTAssertThrowsError(try SSHypothesisTesting.bartlettTest(data: [normal1], alpha: 0.05))
+        
         varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .median, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.000490846, accuracy: 1E-9)
+        
         varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .mean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.000261212, accuracy: 1E-9)
+        
         varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .trimmedMean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0003168469, accuracy: 1E-9)
     }
@@ -98,6 +114,7 @@ class SwiftyStatsTests: XCTestCase {
     func testKStest() {
         let normal = try! SSExamine<Double>.init(withObject: normal1, levelOfMeasurement: .interval, characterSet: nil)
         normal.name = "Normal Distribution"
+        
         let laplace = try! SSExamine<Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, characterSet: nil)
         laplace.name = "Laplace Distribution"
         
