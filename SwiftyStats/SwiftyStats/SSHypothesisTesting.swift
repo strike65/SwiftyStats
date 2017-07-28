@@ -924,8 +924,6 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var cdfLeveneMedian: Double = 0.0
-//        var cdfLeveneMean: Double
-//        var cdfLeveneTrimmedMean: Double
         var cdfTValueEqualVariances: Double = 0.0
         var cdfTValueUnequalVariances: Double = 0.0
         var dfEqualVariances: Double = 0.0
@@ -942,8 +940,6 @@ public class SSHypothesisTesting {
         var tValueEqualVariances: Double = 0.0
         var tValueUnequalVariances: Double = 0.0
         var variancesAreEqualMedian: Bool = false
-//        var variancesAreEqualMean: Bool
-//        var variancesAreEqualTrimmedMean: Bool
         var twoTailedEV: Double = 0.0
         var twoTailedUEV: Double = 0.0
         var oneTailedEV: Double = 0.0
@@ -972,22 +968,6 @@ public class SSHypothesisTesting {
             criticalValueEqualVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfEqualVariances)
             criticalValueUnequalVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfUnequalVariances)
             let lArray:Array<SSExamine<Double>> = [sample1, sample2]
-//            var type: SSLeveneTestType
-//            if let s1 = sample1.skewness, let s2 = sample2.skewness, let k1 = sample1.kurtosisType, let k2 = sample2.kurtosisType {
-//                if k1 == .platykurtic || k2 == .platykurtic {
-//                    type = .trimmedMean
-//                }
-//                else if fabs(s1 - 0.0) > 0.5 || fabs(s2 - 0.0) > 0.5 {
-//                    type = .median
-//                }
-//                else {
-//                    type = .mean
-//                }
-//            }
-//            else {
-//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
-//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-//            }
             if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .median, alpha: alpha) {
                 cdfLeveneMedian = leveneResult.pValue!
                 variancesAreEqualMedian = leveneResult.equality!
@@ -996,22 +976,6 @@ public class SSHypothesisTesting {
                 os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
-//            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .mean, alpha: alpha) {
-//                cdfLeveneMean = leveneResult.pValue!
-//                variancesAreEqualMean = leveneResult.equality!
-//            }
-//            else {
-//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
-//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-//            }
-//            if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .trimmedMean, alpha: alpha) {
-//                cdfLeveneTrimmedMean = leveneResult.pValue!
-//                variancesAreEqualTrimmedMean = leveneResult.equality!
-//            }
-//            else {
-//                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
-//                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-//            }
             if cdfTValueEqualVariances > 0.5 {
                 twoTailedEV = (1.0 - cdfTValueEqualVariances) * 2.0
                 oneTailedEV = 1.0 - cdfTValueEqualVariances
@@ -1157,6 +1121,72 @@ public class SSHypothesisTesting {
         }
     }
     
-    
+    /// Performs the t test for matched pairs
+    /// - Parameter set1: data of set1
+    /// - Parameter set2: data of set2
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
+    public class func matchedPairsTTest(set1: SSExamine<Double>!, set2: SSExamine<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
+        if set1.sampleSize < 2 || set2.sampleSize < 2 {
+            os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set1.sampleSize != set2.sampleSize {
+            os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let m1 = set1.arithmeticMean!
+        let m2 = set2.arithmeticMean!
+        let s1 = set1.variance(type: .unbiased)!
+        let s2 = set2.variance(type: .unbiased)!
+        let diffMeans = m1 - m2
+        let a1 = set1.elementsAsArray(sortOrder: .original)!
+        let a2 = set2.elementsAsArray(sortOrder: .original)!
+        var sum: Double = 0.0
+        let n: Int = set1.sampleSize
+        var i: Int = 0
+        let pSum = m1 * m2
+        while i < n {
+            sum += a1[i] * a2[i] - pSum
+            i += 1
+        }
+        let df = Double(n) - 1.0
+        let cov = sum / df
+        let sed = sqrt((s1 + s2 - 2.0 * cov) / (df + 1.0))
+        let sdDiff = sqrt(s1 + s2 - 2.0 * cov)
+        let t = diffMeans / sed
+        let corr = cov / (sqrt(s1) * sqrt(s2))
+        do {
+            let pCorr = try (2.0 * (1.0 - SSProbabilityDistributions.cdfStudentTDist(t: corr * sqrt(df - 1.0) / (1.0 - corr * corr), degreesOfFreedom: df - 1.0)))
+            let lowerCIDiff =  try (diffMeans - SSProbabilityDistributions.quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
+            let upperCIDiff =  try (diffMeans + SSProbabilityDistributions.quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
+            var pTwoTailed = try SSProbabilityDistributions.cdfStudentTDist(t: t, degreesOfFreedom: df)
+            if pTwoTailed > 0.5 {
+                pTwoTailed = 1.0 - pTwoTailed
+            }
+            pTwoTailed *= 2.0
+            if sed.isZero {
+                pTwoTailed = 1.0
+            }
+            let effectSize = sqrt((t * t) / ((t * t) + df))
+            var result = SSMatchedPairsTTestResult()
+            result.sampleSize = Double(n)
+            result.covariance = cov
+            result.stdEDiff = sed
+            result.stdDevDiff = sdDiff
+            result.tStat = t
+            result.correlation = corr
+            result.pValueCorr = pCorr
+            result.p2Value = pTwoTailed
+            result.effectSizeR = effectSize
+            result.ci95lower = lowerCIDiff
+            result.ci95upper = upperCIDiff
+            result.df = df
+            return result
+        }
+        catch {
+            throw error
+        }
+    }
     
 }

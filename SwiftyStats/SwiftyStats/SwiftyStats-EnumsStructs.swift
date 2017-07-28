@@ -562,4 +562,31 @@ public struct SSOneSampleTTestResult {
     var meanEQtestValue: Bool? = false
 }
 
+/// Encapsulates the results of a matched pairs t test
+public struct SSMatchedPairsTTestResult {
+    /// Cov
+    var covariance: Double?
+    /// standard error of the difference
+    var stdEDiff: Double?
+    /// correlatiopn
+    var correlation: Double?
+    /// p value of correlation
+    var pValueCorr: Double?
+    /// effect size
+    var effectSizeR: Double?
+    /// upper bound of the 95%-confidence interval
+    var ci95upper: Double?
+    /// lower bound of the 95%-confidence interval
+    var ci95lower: Double?
+    /// sd of the differences
+    var stdDevDiff: Double?
+    /// sample size
+    var sampleSize: Double?
+    /// p value for two tailed test
+    var p2Value: Double?
+    /// degrees of freedom
+    var df: Double?
+    /// t statistics
+    var tStat: Double?
+}
 

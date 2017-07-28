@@ -86,7 +86,15 @@ class SwiftyStatsTests: XCTestCase {
         oneSTTestResult = try! SSHypothesisTesting.oneSampleTTest(sample: examine1, mean: 1.0 / 3.0, alpha: 0.05)
         XCTAssertEqualWithAccuracy(oneSTTestResult.p2Value!, 0.00314911, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(oneSTTestResult.tStat!, -3.01937, accuracy: 1E-5)
+        
+        var matchedPairsTTestRest = try! SSHypothesisTesting.matchedPairsTTest(set1: examine1, set2: examine2, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(matchedPairsTTestRest.p2Value!, 0.331154, accuracy: 1E-6)
+        
+        matchedPairsTTestRest = try! SSHypothesisTesting.matchedPairsTTest(set1: examine1, set2: examine3, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(matchedPairsTTestRest.p2Value!, 1.63497E-20, accuracy: 1E-12)
 
+        matchedPairsTTestRest = try! SSHypothesisTesting.matchedPairsTTest(set1: examine1, set2: examine1, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(matchedPairsTTestRest.p2Value!, 1, accuracy: 1E-12)
     }
     
     func testEqualityOfVariance() {
