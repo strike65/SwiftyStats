@@ -135,6 +135,7 @@ fileprivate let LnFactorial: Array<Double> = [
 
 /*------------------------------------------------------------------------*/
 
+/// Returns the logarithm of n!
 public func getLogFactorial(_ n: Int) -> Double {
     /* Returns the natural logarithm of factorial n! */
     if (n <= MFACT) {
@@ -651,6 +652,7 @@ fileprivate func cdfSpecial (_ n: Int, _ x: Double) -> Double {
 
 /*========================================================================*/
 
+/// Computes the cdf of the Kolmogorov-Smirnov distribution (Author: Richard Simard)
 public func KScdf(n: Int, x: Double) -> Double {
     let w = Double(n) * x * x
     let u = cdfSpecial(n, x)

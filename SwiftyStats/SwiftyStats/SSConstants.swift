@@ -40,119 +40,115 @@ public let SSExamineFileExtension = "SSexamine"
 /// The current file version for archiving
 public let SSStatisticsFileVersionString: String = "1.0.0"
 
-// sqrt(2/pi)
+/// sqrt(2/pi)
 public let  SQRT2OPIL : Float80 = 0.797884560802865355879892119868763736952
-// 2 / pi
+/// 2 / pi
 public let  TWOOPIL : Float80 = 0.636619772367581343075535053490057448139
-// pi / 4
+/// pi / 4
 public let  PIQUARTL : Float80 = 0.785398163397448309615660845819875721049
-// 3 Pi / 4
+/// 3 Pi / 4
 public let  THREEPIQUARTL : Float80 = 2.356194490192344928846982537459627163148
-// Euler Gamma
+/// Euler Gamma
 public let  EULERGAMMAL : Float80 = 0.577215664901532860606512090082402431042
-// sqrt(pi)
+/// sqrt(pi)
 public let  SQRTPIL : Float80 = 1.772453850905516027298167483341145182798
-// pi
+/// pi
 public let  PILL : Float80 = 3.141592653589793238462643383279502884197
-// sqrt(2)
+/// sqrt(2)
 public let  SQRTTWOL : Float80 = 1.414213562373095048801688724209698078570
-// sqrt(1/(2 * pi))
+/// sqrt(1/(2 * pi))
 public let  SQRT2PIINVL : Float80 = 0.398942280401432677939946059934381868476
-// sqrt(2*pi)
+/// sqrt(2*pi)
 public let  SQRT2PIL : Float80 = 2.506628274631000502415765284811045253010
-// log(sqrt(2*pi))
+/// log(sqrt(2*pi))
 public let  LOGSQRT2PIL : Float80 = 0.918938533204672741780329736405617639861
-// pi /2
+/// pi /2
 public let  PIHALFL : Float80 = 1.570796326794896619231321691639751442099
-// sqrt(pi/2)
+/// sqrt(pi/2)
 public let  SQRTPIHALFL : Float80 = 0.886226925452758013649083741670572591399
-// log(2)
+/// log(2)
 public let  LOG2L : Float80 = 0.693147180559945309417232121458176568076
-// 1/12 (one over twelve)
+/// 1/12 (one over twelve)
 public let  OOTWL : Float80 = 0.083333333333333333333333333333333333333
-// 1/18 (one over eighteen)
+/// 1/18 (one over eighteen)
 public let  OOEIL : Float80 = 0.055555555555555555555555555555555555556
-// 1/24 (one over twentyfour)
+/// 1/24 (one over twentyfour)
 public let  OOTWFL : Float80 = 0.041666666666666666666666666666666666667
-// 2 * pi
+/// 2 * pi
 public let  TWOPIL : Float80 = 6.283185307179586476925286766559005768394
-// pi * pi
+/// pi * pi
 public let  PISQUAREDL : Float80 = 9.869604401089358618834490999876151135314
-// 1 / (2 pi)
+/// 1 / (2 pi)
 public let  OO2PIL : Float80 = 0.159154943091895335768883763372514362035
-// log(pi)
+/// log(pi)
 public let  LOGPIL : Float80 = 1.144729885849400174143427351353058711647
-// 1/ pi
+/// 1/ pi
 public let  OOPIL : Float80 = 0.318309886183790671537767526745028724069
-// sqrt(3)
+/// sqrt(3)
 public let  SQRT3L : Float80 = 1.732050807568877293527446341505872366943
-// 1 / sqrt(pi)
+/// 1 / sqrt(pi)
 public let  OOSQRTPIL : Float80 = 0.564189583547756286948079451560772585844
-// 1 / 3
+/// 1 / 3
 public let  OO3L : Float80 = 0.333333333333333333333333333333333333333
-// 1/ 6
+/// 1/ 6
 public let  OO6L : Float80 = 0.166666666666666666666666666666666666667
-// 2/3
+/// 2/3
 public let  TWOO3L : Float80 = 0.666666666666666666666666666666666666666
-// 2^(1/4)
+/// 2^(1/4)
 public let  TWOEXPQUARTL : Float80 = 1.189207115002721066717499970560475915293
-// sqrt(2/pi)
+/// sqrt(2/pi)
 public let  SQRT2OPI : Double = 0.797884560802865355879892119868763736952;
-// 2 / pi
+/// 2 / pi
 public let  TWOOPI : Double = 0.636619772367581343075535053490057448139;
-// pi / 4
+/// pi / 4
 public let  PIQUART : Double =			0.785398163397448309615660845819875721049;
-// 3 Pi / 4
+/// 3 Pi / 4
 public let  THREEPIQUART : Double = 2.356194490192344928846982537459627163148;
-/*!
- Euler's gamma
- */
+/// Euler's gamma
 public let  EULERGAMMA : Double = 0.577215664901532860606512090082402431042;
-/*!
- sqrt(pi)
- */
+/// sqrt(pi)
 public let  SQRTPI : Double = 1.772453850905516027298167483341145182798;
-// pi
+/// pi
 public let  PIL : Float80 = 3.141592653589793238462643383279502884197;
-// sqrt(2)
+/// sqrt(2)
 public let  SQRTTWO : Double = 1.414213562373095048801688724209698078570;
-// sqrt(1/(2 * pi))
+/// sqrt(1/(2 * pi))
 public let  SQRT2PIINV : Double = 0.398942280401432677939946059934381868476;
-// sqrt(2*pi)
+/// sqrt(2*pi)
 public let  SQRT2PI : Double = 2.506628274631000502415765284811045253010;
-// log(sqrt(2*pi))
+/// log(sqrt(2*pi))
 public let  LOGSQRT2PI : Double = 0.918938533204672741780329736405617639861;
-// pi /2
+/// pi /2
 public let  PIHALF : Double = 1.570796326794896619231321691639751442099;
-// sqrt(pi/2)
+/// sqrt(pi/2)
 public let  SQRTPIHALF : Double =	0.886226925452758013649083741670572591399;
-// log(2)
+/// log(2)
 public let  LOG2 : Double = 0.693147180559945309417232121458176568076;
-// 1/12 (one over twelve)
+/// 1/12 (one over twelve)
 public let  OOTW : Double = 0.083333333333333333333333333333333333333;
-// 1/18 (one over eighteen)
+/// 1/18 (one over eighteen)
 public let  OOEI : Double = 0.055555555555555555555555555555555555556;
-// 1/24 (one over twentyfour)
+/// 1/24 (one over twentyfour)
 public let  OOTWF : Double = 0.041666666666666666666666666666666666667;
-// 2 * pi
+/// 2 * pi
 public let  TWOPI : Double = 6.283185307179586476925286766559005768394;
-// pi * pi
+/// pi * pi
 public let  PISQUARED : Double = 9.869604401089358618834490999876151135314;
-// 1 / (2 pi)
+/// 1 / (2 pi)
 public let  OO2PI : Double =		0.159154943091895335768883763372514362035;
-// log(pi)
+/// log(pi)
 public let  LOGPI : Double = 1.144729885849400174143427351353058711647;
-// 1/ pi
+/// 1/ pi
 public let  OOPI : Double = 0.318309886183790671537767526745028724069;
-// sqrt(3)
+/// sqrt(3)
 public let  SQRT3 : Double = 1.732050807568877293527446341505872366943;
-// 1 / sqrt(pi)
+/// 1 / sqrt(pi)
 public let  OOSQRTPI : Double = 0.564189583547756286948079451560772585844;
-// 1 / 3
+/// 1 / 3
 public let  OO3 : Double =	0.333333333333333333333333333333333333333;
-// 1/ 6
+/// 1/ 6
 public let  OO6 : Double = 0.166666666666666666666666666666666666667;
-// 2/3
+/// 2/3
 public let  TWOO3 : Double = 0.666666666666666666666666666666666666666;
-// 2^(1/4)
+/// 2^(1/4)
 public let  TWOEXPQUART : Double =	1.189207115002721066717499970560475915293;

@@ -77,8 +77,8 @@ func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
     }
 }
 
-/// Adds the function sgn()
 extension Double {
+    /// Adds the function sgn()
     func sgn() -> Double {
         if self.sign == .minus {
             return -1.0

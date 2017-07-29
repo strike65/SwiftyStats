@@ -208,6 +208,7 @@ public class SSHypothesisTesting {
     // MARK: GoF test
     
     /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
+    /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter data: SSExamine<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
@@ -227,7 +228,8 @@ public class SSHypothesisTesting {
 
     }
 
-    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
+    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov.
+    /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
@@ -568,6 +570,7 @@ public class SSHypothesisTesting {
     }
 
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
     /// - Parameter data: Data as SSExamine object
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2
@@ -588,6 +591,7 @@ public class SSHypothesisTesting {
 
     
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2

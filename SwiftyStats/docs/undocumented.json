@@ -1,0 +1,390 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 33,
+      "symbol": "SSContFrac.eps",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 35,
+      "symbol": "SSContFrac.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 128,
+      "symbol": "SSBetaRegularized.a",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 129,
+      "symbol": "SSBetaRegularized.b",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 131,
+      "symbol": "SSBetaRegularized.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 161,
+      "symbol": "SSGammaQ.a",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSContFrac.swift",
+      "line": 163,
+      "symbol": "SSGammaQ.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 338,
+      "symbol": "SSExamine.encode(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 355,
+      "symbol": "SSExamine.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 372,
+      "symbol": "SSExamine.copy(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 1478,
+      "symbol": "SSExamine.herfindahlIndex",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 1499,
+      "symbol": "SSExamine.herfindahlIndexNormalized",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSExamine.swift",
+      "line": 1931,
+      "symbol": "SSExamine.testForDistribution(targetDistribution:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSHypothesisTesting.swift",
+      "line": 28,
+      "symbol": "SSHypothesisTesting",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSimard-KSProb.swift",
+      "line": 716,
+      "symbol": "KSfbar(n:x:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSwiftyStatsError.swift",
+      "line": 33,
+      "symbol": "SSSwiftyStatsError.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSwiftyStatsError.swift",
+      "line": 34,
+      "symbol": "SSSwiftyStatsError.line",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSwiftyStatsError.swift",
+      "line": 35,
+      "symbol": "SSSwiftyStatsError.function",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSwiftyStatsError.swift",
+      "line": 36,
+      "symbol": "SSSwiftyStatsError.file",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SSSwiftyStatsError.swift",
+      "line": 141,
+      "symbol": "SSSwiftyStatsError.init(coder:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 47,
+      "symbol": "SSConfIntv.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 49,
+      "symbol": "SSConfIntv.init(lower:upper:width:type:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 56,
+      "symbol": "SSConfIntv.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 130,
+      "symbol": "SSRunsTestCuttingPoint.mean",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 130,
+      "symbol": "SSRunsTestCuttingPoint.median",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 130,
+      "symbol": "SSRunsTestCuttingPoint.mode",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 130,
+      "symbol": "SSRunsTestCuttingPoint.userDefined",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 135,
+      "symbol": "SSContingencyTableSortOrder.ascending",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 135,
+      "symbol": "SSContingencyTableSortOrder.descending",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 135,
+      "symbol": "SSContingencyTableSortOrder.none",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 140,
+      "symbol": "SS1DChiSquareHypothesisType.irregular",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 140,
+      "symbol": "SS1DChiSquareHypothesisType.uniform",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 153,
+      "symbol": "SSQuartile.init(Q25:Q50:Q75:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 158,
+      "symbol": "SSQuartile.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 176,
+      "symbol": "SSDescriptiveStats.init(mean:variance:sampleSize:standardDev:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 182,
+      "symbol": "SSDescriptiveStats.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 201,
+      "symbol": "SSContProbDistParams.init(mean:variance:kurtosis:skewness:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 207,
+      "symbol": "SSContProbDistParams.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 227,
+      "symbol": "SSVarianceType.biased",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 228,
+      "symbol": "SSVarianceType.unbiased",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 233,
+      "symbol": "SSStandardDeviationType.biased",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 234,
+      "symbol": "SSStandardDeviationType.unbiased",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 239,
+      "symbol": "SSKurtosisType.platykurtic",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 240,
+      "symbol": "SSKurtosisType.mesokurtic",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 241,
+      "symbol": "SSKurtosisType.leptokurtic",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 262,
+      "symbol": "SSOutlierTest",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 263,
+      "symbol": "SSOutlierTest.grubbs",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 264,
+      "symbol": "SSOutlierTest.esd",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 268,
+      "symbol": "SSGrubbsTestResult",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 288,
+      "symbol": "SSGrubbsTestResult.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 312,
+      "symbol": "SSESDTestResult",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 334,
+      "symbol": "SSESDTestResult.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 363,
+      "symbol": "SSGoFTarget.none",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 401,
+      "symbol": "SSKSTestResult.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
+      "line": 627,
+      "symbol": "SSOneWayANOVATestResult.meansEQUAL",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats"
+}

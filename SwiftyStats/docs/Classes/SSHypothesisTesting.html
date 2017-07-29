@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SSHypothesisTesting Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/SSHypothesisTesting" class="dashAnchor"></a>
+    <a title="SSHypothesisTesting Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (90% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SSHypothesisTesting Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SSBetaRegularized.html">SSBetaRegularized</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSContFrac.html">SSContFrac</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSExamine.html">SSExamine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSGammaQ.html">SSGammaQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSHypothesisTesting.html">SSHypothesisTesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSProbabilityDistributions.html">SSProbabilityDistributions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSSwiftyStatsError.html">SSSwiftyStatsError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SSSwiftyStatsError/ErrorType.html">– ErrorType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats10EULERGAMMASd">EULERGAMMA</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats11EULERGAMMALVs7Float80">EULERGAMMAL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4LOG2Sd">LOG2</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5LOG2LVs7Float80">LOG2L</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5LOGPISd">LOGPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6LOGPILVs7Float80">LOGPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats10LOGSQRT2PISd">LOGSQRT2PI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats11LOGSQRT2PILVs7Float80">LOGSQRT2PIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5OO2PISd">OO2PI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6OO2PILVs7Float80">OO2PIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats3OO3Sd">OO3</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4OO3LVs7Float80">OO3L</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats3OO6Sd">OO6</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4OO6LVs7Float80">OO6L</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4OOEISd">OOEI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5OOEILVs7Float80">OOEIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4OOPISd">OOPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5OOPILVs7Float80">OOPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8OOSQRTPISd">OOSQRTPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats9OOSQRTPILVs7Float80">OOSQRTPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4OOTWSd">OOTW</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5OOTWFSd">OOTWF</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6OOTWFLVs7Float80">OOTWFL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5OOTWLVs7Float80">OOTWL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6PIHALFSd">PIHALF</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7PIHALFLVs7Float80">PIHALFL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats3PILVs7Float80">PIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats4PILLVs7Float80">PILL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7PIQUARTSd">PIQUART</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8PIQUARTLVs7Float80">PIQUARTL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats9PISQUAREDSd">PISQUARED</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats10PISQUAREDLVs7Float80">PISQUAREDL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8SQRT2OPISd">SQRT2OPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats9SQRT2OPILVs7Float80">SQRT2OPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7SQRT2PISd">SQRT2PI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats10SQRT2PIINVSd">SQRT2PIINV</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats11SQRT2PIINVLVs7Float80">SQRT2PIINVL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8SQRT2PILVs7Float80">SQRT2PIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5SQRT3Sd">SQRT3</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6SQRT3LVs7Float80">SQRT3L</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6SQRTPISd">SQRTPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats10SQRTPIHALFSd">SQRTPIHALF</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats11SQRTPIHALFLVs7Float80">SQRTPIHALFL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7SQRTPILVs7Float80">SQRTPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7SQRTTWOSd">SQRTTWO</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8SQRTTWOLVs7Float80">SQRTTWOL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats22SSExamineFileExtensionSS">SSExamineFileExtension</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats29SSStatisticsFileVersionStringSS">SSStatisticsFileVersionString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats12THREEPIQUARTSd">THREEPIQUART</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats13THREEPIQUARTLVs7Float80">THREEPIQUARTL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats11TWOEXPQUARTSd">TWOEXPQUART</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats12TWOEXPQUARTLVs7Float80">TWOEXPQUARTL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5TWOO3Sd">TWOO3</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6TWOO3LVs7Float80">TWOO3L</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6TWOOPISd">TWOOPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats7TWOOPILVs7Float80">TWOOPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats5TWOPISd">TWOPI</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats6TWOPILVs7Float80">TWOPIL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v11SwiftyStats8log_statCSo5OSLog">log_stat</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/SS1DChiSquareHypothesisType.html">SS1DChiSquareHypothesisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSCIType.html">SSCIType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSContingencyTableSortOrder.html">SSContingencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSCumulativeFrequencyTableFormat.html">SSCumulativeFrequencyTableFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSDataArraySortOrder.html">SSDataArraySortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSESDTestType.html">SSESDTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSFrequencyTableSortOrder.html">SSFrequencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSGoFTarget.html">SSGoFTarget</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSKurtosisType.html">SSKurtosisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSLevelOfMeasurement.html">SSLevelOfMeasurement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSLeveneTestType.html">SSLeveneTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSMomentType.html">SSMomentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSOutlierTest.html">SSOutlierTest</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSRunsTestCuttingPoint.html">SSRunsTestCuttingPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSSemiVariance.html">SSSemiVariance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSSkewness.html">SSSkewness</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSSortUniqeItems.html">SSSortUniqeItems</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSStandardDeviationType.html">SSStandardDeviationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSVarianceType.html">SSVarianceType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Double.html">Double</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats5KScdfFT1nSi1xSd_Sd">KScdf(n:x:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats6KSfbarFT1nSi1xSd_Sd">KSfbar(n:x:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats12betaFunctionFT1aGSQSd_1bGSQSd__Sd">betaFunction(a:b:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats14betaNormalizedFT1xGSQSd_1aGSQSd_1bGSQSd__Sd">betaNormalized(x:a:b:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats14fractionalPartFSdSd">fractionalPart(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats16gammaNormalizedPFT1xGSQSd_1aGSQSd_9convergedGSpSb__Sd">gammaNormalizedP(x:a:converged:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats16gammaNormalizedQFT1xGSQSd_1aGSQSd_9convergedGSpSb__Sd">gammaNormalizedQ(x:a:converged:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats15getLogFactorialFSiSd">getLogFactorial(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats9isIntegerFSdSb">isInteger(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats9isNumericurFxSb">isNumeric(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats5isOddFSdSb">isOdd(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F11SwiftyStats7maximumuRxs10ComparablerFT2t1x2t2x_x">maximum(t1:t2:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SSExamineContainer.html">SSExamineContainer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/SSADTestResult.html">SSADTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSChiSquareVarianceTestResult.html">SSChiSquareVarianceTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSConfIntv.html">SSConfIntv</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSContProbDistParams.html">SSContProbDistParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSCumulativeFrequencyTableItem.html">SSCumulativeFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSDescriptiveStats.html">SSDescriptiveStats</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSESDTestResult.html">SSESDTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSFrequencyTableItem.html">SSFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSGrubbsTestResult.html">SSGrubbsTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSKSTestResult.html">SSKSTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSMatchedPairsTTestResult.html">SSMatchedPairsTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSOneSampleTTestResult.html">SSOneSampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSQuartile.html">SSQuartile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSTwoSampleTTestResult.html">SSTwoSampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SSHypothesisTesting</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Grubbs%20test"></a>
+                <a name="//apple_ref/swift/Section/Grubbs test" class="dashAnchor"></a>
+                <a href="#/Grubbs%20test">
+                  <h3 class="section-name">Grubbs test</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting10grubbsTestFT4dataGSaSd_5alphaGSQSd__GSqVS_18SSGrubbsTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/grubbsTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting10grubbsTestFT4dataGSaSd_5alphaGSQSd__GSqVS_18SSGrubbsTestResult_">grubbsTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Grubbs outlier test</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">grubbsTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSGrubbsTestResult.html">SSGrubbsTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An Array<Double> containing the data</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>SSGrubbsTestResult</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/ESD%20test"></a>
+                <a name="//apple_ref/swift/Section/ESD test" class="dashAnchor"></a>
+                <a href="#/ESD%20test">
+                  <h3 class="section-name">ESD test</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting14esdOutlierTestFT4dataGSaSd_5alphaGSQSd_11maxOutliersGSQSi_8testTypeOS_13SSESDTestType_GSqVS_15SSESDTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/esdOutlierTest(data:alpha:maxOutliers:testType:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting14esdOutlierTestFT4dataGSaSd_5alphaGSQSd_11maxOutliersGSQSi_8testTypeOS_13SSESDTestType_GSqVS_15SSESDTestResult_">esdOutlierTest(data:alpha:maxOutliers:testType:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test ist more accurate than the Grubbs test (For Grubbs test the suspected number of outliers must be specified exactly.)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">esdOutlierTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="nv">maxOutliers</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span><span class="p">,</span> <span class="nv">testType</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSESDTestType.html">SSESDTestType</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSESDTestResult.html">SSESDTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>maxOutliers</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Upper bound for the number of outliers to detect</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>testType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/GoF%20test"></a>
+                <a name="//apple_ref/swift/Section/GoF test" class="dashAnchor"></a>
+                <a href="#/GoF%20test">
+                  <h3 class="section-name">GoF test</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting9ksGoFTestFzT4dataGSQGCS_9SSExamineSd__18targetDistributionOS_11SSGoFTarget_GSqVS_14SSKSTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/ksGoFTest(data:targetDistribution:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting9ksGoFTestFzT4dataGSQGCS_9SSExamineSd__18targetDistributionOS_11SSGoFTarget_GSqVS_14SSKSTestResult_">ksGoFTest(data:targetDistribution:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the goodnes of fit test according to Kolmogorov and Smirnov
+The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">ksGoFTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="n">targetDistribution</span> <span class="nv">target</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSGoFTarget.html">SSGoFTarget</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSKSTestResult.html">SSKSTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>target</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Distribution to test for</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting9ksGoFTestFzT4dataGSQGSaSd__18targetDistributionOS_11SSGoFTarget_GSqVS_14SSKSTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/ksGoFTest(data:targetDistribution:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting9ksGoFTestFzT4dataGSQGSaSd__18targetDistributionOS_11SSGoFTarget_GSqVS_14SSKSTestResult_">ksGoFTest(data:targetDistribution:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the goodnes of fit test according to Kolmogorov and Smirnov.
+The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">ksGoFTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="n">targetDistribution</span> <span class="nv">target</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSGoFTarget.html">SSGoFTarget</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSKSTestResult.html">SSKSTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>target</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Distribution to test for</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting15adNormalityTestFzT4dataGSQGCS_9SSExamineSd__5alphaGSQSd__GSqVS_14SSADTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/adNormalityTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting15adNormalityTestFzT4dataGSQGCS_9SSExamineSd__5alphaGSQSd__GSqVS_14SSADTestResult_">adNormalityTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">adNormalityTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSADTestResult.html">SSADTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as SSExamine object</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting15adNormalityTestFzT4dataGSQGSaSd__5alphaGSQSd__GSqVS_14SSADTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/adNormalityTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting15adNormalityTestFzT4dataGSQGSaSd__5alphaGSQSd__GSqVS_14SSADTestResult_">adNormalityTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">adNormalityTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSADTestResult.html">SSADTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Equality%20of%20variances"></a>
+                <a name="//apple_ref/swift/Section/Equality of variances" class="dashAnchor"></a>
+                <a href="#/Equality%20of%20variances">
+                  <h3 class="section-name">Equality of variances</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting12bartlettTestFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/bartlettTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting12bartlettTestFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_">bartlettTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Bartlett test for two or more samples</p>
+<li>Paramater alpha: Alpha</li>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">bartlettTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array containing samples as SSExamine objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting12bartlettTestFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/bartlettTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting12bartlettTestFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_">bartlettTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Bartlett test for two or more samples</p>
+<li>Paramater alpha: Alpha</li>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">bartlettTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array containing samples</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting10leveneTestFzT4dataGSQGSaGCS_9SSExamineSd___8testTypeOS_16SSLeveneTestType5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/leveneTest(data:testType:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting10leveneTestFzT4dataGSQGSaGCS_9SSExamineSd___8testTypeOS_16SSLeveneTestType5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_">leveneTest(data:testType:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Levene / Brown-Forsythe test for two or more samples</p>
+<li>Paramater alpha: Alpha</li>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">leveneTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">testType</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSLeveneTestType.html">SSLeveneTestType</a></span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array containing SSExamine objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>testType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>.median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting10leveneTestFzT4dataGSQGSaGSaSd___8testTypeOS_16SSLeveneTestType5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/leveneTest(data:testType:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting10leveneTestFzT4dataGSQGSaGSaSd___8testTypeOS_16SSLeveneTestType5alphaGSQSd__GSqVS_28SSVarianceEqualityTestResult_">leveneTest(data:testType:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Levene / Brown-Forsythe test for two or more samples</p>
+<li>Paramater alpha: Alpha</li>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">leveneTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">testType</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSLeveneTestType.html">SSLeveneTestType</a></span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array containing samples</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>testType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>.median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting21chiSquareVarianceTestFzT4dataGSaSd_15nominalVarianceGSQSd_5alphaGSQSd__GSqVS_29SSChiSquareVarianceTestResult_"></a>
+                    <a name="//apple_ref/swift/Method/chiSquareVarianceTest(data:nominalVariance:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting21chiSquareVarianceTestFzT4dataGSaSd_15nominalVarianceGSQSd_5alphaGSQSd__GSqVS_29SSChiSquareVarianceTestResult_">chiSquareVarianceTest(data:nominalVariance:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Chi^2 variance equality test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if sample.sampleSize &lt; 2 || s0 &lt;= 0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">chiSquareVarianceTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">nominalVariance</span> <span class="nv">s0</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSChiSquareVarianceTestResult.html">SSChiSquareVarianceTestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>s0</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>nominal variance</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting21chiSquareVarianceTestFzT6sampleGCS_9SSExamineSd_15nominalVarianceGSQSd_5alphaGSQSd__VS_29SSChiSquareVarianceTestResult"></a>
+                    <a name="//apple_ref/swift/Method/chiSquareVarianceTest(sample:nominalVariance:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting21chiSquareVarianceTestFzT6sampleGCS_9SSExamineSd_15nominalVarianceGSQSd_5alphaGSQSd__VS_29SSChiSquareVarianceTestResult">chiSquareVarianceTest(sample:nominalVariance:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the Chi^2 variance equality test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if sample.sampleSize &lt; 2 || s0 &lt;= 0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">chiSquareVarianceTest</span><span class="p">(</span><span class="nv">sample</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">nominalVariance</span> <span class="nv">s0</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSChiSquareVarianceTestResult.html">SSChiSquareVarianceTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>s0</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>nominal variance</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/t-Tests"></a>
+                <a name="//apple_ref/swift/Section/t-Tests" class="dashAnchor"></a>
+                <a href="#/t-Tests">
+                  <h3 class="section-name">t-Tests</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting14twoSampleTTestFzT5data1GSQGSaSd__5data2GSaSd_5alphaGSQSd__VS_22SSTwoSampleTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/twoSampleTTest(data1:data2:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting14twoSampleTTestFzT5data1GSQGSaSd__5data2GSaSd_5alphaGSQSd__VS_22SSTwoSampleTTestResult">twoSampleTTest(data1:data2:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the two sample t test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">twoSampleTTest</span><span class="p">(</span><span class="nv">data1</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">data2</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSTwoSampleTTestResult.html">SSTwoSampleTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample1</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data1 as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample2</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data2 as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting14twoSampleTTestFzT7sample1GSQGCS_9SSExamineSd__7sample2GS1_Sd_5alphaGSQSd__VS_22SSTwoSampleTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/twoSampleTTest(sample1:sample2:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting14twoSampleTTestFzT7sample1GSQGCS_9SSExamineSd__7sample2GS1_Sd_5alphaGSQSd__VS_22SSTwoSampleTTestResult">twoSampleTTest(sample1:sample2:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the two sample t test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">twoSampleTTest</span><span class="p">(</span><span class="nv">sample1</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">sample2</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSTwoSampleTTestResult.html">SSTwoSampleTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample1</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data1 as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample2</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data2 as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting14oneSampleTTestFzT6sampleGCS_9SSExamineSd_4meanGSQSd_5alphaGSQSd__VS_22SSOneSampleTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/oneSampleTTest(sample:mean:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting14oneSampleTTestFzT6sampleGCS_9SSExamineSd_4meanGSQSd_5alphaGSQSd__VS_22SSOneSampleTTestResult">oneSampleTTest(sample:mean:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the one sample t test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff sample.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">oneSampleTTest</span><span class="p">(</span><span class="nv">sample</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">mean</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneSampleTTestResult.html">SSOneSampleTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sample</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mean</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Reference mean</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting14oneSampleTTEstFzT4dataGSQGSaSd__4meanGSQSd_5alphaGSQSd__VS_22SSOneSampleTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/oneSampleTTEst(data:mean:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting14oneSampleTTEstFzT4dataGSQGSaSd__4meanGSQSd_5alphaGSQSd__VS_22SSOneSampleTTestResult">oneSampleTTEst(data:mean:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the one sample t test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff sample.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">oneSampleTTEst</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">mean</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneSampleTTestResult.html">SSOneSampleTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mean</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Reference mean</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting17matchedPairsTTestFzT4set1GSQGCS_9SSExamineSd__4set2GS1_Sd_5alphaGSQSd__VS_25SSMatchedPairsTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/matchedPairsTTest(set1:set2:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting17matchedPairsTTestFzT4set1GSQGCS_9SSExamineSd__4set2GS1_Sd_5alphaGSQSd__VS_25SSMatchedPairsTTestResult">matchedPairsTTest(set1:set2:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the t test for matched pairs</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff set1.sampleSize &lt; 2 || set2.sampleSize &lt; 2 || (set1.sampleSize != set2.sampleSize)
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">matchedPairsTTest</span><span class="p">(</span><span class="nv">set1</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">set2</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSMatchedPairsTTestResult.html">SSMatchedPairsTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>set1</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data of set1 as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>set2</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data of set2 as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting17matchedPairsTTestFzT5data1GSQGSaSd__5data2GSaSd_5alphaGSQSd__VS_25SSMatchedPairsTTestResult"></a>
+                    <a name="//apple_ref/swift/Method/matchedPairsTTest(data1:data2:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting17matchedPairsTTestFzT5data1GSQGSaSd__5data2GSaSd_5alphaGSQSd__VS_25SSMatchedPairsTTestResult">matchedPairsTTest(data1:data2:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the t test for matched pairs</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data1.count &lt; 2 || data2.count &lt; 2 || data1.count != data2.count
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">matchedPairsTTest</span><span class="p">(</span><span class="nv">data1</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">data2</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSMatchedPairsTTestResult.html">SSMatchedPairsTTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>set1</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data of set1 as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>set2</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data of set2 as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting11oneWayANOVAFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_"></a>
+                    <a name="//apple_ref/swift/Method/oneWayANOVA(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting11oneWayANOVAFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_">oneWayANOVA(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a one way ANOVA (multiple means test)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.count &lt;= 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">oneWayANOVA</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting11oneWayANOVAFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_"></a>
+                    <a name="//apple_ref/swift/Method/oneWayANOVA(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting11oneWayANOVAFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_">oneWayANOVA(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a one way ANOVA (multiple means test)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.count &lt;= 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">oneWayANOVA</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting17multipleMeansTestFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_"></a>
+                    <a name="//apple_ref/swift/Method/multipleMeansTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting17multipleMeansTestFzT4dataGSQGSaGSaSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_">multipleMeansTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a one way ANOVA (multiple means test)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.count &lt;= 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">multipleMeansTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting17multipleMeansTestFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_"></a>
+                    <a name="//apple_ref/swift/Method/multipleMeansTest(data:alpha:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting17multipleMeansTestFzT4dataGSQGSaGCS_9SSExamineSd___5alphaGSQSd__GSqVS_23SSOneWayANOVATestResult_">multipleMeansTest(data:alpha:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a one way ANOVA (multiple means test)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.count &lt;= 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">multipleMeansTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as SSExamine<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-07-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
