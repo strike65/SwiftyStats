@@ -919,7 +919,7 @@ public class SSHypothesisTesting {
     /// - Parameter data: Data as Array<Double>
     /// - Parameter s0: nominal variance
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if sample.sampleSize < 2 || s0 <= 0
+    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2 || s0 <= 0
     public class func chiSquareVarianceTest(data: Array<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult? {
         if data.count < 2 {
             os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
@@ -982,7 +982,141 @@ public class SSHypothesisTesting {
         catch {
             throw error
         }
-        
+    }
+    
+    /// Performs the F ratio test for variance equality
+    /// - Parameter data1: Data as Array<Double>
+    /// - Parameter data1: Data as Array<Double>
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError iff data1.sampleSize < 2 || data1.sampleSize < 2
+    public class func fTestVarianceEquality(data1: Array<Double>!, data2: Array<Double>!, alpha: Double!) throws -> SSFTestResult {
+        if data1.count < 2 {
+            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if data2.count < 2 {
+            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try SSHypothesisTesting.fTestVarianceEquality(sample1: SSExamine<Double>.init(withArray: data1, characterSet: nil), sample2: SSExamine<Double>.init(withArray: data2, characterSet: nil), alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    /// Performs the F ratio test for variance equality
+    /// - Parameter sample1: Data as SSExamine<Double>
+    /// - Parameter sample2: Data as SSExamine<Double>
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample1.sampleSize < 2
+    public class func fTestVarianceEquality(sample1: SSExamine<Double>!, sample2: SSExamine<Double>!, alpha: Double!) throws -> SSFTestResult {
+        if sample1.sampleSize < 2 {
+            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if sample2.sampleSize < 2 {
+            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let s1: Double
+        let s2: Double
+        let testStat: Double
+        if let a = sample1.variance(type: .unbiased), let b = sample2.variance(type: .unbiased) {
+            s1 = a
+            s2 = b
+            testStat = s1 / s2
+        }
+        else {
+            os_log("error in obtaining the f ratio", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let df1 = Double(sample1.sampleSize) - 1.0
+        let df2 = Double(sample2.sampleSize) - 1.0
+        let cdfTestStat: Double
+        do {
+            cdfTestStat = try SSProbabilityDistributions.cdfFRatio(f: testStat, numeratorDF: df1, denominatorDF: df2)
+        }
+        catch {
+            throw error
+        }
+        var pVVarEqual: Double
+        if cdfTestStat > 0.5 {
+            pVVarEqual = 2.0 * (1.0 - cdfTestStat)
+        }
+        else {
+            pVVarEqual = 2.0 * cdfTestStat
+        }
+        let pVVar1LTEVar2 = 1.0 - cdfTestStat
+        let pVVar1GTEVar2 = cdfTestStat
+        var var1EQvar2: Bool
+        var var1GTEvar2: Bool
+        var var1LTEvar2: Bool
+        if pVVarEqual < alpha {
+            var1EQvar2 = false
+        }
+        else {
+            var1EQvar2 = true
+        }
+        if pVVar1LTEVar2 < alpha {
+            var1LTEvar2 = false
+        }
+        else {
+            var1LTEvar2 = true
+        }
+        if pVVar1GTEVar2 < alpha {
+            var1GTEvar2 = false
+        }
+        else {
+            var1GTEvar2 = true
+        }
+        var ciTwoSidedAlphaLower: Double
+        var ciTwoSidedAlphaUpper: Double
+        var ciLessAlphaLower: Double
+        var ciLessAlphaUpper: Double
+        var ciGreaterAlphaLower: Double
+        var ciGreaterAlphaUpper: Double
+        do {
+            ciTwoSidedAlphaUpper = try (testStat / SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: df1, denominatorDF: df2))
+            ciTwoSidedAlphaLower = try (testStat * SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: df2, denominatorDF: df1))
+            ciLessAlphaLower = 0.0
+            ciLessAlphaUpper = try (testStat / SSProbabilityDistributions.quantileFRatioDist(p: alpha, numeratorDF: df1, denominatorDF: df2))
+            ciGreaterAlphaLower = try (testStat * SSProbabilityDistributions.quantileFRatioDist(p: alpha, numeratorDF: df2, denominatorDF: df1))
+            ciGreaterAlphaUpper = Double.infinity
+        }
+        catch {
+            throw error
+        }
+        var result = SSFTestResult()
+        result.sampleSize1 = Double(sample1.sampleSize)
+        result.sampleSize2 = Double(sample2.sampleSize)
+        result.dfNumerator = df1
+        result.dfDenominator = df2
+        result.variance1 = s1;
+        result.variance2 = s2;
+        result.FRatio = testStat;
+        result.p2Value = pVVarEqual;
+        result.p1Value = pVVarEqual / 2.0;
+        result.FRatioEQ1 = var1EQvar2;
+        result.FRatioGTE1 = var1GTEvar2;
+        result.FRatioLTE1 = var1LTEvar2;
+        var cieq = SSConfIntv()
+        cieq.lowerBound = ciTwoSidedAlphaLower
+        cieq.upperBound = ciTwoSidedAlphaUpper
+        cieq.intervalWidth = ciTwoSidedAlphaUpper - ciTwoSidedAlphaLower
+        var cilt = SSConfIntv()
+        cilt.intervalWidth = ciLessAlphaUpper - ciLessAlphaLower;
+        cilt.lowerBound = ciLessAlphaLower;
+        cilt.upperBound = ciLessAlphaUpper;
+        var cigt = SSConfIntv()
+        cigt.intervalWidth = ciGreaterAlphaUpper - ciGreaterAlphaLower;
+        cigt.lowerBound = ciGreaterAlphaLower;
+        cigt.upperBound = ciGreaterAlphaUpper;
+        result.ciRatioEQ1 = cieq
+        result.ciRatioGTE1 = cigt
+        result.ciRatioLTE1 = cilt
+        return result
     }
 
     /************************************************************************************************/

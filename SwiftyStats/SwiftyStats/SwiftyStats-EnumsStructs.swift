@@ -38,27 +38,13 @@ public enum SSCIType {
 /// Confidence interval struct
 public struct SSConfIntv {
     /// Upper bound of the CI
-    var upperBound: Double
+    var upperBound: Double?
     /// Lower bound of the CI
-    var lowerBound: Double
+    var lowerBound: Double?
     /// Range of the CI
-    var intervalWidth: Double
+    var intervalWidth: Double?
     
-    var type: SSCIType
-    
-    init(lower: Double, upper: Double, width: Double, type: SSCIType) {
-        upperBound = upper
-        lowerBound = lower
-        intervalWidth = width
-        self.type = type
-    }
-    
-    init() {
-        upperBound = 0
-        lowerBound = 0
-        intervalWidth = 0
-        self.type = .normal
-    }
+//    var type: SSCIType
 }
 /// Defines the format of the Cumulative Frequency Table
 public enum SSCumulativeFrequencyTableFormat {
@@ -236,8 +222,11 @@ public enum SSStandardDeviationType: Int {
 
 /// Defines type of kurtosis
 public enum SSKurtosisType {
-    case platykurtic // kurtosisExecs < 0
+    /// kurtosisExecs < 0
+    case platykurtic
+    /// kurtosisExecs == 0
     case mesokurtic  // kurtosisExces == 0
+    /// kurtosisExecs > 0
     case leptokurtic  // kurtosisExcess > 0
 }
 
@@ -259,43 +248,34 @@ public enum SSSemiVariance {
     case upper
 }
 
+/// Type of outlier test
 public enum SSOutlierTest {
+    /// use Grubbs test
     case grubbs
+    /// use ESD test
     case esd
 }
 
 
 public struct SSGrubbsTestResult {
     /// ciritcal value
-    public var criticalValue: Double!
+    public var criticalValue: Double?
     /// largest value
-    public var largest: Double!
+    public var largest: Double?
     /// smalles value
-    public var smallest: Double!
+    public var smallest: Double?
     /// sample size
-    public var sampleSize: Int!
+    public var sampleSize: Int?
     /// max difference
-    public var maxDiff: Double!
+    public var maxDiff: Double?
     /// arithmetic mean
-    public var mean: Double!
+    public var mean: Double?
     /// Grubbs G
-    public var G: Double!
+    public var G: Double?
     /// sd
-    public var stdDev: Double!
+    public var stdDev: Double?
     /// true iff G > ciriticalValue
-    public var hasOutliers: Bool!
-    
-    public init() {
-        criticalValue = Double.nan
-        largest = Double.nan
-        smallest = Double.nan
-        sampleSize = Int.max
-        maxDiff = Double.nan
-        mean = Double.nan
-        G = Double.nan
-        stdDev = Double.nan
-        hasOutliers = false
-    }
+    public var hasOutliers: Bool?
 }
 
 /// Type of the Rosner test for outliers (ESD test)
@@ -327,22 +307,9 @@ public struct SSESDTestResult {
     /// max number of outliers to search for
     var maxOutliers: Int?
     /// test type
-    var testType: SSESDTestType
+    var testType: SSESDTestType?
     /// array of the means
     var means: Array<Double>?
-    
-    init() {
-        stdDeviations = nil
-        itemsRemoved = nil
-        testStatistics = nil
-        lambdas = nil
-        countOfOutliers = nil
-        outliers = nil
-        alpha = nil
-        maxOutliers = nil
-        testType = .bothTails
-        means = nil
-    }
 }
 
 
@@ -382,7 +349,7 @@ public struct SSKSTestResult {
     /// empirical scale parameter
     var estimatedScaleParam: Double?
     /// target distribution
-    var targetDistribution: SSGoFTarget
+    var targetDistribution: SSGoFTarget?
     /// p value
     var pValue: Double?
     /// max absolute difference
@@ -397,25 +364,6 @@ public struct SSKSTestResult {
     var sampleSize: Int?
     /// a string containing additional info (for certain distributions)
     var infoString: String?
-    
-    public init() {
-        estimatedSd = nil
-        estimatedMean = nil
-        estimatedDegreesOfFreedom = nil
-        estimatedVar = nil
-        estimatedLowerBound = nil
-        estimatedUpperBound = nil
-        estimatedShapeParam = nil
-        estimatedScaleParam = nil
-        targetDistribution = .none
-        pValue = nil
-        maxAbsDifference = nil
-        maxPosDifference = nil
-        maxNegDifference = nil
-        zStatistics = nil
-        sampleSize = nil
-        infoString = nil
-    }
 }
 
 
@@ -629,5 +577,49 @@ public struct SSOneWayANOVATestResult {
     var cv: Double?
     /// p value of the Levene test
     var pLevene: Double?
+}
+
+/// Holds the results of the F test for equal variances
+public struct SSFTestResult {
+    /// size of sample 1
+    var sampleSize1: Double?
+    /// size of sample 2
+    var sampleSize2: Double?
+    /// denominator degrees of freedom
+    var dfDenominator: Double?
+    /// numerator degrees of freedom
+    var dfNumerator: Double?
+    /// variance of sample 1
+    var variance1: Double?
+    /// variance of sample 2
+    var variance2: Double?
+    /// F ratio
+    var FRatio: Double?
+    /// one sided p value
+    var p1Value: Double?
+    /// two sided p value
+    var p2Value: Double?
+    /// indicates if variances are equal
+    var FRatioEQ1: Bool?
+    /// indicates if var1 <= var2
+    var FRatioLTE1: Bool?
+    /// indicates if var1 >= var2
+    var FRatioGTE1: Bool?
+    /// confidence intervall for var1 == var2
+    var ciRatioEQ1: SSConfIntv?
+    /// confidence intervall for var1 <= var2
+    var ciRatioLTE1: SSConfIntv?
+    /// confidence intervall for var1 >= var2
+    var ciRatioGTE1: SSConfIntv?
+}
+
+
+public struct SSBoxLjungResult {
+    var errorDescription: String?
+    var coefficients: Array<Double>
+    var seBartlett: Array<Double>
+    var seWN: Array<Double>
+    var testStatistic: Array<Double>
+    var pValues: Array<Double>
 }
 

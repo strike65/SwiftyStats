@@ -144,12 +144,23 @@ class SwiftyStatsTests: XCTestCase {
         varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .trimmedMean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0003168469, accuracy: 1E-9)
         
-        var chiResult: SSChiSquareVarianceTestResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 9.0 / 4.0, alpha: 0.05)!
+        var chiResult: SSChiSquareVarianceTestResult
+        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 9.0 / 4.0, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.242166, accuracy: 1E-6)
 
         chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 8.0 / 5.0, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.000269792, accuracy: 1E-9)
-    }
+        
+        var ftestRes: SSFTestResult
+        ftestRes = try! SSHypothesisTesting.fTestVarianceEquality(data1: normal1, data2: normal2, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(ftestRes.p1Value!, 0.000519142, accuracy: 1E-9)
+
+        ftestRes = try! SSHypothesisTesting.fTestVarianceEquality(data1: normal1, data2: normal3, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(ftestRes.p1Value!, 1.43217E-6, accuracy: 1E-9)
+
+        ftestRes = try! SSHypothesisTesting.fTestVarianceEquality(data1: normal2, data2: normal3, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(ftestRes.p1Value!, 0.0736106, accuracy: 1E-7)
+}
     
     func testKStest() {
         let normal = try! SSExamine<Double>.init(withObject: normal1, levelOfMeasurement: .interval, characterSet: nil)
@@ -282,23 +293,23 @@ class SwiftyStatsTests: XCTestCase {
                     let zarr = try SSExamine<Double>.init(withObject: zarrData, levelOfMeasurement: .interval, characterSet: nil)
                     if let ci = zarr.studentTCI(alpha: 0.95) {
                         // CI computed using R
-                        XCTAssertEqualWithAccuracy(ci.lowerBound, 9.258242, accuracy: 1E-5)
-                        XCTAssertEqualWithAccuracy(ci.upperBound, 9.264679, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.lowerBound!, 9.258242, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.upperBound!, 9.264679, accuracy: 1E-5)
                     }
                     if let ci = zarr.normalCI(alpha: 0.95, populationSD: zarr.standardDeviation(type: .unbiased)!) {
                         // CI computed using R
-                        XCTAssertEqualWithAccuracy(ci.lowerBound, 9.258262, accuracy: 1E-5)
-                        XCTAssertEqualWithAccuracy(ci.upperBound, 9.264659, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.lowerBound!, 9.258262, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.upperBound!, 9.264659, accuracy: 1E-5)
                     }
                     if let ci = double1.studentTCI(alpha: 0.95) {
                         // CI computed using R
-                        XCTAssertEqualWithAccuracy(ci.lowerBound, 19.30157, accuracy: 1E-5)
-                        XCTAssertEqualWithAccuracy(ci.upperBound, 20.90005, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.lowerBound!, 19.30157, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.upperBound!, 20.90005, accuracy: 1E-5)
                     }
                     if let ci = double1.normalCI(alpha: 0.95, populationSD: double1.standardDeviation(type: .unbiased)!) {
                         // CI computed using R
-                        XCTAssertEqualWithAccuracy(ci.lowerBound, 19.30548, accuracy: 1E-5)
-                        XCTAssertEqualWithAccuracy(ci.upperBound, 20.89613, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.lowerBound!, 19.30548, accuracy: 1E-5)
+                        XCTAssertEqualWithAccuracy(ci.upperBound!, 20.89613, accuracy: 1E-5)
                     }
                 }
             }

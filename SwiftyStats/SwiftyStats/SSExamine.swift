@@ -1624,7 +1624,11 @@ extension SSExamine {
                 width = u * t1
                 upper = m! + width
                 lower = m! - width
-                return SSConfIntv(lower: lower, upper: upper, width: width, type: .normal)
+                var result = SSConfIntv()
+                result.lowerBound = lower
+                result.upperBound = upper
+                result.intervalWidth = width
+                return result
             }
             catch {
                 return nil
@@ -1658,7 +1662,11 @@ extension SSExamine {
                 lower = m - u * s / sqrt(Double(self.sampleSize))
                 upper = m + u * s / sqrt(Double(self.sampleSize))
                 width = u * s / sqrt(Double(self.sampleSize))
-                return SSConfIntv(lower: lower, upper: upper, width: width, type: .student)
+                var result = SSConfIntv()
+                result.lowerBound = lower
+                result.upperBound = upper
+                result.intervalWidth = width
+                return result
             }
             else {
                 return nil
