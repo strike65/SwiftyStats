@@ -95,6 +95,32 @@ class SwiftyStatsTests: XCTestCase {
 
         matchedPairsTTestRest = try! SSHypothesisTesting.matchedPairsTTest(set1: examine1, set2: examine1, alpha: 0.05)
         XCTAssertEqualWithAccuracy(matchedPairsTTestRest.p2Value!, 1, accuracy: 1E-12)
+        
+        /// data from http://www.itl.nist.gov/div898/handbook/eda/section3/eda354.htm
+        let a1 = [1.006,0.996,0.998,1,0.992,0.993,1.002,0.999,0.994,1]
+        let a2 = [0.998,1.006,1,1.002,0.997,0.998,0.996,1,1.006,0.988]
+        let a3 = [0.991,0.987,0.997,0.999,0.995,0.994,1,0.999,0.996,0.996]
+        let a4 = [1.005,1.002,0.994,1,0.995,0.994,0.998,0.996,1.002,0.996]
+        let a5 = [0.998,0.998,0.982,0.99,1.002,0.984,0.996,0.993,0.98,0.996]
+        let a6 = [1.009,1.013,1.009,0.997,0.988,1.002,0.995,0.998,0.981,0.996]
+        let a7 = [0.99,1.004,0.996,1.001,0.998,1,1.018,1.01,0.996,1.002]
+        let a8 = [0.998,1,1.006,1,1.002,0.996,0.998,0.996,1.002,1.006]
+        let a9 = [1.002,0.998,0.996,0.995,0.996,1.004,1.004,0.998,0.999,0.991]
+        let a10 = [0.991,0.995,0.984,0.994,0.997,0.997,0.991,0.998,1.004,0.997]
+        var multipleMeansRes = try! SSHypothesisTesting.multipleMeansTest(data: [a1,a2,a3,a4,a5,a6,a7,a8,a9,a10], alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(multipleMeansRes.p2Value!, 0.0227, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(multipleMeansRes.FStatistic!, 2.297, accuracy: 1E-3)
+        
+        // data from https://brownmath.com/stat/anova1.htm#ANOVAhow
+        let b1 = [64.0,72.0,68.0,77.0,56.0,95.0]
+        let b2 = [78,91,97,82,85,77.0]
+        let b3 = [75,93,78,71,63,76.0]
+        let b4 = [55,66,49,64,70,68.0]
+        multipleMeansRes = try! SSHypothesisTesting.multipleMeansTest(data: [b1,b2,b3,b4], alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(multipleMeansRes.p2Value!, 0.0069, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(multipleMeansRes.FStatistic!, 5.41, accuracy: 1E-2)
+        
+        
     }
     
     func testEqualityOfVariance() {
@@ -117,6 +143,12 @@ class SwiftyStatsTests: XCTestCase {
         
         varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .trimmedMean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0003168469, accuracy: 1E-9)
+        
+        var chiResult: SSChiSquareVarianceTestResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 9.0 / 4.0, alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.242166, accuracy: 1E-6)
+
+        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 8.0 / 5.0, alpha: 0.05)!
+        XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.000269792, accuracy: 1E-9)
     }
     
     func testKStest() {

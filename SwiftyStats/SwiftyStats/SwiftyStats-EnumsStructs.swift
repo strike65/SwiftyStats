@@ -582,11 +582,52 @@ public struct SSMatchedPairsTTestResult {
     var stdDevDiff: Double?
     /// sample size
     var sampleSize: Double?
-    /// p value for two tailed test
+    /// p value for two sided test
     var p2Value: Double?
     /// degrees of freedom
     var df: Double?
     /// t statistics
     var tStat: Double?
+}
+
+/// Holds the results of the chi^2 variance test
+public struct SSChiSquareVarianceTestResult {
+    /// degrees of freedom
+    var df: Double?
+    /// variance ratio
+    var ratio: Double?
+    /// chi^2
+    var testStatisticValue: Double?
+    /// one sided p value
+    var p1Value: Double?
+    /// two sided p value
+    var p2Value: Double?
+    /// sample size
+    var sampleSize: Double?
+    /// true iff sample variance == s0
+    var sigmaUEQs0: Bool?
+    /// true iff sample variance <= s0
+    var sigmaLTEs0: Bool?
+    /// true iff sample variance >= s0
+    var sigmaGTEs0: Bool?
+    /// sample standard deviation
+    var sd: Double?
+}
+
+/// Holds the results of the multiple means tes
+public struct SSOneWayANOVATestResult {
+    /// two sided p value
+    var p2Value: Double?
+    /// F ratio
+    var FStatistic: Double?
+    /// p value of the Bartlett test
+    var pBartlett: Double?
+    /// Alpha
+    var alpha: Double?
+    var meansEQUAL: Bool?
+    /// critical value at alpha
+    var cv: Double?
+    /// p value of the Levene test
+    var pLevene: Double?
 }
 
