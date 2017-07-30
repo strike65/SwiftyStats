@@ -113,7 +113,14 @@ public enum SSLeveneTestType {
 
 /// Defines the cutting point used by the Runs test
 public enum SSRunsTestCuttingPoint {
-    case median, mean, mode, userDefined
+    /// use the median
+    case median
+    /// use mean
+    case mean
+    /// use mode
+    case mode
+    /// use user defined cutting point
+    case userDefined
 }
 
 /// Defines the sort order of the Contingency Table
@@ -613,13 +620,38 @@ public struct SSFTestResult {
     var ciRatioGTE1: SSConfIntv?
 }
 
-
+/// Holds the results of Box Ljung Autocorrelation
 public struct SSBoxLjungResult {
-    var errorDescription: String?
-    var coefficients: Array<Double>
-    var seBartlett: Array<Double>
-    var seWN: Array<Double>
-    var testStatistic: Array<Double>
-    var pValues: Array<Double>
+    /// coefficients as Dictionary<lag: String, coeff: Double>
+    var coefficients: Array<Double>?
+    /// Bartlett standard error as Dictionary<lag: String, se: Double>
+    var seBartlett: Array<Double>?
+    /// standard error for white noise as Dictionary<lag: String, se: Double>
+    var seWN: Array<Double>?
+    /// test statistics as Dictionary<lag: String, stat: Double>
+    var testStatistic: Array<Double>?
+    /// pavalues as  Dictionary<lag: String, pValue: Double>
+    var pValues: Array<Double>?
 }
 
+/// Holds the results of the runs test
+public struct SSRunsTestResult {
+    /// Number of items >= cutting point
+    var nGTEcp: Double?
+    /// Number of items < cutting point
+    var nLTcp: Double?
+    /// Number of runs
+    var nRuns: Double?
+    /// z value
+    var ZStatistic: Double?
+    /// critical value
+    var criticalValue: Double?
+    /// p value
+    var pValue: Double?
+    // cutting point used
+    var cp: Double?
+    /// Array of differences
+    var diffs: Array<Double>?
+    /// Randomness?
+    var randomness: Bool?
+}

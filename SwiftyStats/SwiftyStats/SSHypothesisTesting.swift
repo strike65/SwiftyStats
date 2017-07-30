@@ -21,12 +21,12 @@
  
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 import Foundation
 import os.log
 
 public class SSHypothesisTesting {
-
+    
     /************************************************************************************************/
     // MARK: Grubbs test
     
@@ -74,10 +74,10 @@ public class SSHypothesisTesting {
             return nil
         }
     }
-
+    
     /************************************************************************************************/
     // MARK: ESD test
-
+    
     /// Returns p for run i
     fileprivate class func rosnerP(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
         return 1.0 - ( alpha / ( 2.0 * (Double(sampleSize) - Double(i) + 1.0 ) ) )
@@ -204,10 +204,355 @@ public class SSHypothesisTesting {
         return res
     }
     
+    
+    /// Returns the autocorrelation coefficient for a particular lag
+    /// - Parameter data: Array<Double> object
+    /// - Parameter lag: Lag
+    /// - Throws: SSSwiftyStatsError iff data.count < 2
+    public class func autocorrelationCoefficient(data: Array<Double>!, lag: Int!) throws -> Double {
+        if data.count < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: data, characterSet: nil), lag: lag)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    
+    /// Returns the autocorrelation coefficient for a particular lag
+    /// - Parameter data: SSExamine<Double> object
+    /// - Parameter lag: Lag
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public class func autocorrelationCoefficient(data: SSExamine<Double>!, lag: Int!) throws -> Double {
+        if data.sampleSize < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var r: Double
+        var num: Double = 0.0
+        var den: Double = 0.0
+        let mean: Double = data.arithmeticMean!
+        var i: Int = 0
+        let n = data.sampleSize
+        let elements = data.elementsAsArray(sortOrder: .original)!
+        while i < n - 1 {
+            num += (elements[i] - mean) * (elements[i + 1] - mean)
+            i += 1
+        }
+        i = 0
+        while i < n {
+            den += pow(elements[i] - mean, 2.0)
+            i += 1
+        }
+        r = num / den
+        return r
+    }
+    
+    
+    /// Performs a Box-Ljung test for autocorrelation for all possible lags
+    ///
+    /// ### Usage ###
+    /// ````
+    /// let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
+    /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
+    /// ````
+    /// - Parameter data: Array<Double>
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public class func autocorrelation(data: Array<Double>!) throws -> SSBoxLjungResult {
+        if data.count < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        do {
+            return try autocorrelation(data: examine)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    /// Performs a Box-Ljung test for autocorrelation for all possible lags
+    ///
+    /// ### Usage ###
+    /// ````
+    /// let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
+    /// let lewdat = SSExamine<Double>.init(withArray: lew1, characterSet: nil)
+    /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
+    /// ````
+    /// - Parameter data: SSExamine object
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public class func autocorrelation(data: SSExamine<Double>!) throws -> SSBoxLjungResult {
+        if data.sampleSize < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var acr = Array<Double>()
+        var serWhiteNoise = Array<Double>()
+        var serBartlett = Array<Double>()
+        var statBoxLjung = Array<Double>()
+        var sig = Array<Double>()
+        var r: Double
+        var num: Double = 0.0
+        var den: Double = 0.0
+        let mean: Double = data.arithmeticMean!
+        var i: Int = 0
+        var k: Int = 0
+        let n = data.sampleSize
+        let elements = data.elementsAsArray(sortOrder: .original)!
+        while i < n {
+            den += pow(elements[i] - mean, 2.0)
+            i += 1
+        }
+        var l = 0
+        while l <= n - 2 {
+            i = 0
+            while i < n - l {
+                num += (elements[i] - mean) * (elements[i + l] - mean)
+                i += 1
+            }
+            r = num / den
+            acr.append(r)
+            num = 0.0
+            l += 1
+        }
+        var sum = 0.0
+        let nr = 1.0 / Double(n)
+        k = 0
+        while k < acr.count {
+            l = 1
+            while l < k {
+                sum += pow(acr[l], 2.0)
+                l += 1
+            }
+            serBartlett.append(nr * (1.0 + 2.0 * sum))
+            sum = 0.0
+            k += 1
+        }
+        serBartlett[0] = 0.0
+        serWhiteNoise.append(0.0)
+        statBoxLjung.append(Double.infinity)
+        sig.append(0.0)
+        sum = 0.0
+        let f = Double(n) * (Double(n) * 2.0)
+        k = 1
+        while k < acr.count {
+            serWhiteNoise.append(sqrt(nr * ((Double(n) - Double(k)) / (Double(n) + 2.0))))
+            l = 1
+            while l <= k {
+                sum += sum + (pow(acr[l], 2.0) / (Double(n) - Double(l)))
+                l += 1
+            }
+            statBoxLjung.append(f * sum)
+            do {
+                try sig.append(1.0 - SSProbabilityDistributions.cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: Double(k)))
+            }
+            catch {
+                throw error
+            }
+            sum = 0.0
+            k += 1
+        }
+        var coeff: Dictionary<String, Double> = Dictionary<String, Double>()
+        var bartlettStandardError: Dictionary<String, Double> = Dictionary<String, Double>()
+        var pValues: Dictionary<String, Double> = Dictionary<String, Double>()
+        var boxLjungStatistics: Dictionary<String, Double> = Dictionary<String, Double>()
+        var whiteNoiseStandardError: Dictionary<String, Double> = Dictionary<String, Double>()
+        i = 0
+        while i < acr.count {
+            coeff["\(i)"] = acr[i]
+            i += 1
+        }
+        i = 0
+        while i < serBartlett.count {
+            bartlettStandardError["\(i)"] = serBartlett[i]
+            i += 1
+        }
+        i = 0
+        while i < sig.count {
+            pValues["\(i)"] = sig[i]
+            i += 1
+        }
+        i = 0
+        while i < statBoxLjung.count {
+            boxLjungStatistics["\(i)"] = statBoxLjung[i]
+            i += 1
+        }
+        i = 0
+        while i < serWhiteNoise.count {
+            whiteNoiseStandardError["\(i)"] = serWhiteNoise[i]
+            i += 1
+        }
+        var result = SSBoxLjungResult()
+        result.coefficients = acr
+        result.seBartlett = serBartlett
+        result.seWN = serWhiteNoise
+        result.pValues = sig
+        result.testStatistic = statBoxLjung
+        return result
+    }
+
+    // MARK: Randomness
+    
+    /// Performs the runs test for the given sample. Tests for randomness.
+    /// ### Important Note ###
+    /// It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/>
+    ///
+    /// ````
+    /// Suppose the original data is a string containing only "H" and "L":
+    /// HLHHLHHLHLLHLHHL
+    /// Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+    /// 1311311313313113
+    /// In this case a cutting point of 2 must be used.
+    /// Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+    /// 1211211212212112
+    /// In this case a cutting point of 1.5 must be used.
+    /// ````
+    ///
+    /// - Parameter data: Array<Double>
+    /// - Parameter alpha: Alpha
+    /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
+    /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public class func runsTest(data: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
+        if data.count < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: data, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    
+    /// Performs the runs test for the given sample. Tests for randomness.
+    /// ### Important Note ###
+    /// It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/>
+    ///
+    /// ````
+    /// Suppose the original data is a string containing only "H" and "L":
+    /// HLHHLHHLHLLHLHHL
+    /// Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+    /// 1311311313313113
+    /// In this case a cutting point of 2 must be used.
+    /// Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+    /// 1211211212212112
+    /// In this case a cutting point of 1.5 must be used.
+    /// ````
+    ///
+    /// - Parameter data: Array<Double>
+    /// - Parameter alpha: Alpha
+    /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
+    /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
+        if data.sampleSize < 2 {
+            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var diff = Array<Double>()
+        let elements = data.elementsAsArray(sortOrder: .original)!
+        var dtemp: Double = 0.0
+        var np: Double = 0.0
+        var nn: Double = 0.0
+        var r: Int = 1
+        var cp: Double = 0.0
+        var isPrevPos = false
+        switch useCP {
+        case .mean:
+            cp = data.arithmeticMean!
+        case .median:
+            cp = data.median!
+        case .mode:
+            if let modes = data.commonest {
+                cp = modes.sorted(by: {$0 > $1})[0]
+            }
+        case .userDefined:
+            if let _ = cuttingPoint {
+                cp = cuttingPoint!
+            }
+            else {
+                os_log("no user defined cutting point specified", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+        }
+        for element in elements {
+            dtemp = element - cp
+            diff.append(dtemp)
+            if isPrevPos && (dtemp < 0.0) {
+                r += 1
+            }
+            if !isPrevPos && (dtemp >= 0.0) {
+                r += 1
+            }
+            if dtemp >= 0.0 {
+                isPrevPos = true
+                np += 1.0
+            }
+            else {
+                isPrevPos = false
+                nn += 1.0
+            }
+        }
+        dtemp = nn + np
+        let sigma = sqrt((2.0 * np * nn * (2.0 * np * nn - nn - np)) / ((dtemp * dtemp * (np + nn - 1.0))))
+        let mean = (2.0 * np * nn) / dtemp + 1.0
+        var z: Double = 0.0
+        dtemp = Double(r) - mean
+        if data.sampleSize < 50 {
+            if dtemp <= 0.5 {
+                z = (dtemp + 0.5) / sigma
+            }
+            else if dtemp > 0.5 {
+                z = (dtemp - 0.5) / sigma
+            }
+            else if fabs(dtemp) < 0.5 {
+                z = 0.0
+            }
+        }
+        else {
+            z = dtemp / sigma
+        }
+        var p: Double = 0.0
+        var cv: Double
+        p = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        do {
+            cv = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1 - alpha / 2.0)
+        }
+        catch {
+            throw error
+        }
+        if p > 0.5 {
+            p = (1.0 - p) * 2.0
+        }
+        else {
+            p *= 2.0
+        }
+        var result = SSRunsTestResult()
+        result.nGTEcp = np
+        result.nLTcp = nn
+        result.nRuns = Double(r)
+        result.ZStatistic = z
+        result.pValue = p
+        result.cp = cp
+        result.diffs = diff
+        result.criticalValue = cv
+        result.randomness = fabs(z) <= cv
+        return result
+    }
+    
+    
     /************************************************************************************************/
     // MARK: GoF test
     
-    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov
+    /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter data: SSExamine<Double>
     /// - Parameter target: Distribution to test for
@@ -225,10 +570,10 @@ public class SSHypothesisTesting {
             os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-
+        
     }
-
-    /// Performs the goodnes of fit test according to Kolmogorov and Smirnov.
+    
+    /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
@@ -247,7 +592,7 @@ public class SSHypothesisTesting {
             os_log("unable to create examine object", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sortedData = _data.uniqueElements(sortOrder: .ascending)! 
+        let sortedData = _data.uniqueElements(sortOrder: .ascending)!
         var dD: Double = 0.0
         var dz: Double
         var dtestCDF: Double = 0.0
@@ -315,7 +660,7 @@ public class SSHypothesisTesting {
             switch target {
             case .gaussian:
                 do {
-                   dtestCDF = try SSProbabilityDistributions.cdfNormalDist(x: (value - dest1) / dest2, mean: 0, variance: 1)
+                    dtestCDF = try SSProbabilityDistributions.cdfNormalDist(x: (value - dest1) / dest2, mean: 0, variance: 1)
                     bok = true
                 }
                 catch {
@@ -394,31 +739,31 @@ public class SSHypothesisTesting {
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
         dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
         dz = sqrt(Double(_data.sampleSize - ik)) * dD
-//        var dp: Double
-//        var dq: Double
-//        // according to Smirnov, not as accurate as possible but simple
-//        if (!dD.isNaN)
-//        {
-//            dz = sqrt(Double(_data.sampleSize - ik)) * dD
-//            dp = 0.0
-//            if ((dz >= 0) && (dz < 0.27)) {
-//                dp = 1.0
-//            }
-//            else if ((dz >= 0.27) && (dz < 1.0)) {
-//                dq = exp(-1.233701 * pow(dz, -2.0))
-//                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
-//            }
-//            else if ((dz >= 1.0) && (dz < 3.1)) {
-//                dq = exp(-2.0 * pow(dz, 2.0))
-//                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
-//            } else if (dz > 3.1) {
-//                dp = 0.0
-//            }
-//        }
-//        else {
-//            dp = Double.nan
-//        }
-//
+        //        var dp: Double
+        //        var dq: Double
+        //        // according to Smirnov, not as accurate as possible but simple
+        //        if (!dD.isNaN)
+        //        {
+        //            dz = sqrt(Double(_data.sampleSize - ik)) * dD
+        //            dp = 0.0
+        //            if ((dz >= 0) && (dz < 0.27)) {
+        //                dp = 1.0
+        //            }
+        //            else if ((dz >= 0.27) && (dz < 1.0)) {
+        //                dq = exp(-1.233701 * pow(dz, -2.0))
+        //                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
+        //            }
+        //            else if ((dz >= 1.0) && (dz < 3.1)) {
+        //                dq = exp(-2.0 * pow(dz, 2.0))
+        //                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
+        //            } else if (dz > 3.1) {
+        //                dp = 0.0
+        //            }
+        //        }
+        //        else {
+        //            dp = Double.nan
+        //        }
+        //
         let dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {
@@ -433,7 +778,7 @@ public class SSHypothesisTesting {
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
             result.sampleSize = _data.sampleSize
-
+            
         case .exponential:
             result.targetDistribution = .exponential
             if bok1 {
@@ -479,7 +824,7 @@ public class SSHypothesisTesting {
         }
         return result
     }
-
+    
     /************************************************************************************************/
     /************************************************************************************************/
     // Marsaglia et al.: Evaluating the Anderson-Darling Distribution. Journal of
@@ -568,7 +913,7 @@ public class SSHypothesisTesting {
         v = -0.00022633 + (6.54034 - (14.6538 - (14.458 - (8.259 - 1.91864 * v) * v) * v) * v) * v
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
-
+    
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
     /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
     /// - Parameter data: Data as SSExamine object
@@ -588,7 +933,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
     }
-
+    
     
     /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
     /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
@@ -656,7 +1001,7 @@ public class SSHypothesisTesting {
     
     /************************************************************************************************/
     // MARK: Equality of variances
-
+    
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples as SSExamine objects
     /// - Parameter alpha: Alpha
@@ -683,7 +1028,7 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-
+    
     
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples
@@ -1118,10 +1463,10 @@ public class SSHypothesisTesting {
         result.ciRatioLTE1 = cilt
         return result
     }
-
+    
     /************************************************************************************************/
     // MARK: t-Tests
-
+    
     
     /// Performs the two sample t test
     /// - Parameter sample1: Data1 as Array<Double>
@@ -1468,7 +1813,7 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-
+    
     /// Performs a one way ANOVA (multiple means test)
     /// - Parameter data: data as SSExamine<Double>
     /// - Parameter alpha: Alpha
@@ -1506,7 +1851,7 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-
+    
     /// Performs a one way ANOVA (multiple means test)
     /// - Parameter data: data as SSExamine<Double>
     /// - Parameter alpha: Alpha

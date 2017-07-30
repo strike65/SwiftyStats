@@ -142,121 +142,86 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 116,
-      "symbol": "SSRunsTestCuttingPoint.mean",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 116,
-      "symbol": "SSRunsTestCuttingPoint.median",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 116,
-      "symbol": "SSRunsTestCuttingPoint.mode",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 116,
-      "symbol": "SSRunsTestCuttingPoint.userDefined",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 121,
+      "line": 128,
       "symbol": "SSContingencyTableSortOrder.ascending",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 121,
+      "line": 128,
       "symbol": "SSContingencyTableSortOrder.descending",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 121,
+      "line": 128,
       "symbol": "SSContingencyTableSortOrder.none",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 126,
+      "line": 133,
       "symbol": "SS1DChiSquareHypothesisType.irregular",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 126,
+      "line": 133,
       "symbol": "SS1DChiSquareHypothesisType.uniform",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 213,
+      "line": 220,
       "symbol": "SSVarianceType.biased",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 214,
+      "line": 221,
       "symbol": "SSVarianceType.unbiased",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 219,
+      "line": 226,
       "symbol": "SSStandardDeviationType.biased",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 220,
+      "line": 227,
       "symbol": "SSStandardDeviationType.unbiased",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 260,
+      "line": 267,
       "symbol": "SSGrubbsTestResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 292,
+      "line": 299,
       "symbol": "SSESDTestResult",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 330,
+      "line": 337,
       "symbol": "SSGoFTarget.none",
       "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/SwiftyStats/SwiftyStats-EnumsStructs.swift",
-      "line": 617,
-      "symbol": "SSBoxLjungResult",
-      "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     }
   ],

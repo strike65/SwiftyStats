@@ -14,7 +14,7 @@
     <a title="SSHypothesisTesting Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (91% documented)</p>
+        <p><a href="../index.html"> Docs</a> (92% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -293,6 +293,9 @@
                 <a href="../Structs.html#/s:V11SwiftyStats10SSQuartile">SSQuartile</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs.html#/s:V11SwiftyStats16SSRunsTestResult">SSRunsTestResult</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs.html#/s:V11SwiftyStats22SSTwoSampleTTestResult">SSTwoSampleTTestResult</a>
               </li>
               <li class="nav-group-task">
@@ -474,6 +477,452 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting26autocorrelationCoefficientFzT4dataGSQGSaSd__3lagGSQSi__Sd"></a>
+                    <a name="//apple_ref/swift/Method/autocorrelationCoefficient(data:lag:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting26autocorrelationCoefficientFzT4dataGSQGSaSd__3lagGSQSi__Sd">autocorrelationCoefficient(data:lag:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the autocorrelation coefficient for a particular lag</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.count &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">autocorrelationCoefficient</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">lag</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double> object</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lag</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Lag</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting26autocorrelationCoefficientFzT4dataGSQGCS_9SSExamineSd__3lagGSQSi__Sd"></a>
+                    <a name="//apple_ref/swift/Method/autocorrelationCoefficient(data:lag:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting26autocorrelationCoefficientFzT4dataGSQGCS_9SSExamineSd__3lagGSQSi__Sd">autocorrelationCoefficient(data:lag:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the autocorrelation coefficient for a particular lag</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">autocorrelationCoefficient</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">lag</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Double</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSExamine<Double> object</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lag</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Lag</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting15autocorrelationFzT4dataGSQGSaSd___VS_16SSBoxLjungResult"></a>
+                    <a name="//apple_ref/swift/Method/autocorrelation(data:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting15autocorrelationFzT4dataGSQGSaSd___VS_16SSBoxLjungResult">autocorrelation(data:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a Box-Ljung test for autocorrelation for all possible lags</p>
+<h3 id='usage' class='heading'>Usage</h3>
+<pre class="highlight plaintext"><code>let lew1: Array&lt;Double&gt; = [-213,-564,-35,-15,141,115,-420]
+let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
+</code></pre>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">autocorrelation</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:V11SwiftyStats16SSBoxLjungResult">SSBoxLjungResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting15autocorrelationFzT4dataGSQGCS_9SSExamineSd___VS_16SSBoxLjungResult"></a>
+                    <a name="//apple_ref/swift/Method/autocorrelation(data:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting15autocorrelationFzT4dataGSQGCS_9SSExamineSd___VS_16SSBoxLjungResult">autocorrelation(data:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs a Box-Ljung test for autocorrelation for all possible lags</p>
+<h3 id='usage' class='heading'>Usage</h3>
+<pre class="highlight plaintext"><code>let lew1: Array&lt;Double&gt; = [-213,-564,-35,-15,141,115,-420]
+let lewdat = SSExamine&lt;Double&gt;.init(withArray: lew1, characterSet: nil)
+let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
+</code></pre>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">autocorrelation</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:V11SwiftyStats16SSBoxLjungResult">SSBoxLjungResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSExamine object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Randomness"></a>
+                <a name="//apple_ref/swift/Section/Randomness" class="dashAnchor"></a>
+                <a href="#/Randomness">
+                  <h3 class="section-name">Randomness</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting8runsTestFzT4dataGSQGSaSd__5alphaGSQSd_15useCuttingPointOS_22SSRunsTestCuttingPoint23userDefinedCuttingPointGSqSd__VS_16SSRunsTestResult"></a>
+                    <a name="//apple_ref/swift/Method/runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting8runsTestFzT4dataGSQGSaSd__5alphaGSQSd_15useCuttingPointOS_22SSRunsTestCuttingPoint23userDefinedCuttingPointGSqSd__VS_16SSRunsTestResult">runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the runs test for the given sample. Tests for randomness.</p>
+<h3 id='important-note' class='heading'>Important Note</h3>
+
+<p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
+<pre class="highlight plaintext"><code>Suppose the original data is a string containing only "H" and "L":
+HLHHLHHLHLLHLHHL
+Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+1311311313313113
+In this case a cutting point of 2 must be used.
+Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+1211211212212112
+In this case a cutting point of 1.5 must be used.
+</code></pre>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">runsTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="n">useCuttingPoint</span> <span class="nv">useCP</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSRunsTestCuttingPoint.html">SSRunsTestCuttingPoint</a></span><span class="p">,</span> <span class="n">userDefinedCuttingPoint</span> <span class="nv">cuttingPoint</span><span class="p">:</span> <span class="kt">Double</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:V11SwiftyStats16SSRunsTestResult">SSRunsTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>useCuttingPoint</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cP</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC11SwiftyStats19SSHypothesisTesting8runsTestFzT4dataGSQGCS_9SSExamineSd__5alphaGSQSd_15useCuttingPointOS_22SSRunsTestCuttingPoint23userDefinedCuttingPointGSqSd__VS_16SSRunsTestResult"></a>
+                    <a name="//apple_ref/swift/Method/runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC11SwiftyStats19SSHypothesisTesting8runsTestFzT4dataGSQGCS_9SSExamineSd__5alphaGSQSd_15useCuttingPointOS_22SSRunsTestCuttingPoint23userDefinedCuttingPointGSqSd__VS_16SSRunsTestResult">runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Performs the runs test for the given sample. Tests for randomness.</p>
+<h3 id='important-note' class='heading'>Important Note</h3>
+
+<p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
+<pre class="highlight plaintext"><code>Suppose the original data is a string containing only "H" and "L":
+HLHHLHHLHLLHLHHL
+Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+1311311313313113
+In this case a cutting point of 2 must be used.
+Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+1211211212212112
+In this case a cutting point of 1.5 must be used.
+</code></pre>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError iff data.sampleSize &lt; 2
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">runsTest</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;!</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">Double</span><span class="o">!</span><span class="p">,</span> <span class="n">useCuttingPoint</span> <span class="nv">useCP</span><span class="p">:</span> <span class="kt"><a href="../Enums/SSRunsTestCuttingPoint.html">SSRunsTestCuttingPoint</a></span><span class="p">,</span> <span class="n">userDefinedCuttingPoint</span> <span class="nv">cuttingPoint</span><span class="p">:</span> <span class="kt">Double</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs.html#/s:V11SwiftyStats16SSRunsTestResult">SSRunsTestResult</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array<Double></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>useCuttingPoint</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cP</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -498,7 +947,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Performs the goodnes of fit test according to Kolmogorov and Smirnov
+                        <p>Performs the goodness of fit test according to Kolmogorov and Smirnov
 The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
@@ -562,7 +1011,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Performs the goodnes of fit test according to Kolmogorov and Smirnov.
+                        <p>Performs the goodness of fit test according to Kolmogorov and Smirnov.
 The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
