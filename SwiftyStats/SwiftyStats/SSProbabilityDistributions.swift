@@ -29,7 +29,8 @@ import os.log
 /// Provides some of the commonest probability distributions. In general, functions are prefixed by "pdf", "cdf", "quantile" for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively. Probablity distributions in general are defined in relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean". Sometimes it is possible, that a particular distribution isn't defined for a parameter provided.
 /// ### Important ###
 /// This class throws an error object in such circumstances. Therefore the user must embed any call of such functions in a "do-catch" statement.
-class SSProbabilityDistributions {
+
+public class SSProbabilityDistributions {
 
 // MARK: GAUSSIAN
     
@@ -291,6 +292,7 @@ class SSProbabilityDistributions {
      END IF
      END
     */
+    
     /// Returns the quantile function of the standard Gaussian distribution. Uses the algorithm at
     /// http://lib.stat.cmu.edu/apstat/241 (ALGORITHM AS241  APPL. STATIST. (1988) VOL. 37, NO. 3, 477-484.)
     /// - Parameter p: P

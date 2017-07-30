@@ -56,8 +56,9 @@ func fractionalPart(_ value: Double) -> Double {
     let result: Double = modf(value, &intpart)
     return result
 }
+
 /// Tests, if a value is numeric
-/// - Paramter value: A value of Type T
+/// - Paramter value: A value of type T
 func isNumeric<T>(_ value: T) -> Bool {
     if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
         return true
@@ -77,8 +78,61 @@ func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
     }
 }
 
+
+/* The natural logarithm of factorial n! for  0 <= n <= MFACT */
+fileprivate let LnFactorial: Array<Double> = [
+    0,
+    0,
+    0.6931471805599453,
+    1.791759469228055,
+    3.178053830347946,
+    4.787491742782046,
+    6.579251212010101,
+    8.525161361065415,
+    10.60460290274525,
+    12.80182748008147,
+    15.10441257307552,
+    17.50230784587389,
+    19.98721449566188,
+    22.55216385312342,
+    25.19122118273868,
+    27.89927138384088,
+    30.67186010608066,
+    33.50507345013688,
+    36.39544520803305,
+    39.33988418719949,
+    42.33561646075348,
+    45.3801388984769,
+    48.47118135183522,
+    51.60667556776437,
+    54.7847293981123,
+    58.00360522298051,
+    61.26170176100199,
+    64.55753862700632,
+    67.88974313718154,
+    71.257038967168,
+    74.65823634883016]
+
+/*------------------------------------------------------------------------*/
+
+/// Returns the logarithm of n!
+func logFactorial(_ n: Int) -> Double {
+    /* Returns the natural logarithm of factorial n! */
+    if (n <= 30) {
+        return LnFactorial[n]
+        
+    } else {
+        let x = Double(n + 1)
+        let y = 1.0 / (x * x)
+        var z = ((-(5.95238095238E-4 * y) + 7.936500793651E-4) * y - 2.7777777777778E-3) * y + 8.3333333333333E-2
+        z = ((x - 0.5) * log(x) - x) + 9.1893853320467E-1 + z / x
+        return z
+    }
+}
+
 extension Double {
-    /// Adds the function sgn()
+    /// Adds the function sgn().
+    /// - Returns: -1.0 if the receiver is < 0.0, +1.0 otherwise
     func sgn() -> Double {
         if self.sign == .minus {
             return -1.0

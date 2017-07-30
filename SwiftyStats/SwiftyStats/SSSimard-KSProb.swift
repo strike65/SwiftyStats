@@ -136,7 +136,7 @@ fileprivate let LnFactorial: Array<Double> = [
 /*------------------------------------------------------------------------*/
 
 /// Returns the logarithm of n!
-public func getLogFactorial(_ n: Int) -> Double {
+fileprivate func getLogFactorial(_ n: Int) -> Double {
     /* Returns the natural logarithm of factorial n! */
     if (n <= MFACT) {
         return LnFactorial[n]

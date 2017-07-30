@@ -23,7 +23,6 @@
 		9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */; };
 		9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */; };
 		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
-		9FF3DEF91F23634E004B6AA1 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 9FF3DEF81F23634E004B6AA1 /* TODO */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +57,7 @@
 		9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHypothesisTesting.swift; sourceTree = "<group>"; };
 		9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSContFrac.swift; sourceTree = "<group>"; };
 		9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
+		9FC547491F2DDE2000F58541 /* scratch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FF3DEF81F23634E004B6AA1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,6 +103,7 @@
 		9F82D3A51F1E8F19001BFC9D /* SwiftyStats */ = {
 			isa = PBXGroup;
 			children = (
+				9FC547491F2DDE2000F58541 /* scratch */,
 				9FF3DEF81F23634E004B6AA1 /* TODO */,
 				9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */,
 				9F82D3BD1F1E8F57001BFC9D /* SSConstants.swift */,
@@ -226,7 +227,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FF3DEF91F23634E004B6AA1 /* TODO in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,7 +27,7 @@ import Foundation
 
 /// An abstract class for the evaluation of continued fractions. This class must be subclassed.
 /// The n<sup>th</sup> coefficient is computed using the methods a_N:N point:x and b_N:N point:x<br/>
-/// <img src="../docs/img/cf.png" alt="">
+/// <img src="../img/cf.png" alt="">
 public class SSContFrac: NSObject {
 
     public var eps:Double = 1E-12

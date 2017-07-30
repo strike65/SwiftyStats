@@ -586,9 +586,10 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
 }
 
-// MARK: Management
 extension SSExamine {
     
+    // MARK: File Management
+
     /// Saves the table to filePath using NSKeyedArchiver.
     /// - Parameter path: The full qualified filename.
     /// - Parameter overwrite: If yes an existing file will be overwritten.
@@ -647,9 +648,10 @@ extension SSExamine {
     }
 }
 
-// MARK: Elements
 extension SSExamine {
     
+    // MARK: Elements
+
     /// Returns all elements as one string. Elements are delimited by del.
     /// Paramater del: The delimiter. Can be nil or empty.
     public func elementsAsString(withDelimiter del: String?) -> String? {
@@ -740,11 +742,117 @@ extension SSExamine {
         }
         return result
     }
+    
+    // MARK: Frequencies
+    
+    /// Returns the frequency table as an array, ordered as speciefied.
+    /// - Parameter sortOrder: SSFrequencyTableSortsortOrder
+    public func frequencyTable(sortOrder: SSFrequencyTableSortOrder) -> Array<SSFrequencyTableItem<SSElement>> {
+        var result = Array<SSFrequencyTableItem<SSElement>>()
+        var tableItem: SSFrequencyTableItem<SSElement>
+        if self.sampleSize > 0 {
+            for (item, freq) in self.elements {
+                tableItem = SSFrequencyTableItem<SSElement>(withItem: item, relativeFrequency: Double(freq)/Double(self.sampleSize), frequency: freq)
+                result.append(tableItem)
+            }
+            switch sortOrder {
+            case .none:
+                return result
+            case .valueAscending:
+                return result.sorted(by: { $0.item < $1.item})
+            case .valueDescending:
+                return result.sorted(by: { $0.item > $1.item})
+            case .frequencyAscending:
+                return result.sorted(by: { $0.frequency < $1.frequency})
+            case .frequencyDescending:
+                return result.sorted(by: { $0.frequency > $1.frequency})
+            }
+        }
+        else {
+            return result
+        }
+    }
+    
+    /// Returns the cumulative frequency table
+    /// - Parameter format: SSCumulativeFrequencyTableFormat
+    public func cumulativeFrequencyTable(format: SSCumulativeFrequencyTableFormat) -> Array<SSCumulativeFrequencyTableItem<SSElement>> {
+        var tableItem: SSCumulativeFrequencyTableItem<SSElement>
+        var cumRelFreq: Double = 0.0
+        var cumAbsFreq: Double = 0.0
+        var result = Array<SSCumulativeFrequencyTableItem<SSElement>>()
+        let frequencyTable = self.frequencyTable(sortOrder: .valueAscending)
+        switch format {
+        case .eachUniqueItem:
+            for fItem:SSFrequencyTableItem<SSElement> in frequencyTable {
+                cumAbsFreq = cumAbsFreq + Double(fItem.frequency)
+                cumRelFreq = cumRelFreq + fItem.relativeFrequency
+                for _ in (Int(cumAbsFreq) - fItem.frequency)...(Int(cumAbsFreq) - 1) {
+                    tableItem = SSCumulativeFrequencyTableItem<SSElement>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Int(cumAbsFreq))
+                    result.append(tableItem)
+                }
+            }
+        case .eachItem:
+            for fItem:SSFrequencyTableItem<SSElement> in frequencyTable {
+                cumAbsFreq = cumAbsFreq + Double(fItem.frequency)
+                cumRelFreq = cumRelFreq + Double(fItem.relativeFrequency)
+                tableItem = SSCumulativeFrequencyTableItem<SSElement>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Int(cumAbsFreq))
+                result.append(tableItem)
+            }
+        }
+        return result
+    }
+    
+    /// Empirical CDF of item
+    /// - Parameter item: The item for which the cdf will be returned.
+    public func empiricalCDF(of item: SSElement) -> Double {
+        var result: Double = Double.nan
+        if let min = self.minimum, let max = self.maximum {
+            if item < min {
+                return 0.0
+            }
+            else if item > max {
+                return 1.0
+            }
+            if self.contains(item: item) {
+                result = self.cumulativeRelativeFrequencies[item]!
+            }
+            else {
+                for itm in self.uniqueElements(sortOrder: .ascending)! {
+                    if itm < item {
+                        result = self.cumulativeRelativeFrequencies[itm]!
+                    }
+                }
+            }
+        }
+        return result
+    }
+    
+    /// The smallest frequency. Can be nil for empty tables.
+    public var smallestFrequency: Int? {
+        if !isEmpty {
+            return (self.frequencyTable(sortOrder: .frequencyAscending).first?.frequency)!
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// The largest frequency Can be nil for empty tables.
+    public var largestFrequency: Int? {
+        if !isEmpty {
+            return (self.frequencyTable(sortOrder: .frequencyAscending).last?.frequency)!
+        }
+        else {
+            return nil
+        }
+    }
+
+
 }
 
-// MARK: Statistics
-
 extension SSExamine {
+    
+    // MARK: Totals
     
     /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
     public var squareTotal: Double {
@@ -809,6 +917,8 @@ extension SSExamine {
         }
     }
     
+    // MARK: Location
+    
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
     public var arithmeticMean: Double? {
         if numeric && !isEmpty {
@@ -818,6 +928,247 @@ extension SSExamine {
             return nil
         }
     }
+    
+    /// The mode. Can contain more than one item. Can be nil for empty tables.
+    public var mode: Array<SSElement>? {
+        if !isEmpty {
+            var result: Array<SSElement> = Array<SSElement>()
+            let ft = self.frequencyTable(sortOrder: .frequencyDescending)
+            let freq = ft.first?.frequency
+            for tableItem in ft {
+                if tableItem.frequency >= freq! {
+                    result.append(tableItem.item)
+                }
+                else {
+                    break
+                }
+            }
+            return result
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// The most common value. Same as mode. Can contain more than one item. Can be nil for empty tables.
+    public var commonest: Array<SSElement>? {
+        return mode
+    }
+    
+    
+    /// The scarcest elements. Can be nil for empty tables.
+    public var scarcest: Array<SSElement>? {
+        if !isEmpty {
+            var result: Array<SSElement> = Array<SSElement>()
+            let ft = self.frequencyTable(sortOrder: .frequencyAscending)
+            let freq = ft.first?.frequency
+            for tableItem in ft {
+                if tableItem.frequency <= freq! {
+                    result.append(tableItem.item)
+                }
+                else {
+                    break
+                }
+            }
+            return result
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the q-quantile.
+    /// Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric.
+    public func quantile(q: Double) throws -> Double? {
+        if q.isZero || q < 0.0 || q >= 1.0 {
+            os_log("p has to be > 0.0 and < 1.0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if !numeric {
+            os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
+            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var result: Double
+        if !isEmpty && self.sampleSize >= 2 {
+            let k = Double(self.sampleSize) * q
+            var a = self.elementsAsArray(sortOrder: .ascending)!
+            if k.truncatingRemainder(dividingBy: 1).isZero {
+                result = ((a[a.startIndex.advanced(by: Int(k - 1))] as! Double) + (a[a.startIndex.advanced(by: Int(k))] as! Double)) / 2.0
+            }
+            else {
+                result = a[a.startIndex.advanced(by: Int(ceil(k - 1)))] as! Double
+            }
+            return result
+        }
+        else {
+            return nil
+        }
+    }
+
+    /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
+    public var quartile: SSQuartile? {
+        get {
+            if !isEmpty && numeric {
+                var res = SSQuartile()
+                do {
+                    res.q25 = try self.quantile(q: 0.25)!
+                    res.q75 = try self.quantile(q: 0.75)!
+                    res.q50 = try self.quantile(q: 0.5)!
+                }
+                catch {
+                    return nil
+                }
+                return res
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    /// Returns the geometric mean.
+    public var geometricMean: Double? {
+        get {
+            if !isEmpty && numeric {
+                let a = self.logProduct
+                let b = Double(self.sampleSize)
+                let c = exp(a / b)
+                return c
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    /// Harmonic mean. Can be nil for non-numeric data.
+    public var harmonicMean: Double? {
+        get {
+            if !isEmpty && numeric {
+                return Double(self.sampleSize) / self.inverseTotal
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    
+    /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
+    public var contraHarmonicMean: Double? {
+        if !isEmpty && numeric {
+            let sqM = self.squareTotal / Double(self.sampleSize)
+            let m = self.arithmeticMean!
+            if !m.isZero {
+                return sqM / m
+            }
+            else {
+                return Double.infinity * (-1.0)
+            }
+        }
+        else {
+            return nil
+        }
+    }
+
+    /// Returns the powered mean of order n
+    /// - Parameter n: The order of the powered mean
+    /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
+    public func poweredMean(order: Double) -> Double? {
+        if order <= 0.0 || !numeric {
+            return nil
+        }
+        if !isEmpty {
+            let sum = self.poweredTotal(power: order)
+            return pow(sum / Double(self.sampleSize), 1.0 / order)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the trimmed mean of all elements after dropping a fraction of alpha of the smallest and largest elements.
+    /// - Parameter alpha: Fraction to drop
+    /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
+    public func trimmedMean(alpha: Double) throws -> Double? {
+        if alpha <= 0.0 || alpha >= 0.5 {
+            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if !isEmpty {
+            if numeric {
+                if let a = self.elementsAsArray(sortOrder: .ascending) {
+                    let l = a.count
+                    let v = floor(Double(l) * alpha)
+                    var s = 0.0
+                    var k = 0.0
+                    for i in Int(v)...l - Int(v) - 1  {
+                        s = s + (a[i] as! Double)
+                        k = k + 1
+                    }
+                    return s / k
+                }
+                else {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the mean after replacing a given fraction (alpha) at the high and low end with the most extreme remaining values.
+    /// - Parameter alpha: Fraction
+    /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
+    public func winsorizedMean(alpha: Double) throws -> Double? {
+        if alpha <= 0.0 || alpha >= 0.5 {
+            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if !isEmpty && numeric {
+            if let a = self.elementsAsArray(sortOrder: .ascending) {
+                let l = a.count
+                let v = floor(Double(l) * alpha)
+                var s = 0.0
+                for i in Int(v)...l - Int(v) - 1  {
+                    s = s + (a[i] as! Double)
+                }
+                s = s + v * ((a[Int(v)] as! Double) + (a[Int(l - Int(v) - 1)] as! Double))
+                return s / Double(self.sampleSize)
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// The median. Can be nil for non-numeric data.
+    public var median: Double? {
+        get {
+            var res: Double
+            if !isEmpty && numeric {
+                do {
+                    res = try self.quantile(q: 0.5)!
+                }
+                catch {
+                    return nil
+                }
+                return res
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    // MARK: Products
     
     /// Product of all elements. Will be Double.nan for non-numeric data.
     public var product: Double {
@@ -873,62 +1224,8 @@ extension SSExamine {
     }
     
     
-    /// Returns the frequency table as an array, ordered as speciefied.
-    /// - Parameter sortOrder: SSFrequencyTableSortsortOrder
-    public func frequencyTable(sortOrder: SSFrequencyTableSortOrder) -> Array<SSFrequencyTableItem<SSElement>> {
-        var result = Array<SSFrequencyTableItem<SSElement>>()
-        var tableItem: SSFrequencyTableItem<SSElement>
-        if self.sampleSize > 0 {
-            for (item, freq) in self.elements {
-                tableItem = SSFrequencyTableItem<SSElement>(withItem: item, relativeFrequency: Double(freq)/Double(self.sampleSize), frequency: freq)
-                result.append(tableItem)
-            }
-            switch sortOrder {
-            case .none:
-                return result
-            case .valueAscending:
-                return result.sorted(by: { $0.item < $1.item})
-            case .valueDescending:
-                return result.sorted(by: { $0.item > $1.item})
-            case .frequencyAscending:
-                return result.sorted(by: { $0.frequency < $1.frequency})
-            case .frequencyDescending:
-                return result.sorted(by: { $0.frequency > $1.frequency})
-            }
-        }
-        else {
-            return result
-        }
-    }
     
-    /// Returns the cumulative frequency table
-    /// - Parameter format: SSCumulativeFrequencyTableFormat
-    public func cumulativeFrequencyTable(format: SSCumulativeFrequencyTableFormat) -> Array<SSCumulativeFrequencyTableItem<SSElement>> {
-        var tableItem: SSCumulativeFrequencyTableItem<SSElement>
-        var cumRelFreq: Double = 0.0
-        var cumAbsFreq: Double = 0.0
-        var result = Array<SSCumulativeFrequencyTableItem<SSElement>>()
-        let frequencyTable = self.frequencyTable(sortOrder: .valueAscending)
-        switch format {
-        case .eachUniqueItem:
-            for fItem:SSFrequencyTableItem<SSElement> in frequencyTable {
-                cumAbsFreq = cumAbsFreq + Double(fItem.frequency)
-                cumRelFreq = cumRelFreq + fItem.relativeFrequency
-                for _ in (Int(cumAbsFreq) - fItem.frequency)...(Int(cumAbsFreq) - 1) {
-                    tableItem = SSCumulativeFrequencyTableItem<SSElement>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Int(cumAbsFreq))
-                    result.append(tableItem)
-                }
-            }
-        case .eachItem:
-            for fItem:SSFrequencyTableItem<SSElement> in frequencyTable {
-                cumAbsFreq = cumAbsFreq + Double(fItem.frequency)
-                cumRelFreq = cumRelFreq + Double(fItem.relativeFrequency)
-                tableItem = SSCumulativeFrequencyTableItem<SSElement>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Int(cumAbsFreq))
-                result.append(tableItem)
-            }
-        }
-        return result
-    }
+    // MARK: Dispersion
     
     /// The largest item. Can be nil for empty tables.
     public var maximum: SSElement? {
@@ -976,146 +1273,7 @@ extension SSExamine {
         }
     }
     
-    /// Empirical CDF of item
-    /// - Parameter item: The item for which the cdf will be returned.
-    public func empiricalCDF(of item: SSElement) -> Double {
-        var result: Double = Double.nan
-        if let min = self.minimum, let max = self.maximum {
-            if item < min {
-                return 0.0
-            }
-            else if item > max {
-                return 1.0
-            }
-            if self.contains(item: item) {
-                result = self.cumulativeRelativeFrequencies[item]!
-            }
-            else {
-                for itm in self.uniqueElements(sortOrder: .ascending)! {
-                    if itm < item {
-                        result = self.cumulativeRelativeFrequencies[itm]!
-                    }
-                }
-            }
-        }
-        return result
-    }
     
-    /// The smallest frequency. Can be nil for empty tables.
-    public var smallestFrequency: Int? {
-        if !isEmpty {
-            return (self.frequencyTable(sortOrder: .frequencyAscending).first?.frequency)!
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// The largest frequency Can be nil for empty tables.
-    public var largestFrequency: Int? {
-        if !isEmpty {
-            return (self.frequencyTable(sortOrder: .frequencyAscending).last?.frequency)!
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// The scarcest elements. Can be nil for empty tables.
-    public var scarcest: Array<SSElement>? {
-        if !isEmpty {
-            var result: Array<SSElement> = Array<SSElement>()
-            let ft = self.frequencyTable(sortOrder: .frequencyAscending)
-            let freq = ft.first?.frequency
-            for tableItem in ft {
-                if tableItem.frequency <= freq! {
-                    result.append(tableItem.item)
-                }
-                else {
-                    break
-                }
-            }
-            return result
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// The mode. Can contain more than one item. Can be nil for empty tables.
-    public var mode: Array<SSElement>? {
-        if !isEmpty {
-            var result: Array<SSElement> = Array<SSElement>()
-            let ft = self.frequencyTable(sortOrder: .frequencyDescending)
-            let freq = ft.first?.frequency
-            for tableItem in ft {
-                if tableItem.frequency >= freq! {
-                    result.append(tableItem.item)
-                }
-                else {
-                    break
-                }
-            }
-            return result
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// The most common value. Same as mode. Can contain more than one item. Can be nil for empty tables.
-    public var commonest: Array<SSElement>? {
-        return mode
-    }
-    
-    /// Returns the q-quantile.
-    /// Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric.
-    public func quantile(q: Double) throws -> Double? {
-        if q.isZero || q < 0.0 || q >= 1.0 {
-            os_log("p has to be > 0.0 and < 1.0", log: log_stat, type: .error)
-            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        if !numeric {
-            os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
-            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        var result: Double
-        if !isEmpty && self.sampleSize >= 2 {
-            let k = Double(self.sampleSize) * q
-            var a = self.elementsAsArray(sortOrder: .ascending)!
-            if k.truncatingRemainder(dividingBy: 1).isZero {
-                result = ((a[a.startIndex.advanced(by: Int(k - 1))] as! Double) + (a[a.startIndex.advanced(by: Int(k))] as! Double)) / 2.0
-            }
-            else {
-                result = a[a.startIndex.advanced(by: Int(ceil(k - 1)))] as! Double
-            }
-            return result
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
-    public var quartile: SSQuartile? {
-        get {
-            if !isEmpty && numeric {
-                var res = SSQuartile()
-                do {
-                    res.q25 = try self.quantile(q: 0.25)!
-                    res.q75 = try self.quantile(q: 0.75)!
-                    res.q50 = try self.quantile(q: 0.5)!
-                }
-                catch {
-                    return nil
-                }
-                return res
-            }
-            else {
-                return nil
-            }
-        }
-    }
     /// Returns the quartile devation (interquartile range / 2.0)
     public var quartileDeviation: Double? {
         if let _ = self.interquartileRange {
@@ -1198,206 +1356,6 @@ extension SSExamine {
         }
     }
     
-    
-    /// The median. Can be nil for non-numeric data.
-    public var median: Double? {
-        get {
-            var res: Double
-            if !isEmpty && numeric {
-                do {
-                    res = try self.quantile(q: 0.5)!
-                }
-                catch {
-                    return nil
-                }
-                return res
-            }
-            else {
-                return nil
-            }
-        }
-    }
-    
-    /// Returns the geometric mean.
-    public var geometricMean: Double? {
-        get {
-            if !isEmpty && numeric {
-                let a = self.logProduct
-                let b = Double(self.sampleSize)
-                let c = exp(a / b)
-                return c
-            }
-            else {
-                return nil
-            }
-        }
-    }
-    
-    /// Harmonic mean. Can be nil for non-numeric data.
-    public var harmonicMean: Double? {
-        get {
-            if !isEmpty && numeric {
-                return Double(self.sampleSize) / self.inverseTotal
-            }
-            else {
-                return nil
-            }
-        }
-    }
-    
-    /// Returns the powered mean of order n
-    /// - Parameter n: The order of the powered mean
-    /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
-    public func poweredMean(order: Double) -> Double? {
-        if order <= 0.0 || !numeric {
-            return nil
-        }
-        if !isEmpty {
-            let sum = self.poweredTotal(power: order)
-            return pow(sum / Double(self.sampleSize), 1.0 / order)
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the trimmed mean of all elements after dropping a fraction of alpha of the smallest and largest elements.
-    /// - Parameter alpha: Fraction to drop
-    /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
-    public func trimmedMean(alpha: Double) throws -> Double? {
-        if alpha <= 0.0 || alpha >= 0.5 {
-            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
-            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        if !isEmpty {
-            if numeric {
-                if let a = self.elementsAsArray(sortOrder: .ascending) {
-                    let l = a.count
-                    let v = floor(Double(l) * alpha)
-                    var s = 0.0
-                    var k = 0.0
-                    for i in Int(v)...l - Int(v) - 1  {
-                        s = s + (a[i] as! Double)
-                        k = k + 1
-                    }
-                    return s / k
-                }
-                else {
-                    return nil
-                }
-            }
-            else {
-                return nil
-            }
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the mean after replacing a given fraction (alpha) at the high and low end with the most extreme remaining values.
-    /// - Parameter alpha: Fraction
-    /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
-    public func winsorizedMean(alpha: Double) throws -> Double? {
-        if alpha <= 0.0 || alpha >= 0.5 {
-            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
-            throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        if !isEmpty && numeric {
-            if let a = self.elementsAsArray(sortOrder: .ascending) {
-                let l = a.count
-                let v = floor(Double(l) * alpha)
-                var s = 0.0
-                for i in Int(v)...l - Int(v) - 1  {
-                    s = s + (a[i] as! Double)
-                }
-                s = s + v * ((a[Int(v)] as! Double) + (a[Int(l - Int(v) - 1)] as! Double))
-                return s / Double(self.sampleSize)
-            }
-            else {
-                return nil
-            }
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the r_th moment of the given type.
-    /// If .central is specified, the r_th central moment of all elements with respect to their mean will be returned.
-    /// If .origin is specified, the r_th moment about the origin will be returned.
-    /// If .standardized is specified, the r_th standardized moment will be returned.
-    /// - Parameter r: r
-    public func moment(r: Int!, type: SSMomentType) -> Double? {
-        switch type {
-        case .central:
-            return centralMoment(r: r)
-        case .origin:
-            return originMoment(r: r)
-        case .standardized:
-            return standardizedMoment(r: r)
-        }
-    }
-    
-    /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
-    /// - Parameter r: r
-    private func centralMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
-            let m = self.arithmeticMean!
-            var diff = 0.0
-            var sum = 0.0
-            for (item, freq) in self.elements {
-                diff = (item as! Double) - m
-                sum = sum + pow(diff, Double(r)) * Double(freq)
-            }
-            return sum / Double(self.sampleSize)
-        }
-        else {
-            return nil
-        }
-    }
-    
-    
-    /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
-    /// - Parameter r: r
-    private func originMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
-            var sum = 0.0
-            for (item, freq) in self.elements {
-                sum = sum + pow((item as! Double), Double(r)) * Double(freq)
-            }
-            return sum / Double(self.sampleSize)
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns then r_th standardized moment.
-    private func standardizedMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
-            var sum = 0.0
-            let m = self.arithmeticMean
-            if let sd = self.standardDeviation(type: .biased) {
-                if !sd.isZero {
-                    for (item, freq) in self.elements {
-                        sum = sum + pow( ( (item as! Double) - m! ) / sd, Double(r)) * Double(freq)
-                    }
-                    return sum / Double(self.sampleSize)
-                }
-                else {
-                    return nil
-                }
-            }
-            else {
-                return nil
-            }
-        }
-        else {
-            return nil
-        }
-    }
-    
     /// Returns the sample variance.
     /// - Parameter type: Can be .sample and .unbiased
     public func variance(type: SSVarianceType) -> Double? {
@@ -1442,6 +1400,7 @@ extension SSExamine {
             return nil
         }
     }
+
     
     /// Returns the entropy of the sample. Defined only for nominal or ordinal data
     public var entropy: Double? {
@@ -1462,7 +1421,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     
     /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
     public var relativeEntropy: Double? {
@@ -1473,7 +1432,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     // Returns the Herfindahl index
     public var herfindahlIndex: Double? {
         if !isEmpty && numeric {
@@ -1494,7 +1453,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     // Returns the normalized Herfindahl index
     public var herfindahlIndexNormalized: Double? {
         if let hi = self.herfindahlIndex {
@@ -1505,105 +1464,16 @@ extension SSExamine {
         }
     }
     
-    /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
-    public var contraHarmonicMean: Double? {
-        if !isEmpty && numeric {
-            let sqM = self.squareTotal / Double(self.sampleSize)
-            let m = self.arithmeticMean!
-            if !m.isZero {
-                return sqM / m
-            }
-            else {
-                return Double.infinity * (-1.0)
-            }
+    /// Returns the Gini coefficient
+    public var giniCoeff: Double? {
+        if let md = meanDifference {
+            return md / (2.0 * arithmeticMean!)
         }
         else {
             return nil
         }
     }
-    
-    /// Returns the kurtosis excess
-    public var kurtosisExcess: Double? {
-        if !isEmpty && numeric {
-            if let m4 = moment(r: 4, type: .central), let m2 = moment(r: 2, type: .central) {
-                return m4 / pow(m2, 2) - 3.0
-            }
-            else {
-                return nil
-            }
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the kurtosis.
-    public var kurtosis: Double? {
-        if let k = kurtosisExcess {
-            return k + 3.0
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the type of kurtosis.
-    public var kurtosisType: SSKurtosisType? {
-        get {
-            if let ke = kurtosisExcess {
-                if ke < 0 {
-                    return .platykurtic
-                }
-                else if ke.isZero {
-                    return .mesokurtic
-                }
-                else {
-                    return .leptokurtic
-                }
-            }
-            else {
-                return nil
-            }
-        }
-    }
-    
-    
-    
-    /// Returns the skewness.
-    public var skewness: Double? {
-        if !isEmpty && numeric {
-            if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
-                return m3 / pow(s3, 3)
-            }
-            else {
-                return nil
-            }
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the type of skewness
-    public var skewnessType: SSSkewness? {
-        get {
-            if let sk = skewness {
-                if sk < 0 {
-                    return .leftSkewed
-                }
-                else if sk.isZero {
-                    return .symmetric
-                }
-                else {
-                    return .rightSkewed
-                }
-            }
-            else {
-                return nil
-            }
-        }
-    }
-    
+
     /// Returns the alpha-confidence interval of the mean when the population variance is known
     /// - Parameter a: Alpha
     /// - Parameter sd: Standard deviation of the population
@@ -1762,7 +1632,7 @@ extension SSExamine {
         }
         return result
     }
-
+    
     /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     public func meanAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
@@ -1787,16 +1657,6 @@ extension SSExamine {
     public var meanRelativeDifference: Double? {
         if let md = meanDifference {
             return md / arithmeticMean!
-        }
-        else {
-            return nil
-        }
-    }
-    
-    /// Returns the Gini coefficient
-    public var giniCoeff: Double? {
-        if let md = meanDifference {
-            return md / (2.0 * arithmeticMean!)
         }
         else {
             return nil
@@ -1856,6 +1716,169 @@ extension SSExamine {
             return nil
         }
     }
+
+
+    // MARK: Empirical Moments
+    
+    /// Returns the r_th moment of the given type.
+    /// If .central is specified, the r_th central moment of all elements with respect to their mean will be returned.
+    /// If .origin is specified, the r_th moment about the origin will be returned.
+    /// If .standardized is specified, the r_th standardized moment will be returned.
+    /// - Parameter r: r
+    public func moment(r: Int!, type: SSMomentType) -> Double? {
+        switch type {
+        case .central:
+            return centralMoment(r: r)
+        case .origin:
+            return originMoment(r: r)
+        case .standardized:
+            return standardizedMoment(r: r)
+        }
+    }
+    
+    /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
+    /// - Parameter r: r
+    fileprivate func centralMoment(r: Int!) -> Double? {
+        if !isEmpty && numeric {
+            let m = self.arithmeticMean!
+            var diff = 0.0
+            var sum = 0.0
+            for (item, freq) in self.elements {
+                diff = (item as! Double) - m
+                sum = sum + pow(diff, Double(r)) * Double(freq)
+            }
+            return sum / Double(self.sampleSize)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    
+    /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
+    /// - Parameter r: r
+    fileprivate func originMoment(r: Int!) -> Double? {
+        if !isEmpty && numeric {
+            var sum = 0.0
+            for (item, freq) in self.elements {
+                sum = sum + pow((item as! Double), Double(r)) * Double(freq)
+            }
+            return sum / Double(self.sampleSize)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns then r_th standardized moment.
+    fileprivate func standardizedMoment(r: Int!) -> Double? {
+        if !isEmpty && numeric {
+            var sum = 0.0
+            let m = self.arithmeticMean
+            if let sd = self.standardDeviation(type: .biased) {
+                if !sd.isZero {
+                    for (item, freq) in self.elements {
+                        sum = sum + pow( ( (item as! Double) - m! ) / sd, Double(r)) * Double(freq)
+                    }
+                    return sum / Double(self.sampleSize)
+                }
+                else {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    // MARK: Empirical distribution parameters
+    
+    /// Returns the kurtosis excess
+    public var kurtosisExcess: Double? {
+        if !isEmpty && numeric {
+            if let m4 = moment(r: 4, type: .central), let m2 = moment(r: 2, type: .central) {
+                return m4 / pow(m2, 2) - 3.0
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the kurtosis.
+    public var kurtosis: Double? {
+        if let k = kurtosisExcess {
+            return k + 3.0
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the type of kurtosis.
+    public var kurtosisType: SSKurtosisType? {
+        get {
+            if let ke = kurtosisExcess {
+                if ke < 0 {
+                    return .platykurtic
+                }
+                else if ke.isZero {
+                    return .mesokurtic
+                }
+                else {
+                    return .leptokurtic
+                }
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    
+    
+    /// Returns the skewness.
+    public var skewness: Double? {
+        if !isEmpty && numeric {
+            if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
+                return m3 / pow(s3, 3)
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Returns the type of skewness
+    public var skewnessType: SSSkewness? {
+        get {
+            if let sk = skewness {
+                if sk < 0 {
+                    return .leftSkewed
+                }
+                else if sk.isZero {
+                    return .symmetric
+                }
+                else {
+                    return .rightSkewed
+                }
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
     
     /// Returns true, if there are outliers.
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
@@ -1949,5 +1972,6 @@ extension SSExamine {
             }
         }
     }
+    
     
 }

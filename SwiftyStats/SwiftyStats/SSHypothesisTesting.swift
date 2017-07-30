@@ -659,7 +659,7 @@ public class SSHypothesisTesting {
 
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples as SSExamine objects
-    /// - Paramater alpha: Alpha
+    /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func bartlettTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
@@ -687,7 +687,7 @@ public class SSHypothesisTesting {
     
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples
-    /// - Paramater alpha: Alpha
+    /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func bartlettTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         var _N = 0.0
@@ -753,7 +753,7 @@ public class SSHypothesisTesting {
     /// Performs the Levene / Brown-Forsythe test for two or more samples
     /// - Parameter data: Array containing SSExamine objects
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
-    /// - Paramater alpha: Alpha
+    /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func leveneTest(data: Array<SSExamine<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
@@ -782,7 +782,7 @@ public class SSHypothesisTesting {
     /// Performs the Levene / Brown-Forsythe test for two or more samples
     /// - Parameter data: Array containing samples
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
-    /// - Paramater alpha: Alpha
+    /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func leveneTest(data: Array<Array<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         var _N = 0.0
