@@ -655,3 +655,32 @@ public struct SSRunsTestResult {
     /// Randomness?
     var randomness: Bool?
 }
+
+/// Holds the results of the Mann-Whitney U test
+public struct SSMannWhitneyUTestResult {
+    /// sum of ranks in set 1
+    var sumRanks1: Double?
+    /// sum of ranks in set 2
+    var sumRanks2: Double?
+    /// mean of ranks in set 1
+    var meanRank1: Double?
+    /// mean of ranks in set 2
+    var meanRank2: Double?
+    /// sum of tied ranks
+    var sumTiedRanks: Double?
+    /// number of ties
+    var nTies: Int?
+    /// U
+    var UMannWhitney: Double?
+    /// Wilcoxon W
+    var WilcoxonW: Double?
+    /// Z
+    var ZStatistic: Double?
+    /// two sided approximated p value
+    var p2Approx: Double?
+    /// two sided exact p value
+    var p2Exact: Double?
+    /// effect size
+    var effectSize: Double?
+}
+

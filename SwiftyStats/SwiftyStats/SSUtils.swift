@@ -78,6 +78,16 @@ func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
     }
 }
 
+/// Returns the minimum of two comparable values
+func minimum<T>(t1: T, t2: T) -> T where T:Comparable {
+    if t1 < t2 {
+        return t1
+    }
+    else {
+        return t2
+    }
+}
+
 
 /* The natural logarithm of factorial n! for  0 <= n <= MFACT */
 fileprivate let LnFactorial: Array<Double> = [
@@ -129,6 +139,7 @@ func logFactorial(_ n: Int) -> Double {
         return z
     }
 }
+
 
 extension Double {
     /// Adds the function sgn().
