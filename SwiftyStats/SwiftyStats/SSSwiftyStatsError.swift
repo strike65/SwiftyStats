@@ -74,6 +74,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         case fileExists
         /// Can't create object
         case errorCreatingObject
+        /// internal error - contact developer
+        case internalError
     }
 
     /// A string describing the error
@@ -117,6 +119,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
             return "File does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
         case .errorCreatingObject:
             return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
+        case .internalError:
+            return "Fatal internal error :" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
         }
     }
     

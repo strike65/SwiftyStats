@@ -1920,4 +1920,339 @@ public class SSHypothesisTesting {
         return result
     }
     
+    
+    /// Binomial
+    fileprivate func binomial2(n: Double!, k: Double!) -> Double {
+        if k == 0.0 {
+            return 1.0
+        }
+        let num: Double = lgamma(n + 1.0)
+        let den: Double = lgamma(n - k + 1.0) + lgamma(k + 1.0)
+        let q: Double = num - den
+        return exp(q)
+    }
+    
+    /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
+    fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
+        // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
+        if m <= 0 || n <= 0 {
+            os_log("m and n is exptected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if U > (Double(m) * Double(n)) {
+            return Double.nan
+        }
+        var freq: Array<Double> = Array<Double>.init(repeating: 0.0, count: m * n * 2)
+        var work: Array<Double> = Array<Double>.init(repeating: 0.0, count: m * n * 2)
+        var minmn: Int
+        var maxmmn: Int
+        var mn1: Int
+        var n1: Int
+        var i: Int
+        var _in: Int
+        var l: Int
+        var k: Int
+        var j: Int
+        var sum: Double
+        let one = 1.0
+        let zero = 0.0
+        minmn = minimum(t1: m, t2: n)
+        if minmn < 1 {
+            os_log("m and n is exptected to be > 0", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        mn1 = m * n + 1
+        maxmmn = maximum(t1: m, t2: n)
+        n1 = maxmmn + 1
+        i = 1
+        while i <= n1 {
+            freq[i - 1] = one
+            i += 1
+        }
+        if minmn > 1 {
+            n1 = n1 + 1
+            i = n1
+            while i <= mn1 {
+                freq[i - 1] = zero
+                i += 1
+            }
+            work[0] = zero
+            _in = maxmmn
+            i = 2
+            while i <= minmn {
+                work[i - 1] = zero
+                _in = _in + maxmmn
+                n1 = _in + 2
+                l = 1 + _in / 2
+                k = i
+                j = 1
+                
+                while j <= l {
+                    k = k + 1
+                    n1 = n1 - 1
+                    sum = freq[j - 1] + work[j - 1]
+                    freq[j - 1] = sum
+                    work[k - 1] = sum - freq[n1 - 1]
+                    freq[n1 - 1] = sum
+                    j += 1
+                }
+                i += 1
+            }
+        }
+        sum = 0.0
+        i = 1
+        while i <= mn1 {
+            sum = sum + freq[i - 1]
+            freq[i - 1] = sum
+            i += 1
+        }
+        i = 1
+        while i <= mn1 {
+            freq[i - 1] = freq[i - 1] / sum
+            i += 1
+        }
+        return freq[Int(floor(U))]
+    }
+
+    /// Returns the sum of i for i = start...end
+    fileprivate class func sumUp(start: Int!, end: Int!) -> Double {
+        var sum = 0.0
+        var i: Int = start
+        while i < end {
+            sum += Double(i)
+            i += 1
+        }
+        return sum
+    }
+
+    /// Ranking
+    /// - Parameter set1: set1
+    /// - Parameter set2: set2
+    /// - Parameter identifierSet1: identifier for set1
+    /// - Parameter identifierSet2: identifier for set2
+    /// - Parameter inout ranks: contains the ranks upon return
+    /// - Parameter inout groups: contains the grpups upon return
+    /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
+    /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
+    fileprivate class func rank2Arrays<T>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable {
+        var hasTies: Bool = false
+        let a = set1.elementsAsArray(sortOrder: .original)!
+        let b = set2.elementsAsArray(sortOrder: .original)!
+        var combined: Array<T> = a
+        combined.append(contentsOf: b)
+        var combined_sorted = combined.sorted(by: {$0 < $1})
+        var i: Int = 0
+        var k: Int = 1
+        var sum: Double = 1.0
+        while i <= combined_sorted.count - 1 {
+            // determine frequencies in set1 and set2
+            let freq1 = set1.frequency(item: combined_sorted[i])
+            let freq2 = set2.frequency(item: combined_sorted[i])
+            if set1.contains(item: combined_sorted[i]) && set2.contains(item: combined_sorted[i]) {
+                hasTies = true
+                let freq: Int = freq1 + freq2
+                ties.append(Double(freq))
+                k = 1
+                sum = 0.0
+                while k <= freq {
+                    sum += Double(i + k)
+                    k += 1
+                }
+                k = 1
+                while k <= freq {
+                    ranks.append(sum / Double(freq))
+                    if k <= set1.frequency(item: combined_sorted[i])  {
+                        groups.append(identifierSet1)
+                    }
+                    else {
+                        groups.append(identifierSet2)
+                    }
+                    k += 1
+                }
+                print(sum)
+                i += freq
+            }
+            else if set1.contains(item: combined_sorted[i]) {
+                if freq1 > 1 {
+                    ties.append(Double(freq1))
+                    k = 1
+                    sum = 0.0
+                    while k <= freq1 {
+                        sum += Double(i + k)
+                        k += 1
+                    }
+                    k = 1
+                    while k <= freq1 {
+                        ranks.append(sum / Double(freq1))
+                        groups.append(identifierSet1)
+                        k += 1
+                    }
+                    i += freq1
+                }
+                else {
+                    ranks.append(Double(i + 1))
+                    groups.append(identifierSet1)
+                    i += 1
+                }
+            }
+            else if set2.contains(item: combined_sorted[i]) {
+                if freq2 > 1 {
+                    ties.append(Double(freq2))
+                    k = 1
+                    sum = 0.0
+                    while k <= freq2 {
+                        sum += Double(i + k)
+                        k += 1
+                    }
+                    k = 1
+                    while k <= freq2 {
+                        ranks.append(sum / Double(freq2))
+                        groups.append(identifierSet2)
+                        k += 1
+                    }
+                    i += freq2
+                }
+                else {
+                    ranks.append(Double(i + 1))
+                    groups.append(identifierSet2)
+                    i += 1
+                }
+            }
+        }
+        i = 0
+        while i < ranks.count {
+            if groups[i] == identifierSet1 {
+                sumRanksSet1 = sumRanksSet1 + ranks[i]
+            }
+            else {
+                sumRanksSet2 = sumRanksSet2 + ranks[i]
+            }
+            i += 1
+        }
+        return hasTies
+    }
+    
+    /// Perform the Mann-Whitney U test for independent samples.
+    /// ### Note ###
+    /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
+    /// - Parameter set1: Observations of group1
+    /// - Parameter set2: Observations of group2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable {
+        if set1.sampleSize <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.sampleSize <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var ranks:Array<Double> = Array<Double>()
+        var groups:Array<String> = Array<String>()
+        var ties: Array<Double> = Array<Double>()
+
+        var sumRanksSet1: Double = 0.0
+        var sumRanksSet2: Double = 0.0
+        var hasTies: Bool
+        hasTies = rank2Arrays(set1: set1, set2: set2, identifierSet1: "A", identifierSet2: "B", ranks: &ranks, groups: &groups, ties: &ties, sumRanksSet1: &sumRanksSet1, sumRanksSet2: &sumRanksSet2)
+        let U1 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set1.sampleSize) * (Double(set1.sampleSize) + 1)) / 2.0 - sumRanksSet1
+        let U2 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set2.sampleSize) * (Double(set2.sampleSize) + 1)) / 2.0 - sumRanksSet2
+        let nm = Double(set1.sampleSize) * Double(set2.sampleSize)
+        let n1 = Double(set1.sampleSize)
+        let n2 = Double(set2.sampleSize)
+        if (U1 + U2) != nm {
+            os_log("internal error", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+        }
+        let S = n1 + n2
+        var z: Double = 0.0
+        var pasymp1: Double = 0.0
+        var pasymp2: Double = 0.0
+        var pexact1: Double = 0.0
+        var pexact2: Double = 0.0
+        
+        z = Double.nan
+        var temp1: Double = 0.0
+        var denom: Double = 0.0
+        var num: Double = 0.0
+        var i: Int = 0
+        let U: Double
+        if U1 > (n1 * n2) / 2.0 {
+            U = nm - U1
+        }
+        else {
+            U = U1
+        }
+        if hasTies {
+            while i < ties.count {
+                temp1 += (pow(Double(ties[i]), 3.0) - ties[i]) / 12.0
+                i += 1
+            }
+            denom = sqrt((nm / (S * (S - 1.0))) * ((pow(S, 3.0) - S) / 12.0 - temp1))
+            num = fabs(U - nm / 2.0)
+            z = num / denom
+            pasymp1 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+            pasymp2 = pasymp1 * 2.0
+            pexact1 = Double.nan
+            pexact2 = Double.nan
+        }
+        else {
+            z = fabs(U - nm / 2.0) / sqrt((nm * (n1 + n2 + 1)) / 12.0)
+            if (n1 * n2) <= 400 && ((n1 * n2) + minimum(t1: n1, t2: n2)) <= 220 {
+                do {
+                    if U <= (n1 * n2 + 1) / 2.0 {
+                        pexact1 = try cdfMannWhitney(U: U, m: set1.sampleSize, n: set2.sampleSize)
+                    }
+                    else {
+                        pexact1 = try cdfMannWhitney(U: U, m: set1.sampleSize, n: set2.sampleSize)
+                        pexact1 = 1.0 - pexact1
+                    }
+                    pexact2 = 2.0 * pexact1
+                }
+                catch {
+                    throw error
+                }
+            }
+            else {
+                pexact1 = Double.nan
+                pexact2 = Double.nan
+            }
+            pasymp1 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+            pasymp2 = 2.0 * pasymp1
+        }
+        let W = sumRanksSet2
+        var testR = SSMannWhitneyUTestResult()
+        testR.sumRanks1 = sumRanksSet1
+        testR.sumRanks2 = sumRanksSet2
+        testR.meanRank1 = sumRanksSet1 / n1
+        testR.meanRank2 = sumRanksSet2 / n2
+        testR.UMannWhitney = U
+        testR.WilcoxonW = W
+        testR.ZStatistic = z
+        testR.p2Approx = pasymp2
+        testR.p2Exact = pexact2
+        testR.p1Approx = pasymp1
+        testR.p1Exact = pexact1
+        testR.effectSize = z / sqrt(n1 + n2)
+        return testR
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

@@ -680,6 +680,10 @@ public struct SSMannWhitneyUTestResult {
     var p2Approx: Double?
     /// two sided exact p value
     var p2Exact: Double?
+    /// one sided approximated p value
+    var p1Approx: Double?
+    /// one sided exact p value
+    var p1Exact: Double?
     /// effect size
     var effectSize: Double?
 }
