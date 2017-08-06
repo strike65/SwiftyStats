@@ -41,7 +41,7 @@ catch {
 }
 ```
 
-You can retrive your data encapsulated by an SSExamine object as an array in various sort orders (ascending, descending, as entered [original], unsorted):
+You can get your data as an array in various sort orders (ascending, descending, as entered [original], unsorted):
 
 ```Swift
 // all elements as array
@@ -78,6 +78,10 @@ The framework implements the following tests so far:
 - Levene test (with variants)
 - Grubbs test
 - ESD test (Rosner test)
+- t tests
+- Mann Whitney test
+- Wilcoxon matched pairs test
+- sign test
 - ...
 
 # SSProbabilityDistributions
