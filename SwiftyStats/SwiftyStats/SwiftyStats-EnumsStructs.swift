@@ -688,3 +688,51 @@ public struct SSMannWhitneyUTestResult {
     var effectSize: Double?
 }
 
+
+/// Holds the results of the Wilcoxon test for matched pairs
+public struct SSWilcoxonMatchedPairsTestResult {
+    /// two sided p value
+    var p2Value: Double?
+    /// sample size
+    var sampleSize: Double?
+    /// number of ranks > 0
+    var nPosRanks: Int?
+    /// number of ranks < 0
+    var nNegRanks: Int?
+    /// number of ties
+    var nTies: Int?
+    /// number of zero valued differences
+    var nZeroDiff: Int?
+    /// sum of negative ranks
+    var sumNegRanks: Double?
+    /// sum of positive ranks
+    var sumPosRanks: Double?
+    /// mean of negative ranks
+    var meanPosRanks: Double?
+    /// mean of positive ranks
+    var meanNegRanks: Double?
+    /// z statistic
+    var ZStatistic: Double?
+    /// Cohen's d
+    var dCohen: Double?
+
+}
+/// Sign test results
+public struct SSSignTestRestult {
+    /// exact p value
+    var pValueExact: Double?
+    /// asymptotic p value
+    var pValueApprox: Double?
+    /// number of differences > 0
+    var nPosDiff: Int?
+    /// number of differences < 0
+    var nNegDiff: Int?
+    /// number of ties
+    var nTies: Int?
+    /// sample size
+    var total: Int?
+    /// z value
+    var ZStatistic: Double?
+}
+
+

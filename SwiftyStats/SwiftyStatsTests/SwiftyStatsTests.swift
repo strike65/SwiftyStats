@@ -25,7 +25,6 @@
 import XCTest
 @testable import SwiftyStats
 
-
 //[3, 3, 4, 5, 5, 5, 5, 8, 8, 9, 10, 13, 13, 13, 15, 16]
 class SwiftyStatsTests: XCTestCase {
     let doubleData: Array<Double> = [18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28]
@@ -55,6 +54,13 @@ class SwiftyStatsTests: XCTestCase {
     let s2:Array<Double> = [9,7,5,10,6,8]
     let s3 = [118,122.0,124,130,141]
     let s4 = [121,121.0,121,136,136]
+    
+    let sign1 = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0]
+    let sign2 = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0]
+    let sign3 = [443.0,421,436,376,458,408,422,431,459,369,360,431,403,436,376,370,443]
+    let sign4 = [ 57.0,352,587,415,458,424,463,583,432,379,370,584,422,587,415,419,57]
+    
+    
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -65,7 +71,36 @@ class SwiftyStatsTests: XCTestCase {
         super.tearDown()
     }
     
+    func testSignTest() {
+        let g1 = SSExamine<Double>.init(withArray: sign1, characterSet: nil)
+        let g2 = SSExamine<Double>.init(withArray: sign2, characterSet: nil)
+        var res = try! SSHypothesisTesting.signTest(set1: g1, set2: g2)
+        let g3 = SSExamine<Double>.init(withArray: sign3, characterSet: nil)
+        let g4 = SSExamine<Double>.init(withArray: sign4, characterSet: nil)
+        res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.038, accuracy: 1E-3)
+        let g5 = SSExamine<Double>.init(withArray: largeNormal1, characterSet: nil)
+        let g6 = SSExamine<Double>.init(withArray: largeNormal2, characterSet: nil)
+        res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
+        XCTAssertEqualWithAccuracy(res.ZStatistic!, -2.7511815643464903, accuracy: 1E-7)
+    }
+    
+    func testWilcoxonMatchedPairs() {
+        // tested using IBM SPSS 24
+        let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
+        let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
+        let examine1 = SSExamine.init(withArray: M1, characterSet: nil)
+        let examine2 = SSExamine.init(withArray: M2, characterSet: nil)
+        let wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
+        XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.528, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 0.631, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(wilcox.sumNegRanks!, 22.5, accuracy: 1E-1)
+        XCTAssertEqualWithAccuracy(wilcox.sumPosRanks!, 13.5, accuracy: 1E-1)
+    }
+    
+    
     func testManWhitney() {
+        // tested using IBM SPSS 24
         let A1: Array<Double> = [5,5,8,9,13,13,13,15]
         let B1: Array<Double> = [3,3,4,5,5,8,10,16]
         let A2: Array<Double> = [7,14,22,36,40,48,49,52]
@@ -232,6 +267,7 @@ class SwiftyStatsTests: XCTestCase {
         
         adRes = try! SSHypothesisTesting.adNormalityTest(data: laplaceData, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(adRes.pValue!, 0.04, accuracy: 1E-2)
+        
     }
     
     func testDistributions() {

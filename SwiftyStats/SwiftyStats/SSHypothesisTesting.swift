@@ -554,13 +554,13 @@ public class SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: SSExamine<Double>
+    /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         if !data.isEmpty {
             do {
-                return try ksGoFTest(data: data.elementsAsArray(sortOrder: .original)!, targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<Double>.init(withArray: data, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
@@ -575,24 +575,24 @@ public class SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: Array<Double>
+    /// - Parameter data: SSExamine<Double>!
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         // error handling
-        if data.count < 2 {
+        if data.sampleSize < 2 {
             os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let _data: SSExamine<Double>
-        do {
-            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
-        }
-        catch {
-            os_log("unable to create examine object", log: log_stat, type: .error)
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        let sortedData = _data.uniqueElements(sortOrder: .ascending)!
+//        let _data: SSExamine<Double>
+//        do {
+//            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+//        }
+//        catch {
+//            os_log("unable to create examine object", log: log_stat, type: .error)
+//            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+//        }
+        let sortedData = data.uniqueElements(sortOrder: .ascending)!
         var dD: Double = 0.0
         var dz: Double
         var dtestCDF: Double = 0.0
@@ -615,8 +615,8 @@ public class SSHypothesisTesting {
         var lds: Double = 0.0
         switch target {
         case .gaussian:
-            dest1 = _data.arithmeticMean!
-            if let test = _data.standardDeviation(type: .unbiased) {
+            dest1 = data.arithmeticMean!
+            if let test = data.standardDeviation(type: .unbiased) {
                 dest2 = test
             }
         case .exponential:
@@ -624,7 +624,7 @@ public class SSHypothesisTesting {
             ik = 0
             for value in sortedData {
                 if value <= 0 {
-                    ik = ik + _data.frequency(item: value)
+                    ik = ik + data.frequency(item: value)
                     dest3 = Double(ik) * value
                 }
             }
@@ -633,24 +633,24 @@ public class SSHypothesisTesting {
                     lds = 0
                 }
                 else {
-                    lds = lds + Double(_data.frequency(item: value)) / (Double(_data.sampleSize) - Double(ik))
+                    lds = lds + Double(data.frequency(item: value)) / (Double(data.sampleSize) - Double(ik))
                 }
                 ecdf[value] = lds
             }
-            if lds == 0.0 || ik > (_data.sampleSize - 2) {
+            if lds == 0.0 || ik > (data.sampleSize - 2) {
                 bok1 = false
             }
-            dest1 = (Double(_data.sampleSize) - Double(ik)) / (_data.total - dest3)
+            dest1 = (Double(data.sampleSize) - Double(ik)) / (data.total - dest3)
         case .uniform:
-            dest1 = _data.minimum!
-            dest2 = _data.maximum!
+            dest1 = data.minimum!
+            dest2 = data.maximum!
             ik = 0
         case .studentT:
-            dest1 = Double(_data.sampleSize)
+            dest1 = Double(data.sampleSize)
             ik = 0
         case .laplace:
-            dest1 = _data.median!
-            dest2 = _data.medianAbsoluteDeviation(aroundReferencePoint: dest1)!
+            dest1 = data.median!
+            dest2 = data.medianAbsoluteDeviation(aroundReferencePoint: dest1)!
             ik = 0
         case .none:
             return nil
@@ -706,7 +706,7 @@ public class SSHypothesisTesting {
                     dtemp1 = ecdf[value]! - dtestCDF
                 }
                 else {
-                    dtemp1 = _data.empiricalCDF(of: value) - dtestCDF
+                    dtemp1 = data.empiricalCDF(of: value) - dtestCDF
                 }
                 if dtemp1 < dmax1n {
                     dmax1n = dtemp1
@@ -720,7 +720,7 @@ public class SSHypothesisTesting {
                         dtemp1 = ecdf[nt]! - dtestCDF
                     }
                     else {
-                        dtemp1 = _data.empiricalCDF(of: nt) - dtestCDF
+                        dtemp1 = data.empiricalCDF(of: nt) - dtestCDF
                     }
                 }
                 else {
@@ -738,13 +738,13 @@ public class SSHypothesisTesting {
         dmaxn = (fabs(dmax1n) > fabs(dmax2n)) ? dmax1n : dmax2n
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
         dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
-        dz = sqrt(Double(_data.sampleSize - ik)) * dD
+        dz = sqrt(Double(data.sampleSize - ik)) * dD
         //        var dp: Double
         //        var dq: Double
         //        // according to Smirnov, not as accurate as possible but simple
         //        if (!dD.isNaN)
         //        {
-        //            dz = sqrt(Double(_data.sampleSize - ik)) * dD
+        //            dz = sqrt(Double(data.sampleSize - ik)) * dD
         //            dp = 0.0
         //            if ((dz >= 0) && (dz < 0.27)) {
         //                dp = 1.0
@@ -764,7 +764,7 @@ public class SSHypothesisTesting {
         //            dp = Double.nan
         //        }
         //
-        let dp: Double = 1.0 - KScdf(n: _data.sampleSize, x: dD)
+        let dp: Double = 1.0 - KScdf(n: data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {
         case .gaussian:
@@ -777,7 +777,7 @@ public class SSHypothesisTesting {
             result.maxNegDifference = dmaxn
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
-            result.sampleSize = _data.sampleSize
+            result.sampleSize = data.sampleSize
             
         case .exponential:
             result.targetDistribution = .exponential
@@ -792,7 +792,7 @@ public class SSHypothesisTesting {
             result.maxNegDifference = dmaxn
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
-            result.sampleSize = _data.sampleSize
+            result.sampleSize = data.sampleSize
         case .uniform:
             result.estimatedLowerBound = dest1
             result.estimatedUpperBound = dest2
@@ -801,7 +801,7 @@ public class SSHypothesisTesting {
             result.maxNegDifference = dmaxn
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
-            result.sampleSize = _data.sampleSize
+            result.sampleSize = data.sampleSize
         case .studentT:
             result.estimatedDegreesOfFreedom = dest1
             result.pValue = dp
@@ -809,7 +809,7 @@ public class SSHypothesisTesting {
             result.maxNegDifference = dmaxn
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
-            result.sampleSize = _data.sampleSize
+            result.sampleSize = data.sampleSize
         case .laplace:
             result.estimatedMean = dest1
             result.estimatedShapeParam = dest2
@@ -818,7 +818,7 @@ public class SSHypothesisTesting {
             result.maxNegDifference = dmaxn
             result.maxPosDifference = dmaxp
             result.zStatistics = dz
-            result.sampleSize = _data.sampleSize
+            result.sampleSize = data.sampleSize
         case .none:
             break
         }
@@ -1920,9 +1920,10 @@ public class SSHypothesisTesting {
         return result
     }
     
+    // MARK: non parametric
     
     /// Binomial
-    fileprivate func binomial2(n: Double!, k: Double!) -> Double {
+    fileprivate class func binomial2(n: Double!, k: Double!) -> Double {
         if k == 0.0 {
             return 1.0
         }
@@ -2016,7 +2017,7 @@ public class SSHypothesisTesting {
 
     /// Returns the sum of i for i = start...end
     fileprivate class func sumUp(start: Int!, end: Int!) -> Double {
-        var sum = 0.0
+        var sum = Double(start)
         var i: Int = start
         while i < end {
             sum += Double(i)
@@ -2135,10 +2136,33 @@ public class SSHypothesisTesting {
     /// Perform the Mann-Whitney U test for independent samples.
     /// ### Note ###
     /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
+    /// - Parameter set1: Observations of group1 as Array<T>
+    /// - Parameter set2: Observations of group2 as Array<T>
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
+        if set1.count <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.count <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try mannWhitneyUTest(set1: SSExamine<T>.init(withArray: set1, characterSet: nil) , set2: SSExamine<T>.init(withArray: set2, characterSet: nil))
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    /// Perform the Mann-Whitney U test for independent samples.
+    /// ### Note ###
+    /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable {
+    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
         if set1.sampleSize <= 2 {
             os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -2221,29 +2245,263 @@ public class SSHypothesisTesting {
             pasymp2 = 2.0 * pasymp1
         }
         let W = sumRanksSet2
-        var testR = SSMannWhitneyUTestResult()
-        testR.sumRanks1 = sumRanksSet1
-        testR.sumRanks2 = sumRanksSet2
-        testR.meanRank1 = sumRanksSet1 / n1
-        testR.meanRank2 = sumRanksSet2 / n2
-        testR.UMannWhitney = U
-        testR.WilcoxonW = W
-        testR.ZStatistic = z
-        testR.p2Approx = pasymp2
-        testR.p2Exact = pexact2
-        testR.p1Approx = pasymp1
-        testR.p1Exact = pexact1
-        testR.effectSize = z / sqrt(n1 + n2)
-        return testR
+        var result = SSMannWhitneyUTestResult()
+        result.sumRanks1 = sumRanksSet1
+        result.sumRanks2 = sumRanksSet2
+        result.meanRank1 = sumRanksSet1 / n1
+        result.meanRank2 = sumRanksSet2 / n2
+        result.UMannWhitney = U
+        result.WilcoxonW = W
+        result.ZStatistic = z
+        result.p2Approx = pasymp2
+        result.p2Exact = pexact2
+        result.p1Approx = pasymp1
+        result.p1Exact = pexact1
+        result.effectSize = z / sqrt(n1 + n2)
+        return result
+    }
+
+    /// Performs the Wilcoxon signed ranks test for matched pairs
+    /// - Parameter set1: Observations 1 as Array<Double>
+    /// - Parameter set2: Observations 2 as Array<Double>
+    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    public class func wilcoxonMatchedPairs(set1: Array<Double>!, set2: Array<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
+        if set1.count <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.count <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set1.count != set2.count {
+            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try SSHypothesisTesting.wilcoxonMatchedPairs(set1: SSExamine<Double>.init(withArray: set1, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, characterSet: nil))
+        }
+        catch {
+            throw error
+        }
     }
     
     
+    /// Performs the Wilcoxon signed ranks test for matched pairs
+    /// - Parameter set1: Observations 1
+    /// - Parameter set2: Observations 2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    public class func wilcoxonMatchedPairs(set1: SSExamine<Double>!, set2: SSExamine<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
+        if set1.sampleSize <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.sampleSize <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set1.sampleSize != set2.sampleSize {
+            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var i: Int
+        var np: Int = 0
+        var nn: Int = 0
+        var nties: Int = 0
+        var temp: Double = 0.0
+        var diff:Array<Double> = Array<Double>()
+        let a1: Array<Double> = set1.elementsAsArray(sortOrder: .original)!
+        let a2: Array<Double> = set2.elementsAsArray(sortOrder: .original)!
+        let N = set1.sampleSize
+        i = 0
+        while i < N {
+            temp = a2[i] - a1[i]
+            if temp < 0.0 {
+                nn += 1
+            }
+            else if temp > 0.0 {
+                np += 1
+            }
+            if temp != 0.0 {
+                diff.append(temp)
+            }
+            i += 1
+        }
+        var sorted = diff.sorted(by: {fabs($0) < fabs($1) } )
+        var signs: Array<Double> = Array<Double>()
+        var absDiffSorted:Array<Double> = Array<Double>()
+        i = 0
+        while i < sorted.count {
+            signs.append(sorted[i] > 0.0 ? 1.0 : -1.0)
+            absDiffSorted.append(fabs(sorted[i]))
+            i += 1
+        }
+        let examine = SSExamine<Double>.init(withArray: absDiffSorted, characterSet: nil)
+        var ranks: Array<Double> = Array<Double>()
+        var ties: Array<Double> = Array<Double>()
+        var ptemp: Int
+        var freq: Int
+        var sum: Double = 0.0
+        let n = absDiffSorted.count
+        var pos: Int = 0
+        while pos < n {
+            ptemp = pos + 1
+            sum = Double(ptemp)
+            freq = examine.frequency(item: absDiffSorted[pos])
+            if freq == 1 {
+                ranks.append(sum)
+                pos += 1
+            }
+            else {
+                nties += 1
+                ties.append(Double(freq))
+                sum = Double(freq) * Double(ptemp) + sumUp(start: 1, end: freq - 1)
+                i = 1
+                while i <= freq {
+                    ranks.append(sum / Double(freq))
+                    i += 1
+                }
+                pos = ptemp + freq - 1
+            }
+        }
+        var nposranks: Int = 0
+        var nnegranks: Int = 0
+        var sumposranks: Double = 0.0
+        var sumnegranks: Double = 0.0
+        var meanposranks: Double
+        var meannegranks: Double
+        i = 0
+        while i < n {
+            if signs[i] == 1.0 {
+                nposranks += 1
+                sumposranks += ranks[i]
+            }
+            else {
+                nnegranks += 1
+                sumnegranks += ranks[i]
+            }
+            i += 1
+        }
+        if sumnegranks + sumposranks != (Double(n) * (Double(n) + 1.0)) / 2.0 {
+            os_log("internal error", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+        }
+        meannegranks = nnegranks > 0 ? sumnegranks / Double(nnegranks) : 0.0
+        meanposranks = nposranks > 0 ? sumposranks / Double(nposranks) : 0.0
+        var z: Double
+        var ts: Double = 0.0
+        i = 0
+        while i < ties.count {
+            ts += (pow(ties[i], 3.0) - ties[i]) / 48.0
+            i += 1
+        }
+        z = (fabs(min(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
+        let p = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+        let cohenD = fabs(z) / sqrt(2.0 * Double(N))
+        var result = SSWilcoxonMatchedPairsTestResult()
+        result.p2Value = 2.0 * p
+        result.sampleSize = Double(N)
+        result.nPosRanks = nposranks
+        result.nNegRanks = nnegranks
+        result.nTies = nties
+        result.nZeroDiff = N - np - nn
+        result.sumNegRanks = sumnegranks
+        result.sumPosRanks = sumposranks
+        result.meanPosRanks = meanposranks
+        result.meanNegRanks = meannegranks
+        result.ZStatistic = z
+        result.dCohen = cohenD
+        return result
+    }
+
     
+    /// Performs the sign test
+    /// - Parameter set1: Observations 1
+    /// - Parameter set2: Observations 2
+    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    public class func signTest(set1: Array<Double>, set2: Array<Double>) throws -> SSSignTestRestult {
+        if set1.count <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.count <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set1.count != set2.count {
+            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try signTest(set1: SSExamine<Double>.init(withArray: set1, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, characterSet: nil))
+        }
+        catch {
+            throw error
+        }
+    }
     
-    
-    
-    
-    
+    /// Performs the sign test
+    /// - Parameter set1: Observations 1
+    /// - Parameter set2: Observations 2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    public class func signTest(set1: SSExamine<Double>, set2: SSExamine<Double>) throws -> SSSignTestRestult {
+        if set1.sampleSize <= 2 {
+            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.sampleSize <= 2 {
+            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set1.sampleSize != set2.sampleSize {
+            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let a1 = set1.elementsAsArray(sortOrder: .original)!
+        let a2 = set2.elementsAsArray(sortOrder: .original)!
+        var np: Int = 0
+        var nn: Int = 0
+        var nties: Int = 0
+        var temp: Double = 0.0
+        var i: Int = 0
+        while i < a1.count {
+            temp = a2[i] - a1[i]
+            if temp > 0.0 {
+                np += 1
+            }
+            else if temp < 0.0 {
+                nn += 1
+            }
+            else {
+                nties += 1
+            }
+            i += 1
+        }
+        var pexact: Double = 0.0
+        var z: Double
+        let nnpnp = nn + np
+        let r = min(np,nn)
+        temp = Double(max(nn, np))
+        if nnpnp <= 1000 {
+            i = 0
+            while i <= r {
+                pexact += binomial2(n: Double(nnpnp), k: Double(i)) * pow(0.5, Double(nnpnp))
+                i += 1
+            }
+        }
+        z = (temp - 0.5 * Double(nnpnp) - 0.5)
+        z = -1.0 * z / (0.5 * sqrt(Double(nnpnp)))
+        let pasymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        var result = SSSignTestRestult()
+        result.pValueExact = pexact
+        result.pValueApprox = pasymp
+        result.nPosDiff = np
+        result.nNegDiff = nn
+        result.nTies = nties
+        result.total = set1.sampleSize
+        result.ZStatistic = z
+        return result
+    }
     
     
     
