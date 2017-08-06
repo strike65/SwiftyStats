@@ -38,13 +38,13 @@ public enum SSCIType {
 /// Confidence interval struct
 public struct SSConfIntv {
     /// Upper bound of the CI
-    var upperBound: Double?
+    public var upperBound: Double?
     /// Lower bound of the CI
-    var lowerBound: Double?
+    public var lowerBound: Double?
     /// Range of the CI
-    var intervalWidth: Double?
+    public var intervalWidth: Double?
     
-//    var type: SSCIType
+//    public var type: SSCIType
 }
 /// Defines the format of the Cumulative Frequency Table
 public enum SSCumulativeFrequencyTableFormat {
@@ -137,11 +137,11 @@ public enum SS1DChiSquareHypothesisType {
 /// Quartile struct
 public struct SSQuartile {
     /// 25% Quartile
-    var q25: Double
+    public var q25: Double
     /// 50% Quartile
-    var q50: Double
+    public var q50: Double
     /// 75% Quartile
-    var q75: Double
+    public var q75: Double
     
     init(Q25: Double, Q50: Double, Q75: Double) {
         q25 = Q25
@@ -158,13 +158,13 @@ public struct SSQuartile {
 /// Struct containing descriptive stats
 public struct SSDescriptiveStats {
     /// arithmetic mean
-    var mean: Double
+    public var mean: Double
     /// Variance
-    var variance: Double
+    public var variance: Double
     /// Sample size
-    var sampleSize: Double
+    public var sampleSize: Double
     /// Standard deviation
-    var standardDeviation: Double
+    public var standardDeviation: Double
 
     init(mean: Double, variance: Double, sampleSize: Double, standardDev: Double) {
         self.mean = mean
@@ -183,13 +183,13 @@ public struct SSDescriptiveStats {
 /// Parameters of a continuous probability distribution
 public struct SSContProbDistParams {
     /// Kurtosis
-    var kurtosis: Double
+    public var kurtosis: Double
     /// Mean
-    var mean: Double
+    public var mean: Double
     /// Skewness
-    var skewness: Double
+    public var skewness: Double
     /// Variance
-    var variance: Double
+    public var variance: Double
     
     init(mean: Double, variance: Double, kurtosis: Double, skewness: Double) {
         self.mean = mean
@@ -298,25 +298,25 @@ public enum SSESDTestType {
 
 public struct SSESDTestResult {
     /// sd
-    var stdDeviations: Array<Double>?
+    public var stdDeviations: Array<Double>?
     /// number of items removed during procedure
-    var itemsRemoved: Array<Double>?
+    public var itemsRemoved: Array<Double>?
     /// test statistic
-    var testStatistics: Array<Double>?
+    public var testStatistics: Array<Double>?
     /// array of lamddas
-    var lambdas: Array<Double>?
+    public var lambdas: Array<Double>?
     /// count of outliers found
-    var countOfOutliers: Int?
+    public var countOfOutliers: Int?
     /// array containing outliers found
-    var outliers: Array<Double>?
+    public var outliers: Array<Double>?
     /// alpha
-    var alpha: Double?
+    public var alpha: Double?
     /// max number of outliers to search for
-    var maxOutliers: Int?
+    public var maxOutliers: Int?
     /// test type
-    var testType: SSESDTestType?
+    public var testType: SSESDTestType?
     /// array of the means
-    var means: Array<Double>?
+    public var means: Array<Double>?
 }
 
 
@@ -340,399 +340,399 @@ public enum SSGoFTarget {
 /// Results of the KS one sample test. The fields actually used depend on the target distribution.
 public struct SSKSTestResult {
     /// emprical mean
-    var estimatedMean: Double?
+    public var estimatedMean: Double?
     /// empirical sd
-    var estimatedSd: Double?
+    public var estimatedSd: Double?
     /// empirical variance
-    var estimatedVar: Double?
+    public var estimatedVar: Double?
     /// empirical lower bound
-    var estimatedLowerBound: Double?
+    public var estimatedLowerBound: Double?
     /// empirical upper bound
-    var estimatedUpperBound: Double?
+    public var estimatedUpperBound: Double?
     /// empirical degrees of freedom
-    var estimatedDegreesOfFreedom: Double?
+    public var estimatedDegreesOfFreedom: Double?
     /// empirical shape parameter
-    var estimatedShapeParam: Double?
+    public var estimatedShapeParam: Double?
     /// empirical scale parameter
-    var estimatedScaleParam: Double?
+    public var estimatedScaleParam: Double?
     /// target distribution
-    var targetDistribution: SSGoFTarget?
+    public var targetDistribution: SSGoFTarget?
     /// p value
-    var pValue: Double?
+    public var pValue: Double?
     /// max absolute difference
-    var maxAbsDifference: Double?
+    public var maxAbsDifference: Double?
     /// max absolute positive difference
-    var maxPosDifference: Double?
+    public var maxPosDifference: Double?
     /// max absolute negative difference
-    var maxNegDifference: Double?
+    public var maxNegDifference: Double?
     /// z value
-    var zStatistics: Double?
+    public var zStatistics: Double?
     /// sample size
-    var sampleSize: Int?
+    public var sampleSize: Int?
     /// a string containing additional info (for certain distributions)
-    var infoString: String?
+    public var infoString: String?
 }
 
 
 /// Results of the Anderson Darling test
 public struct SSADTestResult {
     /// p value (= (1 - alpha)-quantile of testStatistic
-    var pValue: Double?
+    public var pValue: Double?
     /// Anderson Darling statistics
-    var AD: Double?
+    public var AD: Double?
     /// AD*
-    var ADStar: Double?
+    public var ADStar: Double?
     /// sample size
-    var sampleSize: Int?
+    public var sampleSize: Int?
     /// standard deviation
-    var stdDev: Double?
+    public var stdDev: Double?
     /// variance
-    var variance: Double?
+    public var variance: Double?
     /// mean
-    var mean: Double?
+    public var mean: Double?
     /// true iff pValue >= alpha
-    var isNormal: Bool?
+    public var isNormal: Bool?
 }
 
 /// Result of tests for equality of variances (Bartlett, Levene, Brown-Forsythe)
 public struct SSVarianceEqualityTestResult {
     /// degrees of freedom
-    var df: Double?
+    public var df: Double?
     /// critical value for alpha = 0.1
-    var cv90Pct: Double?
+    public var cv90Pct: Double?
     /// critical value for alpha = 0.05
-    var cv95Pct: Double?
+    public var cv95Pct: Double?
     /// critical value for alpha = 0.01
-    var cv99Pct: Double?
+    public var cv99Pct: Double?
     /// critical value for alpha as set by the call
-    var cvAlpha: Double?
+    public var cvAlpha: Double?
     /// p value (= (1 - alpha)-quantile of testStatistic
-    var pValue: Double?
+    public var pValue: Double?
     /// test statistic value
-    var testStatistic: Double?
+    public var testStatistic: Double?
     /// set to true iff pValue >= alpha
-    var equality: Bool?
+    public var equality: Bool?
 }
 /// Results of the two sample t-Test
 public struct SSTwoSampleTTestResult {
     /// one sided p value for equal variances
-    var p1EQVAR: Double?
+    public var p1EQVAR: Double?
     /// one sided p value for unequal variances
-    var p1UEQVAR: Double?
+    public var p1UEQVAR: Double?
     /// two sided p value for equal variances
-    var p2EQVAR: Double?
+    public var p2EQVAR: Double?
     /// two sided p value for unequal variances
-    var p2UEQVAR: Double?
+    public var p2UEQVAR: Double?
     /// mean of sample 1
-    var mean1: Double?
+    public var mean1: Double?
     /// mean of sample 2
-    var mean2: Double?
+    public var mean2: Double?
     /// n of sample 1
-    var sampleSize1: Double?
+    public var sampleSize1: Double?
     /// n of sample 2
-    var sampleSize2: Double?
+    public var sampleSize2: Double?
     /// sd of sample 1
-    var stdDev1: Double?
+    public var stdDev1: Double?
     /// sd of sample 1
-    var stdDev2: Double?
+    public var stdDev2: Double?
     /// pooled sd
-    var pooledStdDev: Double?
+    public var pooledStdDev: Double?
     /// pooled variance
-    var pooledVariance: Double?
+    public var pooledVariance: Double?
     /// mean1 - mean2
-    var differenceInMeans: Double?
+    public var differenceInMeans: Double?
     /// t Value assuming equal variances
-    var tEQVAR: Double?
+    public var tEQVAR: Double?
     /// t Value assuming unequal variances
-    var tUEQVAR: Double?
+    public var tUEQVAR: Double?
     /// p Value of the Levene test
-    var LeveneP: Double?
+    public var LeveneP: Double?
     /// degrees of freedom assuming equal variances
-    var dfEQVAR: Double?
+    public var dfEQVAR: Double?
     /// degrees of freedom assuming unequal variances (Welch)
-    var dfUEQVAR: Double?
+    public var dfUEQVAR: Double?
     /// s(1) == s(2)
-    var variancesAreEqual: Bool? = false
+    public var variancesAreEqual: Bool? = false
     /// mean1 >= mean2
-    var mean1GTEmean2: Bool? = false
+    public var mean1GTEmean2: Bool? = false
     /// mean1 <= mean2
-    var mean1LTEmean2: Bool? = false
+    public var mean1LTEmean2: Bool? = false
     /// mean1 == mean2
-    var mean1EQmean2: Bool? = false
+    public var mean1EQmean2: Bool? = false
     /// mean1 != mean2
-    var mean1UEQmean2: Bool? = false
+    public var mean1UEQmean2: Bool? = false
     /// critical value assuming equal variances
-    var CVEQVAR: Double?
+    public var CVEQVAR: Double?
     /// critical value assuming unequal variances
-    var CVUEQVAR: Double?
+    public var CVUEQVAR: Double?
     /// effect size assuming equal variances
-    var rEQVAR: Double?
+    public var rEQVAR: Double?
     /// effect size assuming unequal variances
-    var rUEQVAR: Double?
+    public var rUEQVAR: Double?
     /// t value according to Welch
-    var tWelch: Double?
+    public var tWelch: Double?
     /// degrees of freedom according to Welch
-    var dfWelch: Double?
+    public var dfWelch: Double?
     /// two sided p value according to Welch
-    var p2Welch: Double?
+    public var p2Welch: Double?
     /// one sided p value according to Welch
-    var p1Welch: Double?
+    public var p1Welch: Double?
 }
 
 /// Struct holding the results of the one sample t test
 public struct SSOneSampleTTestResult {
     /// one sided p value
-    var p1Value: Double?
+    public var p1Value: Double?
     /// one sided p value
-    var p2Value: Double?
+    public var p2Value: Double?
     /// t Value
-    var tStat: Double?
+    public var tStat: Double?
     /// critical value for alpha = 0.1
-    var cv90Pct: Double?
+    public var cv90Pct: Double?
     /// critical value for alpha = 0.05
-    var cv95Pct: Double?
+    public var cv95Pct: Double?
     /// critical value for alpha = 0.01
-    var cv99Pct: Double?
+    public var cv99Pct: Double?
     /// critical value for alpha as set by the call
-    var cvAlpha: Double?
+    public var cvAlpha: Double?
     /// mean
-    var mean: Double?
+    public var mean: Double?
     /// reference mean
-    var mean0: Double?
+    public var mean0: Double?
     /// mean - mean0
-    var difference: Double?
+    public var difference: Double?
     /// n of sample
-    var sampleSize: Double?
+    public var sampleSize: Double?
     /// sd
-    var stdDev: Double?
+    public var stdDev: Double?
     /// standard error
-    var stdErr: Double?
+    public var stdErr: Double?
     /// degrees of freedom
-    var df: Double?
+    public var df: Double?
     /// mean1 >= mean0
-    var meanGTEtestValue: Bool? = false
+    public var meanGTEtestValue: Bool? = false
     /// mean <= mean0
-    var meanLTEtestValue: Bool? = false
+    public var meanLTEtestValue: Bool? = false
     /// mean == mean0
-    var meanEQtestValue: Bool? = false
+    public var meanEQtestValue: Bool? = false
 }
 
 /// Encapsulates the results of a matched pairs t test
 public struct SSMatchedPairsTTestResult {
     /// Cov
-    var covariance: Double?
+    public var covariance: Double?
     /// standard error of the difference
-    var stdEDiff: Double?
+    public var stdEDiff: Double?
     /// correlatiopn
-    var correlation: Double?
+    public var correlation: Double?
     /// p value of correlation
-    var pValueCorr: Double?
+    public var pValueCorr: Double?
     /// effect size
-    var effectSizeR: Double?
+    public var effectSizeR: Double?
     /// upper bound of the 95%-confidence interval
-    var ci95upper: Double?
+    public var ci95upper: Double?
     /// lower bound of the 95%-confidence interval
-    var ci95lower: Double?
+    public var ci95lower: Double?
     /// sd of the differences
-    var stdDevDiff: Double?
+    public var stdDevDiff: Double?
     /// sample size
-    var sampleSize: Double?
+    public var sampleSize: Double?
     /// p value for two sided test
-    var p2Value: Double?
+    public var p2Value: Double?
     /// degrees of freedom
-    var df: Double?
+    public var df: Double?
     /// t statistics
-    var tStat: Double?
+    public var tStat: Double?
 }
 
 /// Holds the results of the chi^2 variance test
 public struct SSChiSquareVarianceTestResult {
     /// degrees of freedom
-    var df: Double?
+    public var df: Double?
     /// variance ratio
-    var ratio: Double?
+    public var ratio: Double?
     /// chi^2
-    var testStatisticValue: Double?
+    public var testStatisticValue: Double?
     /// one sided p value
-    var p1Value: Double?
+    public var p1Value: Double?
     /// two sided p value
-    var p2Value: Double?
+    public var p2Value: Double?
     /// sample size
-    var sampleSize: Double?
+    public var sampleSize: Double?
     /// true iff sample variance == s0
-    var sigmaUEQs0: Bool?
+    public var sigmaUEQs0: Bool?
     /// true iff sample variance <= s0
-    var sigmaLTEs0: Bool?
+    public var sigmaLTEs0: Bool?
     /// true iff sample variance >= s0
-    var sigmaGTEs0: Bool?
+    public var sigmaGTEs0: Bool?
     /// sample standard deviation
-    var sd: Double?
+    public var sd: Double?
 }
 
 /// Holds the results of the multiple means tes
 public struct SSOneWayANOVATestResult {
     /// two sided p value
-    var p2Value: Double?
+    public var p2Value: Double?
     /// F ratio
-    var FStatistic: Double?
+    public var FStatistic: Double?
     /// p value of the Bartlett test
-    var pBartlett: Double?
+    public var pBartlett: Double?
     /// Alpha
-    var alpha: Double?
-    var meansEQUAL: Bool?
+    public var alpha: Double?
+    public var meansEQUAL: Bool?
     /// critical value at alpha
-    var cv: Double?
+    public var cv: Double?
     /// p value of the Levene test
-    var pLevene: Double?
+    public var pLevene: Double?
 }
 
 /// Holds the results of the F test for equal variances
 public struct SSFTestResult {
     /// size of sample 1
-    var sampleSize1: Double?
+    public var sampleSize1: Double?
     /// size of sample 2
-    var sampleSize2: Double?
+    public var sampleSize2: Double?
     /// denominator degrees of freedom
-    var dfDenominator: Double?
+    public var dfDenominator: Double?
     /// numerator degrees of freedom
-    var dfNumerator: Double?
+    public var dfNumerator: Double?
     /// variance of sample 1
-    var variance1: Double?
+    public var variance1: Double?
     /// variance of sample 2
-    var variance2: Double?
+    public var variance2: Double?
     /// F ratio
-    var FRatio: Double?
+    public var FRatio: Double?
     /// one sided p value
-    var p1Value: Double?
+    public var p1Value: Double?
     /// two sided p value
-    var p2Value: Double?
+    public var p2Value: Double?
     /// indicates if variances are equal
-    var FRatioEQ1: Bool?
+    public var FRatioEQ1: Bool?
     /// indicates if var1 <= var2
-    var FRatioLTE1: Bool?
+    public var FRatioLTE1: Bool?
     /// indicates if var1 >= var2
-    var FRatioGTE1: Bool?
+    public var FRatioGTE1: Bool?
     /// confidence intervall for var1 == var2
-    var ciRatioEQ1: SSConfIntv?
+    public var ciRatioEQ1: SSConfIntv?
     /// confidence intervall for var1 <= var2
-    var ciRatioLTE1: SSConfIntv?
+    public var ciRatioLTE1: SSConfIntv?
     /// confidence intervall for var1 >= var2
-    var ciRatioGTE1: SSConfIntv?
+    public var ciRatioGTE1: SSConfIntv?
 }
 
 /// Holds the results of Box Ljung Autocorrelation
 public struct SSBoxLjungResult {
     /// coefficients as Dictionary<lag: String, coeff: Double>
-    var coefficients: Array<Double>?
+    public var coefficients: Array<Double>?
     /// Bartlett standard error as Dictionary<lag: String, se: Double>
-    var seBartlett: Array<Double>?
+    public var seBartlett: Array<Double>?
     /// standard error for white noise as Dictionary<lag: String, se: Double>
-    var seWN: Array<Double>?
+    public var seWN: Array<Double>?
     /// test statistics as Dictionary<lag: String, stat: Double>
-    var testStatistic: Array<Double>?
+    public var testStatistic: Array<Double>?
     /// pavalues as  Dictionary<lag: String, pValue: Double>
-    var pValues: Array<Double>?
+    public var pValues: Array<Double>?
 }
 
 /// Holds the results of the runs test
 public struct SSRunsTestResult {
     /// Number of items >= cutting point
-    var nGTEcp: Double?
+    public var nGTEcp: Double?
     /// Number of items < cutting point
-    var nLTcp: Double?
+    public var nLTcp: Double?
     /// Number of runs
-    var nRuns: Double?
+    public var nRuns: Double?
     /// z value
-    var ZStatistic: Double?
+    public var ZStatistic: Double?
     /// critical value
-    var criticalValue: Double?
+    public var criticalValue: Double?
     /// p value
-    var pValue: Double?
+    public var pValue: Double?
     // cutting point used
-    var cp: Double?
+    public var cp: Double?
     /// Array of differences
-    var diffs: Array<Double>?
+    public var diffs: Array<Double>?
     /// Randomness?
-    var randomness: Bool?
+    public var randomness: Bool?
 }
 
 /// Holds the results of the Mann-Whitney U test
 public struct SSMannWhitneyUTestResult {
     /// sum of ranks in set 1
-    var sumRanks1: Double?
+    public var sumRanks1: Double?
     /// sum of ranks in set 2
-    var sumRanks2: Double?
+    public var sumRanks2: Double?
     /// mean of ranks in set 1
-    var meanRank1: Double?
+    public var meanRank1: Double?
     /// mean of ranks in set 2
-    var meanRank2: Double?
+    public var meanRank2: Double?
     /// sum of tied ranks
-    var sumTiedRanks: Double?
+    public var sumTiedRanks: Double?
     /// number of ties
-    var nTies: Int?
+    public var nTies: Int?
     /// U
-    var UMannWhitney: Double?
+    public var UMannWhitney: Double?
     /// Wilcoxon W
-    var WilcoxonW: Double?
+    public var WilcoxonW: Double?
     /// Z
-    var ZStatistic: Double?
+    public var ZStatistic: Double?
     /// two sided approximated p value
-    var p2Approx: Double?
+    public var p2Approx: Double?
     /// two sided exact p value
-    var p2Exact: Double?
+    public var p2Exact: Double?
     /// one sided approximated p value
-    var p1Approx: Double?
+    public var p1Approx: Double?
     /// one sided exact p value
-    var p1Exact: Double?
+    public var p1Exact: Double?
     /// effect size
-    var effectSize: Double?
+    public var effectSize: Double?
 }
 
 
 /// Holds the results of the Wilcoxon test for matched pairs
 public struct SSWilcoxonMatchedPairsTestResult {
     /// two sided p value
-    var p2Value: Double?
+    public var p2Value: Double?
     /// sample size
-    var sampleSize: Double?
+    public var sampleSize: Double?
     /// number of ranks > 0
-    var nPosRanks: Int?
+    public var nPosRanks: Int?
     /// number of ranks < 0
-    var nNegRanks: Int?
+    public var nNegRanks: Int?
     /// number of ties
-    var nTies: Int?
+    public var nTies: Int?
     /// number of zero valued differences
-    var nZeroDiff: Int?
+    public var nZeroDiff: Int?
     /// sum of negative ranks
-    var sumNegRanks: Double?
+    public var sumNegRanks: Double?
     /// sum of positive ranks
-    var sumPosRanks: Double?
+    public var sumPosRanks: Double?
     /// mean of negative ranks
-    var meanPosRanks: Double?
+    public var meanPosRanks: Double?
     /// mean of positive ranks
-    var meanNegRanks: Double?
+    public var meanNegRanks: Double?
     /// z statistic
-    var ZStatistic: Double?
+    public var ZStatistic: Double?
     /// Cohen's d
-    var dCohen: Double?
+    public var dCohen: Double?
 
 }
 /// Sign test results
 public struct SSSignTestRestult {
     /// exact p value
-    var pValueExact: Double?
+    public var pValueExact: Double?
     /// asymptotic p value
-    var pValueApprox: Double?
+    public var pValueApprox: Double?
     /// number of differences > 0
-    var nPosDiff: Int?
+    public var nPosDiff: Int?
     /// number of differences < 0
-    var nNegDiff: Int?
+    public var nNegDiff: Int?
     /// number of ties
-    var nTies: Int?
+    public var nTies: Int?
     /// sample size
-    var total: Int?
+    public var total: Int?
     /// z value
-    var ZStatistic: Double?
+    public var ZStatistic: Double?
 }
 
 
