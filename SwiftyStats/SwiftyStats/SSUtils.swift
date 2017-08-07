@@ -26,6 +26,20 @@
 
 import Foundation
 
+
+
+/// Binomial
+public func binomial2(n: Double!, k: Double!) -> Double {
+    if k == 0.0 {
+        return 1.0
+    }
+    let num: Double = lgamma(n + 1.0)
+    let den: Double = lgamma(n - k + 1.0) + lgamma(k + 1.0)
+    let q: Double = num - den
+    return exp(q)
+}
+
+
 /// Tests, if a value is integer.
 /// - Paramter value: A double-value.
 func isInteger(_ value: Double) -> Bool {

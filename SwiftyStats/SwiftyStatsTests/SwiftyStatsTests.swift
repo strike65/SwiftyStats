@@ -71,18 +71,56 @@ class SwiftyStatsTests: XCTestCase {
         super.tearDown()
     }
     
+    func testBinomialTest() {
+        var p: Double
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .twoSided)
+//        XCTAssertEqualWithAccuracy(p, 0.424, accuracy: 1E-3)
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .less)
+//        XCTAssertEqualWithAccuracy(p, 0.9102, accuracy: 1E-4)
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .greater)
+//        XCTAssertEqualWithAccuracy(p, 0.212, accuracy: 1E-3)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 35, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(p, 0.3814, accuracy: 1E-3)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
+        XCTAssertEqualWithAccuracy(p, 0.1923, accuracy: 1E-4)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .greater)
+        XCTAssertEqualWithAccuracy(p, 0.8715, accuracy: 1E-4)
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess:15, numberOfTrials: 20, probability: 0.5, alternative: .twoSided)
+//        XCTAssertEqualWithAccuracy(p, 0.3814, accuracy: 1E-3)
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 10, probability: 0.6, alternative: .less)
+//        XCTAssertEqualWithAccuracy(p, 0.1923, accuracy: 1E-4)
+//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 8, numberOfTrials: 10, probability: 0.2, alternative: .greater)
+//        XCTAssertEqualWithAccuracy(p, 0.8715, accuracy: 1E-4)
+
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
+        let Data:Array<String> = ["A","A","A","A","A","B","A","A","B","B","B","B","A","A"]
+        let Data2:Array<Int> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A")
+        XCTAssertEqualWithAccuracy(res.p2ValueExact!, 0.424, accuracy: 1E-3)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A")
+        XCTAssertEqualWithAccuracy(res.p2ValueExact!, 0.0003819, accuracy: 1E-7)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A")
+        XCTAssertEqualWithAccuracy(res.p2ValueApprox!,  0.771, accuracy: 1E-3)
+        _ = SSHypothesisTesting.binomialTest(numberOfSuccess: 7, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .twoSided)
+        var res2 = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data2, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: 1)
+        _ = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .twoSided)
+    }
+    
     func testSignTest() {
         let g1 = SSExamine<Double>.init(withArray: sign1, characterSet: nil)
         let g2 = SSExamine<Double>.init(withArray: sign2, characterSet: nil)
         var res = try! SSHypothesisTesting.signTest(set1: g1, set2: g2)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0144084, accuracy: 1E-6)
         let g3 = SSExamine<Double>.init(withArray: sign3, characterSet: nil)
         let g4 = SSExamine<Double>.init(withArray: sign4, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
-        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.038, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0384064, accuracy: 1E-6)
         let g5 = SSExamine<Double>.init(withArray: largeNormal1, characterSet: nil)
         let g6 = SSExamine<Double>.init(withArray: largeNormal2, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
         XCTAssertEqualWithAccuracy(res.ZStatistic!, -2.7511815643464903, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.00295538, accuracy: 1E-6)
     }
     
     func testWilcoxonMatchedPairs() {

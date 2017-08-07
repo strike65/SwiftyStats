@@ -735,4 +735,38 @@ public struct SSSignTestRestult {
     public var ZStatistic: Double?
 }
 
+/// Binomial test results
+public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+    /// number of trials
+    public var nTrials: Int?
+    /// number of successes
+    public var nSuccess: Int?
+    /// number of failures
+    public var nFailure: Int?
+    /// one sided p value (asympt)
+    public var p1ValueApprox: Double?
+    /// one sided p value (exact)
+    public var p1ValueExact: Double?
+    /// two sided p value (asympt)
+    public var p2ValueApprox: Double?
+    /// two sided p value (exat)
+    public var p2ValueExact: Double?
+    /// probability for success
+    public var probSuccess: Double?
+    /// probability for failure
+    public var probFailure: Double?
+    /// test probability
+    public var probTest: Double?
+    /// success id
+    public var successCode: T?
+    
+}
 
+
+public enum SSBinomialTestType {
+    case less, greater, twoSided
+}
+
+public enum SSBinomialTail {
+    case lower, upper
+}

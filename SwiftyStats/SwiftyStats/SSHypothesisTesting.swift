@@ -1922,16 +1922,6 @@ public class SSHypothesisTesting {
     
     // MARK: non parametric
     
-    /// Binomial
-    fileprivate class func binomial2(n: Double!, k: Double!) -> Double {
-        if k == 0.0 {
-            return 1.0
-        }
-        let num: Double = lgamma(n + 1.0)
-        let den: Double = lgamma(n - k + 1.0) + lgamma(k + 1.0)
-        let q: Double = num - den
-        return exp(q)
-    }
     
     /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
     fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
@@ -2503,8 +2493,130 @@ public class SSHypothesisTesting {
         return result
     }
     
+    /// Performs the binomial test
+    /// ### Note ###
+    /// - H<sub>0</sub>: The probability of success is equal to p0
+    /// - H<sub>a1</sub>: if p0 == 0.5, the probability of success is not equal to p0 (two sided)
+    /// - H<sub>a2</sub>: if p0 < 0.5, the probability of success is less than p0 (one sided)
+    /// - H<sub>a</sub>: if p0 > 0.5, the probability of success is greater than p0 (one sided)
+    /// - Paramater data: Dichotomous data
+    /// - Parameter p0: Probability
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
+    public class func binomialTest(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: Double!, alpha: Double!, alternative: SSBinomialTestType) -> Double {
+        var lowersum: Double = 0.0
+        var uppersum: Double = 0.0
+        var pV: Double = 0.0
+        var pV1: Double = 0.0
+        var pA1: Double = 0.0
+        var z1: Double = 0.0
+        let q = 1.0 - p0
+        var i: Int
+        if trials < 100000 {
+            switch alternative {
+            case .less:
+                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
+            case .greater:
+                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
+            case .twoSided:
+                var c1: Int = 0
+                var c2: Int = 0
+                var temp: Double = 0.0
+                let ah = alpha / 2.0
+                let d = SSProbabilityDistributions.pdfBinomialDistribution(k: success, n: trials, probability: p0)
+                let m = Double(trials) * p0
+                if success == Int(ceil(m)) {
+                    pV = 1.0
+                }
+                else if success < Int(ceil(m)) {
+                    i = Int(ceil(m))
+                    for j in i...trials {
+                        if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                            c1 = j - 1
+                            break
+                        }
+                    }
+                    pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
+                    pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
+                    pV = pV + pV1
+                }
+                else {
+                    i = 0
+                    for j in 0...Int(floor(m)) {
+                        if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                            c1 = j + 1
+                        }
+                    }
+                    pV = SSProbabilityDistributions.cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
+                    pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
+                    pV = pV + pV1
+                }
+            }
+        }
+        else {
+            z1 = (fabs(Double(success) / Double(trials) - p0) - 1.0 / (2.0 * Double(trials))) / sqrt(p0 * (1.0 - p0) / Double(trials))
+            pA1 = SSProbabilityDistributions.cdfStandardNormalDist(u: z1)
+        }
+        return pV
+    }
+
     
-    
+    /// Performs the binomial test
+    /// ### Note ###
+    /// - H<sub>0</sub>: The probability of success is equal to p0
+    /// - H<sub>a1</sub>: if p0 == 0.5, the probability of success is not equal to p0 (two sided)
+    /// - H<sub>a2</sub>: if p0 < 0.5, the probability of success is less than p0 (one sided)
+    /// - H<sub>a</sub>: if p0 > 0.5, the probability of success is greater than p0 (one sided)
+    /// - Paramater data: Dichotomous data
+    /// - Parameter p0: Probability
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
+    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+        if data.sampleSize <= 2 {
+            os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
+            os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let n1: Double = Double(data.frequency(item: successID))
+        let n2: Double = Double(data.sampleSize) - n1
+        let m = min(n1, n2)
+        let n = n1 + n2
+        var sum: Double = 0.0
+        var p: Double
+        var pV: Double
+        var q: Double
+        var pA1: Double
+        var pA2: Double
+        var z1: Double
+        var z2: Double
+        var pasymp: Double
+        var i: Int
+        z1 = (n1 + 0.5 - (n1 + n2) * p0) / sqrt((n1 + n2) * p0 * (1.0 - p0))
+        z2 = (n1 - 0.5 - (n1 + n2) * p0) / sqrt((n1 + n2) * p0 * (1.0 - p0))
+        pA1 = SSProbabilityDistributions.cdfStandardNormalDist(u: z1)
+        pA2 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: z2)
+        if p0 > 0.5 {
+            pasymp = pA2
+        }
+        else {
+            pasymp = pA1
+            pasymp = 2.0 * pasymp
+        }
+        var result = SSBinomialTestResult<T>()
+        result.nTrials = Int(n)
+        result.nSuccess = Int(n1)
+        result.nFailure = Int(n2)
+        result.p2ValueExact = Double.nan
+        result.p1ValueExact = SSProbabilityDistributions.cdfBinomialDistribution(k: Int(n1), n: data.sampleSize, probability: p0, tail: .lower)
+        result.p2ValueApprox = pasymp
+        result.p1ValueApprox = pasymp / 2.0
+        result.probFailure = n2 / n
+        result.probSuccess = n1 / n
+        result.probTest = p0
+        result.successCode = successID
+        return result
+    }
     
     
     
