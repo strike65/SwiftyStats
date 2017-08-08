@@ -71,40 +71,56 @@ class SwiftyStatsTests: XCTestCase {
         super.tearDown()
     }
     
+    
+    func testKS2Sample() {
+        let set1 = SSExamine<Double>.init(withArray: wafer1, characterSet: nil)
+        let set2 = SSExamine<Double>.init(withArray: wafer2, characterSet: nil)
+        var res: SSKSTwoSampleTestResult
+        res = try! SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: set1, set2: set2, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(res.p2Value!, 0.4611, accuracy: 1E-4)
+        let set3 = SSExamine<Double>.init(withArray: normal3, characterSet: nil)
+        let set4 = SSExamine<Double>.init(withArray: laplaceData, characterSet: nil)
+        res = try! SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: set3, set2: set4, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(res.p2Value!, 7.159e-07, accuracy: 1E-7)
+    }
+    
     func testBinomialTest() {
         var p: Double
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .twoSided)
-//        XCTAssertEqualWithAccuracy(p, 0.424, accuracy: 1E-3)
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .less)
-//        XCTAssertEqualWithAccuracy(p, 0.9102, accuracy: 1E-4)
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .greater)
-//        XCTAssertEqualWithAccuracy(p, 0.212, accuracy: 1E-3)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(p, 0.424, accuracy: 1E-3)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .less)
+        XCTAssertEqualWithAccuracy(p, 0.9102, accuracy: 1E-4)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .greater)
+        XCTAssertEqualWithAccuracy(p, 0.212, accuracy: 1E-3)
         p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(0.002055, p, accuracy: 1E-6)
         p = SSHypothesisTesting.binomialTest(numberOfSuccess: 35, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
-        XCTAssertEqualWithAccuracy(p, 0.3814, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(p, 0.2764, accuracy: 1E-4)
         p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
         XCTAssertEqualWithAccuracy(p, 0.1923, accuracy: 1E-4)
         p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .greater)
         XCTAssertEqualWithAccuracy(p, 0.8715, accuracy: 1E-4)
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess:15, numberOfTrials: 20, probability: 0.5, alternative: .twoSided)
-//        XCTAssertEqualWithAccuracy(p, 0.3814, accuracy: 1E-3)
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 10, probability: 0.6, alternative: .less)
-//        XCTAssertEqualWithAccuracy(p, 0.1923, accuracy: 1E-4)
-//        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 8, numberOfTrials: 10, probability: 0.2, alternative: .greater)
-//        XCTAssertEqualWithAccuracy(p, 0.8715, accuracy: 1E-4)
-
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess:15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(p, 0.2531, accuracy: 1E-4)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .less)
+        XCTAssertEqualWithAccuracy(p, 0.949, accuracy: 1E-3)
+        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .greater)
+        XCTAssertEqualWithAccuracy(p, 0.1256, accuracy: 1E-4)
         let Data:Array<String> = ["A","A","A","A","A","B","A","A","B","B","B","B","A","A"]
-        let Data2:Array<Int> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A")
-        XCTAssertEqualWithAccuracy(res.p2ValueExact!, 0.424, accuracy: 1E-3)
-        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A")
-        XCTAssertEqualWithAccuracy(res.p2ValueExact!, 0.0003819, accuracy: 1E-7)
-        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A")
-        XCTAssertEqualWithAccuracy(res.p2ValueApprox!,  0.771, accuracy: 1E-3)
-        _ = SSHypothesisTesting.binomialTest(numberOfSuccess: 7, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .twoSided)
-        var res2 = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data2, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: 1)
-        _ = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .twoSided)
+        var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A", alpha: 0.05, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.424, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3513801, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 0.8724016, accuracy: 1E-7)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3904149, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 1.0, accuracy: 1E-7)
+        res = try! SSHypothesisTesting.binomialTest(data: Data, characterSet: CharacterSet.alphanumerics, testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
+        XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3904149, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 1.0, accuracy: 1E-7)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A", alpha: 0.05, alternative: .less)
+        XCTAssertEqualWithAccuracy(res.pValueExact!,  0.4158, accuracy: 1E-4)
     }
     
     func testSignTest() {
@@ -178,10 +194,18 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(try! SSHypothesisTesting.autocorrelationCoefficient(data: examine, lag: 1), -0.31, accuracy: 1E-2)
         
         var runsTest: SSRunsTestResult
-        runsTest = try! SSHypothesisTesting.runsTest(data: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
+        runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
         XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
-        XCTAssertEqualWithAccuracy(runsTest.pValue!, 0.007, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.007065, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
+        
+        let data = [18.0,17,18,19,20,19,19,21,18,21,22]
+        runsTest = try! SSHypothesisTesting.runsTest(array: data, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
+        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, -1.4489, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.1474, accuracy: 1E-4)
+        
+        
+        
     }
     
     func testTTest()  {
@@ -244,30 +268,30 @@ class SwiftyStatsTests: XCTestCase {
     
     func testEqualityOfVariance() {
         // with two arrays
-        var varianceTestResult = try! SSHypothesisTesting.bartlettTest(data: [normal1, normal2], alpha: 0.05)!
+        var varianceTestResult = try! SSHypothesisTesting.bartlettTest(array: [normal1, normal2], alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.00103845, accuracy: 1E-8)
         XCTAssertEqualWithAccuracy(varianceTestResult.testStatistic!, 10.7577, accuracy: 1E-4)
 
         // with three arrays
-        varianceTestResult = try! SSHypothesisTesting.bartlettTest(data: [normal1, normal2, normal3], alpha: 0.05)!
+        varianceTestResult = try! SSHypothesisTesting.bartlettTest(array: [normal1, normal2, normal3], alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0000156135, accuracy: 1E-10)
         XCTAssertEqualWithAccuracy(varianceTestResult.testStatistic!, 22.1347, accuracy: 1E-4)
-        XCTAssertThrowsError(try SSHypothesisTesting.bartlettTest(data: [normal1], alpha: 0.05))
+        XCTAssertThrowsError(try SSHypothesisTesting.bartlettTest(array: [normal1], alpha: 0.05))
         
-        varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .median, alpha: 0.05)!
+        varianceTestResult = try! SSHypothesisTesting.leveneTest(array: [normal1, normal2, normal3], testType: .median, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.000490846, accuracy: 1E-9)
         
-        varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .mean, alpha: 0.05)!
+        varianceTestResult = try! SSHypothesisTesting.leveneTest(array: [normal1, normal2, normal3], testType: .mean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.000261212, accuracy: 1E-9)
         
-        varianceTestResult = try! SSHypothesisTesting.leveneTest(data: [normal1, normal2, normal3], testType: .trimmedMean, alpha: 0.05)!
+        varianceTestResult = try! SSHypothesisTesting.leveneTest(array: [normal1, normal2, normal3], testType: .trimmedMean, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(varianceTestResult.pValue!, 0.0003168469, accuracy: 1E-9)
         
         var chiResult: SSChiSquareVarianceTestResult
-        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 9.0 / 4.0, alpha: 0.05)!
+        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(array: normal3, nominalVariance: 9.0 / 4.0, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.242166, accuracy: 1E-6)
 
-        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(data: normal3, nominalVariance: 8.0 / 5.0, alpha: 0.05)!
+        chiResult = try! SSHypothesisTesting.chiSquareVarianceTest(array: normal3, nominalVariance: 8.0 / 5.0, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(chiResult.p1Value!, 0.000269792, accuracy: 1E-9)
         
         var ftestRes: SSFTestResult
@@ -288,22 +312,22 @@ class SwiftyStatsTests: XCTestCase {
         let laplace = try! SSExamine<Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, characterSet: nil)
         laplace.name = "Laplace Distribution"
         
-        var res: SSKSTestResult = try! SSHypothesisTesting.ksGoFTest(data: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
+        var res: SSKSTestResult = try! SSHypothesisTesting.ksGoFTest(array: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
         XCTAssertEqualWithAccuracy(res.pValue!, 0.932551, accuracy: 1E-5)
 
-        res = try! SSHypothesisTesting.ksGoFTest(data: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
+        res = try! SSHypothesisTesting.ksGoFTest(array: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
         XCTAssertEqualWithAccuracy(res.pValue!, 0.231796, accuracy: 1E-5)
         
-        res = try! SSHypothesisTesting.ksGoFTest(data: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
+        res = try! SSHypothesisTesting.ksGoFTest(array: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
         XCTAssertEqualWithAccuracy(res.pValue!, 0.0948321, accuracy: 1E-5)
         
-        res = try! SSHypothesisTesting.ksGoFTest(data: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
+        res = try! SSHypothesisTesting.ksGoFTest(array: laplace.elementsAsArray(sortOrder: .original)!, targetDistribution: .laplace)!
         XCTAssertEqualWithAccuracy(res.pValue!, 0.0771619, accuracy: 1E-5)
         
-        var adRes = try! SSHypothesisTesting.adNormalityTest(data: normal1, alpha: 0.05)!
+        var adRes = try! SSHypothesisTesting.adNormalityTest(array: normal1, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(adRes.pValue!, 0.987, accuracy: 1E-3)
         
-        adRes = try! SSHypothesisTesting.adNormalityTest(data: laplaceData, alpha: 0.05)!
+        adRes = try! SSHypothesisTesting.adNormalityTest(array: laplaceData, alpha: 0.05)!
         XCTAssertEqualWithAccuracy(adRes.pValue!, 0.04, accuracy: 1E-2)
         
     }

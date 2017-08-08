@@ -37,14 +37,12 @@ public enum SSCIType {
 
 /// Confidence interval struct
 public struct SSConfIntv {
-    /// Upper bound of the CI
-    public var upperBound: Double?
     /// Lower bound of the CI
     public var lowerBound: Double?
+    /// Upper bound of the CI
+    public var upperBound: Double?
     /// Range of the CI
     public var intervalWidth: Double?
-    
-//    public var type: SSCIType
 }
 /// Defines the format of the Cumulative Frequency Table
 public enum SSCumulativeFrequencyTableFormat {
@@ -647,7 +645,9 @@ public struct SSRunsTestResult {
     /// critical value
     public var criticalValue: Double?
     /// p value
-    public var pValue: Double?
+    public var pValueExact: Double?
+    /// p value asymptotic
+    public var pValueAsymp: Double?
     // cutting point used
     public var cp: Double?
     /// Array of differences
@@ -743,8 +743,6 @@ public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
     public var nSuccess: Int?
     /// number of failures
     public var nFailure: Int?
-    /// one sided p value (asympt)
-    public var pValueApprox: Double?
     /// one sided p value (exact)
     public var pValueExact: Double?
     /// probability for success
@@ -755,14 +753,54 @@ public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
     public var probTest: Double?
     /// success id
     public var successCode: T?
-    
+    /// 1 - alpha confidence interval
+    public var confInt: SSConfIntv?
 }
 
 
-public enum SSBinomialTestType {
+public enum SSAlternativeHypotheses {
     case less, greater, twoSided
 }
 
-public enum SSBinomialTail {
+public enum SSCDFTail {
     case lower, upper
 }
+
+
+/// Results of the KS-2-Sample test
+public struct SSKSTwoSampleTestResult {
+    /// max pos diff
+    var dMaxPos: Double?
+    /// max neg diff
+    var dMaxNeg: Double?
+    /// max abs diff
+    var dMaxAbs: Double?
+    /// z value
+    var zStatistic: Double?
+    /// p valie
+    var p2Value: Double?
+    /// size of sample 1
+    var sampleSize1: Int?
+    /// size of sample 2
+    var sampleSize2: Int?
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

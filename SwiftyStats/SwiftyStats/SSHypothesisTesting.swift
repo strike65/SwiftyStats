@@ -209,13 +209,13 @@ public class SSHypothesisTesting {
     /// - Parameter data: Array<Double> object
     /// - Parameter lag: Lag
     /// - Throws: SSSwiftyStatsError iff data.count < 2
-    public class func autocorrelationCoefficient(data: Array<Double>!, lag: Int!) throws -> Double {
-        if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+    public class func autocorrelationCoefficient(array: Array<Double>!, lag: Int!) throws -> Double {
+        if array.count < 2 {
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: data, characterSet: nil), lag: lag)
+            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: array, characterSet: nil), lag: lag)
         }
         catch {
             throw error
@@ -229,7 +229,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelationCoefficient(data: SSExamine<Double>!, lag: Int!) throws -> Double {
         if data.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var r: Double
@@ -264,7 +264,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation(data: Array<Double>!) throws -> SSBoxLjungResult {
         if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
@@ -288,7 +288,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation(data: SSExamine<Double>!) throws -> SSBoxLjungResult {
         if data.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var acr = Array<Double>()
@@ -418,13 +418,13 @@ public class SSHypothesisTesting {
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func runsTest(data: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
-        if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+    public class func runsTest(array: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
+        if array.count < 2 {
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: data, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint)
+            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint)
         }
         catch {
             throw error
@@ -454,14 +454,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
         if data.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var diff = Array<Double>()
         let elements = data.elementsAsArray(sortOrder: .original)!
         var dtemp: Double = 0.0
-        var np: Double = 0.0
-        var nn: Double = 0.0
+        var n2: Double = 0.0
+        var n1: Double = 0.0
         var r: Int = 1
         var cp: Double = 0.0
         var isPrevPos = false
@@ -494,53 +494,66 @@ public class SSHypothesisTesting {
             }
             if dtemp >= 0.0 {
                 isPrevPos = true
-                np += 1.0
+                n2 += 1.0
             }
             else {
                 isPrevPos = false
-                nn += 1.0
+                n1 += 1.0
             }
         }
-        dtemp = nn + np
-        let sigma = sqrt((2.0 * np * nn * (2.0 * np * nn - nn - np)) / ((dtemp * dtemp * (np + nn - 1.0))))
-        let mean = (2.0 * np * nn) / dtemp + 1.0
+        dtemp = n1 + n2
+        let sigma = sqrt((2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0))))
+        let mean = (2.0 * n2 * n1) / dtemp + 1.0
         var z: Double = 0.0
         dtemp = Double(r) - mean
-        if data.sampleSize < 50 {
-            if dtemp <= 0.5 {
-                z = (dtemp + 0.5) / sigma
-            }
-            else if dtemp > 0.5 {
-                z = (dtemp - 0.5) / sigma
-            }
-            else if fabs(dtemp) < 0.5 {
-                z = 0.0
-            }
-        }
-        else {
-            z = dtemp / sigma
-        }
-        var p: Double = 0.0
+        var pExact: Double = Double.nan
+        var pAsymp: Double = 0.0
         var cv: Double
-        p = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
         do {
             cv = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1 - alpha / 2.0)
         }
         catch {
             throw error
         }
-        if p > 0.5 {
-            p = (1.0 - p) * 2.0
+        z = dtemp / sigma
+        pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        if pAsymp > 0.5 {
+            pAsymp = (1.0 - pAsymp) * 2.0
         }
         else {
-            p *= 2.0
+            pAsymp *= 2.0
+        }
+        if n1 < 20 && n2 < 20 {
+            if r % 2 == 0 {
+                var rr = 2
+                var sum = 0.0
+                var q = 0.0
+                while rr <= r {
+                    q = Double(rr) / 2.0
+                    sum += binomial2(n: n1 - 1.0, k: q - 1.0) * binomial2(n: n2 - 1.0,k: q - 1)
+                    rr += 1
+                }
+                pExact = 2.0 * sum / binomial2(n: (n1 + n2), k: n1)
+            }
+            else {
+                var rr = 2
+                var sum = 0.0
+                var q = 0.0
+                while rr <= r {
+                    q = Double(rr - 1) / 2.0
+                    sum += (binomial2(n: n1 - 1.0, k: q) * binomial2(n: n2 - 1.0, k: q - 1) / 2.0) + binomial2(n: n1 - 1.0, k: q - 1.0) * binomial2(n: n2 - 1.0,k: q)
+                    rr += 1
+                }
+                pExact = sum / binomial2(n: (n1 + n2), k: n1)
+            }
         }
         var result = SSRunsTestResult()
-        result.nGTEcp = np
-        result.nLTcp = nn
+        result.nGTEcp = n2
+        result.nLTcp = n1
         result.nRuns = Double(r)
         result.ZStatistic = z
-        result.pValue = p
+        result.pValueExact = pExact
+        result.pValueAsymp = pAsymp
         result.cp = cp
         result.diffs = diff
         result.criticalValue = cv
@@ -549,30 +562,74 @@ public class SSHypothesisTesting {
     }
     
     
+//    public class func waldWolfowitzTwoSampleRunsTest<T>(array1: Array<T>)
+    
+    
     /************************************************************************************************/
     // MARK: GoF test
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
+    /// ### Note ###
+    /// Calls ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
-        if !data.isEmpty {
+    public class func kolmogorovSmirnovGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+        if array.count >= 2 {
             do {
-                return try ksGoFTest(data: SSExamine<Double>.init(withArray: data, characterSet: nil), targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
             }
         }
         else {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        
+    }
+
+    
+    /// Performs the goodness of fit test according to Kolmogorov and Smirnov
+    /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
+    /// - Parameter data: Array<Double>
+    /// - Parameter target: Distribution to test for
+    /// - Throws: SSSwiftyStatsError if data.count < 2
+    public class func ksGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+        if array.count >= 2 {
+            do {
+                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), targetDistribution: target)
+            }
+            catch {
+                throw error
+            }
+        }
+        else {
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         
     }
     
+    
+    /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
+    /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
+    /// ### Note ###
+    /// Calls ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
+    /// - Parameter data: SSExamine<Double>!
+    /// - Parameter target: Distribution to test for
+    /// - Throws: SSSwiftyStatsError if data.count < 2
+    public class func kolmogorovSmirnovGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+        do {
+            return try ksGoFTest(data: data, targetDistribution: target)
+        }
+        catch {
+            throw error
+        }
+    }
+
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter data: SSExamine<Double>!
@@ -581,17 +638,9 @@ public class SSHypothesisTesting {
     public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         // error handling
         if data.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-//        let _data: SSExamine<Double>
-//        do {
-//            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
-//        }
-//        catch {
-//            os_log("unable to create examine object", log: log_stat, type: .error)
-//            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-//        }
         let sortedData = data.uniqueElements(sortOrder: .ascending)!
         var dD: Double = 0.0
         var dz: Double
@@ -739,31 +788,6 @@ public class SSHypothesisTesting {
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
         dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
         dz = sqrt(Double(data.sampleSize - ik)) * dD
-        //        var dp: Double
-        //        var dq: Double
-        //        // according to Smirnov, not as accurate as possible but simple
-        //        if (!dD.isNaN)
-        //        {
-        //            dz = sqrt(Double(data.sampleSize - ik)) * dD
-        //            dp = 0.0
-        //            if ((dz >= 0) && (dz < 0.27)) {
-        //                dp = 1.0
-        //            }
-        //            else if ((dz >= 0.27) && (dz < 1.0)) {
-        //                dq = exp(-1.233701 * pow(dz, -2.0))
-        //                dp = 1.0 - ((2.506628 * (dq + pow(dq, 9.0) + pow(dq, 25.0))) / dz)
-        //            }
-        //            else if ((dz >= 1.0) && (dz < 3.1)) {
-        //                dq = exp(-2.0 * pow(dz, 2.0))
-        //                dp = 2.0 * (dq - pow(dq, 4.0) + pow(dq, 9.0) - pow(dq, 16.0))
-        //            } else if (dz > 3.1) {
-        //                dp = 0.0
-        //            }
-        //        }
-        //        else {
-        //            dp = Double.nan
-        //        }
-        //
         let dp: Double = 1.0 - KScdf(n: data.sampleSize, x: dD)
         var result = SSKSTestResult()
         switch target {
@@ -922,14 +946,14 @@ public class SSHypothesisTesting {
     public class func adNormalityTest(data: SSExamine<Double>!, alpha: Double!) throws -> SSADTestResult? {
         if !data.isEmpty {
             do {
-                return try adNormalityTest(data: data.elementsAsArray(sortOrder: .original)!, alpha: alpha)
+                return try adNormalityTest(array: data.elementsAsArray(sortOrder: .original)!, alpha: alpha)
             }
             catch {
                 throw error
             }
         }
         else {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
     }
@@ -940,7 +964,7 @@ public class SSHypothesisTesting {
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func adNormalityTest(data: Array<Double>!, alpha: Double!) throws -> SSADTestResult? {
+    public class func adNormalityTest(array: Array<Double>!, alpha: Double!) throws -> SSADTestResult? {
         var ad: Double = 0.0
         var a2: Double
         var estMean: Double
@@ -948,13 +972,13 @@ public class SSHypothesisTesting {
         var n: Int
         var tempArray: Array<Double>
         var pValue: Double
-        if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+        if array.count < 2 {
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let _data: SSExamine<Double>
         do {
-            _data = try SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+            _data = try SSExamine<Double>.init(withObject: array, levelOfMeasurement: .interval, characterSet: nil)
         }
         catch {
             os_log("unable to create examine object", log: log_stat, type: .error)
@@ -1008,7 +1032,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func bartlettTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
-            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<Double>> = Array<Array<Double>>()
@@ -1017,12 +1041,12 @@ public class SSHypothesisTesting {
                 array.append(examine.elementsAsArray(sortOrder: .original)!)
             }
             else {
-                os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
         do {
-            return try bartlettTest(data: array, alpha: alpha)
+            return try bartlettTest(array: array, alpha: alpha)
         }
         catch {
             throw error
@@ -1034,7 +1058,7 @@ public class SSHypothesisTesting {
     /// - Parameter data: Array containing samples
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
-    public class func bartlettTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+    public class func bartlettTest(array: Array<Array<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         var _N = 0.0
         var _pS = 0.0
         var _s1 = 0.0
@@ -1049,12 +1073,12 @@ public class SSHypothesisTesting {
         var _cutoffAlpha = 0.0
         var _data:Array<SSExamine<Double>> = Array<SSExamine<Double>>()
         var result: SSVarianceEqualityTestResult
-        if data.count < 2 {
-            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+        if array.count < 2 {
+            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        for array in data {
-            _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+        for a in array {
+            _data.append(SSExamine<Double>.init(withArray: a, characterSet: nil))
         }
         _k = Double(_data.count)
         for examine in _data {
@@ -1102,7 +1126,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func leveneTest(data: Array<SSExamine<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
-            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<Double>> = Array<Array<Double>>()
@@ -1111,12 +1135,12 @@ public class SSHypothesisTesting {
                 array.append(examine.elementsAsArray(sortOrder: .original)!)
             }
             else {
-                os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
         do {
-            return try leveneTest(data: array, testType: testType, alpha: alpha)
+            return try leveneTest(array: array, testType: testType, alpha: alpha)
         }
         catch {
             throw error
@@ -1129,7 +1153,7 @@ public class SSHypothesisTesting {
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
-    public class func leveneTest(data: Array<Array<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
+    public class func leveneTest(array: Array<Array<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         var _N = 0.0
         var _s1 = 0.0
         var _s2 = 0.0
@@ -1145,16 +1169,16 @@ public class SSHypothesisTesting {
         var _ntemp: Double
         var _k: Double
         var _data: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
-        if data.count < 2 {
-            os_log("number of samples is exptected to be > 1", log: log_stat, type: .error)
+        if array.count < 2 {
+            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        for array in data {
+        for a in array {
             if array.count >= 2 {
-                _data.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+                _data.append(SSExamine<Double>.init(withArray: a, characterSet: nil))
             }
             else {
-                os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -1265,17 +1289,17 @@ public class SSHypothesisTesting {
     /// - Parameter s0: nominal variance
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.sampleSize < 2 || s0 <= 0
-    public class func chiSquareVarianceTest(data: Array<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult? {
-        if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+    public class func chiSquareVarianceTest(array: Array<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult? {
+        if array.count < 2 {
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if s0 <= 0 {
-            os_log("nominal variance is exptected to be > 0", log: log_stat, type: .error)
+            os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try chiSquareVarianceTest(sample: SSExamine<Double>.init(withArray: data, characterSet: nil), nominalVariance: s0, alpha: alpha)
+            return try chiSquareVarianceTest(sample: SSExamine<Double>.init(withArray: array, characterSet: nil), nominalVariance: s0, alpha: alpha)
         }
         catch {
             throw error
@@ -1289,11 +1313,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if sample.sampleSize < 2 || s0 <= 0
     public class func chiSquareVarianceTest(sample: SSExamine<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult {
         if sample.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if s0 <= 0 {
-            os_log("nominal variance is exptected to be > 0", log: log_stat, type: .error)
+            os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1336,11 +1360,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data1.sampleSize < 2 || data1.sampleSize < 2
     public class func fTestVarianceEquality(data1: Array<Double>!, data2: Array<Double>!, alpha: Double!) throws -> SSFTestResult {
         if data1.count < 2 {
-            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data2.count < 2 {
-            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1358,11 +1382,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample1.sampleSize < 2
     public class func fTestVarianceEquality(sample1: SSExamine<Double>!, sample2: SSExamine<Double>!, alpha: Double!) throws -> SSFTestResult {
         if sample1.sampleSize < 2 {
-            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if sample2.sampleSize < 2 {
-            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let s1: Double
@@ -1475,11 +1499,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SSTwoSampleTTestResult {
         if data1.count < 2 {
-            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data2.count < 2 {
-            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sample1 = SSExamine<Double>.init(withArray: data1, characterSet: nil)
@@ -1499,11 +1523,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SSTwoSampleTTestResult {
         if sample1.sampleSize < 2 {
-            os_log("sample1 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if sample2.sampleSize < 2 {
-            os_log("sample2 size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var cdfLeveneMedian: Double = 0.0
@@ -1641,7 +1665,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
     public class func oneSampleTTest(sample: SSExamine<Double>, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
         if sample.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var testStatisticValue: Double = 0.0
@@ -1692,7 +1716,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
     public class func oneSampleTTEst(data: Array<Double>!, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
         if data.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, characterSet: nil)
@@ -1711,7 +1735,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
     public class func matchedPairsTTest(set1: SSExamine<Double>!, set2: SSExamine<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
         if set1.sampleSize < 2 || set2.sampleSize < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
@@ -1779,7 +1803,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data1.count < 2 || data2.count < 2 || data1.count != data2.count
     public class func matchedPairsTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
         if data1.count < 2 || data2.count < 2 {
-            os_log("sample size is exptected to be >= 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data1.count != data2.count {
@@ -1803,7 +1827,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func oneWayANOVA(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is exptected to be > 2", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1820,7 +1844,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func oneWayANOVA(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is exptected to be > 2", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1837,7 +1861,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is exptected to be > 2", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var examines: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
@@ -1858,7 +1882,7 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is exptected to be > 2", log: log_stat, type: .error)
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var overallMean: Double
@@ -1927,7 +1951,7 @@ public class SSHypothesisTesting {
     fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
         // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
         if m <= 0 || n <= 0 {
-            os_log("m and n is exptected to be > 0", log: log_stat, type: .error)
+            os_log("m and n is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if U > (Double(m) * Double(n)) {
@@ -1949,7 +1973,7 @@ public class SSHypothesisTesting {
         let zero = 0.0
         minmn = minimum(t1: m, t2: n)
         if minmn < 1 {
-            os_log("m and n is exptected to be > 0", log: log_stat, type: .error)
+            os_log("m and n is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         mn1 = m * n + 1
@@ -2131,11 +2155,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -2154,11 +2178,11 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var ranks:Array<Double> = Array<Double>()
@@ -2257,15 +2281,15 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func wilcoxonMatchedPairs(set1: Array<Double>!, set2: Array<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -2283,15 +2307,15 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func wilcoxonMatchedPairs(set1: SSExamine<Double>!, set2: SSExamine<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var i: Int
@@ -2411,15 +2435,15 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func signTest(set1: Array<Double>, set2: Array<Double>) throws -> SSSignTestRestult {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -2436,15 +2460,15 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func signTest(set1: SSExamine<Double>, set2: SSExamine<Double>) throws -> SSSignTestRestult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            os_log("sample size of set 1 is exptected to be equal to sample size of set2", log: log_stat, type: .error)
+            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let a1 = set1.elementsAsArray(sortOrder: .original)!
@@ -2496,80 +2520,148 @@ public class SSHypothesisTesting {
     /// Performs the binomial test
     /// ### Note ###
     /// - H<sub>0</sub>: The probability of success is equal to p0
-    /// - H<sub>a1</sub>: if p0 == 0.5, the probability of success is not equal to p0 (two sided)
-    /// - H<sub>a2</sub>: if p0 < 0.5, the probability of success is less than p0 (one sided)
-    /// - H<sub>a</sub>: if p0 > 0.5, the probability of success is greater than p0 (one sided)
-    /// - Paramater data: Dichotomous data
+    /// - H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)
+    /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
+    /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
+    ///
+    /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
-    public class func binomialTest(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: Double!, alpha: Double!, alternative: SSBinomialTestType) -> Double {
+    public class func binomialTest(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: Double!, alpha: Double!, alternative: SSAlternativeHypotheses) -> Double {
+        if p0.isNaN {
+            return Double.nan
+        }
         var pV: Double = 0.0
         var pV1: Double = 0.0
-        var pA1: Double = 0.0
-        var z1: Double = 0.0
         let q = 1.0 - p0
         var i: Int
-        if trials < 100000 {
-            switch alternative {
-            case .less:
+        switch alternative {
+        case .less:
+            pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
+        case .greater:
+            pV = SSProbabilityDistributions.cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
+        case .twoSided:
+            // algorithm adapted fropm R function binom.test
+            var c1: Int = 0
+            let d = SSProbabilityDistributions.pdfBinomialDistribution(k: success, n: trials, probability: p0)
+            let m = Double(trials) * p0
+            if success == Int(ceil(m)) {
+                pV = 1.0
+            }
+            else if success < Int(ceil(m)) {
+                i = Int(ceil(m))
+                for j in i...trials {
+                    if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                        c1 = j - 1
+                        break
+                    }
+                }
                 pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
-            case .greater:
-                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
-            case .twoSided:
-                // algorithm adapted fropm R function binom.test
-                var c1: Int = 0
-                let d = SSProbabilityDistributions.pdfBinomialDistribution(k: success, n: trials, probability: p0)
-                let m = Double(trials) * p0
-                if success == Int(ceil(m)) {
-                    pV = 1.0
-                }
-                else if success < Int(ceil(m)) {
-                    i = Int(ceil(m))
-                    for j in i...trials {
-                        if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
-                            c1 = j - 1
-                            break
-                        }
+                pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
+                pV = pV + pV1
+            }
+            else {
+                i = 0
+                for j in 0...Int(floor(m)) {
+                    if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                        c1 = j + 1
                     }
-                    pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
-                    pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
-                    pV = pV + pV1
                 }
-                else {
-                    i = 0
-                    for j in 0...Int(floor(m)) {
-                        if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
-                            c1 = j + 1
-                        }
-                    }
-                    pV = SSProbabilityDistributions.cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
-                    pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
-                    pV = pV + pV1
-                }
+                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
+                pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
+                pV = pV + pV1
             }
         }
-        else {
-            z1 = (fabs(Double(success) / Double(trials) - p0) - 1.0 / (2.0 * Double(trials))) / sqrt(p0 * (1.0 - p0) / Double(trials))
-            pA1 = SSProbabilityDistributions.cdfStandardNormalDist(u: z1)
-        }
         return pV
+    }
+
+    
+    fileprivate class func lowerBoundCIBinomial(success: Double!, trials: Double!, alpha: Double) throws -> Double {
+        var res: Double
+        if success == 0 {
+            res = 0.0
+        }
+        else {
+            do {
+                res = try SSProbabilityDistributions.quantileBetaDist(p: alpha, shapeA: success, shapeB: trials - success + 1)
+            }
+            catch {
+                throw error
+            }
+        }
+        return res
+    }
+
+    fileprivate class func upperBoundCIBinomial(success: Double!, trials: Double!, alpha: Double) throws -> Double {
+        var res: Double
+        if success == trials {
+            res = 1.0
+        }
+        else {
+            do {
+                res = try SSProbabilityDistributions.quantileBetaDist(p: 1.0 - alpha, shapeA: success + 1, shapeB: trials - success)
+            }
+            catch {
+                throw error
+            }
+        }
+        return res
     }
 
     
     /// Performs the binomial test
     /// ### Note ###
     /// - H<sub>0</sub>: The probability of success is equal to p0
-    /// - H<sub>a1</sub>: if p0 == 0.5, the probability of success is not equal to p0 (two sided)
-    /// - H<sub>a2</sub>: if p0 < 0.5, the probability of success is less than p0 (one sided)
-    /// - H<sub>a</sub>: if p0 > 0.5, the probability of success is greater than p0 (one sided)
-    /// - Paramater data: Dichotomous data
+    /// - H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)
+    /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
+    /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
+    /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
-    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T, alpha: Double!, alternative: SSBinomialTestType) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    public class func binomialTest<T>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+        if p0.isNaN {
+            os_log("p0 is NaN", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if data.count <= 2 {
+            os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let examine = SSExamine<T>.init(withArray: data, characterSet: characterSet)
+        if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
+            os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try SSHypothesisTesting.binomialTest(data: examine, testProbability: p0, successCodedAs: successID, alpha: alpha, alternative: alternative)
+        }
+        catch {
+            throw error
+        }
+    }
+    
+    
+    
+    /// Performs the binomial test
+    /// ### Note ###
+    /// - H<sub>0</sub>: The probability of success is equal to p0
+    /// - H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)
+    /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
+    /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
+    /// - Parameter data: Dichotomous data
+    /// - Parameter p0: Probability
+    /// - Parameter alpha: alpha
+    /// - Parameter alternative: .less, .greater or .twoSided
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+        if p0.isNaN {
+            os_log("p0 is NaN", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
         if data.sampleSize <= 2 {
-            os_log("sample size is exptected to be > 2", log: log_stat, type: .error)
+            os_log("sample size is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
@@ -2578,35 +2670,44 @@ public class SSHypothesisTesting {
         }
         let success: Double = Double(data.frequency(item: successID))
         let failure: Double = Double(data.sampleSize) - success
-//        let m = min(success, failure)
         let n = success + failure
-//        var sum: Double = 0.0
-//        var p: Double
-//        var pV: Double
-//        var q: Double
-        var pA1: Double
-        var pA2: Double
-        var z1: Double
-        var z2: Double
-        var pasymp: Double
-//        var i: Int
-        z1 = (success + 0.5 - (success + failure) * p0) / sqrt((success + failure) * p0 * (1.0 - p0))
-        z2 = (success - 0.5 - (success + failure) * p0) / sqrt((success + failure) * p0 * (1.0 - p0))
-        pA1 = SSProbabilityDistributions.cdfStandardNormalDist(u: z1)
-        pA2 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: z2)
-        if p0 > 0.5 {
-            pasymp = pA2
-        }
-        else {
-            pasymp = pA1
-            pasymp = 2.0 * pasymp
+        var cint = SSConfIntv()
+        switch alternative {
+        case .less:
+            do {
+                cint.lowerBound = 0.0
+                cint.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha)
+                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+            }
+            catch {
+                throw error
+            }
+        case .greater:
+            do {
+                cint.upperBound = 1.0
+                cint.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
+                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+            }
+            catch {
+                throw error
+            }
+        case .twoSided:
+            do {
+                cint.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
+                cint.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
+                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+            }
+            catch {
+                throw error
+            }
+            
         }
         var result = SSBinomialTestResult<T>()
+        result.confInt = cint
         result.nTrials = Int(n)
         result.nSuccess = Int(success)
         result.nFailure = Int(failure)
-        result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: Int(success), numberOfTrials: Int(n), probability: p0, alpha: alpha, alternative: alternative)
-        result.pValueApprox = pasymp
+        result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: Int(success), numberOfTrials: Int(n), probability: p0,alpha: alpha,  alternative: alternative)
         result.probFailure = failure / n
         result.probSuccess = success / n
         result.probTest = p0
@@ -2615,7 +2716,114 @@ public class SSHypothesisTesting {
     }
     
     
+    ///  Performs a two sample Kolmogorov-Smirnov test.
+    /// ### Note ###
+    /// H<sub>0</sub>: The two samples are from populations with same distribution function (F<sub>1</sub>(x) = F<sub>2</sub>(x))
+    ///
+    /// H<sub>a1</sub>:(F<sub>1</sub>(x) > F<sub>2</sub>(x))
+    ///
+    /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
+    /// - Parameter set1: A Array object containg data for set 1
+    /// - Parameter set2: A Array object containg data for set 2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: Array<T>, set2: Array<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable {
+        if set1.count <= 2 {
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.count <= 2 {
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            return try SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: SSExamine<T>.init(withArray: set1, characterSet: nil), set2: SSExamine<T>.init(withArray: set2, characterSet: nil), alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
     
+    
+    ///  Performs a two sample Kolmogorov-Smirnov test.
+    /// ### Note ###
+    /// H<sub>0</sub>: The two samples are from populations with same distribution function (F<sub>1</sub>(x) = F<sub>2</sub>(x))
+    ///
+    /// H<sub>a1</sub>:(F<sub>1</sub>(x) > F<sub>2</sub>(x))
+    ///
+    /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
+    /// - Parameter set1: A SSExamine object containg data for set 1
+    /// - Parameter set2: A SSExamine object containg data for set 2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: SSExamine<T>, set2: SSExamine<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable {
+        if set1.sampleSize <= 2 {
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.sampleSize <= 2 {
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var a1 = set1.elementsAsArray(sortOrder: .ascending)!
+        a1.append(contentsOf: set2.elementsAsArray(sortOrder: .ascending)!)
+        let n1 = Double(set1.sampleSize)
+        let n2 = Double(set2.sampleSize)
+        var dcdf: Double
+        var maxNeg: Double = 0.0
+        var maxPos: Double = 0.0
+        if n1 > n2 {
+            for element in a1 {
+                dcdf = set1.empiricalCDF(of: element) - set2.empiricalCDF(of: element)
+                if dcdf < 0.0 {
+                    maxNeg = dcdf < maxNeg ? dcdf : maxNeg
+                }
+                else {
+                    maxPos = dcdf > maxPos ? dcdf : maxPos
+                }
+            }
+        }
+        else {
+            for element in a1 {
+                dcdf = set2.empiricalCDF(of: element) - set1.empiricalCDF(of: element)
+                if dcdf < 0.0 {
+                    maxNeg = dcdf < maxNeg ? dcdf : maxNeg
+                }
+                else {
+                    maxPos = dcdf > maxPos ? dcdf : maxPos
+                }
+            }
+        }
+        let maxD: Double
+        maxD = fabs(maxNeg) > fabs(maxPos) ? fabs(maxNeg) : fabs(maxPos)
+        var z: Double = 0.0
+        var p: Double = 0.0
+        var q: Double = 0.0
+        if !maxD.isNaN {
+            z = maxD * sqrt(n1 * n2 / (n1 + n2))
+            if ((z >= 0) && (z < 0.27)) {
+                p = 1.0
+            }
+            else if ((z >= 0.27) && (z < 1.0)) {
+                q = exp(-1.233701 * pow(z, -2.0))
+                p = 1.0 - ((2.506628 * (q + pow(q, 9.0) + pow(q, 25.0))) / z)
+            }
+            else if ((z >= 1.0) && (z < 3.1)) {
+                q = exp(-2.0 * pow(z, 2.0))
+                p = 2.0 * (q - pow(q, 4.0) + pow(q, 9.0) - pow(q, 16.0))
+            }
+            else if (z >= 3.1) {
+                p = 0.0
+            }
+        }
+        var result = SSKSTwoSampleTestResult()
+        result.dMaxAbs = maxD
+        result.dMaxNeg = maxNeg
+        result.dMaxPos = maxPos
+        result.zStatistic = z
+        result.p2Value = p
+        result.sampleSize1 = set1.sampleSize
+        result.sampleSize2 = set2.sampleSize
+        return result
+    }
     
     
     

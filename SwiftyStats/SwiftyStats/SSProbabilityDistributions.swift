@@ -2279,7 +2279,12 @@ public class SSProbabilityDistributions {
     
     // MARK: binomial
     
-    public class func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tail: SSBinomialTail) -> Double {
+    /// Returns the cdf of the Binomial Distribution
+    /// - Parameter k: number of successes
+    /// - Parameter n: number of trials
+    /// - Parameter p0: probability fpr success
+    /// - Parameter tail: .lower, .upper
+    public class func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tail: SSCDFTail) -> Double {
         var i = 0
         var lowerSum: Double = 0.0
         var upperSum: Double = 0.0
@@ -2297,6 +2302,10 @@ public class SSProbabilityDistributions {
     }
 
     
+    /// Returns the pdf of the Binomial Distribution
+    /// - Parameter k: number of successes
+    /// - Parameter n: number of trials
+    /// - Parameter p0: probability fpr success
     public class func pdfBinomialDistribution(k: Int, n: Int, probability p0: Double!) -> Double {
         var result: Double
         result = binomial2(n: Double(n), k: Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))

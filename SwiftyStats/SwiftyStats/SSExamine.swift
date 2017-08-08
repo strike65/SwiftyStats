@@ -72,7 +72,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, Double> {
-        updateCumulativeFrequencies()
+//        updateCumulativeFrequencies()
         return cumRelFrequencies
     }
     
@@ -1944,7 +1944,7 @@ extension SSExamine {
         }
         else {
             do {
-                if let r = try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: .gaussian) {
+                if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: .gaussian) {
                     return r.pValue! > self.alpha
                 }
                 else {
@@ -1965,7 +1965,7 @@ extension SSExamine {
         }
         else {
             do {
-                return try SSHypothesisTesting.ksGoFTest(data: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: target)
+                return try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: target)
             }
             catch {
                 throw error
