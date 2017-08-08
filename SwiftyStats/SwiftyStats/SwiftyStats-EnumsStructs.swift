@@ -744,13 +744,9 @@ public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
     /// number of failures
     public var nFailure: Int?
     /// one sided p value (asympt)
-    public var p1ValueApprox: Double?
+    public var pValueApprox: Double?
     /// one sided p value (exact)
-    public var p1ValueExact: Double?
-    /// two sided p value (asympt)
-    public var p2ValueApprox: Double?
-    /// two sided p value (exat)
-    public var p2ValueExact: Double?
+    public var pValueExact: Double?
     /// probability for success
     public var probSuccess: Double?
     /// probability for failure
