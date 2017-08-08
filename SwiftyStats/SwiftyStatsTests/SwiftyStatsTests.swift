@@ -204,8 +204,16 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, -1.4489, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.1474, accuracy: 1E-4)
         
-        
-        
+        let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
+        let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
+//        let M1 = [35,44,39,50,48,29,60,75,49,66]
+//        let M2 = [17, 23, 13,24,33,21, 18, 16, 32]
+        let set1 = SSExamine.init(withArray: M1, characterSet: nil)
+        let set2 = SSExamine.init(withArray: M2, characterSet: nil)
+        try! SSHypothesisTesting.runsTest(data: set1, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
+        try! SSHypothesisTesting.waldWolfowitzTwoSampleTest(set1: set1, set2: set2)
+//        35,44,39,50,48,29,60,75,49,66
+        // 17, 23, 13,24,33,21, 18, 16, 32
     }
     
     func testTTest()  {

@@ -2289,7 +2289,7 @@ public class SSProbabilityDistributions {
         var lowerSum: Double = 0.0
         var upperSum: Double = 0.0
         while i <= k {
-            lowerSum += binomial2(n: Double(n), k: Double(i)) * pow(p0, Double(i)) * pow(1.0 - p0, Double(n - i))
+            lowerSum += binomial2(Double(n), Double(i)) * pow(p0, Double(i)) * pow(1.0 - p0, Double(n - i))
             i += 1
         }
         upperSum = 1.0 - lowerSum
@@ -2308,7 +2308,7 @@ public class SSProbabilityDistributions {
     /// - Parameter p0: probability fpr success
     public class func pdfBinomialDistribution(k: Int, n: Int, probability p0: Double!) -> Double {
         var result: Double
-        result = binomial2(n: Double(n), k: Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))
+        result = binomial2(Double(n), Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))
         return result
     }
 }

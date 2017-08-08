@@ -29,7 +29,7 @@ import Foundation
 
 
 /// Binomial
-public func binomial2(n: Double!, k: Double!) -> Double {
+public func binomial2(_ n: Double!, _ k: Double!) -> Double {
     if k == 0.0 {
         return 1.0
     }

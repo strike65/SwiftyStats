@@ -523,17 +523,17 @@ public class SSHypothesisTesting {
         else {
             pAsymp *= 2.0
         }
-        if n1 < 20 && n2 < 20 {
+        if n1 + n2 <= 30 {
             if r % 2 == 0 {
                 var rr = 2
                 var sum = 0.0
                 var q = 0.0
                 while rr <= r {
                     q = Double(rr) / 2.0
-                    sum += binomial2(n: n1 - 1.0, k: q - 1.0) * binomial2(n: n2 - 1.0,k: q - 1)
+                    sum += binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0,q - 1)
                     rr += 1
                 }
-                pExact = 2.0 * sum / binomial2(n: (n1 + n2), k: n1)
+                pExact = 2.0 * sum / binomial2((n1 + n2), n1)
             }
             else {
                 var rr = 2
@@ -541,10 +541,10 @@ public class SSHypothesisTesting {
                 var q = 0.0
                 while rr <= r {
                     q = Double(rr - 1) / 2.0
-                    sum += (binomial2(n: n1 - 1.0, k: q) * binomial2(n: n2 - 1.0, k: q - 1) / 2.0) + binomial2(n: n1 - 1.0, k: q - 1.0) * binomial2(n: n2 - 1.0,k: q)
+                    sum += (binomial2(n1 - 1.0, q) * binomial2(n2 - 1.0, q - 1) / 2.0) + binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0, q)
                     rr += 1
                 }
-                pExact = sum / binomial2(n: (n1 + n2), k: n1)
+                pExact = sum / binomial2((n1 + n2), n1)
             }
         }
         var result = SSRunsTestResult()
@@ -2040,6 +2040,7 @@ public class SSHypothesisTesting {
         return sum
     }
 
+
     /// Ranking
     /// - Parameter set1: set1
     /// - Parameter set2: set2
@@ -2049,12 +2050,14 @@ public class SSHypothesisTesting {
     /// - Parameter inout groups: contains the grpups upon return
     /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
     /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-    fileprivate class func rank2Arrays<T>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable {
+    fileprivate class func rank2Arrays<T>(array1: Array<T>!, array2: Array<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable {
         var hasTies: Bool = false
-        let a = set1.elementsAsArray(sortOrder: .original)!
-        let b = set2.elementsAsArray(sortOrder: .original)!
-        var combined: Array<T> = a
-        combined.append(contentsOf: b)
+        let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, characterSet: nil)
+        let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, characterSet: nil)
+        let a = set1.elementsAsArray(sortOrder: .original)
+        let b = set2.elementsAsArray(sortOrder: .original)
+        var combined: Array<T> = a!
+        combined.append(contentsOf: b!)
         var combined_sorted = combined.sorted(by: {$0 < $1})
         var i: Int = 0
         var k: Int = 1
@@ -2145,6 +2148,120 @@ public class SSHypothesisTesting {
             i += 1
         }
         return hasTies
+
+    }
+    
+    /// Ranking
+    /// - Parameter set1: set1
+    /// - Parameter set2: set2
+    /// - Parameter identifierSet1: identifier for set1
+    /// - Parameter identifierSet2: identifier for set2
+    /// - Parameter inout ranks: contains the ranks upon return
+    /// - Parameter inout groups: contains the grpups upon return
+    /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
+    /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
+    fileprivate class func rank2Arrays<T>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, sortedItems: inout Array<T>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable {
+        var hasTies: Bool = false
+        let a = set1.elementsAsArray(sortOrder: .original)!
+        let b = set2.elementsAsArray(sortOrder: .original)!
+        var combined: Array<T> = a
+        combined.append(contentsOf: b)
+        var combined_sorted = combined.sorted(by: {$0 < $1})
+        var i: Int = 0
+        var k: Int = 1
+        var sum: Double = 1.0
+        while i <= combined_sorted.count - 1 {
+            // determine frequencies in set1 and set2
+            let freq1 = set1.frequency(item: combined_sorted[i])
+            let freq2 = set2.frequency(item: combined_sorted[i])
+            if set1.contains(item: combined_sorted[i]) && set2.contains(item: combined_sorted[i]) {
+                hasTies = true
+                let freq: Int = freq1 + freq2
+                ties.append(Double(freq))
+                k = 1
+                sum = 0.0
+                while k <= freq {
+                    sum += Double(i + k)
+                    k += 1
+                }
+                k = 1
+                while k <= freq {
+                    ranks.append(sum / Double(freq))
+                    if k <= set1.frequency(item: combined_sorted[i])  {
+                        groups.append(identifierSet1)
+                        sortedItems.append(combined_sorted[i])
+                    }
+                    else {
+                        groups.append(identifierSet2)
+                        sortedItems.append(combined_sorted[i])
+                    }
+                    k += 1
+                }
+                print(sum)
+                i += freq
+            }
+            else if set1.contains(item: combined_sorted[i]) {
+                if freq1 > 1 {
+                    ties.append(Double(freq1))
+                    k = 1
+                    sum = 0.0
+                    while k <= freq1 {
+                        sum += Double(i + k)
+                        k += 1
+                    }
+                    k = 1
+                    while k <= freq1 {
+                        ranks.append(sum / Double(freq1))
+                        groups.append(identifierSet1)
+                        sortedItems.append(combined_sorted[i])
+                        k += 1
+                    }
+                    i += freq1
+                }
+                else {
+                    ranks.append(Double(i + 1))
+                    groups.append(identifierSet1)
+                    sortedItems.append(combined_sorted[i])
+                    i += 1
+                }
+            }
+            else if set2.contains(item: combined_sorted[i]) {
+                if freq2 > 1 {
+                    ties.append(Double(freq2))
+                    k = 1
+                    sum = 0.0
+                    while k <= freq2 {
+                        sum += Double(i + k)
+                        k += 1
+                    }
+                    k = 1
+                    while k <= freq2 {
+                        ranks.append(sum / Double(freq2))
+                        groups.append(identifierSet2)
+                        sortedItems.append(combined_sorted[i])
+                        k += 1
+                    }
+                    i += freq2
+                }
+                else {
+                    ranks.append(Double(i + 1))
+                    groups.append(identifierSet2)
+                    sortedItems.append(combined_sorted[i])
+                    i += 1
+                }
+            }
+        }
+        i = 0
+        while i < ranks.count {
+            if groups[i] == identifierSet1 {
+                sumRanksSet1 = sumRanksSet1 + ranks[i]
+            }
+            else {
+                sumRanksSet2 = sumRanksSet2 + ranks[i]
+            }
+            i += 1
+        }
+        return hasTies
     }
     
     /// Perform the Mann-Whitney U test for independent samples.
@@ -2188,11 +2305,11 @@ public class SSHypothesisTesting {
         var ranks:Array<Double> = Array<Double>()
         var groups:Array<String> = Array<String>()
         var ties: Array<Double> = Array<Double>()
-
+        var sortedData: Array<T> = Array<T>()
         var sumRanksSet1: Double = 0.0
         var sumRanksSet2: Double = 0.0
         var hasTies: Bool
-        hasTies = rank2Arrays(set1: set1, set2: set2, identifierSet1: "A", identifierSet2: "B", ranks: &ranks, groups: &groups, ties: &ties, sumRanksSet1: &sumRanksSet1, sumRanksSet2: &sumRanksSet2)
+        hasTies = rank2Arrays(set1: set1, set2: set2, identifierSet1: "A", identifierSet2: "B", ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanksSet1, sumRanksSet2: &sumRanksSet2)
         let U1 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set1.sampleSize) * (Double(set1.sampleSize) + 1)) / 2.0 - sumRanksSet1
         let U2 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set2.sampleSize) * (Double(set2.sampleSize) + 1)) / 2.0 - sumRanksSet2
         let nm = Double(set1.sampleSize) * Double(set2.sampleSize)
@@ -2499,7 +2616,7 @@ public class SSHypothesisTesting {
         if nnpnp <= 1000 {
             i = 0
             while i <= r {
-                pexact += binomial2(n: Double(nnpnp), k: Double(i)) * pow(0.5, Double(nnpnp))
+                pexact += binomial2(Double(nnpnp), Double(i)) * pow(0.5, Double(nnpnp))
                 i += 1
             }
         }
@@ -2825,7 +2942,109 @@ public class SSHypothesisTesting {
         return result
     }
     
-    
+    public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult where T: Comparable, T: Hashable {
+        if set1.sampleSize <= 2 {
+            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if set2.sampleSize <= 2 {
+            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var groups = Array<String>()
+        var ranks = Array<Double>()
+        var ties = Array<Double>()
+//        var sortedGroups: Array<String> = Array<String>()
+        var sortedData: Array<T> = Array<T>()
+        var sumRanks1: Double = 0.0
+        var sumRanks2: Double = 0.0
+        let _ = rank2Arrays(set1: set1, set2: set2, identifierSet1: "1", identifierSet2: "2", ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanks1, sumRanksSet2: &sumRanks2)
+        var temp = groups[0]
+        var changes: Int = 0
+        var i: Int = 1
+        while i < groups.count {
+            if temp != groups[i] {
+                changes += 1
+                temp = groups[i]
+            }
+            i += 1
+        }
+        var tempObject: T = sortedData[0]
+        var nties: Int = 0
+        var ntiedcases: Int = 0
+        var ntiesintergroup: Int = 0
+        var f1: Int
+        var f2: Int
+        f1 = set1.frequency(item: tempObject)
+        f2 = set2.frequency(item: tempObject)
+        if f1 > 0 && f2 > 0 {
+            ntiedcases += f1 + f2
+            ntiesintergroup += 1
+        }
+        i = 1
+        while i < sortedData.count {
+            if tempObject == sortedData[i] {
+                nties += 1
+            }
+            else {
+                f1 = set1.frequency(item: sortedData[i])
+                f2 = set2.frequency(item: sortedData[i])
+                if f1 > 0 && f2 > 0 {
+                    ntiedcases += 1
+                    ntiesintergroup += 1
+                }
+                tempObject = sortedData[i]
+            }
+            i += 1
+        }
+        changes += 1
+        let n1 = Double(set1.sampleSize)
+        let n2 = Double(set2.sampleSize)
+        var dtemp = n1 + n2
+        var pAsymp = Double.nan
+        var pExact = Double.nan
+        let sigma = (2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0)))
+        let mean = (2.0 * n1 * n2) / dtemp + 1.0
+        var z = 0.0
+        var sum = 0.0
+        dtemp = Double(changes) - mean
+        z = dtemp / sigma
+        pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        if n1 + n2 < 100 {
+            if !isOdd(Double(changes)) {
+                var r = 2
+                var R: Double
+                while r <= changes {
+                    R = Double(r)
+                    sum += binomial2(n1 - 1.0, (R / 2.0) - 1.0) * binomial2(n2 - 1.0,(R / 2.0) - 1.0);
+                    r += 1
+                }
+                pExact = 2.0 * sum / binomial2(n1 + n2, n1)
+            }
+            else {
+                var r = 2
+                var R: Double
+                while r <= changes {
+                    R = Double(r)
+                    sum += (binomial2(n1 - 1.0,(R - 1.0) / 2.0) * binomial2(n2 - 1.0, (R - 3.0) / 2.0) + binomial2(n1 - 1.0, (R - 3.0) / 2.0) * binomial2(n2 - 1.0,(R - 1.0) / 2.0))
+                    r += 1
+                }
+                pExact = sum / binomial2(n1 + n2, n1)
+            }
+        }
+        var result = SSWaldWolfowitzTwoSampleTestResult()
+        result.ZStatistic = z
+        result.pValueExact = pExact
+        result.pValueAsymp = pAsymp
+        result.mean = mean
+        result.variance = sigma
+        result.nRuns = changes
+        result.nTiesIntergroup = ntiesintergroup
+        result.nTiedCases = ntiedcases
+        result.sampleSize1 = set1.sampleSize
+        result.sampleSize2 = set2.sampleSize
+        return result
+    }
     
     
     
