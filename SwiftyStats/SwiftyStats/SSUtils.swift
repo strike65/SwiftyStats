@@ -167,3 +167,29 @@ extension Double {
         }
     }
 }
+
+/// Returns a SSExamine object of length one and count "count"
+/// - Parameter value: Value
+/// - Parameter count: Number of values
+func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Comparable, T: Hashable {
+    let array = Array<T>.init(repeating: value, count: count)
+    let res = SSExamine<T>.init(withArray: array, characterSet: nil)
+    return res
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
