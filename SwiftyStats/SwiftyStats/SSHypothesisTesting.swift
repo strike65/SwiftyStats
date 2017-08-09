@@ -464,7 +464,7 @@ public class SSHypothesisTesting {
         var n1: Double = 0.0
         var r: Int = 1
         var cp: Double = 0.0
-        var isPrevPos = false
+//        var isPrevPos: Bool
         switch useCP {
         case .mean:
             cp = data.arithmeticMean!
@@ -483,27 +483,25 @@ public class SSHypothesisTesting {
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
+        var RR = 1
+        var s = (elements.first! - cp).sign
+        var i = 0
         for element in elements {
             dtemp = element - cp
             diff.append(dtemp)
-//            if isPrevPos && (dtemp < 0.0) {
-//                r += 1
-//            }
-//            if !isPrevPos && (dtemp > 0.0) {
-//                r += 1
-//            }
+            if dtemp.sign != s {
+                s = dtemp.sign
+                RR += 1
+            }
+            i += 1
             if dtemp >= 0.0 {
-                isPrevPos = true
                 n2 += 1.0
             }
             else {
-                isPrevPos = false
                 n1 += 1.0
             }
         }
-        var RR = 1
-        var s = diff[0].sign
-        var i = 0
+        /* keep this for historical reasons ;-)
         for d in diff {
             if d.sign != s {
                 s = d.sign
@@ -511,10 +509,8 @@ public class SSHypothesisTesting {
             }
             i += 1
         }
+        */
         r = RR
-        if RR != r {
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
         dtemp = n1 + n2
         let sigma = sqrt((2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0))))
         let mean = (2.0 * n2 * n1) / dtemp + 1.0
@@ -2076,7 +2072,7 @@ public class SSHypothesisTesting {
     /// - Parameter inout groups: contains the grpups upon return
     /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
     /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-    fileprivate class func rank2Arrays<T>(array1: Array<T>!, array2: Array<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable {
+    fileprivate class func rank2Arrays<T, U>(array1: Array<T>!, array2: Array<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable{
         var hasTies: Bool = false
         let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, characterSet: nil)
         let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, characterSet: nil)
@@ -2814,7 +2810,7 @@ public class SSHypothesisTesting {
         let success: Double = Double(data.frequency(item: successID))
         let failure: Double = Double(data.sampleSize) - success
         let n = success + failure
-        var probSuccess = success / n
+        let probSuccess = success / n
         var cintJeffreys = SSConfIntv()
         var cintClopperPearson = SSConfIntv()
         var fQ: Double

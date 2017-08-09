@@ -788,30 +788,30 @@ public struct SSKSTwoSampleTestResult {
 
 }
 
-
+/// Holds the results of the two sample runs test
 public struct SSWaldWolfowitzTwoSampleTestResult {
     /// Number of runs
     public var nRuns: Int?
     /// z value
     public var ZStatistic: Double?
-    /// critical value
-    public var criticalValue: Double?
+// critical value
+//    public var criticalValue: Double?
     /// p value
     public var pValueExact: Double?
     /// p value asymptotic
     public var pValueAsymp: Double?
     /// mean
-    var mean: Double?
+    public var mean: Double?
     /// variance
-    var variance: Double?
+    public var variance: Double?
     /// number of intergroup ties
-    var nTiesIntergroup: Int?
+    public var nTiesIntergroup: Int?
     /// number of inner group ties
-    var nTiedCases: Int?
+    public var nTiedCases: Int?
     /// size of sample 1
-    var sampleSize1: Int?
+    public var sampleSize1: Int?
     /// size of sample 2
-    var sampleSize2: Int?
+    public var sampleSize2: Int?
 }
 
 
