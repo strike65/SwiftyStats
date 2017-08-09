@@ -418,13 +418,13 @@ public class SSHypothesisTesting {
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func runsTest(array: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
+    public class func runsTest(array: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
         if array.count < 2 {
             os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint)
+            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint, alternative: alternative)
         }
         catch {
             throw error
@@ -452,7 +452,7 @@ public class SSHypothesisTesting {
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?) throws -> SSRunsTestResult {
+    public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
         if data.sampleSize < 2 {
             os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -486,12 +486,12 @@ public class SSHypothesisTesting {
         for element in elements {
             dtemp = element - cp
             diff.append(dtemp)
-            if isPrevPos && (dtemp < 0.0) {
-                r += 1
-            }
-            if !isPrevPos && (dtemp >= 0.0) {
-                r += 1
-            }
+//            if isPrevPos && (dtemp < 0.0) {
+//                r += 1
+//            }
+//            if !isPrevPos && (dtemp > 0.0) {
+//                r += 1
+//            }
             if dtemp >= 0.0 {
                 isPrevPos = true
                 n2 += 1.0
@@ -501,12 +501,26 @@ public class SSHypothesisTesting {
                 n1 += 1.0
             }
         }
+        var RR = 1
+        var s = diff[0].sign
+        var i = 0
+        for d in diff {
+            if d.sign != s {
+                s = d.sign
+                RR += 1
+            }
+            i += 1
+        }
+        r = RR
+        if RR != r {
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
         dtemp = n1 + n2
         let sigma = sqrt((2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0))))
         let mean = (2.0 * n2 * n1) / dtemp + 1.0
         var z: Double = 0.0
         dtemp = Double(r) - mean
-        var pExact: Double = Double.nan
+        let pExact: Double = Double.nan
         var pAsymp: Double = 0.0
         var cv: Double
         do {
@@ -515,38 +529,50 @@ public class SSHypothesisTesting {
         catch {
             throw error
         }
-        z = dtemp / sigma
-        pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
-        if pAsymp > 0.5 {
-            pAsymp = (1.0 - pAsymp) * 2.0
+//        if n1 + n2 >= 60 {
+            z = dtemp / sigma
+//        }
+//        else {
+//            z = (dtemp - 0.5) / sigma
+//        }
+        switch alternative {
+        case .twoSided:
+            pAsymp = 2.0 * SSProbabilityDistributions.cdfStandardNormalDist(u: -fabs(z))
+        case .less:
+            pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        case .greater:
+            pAsymp = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: z)
         }
-        else {
-            pAsymp *= 2.0
-        }
-        if n1 + n2 <= 30 {
-            if r % 2 == 0 {
-                var rr = 2
-                var sum = 0.0
-                var q = 0.0
-                while rr <= r {
-                    q = Double(rr) / 2.0
-                    sum += binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0,q - 1)
-                    rr += 1
-                }
-                pExact = 2.0 * sum / binomial2((n1 + n2), n1)
-            }
-            else {
-                var rr = 2
-                var sum = 0.0
-                var q = 0.0
-                while rr <= r {
-                    q = Double(rr - 1) / 2.0
-                    sum += (binomial2(n1 - 1.0, q) * binomial2(n2 - 1.0, q - 1) / 2.0) + binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0, q)
-                    rr += 1
-                }
-                pExact = sum / binomial2((n1 + n2), n1)
-            }
-        }
+//        if pAsymp > 0.5 {
+//            pAsymp = (1.0 - pAsymp) * 2.0
+//        }
+//        else {
+//            pAsymp *= 2.0
+//        }
+//        if n1 + n2 <= 30 {
+//            if r % 2 == 0 {
+//                var rr = 2
+//                var sum = 0.0
+//                var q = 0.0
+//                while rr <= r {
+//                    q = Double(rr) / 2.0
+//                    sum += binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0,q - 1)
+//                    rr += 1
+//                }
+//                pExact = 2.0 * sum / binomial2((n1 + n2), n1)
+//            }
+//            else {
+//                var rr = 2
+//                var sum = 0.0
+//                var q = 0.0
+//                while rr <= r {
+//                    q = Double(rr - 1) / 2.0
+//                    sum += (binomial2(n1 - 1.0, q) * binomial2(n2 - 1.0, q - 1) / 2.0) + binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0, q)
+//                    rr += 1
+//                }
+//                pExact = sum / binomial2((n1 + n2), n1)
+//            }
+//        }
         var result = SSRunsTestResult()
         result.nGTEcp = n2
         result.nLTcp = n1
@@ -2087,7 +2113,6 @@ public class SSHypothesisTesting {
                     }
                     k += 1
                 }
-                print(sum)
                 i += freq
             }
             else if set1.contains(item: combined_sorted[i]) {
@@ -2160,7 +2185,7 @@ public class SSHypothesisTesting {
     /// - Parameter inout groups: contains the grpups upon return
     /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
     /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-    fileprivate class func rank2Arrays<T>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: String!, identifierSet2: String!, ranks: inout Array<Double>, groups: inout Array<String>, sortedItems: inout Array<T>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable {
+    fileprivate class func rank2Arrays<T, U>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, sortedItems: inout Array<T>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable {
         var hasTies: Bool = false
         let a = set1.elementsAsArray(sortOrder: .original)!
         let b = set2.elementsAsArray(sortOrder: .original)!
@@ -2197,7 +2222,6 @@ public class SSHypothesisTesting {
                     }
                     k += 1
                 }
-                print(sum)
                 i += freq
             }
             else if set1.contains(item: combined_sorted[i]) {
@@ -2701,6 +2725,7 @@ public class SSHypothesisTesting {
         else {
             do {
                 res = try SSProbabilityDistributions.quantileBetaDist(p: alpha, shapeA: success, shapeB: trials - success + 1)
+//                res = try SSProbabilityDistributions.quantileBetaDist(p: alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -2717,6 +2742,7 @@ public class SSHypothesisTesting {
         else {
             do {
                 res = try SSProbabilityDistributions.quantileBetaDist(p: 1.0 - alpha, shapeA: success + 1, shapeB: trials - success)
+//                res = try SSProbabilityDistributions.quantileBetaDist(p: 1.0 - alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -2788,45 +2814,61 @@ public class SSHypothesisTesting {
         let success: Double = Double(data.frequency(item: successID))
         let failure: Double = Double(data.sampleSize) - success
         let n = success + failure
-        var cint = SSConfIntv()
+        var probSuccess = success / n
+        var cintJeffreys = SSConfIntv()
+        var cintClopperPearson = SSConfIntv()
+        var fQ: Double
         switch alternative {
         case .less:
             do {
-                cint.lowerBound = 0.0
-                cint.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha)
-                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+                cintJeffreys.lowerBound = 0.0
+                cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha)
+                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                cintClopperPearson.lowerBound = 0.0
+                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
+                cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
+                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
         case .greater:
             do {
-                cint.upperBound = 1.0
-                cint.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
-                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+                cintJeffreys.upperBound = 1.0
+                cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
+                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
+                cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
+                cintClopperPearson.upperBound = 1.0
+                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
         case .twoSided:
             do {
-                cint.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
-                cint.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
-                cint.intervalWidth = fabs(cint.upperBound! - cint.lowerBound!)
+                cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
+                cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
+                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
+                cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
+                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
+                cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
+                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
-            
         }
         var result = SSBinomialTestResult<T>()
-        result.confInt = cint
+        result.confIntJeffreys = cintJeffreys
+        result.confIntClopperPearson = cintClopperPearson
         result.nTrials = Int(n)
         result.nSuccess = Int(success)
         result.nFailure = Int(failure)
         result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: Int(success), numberOfTrials: Int(n), probability: p0,alpha: alpha,  alternative: alternative)
         result.probFailure = failure / n
-        result.probSuccess = success / n
+        result.probSuccess = probSuccess
         result.probTest = p0
         result.successCode = successID
         return result
@@ -2942,6 +2984,11 @@ public class SSHypothesisTesting {
         return result
     }
     
+    
+    /// Performs the two-sided Wald Wolfowitz test for two samples
+    /// - Parameter set1: Observations in group 1
+    /// - Parameter set2: Observations in group 2
+    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult where T: Comparable, T: Hashable {
         if set1.sampleSize <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
@@ -2951,20 +2998,20 @@ public class SSHypothesisTesting {
             os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var groups = Array<String>()
+        var groups = Array<Double>()
         var ranks = Array<Double>()
         var ties = Array<Double>()
 //        var sortedGroups: Array<String> = Array<String>()
         var sortedData: Array<T> = Array<T>()
         var sumRanks1: Double = 0.0
         var sumRanks2: Double = 0.0
-        let _ = rank2Arrays(set1: set1, set2: set2, identifierSet1: "1", identifierSet2: "2", ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanks1, sumRanksSet2: &sumRanks2)
+        let _ = rank2Arrays(set1: set1, set2: set2, identifierSet1: 0.0, identifierSet2: 1.0, ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanks1, sumRanksSet2: &sumRanks2)
         var temp = groups[0]
-        var changes: Int = 0
+        var R: Int = 0
         var i: Int = 1
         while i < groups.count {
             if temp != groups[i] {
-                changes += 1
+                R += 1
                 temp = groups[i]
             }
             i += 1
@@ -2997,36 +3044,44 @@ public class SSHypothesisTesting {
             }
             i += 1
         }
-        changes += 1
-        let n1 = Double(set1.sampleSize)
-        let n2 = Double(set2.sampleSize)
+        R += 1
+        var n1: Double = 0.0
+        var n2: Double = 0.0
+        for g in groups {
+            if g == 0.0 {
+                n1 += 1.0
+            }
+            else if g == 1.0 {
+                n2 += 1.0
+            }
+        }
         var dtemp = n1 + n2
         var pAsymp = Double.nan
         var pExact = Double.nan
-        let sigma = (2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0)))
+        let sigma = sqrt(2.0 * n1 * n2 * (2.0 * n1 * n2 - n1 - n2) / ((n1 + n2) * (n1 + n2) * (n1 + n2 - 1.0)))
         let mean = (2.0 * n1 * n2) / dtemp + 1.0
         var z = 0.0
         var sum = 0.0
-        dtemp = Double(changes) - mean
+        dtemp = Double(R) - mean
         z = dtemp / sigma
-        pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
-        if n1 + n2 < 100 {
-            if !isOdd(Double(changes)) {
+        pAsymp = 2.0 * SSProbabilityDistributions.cdfStandardNormalDist(u: -fabs(z))
+        if n1 + n2 <= 30 {
+            if !isOdd(Double(R)) {
                 var r = 2
-                var R: Double
-                while r <= changes {
-                    R = Double(r)
-                    sum += binomial2(n1 - 1.0, (R / 2.0) - 1.0) * binomial2(n2 - 1.0,(R / 2.0) - 1.0);
+                var RR: Double
+                while r <= R {
+                    RR = Double(r)
+                    sum += binomial2(n1 - 1.0, (RR / 2.0) - 1.0) * binomial2(n2 - 1.0,(RR / 2.0) - 1.0);
                     r += 1
                 }
                 pExact = 2.0 * sum / binomial2(n1 + n2, n1)
             }
             else {
                 var r = 2
-                var R: Double
-                while r <= changes {
-                    R = Double(r)
-                    sum += (binomial2(n1 - 1.0,(R - 1.0) / 2.0) * binomial2(n2 - 1.0, (R - 3.0) / 2.0) + binomial2(n1 - 1.0, (R - 3.0) / 2.0) * binomial2(n2 - 1.0,(R - 1.0) / 2.0))
+                var RR: Double
+                while r <= R {
+                    RR = Double(r)
+                    sum += (binomial2(n1 - 1.0,(RR - 1.0) / 2.0) * binomial2(n2 - 1.0, (RR - 3.0) / 2.0) + binomial2(n1 - 1.0, (RR - 3.0) / 2.0) * binomial2(n2 - 1.0,(RR - 1.0) / 2.0))
                     r += 1
                 }
                 pExact = sum / binomial2(n1 + n2, n1)
@@ -3034,11 +3089,11 @@ public class SSHypothesisTesting {
         }
         var result = SSWaldWolfowitzTwoSampleTestResult()
         result.ZStatistic = z
-        result.pValueExact = pExact
+        result.pValueExact = (1.0 - pExact) / 2.0
         result.pValueAsymp = pAsymp
         result.mean = mean
         result.variance = sigma
-        result.nRuns = changes
+        result.nRuns = R
         result.nTiesIntergroup = ntiesintergroup
         result.nTiedCases = ntiedcases
         result.sampleSize1 = set1.sampleSize

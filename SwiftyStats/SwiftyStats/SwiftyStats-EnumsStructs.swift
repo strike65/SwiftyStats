@@ -753,8 +753,10 @@ public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
     public var probTest: Double?
     /// success id
     public var successCode: T?
-    /// 1 - alpha confidence interval
-    public var confInt: SSConfIntv?
+    /// 1 - alpha confidence interval (Jeffreys)
+    public var confIntJeffreys: SSConfIntv?
+    /// 1 - alpha confidence interval (Clopper/Pearson)
+    public var confIntClopperPearson: SSConfIntv?
 }
 
 

@@ -109,16 +109,16 @@ class SwiftyStatsTests: XCTestCase {
         let Data:Array<String> = ["A","A","A","A","A","B","A","A","B","B","B","B","A","A"]
         var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A", alpha: 0.05, alternative: .twoSided)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.424, accuracy: 1E-3)
-        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3513801, accuracy: 1E-7)
-        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 0.8724016, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3513801, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 0.8724016, accuracy: 1E-7)
         res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
-        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3904149, accuracy: 1E-7)
-        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 1.0, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3904149, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 1.0, accuracy: 1E-7)
         res = try! SSHypothesisTesting.binomialTest(data: Data, characterSet: CharacterSet.alphanumerics, testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
-        XCTAssertEqualWithAccuracy(res.confInt!.lowerBound!, 0.3904149, accuracy: 1E-7)
-        XCTAssertEqualWithAccuracy(res.confInt!.upperBound!, 1.0, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3904149, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 1.0, accuracy: 1E-7)
         res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A", alpha: 0.05, alternative: .less)
         XCTAssertEqualWithAccuracy(res.pValueExact!,  0.4158, accuracy: 1E-4)
     }
@@ -194,26 +194,41 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(try! SSHypothesisTesting.autocorrelationCoefficient(data: examine, lag: 1), -0.31, accuracy: 1E-2)
         
         var runsTest: SSRunsTestResult
-        runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
+        runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .twoSided)
         XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.007065, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
-        
+        runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .less)
+        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.9965, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
+
+        runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .greater)
+        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.003532, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
+
         let data = [18.0,17,18,19,20,19,19,21,18,21,22]
-        runsTest = try! SSHypothesisTesting.runsTest(array: data, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
+        runsTest = try! SSHypothesisTesting.runsTest(array: data, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .twoSided)
         XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, -1.4489, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.1474, accuracy: 1E-4)
         
+        // http://www.reiter1.com/Glossar/Wald_Wolfowitz.htm
+        let m = 3.0
+        let w = 1.0
+        let ww1: Array<Double> = [m, m, w, w, m, w, m, m, w, w, m, w, m, w, m, w, m, m, w, m, m, w, m, w, m]
+        runsTest = try! SSHypothesisTesting.runsTest(array: ww1, alpha: 0.05, useCuttingPoint: .mean, userDefinedCuttingPoint: nil, alternative: .twoSided)
+        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.3563, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.01846, accuracy: 1E-5)
+
+        
         let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
-//        let M1 = [35,44,39,50,48,29,60,75,49,66]
-//        let M2 = [17, 23, 13,24,33,21, 18, 16, 32]
         let set1 = SSExamine.init(withArray: M1, characterSet: nil)
         let set2 = SSExamine.init(withArray: M2, characterSet: nil)
-        try! SSHypothesisTesting.runsTest(data: set1, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil)
-        try! SSHypothesisTesting.waldWolfowitzTwoSampleTest(set1: set1, set2: set2)
-//        35,44,39,50,48,29,60,75,49,66
-        // 17, 23, 13,24,33,21, 18, 16, 32
+        let ww: SSWaldWolfowitzTwoSampleTestResult = try! SSHypothesisTesting.waldWolfowitzTwoSampleTest(set1: set1, set2: set2)
+        XCTAssertEqualWithAccuracy(ww.pValueAsymp!, 0.01512, accuracy: 1E-5)
+        XCTAssertEqualWithAccuracy(ww.ZStatistic!, 2.4296, accuracy: 1E-4)
     }
     
     func testTTest()  {
