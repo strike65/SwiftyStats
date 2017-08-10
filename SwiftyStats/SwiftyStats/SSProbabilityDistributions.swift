@@ -2311,8 +2311,19 @@ public class SSProbabilityDistributions {
         result = binomial2(Double(n), Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))
         return result
     }
-}
 
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 

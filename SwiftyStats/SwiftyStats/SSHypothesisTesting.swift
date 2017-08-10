@@ -3097,6 +3097,47 @@ public class SSHypothesisTesting {
         return result
     }
     
+    /// A more general ranking routine
+    /// - Paramater data: Array with data to rank
+    /// - Parameter inout ranks: Upon return contains the ranks
+    /// - Parameter inout ties: Upon return contains the correction terms for ties
+    /// - Parameter inout numberOfTies: Upon return contains number of ties
+    public class func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable {
+        var pos: Int
+        let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, characterSet: nil)
+        var ptemp: Int
+        var freq: Int
+        var sum = 0.0
+        var sum1 = 0.0
+        numberOfTies = 0
+        pos = 0
+        while pos < examine.sampleSize {
+            ptemp = pos + 1
+            sum = Double(ptemp)
+            freq = examine.frequency(item: data[pos])
+            if freq == 1 {
+                ranks.append(sum)
+                pos += 1
+            }
+            else {
+                numberOfTies += 1
+                ties.append(pow(Double(freq), 3.0) - Double(freq))
+                sum1 = 0.0
+                for i in 1...(freq - 1) {
+                    sum1 += Double(i)
+                }
+                sum += sum1 + Double(ptemp)
+                for _ in 1...freq {
+                    ranks.append(sum / Double(freq))
+                }
+                pos = ptemp + freq - 1
+            }
+        }
+    }
+    
+
+    
+    
     
     
 }

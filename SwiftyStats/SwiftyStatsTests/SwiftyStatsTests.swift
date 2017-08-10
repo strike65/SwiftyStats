@@ -72,6 +72,30 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     
+    func testGroupSorter() {
+        let d1 = [1,3,5,7,9,11,13]
+        let d2 = [1,4,6,8,10,12,14, -13]
+        let d3 = [-1,-3,-5,-7,-9,-11,-13]
+        let g1 = [1,1,1,1,1,1,1]
+        let g2 = [2,2,2,2,2,2,2,2]
+        let g3 = [3,3,3,3,3,3,3]
+        var data = Array<Int>()
+        data.append(contentsOf: d1)
+        data.append(contentsOf: d2)
+        data.append(contentsOf: d3)
+        var groups = Array<Int>()
+        groups.append(contentsOf: g1)
+        groups.append(contentsOf: g2)
+        groups.append(contentsOf: g3)
+        let sorter = SSDataGroupSorter<Int>.init(data: data, groups: groups)
+        let check: (Array<Int>, Array<Int>) = sorter.sortedArrays()
+        var ranks = Array<Double>()
+        var ties = Array<Double>()
+        var nties = 0
+        rank(data: check.1, ranks: &ranks, ties: &ties, numberOfTies: &nties)
+        print("Done")
+    }
+    
     func testKS2Sample() {
         let set1 = SSExamine<Double>.init(withArray: wafer1, characterSet: nil)
         let set2 = SSExamine<Double>.init(withArray: wafer2, characterSet: nil)

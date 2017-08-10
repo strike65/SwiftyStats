@@ -24,6 +24,7 @@
 		9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */; };
 		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
 		9FE9A5491F374F0400BC37BF /* LargeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9A5481F374F0400BC37BF /* LargeSet.swift */; };
+		9FF073C01F3CD48200439F7F /* SSDataGroupSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 		9FC547491F2DDE2000F58541 /* scratch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FE9A5481F374F0400BC37BF /* LargeSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeSet.swift; sourceTree = "<group>"; };
+		9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDataGroupSorter.swift; sourceTree = "<group>"; };
 		9FF3DEF81F23634E004B6AA1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +124,7 @@
 				9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */,
 				9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */,
 				9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */,
+				9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */,
 			);
 			path = SwiftyStats;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				9F82D3C91F1E8F57001BFC9D /* SSProbabilityDistributions.swift in Sources */,
 				9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */,
 				9F82D3C71F1E8F57001BFC9D /* SSFrequencyTables.swift in Sources */,
+				9FF073C01F3CD48200439F7F /* SSDataGroupSorter.swift in Sources */,
 				9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */,
 				9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */,
 				9F82D3C61F1E8F57001BFC9D /* SSExamine.swift in Sources */,
