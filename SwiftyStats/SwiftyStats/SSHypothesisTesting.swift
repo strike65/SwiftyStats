@@ -2323,13 +2323,26 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var ranks:Array<Double> = Array<Double>()
-        var groups:Array<String> = Array<String>()
+        var groups:Array<Int> = Array<Int>()
         var ties: Array<Double> = Array<Double>()
-        var sortedData: Array<T> = Array<T>()
         var sumRanksSet1: Double = 0.0
         var sumRanksSet2: Double = 0.0
-        var hasTies: Bool
-        hasTies = rank2Arrays(set1: set1, set2: set2, identifierSet1: "A", identifierSet2: "B", ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanksSet1, sumRanksSet2: &sumRanksSet2)
+        groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
+        groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
+        var numberOfTies: Int = 0
+        var tempData = set1.elementsAsArray(sortOrder: .original)!
+        tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .original)!)
+        let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
+        let sorted = sorter.sortedArrays()
+        rank(data: sorted.sortedData, ranks: &ranks, ties: &ties, numberOfTies: &numberOfTies)
+        for i in 0...(set1.sampleSize + set2.sampleSize) - 1 {
+            if sorted.sortedGroups[i] == 1 {
+                sumRanksSet1 += ranks[i]
+            }
+            else if sorted.sortedGroups[i] == 2 {
+                sumRanksSet2 += ranks[i]
+            }
+        }
         let U1 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set1.sampleSize) * (Double(set1.sampleSize) + 1)) / 2.0 - sumRanksSet1
         let U2 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set2.sampleSize) * (Double(set2.sampleSize) + 1)) / 2.0 - sumRanksSet2
         let nm = Double(set1.sampleSize) * Double(set2.sampleSize)
@@ -2358,9 +2371,9 @@ public class SSHypothesisTesting {
         else {
             U = U1
         }
-        if hasTies {
+        if ties.count > 0 {
             while i < ties.count {
-                temp1 += (pow(Double(ties[i]), 3.0) - ties[i]) / 12.0
+                temp1 += (ties[i] / 12.0)
                 i += 1
             }
             denom = sqrt((nm / (S * (S - 1.0))) * ((pow(S, 3.0) - S) / 12.0 - temp1))
@@ -3108,7 +3121,6 @@ public class SSHypothesisTesting {
         var ptemp: Int
         var freq: Int
         var sum = 0.0
-        var sum1 = 0.0
         numberOfTies = 0
         pos = 0
         while pos < examine.sampleSize {
@@ -3122,11 +3134,10 @@ public class SSHypothesisTesting {
             else {
                 numberOfTies += 1
                 ties.append(pow(Double(freq), 3.0) - Double(freq))
-                sum1 = 0.0
-                for i in 1...(freq - 1) {
-                    sum1 += Double(i)
+                sum = 0.0
+                for i in 0...(freq - 1) {
+                    sum += Double(ptemp + i)
                 }
-                sum += sum1 + Double(ptemp)
                 for _ in 1...freq {
                     ranks.append(sum / Double(freq))
                 }
