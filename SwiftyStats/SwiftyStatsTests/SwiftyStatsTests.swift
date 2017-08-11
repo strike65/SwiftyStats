@@ -89,7 +89,8 @@ class SwiftyStatsTests: XCTestCase {
         groups.append(contentsOf: g3)
         let sorter = SSDataGroupSorter<Int>.init(data: data, groups: groups)
         let check: (Array<Int>, Array<Int>) = sorter.sortedArrays()
-        print(try! ptukey(q: 0.95, rr: 3, cc: 5, df: 12, tail: .lower, returnLogP: false))
+        print(try! qtukey(p: 0.95, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, log_p: false))
+        print(try! ptukey(q: 3.77292895940833, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, returnLogP: false))
     }
     
     func testKS2Sample() {

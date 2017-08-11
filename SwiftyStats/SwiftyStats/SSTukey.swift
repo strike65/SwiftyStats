@@ -50,7 +50,7 @@
 import Foundation
 import os.log
 
-func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
+fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     /*  wprob() :
      
      This function calculates probability integral of Hartley's
@@ -196,8 +196,9 @@ func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
                 break
             }
             
-            pplus = 2 * SSProbabilityDistributions.cdfStandardNormalDist(u: ac)
+//            pplus = 2 * SSProbabilityDistributions.cdfStandardNormalDist(u: ac)
             do {
+                pplus = try SSProbabilityDistributions.cdfNormalDist(x: ac, mean: 0, variance: 1) * 2.0 // SSProbabilityDistributions.cdfStandardNormalDist(u: ac)
                 pminus = try SSProbabilityDistributions.cdfNormalDist(x: ac, mean: w, variance: 1) * 2.0  // pnorm(ac, w,  1., 1,0)
             }
             catch {
@@ -299,73 +300,6 @@ fileprivate func r_dt_val(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
     }
 }
 
-/* Do the boundaries exactly for q*() functions :
- * Often  _LEFT_ = ML_NEGINF , and very often _RIGHT_ = ML_POSINF;
- *
- * R_Q_P01_boundaries(p, _LEFT_, _RIGHT_)  :<==>
- *
- *     R_Q_P01_check(p);
- *     if (p == R_DT_0) return _LEFT_ ;
- *     if (p == R_DT_1) return _RIGHT_;
- *
- * the following implementation should be more efficient (less tests):
- */
-/*
- #define R_Q_P01_boundaries(p, _LEFT_, _RIGHT_)		\
-if (log_p) {					\
-    if(p > 0)					\
-    ML_ERR_return_NAN;				\
-    if(p == 0) /* upper bound*/			\
-    return lower_tail ? _RIGHT_ : _LEFT_;	\
-    if(p == ML_NEGINF)				\
-    return lower_tail ? _LEFT_ : _RIGHT_;	\
-}							\
-else { /* !log_p */					\
-    if(p < 0 || p > 1)				\
-    ML_ERR_return_NAN;				\
-    if(p == 0)					\
-    return lower_tail ? _LEFT_ : _RIGHT_;	\
-    if(p == 1)					\
-    return lower_tail ? _RIGHT_ : _LEFT_;	\
-}
-*/
-
-fileprivate func r_q_P01_boundaries(x: Double, right: Double, left: Double, tail: SSCDFTail, log_p: Bool) -> Double {
-    if log_p {
-        if x > 0 {
-            return Double.nan
-        }
-        if x == 0.0 {
-            return (tail == .lower) ? right : left
-        }
-        if x == -Double.infinity {
-            return (tail == .lower) ? left : right
-        }
-        return Double.nan
-    }
-    else {
-        if x < 0 || x > 1 {
-            return Double.nan
-        }
-        if x == 0.0 {
-            return (tail == .lower) ? left : right
-        }
-        if x == 1.0 {
-            return (tail == .lower) ? right : left
-        }
-        return Double.nan
-    }
-}
-
-
-/*
- #define R_DT_qIv(p)	(log_p ? (lower_tail ? exp(p) : - expm1(p)) \
- : R_D_Lval(p))
-*/
-/*
-#define R_D_Lval(p)	(lower_tail ? (p) : (0.5 - (p) + 0.5))
- */
-
 fileprivate func r_d_lval(x: Double, tail: SSCDFTail) -> Double {
     return (tail == .lower) ? x : (0.5 - x + 0.5)
 }
@@ -381,8 +315,66 @@ fileprivate func r_dt_qiv(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
 }
 
 
-
-func ptukey(q: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
+/// This a translation from the R function ptukey to Swift. See Remarks below
+/// q = value of studentized range
+/// rr = no. of rows or groups
+/// cc = no. of columns or treatments
+/// df = degrees of freedom of error term
+/// ir[0] = error flag = 1 if wprob probability > 1
+/// ir[1] = error flag = 1 if qprob probability > 1
+///
+/// qprob = returned probability integral over [0, q]
+///
+/// The program will not terminate if ir[0] or ir[1] are raised.
+///
+/// All references in wprob to Abramowitz and Stegun
+/// are from the following reference:
+///
+/// Abramowitz, Milton and Stegun, Irene A.
+/// Handbook of Mathematical Functions.
+/// New York:  Dover publications, Inc. (1970).
+///
+/// All constants taken from this text are
+/// given to 25 significant digits.
+///
+/// nlegq = order of legendre quadrature
+/// ihalfq = int ((nlegq + 1) / 2)
+/// eps = max. allowable value of integral
+/// eps1 & eps2 = values below which there is
+/// no contribution to integral.
+///
+/// d.f. <= dhaf:	integral is divided into ulen1 length intervals.  else
+/// d.f. <= dquar:	integral is divided into ulen2 length intervals.  else
+/// d.f. <= deigh:	integral is divided into ulen3 length intervals.  else
+/// d.f. <= dlarg:	integral is divided into ulen4 length intervals.
+///
+/// d.f. > dlarg:	the range is used to calculate integral.
+///
+/// M_LN2 = log(2)
+///
+/// xlegq = legendre 16-point nodes
+/// alegq = legendre 16-point coefficients
+///
+/// The coefficients and nodes for the legendre quadrature used in
+/// qprob and wprob were calculated using the algorithms found in:
+///
+/// Stroud, A. H. and Secrest, D.
+/// Gaussian Quadrature Formulas.
+/// Englewood Cliffs,
+/// New Jersey:  Prentice-Hall, Inc, 1966.
+///
+/// All values matched the tables (provided in same reference)
+/// to 30 significant digits.
+///
+/// f(x) = .5 + erf(x / sqrt(2)) / 2      for x > 0
+///
+/// f(x) = erfc( -x / sqrt(2)) / 2	      for x < 0
+///
+/// where f(x) is standard normal c. d. f.
+///
+/// if degrees of freedom large, approximate integral
+/// with range distribution.
+public func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
     /*  function ptukey() [was qprob() ]:
      
      q = value of studentized range
@@ -490,7 +482,7 @@ func ptukey(q: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, retu
     var i: Int
     var j: Int
     var jj: Int
-    if q.isNaN || rr.isNaN || cc.isNaN || df.isNaN {
+    if q.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN {
         return Double.nan
     }
     
@@ -502,7 +494,7 @@ func ptukey(q: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, retu
     /* df must be > 1 */
     /* there must be at least two values */
     
-    if (df < 2 || rr < 1 || cc < 2) {
+    if (df < 2 || nranges < 1 || numberOfMeans < 2) {
         return Double.nan
     }
     
@@ -512,7 +504,7 @@ func ptukey(q: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, retu
     
     if (df > dlarg) {
         do {
-            return r_dt_val(x: try wprob(w: q, rr: rr, cc: cc), tail: tail, log_p: returnLogP)
+            return r_dt_val(x: try wprob(w: q, rr: nranges, cc: numberOfMeans), tail: tail, log_p: returnLogP)
         }
         catch {
             throw error
@@ -564,7 +556,7 @@ func ptukey(q: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, retu
                 
                 /* call wprob to find integral of range portion */
                 do {
-                    wprb = try wprob(w: qsqz, rr: rr, cc: cc)
+                    wprb = try wprob(w: qsqz, rr: nranges, cc: numberOfMeans)
                 }
                 catch {
                     throw error
@@ -665,7 +657,13 @@ fileprivate func qinv(p: Double, c: Double, v: Double) -> Double {
  *  If the difference between successive iterates is less than eps,
  *  the search is terminated
  */
-public func qtukey(p: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
+
+/// In R, the function is called as follows:
+///
+/// qtukey <- function(p, nmeans, df, nranges=1, lower.tail = TRUE, log.p = FALSE)
+///
+//  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
+public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
     let eps = 0.0001
     let maxiter = 50
     
@@ -677,28 +675,48 @@ public func qtukey(p: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTai
     var xabs: Double
     var iter: Int
     var pp: Double
-    if (p.isNaN || rr.isNaN || cc.isNaN || df.isNaN) {
-        return p + rr + cc + df;
+    if (p.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN) {
+        return p + nranges + numberOfMeans + df;
     }
 
     /* df must be > 1 ; there must be at least two values */
-    if (df < 2 || rr < 1 || cc < 2) {
+    if (df < 2 || nranges < 1 || numberOfMeans < 2) {
         return Double.nan
     }
+    if log_p {
+        if p > 0 {
+            return Double.nan
+        }
+        if p == 0.0 {
+            return (tail == .lower) ? 0 : Double.infinity
+        }
+        if p == -Double.infinity {
+            return (tail == .lower) ? Double.infinity : 0
+        }
+    }
+    else {
+        if p < 0 || p > 1 {
+            return Double.nan
+        }
+        if p == 0.0 {
+            return (tail == .lower) ? Double.infinity : 0
+        }
+        if p == 1.0 {
+            return (tail == .lower) ? 0 : Double.infinity
+        }
+    }
     
-    r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
+ //   r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
 
-    pp = r_dt_val(x: p, tail: tail, log_p: log_p)
-    
-    pp = r_dt_qiv(x: pp, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
+    pp = r_dt_qiv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
     
     /* Initial value */
     
-    x0 = qinv(p: pp, c: cc, v: df);
+    x0 = qinv(p: pp, c: numberOfMeans, v: df);
     
     /* Find prob(value < x0) */
     do {
-        valx0 = try ptukey(q: x0, rr: rr, cc: cc, df: df, tail: .lower, /*LOG_P*/returnLogP: false) - pp
+        valx0 = try ptukey(q: x0, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, /*LOG_P*/returnLogP: false) - pp
     }
     catch {
         throw error
@@ -716,7 +734,7 @@ public func qtukey(p: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTai
         x1 = x0 + 1.0
     }
     do {
-        valx1 = try ptukey(q: x1, rr: rr, cc: cc, df: df, /*LOWER*/tail: .lower, /*LOG_P*/returnLogP: false) - pp
+        valx1 = try ptukey(q: x1, nranges: nranges, numberOfMeans: numberOfMeans, df: df, /*LOWER*/tail: .lower, /*LOG_P*/returnLogP: false) - pp
     }
     catch {
         throw error
@@ -737,7 +755,7 @@ public func qtukey(p: Double, rr: Double, cc: Double, df: Double, tail: SSCDFTai
         }
         /* Find prob(value < new iterate) */
         do {
-            valx1 = try ptukey(q: ans, rr: rr, cc: cc, df: df, tail: .lower, returnLogP: false) - p
+            valx1 = try ptukey(q: ans, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, returnLogP: false) - p
         }
         catch {
             throw error
