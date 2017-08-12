@@ -26,6 +26,7 @@
 		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
 		9FE9A5491F374F0400BC37BF /* LargeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9A5481F374F0400BC37BF /* LargeSet.swift */; };
 		9FF073C01F3CD48200439F7F /* SSDataGroupSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */; };
+		9FFBAF981F3F882E0074FB41 /* SSCrosstab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		9FE9A5481F374F0400BC37BF /* LargeSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeSet.swift; sourceTree = "<group>"; };
 		9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDataGroupSorter.swift; sourceTree = "<group>"; };
 		9FF3DEF81F23634E004B6AA1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSCrosstab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */,
 				9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */,
 				9F919AA91F3DD09000FC4199 /* SSTukey.swift */,
+				9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */,
 			);
 			path = SwiftyStats;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			files = (
 				9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */,
 				9F82D3C51F1E8F57001BFC9D /* SSConstants.swift in Sources */,
+				9FFBAF981F3F882E0074FB41 /* SSCrosstab.swift in Sources */,
 				9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */,
 				9F82D3C91F1E8F57001BFC9D /* SSProbabilityDistributions.swift in Sources */,
 				9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */,
