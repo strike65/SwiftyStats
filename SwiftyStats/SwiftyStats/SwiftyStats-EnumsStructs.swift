@@ -813,7 +813,29 @@ public struct SSWaldWolfowitzTwoSampleTestResult {
     /// size of sample 2
     public var sampleSize2: Int?
 }
-
+/// The results of the H test
+public struct SSKruskalWallisHTestResult {
+    /// Chi
+    public var Chi2: Double?
+    /// Chi square corrected for ties
+    public var Chi2corrected: Double?
+    /// one sided p value
+    public var pValue: Double?
+    /// number of Groups
+    public var nGroups: Int?
+    /// Degrees of Freedom
+    public var df: Int?
+    /// number of observations
+    public var nObservations: Int?
+    /// array of mean ranks per group
+    public var meanRanks: Array<Double>?
+    /// array of rank sums per group
+    public var sumRanks: Array<Double>?
+    /// critical value at alpha
+    public var cv: Double?
+    /// alpha
+    public var alpha: Double?
+}
 
 
 

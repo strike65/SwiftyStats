@@ -3188,7 +3188,77 @@ public class SSHypothesisTesting {
         
     }
     
-    
+    public class func kruskalWallisHTest<T>(data: Array<SSExamine<T>>, alpha: Double!) throws -> SSKruskalWallisHTestResult where T: Comparable, T: Hashable {
+        if data.count < 2 {
+            os_log("number of groups is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var groups = Array<Int>()
+        var a1 = Array<T>()
+        var k = 1
+        var N: Double = 0.0
+        for examine in data {
+            if examine.sampleSize < 2 {
+                os_log("sample sizes are expected to be > 2", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+            groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
+            k += 1
+            N += Double(examine.sampleSize)
+            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .original)!)
+        }
+        let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
+        let sorted = sorter.sortedArrays()
+        let ranking = rank(data: sorted.sortedData, groups: sorted.sortedGroups)
+        var sumRanks: Double = 0.0
+        for rank in ranking.sumOfRanks {
+            sumRanks += rank
+        }
+        if sumRanks != N * (N + 1) / 2.0 {
+            os_log("internal error - contact the developer", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+        }
+        var sum = 0.0
+        for i in 0..<ranking.numberOfGroups {
+            sum += pow(ranking.sumOfRanks[i], 2.0) / ranking.sampleSizes[i]
+        }
+        let H = 12.0 / (N * (N + 1)) * sum - 3 * (N + 1.0)
+        let df = Double(ranking.numberOfGroups) - 1.0
+        var ts: Double = 0.0
+        for tie in ranking.ties! {
+            ts += tie
+        }
+        ts = 1.0 - (ts / (pow(N, 3.0) - N))
+        let Hc: Double
+        if ts != 0.0 {
+            Hc = H / ts
+        }
+        else {
+            Hc = Double.nan
+        }
+        var p: Double
+        let cv: Double
+        do {
+            p = try SSProbabilityDistributions.cdfChiSquareDist(chi: H, degreesOfFreedom: df)
+            cv = try SSProbabilityDistributions.quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: df)
+        }
+        catch {
+            throw error
+        }
+        p = 1.0 - p
+        var result = SSKruskalWallisHTestResult()
+        result.Chi2 = H
+        result.Chi2corrected = Hc
+        result.pValue = p
+        result.nGroups = ranking.numberOfGroups
+        result.df = Int(df)
+        result.nObservations = Int(N)
+        result.meanRanks = ranking.meanRanks
+        result.sumRanks = ranking.sumOfRanks
+        result.alpha = alpha
+        result.cv = cv
+        return result
+    }
     
 
     

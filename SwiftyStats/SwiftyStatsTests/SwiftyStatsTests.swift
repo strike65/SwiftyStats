@@ -195,6 +195,27 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.6679, accuracy: 1E-4)
     }
     
+    func testHTest() {
+        // tested using IBM SPSS 24
+        let A1: Array<Double> = [12.1 , 14.8 , 15.3 , 11.4 , 10.8]
+        let B1: Array<Double> = [18.3 , 49.6 , 10.1 , 35.6 , 26.2 , 8.9]
+        let A2: Array<Double> = [12.7 , 25.1 , 47.0 , 16.3 , 30.4]
+        let B2: Array<Double> = [7.3 , 1.9 , 5.8 , 10.1 , 9.4]
+        let setA1 = SSExamine.init(withArray: A1, characterSet: nil)
+        let setB1 = SSExamine.init(withArray: B1, characterSet: nil)
+        let setA2 = SSExamine.init(withArray: A2, characterSet: nil)
+        let setB2 = SSExamine.init(withArray: B2, characterSet: nil)
+        var array = Array<SSExamine<Double>>()
+        array.append(setA1)
+        array.append(setB1)
+        array.append(setA2)
+        array.append(setB2)
+        var htest: SSKruskalWallisHTestResult;
+        htest = try! SSHypothesisTesting.kruskalWallisHTest(data: array, alpha: 0.05)
+        XCTAssertEqualWithAccuracy(htest.pValue!, 0.009, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(htest.Chi2!, 11.53, accuracy: 1E-2)
+    }
+    
     
     func testManWhitney() {
         // tested using IBM SPSS 24
