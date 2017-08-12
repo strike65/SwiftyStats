@@ -76,17 +76,21 @@ class SwiftyStatsTests: XCTestCase {
         let d1 = [1,3,5,7,9,11,13]
         let d2 = [1,4,6,8,10,12,14, -13]
         let d3 = [-1,-3,-5,-7,-9,-11,-13]
+        let d4 = [-3,-6,-8,-10,12,1]
         let g1 = [1,1,1,1,1,1,1]
         let g2 = [2,2,2,2,2,2,2,2]
         let g3 = [3,3,3,3,3,3,3]
+        let g4 = [4,4,4,4,4,4]
         var data = Array<Int>()
         data.append(contentsOf: d1)
         data.append(contentsOf: d2)
         data.append(contentsOf: d3)
+        data.append(contentsOf: d4)
         var groups = Array<Int>()
         groups.append(contentsOf: g1)
         groups.append(contentsOf: g2)
         groups.append(contentsOf: g3)
+        groups.append(contentsOf: g4)
         let sorter = SSDataGroupSorter<Int>.init(data: data, groups: groups)
         let check: (Array<Int>, Array<Int>) = sorter.sortedArrays()
         print(try! qtukey(p: 0.95, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, log_p: false))
@@ -166,11 +170,29 @@ class SwiftyStatsTests: XCTestCase {
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
         let examine1 = SSExamine.init(withArray: M1, characterSet: nil)
         let examine2 = SSExamine.init(withArray: M2, characterSet: nil)
-        let wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
+        var wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.528, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 0.631, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(wilcox.sumNegRanks!, 22.5, accuracy: 1E-1)
         XCTAssertEqualWithAccuracy(wilcox.sumPosRanks!, 13.5, accuracy: 1E-1)
+        // http://documentation.statsoft.com/STATISTICAHelp.aspx?path=Nonparametrics/NonparametricAnalysis/Examples/Example8WilcoxonMatchedPairsTest
+        let M3 = [20.3,17,6.5,25,5.4,29.2,2.9,6.6,15.8,8.3,34.0,8]
+        let M4 = [50.4,87,25.1,28.5,26.9,36.6,1.0,43.8,44.2,10.4,29.9,27.7]
+        let examine3 = SSExamine.init(withArray: M3, characterSet: nil)
+        let examine4 = SSExamine.init(withArray: M4, characterSet: nil)
+        wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine3, set2: examine4)
+        XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.007649, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.667179, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(wilcox.sumNegRanks!, 5, accuracy: 1E-1)
+        XCTAssertEqualWithAccuracy(wilcox.sumPosRanks!, 73.0, accuracy: 1E-1)
+        // http://influentialpoints.com/Training/wilcoxon_matched_pairs_signed_rank_test.htm
+        let M5 = [13.0, 11, 6, 14, 6, 15, 13, 14, 8]
+        let M6 = [1.0, 2, 1, 1, 3, 3, 2, 4, 2]
+        let examine5 = SSExamine.init(withArray: M5, characterSet: nil)
+        let examine6 = SSExamine.init(withArray: M6, characterSet: nil)
+        wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine5, set2: examine6)
+        XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.0076, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.6679, accuracy: 1E-4)
     }
     
     

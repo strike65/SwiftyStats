@@ -2322,27 +2322,20 @@ public class SSHypothesisTesting {
             os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var ranks:Array<Double> = Array<Double>()
         var groups:Array<Int> = Array<Int>()
         var ties: Array<Double> = Array<Double>()
         var sumRanksSet1: Double = 0.0
         var sumRanksSet2: Double = 0.0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
-        var numberOfTies: Int = 0
         var tempData = set1.elementsAsArray(sortOrder: .original)!
         tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .original)!)
         let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
         let sorted = sorter.sortedArrays()
-        rank(data: sorted.sortedData, ranks: &ranks, ties: &ties, numberOfTies: &numberOfTies)
-        for i in 0...(set1.sampleSize + set2.sampleSize) - 1 {
-            if sorted.sortedGroups[i] == 1 {
-                sumRanksSet1 += ranks[i]
-            }
-            else if sorted.sortedGroups[i] == 2 {
-                sumRanksSet2 += ranks[i]
-            }
-        }
+        let rr = rank.init(data: sorted.sortedData, groups: sorted.sortedGroups)
+        ties = rr.ties!
+        sumRanksSet1 = rr.sumOfRanks[0]
+        sumRanksSet2 = rr.sumOfRanks[1]
         let U1 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set1.sampleSize) * (Double(set1.sampleSize) + 1)) / 2.0 - sumRanksSet1
         let U2 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set2.sampleSize) * (Double(set2.sampleSize) + 1)) / 2.0 - sumRanksSet2
         let nm = Double(set1.sampleSize) * Double(set2.sampleSize)
@@ -2469,8 +2462,8 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var i: Int
-        var np: Int = 0
-        var nn: Int = 0
+//        var np: Int = 0
+//        var nn: Int = 0
         var nties: Int = 0
         var temp: Double = 0.0
         var diff:Array<Double> = Array<Double>()
@@ -2480,12 +2473,6 @@ public class SSHypothesisTesting {
         i = 0
         while i < N {
             temp = a2[i] - a1[i]
-            if temp < 0.0 {
-                nn += 1
-            }
-            else if temp > 0.0 {
-                np += 1
-            }
             if temp != 0.0 {
                 diff.append(temp)
             }
@@ -2500,34 +2487,13 @@ public class SSHypothesisTesting {
             absDiffSorted.append(fabs(sorted[i]))
             i += 1
         }
-        let examine = SSExamine<Double>.init(withArray: absDiffSorted, characterSet: nil)
-        var ranks: Array<Double> = Array<Double>()
-        var ties: Array<Double> = Array<Double>()
-        var ptemp: Int
-        var freq: Int
-        var sum: Double = 0.0
+        var ranks: Array<Double>
+        var ties: Array<Double>
+        let ranking = rank.init(data: absDiffSorted, groups: nil)
+        ranks = ranking.ranks
+        ties = ranking.ties!
+        nties = ranking.numberOfTies
         let n = absDiffSorted.count
-        var pos: Int = 0
-        while pos < n {
-            ptemp = pos + 1
-            sum = Double(ptemp)
-            freq = examine.frequency(item: absDiffSorted[pos])
-            if freq == 1 {
-                ranks.append(sum)
-                pos += 1
-            }
-            else {
-                nties += 1
-                ties.append(Double(freq))
-                sum = Double(freq) * Double(ptemp) + sumUp(start: 1, end: freq - 1)
-                i = 1
-                while i <= freq {
-                    ranks.append(sum / Double(freq))
-                    i += 1
-                }
-                pos = ptemp + freq - 1
-            }
-        }
         var nposranks: Int = 0
         var nnegranks: Int = 0
         var sumposranks: Double = 0.0
@@ -2556,7 +2522,7 @@ public class SSHypothesisTesting {
         var ts: Double = 0.0
         i = 0
         while i < ties.count {
-            ts += (pow(ties[i], 3.0) - ties[i]) / 48.0
+            ts += ties[i] / 48.0
             i += 1
         }
         z = (fabs(min(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
@@ -2568,7 +2534,7 @@ public class SSHypothesisTesting {
         result.nPosRanks = nposranks
         result.nNegRanks = nnegranks
         result.nTies = nties
-        result.nZeroDiff = N - np - nn
+        result.nZeroDiff = N - nposranks - nnegranks
         result.sumNegRanks = sumnegranks
         result.sumPosRanks = sumposranks
         result.meanPosRanks = meanposranks
@@ -3007,14 +2973,15 @@ public class SSHypothesisTesting {
             os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var groups = Array<Double>()
-        var ranks = Array<Double>()
-        var ties = Array<Double>()
-//        var sortedGroups: Array<String> = Array<String>()
+        var groups = Array<Int>.init(repeating: 1, count: set1.sampleSize)
+        groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
         var sortedData: Array<T> = Array<T>()
-        var sumRanks1: Double = 0.0
-        var sumRanks2: Double = 0.0
-        let _ = rank2Arrays(set1: set1, set2: set2, identifierSet1: 0.0, identifierSet2: 1.0, ranks: &ranks, groups: &groups, sortedItems: &sortedData, ties: &ties, sumRanksSet1: &sumRanks1, sumRanksSet2: &sumRanks2)
+        var data = set1.elementsAsArray(sortOrder: .original)!
+        data.append(contentsOf: set2.elementsAsArray(sortOrder: .original)!)
+        let sorter = SSDataGroupSorter.init(data: data, groups: groups)
+        let sorted = sorter.sortedArrays()
+        groups = sorted.sortedGroups
+        sortedData = sorted.sortedData
         var temp = groups[0]
         var R: Int = 0
         var i: Int = 1
@@ -3057,10 +3024,10 @@ public class SSHypothesisTesting {
         var n1: Double = 0.0
         var n2: Double = 0.0
         for g in groups {
-            if g == 0.0 {
+            if g == 1 {
                 n1 += 1.0
             }
-            else if g == 1.0 {
+            else if g == 2 {
                 n2 += 1.0
             }
         }
@@ -3109,42 +3076,119 @@ public class SSHypothesisTesting {
         result.sampleSize2 = set2.sampleSize
         return result
     }
-    
-    /// A more general ranking routine
-    /// - Paramater data: Array with data to rank
-    /// - Parameter inout ranks: Upon return contains the ranks
-    /// - Parameter inout ties: Upon return contains the correction terms for ties
-    /// - Parameter inout numberOfTies: Upon return contains number of ties
-    public class func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable {
-        var pos: Int
-        let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, characterSet: nil)
-        var ptemp: Int
-        var freq: Int
-        var sum = 0.0
-        numberOfTies = 0
-        pos = 0
-        while pos < examine.sampleSize {
-            ptemp = pos + 1
-            sum = Double(ptemp)
-            freq = examine.frequency(item: data[pos])
-            if freq == 1 {
-                ranks.append(sum)
-                pos += 1
+    /// Ranks the data
+    /// ### Note ###
+    /// Groups must be coded as an integer value starting at 1. The arrays sumOfRanks, meanRanks and sampleSizes contains [numberOfGroups] values. For group 1 the associated value has index 0!
+    private struct rank<T> where T: Comparable, T: Hashable {
+        /// The ranks
+        public var ranks:Array<Double>!
+        /// An Array containing "sample size" times a group identifier
+        public var groups:Array<Int>?
+        /// An array containing at grou
+        public var sumOfRanks:Array<Double>!
+        /// An array containg all ties precomputed (pow(t, 3) - t)
+        public var ties:Array<Double>?
+        /// The count of ties
+        public var numberOfTies: Int!
+        /// Mean ranks
+        public var meanRanks:Array<Double>!
+        /// Count of groups
+        public var numberOfGroups:Int!
+        /// Size of sample per group
+        public var sampleSizes:Array<Double>!
+        
+        private var data:Array<T>!
+        
+        init(data array: Array<T>!,groups g: Array<Int>?) {
+            ranks = Array<Double>()
+            ties = Array<Double>()
+            sumOfRanks = Array<Double>()
+            if let gg = g {
+                groups = gg
             }
             else {
-                numberOfTies += 1
-                ties.append(pow(Double(freq), 3.0) - Double(freq))
-                sum = 0.0
-                for i in 0...(freq - 1) {
-                    sum += Double(ptemp + i)
+                groups = nil
+            }
+            numberOfTies = 0
+            data = array
+            var temp = Array<Double>()
+            var temp1 = Array<Double>()
+            var temp3 = 0
+            rank(data: data, ranks: &temp, ties: &temp1, numberOfTies: &temp3)
+            ranks = temp
+            ties = temp1
+            numberOfTies = temp3
+            if groups != nil {
+                let uniqueGroups = Set<Int>.init(groups!)
+                numberOfGroups = uniqueGroups.count
+                meanRanks = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
+                sumOfRanks = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
+                sampleSizes = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
+                for i in uniqueGroups {
+                    for k in 0..<groups!.count {
+                        if i == groups![k] {
+                            sumOfRanks[i - 1] += ranks[k]
+                            sampleSizes[i - 1] += 1.0
+                        }
+                    }
                 }
-                for _ in 1...freq {
-                    ranks.append(sum / Double(freq))
+                for i in uniqueGroups {
+                    meanRanks[i - 1] = sumOfRanks[i - 1] / sampleSizes[i - 1]
                 }
-                pos = ptemp + freq - 1
+            }
+            else {
+                numberOfGroups = 1
+                meanRanks = Array<Double>.init(repeating: 0.0, count: 1)
+                sumOfRanks = Array<Double>.init(repeating: 0.0, count: 1)
+                sampleSizes = Array<Double>.init(repeating: 0.0, count: 1)
+                for i in 0..<ranks.count {
+                    sumOfRanks[0] += ranks[i]
+                    sampleSizes[0] += 1.0
+                }
+                meanRanks[0] = sumOfRanks[0] / sampleSizes[0]
+            }
+            
+        }
+        /// A more general ranking routine
+        /// - Paramater data: Array with data to rank
+        /// - Parameter inout ranks: Upon return contains the ranks
+        /// - Parameter inout ties: Upon return contains the correction terms for ties
+        /// - Parameter inout numberOfTies: Upon return contains number of ties
+        private func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable {
+            var pos: Int
+            let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, characterSet: nil)
+            var ptemp: Int
+            var freq: Int
+            var sum = 0.0
+            numberOfTies = 0
+            pos = 0
+            while pos < examine.sampleSize {
+                ptemp = pos + 1
+                sum = Double(ptemp)
+                freq = examine.frequency(item: data[pos])
+                if freq == 1 {
+                    ranks.append(sum)
+                    pos += 1
+                }
+                else {
+                    numberOfTies += 1
+                    ties.append(pow(Double(freq), 3.0) - Double(freq))
+                    sum = 0.0
+                    for i in 0...(freq - 1) {
+                        sum += Double(ptemp + i)
+                    }
+                    for _ in 1...freq {
+                        ranks.append(sum / Double(freq))
+                    }
+                    pos = ptemp + freq - 1
+                }
             }
         }
+        
+        
     }
+    
+    
     
 
     
