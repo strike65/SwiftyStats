@@ -109,7 +109,7 @@ class SwiftyStatsTests: XCTestCase {
         print(m)
         print(m.columnSums()!)
         print(m.rowSums()!)
-        XCTAssertTrue(m.rowTotal() == m.colummTotal())
+        XCTAssertTrue(m.rowTotal() == m.total)
     }
     
     

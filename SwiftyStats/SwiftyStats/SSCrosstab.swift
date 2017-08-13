@@ -98,12 +98,13 @@ public class SSCrosstab<T>: NSObject where T: Comparable, T: Hashable {
     private var grid: Array<Array<T>>
     
     public var isNumeric: Bool
-    
+
     /// Initializes a new crosstab
     /// - Parameter rows: number of rows
     /// - Parameter columns: number of columns
     /// - Parameter initialValue: Initial value
     init(rows: Int, columns: Int, initialValue: T) {
+        assert(rows > 0 && columns > 0, "Creating an empty crosstab is not possible, Use init() instead.")
         self.rr = rows
         self.cc = columns
         self.grid = Array<Array<T>>()
@@ -333,6 +334,103 @@ extension SSCrosstab {
         }
         else {
             return nil
+        }
+    }
+    
+    /// The sum of a row
+    public func rowSum(row: Int) -> Double {
+        assert(row < self.rows && row >= 0, "Index out of range")
+        if let rs = self.rowSums() {
+            return rs[row]
+        }
+        else {
+            return Double.nan
+        }
+    }
+
+    public func nameOfColumn(column: Int) -> String? {
+        assert(column < self.columns && column >= 0, "Index out of range")
+        if let cn = self.columnNames {
+            return cn[column]
+        }
+        else {
+            return nil
+        }
+    }
+
+    
+    public func nameOfRow(row: Int) -> String? {
+        assert(row < self.rows && row >= 0, "Index out of range")
+        if let rn = self.rowNames {
+            return rn[row]
+        }
+        else {
+            return nil
+        }
+    }
+    
+    public func indexOfColumn(columnName: String) -> Int? {
+        if let cn = self.columnNames {
+            return cn.index(of: columnName)
+        }
+        else {
+            return nil
+        }
+    }
+
+    
+    public func indexOfRow(rowName: String) -> Int? {
+        if let rn = self.rowNames {
+            return rn.index(of: rowName)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// The sum of a column
+    public func columnSum(column: Int) -> Double {
+        assert(column < self.columns && column >= 0, "Index out of range")
+        if let cs = self.rowSums() {
+            return cs[column]
+        }
+        else {
+            return Double.nan
+        }
+    }
+
+    /// Sum of column named columnName
+    public func columnSum(columnName: String) -> Double {
+        if let rn = self.columnNames {
+            let i = rn.index(of: columnName)
+            guard i != nil else {
+                return Double.nan
+            }
+            return self.columnSum(column: i!)
+        }
+        else {
+            return Double.nan
+        }
+    }
+
+    /// Sum of row named rowName
+    public func rowSum(rowName: String) -> Double {
+        if let rn = self.rowNames {
+            let i = rn.index(of: rowName)
+            guard i != nil else {
+                return Double.nan
+            }
+            return self.rowSum(row: i!)
+        }
+        else {
+            return Double.nan
+        }
+    }
+
+    /// the total
+    public var total: Double {
+        get {
+            return self.rowTotal()
         }
     }
     
