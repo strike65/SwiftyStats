@@ -73,14 +73,27 @@ class SwiftyStatsTests: XCTestCase {
     
     
     func testCrossTabs() {
-        var m = SSCrosstab.init(rows: 2, columns: 2, initialValue: 1)
+        var m = SSCrosstab.init(rows: 2, columns: 3, initialValue: 1)
         m[0,0] = 1
         m[0,1] = 2
-        m[1,0] = 3
-        m[1,1] = 4
-        m.appendRow([5,6])
-        m.appendRow([7,8])
-//        print(m)
+        m[0,2] = 3
+        m[1,0] = 4
+        m[1,1] = 5
+        m[1,2] = 6
+        try! m.appendRow([7,8,9], name: nil)
+        print(m)
+        try! m.appendRow([10,11,12], name: "test")
+        print(m)
+        try! m.insertRow(newRow: [33,33, 33], at: 2, name: "333")
+        print(m)
+        try! m.insertColumn(newColumn: [99,99,99,99,99], at: 2, name: "999")
+        print(m)
+        XCTAssertThrowsError(try m.removeRow(rowName: "999"))
+        XCTAssertThrowsError(try m.removeColumn(columnName: "333"))
+        try! m.removeRow(rowName: "333")
+        print(m)
+        try! m.removeColumn(columnName: "999")
+        print(m)
 //        m.appendColumn([7,8,9,10])
 //        print(m)
 //        
