@@ -72,30 +72,71 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     
-    func testGroupSorter() {
-        let d1 = [1,3,5,7,9,11,13]
-        let d2 = [1,4,6,8,10,12,14, -13]
-        let d3 = [-1,-3,-5,-7,-9,-11,-13]
-        let d4 = [-3,-6,-8,-10,12,1]
-        let g1 = [1,1,1,1,1,1,1]
-        let g2 = [2,2,2,2,2,2,2,2]
-        let g3 = [3,3,3,3,3,3,3]
-        let g4 = [4,4,4,4,4,4]
-        var data = Array<Int>()
-        data.append(contentsOf: d1)
-        data.append(contentsOf: d2)
-        data.append(contentsOf: d3)
-        data.append(contentsOf: d4)
-        var groups = Array<Int>()
-        groups.append(contentsOf: g1)
-        groups.append(contentsOf: g2)
-        groups.append(contentsOf: g3)
-        groups.append(contentsOf: g4)
-        let sorter = SSDataGroupSorter<Int>.init(data: data, groups: groups)
-        let check: (Array<Int>, Array<Int>) = sorter.sortedArrays()
-        print(try! qtukey(p: 0.95, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, log_p: false))
-        print(try! ptukey(q: 3.77292895940833, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, returnLogP: false))
+    func testCrossTabs() {
+        var m = SSCrosstab.init(rows: 2, columns: 2, initialValue: 1)
+        m[0,0] = 1
+        m[0,1] = 2
+        m[1,0] = 3
+        m[1,1] = 4
+        m.appendRow([5,6])
+        m.appendRow([7,8])
+//        print(m)
+//        m.appendColumn([7,8,9,10])
+//        print(m)
+//        
+//        m.insertRow(newRow: [0,0,0], at: 0)
+//        print(m)
+//        m.insertColumn(newColumn: [9,9,9,9,9], at: 0)
+//        print(m)
+//        m.insertColumn(newColumn: [7,7,7,7,7], at: 3)
+//        print(m)
+//        m.removeRow(at: 0)
+//        print(m)
+//        m.removeColumn(at: 0)
+//        print(m)
+//        print(m.lastColumn)
+//        print(m.firstColumn)
+//        print(m.lastRow)
+//        print(m.firstRow)
+//        print(m.column(columnIndex: 0))
+//        m.setColumnNames(columnNames: ["c1","c2","c3","c4"])
+//        m.setRowNames(rowNames: ["r1","r2","r3","r4"])
+//        print(m)
+//        print(m.columnNamed(columnName: "c4")!)
+//        print(m.rowNamed(rowName: "r1")!)
+//        print(m[0,0])
+//        m[0,0] = 999
+        print(m)
+        print(m.columnSums()!)
+        print(m.rowSums()!)
+        XCTAssertTrue(m.rowTotal() == m.colummTotal())
     }
+    
+    
+//    func testGroupSorter() {
+//        let d1 = [1,3,5,7,9,11,13]
+//        let d2 = [1,4,6,8,10,12,14, -13]
+//        let d3 = [-1,-3,-5,-7,-9,-11,-13]
+//        let d4 = [-3,-6,-8,-10,12,1]
+//        let g1 = [1,1,1,1,1,1,1]
+//        let g2 = [2,2,2,2,2,2,2,2]
+//        let g3 = [3,3,3,3,3,3,3]
+//        let g4 = [4,4,4,4,4,4]
+//        var data = Array<Int>()
+//        data.append(contentsOf: d1)
+//        data.append(contentsOf: d2)
+//        data.append(contentsOf: d3)
+//        data.append(contentsOf: d4)
+//        var groups = Array<Int>()
+//        groups.append(contentsOf: g1)
+//        groups.append(contentsOf: g2)
+//        groups.append(contentsOf: g3)
+//        groups.append(contentsOf: g4)
+//        let sorter = SSDataGroupSorter<Int>.init(data: data, groups: groups)
+//        let check: (Array<Int>, Array<Int>) = sorter.sortedArrays()
+//        print(try! qtukey(p: 0.95, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, log_p: false))
+//        print(try! ptukey(q: 3.77292895940833, nranges: 1, numberOfMeans: 3, df: 12, tail: .lower, returnLogP: false))
+//    }
     
     func testKS2Sample() {
         let set1 = SSExamine<Double>.init(withArray: wafer1, characterSet: nil)
@@ -219,10 +260,10 @@ class SwiftyStatsTests: XCTestCase {
     
     func testManWhitney() {
         // tested using IBM SPSS 24
-        let A1: Array<Double> = [5,5,8,9,13,13,13,15]
-        let B1: Array<Double> = [3,3,4,5,5,8,10,16]
-        let A2: Array<Double> = [7,14,22,36,40,48,49,52]
-        let B2: Array<Double> = [3,5,6,10,17,18,20,39]
+        let A1: Array<Int> = [5,5,8,9,13,13,13,15]
+        let B1: Array<Int> = [3,3,4,5,5,8,10,16]
+        let A2: Array<Int> = [7,14,22,36,40,48,49,52]
+        let B2: Array<Int> = [3,5,6,10,17,18,20,39]
         let setA1 = SSExamine.init(withArray: A1, characterSet: nil)
         let setB1 = SSExamine.init(withArray: B1, characterSet: nil)
         let setA2 = SSExamine.init(withArray: A2, characterSet: nil)

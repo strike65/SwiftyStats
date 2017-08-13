@@ -858,8 +858,15 @@ extension SSExamine {
     public var squareTotal: Double {
         if numeric && !isEmpty {
             var s: Double = 0.0
+            var temp: Double
             for (item, freq) in self.elements {
-                s = s + pow((item as! Double),2.0) * Double(freq)
+                if item is Int {
+                    temp = Double(item as! Int)
+                }
+                else {
+                    temp = item as! Double
+                }
+                s = s + pow(temp ,2.0) * Double(freq)
             }
             return s
         }
@@ -872,8 +879,15 @@ extension SSExamine {
     public func poweredTotal(power p: Double) -> Double {
         if numeric && !isEmpty {
             var s: Double = 0.0
+            var temp: Double
             for (item, freq) in self.elements {
-                s = s + pow((item as! Double), p) * Double(freq)
+                if item is Int {
+                    temp = Double(item as! Int)
+                }
+                else {
+                    temp = item as! Double
+                }
+                s = s + pow(temp, p) * Double(freq)
             }
             return s
         }
@@ -886,8 +900,15 @@ extension SSExamine {
     public var total: Double {
         if numeric && !isEmpty {
             var s: Double = 0.0
+            var temp: Double
             for (item, freq) in self.elements {
-                s = s + (item as! Double) * Double(freq)
+                if item is Int {
+                    temp = Double(item as! Int)
+                }
+                else {
+                    temp = item as! Double
+                }
+                s = s + temp * Double(freq)
             }
             return s
         }
@@ -902,7 +923,12 @@ extension SSExamine {
             var s = 0.0
             var temp: Double
             for (item, freq) in self.elements {
-                temp = (item as! Double)
+                if item is Int {
+                    temp = Double(item as! Int)
+                }
+                else {
+                    temp = item as! Double
+                }
                 if !temp.isZero {
                     s = s + (1.0 / temp) * Double(freq)
                 }
@@ -992,11 +1018,34 @@ extension SSExamine {
         if !isEmpty && self.sampleSize >= 2 {
             let k = Double(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
+            var temp1: Double
+            var temp2: Double
+            var temp3: SSElement
             if k.truncatingRemainder(dividingBy: 1).isZero {
-                result = ((a[a.startIndex.advanced(by: Int(k - 1))] as! Double) + (a[a.startIndex.advanced(by: Int(k))] as! Double)) / 2.0
+                temp3 = a[a.startIndex.advanced(by: Int(k - 1))]
+                if temp3 is Int {
+                    temp1 = Double(temp3 as! Int)
+                }
+                else {
+                    temp1 = temp3 as! Double
+                }
+                temp3 = a[a.startIndex.advanced(by: Int(k))]
+                if temp3 is Int {
+                    temp2 = Double(temp3 as! Int)
+                }
+                else {
+                    temp2 = temp3 as! Double
+                }
+                result = (temp1 + temp2) / 2.0
             }
             else {
-                result = a[a.startIndex.advanced(by: Int(ceil(k - 1)))] as! Double
+                temp3 = a[a.startIndex.advanced(by: Int(ceil(k - 1)))]
+                if temp3 is Int {
+                    result = Double(temp3 as! Int)
+                }
+                else {
+                    result = temp3 as! Double
+                }
             }
             return result
         }
@@ -1102,8 +1151,15 @@ extension SSExamine {
                     let v = floor(Double(l) * alpha)
                     var s = 0.0
                     var k = 0.0
+                    var temp: Double
                     for i in Int(v)...l - Int(v) - 1  {
-                        s = s + (a[i] as! Double)
+                        if a[i] is Int {
+                            temp = Double(a[i] as! Int)
+                        }
+                        else {
+                            temp = a[i] as! Double
+                        }
+                        s = s + temp
                         k = k + 1
                     }
                     return s / k
@@ -1134,10 +1190,30 @@ extension SSExamine {
                 let l = a.count
                 let v = floor(Double(l) * alpha)
                 var s = 0.0
+                var temp: Double
                 for i in Int(v)...l - Int(v) - 1  {
-                    s = s + (a[i] as! Double)
+                    if a[i] is Int {
+                        temp = Double(a[i] as! Int)
+                    }
+                    else {
+                        temp = a[i] as! Double
+                    }
+                    s = s + temp
                 }
-                s = s + v * ((a[Int(v)] as! Double) + (a[Int(l - Int(v) - 1)] as! Double))
+                var temp1: Double
+                if a[Int(v)] is Int {
+                    temp = Double(a[Int(v)] as! Int)
+                }
+                else {
+                    temp = a[Int(v)] as! Double
+                }
+                if a[Int(l - Int(v) - 1)] is Int {
+                    temp1 = Double(a[Int(l - Int(v) - 1)] as! Int)
+                }
+                else {
+                    temp1 = a[Int(l - Int(v) - 1)] as! Double
+                }
+                s = s + v * (temp + temp1)
                 return s / Double(self.sampleSize)
             }
             else {
@@ -1174,12 +1250,19 @@ extension SSExamine {
     public var product: Double {
         if numeric && !isEmpty {
             var p: Double = 1.0
+            var temp: Double
             for (item, freq) in self.elements {
-                if (item as! Double).isZero {
+                if item is Int {
+                    temp = Double(item as! Int)
+                }
+                else {
+                    temp = item as! Double
+                }
+                if temp.isZero {
                     return 0.0
                 }
                 else {
-                    p = p * pow((item as! Double), Double(freq))
+                    p = p * pow(temp, Double(freq))
                 }
             }
             return p
@@ -1204,7 +1287,12 @@ extension SSExamine {
             }
             else {
                 for (item, freq) in self.elements {
-                    temp = item as! Double
+                    if item is Int {
+                        temp = Double(item as! Int)
+                    }
+                    else {
+                        temp = item as! Double
+                    }
                     if temp > 0 {
                         sp = sp + log(temp) * Double(freq)
                     }
@@ -1265,7 +1353,12 @@ extension SSExamine {
     public var range: Double? {
         get {
             if !isEmpty && numeric {
-                return (self.maximum as! Double) - (self.minimum as! Double)
+                if self.maximum is Int {
+                    return Double((self.maximum as! Int) - (self.minimum as! Int))
+                }
+                else {
+                    return (self.maximum as! Double) - (self.minimum as! Double)
+                }
             }
             else {
                 return nil
@@ -1298,7 +1391,12 @@ extension SSExamine {
     public var midRange: Double? {
         if !isEmpty {
             if numeric {
-                return ((self.maximum as! Double) + (self.minimum as! Double)) / 2.0
+                if self.maximum is Int {
+                    return Double((self.maximum as! Int) + (self.minimum as! Int)) / 2.0
+                }
+                else {
+                    return ((self.maximum as! Double) + (self.minimum as! Double)) / 2.0
+                }
             }
             else {
                 return nil
@@ -1368,7 +1466,12 @@ extension SSExamine {
                 var diff = 0.0
                 var sum = 0.0
                 for (item, freq) in self.elements {
-                    diff = (item as! Double) - m!
+                    if item is Int {
+                        diff = Double(item as! Int) - m!
+                    }
+                    else {
+                        diff = (item as! Double) - m!
+                    }
                     sum = sum + diff * diff * Double(freq)
                 }
                 return sum / Double(self.sampleSize - 1)
@@ -1592,8 +1695,14 @@ extension SSExamine {
             while v <= (self.sampleSize - 1) {
                 k = v + 1
                 while k <= self.sampleSize {
-                    t1 = a[v - 1] as! Double
-                    t2 = a[k - 1] as! Double
+                    if a[v - 1] is Int {
+                        t1 = Double(a[v - 1] as! Int)
+                        t2 = Double(a[k - 1] as! Int)
+                    }
+                    else {
+                        t1 = a[v - 1] as! Double
+                        t2 = a[k - 1] as! Double
+                    }
                     s1 = s1 + fabs(t1 - t2)
                     k = k + 1
                 }
@@ -1619,7 +1728,12 @@ extension SSExamine {
         var t1: Double
         let result: Double
         for item in values  {
-            t1 = item as! Double
+            if item is Int {
+                t1 = Double(item as! Int)
+            }
+            else {
+                t1 = item as! Double
+            }
             diffArray.append(fabs(t1 - rp))
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
@@ -1644,7 +1758,12 @@ extension SSExamine {
         var f1: Double
         var c: Int = 0
         for (item, freq) in self.elements {
-            t1 = item as! Double
+            if item is Int {
+                t1 = Double(item as! Int)
+            }
+            else {
+                t1 = item as! Double
+            }
             f1 = Double(freq)
             sum = sum + fabs(t1 - rp) * f1
             c = c + freq
@@ -1675,7 +1794,12 @@ extension SSExamine {
                     var s = 0.0
                     var k: Double = 0
                     for itm in a {
-                        t = itm as! Double
+                        if itm is Int {
+                            t = Double(itm as! Int)
+                        }
+                        else {
+                            t = itm as! Double
+                        }
                         if t < m {
                             s = s + pow(t - m, 2.0)
                             k = k + 1.0
@@ -1696,7 +1820,12 @@ extension SSExamine {
                     var s = 0.0
                     var k: Double = 0
                     for itm in a {
-                        t = itm as! Double
+                        if itm is Int {
+                            t = Double(itm as! Int)
+                        }
+                        else {
+                            t = itm as! Double
+                        }
                         if t > m {
                             s = s + pow(t - m, 2.0)
                             k = k + 1.0
@@ -1743,8 +1872,15 @@ extension SSExamine {
             let m = self.arithmeticMean!
             var diff = 0.0
             var sum = 0.0
+            var t: Double
             for (item, freq) in self.elements {
-                diff = (item as! Double) - m
+                if item is Int {
+                    t = Double(item as! Int)
+                }
+                else {
+                    t = item as! Double
+                }
+                diff = t - m
                 sum = sum + pow(diff, Double(r)) * Double(freq)
             }
             return sum / Double(self.sampleSize)
@@ -1760,8 +1896,15 @@ extension SSExamine {
     fileprivate func originMoment(r: Int!) -> Double? {
         if !isEmpty && numeric {
             var sum = 0.0
+            var t: Double
             for (item, freq) in self.elements {
-                sum = sum + pow((item as! Double), Double(r)) * Double(freq)
+                if item is Int {
+                    t = Double(item as! Int)
+                }
+                else {
+                    t = item as! Double
+                }
+                sum = sum + pow(t, Double(r)) * Double(freq)
             }
             return sum / Double(self.sampleSize)
         }
@@ -1777,8 +1920,15 @@ extension SSExamine {
             let m = self.arithmeticMean
             if let sd = self.standardDeviation(type: .biased) {
                 if !sd.isZero {
+                    var t: Double
                     for (item, freq) in self.elements {
-                        sum = sum + pow( ( (item as! Double) - m! ) / sd, Double(r)) * Double(freq)
+                        if item is Int {
+                            t = Double(item as! Int)
+                        }
+                        else {
+                            t = item as! Double
+                        }
+                        sum = sum + pow( ( t - m! ) / sd, Double(r)) * Double(freq)
                     }
                     return sum / Double(self.sampleSize)
                 }
@@ -1886,16 +2036,38 @@ extension SSExamine {
         if !isEmpty && numeric {
             switch testType {
             case .grubbs:
-                let a:Array<Double> = self.elementsAsArray(sortOrder: .original)! as! Array<Double>
-                if let res = SSHypothesisTesting.grubbsTest(data:a, alpha: 0.05) {
+                var tempArray = Array<Double>()
+                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+                if SSElement.self is Int.Type {
+                    for itm in a {
+                        tempArray.append(Double(itm as! Int))
+                    }
+                }
+                else {
+                    for itm in a {
+                        tempArray.append(itm as! Double)
+                    }
+                }
+                if let res = SSHypothesisTesting.grubbsTest(data:tempArray, alpha: 0.05) {
                     return res.hasOutliers
                 }
                 else {
                     return nil
                 }
             case .esd:
-                let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-                if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                var tempArray = Array<Double>()
+                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+                if SSElement.self is Int.Type {
+                    for itm in a {
+                        tempArray.append(Double(itm as! Int))
+                    }
+                }
+                else {
+                    for itm in a {
+                        tempArray.append(itm as! Double)
+                    }
+                }
+                if let res = SSHypothesisTesting.esdOutlierTest(data: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
                         return true
                     }
@@ -1919,8 +2091,19 @@ extension SSExamine {
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if !isEmpty && numeric {
-            let a:Array<Double> = self.elementsAsArray(sortOrder: .original) as! Array<Double>
-            if let res = SSHypothesisTesting.esdOutlierTest(data: a, alpha: alpha, maxOutliers: max, testType: t) {
+            var tempArray = Array<Double>()
+            let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+            if SSElement.self is Int.Type {
+                for itm in a {
+                    tempArray.append(Double(itm as! Int))
+                }
+            }
+            else {
+                for itm in a {
+                    tempArray.append(itm as! Double)
+                }
+            }
+            if let res = SSHypothesisTesting.esdOutlierTest(data: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
                     return res.outliers as? Array<SSElement>
                 }
