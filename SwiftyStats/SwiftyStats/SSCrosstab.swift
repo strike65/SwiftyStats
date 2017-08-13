@@ -117,6 +117,12 @@ public class SSCrosstab<T>: NSObject where T: Comparable, T: Hashable {
         self.isNumeric = isNumber(initialValue)
     }
     
+    public var is2x2Table: Bool {
+        get {
+            return self.rows == 2 && self.columns == 2
+        }
+    }
+    
     func isValidRowName(name: String) -> Bool {
         if let _ = indexOfRow(rowName: name) {
             return true
@@ -363,6 +369,31 @@ public class SSCrosstab<T>: NSObject where T: Comparable, T: Hashable {
         }
     }
     
+    public func replaceRow(newRow: Array<T>, at: Int, name: String?) throws {
+        assert(self.isValidRowIndex(row: at), "Row-Index out of range")
+        do {
+            try self.insertRow(newRow: newRow, at: at, name: name)
+        }
+        catch {
+            throw error
+        }
+        let _ = self.removeRow(at: at + 1)
+    }
+
+    
+    public func replaceColumn(newColumn: Array<T>, at: Int, name: String?) throws {
+        assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
+        do {
+            try self.insertColumn(newColumn: newColumn, at: at, name: name)
+        }
+        catch {
+            throw error
+        }
+        let _ = self.removeColumn(at: at + 1)
+    }
+
+    
+    
     /// Sets the rows names. Length of rowNames must be equal to self.rows
     public func setRowNames(rowNames: Array<String>) throws {
         if !(rowNames.count == self.rr) {
@@ -588,6 +619,7 @@ extension SSCrosstab {
         }
     }
     
+    /// Returns the relative frequency of cell[row, column]
     public func relativeFrequencyCell(row: Int, column: Int) throws -> Double {
         assert(isValidRowIndex(row: row), "Row-Index out of range")
         assert(isValidColumnIndex(column: column), "Column-Index out of range")
@@ -607,7 +639,7 @@ extension SSCrosstab {
     }
 
     
-    
+    /// Returns the relative frequency of [rowName, columnName]
     public func relativeFrequencyCell(rowName: String, columnName: String) throws -> Double {
         assert(isValidRowName(name: rowName), "Row-Name unknown")
         assert(isValidColumnName(name: columnName), "Column-Name unknown")
@@ -626,6 +658,7 @@ extension SSCrosstab {
         }
     }
 
+    /// Returns the relative row frequency of cell[row, column]
     public func relativeRowFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
@@ -644,6 +677,7 @@ extension SSCrosstab {
         }
     }
 
+    /// Returns the relative column frequency of cell[row, column]
     public func relativeColumnFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
@@ -661,7 +695,8 @@ extension SSCrosstab {
             return Double.nan
         }
     }
-    
+
+    /// Returns the relative margin row frequency of [row]
     public func relativeRowMarginFrequency(row: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         var temp: Double = 0.0
@@ -674,18 +709,178 @@ extension SSCrosstab {
         }
     }
 
+    /// Returns the relative margin row frequency of [row]
+    public func relativeColumnMarginFrequency(column: Int) -> Double {
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        var temp: Double = 0.0
+        if self.isNumeric {
+            temp = self.columnSums![column]
+            return temp / self.total
+        }
+        else {
+            return Double.nan
+        }
+    }
+    
+    /// Returns the relative total frequency
+    public func relativeTotalFrequency(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        var temp: Double = 0.0
+        if self.isNumeric {
+            if T.self is Int.Type {
+                temp = Double(self[row, column] as! Int)
+            }
+            else {
+                temp = self[row, column] as! Double
+            }
+            return temp / self.total
+        }
+        else {
+            return Double.nan
+        }
+    }
 
+    /// Returns the expected frequency for cell[row, column]
+    public func expectedFrequency(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        if self.isNumeric {
+            return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
+        }
+        else {
+            return Double.nan
+        }
+    }
 
+    /// Returns the residual for cell[row, column]
+    public func residual(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        var temp: Double = 0.0
+        if self.isNumeric {
+            if T.self is Int.Type {
+                temp = Double(self[row, column] as! Int)
+            }
+            else {
+                temp = self[row, column] as! Double
+            }
+            return temp - self.expectedFrequency(row: row, column: column)
+        }
+        else {
+            return Double.nan
+        }
+    }
+    
+    /// Returns the standardized residual for cell[row, column]
+    public func standardizedResidual(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        return self.residual(row: row, column: column) / sqrt(expectedFrequency(row: row, column: column))
+    }
 
+    /// Returns the adjusted residual for cell[row, column]
+    public func adjustedResidual(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
+        let rowSum = self.rowSum(row: row)
+        let columnSum = self.columnSum(column: column)
+        return self.residual(row: row, column: column) / sqrt((expectedFrequency(row: row, column: column)) * (1.0 - rowSum / self.total) * (1.0 - columnSum / self.total))
+    }
 
+    /// Degrees of freedom
+    public var degreesOfFreedom: Double {
+        get {
+            let df = Double(self.rows - 1) * Double(self.columns - 1)
+            if df >= 0.0 {
+                return df
+            }
+            else {
+                return Double.nan
+            }
+        }
+    }
 
+    /// Returns Pearson's Chi-Square
+    public var chiSquare: Double {
+        get {
+            if self.isNumeric {
+                var sum: Double = 0.0
+                for r in 0..<self.rows {
+                    for c in 0..<self.columns {
+                        sum += pow(self.residual(row: r, column: c), 2.0) / self.expectedFrequency(row: r, column: c)
+                    }
+                }
+                return sum
+            }
+            else {
+                return Double.nan
+            }
+        }
+    }
 
-
-
-
-
-
-
+    /// Returns Chi-Square Likelihood Ratio
+    public var likelihoodRatio: Double {
+        get {
+            var temp: Double = 0.0
+            var sum: Double = 0.0
+            if self.isNumeric {
+                for r in 0..<self.rows {
+                    for c in 0..<self.columns {
+                        if T.self is Int.Type {
+                            temp = Double(self[r, c] as! Int)
+                        }
+                        else {
+                            temp = self[r, c] as! Double
+                        }
+                        if temp != 0 {
+                            sum += temp * log(temp / self.expectedFrequency(row: r, column: c))
+                        }
+                    }
+                }
+                return 2.0 * sum
+            }
+            else {
+                return Double.nan
+            }
+        }
+    }
+    
+    /// Returns the Yates continuity corrected Chi-Square for a 2 x 2 table
+    public var chiSquareYates: Double {
+        get {
+            if self.is2x2Table {
+                var n11: Double
+                var n12: Double
+                var n21: Double
+                var n22: Double
+                if T.self is Int.Type {
+                    n11 = Double(self[0,0] as! Int)
+                    n12 = Double(self[0,1] as! Int)
+                    n21 = Double(self[1,0] as! Int)
+                    n22 = Double(self[1,1] as! Int)
+                }
+                else {
+                    n11 = self[0,0] as! Double
+                    n12 = self[0,1] as! Double
+                    n21 = self[1,0] as! Double
+                    n22 = self[1,1] as! Double
+                }
+                let temp = fabs(n11 * n22 - n12 * n21)
+                let t = self.total
+                if temp <= (0.5 * t) {
+                    return 0.0
+                }
+                else {
+                    let den = self.rowSum(row: 0) * self.rowSum(row: 1) * self.columnSum(column: 0) * self.columnSum(column: 1)
+                    return t * pow(temp - 0.5 * t, 2.0) / den
+                }
+            }
+            else {
+                return Double.nan
+            }
+        }
+    }
 
 }
 

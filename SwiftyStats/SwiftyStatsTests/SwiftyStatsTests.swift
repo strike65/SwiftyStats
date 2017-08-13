@@ -73,56 +73,12 @@ class SwiftyStatsTests: XCTestCase {
     
     
     func testCrossTabs() {
-        var m = SSCrosstab.init(rows: 2, columns: 3, initialValue: 1)
-        m[0,0] = 1
-        m[0,1] = 2
-        m[0,2] = 3
-        m[1,0] = 4
-        m[1,1] = 5
-        m[1,2] = 6
-        try! m.appendRow([7,8,9], name: nil)
-        print(m)
-        try! m.appendRow([10,11,12], name: "test")
-        print(m)
-        try! m.insertRow(newRow: [33,33, 33], at: 2, name: "333")
-        print(m)
-        try! m.insertColumn(newColumn: [99,99,99,99,99], at: 2, name: "999")
-        print(m)
-        XCTAssertThrowsError(try m.removeRow(rowName: "999"))
-        XCTAssertThrowsError(try m.removeColumn(columnName: "333"))
-        try! m.removeRow(rowName: "333")
-        print(m)
-        try! m.removeColumn(columnName: "999")
-        print(m)
-//        m.appendColumn([7,8,9,10])
-//        print(m)
-//        
-//        m.insertRow(newRow: [0,0,0], at: 0)
-//        print(m)
-//        m.insertColumn(newColumn: [9,9,9,9,9], at: 0)
-//        print(m)
-//        m.insertColumn(newColumn: [7,7,7,7,7], at: 3)
-//        print(m)
-//        m.removeRow(at: 0)
-//        print(m)
-//        m.removeColumn(at: 0)
-//        print(m)
-//        print(m.lastColumn)
-//        print(m.firstColumn)
-//        print(m.lastRow)
-//        print(m.firstRow)
-//        print(m.column(columnIndex: 0))
-//        m.setColumnNames(columnNames: ["c1","c2","c3","c4"])
-//        m.setRowNames(rowNames: ["r1","r2","r3","r4"])
-//        print(m)
-//        print(m.columnNamed(columnName: "c4")!)
-//        print(m.rowNamed(rowName: "r1")!)
-//        print(m[0,0])
-//        m[0,0] = 999
-        print(m)
-        print(m.columnSums()!)
-        print(m.rowSums()!)
-        XCTAssertTrue(m.rowTotal() == m.total)
+        var c = SSCrosstab.init(rows: 4, columns: 3, initialValue: 0)
+        try! c.replaceColumn(newColumn:[52,46,25,26], at: 0, name: "Kurz")
+        try! c.replaceColumn(newColumn:[89,35,15,10], at: 1, name: "Mittel")
+        try! c.replaceColumn(newColumn:[123,23,13,5], at: 2, name: "Mittel")
+        try! c.setRowNames(rowNames: ["Keine", "BA", "BS", "HS"])
+        XCTAssertEqualWithAccuracy(c.chiSquare, 57.28, accuracy: 1e-2)
     }
     
     
