@@ -73,7 +73,7 @@ func fractionalPart(_ value: Double) -> Double {
 
 /// Tests, if a value is numeric
 /// - Paramter value: A value of type T
-func isNumeric<T>(_ value: T) -> Bool {
+func isNumber<T>(_ value: T) -> Bool {
     if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
         return true
     }

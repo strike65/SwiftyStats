@@ -97,7 +97,7 @@ public class SSCrosstab<T>: NSObject where T: Comparable, T: Hashable {
     private var rr: Int, cc: Int
     private var grid: Array<Array<T>>
     
-    public var isNumber: Bool
+    public var isNumeric: Bool
     
     /// Initializes a new crosstab
     /// - Parameter rows: number of rows
@@ -110,7 +110,7 @@ public class SSCrosstab<T>: NSObject where T: Comparable, T: Hashable {
         for _ in 1...rows {
             self.grid.append(Array<T>.init(repeating: initialValue, count: columns))
         }
-        self.isNumber = isNumeric(initialValue)
+        self.isNumeric = isNumber(initialValue)
     }
     
     
@@ -286,7 +286,7 @@ extension SSCrosstab {
     
     /// Returns the row sums as an array with self.rows values
     public func rowSums() -> Array<Double>? {
-        if self.isNumber {
+        if self.isNumeric {
             var sum: Double = 0.0
             var temp = Array<Double>()
             var temp1: Double
@@ -312,7 +312,7 @@ extension SSCrosstab {
 
     /// Returns the column sums as an array with self.columns values
     public func columnSums() -> Array<Double>? {
-        if self.isNumber {
+        if self.isNumeric {
             var sum: Double = 0.0
             var temp = Array<Double>()
             var temp1: Double

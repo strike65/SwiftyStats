@@ -53,7 +53,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     public var levelOfMeasurement: SSLevelOfMeasurement! = .interval
     
     /// If true, the instance contains numerical data
-    public var numeric: Bool! = true
+    public var isNumeric: Bool! = true
     
     /// Returns the count of unique SSElements
     public var length: Int {
@@ -280,7 +280,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter characterSet: If characterSet is not nil, only characters contained in the set will be appended
     private func initializeWithString(string: String, characterSet: CharacterSet?) {
         initializeSSExamine()
-        numeric = false
+        isNumeric = false
         var index: String.Index = string.startIndex
         var offset: String.IndexDistance = 0
         if index < string.endIndex {
@@ -307,11 +307,11 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     private func initializeWithArray(array: Array<SSElement>!) {
         initializeSSExamine()
         if array.count > 0 {
-            if isNumeric(array[0]) {
-                numeric = true
+            if isNumber(array[0]) {
+                isNumeric = true
             }
             else {
-                numeric = false
+                isNumeric = false
             }
             for item in array {
                 append(item)
@@ -330,7 +330,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         descriptionString = "SSExamine Instance - standard"
         alpha = 0.05
         hasChanges = false
-        numeric = true
+        isNumeric = true
     }
     
     
@@ -346,7 +346,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         aCoder.encode(sequence, forKey: "sequence")
         aCoder.encode(items, forKey: "items")
         aCoder.encode(cumRelFrequencies, forKey: "cumRelFrequencies")
-        aCoder.encode(numeric, forKey: "numeric")
+        aCoder.encode(isNumeric, forKey: "isNumeric")
         aCoder.encode(hasChanges, forKey: "hasChanges")
         aCoder.encode(SSStatisticsFileVersionString, forKey: "fileVersionString")
     }
@@ -363,7 +363,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         name = aDecoder.decodeObject(forKey: "name") as? String
         descriptionString = aDecoder.decodeObject(forKey: "descriptionString") as? String
         alpha = aDecoder.decodeObject(forKey: "alpha") as! Double
-        numeric = aDecoder.decodeObject(forKey: "numeric") as! Bool
+        isNumeric = aDecoder.decodeObject(forKey: "isNumeric") as! Bool
         hasChanges = aDecoder.decodeObject(forKey: "hasChanges") as! Bool
         levelOfMeasurement = SSLevelOfMeasurement(rawValue: aDecoder.decodeInteger(forKey: "levelOfMeasurement"))
     }
@@ -503,7 +503,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     public func append(fromArray array: Array<SSElement>!) {
         if array.count > 0 {
             if isEmpty {
-                numeric = isNumeric(array[array.startIndex])
+                isNumeric = isNumber(array[array.startIndex])
             }
             for item in array {
                 append(item)
@@ -578,7 +578,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         sequence.removeAll()
         relFrequencies.removeAll()
         cumRelFrequencies.removeAll()
-        numeric = true
+        isNumeric = true
         hasChanges = true
     }
     
@@ -856,7 +856,7 @@ extension SSExamine {
     
     /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
     public var squareTotal: Double {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             var s: Double = 0.0
             var temp: Double
             for (item, freq) in self.elements {
@@ -877,7 +877,7 @@ extension SSExamine {
     /// Sum of all elements raised to power p
     /// - Parameter p: Power
     public func poweredTotal(power p: Double) -> Double {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             var s: Double = 0.0
             var temp: Double
             for (item, freq) in self.elements {
@@ -898,7 +898,7 @@ extension SSExamine {
     
     /// Total of all elements. Returns Double.nan iff data are non-numeric.
     public var total: Double {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             var s: Double = 0.0
             var temp: Double
             for (item, freq) in self.elements {
@@ -919,7 +919,7 @@ extension SSExamine {
     
     /// Returns the sum of all inversed elements
     public var inverseTotal: Double {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             var s = 0.0
             var temp: Double
             for (item, freq) in self.elements {
@@ -947,7 +947,7 @@ extension SSExamine {
     
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
     public var arithmeticMean: Double? {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             return total / Double(sampleSize)
         }
         else {
@@ -1010,7 +1010,7 @@ extension SSExamine {
             os_log("p has to be > 0.0 and < 1.0", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !numeric {
+        if !isNumeric {
             os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1057,7 +1057,7 @@ extension SSExamine {
     /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
     public var quartile: SSQuartile? {
         get {
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 var res = SSQuartile()
                 do {
                     res.q25 = try self.quantile(q: 0.25)!
@@ -1078,7 +1078,7 @@ extension SSExamine {
     /// Returns the geometric mean.
     public var geometricMean: Double? {
         get {
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 let a = self.logProduct
                 let b = Double(self.sampleSize)
                 let c = exp(a / b)
@@ -1093,7 +1093,7 @@ extension SSExamine {
     /// Harmonic mean. Can be nil for non-numeric data.
     public var harmonicMean: Double? {
         get {
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 return Double(self.sampleSize) / self.inverseTotal
             }
             else {
@@ -1105,7 +1105,7 @@ extension SSExamine {
     
     /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
     public var contraHarmonicMean: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             let sqM = self.squareTotal / Double(self.sampleSize)
             let m = self.arithmeticMean!
             if !m.isZero {
@@ -1124,7 +1124,7 @@ extension SSExamine {
     /// - Parameter n: The order of the powered mean
     /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
     public func poweredMean(order: Double) -> Double? {
-        if order <= 0.0 || !numeric {
+        if order <= 0.0 || !isNumeric {
             return nil
         }
         if !isEmpty {
@@ -1145,7 +1145,7 @@ extension SSExamine {
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isEmpty {
-            if numeric {
+            if isNumeric {
                 if let a = self.elementsAsArray(sortOrder: .ascending) {
                     let l = a.count
                     let v = floor(Double(l) * alpha)
@@ -1185,7 +1185,7 @@ extension SSExamine {
             os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if let a = self.elementsAsArray(sortOrder: .ascending) {
                 let l = a.count
                 let v = floor(Double(l) * alpha)
@@ -1229,7 +1229,7 @@ extension SSExamine {
     public var median: Double? {
         get {
             var res: Double
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 do {
                     res = try self.quantile(q: 0.5)!
                 }
@@ -1248,7 +1248,7 @@ extension SSExamine {
     
     /// Product of all elements. Will be Double.nan for non-numeric data.
     public var product: Double {
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             var p: Double = 1.0
             var temp: Double
             for (item, freq) in self.elements {
@@ -1281,7 +1281,7 @@ extension SSExamine {
     public var logProduct: Double {
         var sp : Double = 0.0
         var temp: Double
-        if numeric && !isEmpty {
+        if isNumeric && !isEmpty {
             if isEmpty {
                 return 0.0
             }
@@ -1352,7 +1352,7 @@ extension SSExamine {
     /// The difference between maximum and minimum. Can be nil for empty tables.
     public var range: Double? {
         get {
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 if self.maximum is Int {
                     return Double((self.maximum as! Int) - (self.minimum as! Int))
                 }
@@ -1390,7 +1390,7 @@ extension SSExamine {
     /// Returns the mid-range
     public var midRange: Double? {
         if !isEmpty {
-            if numeric {
+            if isNumeric {
                 if self.maximum is Int {
                     return Double((self.maximum as! Int) + (self.minimum as! Int)) / 2.0
                 }
@@ -1411,7 +1411,7 @@ extension SSExamine {
     /// Returns the interquartile range
     public var interquartileRange: Double? {
         get {
-            if !isEmpty && numeric {
+            if !isEmpty && isNumeric {
                 do {
                     return try interquantileRange(lowerQuantile: 0.25, upperQuantile: 0.75)!
                 }
@@ -1438,7 +1438,7 @@ extension SSExamine {
             os_log("lower quantile has to be less than upper quantile", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !numeric {
+        if !isNumeric {
             return nil
         }
         if lower.isEqual(to: upper) {
@@ -1461,7 +1461,7 @@ extension SSExamine {
         case .biased:
             return moment(r: 2, type: .central)
         case .unbiased:
-            if !isEmpty && numeric && self.sampleSize >= 2 {
+            if !isEmpty && isNumeric && self.sampleSize >= 2 {
                 let m = self.arithmeticMean
                 var diff = 0.0
                 var sum = 0.0
@@ -1495,7 +1495,7 @@ extension SSExamine {
     
     /// Returns the standard error of the sample
     public var standardError: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             let sd = self.standardDeviation(type: .unbiased)!
             return sd / Double(self.sampleSize)
         }
@@ -1507,7 +1507,7 @@ extension SSExamine {
     
     /// Returns the entropy of the sample. Defined only for nominal or ordinal data
     public var entropy: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
                 var s: Double = 0.0
                 for item in self.uniqueElements(sortOrder: .none)! {
@@ -1538,7 +1538,7 @@ extension SSExamine {
     
     // Returns the Herfindahl index
     public var herfindahlIndex: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
                 var s: Double = 0.0
                 var p: Double = 0.0
@@ -1584,7 +1584,7 @@ extension SSExamine {
         if alpha <= 0.0 || alpha >= 1.0 {
             return nil
         }
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             var upper: Double
             var lower: Double
             var width: Double
@@ -1618,7 +1618,7 @@ extension SSExamine {
         if alpha <= 0.0 || alpha >= 1.0 {
             return nil
         }
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             var upper: Double
             var lower: Double
             var width: Double
@@ -1665,7 +1665,7 @@ extension SSExamine {
     
     /// Returns the coefficient of variation
     public var coefficientOfVariation: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if let s = self.standardDeviation(type: .unbiased) {
                 return s / arithmeticMean!
             }
@@ -1680,7 +1680,7 @@ extension SSExamine {
     
     /// Returns the mean absolute difference
     public var meanDifference: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if self.sampleSize < 2 {
                 return nil
             }
@@ -1720,7 +1720,7 @@ extension SSExamine {
     /// Returns the median absolute deviation around the reference point given. If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     public func medianAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
-        if isEmpty && !numeric && !rp.isNaN {
+        if isEmpty && !isNumeric && !rp.isNaN {
             return nil
         }
         var diffArray:Array<Double> = Array<Double>()
@@ -1750,7 +1750,7 @@ extension SSExamine {
     /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     public func meanAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
-        if isEmpty && !numeric && !rp.isNaN {
+        if isEmpty && !isNumeric && !rp.isNaN {
             return nil
         }
         var sum: Double = 0.0
@@ -1785,7 +1785,7 @@ extension SSExamine {
     /// Returns the semi-variance
     /// - Parameter type: SSSemiVariance.lower or SSSemiVariance.upper
     public func semiVariance(type: SSSemiVariance) -> Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             switch type {
             case .lower:
                 if let a = self.elementsAsArray(sortOrder: .ascending) {
@@ -1868,7 +1868,7 @@ extension SSExamine {
     /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     fileprivate func centralMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             let m = self.arithmeticMean!
             var diff = 0.0
             var sum = 0.0
@@ -1894,7 +1894,7 @@ extension SSExamine {
     /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     fileprivate func originMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             var sum = 0.0
             var t: Double
             for (item, freq) in self.elements {
@@ -1915,7 +1915,7 @@ extension SSExamine {
     
     /// Returns then r_th standardized moment.
     fileprivate func standardizedMoment(r: Int!) -> Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             var sum = 0.0
             let m = self.arithmeticMean
             if let sd = self.standardDeviation(type: .biased) {
@@ -1949,7 +1949,7 @@ extension SSExamine {
     
     /// Returns the kurtosis excess
     public var kurtosisExcess: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if let m4 = moment(r: 4, type: .central), let m2 = moment(r: 2, type: .central) {
                 return m4 / pow(m2, 2) - 3.0
             }
@@ -1996,7 +1996,7 @@ extension SSExamine {
     
     /// Returns the skewness.
     public var skewness: Double? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
                 return m3 / pow(s3, 3)
             }
@@ -2033,7 +2033,7 @@ extension SSExamine {
     /// Returns true, if there are outliers.
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func hasOutliers(testType: SSOutlierTest) -> Bool? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             switch testType {
             case .grubbs:
                 var tempArray = Array<Double>()
@@ -2090,7 +2090,7 @@ extension SSExamine {
     /// - Parameter max: Maximum number of outliers to return
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
-        if !isEmpty && numeric {
+        if !isEmpty && isNumeric {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
             if SSElement.self is Int.Type {
@@ -2122,7 +2122,7 @@ extension SSExamine {
     
     /// Returns true, if the sammple seems to be drawn from a normally distributed population with mean = mean(sample) and sd = sd(sample)
     public var isGaussian: Bool? {
-        if isEmpty || !numeric {
+        if isEmpty || !isNumeric {
             return nil
         }
         else {
@@ -2143,7 +2143,7 @@ extension SSExamine {
     /// Tests, if the sample was drawn from population with a particular distribution function
     // - Parameter target: Distribution to test
     public func testForDistribution(targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
-        if isEmpty || !numeric {
+        if isEmpty || !isNumeric {
             return nil
         }
         else {
