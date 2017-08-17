@@ -27,6 +27,8 @@
 import Foundation
 import os.log
 
+/// Class provides a matrix-like crosstable. Elements are accessibla by c[row, column].
+/// - Precondition: Rowa and columns must be named.
 public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Comparable, R: Hashable, C: Comparable, C: Hashable {
     /// Number of rows
     public var rows: Int {
@@ -92,6 +94,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
+    /// Defines the level od measurement of the column variable
     public var columnLevelOfMeasurement: SSLevelOfMeasurement {
         get {
             return self.levelRows
@@ -101,6 +104,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
+    /// Defines the level od measurement of the row variable
     public var rowLevelOfMeasurement: SSLevelOfMeasurement {
         get {
             return self.levelRows
@@ -109,6 +113,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
             self.levelRows = newValue
         }
     }
+    
     private var rnames: Array<R>?
     private var cnames: Array<C>?
     private var levelRows: SSLevelOfMeasurement
@@ -167,7 +172,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
             return self.rows == 2 && self.columns == 2
         }
     }
-    
+    /// Returns true if name is a valid row-name
     func isValidRowName(name: R) -> Bool {
         if let _ = indexOfRow(rowName: name) {
             return true
@@ -177,6 +182,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
 
+    /// Returns true if name is a valid column-name
     func isValidColumnName(name: C) -> Bool {
         if let _ = indexOfColumn(columnName: name) {
             return true
@@ -186,14 +192,17 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
 
+    /// Returns true if row is a valid index
     func isValidRowIndex(row: Int) -> Bool {
         return row >= 0 && row < self.rows
     }
 
+    /// Returns true if column is a valid column index
     func isValidColumnIndex(column: Int) -> Bool {
         return column >= 0 && column < self.columns
     }
 
+    /// Returns true if row and column are valid indexes
     func isValidIndex(row: Int, column: Int) -> Bool {
         return row >= 0 && row < self.rr && column >= 0 && column < self.cc
     }
@@ -314,11 +323,6 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
             if self.rnames != nil {
                 self.rnames!.append(name!)
             }
-//            else {
-//                self.rnames = Array<V>.init(repeating: nil, count: self.rows)
-//                self.rnames!.remove(at: self.rows - 1)
-//                self.rnames!.append(name!)
-//            }
         }
     }
     
@@ -1233,21 +1237,36 @@ extension SSCrosstab {
         }
     }
     
-//    /// Returns Lambda
-//    public var lambda: Double {
-//        if self.isNumeric {
-//            let cm = self.largestColumTotal
-//            var sum: Double = 0.0
-//            for r in 0..<self.rows {
-//                sum += self.largestCellCount(row: r)
-//            }
-//            return (sum - cm) / (self.total - cm)
-//        }
-//        else {
-//            return Double.nan
-//        }
-//    }
-    
+    /// Returns Lambda
+    public var lambda_C_R: Double {
+        if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
+            let cm = self.largestColumTotal
+            var sum: Double = 0.0
+            for r in 0..<self.rows {
+                sum += self.largestCellCount(row: r)
+            }
+            return (sum - cm) / (self.total - cm)
+        }
+        else {
+            return Double.nan
+        }
+    }
+
+    /// Returns Lambda
+    public var lambda_R_C: Double {
+        if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
+            let rm = self.largestRowTotal
+            var sum: Double = 0.0
+            for c in 0..<self.columns {
+                sum += self.largestCellCount(column: c)
+            }
+            return (sum - rm) / (self.total - rm)
+        }
+        else {
+            return Double.nan
+        }
+    }
+
 
     /// Returns the relative risk
     /// - Preconditions: Only applicable to a 2x2 table
@@ -1308,5 +1327,31 @@ extension SSCrosstab {
         }
     }
 
+    
+    public var tauCR: Double {
+        get {
+            if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
+                var sum1 = 0.0
+                var sum2 = 0.0
+                var fij = 0.0
+                for r in 0..<self.rows {
+                    for c in 0..<self.columns {
+                        if N.self is Int.Type {
+                            fij = Double(self[r,c] as! Int)
+                        }
+                        else {
+                            fij = self[r,c] as! Double
+                        }
+                        sum1 += pow(fij, 2.0) / self.rowSum(row: r)
+                        sum2 += pow(self.columnSum(column: c), 2.0)
+                    }
+                }
+                return (self.total * sum1 - sum2) / (pow(self.total, 2.0) - sum2)
+            }
+            else {
+                return Double.nan
+            }
+        }
+    }
 }
 

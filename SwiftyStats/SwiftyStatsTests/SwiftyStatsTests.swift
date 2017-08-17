@@ -114,6 +114,15 @@ class SwiftyStatsTests: XCTestCase {
         print(c2.r0)
         print(c2.r1)
         print(c2)
+//        TAU test
+        let tauTable = try! SSCrosstab.init(rows: 3, columns: 2, initialValue: 0.0, rowID: ["<= 20 a", "21 - 50 a", ">=51 a"], columnID: ["Raucher", "Nichtraucher"])
+        try! tauTable.setColumn(name: "Raucher", newColumn: [0.4, 0.3, 0.30])
+        try! tauTable.setColumn(name: "Nichtraucher", newColumn: [0.20, 0.30, 0.50])
+        print(tauTable.rowLevelOfMeasurement)
+        print(tauTable.columnLevelOfMeasurement)
+        print(tauTable.lambda_C_R)
+        print(tauTable.lambda_R_C)
+        print(tauTable.tauCR)
     }
     
     
@@ -622,6 +631,10 @@ class SwiftyStatsTests: XCTestCase {
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
+            var t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.999999999999, degreesOfFreedom: 2)
+            t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.95, degreesOfFreedom: 2)
+            t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.99, degreesOfFreedom: 2)
+            
             // Put the code you want to measure the time of here.
         }
     }

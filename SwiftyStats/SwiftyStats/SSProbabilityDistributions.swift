@@ -541,6 +541,8 @@ public class SSProbabilityDistributions {
     /// - Parameter p: p
     /// - Paremeter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+    /// ### Note ###
+    /// Bisection
     public class func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
@@ -556,10 +558,10 @@ public class SSProbabilityDistributions {
          * coded in C# by Volker Thieme 2005
          */
         let eps: Double = 1E-15
-        if fabs( p - 1.0 ) <= eps  {
+        if fabs( p - 1.0 ) <= 1E-5  {
             return Double.infinity
         }
-        if fabs(p) <= eps {
+        if fabs(p) <= 1E-5 {
             return -Double.infinity
         }
         if fabs(p - 0.5) <= eps {
@@ -580,9 +582,10 @@ public class SSProbabilityDistributions {
             _p = p
         }
         minT = 0.0
-        maxT = 1000.0
-        tVal = 500.0
-        while (maxT - minT > (2.0 * eps)) {
+//        maxT = sqrt(params.variance) * 20
+        maxT = 100000.0
+        tVal = (maxT + minT) / 2.0
+        while (maxT - minT > (4.0 * eps)) {
             do {
                 pp = try SSProbabilityDistributions.cdfStudentTDist(t: tVal, degreesOfFreedom: df)
             }
@@ -2324,17 +2327,3 @@ public class SSProbabilityDistributions {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

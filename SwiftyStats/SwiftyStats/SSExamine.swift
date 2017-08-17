@@ -81,9 +81,10 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         var temp: Int
         if !isEmpty {
             var a = elementsAsArray(sortOrder: .original)!
+            let strings = self.elementsAsString(withDelimiter: "")!
             temp = (a[a.startIndex].hashValue)
             for item in a {
-                temp = temp ^ item.hashValue
+                temp = temp ^ item.hashValue ^ strings.hash
             }
             return temp
         }
@@ -92,7 +93,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         }
     }
     
-    /// Two SSExamine objects are supposed to be equal, iff the arrays of all elements are equal.
+    /// Two SSExamine objects are supposed to be equal, iff the arrays of all elements in unsorted order are equal.
     /// - Paramater object: The object to compare to
     public override func isEqual(_ object: Any?) -> Bool {
         if let o: SSExamine<SSElement> = object as? SSExamine<SSElement> {
