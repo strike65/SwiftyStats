@@ -2,8 +2,7 @@
 //  SSDataGroupSorter.swift
 //  SwiftyStats
 //
-//  Created by volker on 10.08.17.
-//  Copyright © 2017 VTSoftware. All rights reserved.
+//  Created by Volker Thieme on 10.08.17.
 //
 
 import Foundation

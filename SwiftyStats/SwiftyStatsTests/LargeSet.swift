@@ -2,8 +2,7 @@
 //  LargeSet.swift
 //  SwiftyStats
 //
-//  Created by volker on 06.08.17.
-//  Copyright © 2017 VTSoftware. All rights reserved.
+//  Created by Volker Thieme on 06.08.17.
 //
 
 import Foundation

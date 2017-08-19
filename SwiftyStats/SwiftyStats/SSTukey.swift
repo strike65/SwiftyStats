@@ -2,8 +2,7 @@
 //  SSTukey.swift
 //  SwiftyStats
 //
-//  Created by volker on 11.08.17.
-//  Copyright © 2017 VTSoftware. All rights reserved.
+//  Created by Volker Thieme on 11.08.17.
 //
 /*
  *  Mathlib : A C Library of Special Functions

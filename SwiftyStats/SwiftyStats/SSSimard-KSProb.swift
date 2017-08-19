@@ -3,7 +3,6 @@
 //  SwiftyStats
 //
 //  Swift version created by Volker Thieme on 23.07.17.
-//  Copyright © 2017 VTSoftware. All rights reserved.
 //  Original copyright see below
 //
 
