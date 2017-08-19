@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */; };
 		9F3C0EAF1F470CC8005E3890 /* clonidine_data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */; };
+		9F3F113B1F4812C00022101F /* SSDataFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F113A1F4812C00022101F /* SSDataFrame.swift */; };
 		9F82D3AD1F1E8F19001BFC9D /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
 		9F82D3B21F1E8F19001BFC9D /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3B11F1E8F19001BFC9D /* SwiftyStatsTests.swift */; };
 		9F82D3B41F1E8F19001BFC9D /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,6 +46,7 @@
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = clonidine_data.swift; sourceTree = "<group>"; };
+		9F3F113A1F4812C00022101F /* SSDataFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDataFrame.swift; sourceTree = "<group>"; };
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStats.h; sourceTree = "<group>"; };
 		9F82D3A71F1E8F19001BFC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */,
 				9F919AA91F3DD09000FC4199 /* SSTukey.swift */,
 				9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */,
+				9F3F113A1F4812C00022101F /* SSDataFrame.swift */,
 			);
 			path = SwiftyStats;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */,
 				9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F919AAA1F3DD09000FC4199 /* SSTukey.swift in Sources */,
+				9F3F113B1F4812C00022101F /* SSDataFrame.swift in Sources */,
 				9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,1 +1,10 @@
 - make error handling consistent (throw errors or return nan)
+
+
+1. import/export csv
+Basically an data file can be interpreted as an two-dimensional array.
+Structure:
+          HEADER1, HEADER2, HEADER3  ....
+(ROW1)    VALUE,   VALUE,   VALUE,   ....
+
+The first row must contain a header. Every column definex
