@@ -532,7 +532,7 @@ public class SSProbabilityDistributions {
         constant = 0.5
         let t1 = betaNormalized(x: 1.0, a: halfDoF, b: constant)
         let t2 = betaNormalized(x: correctedDoF, a: halfDoF, b: constant)
-        result = 0.5 * (1.0 + (t1 - t2) * t.sgn())
+        result = 0.5 * (1.0 + (t1 - t2) * t.sgn)
         return result
     }
     
@@ -1209,7 +1209,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let xm = x - mean
-        let result = 0.5 * (1.0 + xm.sgn() * (1.0 - exp(-fabs(xm) / b)))
+        let result = 0.5 * (1.0 + xm.sgn * (1.0 - exp(-fabs(xm) / b)))
         return result
     }
 

@@ -71,6 +71,20 @@ class SwiftyStatsTests: XCTestCase {
         super.tearDown()
     }
     
+    func testClonidineData() {
+        let verum_ADR_before = SSExamine.init(withArray: v_adrenaline_vnw, characterSet: nil)
+        verum_ADR_before.tag = "Verum"
+        let placebo_ADR_before = SSExamine.init(withArray: p_adrenaline_vnw, characterSet: nil)
+        verum_ADR_before.tag = "Placebo"
+        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
+        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
+        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
+        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
+        var res: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: verum_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
+        res = SSHypothesisTesting.esdOutlierTest(data: placebo_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
+        print(res)
+    }
+    
     
     func testCrossTabs() {
         var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
@@ -604,7 +618,7 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(!double1.hasOutliers(testType: .grubbs)!)
             let double2 = try SSExamine<Double>.init(withObject: rosnerData, levelOfMeasurement: .interval, characterSet: nil)
             XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
-            let esd: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: double2.elementsAsArray(sortOrder: .original)!, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
+            let esd: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: double2, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
             XCTAssert(esd.countOfOutliers == 3)
             let double3 = try SSExamine<Double>.init(withObject: doubleData1, levelOfMeasurement: .interval, characterSet: nil)
             XCTAssert(double3.hasOutliers(testType: .grubbs)!)
@@ -631,11 +645,6 @@ class SwiftyStatsTests: XCTestCase {
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
-            var t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.999999999999, degreesOfFreedom: 2)
-            t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.95, degreesOfFreedom: 2)
-            t = try! SSProbabilityDistributions.quantileStudentTDist(p: 0.99, degreesOfFreedom: 2)
-            
-            // Put the code you want to measure the time of here.
         }
     }
     

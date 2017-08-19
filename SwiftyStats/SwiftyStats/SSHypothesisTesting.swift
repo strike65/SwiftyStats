@@ -27,6 +27,32 @@ import os.log
 
 public class SSHypothesisTesting {
     
+    /// Performs the Grubbs outlier test
+    /// - Parameter data: An Array<Double> containing the data
+    /// - Parameter alpha: Alpha
+    /// - Returns: SSGrubbsTestResult
+    public class func grubbsTest<T>(array: Array<T>!, alpha: Double!) throws -> SSGrubbsTestResult? where T: Comparable, T: Hashable {
+        if array.count == 3 {
+            os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        if alpha <= 0 || alpha >= 1.0 {
+            os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+            return nil
+        }
+        if !isNumber(array[0]) {
+            os_log("expected numerical type", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            let examine = SSExamine<T>.init(withArray: array, characterSet: nil)
+            return try SSHypothesisTesting.grubbsTest(data: examine, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+
     /************************************************************************************************/
     // MARK: Grubbs test
     
@@ -34,35 +60,43 @@ public class SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    public class func grubbsTest(data: Array<Double>, alpha: Double!) -> SSGrubbsTestResult? {
-        if data.count == 0 {
-            return nil
+    public class func grubbsTest<T>(data: SSExamine<T>!, alpha: Double!) throws -> SSGrubbsTestResult where T: Comparable, T: Hashable {
+        if data.sampleSize <= 3 {
+            os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if alpha <= 0 || alpha >= 1.0 {
             os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
-            return nil
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        if !data.isNumeric {
+            os_log("expected numerical type", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+//        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
         var g: Double
         var maxDiff = 0.0
-        let mean = examine.arithmeticMean!
+        let mean = data.arithmeticMean!
         let quantile: Double
-        if let s = examine.standardDeviation(type: .unbiased) {
-            maxDiff = maximum(t1: fabs(examine.maximum! - mean), t2: fabs(examine.minimum! - mean))
+        var mi: Double, ma: Double
+        if let s = data.standardDeviation(type: .unbiased) {
+            ma = makeDouble(data.maximum!)
+            mi = makeDouble(data.minimum!)
+            maxDiff = maximum(fabs(ma - mean), fabs(mi - mean))
             g = maxDiff / s
             do {
-                quantile = try SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(examine.sampleSize)), degreesOfFreedom: Double(examine.sampleSize) - 2.0)
+                quantile = try SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(data.sampleSize)), degreesOfFreedom: Double(data.sampleSize) - 2.0)
             }
             catch {
-                return nil
+                throw error
             }
             let t2 = pow(quantile, 2.0)
-            let t = ( Double(examine.sampleSize) - 1.0 ) * sqrt(t2 / (Double(examine.sampleSize) - 2.0 + t2)) / sqrt(Double(examine.sampleSize))
+            let t = ( Double(data.sampleSize) - 1.0 ) * sqrt(t2 / (Double(data.sampleSize) - 2.0 + t2)) / sqrt(Double(data.sampleSize))
             var res:SSGrubbsTestResult = SSGrubbsTestResult()
-            res.sampleSize = examine.sampleSize
+            res.sampleSize = data.sampleSize
             res.maxDiff = maxDiff
-            res.largest = examine.maximum!
-            res.smallest = examine.minimum!
+            res.largest = makeDouble(data.maximum!)
+            res.smallest = makeDouble(data.minimum!)
             res.criticalValue = t
             res.mean = mean
             res.G = g
@@ -71,7 +105,7 @@ public class SSHypothesisTesting {
             return res
         }
         else {
-            return nil
+            return SSGrubbsTestResult()
         }
     }
     
@@ -98,20 +132,37 @@ public class SSHypothesisTesting {
         return num / denom
     }
     
-    
-    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test ist more accurate than the Grubbs test (For Grubbs test the suspected number of outliers must be specified exactly.)
+
+    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
     /// - Parameter data: Array<Double>
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
-    public class func esdOutlierTest(data: Array<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
-        if data.count == 0 {
+    public class func esdOutlierTest(array: Array<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
+        if array.count == 0 {
             return nil
         }
-        if maxOutliers >= data.count {
+        if maxOutliers >= array.count {
             return nil
         }
-        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        let examine: SSExamine<Double> = SSExamine<Double>.init(withArray: array, characterSet: nil)
+        return SSHypothesisTesting.esdOutlierTest(data: examine, alpha: alpha, maxOutliers: maxOutliers, testType: testType)
+    }
+
+    
+    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
+    /// - Parameter data: Array<Double>
+    /// - Parameter alpha: Alpha
+    /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
+    /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
+    public class func esdOutlierTest(data: SSExamine<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
+        if data.sampleSize == 0 {
+            return nil
+        }
+        if maxOutliers >= data.sampleSize {
+            return nil
+        }
+        let examine = data
         var sortedData = examine.elementsAsArray(sortOrder: .ascending)!
         // var dataRed: Array<Double> = Array<Double>()
         let orgMean: Double = examine.arithmeticMean!
@@ -262,12 +313,12 @@ public class SSHypothesisTesting {
     /// ````
     /// - Parameter data: Array<Double>
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelation(data: Array<Double>!) throws -> SSBoxLjungResult {
-        if data.count < 2 {
+    public class func autocorrelation(array: Array<Double>!) throws -> SSBoxLjungResult {
+        if array.count < 2 {
             os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        let examine = SSExamine<Double>.init(withArray: array, characterSet: nil)
         do {
             return try autocorrelation(data: examine)
         }
@@ -1993,13 +2044,13 @@ public class SSHypothesisTesting {
         var sum: Double
         let one = 1.0
         let zero = 0.0
-        minmn = minimum(t1: m, t2: n)
+        minmn = minimum(m, n)
         if minmn < 1 {
             os_log("m and n is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         mn1 = m * n + 1
-        maxmmn = maximum(t1: m, t2: n)
+        maxmmn = maximum(m, n)
         n1 = maxmmn + 1
         i = 1
         while i <= n1 {
@@ -2379,7 +2430,7 @@ public class SSHypothesisTesting {
         }
         else {
             z = fabs(U - nm / 2.0) / sqrt((nm * (n1 + n2 + 1)) / 12.0)
-            if (n1 * n2) <= 400 && ((n1 * n2) + minimum(t1: n1, t2: n2)) <= 220 {
+            if (n1 * n2) <= 400 && ((n1 * n2) + minimum(n1, n2)) <= 220 {
                 do {
                     if U <= (n1 * n2 + 1) / 2.0 {
                         pexact1 = try cdfMannWhitney(U: U, m: set1.sampleSize, n: set2.sampleSize)

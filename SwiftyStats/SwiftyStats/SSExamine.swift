@@ -2037,22 +2037,23 @@ extension SSExamine {
         if !isEmpty && isNumeric {
             switch testType {
             case .grubbs:
-                var tempArray = Array<Double>()
-                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
-                if SSElement.self is Int.Type {
-                    for itm in a {
-                        tempArray.append(Double(itm as! Int))
-                    }
-                }
-                else {
-                    for itm in a {
-                        tempArray.append(itm as! Double)
-                    }
-                }
-                if let res = SSHypothesisTesting.grubbsTest(data:tempArray, alpha: 0.05) {
+//                var tempArray = Array<Double>()
+//                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+//                if SSElement.self is Int.Type {
+//                    for itm in a {
+//                        tempArray.append(Double(itm as! Int))
+//                    }
+//                }
+//                else {
+//                    for itm in a {
+//                        tempArray.append(itm as! Double)
+//                    }
+//                }
+                do {
+                    let res = try SSHypothesisTesting.grubbsTest(data:self, alpha: 0.05)
                     return res.hasOutliers
                 }
-                else {
+                catch {
                     return nil
                 }
             case .esd:
@@ -2068,7 +2069,7 @@ extension SSExamine {
                         tempArray.append(itm as! Double)
                     }
                 }
-                if let res = SSHypothesisTesting.esdOutlierTest(data: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
                         return true
                     }
@@ -2104,7 +2105,7 @@ extension SSExamine {
                     tempArray.append(itm as! Double)
                 }
             }
-            if let res = SSHypothesisTesting.esdOutlierTest(data: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
+            if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
                     return res.outliers as? Array<SSElement>
                 }

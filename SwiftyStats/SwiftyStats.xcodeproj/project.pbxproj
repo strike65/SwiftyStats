@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */; };
+		9F3C0EAF1F470CC8005E3890 /* clonidine_data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */; };
 		9F82D3AD1F1E8F19001BFC9D /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
 		9F82D3B21F1E8F19001BFC9D /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3B11F1E8F19001BFC9D /* SwiftyStatsTests.swift */; };
 		9F82D3B41F1E8F19001BFC9D /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -43,6 +44,7 @@
 		9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSSimard-KSProb.swift"; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = clonidine_data.swift; sourceTree = "<group>"; };
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3A61F1E8F19001BFC9D /* SwiftyStats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStats.h; sourceTree = "<group>"; };
 		9F82D3A71F1E8F19001BFC9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				9F82D3B11F1E8F19001BFC9D /* SwiftyStatsTests.swift */,
 				9F82D3B31F1E8F19001BFC9D /* Info.plist */,
 				9FE9A5481F374F0400BC37BF /* LargeSet.swift */,
+				9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */,
 			);
 			path = SwiftyStatsTests;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			files = (
 				9FE9A5491F374F0400BC37BF /* LargeSet.swift in Sources */,
 				9F82D3B21F1E8F19001BFC9D /* SwiftyStatsTests.swift in Sources */,
+				9F3C0EAF1F470CC8005E3890 /* clonidine_data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

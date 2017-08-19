@@ -827,7 +827,7 @@ fileprivate func DurbinMatrix(_ n: Int, _ d: Double) -> Double {
 
 
 /* Matrix product */
-fileprivate func mMultiply(_ A: Array<Double>, _ B: Array<Double>, _ C: inout Array<Double>, m: Int) {
+fileprivate func mMultiply(_ A: Array<Double>, _ B: Array<Double>, _ C: inout Array<Double>, _ m: Int) {
     var s: Double
     for i in 0...m - 1 {
         for j in 0...m - 1 {
@@ -841,7 +841,7 @@ fileprivate func mMultiply(_ A: Array<Double>, _ B: Array<Double>, _ C: inout Ar
 }
 
 
-fileprivate func renormalize(V: inout Array<Double>, m: Int, p: UnsafeMutablePointer<Int>) {
+fileprivate func renormalize(_ V: inout Array<Double>, _ m: Int, _ p: UnsafeMutablePointer<Int>) {
 //    int i;
     for i in 0...m * m - 1 {
         V[i] *= INORM
@@ -862,10 +862,10 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
     }
     mPower(A, eA, &V, eV, m, n / 2)
     B = Array<Double>.init(repeating: 0.0, count: m * m)
-    mMultiply(V, V, &B,m: m)
+    mMultiply(V, V, &B, m)
     var eB: Int = 2 * eV.pointee
     if (B[(m / 2) * m + (m / 2)] > NORM) {
-        renormalize(V: &B, m: m, p: &eB)
+        renormalize(&B, m, &eB)
     }
     
     if (n % 2 == 0) {
@@ -874,12 +874,12 @@ fileprivate func mPower(_ A: Array<Double>, _ eA: Int, _ V: inout Array<Double>,
         }
         eV.pointee = eB
     } else {
-        mMultiply(A, B, &V, m: m)
+        mMultiply(A, B, &V,  m)
         eV.pointee = eA + eB
     }
     
     if (V[(m / 2) * m + (m / 2)] > NORM) {
-        renormalize(V: &V, m: m, p: eV)
+        renormalize(&V, m, eV)
     }
     B.removeAll()
 }

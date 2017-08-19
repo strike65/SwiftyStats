@@ -27,6 +27,20 @@
 import Foundation
 
 
+func makeDouble<T>(_ value: T) -> Double {
+    if isNumber(value) {
+        if T.self is Int.Type {
+            return Double(value as! Int)
+        }
+        else {
+            return value as! Double
+        }
+    }
+    else {
+        return Double.nan
+    }
+}
+
 
 /// Binomial
 public func binomial2(_ n: Double!, _ k: Double!) -> Double {
@@ -83,7 +97,7 @@ func isNumber<T>(_ value: T) -> Bool {
 }
 
 /// Returns the maximum of two comparable values
-func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
+func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     if t1 > t2 {
         return t1
     }
@@ -93,7 +107,7 @@ func maximum<T>(t1: T, t2: T) -> T where T:Comparable {
 }
 
 /// Returns the minimum of two comparable values
-func minimum<T>(t1: T, t2: T) -> T where T:Comparable {
+func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     if t1 < t2 {
         return t1
     }
@@ -158,14 +172,25 @@ func logFactorial(_ n: Int) -> Double {
 extension Double {
     /// Adds the function sgn().
     /// - Returns: -1.0 if the receiver is < 0.0, +1.0 otherwise
-    func sgn() -> Double {
-        if self.sign == .minus {
-            return -1.0
-        }
-        else {
-            return 1.0
+    public var sgn: Double {
+        get {
+            if self.sign == .minus {
+                return -1.0
+            }
+            else {
+                return 1.0
+            }
         }
     }
+    
+//    func sgn() -> Double {
+//        if self.sign == .minus {
+//            return -1.0
+//        }
+//        else {
+//            return 1.0
+//        }
+//    }
 }
 
 /// Returns a SSExamine object of length one and count "count"
