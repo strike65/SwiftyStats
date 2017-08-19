@@ -146,29 +146,38 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter object: The object used
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     /// - Throws: SSSwiftyStatsError.missingData if object is not a string or an array<SSElement>
-    public init(withObject object: Any!, levelOfMeasurement lom: SSLevelOfMeasurement! ,characterSet: CharacterSet?) throws {
+    public init(withObject object: Any!, levelOfMeasurement lom: SSLevelOfMeasurement!, name: String?, characterSet: CharacterSet?) throws {
         // allow only arrays an strings as 'object'
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
             os_log("Error creating SSExamine instance", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .missingData, file: #file, line: #line, function: #function)
         }
         super.init()
+        if let n = name {
+            self.name = n
+        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
             self.initializeWithString(string: object as! String, characterSet: characterSet)
         }
         else if object is Array<SSElement> {
-            self.initializeWithArray(array: object as! Array<SSElement>)
+            self.initializeWithArray(object as! Array<SSElement>)
         }
     }
     
     /// Returns: New table by analyzing string. Taking characterSet into account, when set
     /// - Parameter array: The array containing the elements
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
-    public init(withArray array: Array<SSElement>!, characterSet: CharacterSet?) {
+    public init(withArray array: Array<SSElement>!, name: String?, characterSet: CharacterSet?) {
         super.init()
-        self.initializeWithArray(array: array)
+        if let n = name {
+            self.name = n
+        }
+        else {
+            self.name = nil
+        }
+        self.initializeWithArray(array)
     }
     
     
@@ -177,13 +186,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func examine(withContentsOfFile path: String!, separator: String!, stringEncoding: String.Encoding!) throws -> SSExamine<Double>? {
+    public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!) throws -> SSExamine<Double>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             os_log("File not found", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
+        let filename = NSURL(fileURLWithPath: fullFilename).lastPathComponent!
         var doubleScanner: Scanner
         var numberArray: Array<Double> = Array<Double>()
         var dbl: Double = 0.0
@@ -215,7 +225,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             return nil
         }
         if go {
-            return SSExamine<Double>.init(withArray: numberArray, characterSet: nil)
+            return SSExamine<Double>.init(withArray: numberArray, name: filename, characterSet: nil)
         }
         else {
             return nil
@@ -263,9 +273,9 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// Returns a SSExamine instance initialized using the string provided. Level of measurement will be set to .nominal.
     /// - Parameter string: String
     /// - Parameter characterSet: If characterSet is not nil, only characters contained in the set will be appended
-    public class func examineWithString(_ string: String!, characterSet: CharacterSet?) -> SSExamine<String>? {
+    public class func examineWithString(_ string: String!, name: String?, characterSet: CharacterSet?) -> SSExamine<String>? {
         do {
-            let result:SSExamine<String> = try SSExamine<String>(withObject: string, levelOfMeasurement: .nominal, characterSet: characterSet)
+            let result:SSExamine<String> = try SSExamine<String>(withObject: string, levelOfMeasurement: .nominal, name: name,  characterSet: characterSet)
             return result
         }
         catch {
@@ -305,7 +315,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Initializes a new instance using an array
     /// - Parameter array: The array containing the elements
-    private func initializeWithArray(array: Array<SSElement>!) {
+    private func initializeWithArray(_ array: Array<SSElement>!) {
         initializeSSExamine()
         if array.count > 0 {
             if isNumber(array[0]) {
@@ -413,10 +423,10 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns true, if the table contains the item
     /// - Parameter item: Item to search
-    public func contains(item: SSElement) -> Bool {
+    public func contains(_ element: SSElement) -> Bool {
         if !isEmpty {
             let test = items.contains(where: { (key: SSElement, value: Int) in
-                if key == item {
+                if key == element {
                     return true
                 }
                 else {
@@ -433,9 +443,9 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns the relative Frequency of item
     /// - Parameter item: Item
-    public func relativeFrequency(item: SSElement) -> Double {
-        if contains(item: item) {
-            return Double(self.elements[item]!) / Double(self.sampleSize)
+    public func relativeFrequency(_ element: SSElement) -> Double {
+        if contains(element) {
+            return Double(self.elements[element]!) / Double(self.sampleSize)
         }
         else {
             return 0.0
@@ -444,9 +454,9 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns the absolute frequency of item
     /// - Parameter item: Item
-    public func frequency(item: SSElement) -> Int {
-        if contains(item: item) {
-            return items[item]!
+    public func frequency(_ element: SSElement) -> Int {
+        if contains(element) {
+            return items[element]!
         }
         else {
             return 0
@@ -455,10 +465,10 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Appends <item> and updates frequencies
     /// - Parameter item: Item
-    public func append(_ item: SSElement!) {
+    public func append(_ element: SSElement!) {
         var tempPos: Array<Int>
         let test = items.contains(where: { (key: SSElement, value: Int) in
-            if key == item {
+            if key == element {
                 return true
             }
             else {
@@ -467,24 +477,24 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         })
         var currentFrequency: Int
         if test {
-            currentFrequency = items[item]! + 1
-            items[item] = currentFrequency
+            currentFrequency = items[element]! + 1
+            items[element] = currentFrequency
             count = count + 1
             // update relative frequencies
-            for (item, freq) in items {
-                relFrequencies[item] = Double(freq) / Double(self.sampleSize)
+            for (itm, freq) in items {
+                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
             }
-            sequence[item]!.append(count)
+            sequence[element]!.append(count)
         }
         else {
-            items[item] = 1
+            items[element] = 1
             count = count + 1
-            for (item, freq) in items {
-                relFrequencies[item] = Double(freq) / Double(self.sampleSize)
+            for (itm, freq) in items {
+                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
             }
             tempPos = Array()
             tempPos.append(count)
-            sequence[item] = tempPos
+            sequence[element] = tempPos
         }
         updateCumulativeFrequencies()
     }
@@ -492,16 +502,16 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// Appends n elements
     /// - Paramater n: Count of elements to add
     /// - Parameter item: Item to append
-    public func append(repeating n: Int!, item: SSElement!) {
+    public func append(repeating n: Int!, element: SSElement!) {
         for _ in 1...n {
-            append(item)
+            append(element)
         }
         updateCumulativeFrequencies()
     }
     
     /// Appends elements from an array
     /// - Parameter array: Array containing elements to add
-    public func append(fromArray array: Array<SSElement>!) {
+    public func append(contentOf array: Array<SSElement>!) {
         if array.count > 0 {
             if isEmpty {
                 isNumeric = isNumber(array[array.startIndex])
@@ -547,17 +557,17 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// Removes item from the table.
     /// - Parameter item: Item
     /// - Parameter allOccurences: If false, only the first item found will be removed.
-    public func remove(_ item: SSElement!, allOccurences all: Bool!) {
+    public func remove(_ element: SSElement!, allOccurences all: Bool!) {
         if !isEmpty {
-            if contains(item: item) {
+            if contains(element) {
                 var temp: Array<SSElement> = elementsAsArray(sortOrder: .original)!
                 // remove all elements
                 if all {
-                    temp = temp.filter({ $0 != item})
+                    temp = temp.filter({ $0 != element})
                 }
                 else {
                     // remove only the first occurence
-                    let s: Array<Int> = sequence[item]!
+                    let s: Array<Int> = sequence[element]!
                     temp.remove(at:s.first! - 1)
                 }
                 items.removeAll()
@@ -805,7 +815,7 @@ extension SSExamine {
     
     /// Empirical CDF of item
     /// - Parameter item: The item for which the cdf will be returned.
-    public func empiricalCDF(of item: SSElement) -> Double {
+    public func empiricalCDF(_ item: SSElement) -> Double {
         var result: Double = Double.nan
         if let min = self.minimum, let max = self.maximum {
             if item < min {
@@ -814,7 +824,7 @@ extension SSExamine {
             else if item > max {
                 return 1.0
             }
-            if self.contains(item: item) {
+            if self.contains(item) {
                 result = self.cumulativeRelativeFrequencies[item]!
             }
             else {
@@ -1512,7 +1522,7 @@ extension SSExamine {
             if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
                 var s: Double = 0.0
                 for item in self.uniqueElements(sortOrder: .none)! {
-                    s += self.relativeFrequency(item: item) * log2(self.relativeFrequency(item: item))
+                    s += self.relativeFrequency(item) * log2(self.relativeFrequency(item))
                 }
                 return -s
             }
@@ -1544,7 +1554,7 @@ extension SSExamine {
                 var s: Double = 0.0
                 var p: Double = 0.0
                 for item in self.uniqueElements(sortOrder: .none)! {
-                    p = self.relativeFrequency(item: item)
+                    p = self.relativeFrequency(item)
                     s += p * p
                 }
                 return 1.0 - p

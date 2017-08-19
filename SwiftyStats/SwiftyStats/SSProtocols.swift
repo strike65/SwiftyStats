@@ -27,29 +27,37 @@
 import Foundation
 /// Defines a protocol to conform by SSExamine subclasses.
 public protocol SSExamineContainer {
-    associatedtype Item
+    associatedtype ExamineElement
     /// The sample size
     var sampleSize: Int { get }
     /// The "length" of the container. I.e. the number of unique items
     var length: Int { get }
-    /// Contains the container any items
+    /// Contains the container any elements
     var isEmpty: Bool { get }
-    /// Contains the container the item?
-    func contains(item: Item) -> Bool
-    /// Frequency of item
-    func frequency(item: Item) -> Int
-    /// Relative frequency of item
-    func relativeFrequency(item: Item) -> Double
-    /// Appends an item
-    mutating func append(_ item: Item!)
-    /// Appends an item <count> times
-    mutating func append(repeating count: Int!, item: Item!)
+    /// Contains the container the element?
+    func contains(_ element: ExamineElement) -> Bool
+    /// Frequency of element
+    func frequency(_ element: ExamineElement) -> Int
+    /// Relative frequency of element
+    func relativeFrequency(_ element: ExamineElement) -> Double
+    /// Appends an element
+    mutating func append(_ element: ExamineElement!)
+    /// Appends an element <count> times
+    mutating func append(repeating count: Int!, element: ExamineElement!)
     /// Appends items from an array
-    mutating func append(fromArray: Array<Item>!)
+    mutating func append(contentOf array: Array<ExamineElement>!)
     /// Appends characters from a string. Throws, if Item is not of type string
     mutating func append(text: String!, characterSet: CharacterSet?) throws
-    /// Removes the item
-    mutating func remove(_ item: Item!, allOccurences: Bool!)
+    /// Removes the element
+    mutating func remove(_ element: ExamineElement!, allOccurences: Bool!)
     /// Remove all items
     mutating func removeAll()
+}
+
+public protocol SSDataFrameContainer {
+    associatedtype Examine
+    var columns: Int { get }
+    var sampleSize: Int { get  }
+    var isEmpty: Bool { get }
+    mutating func append(_ examine: Examine)
 }

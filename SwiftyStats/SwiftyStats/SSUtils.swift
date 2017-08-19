@@ -198,7 +198,7 @@ extension Double {
 /// - Parameter count: Number of values
 func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Comparable, T: Hashable {
     let array = Array<T>.init(repeating: value, count: count)
-    let res = SSExamine<T>.init(withArray: array, characterSet: nil)
+    let res = SSExamine<T>.init(withArray: array, name: nil, characterSet: nil)
     return res
 }
 

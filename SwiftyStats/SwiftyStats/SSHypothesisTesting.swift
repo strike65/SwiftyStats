@@ -45,7 +45,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            let examine = SSExamine<T>.init(withArray: array, characterSet: nil)
+            let examine = SSExamine<T>.init(withArray: array, name: nil, characterSet: nil)
             return try SSHypothesisTesting.grubbsTest(data: examine, alpha: alpha)
         }
         catch {
@@ -145,7 +145,7 @@ public class SSHypothesisTesting {
         if maxOutliers >= array.count {
             return nil
         }
-        let examine: SSExamine<Double> = SSExamine<Double>.init(withArray: array, characterSet: nil)
+        let examine: SSExamine<Double> = SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil)
         return SSHypothesisTesting.esdOutlierTest(data: examine, alpha: alpha, maxOutliers: maxOutliers, testType: testType)
     }
 
@@ -181,7 +181,7 @@ public class SSHypothesisTesting {
         var currentIndex: Int = 0
         var testStats: Array<Double> = Array<Double>()
         var lambdas: Array<Double> = Array<Double>()
-        currentData.append(fromArray: sortedData)
+        currentData.append(contentOf: sortedData)
         var i: Int = 0
         var k: Int = 1
         var t: Double
@@ -217,7 +217,7 @@ public class SSHypothesisTesting {
             currentLambda = rosnerLambdaRun(alpha: alpha, sampleSize: examine.sampleSize, run: k)
             sortedData.remove(at: currentIndex)
             currentData.removeAll()
-            currentData.append(fromArray: sortedData)
+            currentData.append(contentOf: sortedData)
             testStats.append(currentTestStat)
             lambdas.append(currentLambda)
             itemsRemoved.append(itemToRemove)
@@ -266,7 +266,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: array, characterSet: nil), lag: lag)
+            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil), lag: lag)
         }
         catch {
             throw error
@@ -318,7 +318,7 @@ public class SSHypothesisTesting {
             os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<Double>.init(withArray: array, characterSet: nil)
+        let examine = SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil)
         do {
             return try autocorrelation(data: examine)
         }
@@ -475,7 +475,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint, alternative: alternative)
+            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint, alternative: alternative)
         }
         catch {
             throw error
@@ -651,7 +651,7 @@ public class SSHypothesisTesting {
     public class func kolmogorovSmirnovGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         if array.count >= 2 {
             do {
-                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
@@ -673,7 +673,7 @@ public class SSHypothesisTesting {
     public class func ksGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         if array.count >= 2 {
             do {
-                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, characterSet: nil), targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
@@ -746,7 +746,7 @@ public class SSHypothesisTesting {
             ik = 0
             for value in sortedData {
                 if value <= 0 {
-                    ik = ik + data.frequency(item: value)
+                    ik = ik + data.frequency(value)
                     dest3 = Double(ik) * value
                 }
             }
@@ -755,7 +755,7 @@ public class SSHypothesisTesting {
                     lds = 0
                 }
                 else {
-                    lds = lds + Double(data.frequency(item: value)) / (Double(data.sampleSize) - Double(ik))
+                    lds = lds + Double(data.frequency(value)) / (Double(data.sampleSize) - Double(ik))
                 }
                 ecdf[value] = lds
             }
@@ -828,7 +828,7 @@ public class SSHypothesisTesting {
                     dtemp1 = ecdf[value]! - dtestCDF
                 }
                 else {
-                    dtemp1 = data.empiricalCDF(of: value) - dtestCDF
+                    dtemp1 = data.empiricalCDF(value) - dtestCDF
                 }
                 if dtemp1 < dmax1n {
                     dmax1n = dtemp1
@@ -842,7 +842,7 @@ public class SSHypothesisTesting {
                         dtemp1 = ecdf[nt]! - dtestCDF
                     }
                     else {
-                        dtemp1 = data.empiricalCDF(of: nt) - dtestCDF
+                        dtemp1 = data.empiricalCDF(nt) - dtestCDF
                     }
                 }
                 else {
@@ -1051,7 +1051,7 @@ public class SSHypothesisTesting {
         }
         let _data: SSExamine<Double>
         do {
-            _data = try SSExamine<Double>.init(withObject: array, levelOfMeasurement: .interval, characterSet: nil)
+            _data = try SSExamine<Double>.init(withObject: array, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         }
         catch {
             os_log("unable to create examine object", log: log_stat, type: .error)
@@ -1151,7 +1151,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         for a in array {
-            _data.append(SSExamine<Double>.init(withArray: a, characterSet: nil))
+            _data.append(SSExamine<Double>.init(withArray: a, name: nil, characterSet: nil))
         }
         _k = Double(_data.count)
         for examine in _data {
@@ -1248,7 +1248,7 @@ public class SSHypothesisTesting {
         }
         for a in array {
             if array.count >= 2 {
-                _data.append(SSExamine<Double>.init(withArray: a, characterSet: nil))
+                _data.append(SSExamine<Double>.init(withArray: a, name: nil, characterSet: nil))
             }
             else {
                 os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
@@ -1372,7 +1372,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try chiSquareVarianceTest(sample: SSExamine<Double>.init(withArray: array, characterSet: nil), nominalVariance: s0, alpha: alpha)
+            return try chiSquareVarianceTest(sample: SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil), nominalVariance: s0, alpha: alpha)
         }
         catch {
             throw error
@@ -1441,7 +1441,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.fTestVarianceEquality(sample1: SSExamine<Double>.init(withArray: data1, characterSet: nil), sample2: SSExamine<Double>.init(withArray: data2, characterSet: nil), alpha: alpha)
+            return try SSHypothesisTesting.fTestVarianceEquality(sample1: SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil), sample2: SSExamine<Double>.init(withArray: data2, name: nil, characterSet: nil), alpha: alpha)
         }
         catch {
             throw error
@@ -1579,8 +1579,8 @@ public class SSHypothesisTesting {
             os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sample1 = SSExamine<Double>.init(withArray: data1, characterSet: nil)
-        let sample2 = SSExamine<Double>.init(withArray: data2, characterSet: nil)
+        let sample1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
+        let sample2 = SSExamine<Double>.init(withArray: data2, name: nil, characterSet: nil)
         do {
             return try twoSampleTTest(sample1: sample1, sample2: sample2, alpha: alpha)
         }
@@ -1792,7 +1792,7 @@ public class SSHypothesisTesting {
             os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, characterSet: nil)
+        let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, name: nil, characterSet: nil)
         do {
             return try oneSampleTTest(sample: sample, mean: mean, alpha: alpha)
         }
@@ -1883,8 +1883,8 @@ public class SSHypothesisTesting {
             os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let set1 = SSExamine<Double>.init(withArray: data1, characterSet: nil)
-        let set2 = SSExamine<Double>.init(withArray: data2, characterSet: nil)
+        let set1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
+        let set2 = SSExamine<Double>.init(withArray: data2, name: nil, characterSet: nil)
         do {
             return try matchedPairsTTest(set1: set1, set2: set2, alpha: alpha)
         }
@@ -1939,7 +1939,7 @@ public class SSHypothesisTesting {
         }
         var examines: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
         for array in data {
-            examines.append(SSExamine<Double>.init(withArray: array, characterSet: nil))
+            examines.append(SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil))
         }
         do {
             return try SSHypothesisTesting.multipleMeansTest(data: examines, alpha: alpha)
@@ -2125,8 +2125,8 @@ public class SSHypothesisTesting {
     /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
     fileprivate class func rank2Arrays<T, U>(array1: Array<T>!, array2: Array<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable{
         var hasTies: Bool = false
-        let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, characterSet: nil)
-        let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, characterSet: nil)
+        let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, name: nil, characterSet: nil)
+        let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, name: nil, characterSet: nil)
         let a = set1.elementsAsArray(sortOrder: .original)
         let b = set2.elementsAsArray(sortOrder: .original)
         var combined: Array<T> = a!
@@ -2137,9 +2137,9 @@ public class SSHypothesisTesting {
         var sum: Double = 1.0
         while i <= combined_sorted.count - 1 {
             // determine frequencies in set1 and set2
-            let freq1 = set1.frequency(item: combined_sorted[i])
-            let freq2 = set2.frequency(item: combined_sorted[i])
-            if set1.contains(item: combined_sorted[i]) && set2.contains(item: combined_sorted[i]) {
+            let freq1 = set1.frequency(combined_sorted[i])
+            let freq2 = set2.frequency(combined_sorted[i])
+            if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
                 hasTies = true
                 let freq: Int = freq1 + freq2
                 ties.append(Double(freq))
@@ -2152,7 +2152,7 @@ public class SSHypothesisTesting {
                 k = 1
                 while k <= freq {
                     ranks.append(sum / Double(freq))
-                    if k <= set1.frequency(item: combined_sorted[i])  {
+                    if k <= set1.frequency(combined_sorted[i])  {
                         groups.append(identifierSet1)
                     }
                     else {
@@ -2162,7 +2162,7 @@ public class SSHypothesisTesting {
                 }
                 i += freq
             }
-            else if set1.contains(item: combined_sorted[i]) {
+            else if set1.contains(combined_sorted[i]) {
                 if freq1 > 1 {
                     ties.append(Double(freq1))
                     k = 1
@@ -2185,7 +2185,7 @@ public class SSHypothesisTesting {
                     i += 1
                 }
             }
-            else if set2.contains(item: combined_sorted[i]) {
+            else if set2.contains(combined_sorted[i]) {
                 if freq2 > 1 {
                     ties.append(Double(freq2))
                     k = 1
@@ -2244,9 +2244,9 @@ public class SSHypothesisTesting {
         var sum: Double = 1.0
         while i <= combined_sorted.count - 1 {
             // determine frequencies in set1 and set2
-            let freq1 = set1.frequency(item: combined_sorted[i])
-            let freq2 = set2.frequency(item: combined_sorted[i])
-            if set1.contains(item: combined_sorted[i]) && set2.contains(item: combined_sorted[i]) {
+            let freq1 = set1.frequency(combined_sorted[i])
+            let freq2 = set2.frequency(combined_sorted[i])
+            if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
                 hasTies = true
                 let freq: Int = freq1 + freq2
                 ties.append(Double(freq))
@@ -2259,7 +2259,7 @@ public class SSHypothesisTesting {
                 k = 1
                 while k <= freq {
                     ranks.append(sum / Double(freq))
-                    if k <= set1.frequency(item: combined_sorted[i])  {
+                    if k <= set1.frequency(combined_sorted[i])  {
                         groups.append(identifierSet1)
                         sortedItems.append(combined_sorted[i])
                     }
@@ -2271,7 +2271,7 @@ public class SSHypothesisTesting {
                 }
                 i += freq
             }
-            else if set1.contains(item: combined_sorted[i]) {
+            else if set1.contains(combined_sorted[i]) {
                 if freq1 > 1 {
                     ties.append(Double(freq1))
                     k = 1
@@ -2296,7 +2296,7 @@ public class SSHypothesisTesting {
                     i += 1
                 }
             }
-            else if set2.contains(item: combined_sorted[i]) {
+            else if set2.contains(combined_sorted[i]) {
                 if freq2 > 1 {
                     ties.append(Double(freq2))
                     k = 1
@@ -2351,7 +2351,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try mannWhitneyUTest(set1: SSExamine<T>.init(withArray: set1, characterSet: nil) , set2: SSExamine<T>.init(withArray: set2, characterSet: nil))
+            return try mannWhitneyUTest(set1: SSExamine<T>.init(withArray: set1, name: nil, characterSet: nil) , set2: SSExamine<T>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -2487,7 +2487,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.wilcoxonMatchedPairs(set1: SSExamine<Double>.init(withArray: set1, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, characterSet: nil))
+            return try SSHypothesisTesting.wilcoxonMatchedPairs(set1: SSExamine<Double>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -2614,7 +2614,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try signTest(set1: SSExamine<Double>.init(withArray: set1, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, characterSet: nil))
+            return try signTest(set1: SSExamine<Double>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -2798,7 +2798,7 @@ public class SSHypothesisTesting {
             os_log("sample size is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<T>.init(withArray: data, characterSet: characterSet)
+        let examine = SSExamine<T>.init(withArray: data, name: nil, characterSet: characterSet)
         if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
             os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -2837,7 +2837,7 @@ public class SSHypothesisTesting {
             os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let success: Double = Double(data.frequency(item: successID))
+        let success: Double = Double(data.frequency(successID))
         let failure: Double = Double(data.sampleSize) - success
         let n = success + failure
         let probSuccess = success / n
@@ -2921,7 +2921,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: SSExamine<T>.init(withArray: set1, characterSet: nil), set2: SSExamine<T>.init(withArray: set2, characterSet: nil), alpha: alpha)
+            return try SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: SSExamine<T>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<T>.init(withArray: set2, name: nil, characterSet: nil), alpha: alpha)
         }
         catch {
             throw error
@@ -2957,7 +2957,7 @@ public class SSHypothesisTesting {
         var maxPos: Double = 0.0
         if n1 > n2 {
             for element in a1 {
-                dcdf = set1.empiricalCDF(of: element) - set2.empiricalCDF(of: element)
+                dcdf = set1.empiricalCDF(element) - set2.empiricalCDF(element)
                 if dcdf < 0.0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }
@@ -2968,7 +2968,7 @@ public class SSHypothesisTesting {
         }
         else {
             for element in a1 {
-                dcdf = set2.empiricalCDF(of: element) - set1.empiricalCDF(of: element)
+                dcdf = set2.empiricalCDF(element) - set1.empiricalCDF(element)
                 if dcdf < 0.0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }
@@ -3049,8 +3049,8 @@ public class SSHypothesisTesting {
         var ntiesintergroup: Int = 0
         var f1: Int
         var f2: Int
-        f1 = set1.frequency(item: tempObject)
-        f2 = set2.frequency(item: tempObject)
+        f1 = set1.frequency(tempObject)
+        f2 = set2.frequency(tempObject)
         if f1 > 0 && f2 > 0 {
             ntiedcases += f1 + f2
             ntiesintergroup += 1
@@ -3061,8 +3061,8 @@ public class SSHypothesisTesting {
                 nties += 1
             }
             else {
-                f1 = set1.frequency(item: sortedData[i])
-                f2 = set2.frequency(item: sortedData[i])
+                f1 = set1.frequency(sortedData[i])
+                f2 = set2.frequency(sortedData[i])
                 if f1 > 0 && f2 > 0 {
                     ntiedcases += 1
                     ntiesintergroup += 1
@@ -3207,7 +3207,7 @@ public class SSHypothesisTesting {
         /// - Parameter inout numberOfTies: Upon return contains number of ties
         private func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable {
             var pos: Int
-            let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, characterSet: nil)
+            let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, name: nil, characterSet: nil)
             var ptemp: Int
             var freq: Int
             var sum = 0.0
@@ -3216,7 +3216,7 @@ public class SSHypothesisTesting {
             while pos < examine.sampleSize {
                 ptemp = pos + 1
                 sum = Double(ptemp)
-                freq = examine.frequency(item: data[pos])
+                freq = examine.frequency(data[pos])
                 if freq == 1 {
                     ranks.append(sum)
                     pos += 1

@@ -72,9 +72,9 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testClonidineData() {
-        let verum_ADR_before = SSExamine.init(withArray: v_adrenaline_vnw, characterSet: nil)
+        let verum_ADR_before = SSExamine.init(withArray: v_adrenaline_vnw, name: "Verum", characterSet: nil)
         verum_ADR_before.tag = "Verum"
-        let placebo_ADR_before = SSExamine.init(withArray: p_adrenaline_vnw, characterSet: nil)
+        let placebo_ADR_before = SSExamine.init(withArray: p_adrenaline_vnw, name: "Placebo", characterSet: nil)
         verum_ADR_before.tag = "Placebo"
         print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
         print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
@@ -166,13 +166,13 @@ class SwiftyStatsTests: XCTestCase {
 //    }
     
     func testKS2Sample() {
-        let set1 = SSExamine<Double>.init(withArray: wafer1, characterSet: nil)
-        let set2 = SSExamine<Double>.init(withArray: wafer2, characterSet: nil)
+        let set1 = SSExamine<Double>.init(withArray: wafer1, name: nil, characterSet: nil)
+        let set2 = SSExamine<Double>.init(withArray: wafer2, name: nil, characterSet: nil)
         var res: SSKSTwoSampleTestResult
         res = try! SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: set1, set2: set2, alpha: 0.05)
         XCTAssertEqualWithAccuracy(res.p2Value!, 0.4611, accuracy: 1E-4)
-        let set3 = SSExamine<Double>.init(withArray: normal3, characterSet: nil)
-        let set4 = SSExamine<Double>.init(withArray: laplaceData, characterSet: nil)
+        let set3 = SSExamine<Double>.init(withArray: normal3, name: nil, characterSet: nil)
+        let set4 = SSExamine<Double>.init(withArray: laplaceData, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: set3, set2: set4, alpha: 0.05)
         XCTAssertEqualWithAccuracy(res.p2Value!, 7.159e-07, accuracy: 1E-7)
     }
@@ -200,11 +200,11 @@ class SwiftyStatsTests: XCTestCase {
         p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .greater)
         XCTAssertEqualWithAccuracy(p, 0.1256, accuracy: 1E-4)
         let Data:Array<String> = ["A","A","A","A","A","B","A","A","B","B","B","B","A","A"]
-        var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A", alpha: 0.05, alternative: .twoSided)
+        var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, name: nil, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A", alpha: 0.05, alternative: .twoSided)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.424, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3513801, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 0.8724016, accuracy: 1E-7)
-        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, name: nil, characterSet: CharacterSet.alphanumerics), testProbability: 0.2, successCodedAs: "A", alpha: 0.05, alternative: .greater)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3904149, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 1.0, accuracy: 1E-7)
@@ -212,21 +212,21 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0003819, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.lowerBound!, 0.3904149, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.confIntJeffreys!.upperBound!, 1.0, accuracy: 1E-7)
-        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A", alpha: 0.05, alternative: .less)
+        res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, name: nil, characterSet: CharacterSet.alphanumerics), testProbability: 0.7, successCodedAs: "A", alpha: 0.05, alternative: .less)
         XCTAssertEqualWithAccuracy(res.pValueExact!,  0.4158, accuracy: 1E-4)
     }
     
     func testSignTest() {
-        let g1 = SSExamine<Double>.init(withArray: sign1, characterSet: nil)
-        let g2 = SSExamine<Double>.init(withArray: sign2, characterSet: nil)
+        let g1 = SSExamine<Double>.init(withArray: sign1, name: nil, characterSet: nil)
+        let g2 = SSExamine<Double>.init(withArray: sign2, name: nil, characterSet: nil)
         var res = try! SSHypothesisTesting.signTest(set1: g1, set2: g2)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0144084, accuracy: 1E-6)
-        let g3 = SSExamine<Double>.init(withArray: sign3, characterSet: nil)
-        let g4 = SSExamine<Double>.init(withArray: sign4, characterSet: nil)
+        let g3 = SSExamine<Double>.init(withArray: sign3, name: nil, characterSet: nil)
+        let g4 = SSExamine<Double>.init(withArray: sign4, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.0384064, accuracy: 1E-6)
-        let g5 = SSExamine<Double>.init(withArray: largeNormal1, characterSet: nil)
-        let g6 = SSExamine<Double>.init(withArray: largeNormal2, characterSet: nil)
+        let g5 = SSExamine<Double>.init(withArray: largeNormal1, name: nil, characterSet: nil)
+        let g6 = SSExamine<Double>.init(withArray: largeNormal2, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
         XCTAssertEqualWithAccuracy(res.ZStatistic!, -2.7511815643464903, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.00295538, accuracy: 1E-6)
@@ -236,8 +236,8 @@ class SwiftyStatsTests: XCTestCase {
         // tested using IBM SPSS 24
         let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
-        let examine1 = SSExamine.init(withArray: M1, characterSet: nil)
-        let examine2 = SSExamine.init(withArray: M2, characterSet: nil)
+        let examine1 = SSExamine.init(withArray: M1, name: nil, characterSet: nil)
+        let examine2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
         var wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.528, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 0.631, accuracy: 1E-3)
@@ -246,8 +246,8 @@ class SwiftyStatsTests: XCTestCase {
         // http://documentation.statsoft.com/STATISTICAHelp.aspx?path=Nonparametrics/NonparametricAnalysis/Examples/Example8WilcoxonMatchedPairsTest
         let M3 = [20.3,17,6.5,25,5.4,29.2,2.9,6.6,15.8,8.3,34.0,8]
         let M4 = [50.4,87,25.1,28.5,26.9,36.6,1.0,43.8,44.2,10.4,29.9,27.7]
-        let examine3 = SSExamine.init(withArray: M3, characterSet: nil)
-        let examine4 = SSExamine.init(withArray: M4, characterSet: nil)
+        let examine3 = SSExamine.init(withArray: M3, name: nil, characterSet: nil)
+        let examine4 = SSExamine.init(withArray: M4, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine3, set2: examine4)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.007649, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.667179, accuracy: 1E-6)
@@ -256,8 +256,8 @@ class SwiftyStatsTests: XCTestCase {
         // http://influentialpoints.com/Training/wilcoxon_matched_pairs_signed_rank_test.htm
         let M5 = [13.0, 11, 6, 14, 6, 15, 13, 14, 8]
         let M6 = [1.0, 2, 1, 1, 3, 3, 2, 4, 2]
-        let examine5 = SSExamine.init(withArray: M5, characterSet: nil)
-        let examine6 = SSExamine.init(withArray: M6, characterSet: nil)
+        let examine5 = SSExamine.init(withArray: M5, name: nil, characterSet: nil)
+        let examine6 = SSExamine.init(withArray: M6, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine5, set2: examine6)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.0076, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.6679, accuracy: 1E-4)
@@ -269,10 +269,10 @@ class SwiftyStatsTests: XCTestCase {
         let B1: Array<Double> = [18.3 , 49.6 , 10.1 , 35.6 , 26.2 , 8.9]
         let A2: Array<Double> = [12.7 , 25.1 , 47.0 , 16.3 , 30.4]
         let B2: Array<Double> = [7.3 , 1.9 , 5.8 , 10.1 , 9.4]
-        let setA1 = SSExamine.init(withArray: A1, characterSet: nil)
-        let setB1 = SSExamine.init(withArray: B1, characterSet: nil)
-        let setA2 = SSExamine.init(withArray: A2, characterSet: nil)
-        let setB2 = SSExamine.init(withArray: B2, characterSet: nil)
+        let setA1 = SSExamine.init(withArray: A1, name: nil, characterSet: nil)
+        let setB1 = SSExamine.init(withArray: B1, name: nil, characterSet: nil)
+        let setA2 = SSExamine.init(withArray: A2, name: nil, characterSet: nil)
+        let setB2 = SSExamine.init(withArray: B2, name: nil, characterSet: nil)
         var array = Array<SSExamine<Double>>()
         array.append(setA1)
         array.append(setB1)
@@ -291,10 +291,10 @@ class SwiftyStatsTests: XCTestCase {
         let B1: Array<Int> = [3,3,4,5,5,8,10,16]
         let A2: Array<Int> = [7,14,22,36,40,48,49,52]
         let B2: Array<Int> = [3,5,6,10,17,18,20,39]
-        let setA1 = SSExamine.init(withArray: A1, characterSet: nil)
-        let setB1 = SSExamine.init(withArray: B1, characterSet: nil)
-        let setA2 = SSExamine.init(withArray: A2, characterSet: nil)
-        let setB2 = SSExamine.init(withArray: B2, characterSet: nil)
+        let setA1 = SSExamine.init(withArray: A1, name: nil, characterSet: nil)
+        let setB1 = SSExamine.init(withArray: B1, name: nil, characterSet: nil)
+        let setA2 = SSExamine.init(withArray: A2, name: nil, characterSet: nil)
+        let setB2 = SSExamine.init(withArray: B2, name: nil, characterSet: nil)
         var mw = try! SSHypothesisTesting.mannWhitneyUTest(set1: setA1, set2: setB1)
         XCTAssertEqualWithAccuracy(mw.p2Approx!, 0.099, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(mw.UMannWhitney!, 16.5, accuracy: 1E-1)
@@ -307,18 +307,18 @@ class SwiftyStatsTests: XCTestCase {
     
     func testFrequencies() {
         let characters = ["A", "A", "A", "B", "B", "B","C","C","C"]
-        let c:SSExamine<String> = try! SSExamine<String>.init(withObject: characters, levelOfMeasurement: .nominal, characterSet: nil)
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency(item: "A"))
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency(item: "B"))
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency(item: "C"))
-        XCTAssertEqual(0, c.relativeFrequency(item: "!"))
-        XCTAssertEqual(1.0 / 3.0, c.empiricalCDF(of: "A"))
-        XCTAssertEqual(2.0 / 3.0, c.empiricalCDF(of: "B"))
-        XCTAssertEqual(3.0 / 3.0, c.empiricalCDF(of: "C"))
+        let c:SSExamine<String> = try! SSExamine<String>.init(withObject: characters, levelOfMeasurement: .nominal, name: nil, characterSet: nil)
+        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("A"))
+        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("B"))
+        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("C"))
+        XCTAssertEqual(0, c.relativeFrequency("!"))
+        XCTAssertEqual(1.0 / 3.0, c.empiricalCDF("A"))
+        XCTAssertEqual(2.0 / 3.0, c.empiricalCDF("B"))
+        XCTAssertEqual(3.0 / 3.0, c.empiricalCDF("C"))
     }
     
     func testAutocorrelation() {
-        let examine = SSExamine<Double>.init(withArray: lewData, characterSet: nil)
+        let examine = SSExamine<Double>.init(withArray: lewData, name: nil, characterSet: nil)
         let boxljung = try! SSHypothesisTesting.autocorrelation(data: examine)
         if let a = boxljung.coefficients {
             XCTAssertEqualWithAccuracy(a[1], -0.31, accuracy: 1E-2)
@@ -356,17 +356,17 @@ class SwiftyStatsTests: XCTestCase {
         
         let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
-        let set1 = SSExamine.init(withArray: M1, characterSet: nil)
-        let set2 = SSExamine.init(withArray: M2, characterSet: nil)
+        let set1 = SSExamine.init(withArray: M1, name: nil, characterSet: nil)
+        let set2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
         let ww: SSWaldWolfowitzTwoSampleTestResult = try! SSHypothesisTesting.waldWolfowitzTwoSampleTest(set1: set1, set2: set2)
         XCTAssertEqualWithAccuracy(ww.pValueAsymp!, 0.01512, accuracy: 1E-5)
         XCTAssertEqualWithAccuracy(ww.ZStatistic!, 2.4296, accuracy: 1E-4)
     }
     
     func testTTest()  {
-        let examine1 = SSExamine<Double>.init(withArray: normal1, characterSet: nil)
-        let examine2 = SSExamine<Double>.init(withArray: normal2, characterSet: nil)
-        let examine3 = SSExamine<Double>.init(withArray: normal3, characterSet: nil)
+        let examine1 = SSExamine<Double>.init(withArray: normal1, name: nil, characterSet: nil)
+        let examine2 = SSExamine<Double>.init(withArray: normal2, name: nil, characterSet: nil)
+        let examine3 = SSExamine<Double>.init(withArray: normal3, name: nil, characterSet: nil)
         
         var ttestResult = try! SSHypothesisTesting.twoSampleTTest(sample1: examine1, sample2: examine2, alpha: 0.05)
         XCTAssertEqualWithAccuracy(ttestResult.p2Welch!, 0.366334, accuracy: 1E-6)
@@ -461,10 +461,10 @@ class SwiftyStatsTests: XCTestCase {
 }
     
     func testKStest() {
-        let normal = try! SSExamine<Double>.init(withObject: normal1, levelOfMeasurement: .interval, characterSet: nil)
+        let normal = try! SSExamine<Double>.init(withObject: normal1, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         normal.name = "Normal Distribution"
         
-        let laplace = try! SSExamine<Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, characterSet: nil)
+        let laplace = try! SSExamine<Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         laplace.name = "Laplace Distribution"
         
         var res: SSKSTestResult = try! SSHypothesisTesting.ksGoFTest(array: normal.elementsAsArray(sortOrder: .original)!, targetDistribution: .gaussian)!
@@ -497,7 +497,7 @@ class SwiftyStatsTests: XCTestCase {
     func testDescriptive() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let double1 = SSExamine<Double>(withArray: doubleData, characterSet: nil)
+        let double1 = SSExamine<Double>(withArray: doubleData, name: nil, characterSet: nil)
         do {
             // tests correctness of archiving
             let tempDir = NSTemporaryDirectory()
@@ -509,10 +509,10 @@ class SwiftyStatsTests: XCTestCase {
             try FileManager.default.removeItem(at: url!)
             saved = double1.copy() as? SSExamine<Double>
             XCTAssert(double1.isEqual(saved))
-            XCTAssert(double1.contains(item: 38))
-            XCTAssert(!double1.contains(item: -1))
-            XCTAssertEqual(double1.frequency(item: 27), 10)
-            XCTAssertEqual(double1.relativeFrequency(item: 27), 10.0 / Double(double1.sampleSize))
+            XCTAssert(double1.contains(38))
+            XCTAssert(!double1.contains(-1))
+            XCTAssertEqual(double1.frequency(27), 10)
+            XCTAssertEqual(double1.relativeFrequency(27), 10.0 / Double(double1.sampleSize))
             
             // elements as string
             XCTAssertEqual(double1.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
@@ -552,11 +552,11 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqualWithAccuracy(double1.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
             XCTAssertEqualWithAccuracy(double1.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
             
-            XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 23), 0.72983870967741935, accuracy: 1E-14)
-            XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 9), 0.0040322580645161290, accuracy: 1E-14)
-            XCTAssertEqualWithAccuracy(double1.empiricalCDF(of: 39), 1.0, accuracy: 1E-14)
-            XCTAssertEqual(double1.empiricalCDF(of: -39), 0.0)
-            XCTAssertEqual(double1.empiricalCDF(of: 2000), 1.0)
+            XCTAssertEqualWithAccuracy(double1.empiricalCDF(23), 0.72983870967741935, accuracy: 1E-14)
+            XCTAssertEqualWithAccuracy(double1.empiricalCDF(9), 0.0040322580645161290, accuracy: 1E-14)
+            XCTAssertEqualWithAccuracy(double1.empiricalCDF(39), 1.0, accuracy: 1E-14)
+            XCTAssertEqual(double1.empiricalCDF(-39), 0.0)
+            XCTAssertEqual(double1.empiricalCDF(2000), 1.0)
             XCTAssertEqual(double1.moment(r: 0, type: .central)!, 1.0)
             XCTAssertEqualWithAccuracy(double1.moment(r: 1, type: .central)!, 0, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(double1.moment(r: 2, type: .central)!, 40.671289672216441, accuracy: 1E-14)
@@ -589,7 +589,7 @@ class SwiftyStatsTests: XCTestCase {
                     try XCTAssertEqualWithAccuracy(SSProbabilityDistributions.quantileNormalDist(p: 0.975, mean: m, standardDeviation: s), 32.625566859054832, accuracy: 1E-14)
                 }
                 do {
-                    let zarr = try SSExamine<Double>.init(withObject: zarrData, levelOfMeasurement: .interval, characterSet: nil)
+                    let zarr = try SSExamine<Double>.init(withObject: zarrData, levelOfMeasurement: .interval, name: nil, characterSet: nil)
                     if let ci = zarr.studentTCI(alpha: 0.95) {
                         // CI computed using R
                         XCTAssertEqualWithAccuracy(ci.lowerBound!, 9.258242, accuracy: 1E-5)
@@ -616,11 +616,11 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqual(double1.semiVariance(type: .lower), 24.742644316247556)
             XCTAssertEqual(double1.semiVariance(type: .upper), 65.467428319137056)
             XCTAssert(!double1.hasOutliers(testType: .grubbs)!)
-            let double2 = try SSExamine<Double>.init(withObject: rosnerData, levelOfMeasurement: .interval, characterSet: nil)
+            let double2 = try SSExamine<Double>.init(withObject: rosnerData, levelOfMeasurement: .interval, name: nil, characterSet: nil)
             XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
             let esd: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: double2, alpha: 0.05, maxOutliers: 10, testType: .bothTails)!
             XCTAssert(esd.countOfOutliers == 3)
-            let double3 = try SSExamine<Double>.init(withObject: doubleData1, levelOfMeasurement: .interval, characterSet: nil)
+            let double3 = try SSExamine<Double>.init(withObject: doubleData1, levelOfMeasurement: .interval, name: nil, characterSet: nil)
             XCTAssert(double3.hasOutliers(testType: .grubbs)!)
             XCTAssert(!double2.hasOutliers(testType: .grubbs)!)
             XCTAssert(double3.hasOutliers(testType: .esd)!)
