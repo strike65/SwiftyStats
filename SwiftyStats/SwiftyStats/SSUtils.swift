@@ -201,11 +201,58 @@ func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Compar
     return res
 }
 
+func scanDouble(string: String!) -> Double? {
+    var res: Double = 0.0
+    let s = Scanner.init(string: string)
+    if s.scanDouble(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
 
 
 
 
+func scanDecimal(string: String!) -> Decimal? {
+    var res: Decimal = 0.0
+    let s = Scanner.init(string: string)
+    if s.scanDecimal(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
 
+func scanFloat(string: String!) -> Float? {
+    var res: Float = 0.0
+    let s = Scanner.init(string: string)
+    if s.scanFloat(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+
+func scanInt(string: String!) -> Int? {
+    var res: Int = 0
+    let s = Scanner.init(string: string)
+    if s.scanInt(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+
+func scanString(string: String!) -> String {
+    return string
+}
 
 
 

@@ -238,7 +238,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
     /// - Throws: SSSwiftyStatsError if the file could not be written
-    public func saveTo(fileName path: String!, atomically: Bool!, overwrite: Bool!, separator: String!, stringEncoding: String.Encoding) throws -> Bool {
+    public func saveTo(fileName path: String!, atomically: Bool!, overwrite: Bool!, separator: String!, asRow: Bool = true, stringEncoding: String.Encoding) throws -> Bool {
         var result = true
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath
@@ -257,7 +257,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
                 }
             }
         }
-        if let s = elementsAsString(withDelimiter: separator) {
+        if let s = elementsAsString(withDelimiter: separator, asRow: asRow) {
             do {
                 try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
             }
@@ -664,13 +664,23 @@ extension SSExamine {
 
     /// Returns all elements as one string. Elements are delimited by del.
     /// Paramater del: The delimiter. Can be nil or empty.
-    public func elementsAsString(withDelimiter del: String?) -> String? {
+    public func elementsAsString(withDelimiter del: String?, asRow: Bool = true) -> String? {
         let a: Array<SSElement> = elementsAsArray(sortOrder: .original)!
         var res: String = String()
+        if !asRow {
+            if let n = self.name {
+                res = res + n + "\n"
+            }
+        }
         for item in a {
             res = res + "\(item)"
-            if let _ = del {
-                res = res + del!
+            if asRow {
+                if let _ = del {
+                    res = res + del!
+                }
+            }
+            else {
+                res = res + "\n"
             }
         }
         if let _ = del {
@@ -682,6 +692,23 @@ extension SSExamine {
         }
         if res.characters.count > 0 {
             return res
+        }
+        else {
+            return nil
+        }
+    }
+    
+    private func isValidIndex(index: Int) -> Bool {
+        return index >= 0 && index < self.sampleSize
+    }
+
+    
+    /// Returns the indexed element
+    subscript(_ index: Int) -> SSElement? {
+        assert(isValidIndex(index: index), "Index out of range")
+        if !self.isEmpty {
+            let a = self.elementsAsArray(sortOrder: .original)!
+            return a[index]
         }
         else {
             return nil

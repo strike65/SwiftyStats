@@ -84,16 +84,25 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testDataFrame() {
-        let set1 = SSExamine<Double>.init(withArray: wafer1, name: "Wafer_1", characterSet: nil)
-        let set2 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_2", characterSet: nil)
-        let set3 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_2", characterSet: nil)
-        let df = try! SSDataFrame<Double>.init(examineArray: [set1, set2, set3])
-        print(df[0].sampleSize)
-        print(df["Wafer_1"].name!)
+        let set1 = SSExamine<Double>.init(withArray: wafer1, name: "Wafer_A", characterSet: nil)
+        let set2 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_B", characterSet: nil)
+        let set3 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_C", characterSet: nil)
+        var df = try! SSDataFrame<Double>.init(examineArray: [set1, set2, set3])
+        let _ = try! df.exportCSV(path: "/Users/volker/Desktop/test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf16, atomically: true)
+        var df2:SSDataFrame<Double>
+        df2 = try! SSDataFrame<Double>.dataFrame(fromFile: "/Users/volker/Desktop/test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, scanDouble)
+        XCTAssert(df.isEqual(df2))
+        let normal1 = SSExamine<Double>.init(withArray: self.normal1, name: "Normal_01", characterSet: nil)
+        let normal2 = SSExamine<Double>.init(withArray: self.normal2, name: "Normal_02", characterSet: nil)
+        let normal3 = SSExamine<Double>.init(withArray: self.normal3, name: "Normal_03", characterSet: nil)
+        df = try! SSDataFrame<Double>.init(examineArray: [normal1, normal2, normal3])
+        let _ = try! df.exportCSV(path: "/Users/volker/Desktop/normal.csv", separator: ",", useQuotes: true, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
+        df2 = try! SSDataFrame<Double>.dataFrame(fromFile: "/Users/volker/Desktop/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+        XCTAssert(df.isEqual(df2))
     }
     
     func testCrossTabs() {
-        var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
+        let c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
         try! c.setColumn(at: 0, newColumn:[52,46,25,26])
         try! c.setColumn(name: 2, newColumn:[89,35,15,10])
         try! c.setColumn(at: 2, newColumn:[123,23,13,5])
@@ -106,7 +115,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c[1,1])
         print(c.residual(row: 1, column: 1))
         print(c.phi)
-        var c1 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
+        let c1 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c1.setColumn(at: 0, newColumn:[4,3])
         try! c1.setColumn(name: 2, newColumn:[2,3])
         print(c1.likelihoodRatio)
@@ -119,7 +128,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c1.phi)
         print(c1.cramerV)
         print(c1)
-        var c2 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
+        let c2 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c2.setColumn(at: 0, newColumn:[60,40])
         try! c2.setColumn(name: 2, newColumn:[30,70])
         print(c2.likelihoodRatio)
@@ -361,6 +370,7 @@ class SwiftyStatsTests: XCTestCase {
 
         
         let M1 = [0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47]
+        runsTest = try! SSHypothesisTesting.runsTest(array: M1, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .twoSided)
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
         let set1 = SSExamine.init(withArray: M1, name: nil, characterSet: nil)
         let set2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
@@ -503,8 +513,9 @@ class SwiftyStatsTests: XCTestCase {
     func testDescriptive() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let double1 = SSExamine<Double>(withArray: doubleData, name: nil, characterSet: nil)
+        let double1 = SSExamine<Double>(withArray: doubleData, name: "Double1", characterSet: nil)
         do {
+            try double1.saveTo(fileName: "/Users/volker/Desktop/testDescr.csv", atomically: true, overwrite: true, separator: ",", asRow: false, stringEncoding:String.Encoding.utf8)
             // tests correctness of archiving
             let tempDir = NSTemporaryDirectory()
             let filename = NSUUID().uuidString
