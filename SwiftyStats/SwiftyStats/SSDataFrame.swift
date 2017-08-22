@@ -30,6 +30,20 @@ import os.log
 
 // Defines a structure holding multiple SSExamine objects:
 // Each column contains an SSExamine object. That way we can assign different samples to one column.
+/*
+ Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:
+ 
+ With N = sampleSize:
+ 
+ <          COL[0]      COL[1]     ...  COL[columns - 1] >
+ tags       tags[0]     tags[1]    ...  tags[columns - 1]
+ cnames     cnames[0    cnames[1]  ...  cnames[columns - 1]
+ ROW0       data[0][0]  data[0][1] ...  data[0][columns - 1]
+ ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
+ ...        ..........  .......... ...  ....................
+ ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
+
+*/
 public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCopying where SSElement: Comparable, SSElement: Hashable{
     
     private var data:Array<SSExamine<SSElement>>
@@ -190,8 +204,12 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
-    private func isValidIndex(_ index: Int) -> Bool {
+    private func isValidColumnIndex(_ index: Int) -> Bool {
         return (index >= 0 && index < self.columns) ? true : false
+    }
+    
+    private func isValidRowIndex(_ index: Int) -> Bool {
+        return (index >= 0 && index < self.rows) ? true : false
     }
     
     private func indexOf(columnName: String!) -> Int? {
@@ -203,8 +221,24 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
+    /// Returns the row at a given index
+    public func rowAtIndex(_ index: Int) -> Array<SSElement> {
+        assert(isValidRowIndex(index), "Index out of range")
+        var res = Array<SSElement>()
+        for c in self.data {
+            if let e = c[index] {
+                res.append(e)
+            }
+            else {
+                assert(false, "Index out of range")
+            }
+        }
+        return res
+    }
+    
+    
     subscript(column: Int) -> SSExamine<SSElement> {
-        assert(isValidIndex(column), "Index out of range")
+        assert(isValidColumnIndex(column), "Index out of range")
         return data[column]
     }
     
