@@ -79,8 +79,8 @@ public class SSHypothesisTesting {
         let quantile: Double
         var mi: Double, ma: Double
         if let s = data.standardDeviation(type: .unbiased) {
-            ma = makeDouble(data.maximum!)
-            mi = makeDouble(data.minimum!)
+            ma = castValueToDouble(data.maximum!)!
+            mi = castValueToDouble(data.minimum!)!
             maxDiff = maximum(fabs(ma - mean), fabs(mi - mean))
             g = maxDiff / s
             do {
@@ -94,8 +94,8 @@ public class SSHypothesisTesting {
             var res:SSGrubbsTestResult = SSGrubbsTestResult()
             res.sampleSize = data.sampleSize
             res.maxDiff = maxDiff
-            res.largest = makeDouble(data.maximum!)
-            res.smallest = makeDouble(data.minimum!)
+            res.largest = castValueToDouble(data.maximum!)
+            res.smallest = castValueToDouble(data.minimum!)
             res.criticalValue = t
             res.mean = mean
             res.G = g

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F0BDDC11F4DA68A00906257 /* SSExamine-FileManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0BDDC01F4DA68A00906257 /* SSExamine-FileManagement.swift */; };
+		9F0BDDC31F4DA70C00906257 /* SSExamine-Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0BDDC21F4DA70C00906257 /* SSExamine-Stats.swift */; };
 		9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */; };
 		9F3C0EAF1F470CC8005E3890 /* clonidine_data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */; };
 		9F3F113B1F4812C00022101F /* SSDataFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3F113A1F4812C00022101F /* SSDataFrame.swift */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F0BDDC01F4DA68A00906257 /* SSExamine-FileManagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSExamine-FileManagement.swift"; sourceTree = "<group>"; };
+		9F0BDDC21F4DA70C00906257 /* SSExamine-Stats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSExamine-Stats.swift"; sourceTree = "<group>"; };
 		9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSSimard-KSProb.swift"; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 				9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */,
 				9F82D3BD1F1E8F57001BFC9D /* SSConstants.swift */,
 				9F82D3BE1F1E8F57001BFC9D /* SSExamine.swift */,
+				9F0BDDC01F4DA68A00906257 /* SSExamine-FileManagement.swift */,
+				9F0BDDC21F4DA70C00906257 /* SSExamine-Stats.swift */,
 				9F82D3BF1F1E8F57001BFC9D /* SSFrequencyTables.swift */,
 				9F82D3C01F1E8F57001BFC9D /* SSLogging.swift */,
 				9F82D3C11F1E8F57001BFC9D /* SSProbabilityDistributions.swift */,
@@ -262,6 +268,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F0BDDC31F4DA70C00906257 /* SSExamine-Stats.swift in Sources */,
+				9F0BDDC11F4DA68A00906257 /* SSExamine-FileManagement.swift in Sources */,
 				9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */,
 				9F82D3C51F1E8F57001BFC9D /* SSConstants.swift in Sources */,
 				9FFBAF981F3F882E0074FB41 /* SSCrosstab.swift in Sources */,

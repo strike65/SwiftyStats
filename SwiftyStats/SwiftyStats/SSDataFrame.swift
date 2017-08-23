@@ -65,6 +65,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
+    /// Returns true if the receiver is equal to object.
     public override func isEqual(_ object: Any?) -> Bool {
         var result: Bool = true
         if let df: SSDataFrame<SSElement> = object as? SSDataFrame<SSElement> {
@@ -90,6 +91,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
+    /// Returns true, if the receiver is empty (i.e. there are no data)
     public var isEmpty: Bool {
         get {
             return rows == 0 && cols == 0
@@ -149,6 +151,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         data = Array<SSExamine<SSElement>>()
         rows = 0
         cols = 0
+        super.init()
     }
     /// Appends a column
     /// - Parameter examine: The SSExamine object
@@ -236,7 +239,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         return res
     }
     
-    
+    /// Subscript for columns
     subscript(column: Int) -> SSExamine<SSElement> {
         assert(isValidColumnIndex(column), "Index out of range")
         return data[column]
@@ -291,6 +294,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     public override func copy() -> Any {
         return copy(with: nil)
     }
+    
     /// Exports the dataframe as csv
     /// - Parameter path: The full path
     /// - Parameter atomically: Write atomically
@@ -361,7 +365,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
-    /// Loads the content of a file interpreting the elements separated by separator as double values using the specified encoding.
+    /// Loads the content of a file using the specified encoding.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.

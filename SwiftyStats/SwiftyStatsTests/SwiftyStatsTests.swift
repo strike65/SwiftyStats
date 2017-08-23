@@ -107,6 +107,8 @@ class SwiftyStatsTests: XCTestCase {
         let _ = try! df.exportCSV(path: "/Users/volker/Desktop/normal.csv", separator: ",", useQuotes: true, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
         df2 = try! SSDataFrame<Double>.dataFrame(fromFile: "/Users/volker/Desktop/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
         XCTAssert(df.isEqual(df2))
+        let df3 = try! SSDataFrame<String>.dataFrame(fromFile: "/Users/volker/Desktop/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, scanString)
+        XCTAssert(df3[0].arithmeticMean == nil)
     }
     
     func testCrossTabs() {

@@ -26,21 +26,6 @@
 import Foundation
 
 
-func makeDouble<T>(_ value: T) -> Double {
-    if isNumber(value) {
-        if T.self is Int.Type {
-            return Double(value as! Int)
-        }
-        else {
-            return value as! Double
-        }
-    }
-    else {
-        return Double.nan
-    }
-}
-
-
 /// Binomial
 public func binomial2(_ n: Double!, _ k: Double!) -> Double {
     if k == 0.0 {
@@ -87,13 +72,63 @@ func fractionalPart(_ value: Double) -> Double {
 /// Tests, if a value is numeric
 /// - Paramter value: A value of type T
 func isNumber<T>(_ value: T) -> Bool {
-    if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
+    if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
         return true
     }
     else {
         return false
     }
 }
+
+func castValueToDouble<T>(_ value: T) -> Double? {
+    if value is Int {
+        return Double(value as! Int)
+    }
+    else if value is Int8 {
+        return Double(value as! Int8)
+    }
+    else if value is Int16 {
+        return Double(value as! Int16)
+    }
+    else if value is Int32 {
+        return Double(value as! Int32)
+    }
+    else if value is Int64 {
+        return Double(value as! Int64)
+    }
+    else if value is UInt {
+        return Double(value as! UInt)
+    }
+    else if value is UInt8 {
+        return Double(value as! UInt8)
+    }
+    else if value is UInt16 {
+        return Double(value as! UInt16)
+    }
+    else if value is UInt32 {
+        return Double(value as! UInt32)
+    }
+    else if value is UInt64 {
+        return Double(value as! UInt64)
+    }
+    else if value is Float {
+        return Double(value as! Float)
+    }
+    else if value is Float32 {
+        return Double(value as! Float32)
+    }
+    else if value is Float80 {
+        return Double(value as! Float80)
+    }
+    else if value is Double {
+        return value as? Double
+    }
+    else {
+        return nil
+    }
+}
+
+
 
 /// Returns the maximum of two comparable values
 func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
@@ -201,6 +236,12 @@ func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Compar
     return res
 }
 
+
+/*********
+ functions for basic types provided for use with SSDataFrame.dataFrame...
+*/
+
+
 func scanDouble(string: String!) -> Double? {
     var res: Double = 0.0
     let s = Scanner.init(string: string)
@@ -211,9 +252,6 @@ func scanDouble(string: String!) -> Double? {
         return nil
     }
 }
-
-
-
 
 func scanDecimal(string: String!) -> Decimal? {
     var res: Decimal = 0.0
@@ -230,6 +268,84 @@ func scanFloat(string: String!) -> Float? {
     var res: Float = 0.0
     let s = Scanner.init(string: string)
     if s.scanFloat(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanHexDouble(string: String!) -> Double? {
+    var res: Double = 0.0
+    let s = Scanner.init(string: string)
+    if s.scanHexDouble(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanHexFloat(string: String!) -> Float? {
+    var res: Float = 0.0
+    let s = Scanner.init(string: string)
+    if s.scanHexFloat(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanHexInt32(string: String!) -> UInt32? {
+    var res: UInt32 = 0
+    let s = Scanner.init(string: string)
+    if s.scanHexInt32(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanHexInt64(string: String!) -> UInt64? {
+    var res: UInt64 = 0
+    let s = Scanner.init(string: string)
+    if s.scanHexInt64(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanInt32(string: String!) -> Int32? {
+    var res: Int32 = 0
+    let s = Scanner.init(string: string)
+    if s.scanInt32(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+
+func scanInt64(string: String!) -> Int64? {
+    var res: Int64 = 0
+    let s = Scanner.init(string: string)
+    if s.scanInt64(&res) {
+        return res
+    }
+    else {
+        return nil
+    }
+}
+
+func scanUInt64(string: String!) -> UInt64? {
+    var res: UInt64 = 0
+    let s = Scanner.init(string: string)
+    if s.scanUnsignedLongLong(&res) {
         return res
     }
     else {
