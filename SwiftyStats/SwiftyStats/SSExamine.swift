@@ -185,7 +185,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!) throws -> SSExamine<Double>? {
+    public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!, _ parser: (String!) -> SSElement?) throws -> SSExamine<SSElement>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
@@ -193,20 +193,17 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         let filename = NSURL(fileURLWithPath: fullFilename).lastPathComponent!
-        var doubleScanner: Scanner
-        var numberArray: Array<Double> = Array<Double>()
-        var dbl: Double = 0.0
+        var numberArray: Array<SSElement> = Array<SSElement>()
         var go: Bool = true
         do {
             let importedString = try String.init(contentsOfFile: fullFilename, encoding: stringEncoding)
             if importedString.contains(separator) {
                 if importedString.characters.count > 0 {
                     let separatedStrings: Array<String> = importedString.components(separatedBy: separator)
-                    for number in separatedStrings {
-                        if number.characters.count > 0 {
-                            doubleScanner = Scanner(string: number)
-                            if doubleScanner.scanDouble(&dbl) {
-                                numberArray.append(dbl)
+                    for string in separatedStrings {
+                        if string.characters.count > 0 {
+                            if let value = parser(string) {
+                                numberArray.append(value)
                             }
                             else {
                                 go = false
@@ -224,7 +221,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             return nil
         }
         if go {
-            return SSExamine<Double>.init(withArray: numberArray, name: filename, characterSet: nil)
+            return SSExamine<SSElement>.init(withArray: numberArray, name: filename, characterSet: nil)
         }
         else {
             return nil

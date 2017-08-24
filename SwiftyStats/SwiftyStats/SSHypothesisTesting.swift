@@ -761,7 +761,12 @@ public class SSHypothesisTesting {
             if lds == 0.0 || ik > (data.sampleSize - 2) {
                 bok1 = false
             }
-            dest1 = (Double(data.sampleSize) - Double(ik)) / (data.total - dest3)
+            if let tot = data.total {
+                dest1 = (Double(data.sampleSize) - Double(ik)) / (tot - dest3)
+            }
+            else {
+                dest1 = Double.nan
+            }
         case .uniform:
             dest1 = data.minimum!
             dest2 = data.maximum!
@@ -1987,7 +1992,12 @@ public class SSHypothesisTesting {
                 os_log("at least one sample is empty", log: log_stat, type: .error)
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
-            sum += examine.total
+            if let tot = examine.total {
+                sum += tot
+            }
+            else {
+                sum = Double.nan
+            }
             N += examine.sampleSize
         }
         overallMean = sum / Double(N)
