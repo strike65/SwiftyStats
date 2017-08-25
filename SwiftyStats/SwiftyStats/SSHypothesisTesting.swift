@@ -776,7 +776,7 @@ public class SSHypothesisTesting {
             ik = 0
         case .laplace:
             dest1 = data.median!
-            dest2 = data.medianAbsoluteDeviation(aroundReferencePoint: dest1)!
+            dest2 = data.medianAbsoluteDeviation(center: dest1, scaleFactor: 1.0)!
             ik = 0
         case .none:
             return nil

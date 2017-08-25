@@ -12,7 +12,7 @@ import os.log
 extension SSExamine {
     
     // MARK: Totals
-    
+
     private var isArithemtic: Bool {
         get {
             return (!self.isEmpty && self.isNumeric)
@@ -37,6 +37,7 @@ extension SSExamine {
             return nil
         }
     }
+
     /// Sum of all elements raised to power p
     /// - Parameter p: Power
     public func poweredTotal(power p: Double) -> Double? {
@@ -430,9 +431,7 @@ extension SSExamine {
             return nil
         }
     }
-    
-    
-    
+
     // MARK: Dispersion
     
     /// The largest item. Can be nil for empty tables.
@@ -571,7 +570,7 @@ extension SSExamine {
             return nil
         }
     }
-    
+
     /// Returns the sample variance.
     /// - Parameter type: Can be .sample and .unbiased
     public func variance(type: SSVarianceType) -> Double? {
@@ -599,7 +598,7 @@ extension SSExamine {
             }
         }
     }
-    
+
     /// Returns the sample standard deviation.
     /// - Parameter type: .biased or .unbiased
     public func standardDeviation(type: SSStandardDeviationType) -> Double? {
@@ -610,7 +609,7 @@ extension SSExamine {
             return nil
         }
     }
-    
+
     /// Returns the standard error of the sample
     public var standardError: Double? {
         if isArithemtic {
@@ -630,24 +629,23 @@ extension SSExamine {
     /// Returns the entropy of the sample. Defined only for nominal or ordinal data
     public var entropy: Double? {
         if !isEmpty {
-            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
+//            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
                 var s: Double = 0.0
                 for item in self.uniqueElements(sortOrder: .none)! {
                     s += self.relativeFrequency(item) * log2(self.relativeFrequency(item))
                 }
                 return -s
-            }
-            else {
-                // entropy is not defined for levels other than .nominal or .ordinal
-                return nil
-            }
+//            }
+//            else {
+//                // entropy is not defined for levels other than .nominal or .ordinal
+//                return nil
+//            }
         }
         else {
             return nil
         }
     }
-    
-    
+
     /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
     public var relativeEntropy: Double? {
         if let e = self.entropy {
@@ -657,26 +655,32 @@ extension SSExamine {
             return nil
         }
     }
-    
+
     // Returns the Herfindahl index
     public var herfindahlIndex: Double? {
-        if !isEmpty {
-            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
-                var s: Double = 0.0
-                var p: Double = 0.0
-                for item in self.uniqueElements(sortOrder: .none)! {
-                    p = self.relativeFrequency(item)
-                    s += p * p
-                }
-                return 1.0 - p
-            }
-            else {
+        if isArithemtic {
+            var s: Double = 0.0
+            var p: Double = 0.0
+            guard let tot = self.total else {
+                os_log("measure is not available", log: log_stat, type: .error)
                 return nil
             }
+            for item in self.elementsAsArray(sortOrder: .original)! {
+                if let x = castValueToDouble(item) {
+                    p = x / tot
+                    s += p * p
+                }
+            }
+            return s
         }
         else {
             return nil
         }
+    }
+    
+    
+    public var conc: Double? {
+        return self.herfindahlIndex
     }
     
     // Returns the normalized Herfindahl index
@@ -691,8 +695,21 @@ extension SSExamine {
     
     /// Returns the Gini coefficient
     public var giniCoeff: Double? {
-        if let md = meanDifference {
-            return md / (2.0 * arithmeticMean!)
+        if isArithemtic {
+            if self.sampleSize < 2 {
+                return nil
+            }
+            let sorted = self.elementsAsArray(sortOrder: .ascending)!
+            var s: Double = 0.0
+            let N = Double(self.sampleSize)
+            let m = self.arithmeticMean!
+            for i in 1...self.sampleSize {
+                guard let x = castValueToDouble(sorted[i - 1]) else {
+                    assert(false, "internal error")
+                }
+                s = s + (2.0 * Double(i) - N - 1.0) * x
+            }
+            return s / (pow(N, 2.0) * m)
         }
         else {
             return nil
@@ -806,39 +823,50 @@ extension SSExamine {
             if self.sampleSize < 2 {
                 return nil
             }
-            var s1: Double = 0.0
-            var s2: Double = 0.0
-            let c: Double = Double(self.sampleSize)
-            let a = elementsAsArray(sortOrder: .ascending)!
-            var v: Int = 1
-            var k: Int
-            var t1: Double?
-            var t2: Double?
-            while v <= (self.sampleSize - 1) {
-                k = v + 1
-                while k <= self.sampleSize {
-                    t1 = castValueToDouble(a[v - 1])
-                    t2 = castValueToDouble(a[k - 1])
-                    guard t1 != nil, t2 != nil else {
-                        assert(false, "internal error")
-                    }
-                    s1 = s1 + fabs(t1! - t2!)
-                    k = k + 1
-                }
-                s2 = s2 + s1
-                s1 = 0.0
-                v = v + 1
+            if let g = self.giniCoeff, let m = self.arithmeticMean {
+                return g * 2.0 * m
             }
-            return (s2 * 2.0 / (c * (c - 1.0)))
+            else {
+                return nil
+            }
         }
         else {
             return nil
         }
+//            var s1: Double = 0.0
+//            var s2: Double = 0.0
+//            let c: Double = Double(self.sampleSize)
+//            let a = elementsAsArray(sortOrder: .ascending)!
+//            var v: Int = 1
+//            var k: Int
+//            var t1: Double?
+//            var t2: Double?
+//            while v <= (self.sampleSize - 1) {
+//                k = v + 1
+//                while k <= self.sampleSize {
+//                    t1 = castValueToDouble(a[v - 1])
+//                    t2 = castValueToDouble(a[k - 1])
+//                    guard t1 != nil, t2 != nil else {
+//                        assert(false, "internal error")
+//                    }
+//                    s1 = s1 + fabs(t1! - t2!)
+//                    k = k + 1
+//                }
+//                s2 = s2 + s1
+//                s1 = 0.0
+//                v = v + 1
+//            }
+//            return (s2 * 2.0 / (c * (c - 1.0)))
+//        }
+//        else {
+//            return nil
+//        }
     }
     
     /// Returns the median absolute deviation around the reference point given. If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
-    public func medianAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
+    /// - Parameter scaleFactor: Used for consistency reasons. If nil, the default value will be used.
+    public func medianAbsoluteDeviation(center rp: Double!, scaleFactor c: Double?) -> Double? {
         if !isArithemtic || rp.isNaN {
             return nil
         }
@@ -861,12 +889,19 @@ extension SSExamine {
         else {
             result = sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(ceil(k - 1)))]
         }
-        return result
+        var cf:Double
+        if c != nil {
+            cf = c!
+        }
+        else {
+            cf = 1.4826022185056018
+        }
+        return cf * result
     }
     
     /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
-    public func meanAbsoluteDeviation(aroundReferencePoint rp: Double!) -> Double? {
+    public func meanAbsoluteDeviation(center rp: Double!) -> Double? {
         if !isArithemtic || rp.isNaN {
             return nil
         }
@@ -1166,7 +1201,7 @@ extension SSExamine {
     /// - Parameter alpha: Alpha
     /// - Parameter max: Maximum number of outliers to return
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
-    public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
+    public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<Double>? {
         if isArithemtic {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
@@ -1180,7 +1215,7 @@ extension SSExamine {
             }
             if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
-                    return res.outliers as? Array<SSElement>
+                    return res.outliers
                 }
                 else {
                     return nil

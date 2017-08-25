@@ -61,10 +61,15 @@ class SwiftyStatsTests: XCTestCase {
     let sign4 = [ 57.0,352,587,415,458,424,463,583,432,379,370,584,422,587,415,419,57]
     
     
+    let platykurtic = [5.7728845, 7.5535649, 9.7071630, 1.1721005, 4.4890050, 4.6370910, 1.9418752, 5.3292573, 2.3551720, 0.0322585]
+    let leptokurtic = [-0.99808161,  1.01298806, -2.40529552,  3.20590325, -0.30694220, -0.42411268, -0.91262052,  0.41535032,  0.02999767, -0.02770408]
+    let leftskewed = [10,10,10,10,3,4,5]
+    let rightskewed = [1,1,1,1,1,1,1,1,2,3,4,10]
+    let symmetric = [1,2,2,3,3,3,4,4,4,4,5,5,5,6,6,7]
+    let hf = [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3]
     func testExamine() {
         let examineInt = SSExamine<Int>.init(withArray: intData, name: "integer Data", characterSet: nil)
         let examineIntOutliers = SSExamine<Int>.init(withArray: intData1, name: "integer data with outliers", characterSet: nil)
-//        var testExamineInt: SSExamine<Int>
         let tempDir = NSTemporaryDirectory()
         let filename = NSUUID().uuidString
         let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
@@ -104,7 +109,16 @@ class SwiftyStatsTests: XCTestCase {
         do {
             XCTAssertEqual(examineDouble.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
             // Descriptives
-            
+            let platy:SSExamine<Double> = try! SSExamine<Double>.init(withObject: platykurtic, levelOfMeasurement: .interval, name: "platykurtic", characterSet: nil)
+            let lepto:SSExamine<Double> = try! SSExamine<Double>.init(withObject: leptokurtic, levelOfMeasurement: .interval, name: "leptokurtic", characterSet: nil)
+            XCTAssert(platy.kurtosisType == .platykurtic)
+            XCTAssert(lepto.kurtosisType == .leptokurtic)
+            let left:SSExamine<Int> = try! SSExamine<Int>.init(withObject: leftskewed, levelOfMeasurement: .interval, name: "leftskewed", characterSet: nil)
+            let right:SSExamine<Int> = try! SSExamine<Int>.init(withObject: rightskewed, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+            let sym:SSExamine<Int> = try! SSExamine<Int>.init(withObject: symmetric, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+            XCTAssert(left.skewnessType == .leftSkewed)
+            XCTAssert(right.skewnessType == .rightSkewed)
+            XCTAssert(sym.skewnessType == .symmetric)
             XCTAssert(examineSmall.variance(type: .unbiased) == nil)
             XCTAssert(examineSmall.standardDeviation(type: .unbiased) == nil)
             XCTAssert(examineSmall.standardError == nil)
@@ -135,7 +149,26 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(try! examineString.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9)  == nil)
             XCTAssertEqualWithAccuracy(examineString.entropy!, 2.84335939877734, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(examineString.relativeEntropy!, 0.298193737094250, accuracy: 1E-14)
+            XCTAssert(examineString.kurtosis == nil)
+            XCTAssert(examineString.skewness == nil)
+            XCTAssert(examineString.kurtosisExcess == nil)
+            XCTAssert(examineString.kurtosisType == nil)
+            XCTAssert(examineString.skewnessType == nil)
+            XCTAssert(examineString.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
+            XCTAssert(examineString.isGaussian == nil)
 
+            let outliers = examineIntOutliers.outliers(alpha: 0.05, max: 10, testType: .bothTails)!
+            let expectedOutliers: Array<Double> = [300,200,200,200,101,101,101,100,100,100]
+            XCTAssertEqualWithAccuracy(examineDouble.herfindahlIndex!, 0.004438149, accuracy: 1E-9)
+            XCTAssertEqualWithAccuracy(examineDouble.meanDifference!, 7.050566, accuracy: 1E-6)
+            XCTAssertEqualWithAccuracy(examineDouble.giniCoeff!, 0.1753802, accuracy: 1E-7)
+            XCTAssert(outliers.count == expectedOutliers.count)
+            XCTAssert(examineIntOutliers.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
+            XCTAssertEqualWithAccuracy(examineDouble.meanAbsoluteDeviation(center: examineDouble.arithmeticMean!)!, 5.14695, accuracy: 1E-5)
+            XCTAssertEqualWithAccuracy(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: 1.0)!, 4.0, accuracy: 1E-4)
+            XCTAssertEqualWithAccuracy(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: nil)!, 5.9304, accuracy: 1E-4)
+            XCTAssert(examineDouble.isGaussian!)
+            XCTAssertEqual(outliers, expectedOutliers)
             XCTAssert(examineWithZero.product!.isZero)
             XCTAssert(!examineDouble.hasOutliers(testType: .grubbs)!)
             XCTAssertEqualWithAccuracy(examineDouble.inverseTotal!, 13.540959278542406, accuracy: 1.0E-14)
@@ -176,7 +209,6 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9), 16)
             XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.9, upperQuantile: 0.9), 0)
             XCTAssertEqualWithAccuracy(examineDouble.relativeQuartileDistance!, 0.4736842, accuracy: 1E-7)
-            
             XCTAssertEqualWithAccuracy(examineDouble.cv!, 0.317912682758119939795, accuracy: 1E-15)
             XCTAssertEqualWithAccuracy(examineDouble.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
             XCTAssertEqualWithAccuracy(examineDouble.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
@@ -200,7 +232,9 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqualWithAccuracy(examineDouble.kurtosisExcess!, 0.0912127828607771, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(examineDouble.kurtosis!, 3.0912127828607771, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(examineDouble.skewness!, 0.82294497966005010, accuracy: 1E-14)
-
+            XCTAssertEqualWithAccuracy(examineDouble.skewness!, 0.822945, accuracy: 1E-6)
+            XCTAssertEqualWithAccuracy(examineDouble.kurtosis!, 3.091213, accuracy: 1E-6)
+            XCTAssertEqualWithAccuracy(examineDouble.kurtosisExcess!, 0.091213, accuracy: 1E-6)
             
             XCTAssert(examineEmpty.arithmeticMean == nil)
             XCTAssert(examineEmpty.harmonicMean == nil)
@@ -228,12 +262,13 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(examineEmpty.moment(r: 1, type: .standardized) == nil)
             XCTAssert(examineEmpty.kurtosisExcess == nil)
             XCTAssert(examineEmpty.kurtosis == nil)
+
             XCTAssert(examineIntOutliers.hasOutliers(testType: .grubbs)!)
             XCTAssert(examineIntOutliers.hasOutliers(testType: .esd)!)
 
         }
         catch {
-            
+            print("catch!")
         }
         
 
