@@ -246,10 +246,12 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     }
     
     subscript(name: String!) -> SSExamine<SSElement> {
-        guard let i = cNames.index(of: name) else {
+        if let i = cNames.index(of: name) {
+            return data[i]
+        }
+        else {
             assert(false, "Index out of range")
         }
-        return data[i]
     }
     
     // MARK: NSCoding protocol

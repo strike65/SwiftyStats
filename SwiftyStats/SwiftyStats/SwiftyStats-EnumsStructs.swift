@@ -837,6 +837,14 @@ public struct SSKruskalWallisHTestResult {
 }
 
 
+public struct SSBoxWhisker<T> where T: Comparable, T: Hashable {
+    public var median: Double?
+    public var q25: Double?
+    public var q75: Double?
+    public var iqr: Double?
+    public var extremes: Array<T>?
+}
+
 
 
 

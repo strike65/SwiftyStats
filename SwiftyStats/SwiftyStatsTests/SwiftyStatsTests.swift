@@ -66,8 +66,30 @@ class SwiftyStatsTests: XCTestCase {
     let leftskewed = [10,10,10,10,3,4,5]
     let rightskewed = [1,1,1,1,1,1,1,1,2,3,4,10]
     let symmetric = [1,2,2,3,3,3,4,4,4,4,5,5,5,6,6,7]
-    let hf = [1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,3]
+    let concentr1 = [0.2,0.2,0.2,0.2,0.2]
+    let concentr2 = [0.5,0.2,0.1,0.1,0.1]
+    let concentr3 = [1.0,0,0,0,0]
+    
+    
     func testExamine() {
+        let examineConc1:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr1, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        XCTAssertEqualWithAccuracy(examineConc1.herfindahlIndex!, 0.2, accuracy: 1E-1)
+        XCTAssertEqualWithAccuracy(examineConc1.gini!, 0.0, accuracy: 1E-15)
+        XCTAssertEqualWithAccuracy(examineConc1.giniNorm!, 0.0, accuracy: 1E-15)
+        XCTAssertEqualWithAccuracy(examineConc1.CR(2)!, 0.4, accuracy: 1E-15)
+        XCTAssertEqualWithAccuracy(examineConc1.CR(3)!, 0.6, accuracy: 1E-15)
+        let examineConc2:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr2, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        XCTAssertEqualWithAccuracy(examineConc2.herfindahlIndex!, 0.32, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc2.gini!, 0.36, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc2.giniNorm!, 0.45, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc2.CR(2)!, 0.7, accuracy: 1E-15)
+        XCTAssertEqualWithAccuracy(examineConc2.CR(3)!, 0.8, accuracy: 1E-15)
+        let examineConc3:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr3, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        XCTAssertEqualWithAccuracy(examineConc3.herfindahlIndex!, 1.0, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc3.gini!, 0.8, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc3.giniNorm!, 1.0, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(examineConc3.CR(2)!, 1.0, accuracy: 1E-15)
+        XCTAssertEqualWithAccuracy(examineConc3.CR(3)!, 1.0, accuracy: 1E-15)
         let examineInt = SSExamine<Int>.init(withArray: intData, name: "integer Data", characterSet: nil)
         let examineIntOutliers = SSExamine<Int>.init(withArray: intData1, name: "integer data with outliers", characterSet: nil)
         let tempDir = NSTemporaryDirectory()
@@ -106,6 +128,8 @@ class SwiftyStatsTests: XCTestCase {
         let examineSmall: SSExamine<Double> = try! SSExamine.init(withObject: [1.0], levelOfMeasurement: .interval, name: "double one element", characterSet: nil)
         examineEmpty.removeAll()
         XCTAssert(examineEmpty.isEmpty)
+        XCTAssertNil(examineEmpty.gini)
+        XCTAssertNil(examineString.gini)
         do {
             XCTAssertEqual(examineDouble.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
             // Descriptives
@@ -161,7 +185,7 @@ class SwiftyStatsTests: XCTestCase {
             let expectedOutliers: Array<Double> = [300,200,200,200,101,101,101,100,100,100]
             XCTAssertEqualWithAccuracy(examineDouble.herfindahlIndex!, 0.004438149, accuracy: 1E-9)
             XCTAssertEqualWithAccuracy(examineDouble.meanDifference!, 7.050566, accuracy: 1E-6)
-            XCTAssertEqualWithAccuracy(examineDouble.giniCoeff!, 0.1753802, accuracy: 1E-7)
+            XCTAssertEqualWithAccuracy(examineDouble.gini!, 0.1753802, accuracy: 1E-7)
             XCTAssert(outliers.count == expectedOutliers.count)
             XCTAssert(examineIntOutliers.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
             XCTAssertEqualWithAccuracy(examineDouble.meanAbsoluteDeviation(center: examineDouble.arithmeticMean!)!, 5.14695, accuracy: 1E-5)

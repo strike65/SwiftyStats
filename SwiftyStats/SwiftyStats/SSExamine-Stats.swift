@@ -23,13 +23,13 @@ extension SSExamine {
     public var squareTotal: Double? {
         if isArithemtic {
             var s: Double = 0.0
-            var temp: Double?
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
+                if let temp = castValueToDouble(item) {
+                    s = s + pow(temp ,2.0) * Double(freq)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + pow(temp! ,2.0) * Double(freq)
             }
             return s
         }
@@ -43,13 +43,13 @@ extension SSExamine {
     public func poweredTotal(power p: Double) -> Double? {
         if isArithemtic {
             var s: Double = 0.0
-            var temp: Double?
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
+                if let temp = castValueToDouble(item) {
+                    s = s + pow(temp, p) * Double(freq)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + pow(temp!, p) * Double(freq)
             }
             return s
         }
@@ -62,13 +62,13 @@ extension SSExamine {
     public var total: Double? {
         if isArithemtic {
             var s: Double = 0.0
-            var temp: Double?
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
+                if let temp = castValueToDouble(item) {
+                    s = s + temp * Double(freq)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + temp! * Double(freq)
             }
             return s
         }
@@ -81,17 +81,17 @@ extension SSExamine {
     public var inverseTotal: Double? {
         if isArithemtic {
             var s = 0.0
-            var temp: Double?
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
-                    assert(false, "internal error")
-                }
-                if !temp!.isZero {
-                    s = s + (1.0 / temp!) * Double(freq)
+                if let temp = castValueToDouble(item) {
+                    if !temp.isZero {
+                        s = s + (1.0 / temp) * Double(freq)
+                    }
+                    else {
+                        return Double.infinity
+                    }
                 }
                 else {
-                    return Double.infinity
+                    assert(false, "internal error")
                 }
             }
             return s
@@ -174,33 +174,34 @@ extension SSExamine {
             os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
+        var result: Double = 0.0
         if !isEmpty && self.sampleSize >= 2 {
-            var result: Double
             let k = Double(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
-            var temp1: Double?
-            var temp2: Double?
             var temp3: SSElement
             if k.truncatingRemainder(dividingBy: 1).isZero {
                 temp3 = a[a.startIndex.advanced(by: Int(k - 1))]
-                temp1 = castValueToDouble(temp3)
-                guard temp1 != nil else {
+                if let temp1 = castValueToDouble(temp3) {
+                    temp3 = a[a.startIndex.advanced(by: Int(k))]
+                    if let temp2 = castValueToDouble(temp3) {
+                        result = (temp1 + temp2) / 2.0
+                    }
+                    else {
+                        assert(false, "internal error")
+                    }
+                }
+                else {
                     assert(false, "internal error")
                 }
-                temp3 = a[a.startIndex.advanced(by: Int(k))]
-                temp2 = castValueToDouble(temp3)
-                guard temp2 != nil else {
-                    assert(false, "internal error")
-                }
-                result = (temp1! + temp2!) / 2.0
             }
             else {
                 temp3 = a[a.startIndex.advanced(by: Int(ceil(k - 1)))]
-                temp1 = castValueToDouble(temp3)
-                guard temp1 != nil else {
+                if let temp1 = castValueToDouble(temp3) {
+                    result = temp1
+                }
+                else {
                     assert(false, "internal error")
                 }
-                result = temp1!
             }
             return result
         }
@@ -306,14 +307,14 @@ extension SSExamine {
             let v = floor(Double(l) * alpha)
             var s = 0.0
             var k = 0.0
-            var temp: Double?
             for i in Int(v)...l - Int(v) - 1  {
-                temp = castValueToDouble(a[i])
-                guard temp != nil else {
+                if let temp = castValueToDouble(a[i]) {
+                    s = s + temp
+                    k = k + 1
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + temp!
-                k = k + 1
             }
             return s / k
         }
@@ -335,24 +336,20 @@ extension SSExamine {
             let l = a.count
             let v = floor(Double(l) * alpha)
             var s = 0.0
-            var temp: Double?
             for i in Int(v)...l - Int(v) - 1  {
-                temp = castValueToDouble(a[i])
-                guard temp != nil else {
+                if let temp = castValueToDouble(a[i]) {
+                    s = s + temp
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + temp!
             }
-            temp = castValueToDouble(a[Int(v)])
-            guard temp != nil else {
+            if let temp = castValueToDouble(a[Int(v)]), let temp1 = castValueToDouble(a[Int(l - Int(v) - 1)]) {
+                s = s + v * (temp + temp1)
+            }
+            else {
                 assert(false, "internal error")
             }
-            var temp1: Double?
-            temp1 = castValueToDouble(a[Int(l - Int(v) - 1)])
-            guard temp1 != nil else {
-                assert(false, "internal error")
-            }
-            s = s + v * (temp! + temp1!)
             return s / Double(self.sampleSize)
         }
         else {
@@ -385,17 +382,17 @@ extension SSExamine {
     public var product: Double? {
         if isArithemtic {
             var p: Double = 1.0
-            var temp: Double?
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
-                    assert(false, "internal error")
-                }
-                if temp!.isZero {
-                    return 0.0
+                if let temp = castValueToDouble(item) {
+                    if temp.isZero {
+                        return 0.0
+                    }
+                    else {
+                        p = p * pow(temp, Double(freq))
+                    }
                 }
                 else {
-                    p = p * pow(temp!, Double(freq))
+                    assert(false, "internal error")
                 }
             }
             return p
@@ -408,21 +405,21 @@ extension SSExamine {
     /// The log-Product. Will be Double.nan for non-numeric data or if there is at least one item lower than zero. Returns -inf if there is at least one item equals to zero.
     public var logProduct: Double? {
         var sp : Double = 0.0
-        var temp: Double?
         if isArithemtic {
             for (item, freq) in self.elements {
-                temp = castValueToDouble(item)
-                guard temp != nil else {
-                    assert(false, "internal error")
-                }
-                if temp! > 0 {
-                    sp = sp + log(temp!) * Double(freq)
-                }
-                else if temp!.isZero {
-                    return -Double.infinity
+                if let temp = castValueToDouble(item) {
+                    if temp > 0 {
+                        sp = sp + log(temp) * Double(freq)
+                    }
+                    else if temp.isZero {
+                        return -Double.infinity
+                    }
+                    else {
+                        return Double.nan
+                    }
                 }
                 else {
-                    return Double.nan
+                    assert(false, "internal error")
                 }
             }
             return sp
@@ -463,18 +460,13 @@ extension SSExamine {
     /// The difference between maximum and minimum. Can be nil for empty tables.
     public var range: Double? {
         get {
-            var tempMax: Double?
-            var tempMin: Double?
             if isArithemtic {
-                tempMax = castValueToDouble(self.maximum)
-                guard tempMax != nil else {
+                if let tempMax = castValueToDouble(self.maximum), let tempMin = castValueToDouble(self.minimum) {
+                    return Double(tempMax - tempMin)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                tempMin = castValueToDouble(self.minimum)
-                guard tempMin != nil else {
-                    assert(false, "internal error")
-                }
-                return Double(tempMax! - tempMin!)
             }
             else {
                 return nil
@@ -506,15 +498,12 @@ extension SSExamine {
     /// Returns the mid-range
     public var midRange: Double? {
         if isArithemtic {
-            let tempMax = castValueToDouble(self.maximum)
-            guard tempMax != nil else {
+            if let tempMax = castValueToDouble(self.maximum), let tempMin = castValueToDouble(self.minimum) {
+                return (tempMax + tempMin) / 2.0
+            }
+            else {
                 assert(false, "internal error")
             }
-            let tempMin = castValueToDouble(self.minimum)
-            guard tempMin != nil else {
-                assert(false, "internal error")
-            }
-            return (tempMax! + tempMin!) / 2.0
         }
         else {
             return nil
@@ -582,14 +571,14 @@ extension SSExamine {
                 let m = self.arithmeticMean!
                 var diff = 0.0
                 var sum = 0.0
-                var temp: Double?
                 for (item, freq) in self.elements {
-                    temp = castValueToDouble(item)
-                    guard temp != nil else {
+                    if let temp = castValueToDouble(item) {
+                        diff = temp - m
+                        sum = sum + diff * diff * Double(freq)
+                    }
+                    else {
                         assert(false, "internal error")
                     }
-                    diff = temp! - m
-                    sum = sum + diff * diff * Double(freq)
                 }
                 return sum / Double(self.sampleSize - 1)
             }
@@ -661,40 +650,32 @@ extension SSExamine {
         if isArithemtic {
             var s: Double = 0.0
             var p: Double = 0.0
-            guard let tot = self.total else {
+            if let tot = self.total {
+                for item in self.elementsAsArray(sortOrder: .original)! {
+                    if let x = castValueToDouble(item) {
+                        p = x / tot
+                        s += p * p
+                    }
+                }
+                return s
+            }
+            else {
                 os_log("measure is not available", log: log_stat, type: .error)
                 return nil
             }
-            for item in self.elementsAsArray(sortOrder: .original)! {
-                if let x = castValueToDouble(item) {
-                    p = x / tot
-                    s += p * p
-                }
-            }
-            return s
         }
         else {
             return nil
         }
     }
     
-    
+    /// Returns the Herfindahl measure
     public var conc: Double? {
         return self.herfindahlIndex
     }
     
-    // Returns the normalized Herfindahl index
-    public var herfindahlIndexNormalized: Double? {
-        if let hi = self.herfindahlIndex {
-            return hi * Double(self.length) / Double(self.length - 1)
-        }
-        else {
-            return nil
-        }
-    }
-    
     /// Returns the Gini coefficient
-    public var giniCoeff: Double? {
+    public var gini: Double? {
         if isArithemtic {
             if self.sampleSize < 2 {
                 return nil
@@ -704,10 +685,12 @@ extension SSExamine {
             let N = Double(self.sampleSize)
             let m = self.arithmeticMean!
             for i in 1...self.sampleSize {
-                guard let x = castValueToDouble(sorted[i - 1]) else {
+                if let x = castValueToDouble(sorted[i - 1]) {
+                    s = s + (2.0 * Double(i) - N - 1.0) * x
+                }
+                else {
                     assert(false, "internal error")
                 }
-                s = s + (2.0 * Double(i) - N - 1.0) * x
             }
             return s / (pow(N, 2.0) * m)
         }
@@ -715,6 +698,45 @@ extension SSExamine {
             return nil
         }
     }
+    
+    /// The normalized Gini measure
+    public var giniNorm: Double? {
+        get {
+            if let g = self.gini {
+                let N = Double(self.sampleSize)
+                return g * N / (N - 1.0)
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    /// The concentration ratio
+    public func CR(_ g: Int!) -> Double? {
+        if isArithemtic {
+            if g > 0 && g <= self.sampleSize {
+                let a = self.elementsAsArray(sortOrder: .descending)!
+                var sum: Double = 0.0
+                for i in 0..<g {
+                    if let x = castValueToDouble(a[i]) {
+                        sum = sum + x
+                    }
+                    else {
+                        assert(false, "internal error")
+                    }
+                }
+                return sum
+            }
+            else {
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
     
     /// Returns the alpha-confidence interval of the mean when the population variance is known
     /// - Parameter a: Alpha
@@ -823,7 +845,7 @@ extension SSExamine {
             if self.sampleSize < 2 {
                 return nil
             }
-            if let g = self.giniCoeff, let m = self.arithmeticMean {
+            if let g = self.gini, let m = self.arithmeticMean {
                 return g * 2.0 * m
             }
             else {
@@ -833,34 +855,6 @@ extension SSExamine {
         else {
             return nil
         }
-//            var s1: Double = 0.0
-//            var s2: Double = 0.0
-//            let c: Double = Double(self.sampleSize)
-//            let a = elementsAsArray(sortOrder: .ascending)!
-//            var v: Int = 1
-//            var k: Int
-//            var t1: Double?
-//            var t2: Double?
-//            while v <= (self.sampleSize - 1) {
-//                k = v + 1
-//                while k <= self.sampleSize {
-//                    t1 = castValueToDouble(a[v - 1])
-//                    t2 = castValueToDouble(a[k - 1])
-//                    guard t1 != nil, t2 != nil else {
-//                        assert(false, "internal error")
-//                    }
-//                    s1 = s1 + fabs(t1! - t2!)
-//                    k = k + 1
-//                }
-//                s2 = s2 + s1
-//                s1 = 0.0
-//                v = v + 1
-//            }
-//            return (s2 * 2.0 / (c * (c - 1.0)))
-//        }
-//        else {
-//            return nil
-//        }
     }
     
     /// Returns the median absolute deviation around the reference point given. If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
@@ -872,14 +866,13 @@ extension SSExamine {
         }
         var diffArray:Array<Double> = Array<Double>()
         let values = self.elementsAsArray(sortOrder: .ascending)!
-        var t1: Double?
         let result: Double
         for item in values  {
-            t1 = castValueToDouble(item)
-            guard t1 != nil else {
+            if let t1 = castValueToDouble(item) {
+                diffArray.append(fabs(t1 - rp))
+            }else {
                 assert(false, "internal error")
             }
-            diffArray.append(fabs(t1! - rp))
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
         let k = Double(sortedDifferences.count) * 0.5
@@ -906,17 +899,17 @@ extension SSExamine {
             return nil
         }
         var sum: Double = 0.0
-        var t1: Double?
         var f1: Double
         var c: Int = 0
         for (item, freq) in self.elements {
-            t1 = castValueToDouble(item)
-            guard t1 != nil else {
+            if let t1 = castValueToDouble(item) {
+                f1 = Double(freq)
+                sum = sum + fabs(t1 - rp) * f1
+                c = c + freq
+            }
+            else {
                 assert(false, "internal error")
             }
-            f1 = Double(freq)
-            sum = sum + fabs(t1! - rp) * f1
-            c = c + freq
         }
         return sum / Double(c)
     }
@@ -940,40 +933,40 @@ extension SSExamine {
             case .lower:
                 let a = self.elementsAsArray(sortOrder: .ascending)!
                 let m = self.arithmeticMean!
-                var t: Double?
                 var s = 0.0
                 var k: Double = 0
                 for itm in a {
-                    t = castValueToDouble(itm)
-                    guard t != nil else {
-                        assert(false, "internal error")
-                    }
-                    if t! < m {
-                        s = s + pow(t! - m, 2.0)
-                        k = k + 1.0
+                    if let t = castValueToDouble(itm) {
+                        if t < m {
+                            s = s + pow(t - m, 2.0)
+                            k = k + 1.0
+                        }
+                        else {
+                            break
+                        }
                     }
                     else {
-                        break
+                        assert(false, "internal error")
                     }
                 }
                 return s / k
             case .upper:
                 let a = self.elementsAsArray(sortOrder: .descending)!
                 let m = self.arithmeticMean!
-                var t: Double?
                 var s = 0.0
                 var k: Double = 0
                 for itm in a {
-                    t = castValueToDouble(itm)
-                    guard t != nil else {
-                        assert(false, "internal error")
-                    }
-                    if t! > m {
-                        s = s + pow(t! - m, 2.0)
-                        k = k + 1.0
+                    if let t = castValueToDouble(itm) {
+                        if t > m {
+                            s = s + pow(t - m, 2.0)
+                            k = k + 1.0
+                        }
+                        else {
+                            break
+                        }
                     }
                     else {
-                        break
+                        assert(false, "internal error")
                     }
                 }
                 return s / k
@@ -1010,14 +1003,14 @@ extension SSExamine {
             let m = self.arithmeticMean!
             var diff = 0.0
             var sum = 0.0
-            var t: Double?
             for (item, freq) in self.elements {
-                t = castValueToDouble(item)
-                guard t != nil else {
+                if let t = castValueToDouble(item) {
+                    diff = t - m
+                    sum = sum + pow(diff, Double(r)) * Double(freq)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                diff = t! - m
-                sum = sum + pow(diff, Double(r)) * Double(freq)
             }
             return sum / Double(self.sampleSize)
         }
@@ -1032,13 +1025,13 @@ extension SSExamine {
     fileprivate func originMoment(r: Int!) -> Double? {
         if isArithemtic {
             var sum = 0.0
-            var t: Double?
             for (item, freq) in self.elements {
-                t = castValueToDouble(item)
-                guard t != nil else {
+                if let t = castValueToDouble(item) {
+                    sum = sum + pow(t, Double(r)) * Double(freq)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                sum = sum + pow(t!, Double(r)) * Double(freq)
             }
             return sum / Double(self.sampleSize)
         }
@@ -1054,13 +1047,13 @@ extension SSExamine {
             let m = self.arithmeticMean!
             let sd = self.standardDeviation(type: .biased)!
             if !sd.isZero {
-                var t: Double?
                 for (item, freq) in self.elements {
-                    t = castValueToDouble(item)
-                    guard t != nil else {
+                    if let t = castValueToDouble(item) {
+                        sum = sum + pow( ( t - m ) / sd, Double(r)) * Double(freq)
+                    }
+                    else {
                         assert(false, "internal error")
                     }
-                    sum = sum + pow( ( t! - m ) / sd, Double(r)) * Double(freq)
                 }
                 return sum / Double(self.sampleSize)
             }
@@ -1171,13 +1164,13 @@ extension SSExamine {
             case .esd:
                 var tempArray = Array<Double>()
                 let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
-                var t:Double?
                 for itm in a {
-                    t = castValueToDouble(itm)
-                    guard t != nil else {
+                    if let t = castValueToDouble(itm) {
+                        tempArray.append(t)
+                    }
+                    else {
                         assert(false, "internal error")
                     }
-                    tempArray.append(t!)
                 }
                 if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
@@ -1205,13 +1198,13 @@ extension SSExamine {
         if isArithemtic {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
-            var temp: Double?
             for itm in a {
-                temp = castValueToDouble(itm)
-                guard temp != nil else {
+                if let temp = castValueToDouble(itm) {
+                    tempArray.append(temp)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                tempArray.append(temp!)
             }
             if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
@@ -1265,6 +1258,59 @@ extension SSExamine {
             }
         }
     }
+    
+    
+    public var boxWhisker: SSBoxWhisker<SSElement>? {
+        get {
+            if isArithemtic {
+                do {
+                    var res = SSBoxWhisker<SSElement>()
+                    res.median = self.median
+                    res.q25 = try self.quantile(q: 0.25)
+                    res.q75 = try self.quantile(q: 0.75)
+                    res.iqr = self.interquartileRange
+                    let a = self.elementsAsArray(sortOrder: .ascending)!
+                    var iqr3h: Double
+                    if res.iqr != nil {
+                        iqr3h = 1.5 * res.iqr!
+                    }
+                    else {
+                        return nil
+                    }
+                    res.extremes = Array<SSElement>()
+                    for i in 0..<self.sampleSize {
+                        if let temp = castValueToDouble(a[i]) {
+                            if temp > res.q75! + iqr3h {
+                                res.extremes?.append(a[i])
+                            }
+                            else {
+                                break
+                            }
+                        }
+                    }
+                    for i in stride(from: self.sampleSize - 1, through: 0, by: -1) {
+                        if let temp = castValueToDouble(a[i]) {
+                            if temp < res.q25! - iqr3h {
+                                res.extremes?.append(a[i])
+                            }
+                            else {
+                                break
+                            }
+                        }
+                    }
+                    return res
+                }
+                catch {
+                    return nil
+                }
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
+    
     
     
 }

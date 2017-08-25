@@ -279,21 +279,21 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     subscript(rowName: R!, columnName: C!) -> N {
         get {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            guard let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) else {
+            if let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) {
+                return self.counts[r][c]
+            }
+            else {
                 assert(false, "Index out of range")
             }
-            assert(isValidRowIndex(row: r), "Row-Index out of range")
-            assert(isValidColumnIndex(column: c), "Column-Index out of range")
-            return self.counts[r][c]
         }
         set {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            guard let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) else {
+            if let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) {
+                self.counts[r][c] = newValue
+            }
+            else {
                 assert(false, "Index out of range")
             }
-            assert(isValidRowIndex(row: r), "Row-Index out of range")
-            assert(isValidColumnIndex(column: c), "Column-Index out of range")
-            self.counts[r][c] = newValue
         }
     }
     
@@ -351,18 +351,22 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Removes the row with name
     public func removeRow(rowName name: R) throws -> Array<N> {
-        guard let i = self.indexOfRow(rowName: name) else {
+        if let i = self.indexOfRow(rowName: name) {
+            return self.removeRow(at: i)
+        }
+        else {
             throw SSSwiftyStatsError.init(type: .rowNameUnknown, file: #file, line: #line, function: #function)
         }
-        return self.removeRow(at: i)
     }
     
     /// Removes the column with name
     public func removeColumn(columnName name: C) throws -> Array<N> {
-        guard let i = self.indexOfColumn(columnName: name) else {
+        if let i = self.indexOfColumn(columnName: name) {
+            return self.removeColumn(at: i)
+        }
+        else {
             throw SSSwiftyStatsError.init(type: .columnNameUnknown, file: #file, line: #line, function: #function)
         }
-        return self.removeColumn(at: i)
     }
     
     /// Remove row at index at
@@ -555,21 +559,15 @@ extension SSCrosstab {
                 if self.isNumeric {
                     var sum: Double = 0.0
                     var temp = Array<Double>()
-                    var temp1: Double?
                     for r in 0..<self.rows {
                         sum = 0.0
                         for c in 0..<self.columns {
-                            temp1 = castValueToDouble(self[r, c])
-                            guard temp1 != nil else {
+                            if let temp1 = castValueToDouble(self[r, c]) {
+                                sum += temp1
+                            }
+                            else {
                                 assert(false, "internal error")
                             }
-//                            if N.self is Int.Type {
-//                                temp1 = Double(self[r, c] as! Int)
-//                            }
-//                            else {
-//                                temp1 = self[r, c] as! Double
-//                            }
-                            sum += temp1!
                         }
                         temp.append(sum)
                     }
@@ -587,21 +585,15 @@ extension SSCrosstab {
             if self.isNumeric {
                 var sum: Double = 0.0
                 var temp = Array<Double>()
-                var temp1: Double?
                 for c in 0..<self.columns {
                     sum = 0.0
                     for r in 0..<self.rows {
-                        temp1 = castValueToDouble(self[r, c])
-                        guard temp1 != nil else {
+                        if let temp1 = castValueToDouble(self[r, c]) {
+                            sum += temp1
+                        }
+                        else {
                             assert(false, "internal error")
                         }
-//                        if N.self is Int.Type {
-//                            temp1 = Double(self[r, c] as! Int)
-//                        }
-//                        else {
-//                            temp1 = self[r, c] as! Double
-//                        }
-                        sum += temp1!
                     }
                     temp.append(sum)
                 }
@@ -627,11 +619,12 @@ extension SSCrosstab {
     /// Sum of row named rowName
     public func rowSum(rowName: R) -> Double {
         if let rn = self.rowNames {
-            let i = rn.index(of: rowName)
-            guard i != nil else {
+            if let i = rn.index(of: rowName) {
+                return self.rowSum(row: i)
+            }
+            else {
                 return Double.nan
             }
-            return self.rowSum(row: i!)
         }
         else {
             return Double.nan
@@ -652,11 +645,12 @@ extension SSCrosstab {
     /// Sum of column named columnName
     public func columnSum(columnName: C) -> Double {
         if let rn = self.columnNames {
-            let i = rn.index(of: columnName)
-            guard i != nil else {
+            if let i = rn.index(of: columnName) {
+                return self.columnSum(column: i)
+            }
+            else {
                 return Double.nan
             }
-            return self.columnSum(column: i!)
         }
         else {
             return Double.nan
@@ -773,17 +767,12 @@ extension SSCrosstab {
         if self.isNumeric {
             assert(isValidColumnIndex(column: column), "Row-Index out of range")
             let column = try! self.column(columnIndex: column, sorted: true)
-            let temp1 = castValueToDouble(column.last)
-            guard temp1 != nil else {
+            if let temp1 = castValueToDouble(column.last) {
+                return temp1
+            }
+            else {
                 assert(false, "internal error")
             }
-            return temp1!
-//            if N.self is Int.Type {
-//                return Double(column.last as! Int)
-//            }
-//            else {
-//                return column.last! as! Double
-//            }
         }
         else {
             return Double.nan
@@ -796,17 +785,12 @@ extension SSCrosstab {
         if self.isNumeric {
             assert(isValidRowIndex(row: row), "Row-Index out of range")
             let row = try! self.row(rowIndex: row, sorted: true)
-            let temp1 = castValueToDouble(row.last)
-            guard temp1 != nil else {
+            if let temp1 = castValueToDouble(row.last) {
+                return temp1
+            }
+            else {
                 assert(false, "internal error")
             }
-            return temp1!
-//            if N.self is Int.Type {
-//                return Double(row.last as! Int)
-//            }
-//            else {
-//                return row.last! as! Double
-//            }
         }
         else {
             return Double.nan
@@ -817,19 +801,13 @@ extension SSCrosstab {
     public func relativeFrequencyCell(row: Int, column: Int) throws -> Double {
         assert(isValidRowIndex(row: row), "Row-Index out of range")
         assert(isValidColumnIndex(column: column), "Column-Index out of range")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[row, column])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[row, column]) {
+                return temp / self.total
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[row, column] as! Int)
-//            }
-//            else {
-//                temp = self[row, column] as! Double
-//            }
-            return temp! / self.total
         }
         else {
             return Double.nan
@@ -841,19 +819,13 @@ extension SSCrosstab {
     public func relativeFrequencyCell(rowName: R, columnName: C) throws -> Double {
         assert(isValidRowName(name: rowName), "Row-Name unknown")
         assert(isValidColumnName(name: columnName), "Column-Name unknown")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[rowName, columnName])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[rowName, columnName]) {
+                return temp / self.total
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[rowName, columnName] as! Int)
-//            }
-//            else {
-//                temp = self[rowName, columnName] as! Double
-//            }
-            return temp! / self.total
         }
         else {
             return Double.nan
@@ -864,19 +836,13 @@ extension SSCrosstab {
     public func relativeRowFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[row, column])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[row, column]) {
+                return temp / self.rowSums![row]
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[row, column] as! Int)
-//            }
-//            else {
-//                temp = self[row, column] as! Double
-//            }
-            return temp! / self.rowSums![row]
         }
         else {
             return Double.nan
@@ -887,19 +853,13 @@ extension SSCrosstab {
     public func relativeColumnFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[row, column])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[row, column]) {
+                return temp / self.columnSums![column]
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[row, column] as! Int)
-//            }
-//            else {
-//                temp = self[row, column] as! Double
-//            }
-            return temp! / self.columnSums![column]
         }
         else {
             return Double.nan
@@ -936,19 +896,13 @@ extension SSCrosstab {
     public func relativeTotalFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[row, column])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[row, column]) {
+                return temp / self.total
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[row, column] as! Int)
-//            }
-//            else {
-//                temp = self[row, column] as! Double
-//            }
-            return temp! / self.total
         }
         else {
             return Double.nan
@@ -985,19 +939,13 @@ extension SSCrosstab {
     public func residual(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: Double?
         if self.isNumeric {
-            temp = castValueToDouble(self[row, column])
-            guard temp != nil else {
+            if let temp = castValueToDouble(self[row, column]) {
+                return temp - self.expectedFrequency(row: row, column: column)
+            }
+            else {
                 assert(false, "internal error")
             }
-//            if N.self is Int.Type {
-//                temp = Double(self[row, column] as! Int)
-//            }
-//            else {
-//                temp = self[row, column] as! Double
-//            }
-            return temp! - self.expectedFrequency(row: row, column: column)
         }
         else {
             return Double.nan
@@ -1056,23 +1004,17 @@ extension SSCrosstab {
     /// - Precondition: at least nominal scaled measurements
     public var likelihoodRatio: Double {
         get {
-            var temp: Double?
             var sum: Double = 0.0
             if self.isNumeric {
                 for r in 0..<self.rows {
                     for c in 0..<self.columns {
-                        temp = castValueToDouble(self[r, c])
-                        guard temp != nil else {
-                            assert(false, "internal error")
+                        if let temp = castValueToDouble(self[r, c]) {
+                            if temp != 0 {
+                                sum += temp * log(temp / self.expectedFrequency(row: r, column: c))
+                            }
                         }
-//                        if N.self is Int.Type {
-//                            temp = Double(self[r, c] as! Int)
-//                        }
-//                        else {
-//                            temp = self[r, c] as! Double
-//                        }
-                        if temp! != 0 {
-                            sum += temp! * log(temp! / self.expectedFrequency(row: r, column: c))
+                        else {
+                            assert(false, "internal error")
                         }
                     }
                 }
@@ -1089,15 +1031,18 @@ extension SSCrosstab {
     public var chiSquareYates: Double {
         get {
             if self.is2x2Table {
-                var n11: Double?
-                var n12: Double?
-                var n21: Double?
-                var n22: Double?
-                n11 = castValueToDouble(self[0,0])
-                n12 = castValueToDouble(self[0,1])
-                n21 = castValueToDouble(self[1,0])
-                n22 = castValueToDouble(self[1,1])
-                guard n11 != nil, n12 != nil, n21 != nil, n22 != nil else {
+                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
+                    let temp = fabs(n11 * n22 - n12 * n21)
+                    let t = self.total
+                    if temp <= (0.5 * t) {
+                        return 0.0
+                    }
+                    else {
+                        let den = self.rowSum(row: 0) * self.rowSum(row: 1) * self.columnSum(column: 0) * self.columnSum(column: 1)
+                        return t * pow(temp - 0.5 * t, 2.0) / den
+                    }
+                }
+                else {
                     assert(false, "internal error")
                 }
 //                if N.self is Int.Type {
@@ -1112,15 +1057,6 @@ extension SSCrosstab {
 //                    n21 = self[1,0] as! Double
 //                    n22 = self[1,1] as! Double
 //                }
-                let temp = fabs(n11! * n22! - n12! * n21!)
-                let t = self.total
-                if temp <= (0.5 * t) {
-                    return 0.0
-                }
-                else {
-                    let den = self.rowSum(row: 0) * self.rowSum(row: 1) * self.columnSum(column: 0) * self.columnSum(column: 1)
-                    return t * pow(temp - 0.5 * t, 2.0) / den
-                }
             }
             else {
                 return Double.nan
@@ -1136,73 +1072,45 @@ extension SSCrosstab {
                 return Double.nan
             }
             else {
-                var frc: Double?
                 var sum1: Double = 0.0
                 if self.isNumeric {
-                    var X: Double?
-                    var Y: Double?
                     for r in 0..<self.rows {
-                        X = castValueToDouble(self.rowNames![r])
-                        guard X != nil else {
-                            assert(false, "internal error")
+                        if let X = castValueToDouble(self.rowNames![r]) {
+                            for c in 0..<self.columns {
+                                if let Y = castValueToDouble(self.columnNames![c]) {
+                                    if let frc = castValueToDouble(self[r, c]) {
+                                        sum1 += X * Y * frc
+                                    }
+                                    else {
+                                        assert(false, "internal error")
+                                    }
+                                }
+                                else {
+                                    assert(false, "internal error")
+                                }
+                            }
                         }
-//                        if R.self is Int.Type {
-//                            X = Double(self.rowNames![r] as! Int)
-//                        }
-//                        else {
-//                            X = self.rowNames![r] as! Double
-//                        }
-                        for c in 0..<self.columns {
-                            Y = castValueToDouble(self.columnNames![c])
-                            guard Y != nil else {
-                                assert(false, "internal error")
-                            }
-//                            if C.self is Int.Type {
-//                                Y = Double(self.columnNames![c] as! Int)
-//                            }
-//                            else {
-//                                Y = self.columnNames![c] as! Double
-//                            }
-                            frc = castValueToDouble(self[r, c])
-                            guard frc != nil else {
-                                assert(false, "internal error")
-                            }
-//                            if N.self is Int.Type {
-//                                frc = Double(self[r, c] as! Int)
-//                            }
-//                            else {
-//                                frc = self[r, c] as! Double
-//                            }
-                            sum1 += X! * Y! * frc!
+                        else {
+                            assert(false, "internal error")
                         }
                     }
                     var sum2: Double = 0.0
                     for r in 0..<self.rows {
-                        X = castValueToDouble(self.rowNames![r])
-                        guard X != nil else {
+                        if let X = castValueToDouble(self.rowNames![r]) {
+                            sum2 += X * self.rowSum(row: r)
+                        }
+                        else {
                             assert(false, "internal error")
                         }
-//                        if R.self is Int.Type {
-//                            X = Double(self.rowNames![r] as! Int)
-//                        }
-//                        else {
-//                            X = self.rowNames![r] as! Double
-//                        }
-                        sum2 += X! * self.rowSum(row: r)
                     }
                     var sum3: Double = 0.0
                     for c in 0..<self.columns {
-                        Y = castValueToDouble(self.columnNames![c])
-                        guard Y != nil else {
+                        if let Y = castValueToDouble(self.columnNames![c]) {
+                            sum3 += Y * self.columnSum(column: c)
+                        }
+                        else {
                             assert(false, "internal error")
                         }
-//                        if C.self is Int.Type {
-//                            Y = Double(self.columnNames![c] as! Int)
-//                        }
-//                        else {
-//                            Y = self.columnNames![c] as! Double
-//                        }
-                        sum3 += Y! * self.columnSum(column: c)
                     }
                     return sum1 - (sum2 * sum3) / self.total
                 }
@@ -1212,71 +1120,36 @@ extension SSCrosstab {
             }
         }
     }
+    
     /// Returns the product moment correlation r (Pearson's r)
     /// - Precondition: At least interval scaled measurements
     public var pearsonR: Double {
         get {
             if self.isNumeric && self.rowLevelOfMeasurement != .nominal && self.rowLevelOfMeasurement != .ordinal && self.columnLevelOfMeasurement != .nominal && self.columnLevelOfMeasurement != .ordinal {
-                var X: Double?
-                var Y: Double?
                 var sum1: Double = 0.0
+                var sum2: Double = 0.0
                 var SX: Double
                 var SY: Double
                 for r in 0..<self.rows {
-                    X = castValueToDouble(self.rowNames![r])
-                    guard X != nil else {
+                    if let X = castValueToDouble(self.rowNames![r]) {
+                        sum1 += X * X * self.rowSum(row: r)
+                        sum2 += X * self.rowSum(row: r)
+                    }
+                    else {
                         assert(false, "internal error")
                     }
-//                    if R.self is Int.Type {
-//                        X = Double(self.rowNames![r] as! Int)
-//                    }
-//                    else {
-//                        X = self.rowNames![r] as! Double
-//                    }
-                    sum1 += X! * X! * self.rowSum(row: r)
-                }
-                var sum2: Double = 0.0
-                for r in 0..<self.rows {
-                    X = castValueToDouble(self.rowNames![r])
-                    guard X != nil else {
-                        assert(false, "internal error")
-                    }
-//                    if R.self is Int.Type {
-//                        X = Double(self.rowNames![r] as! Int)
-//                    }
-//                    else {
-//                        X = self.rowNames![r] as! Double
-//                    }
-                    sum2 += X! * self.rowSum(row: r)
                 }
                 SX = sum1 - pow(sum2, 2.0) / self.total
                 sum1 = 0.0
-                for c in 0..<self.columns {
-                    Y = castValueToDouble(self.columnNames![c])
-                    guard Y != nil else {
-                        assert(false, "internal error")
-                    }
-//                    if C.self is Int.Type {
-//                        Y = Double(self.columnNames![c] as! Int)
-//                    }
-//                    else {
-//                        Y = self.columnNames![c] as! Double
-//                    }
-                    sum1 += Y! * Y! * self.columnSum(column: c)
-                }
                 sum2 = 0.0
                 for c in 0..<self.columns {
-                    Y = castValueToDouble(self.columnNames![c])
-                    guard Y != nil else {
+                    if let Y = castValueToDouble(self.columnNames![c]) {
+                        sum1 += Y * Y * self.columnSum(column: c)
+                        sum2 += Y * self.columnSum(column: c)
+                    }
+                    else {
                         assert(false, "internal error")
                     }
-//                    if C.self is Int.Type {
-//                        Y = Double(self.columnNames![c] as! Int)
-//                    }
-//                    else {
-//                        Y = self.columnNames![c] as! Double
-//                    }
-                    sum2 += Y! * self.columnSum(column: c)
                 }
                 SY = sum1 - pow(sum2, 2.0) / self.total
                 return self.covariance / sqrt(SX * SY)
@@ -1361,18 +1234,12 @@ extension SSCrosstab {
     public var r0: Double {
         get {
             if self.is2x2Table {
-                var n11: Double?
-                var n12: Double?
-                var n21: Double?
-                var n22: Double?
-                n11 = castValueToDouble(self[0,0])
-                n12 = castValueToDouble(self[0,1])
-                n21 = castValueToDouble(self[1,0])
-                n22 = castValueToDouble(self[1,1])
-                guard n11 != nil, n12 != nil, n21 != nil, n22 != nil else {
+                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
+                    return (n11 * n22) / (n12 * n21)
+                }
+                else {
                     assert(false, "internal error")
                 }
-                return (n11! * n22!) / (n12! * n21!)
             }
             else {
                 return Double.nan
@@ -1386,18 +1253,12 @@ extension SSCrosstab {
     public var r1: Double {
         get {
             if self.is2x2Table {
-                var n11: Double?
-                var n12: Double?
-                var n21: Double?
-                var n22: Double?
-                n11 = castValueToDouble(self[0,0])
-                n12 = castValueToDouble(self[0,1])
-                n21 = castValueToDouble(self[1,0])
-                n22 = castValueToDouble(self[1,1])
-                guard n11 != nil, n12 != nil, n21 != nil, n22 != nil else {
+                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
+                    return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
+                }
+                else {
                     assert(false, "internal error")
                 }
-                return (n11! * (n21! + n22!)) / (n21! * (n11! + n12!))
             }
             else {
                 return Double.nan
@@ -1411,17 +1272,15 @@ extension SSCrosstab {
             if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
                 var sum1 = 0.0
                 var sum2 = 0.0
-                var fij = 0.0
                 for r in 0..<self.rows {
                     for c in 0..<self.columns {
-                        if N.self is Int.Type {
-                            fij = Double(self[r,c] as! Int)
+                        if let fij = castValueToDouble(self[r,c]) {
+                            sum1 += pow(fij, 2.0) / self.rowSum(row: r)
+                            sum2 += pow(self.columnSum(column: c), 2.0)
                         }
                         else {
-                            fij = self[r,c] as! Double
+                            assert(false, "internal error")
                         }
-                        sum1 += pow(fij, 2.0) / self.rowSum(row: r)
-                        sum2 += pow(self.columnSum(column: c), 2.0)
                     }
                 }
                 return (self.total * sum1 - sum2) / (pow(self.total, 2.0) - sum2)
