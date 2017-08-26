@@ -1189,6 +1189,7 @@ public class SSHypothesisTesting {
             result.cvAlpha = _cutoffAlpha
             result.df = _df
             result.equality = !(_cdfChiSquare > (1.0 - alpha))
+            result.testType = .bartlett
             return result
         }
         catch {
@@ -1354,6 +1355,14 @@ public class SSHypothesisTesting {
             result.testStatistic = _testStatisticValue
             result.equality = _variancesAreEqual
             result.df = Double.nan
+            switch testType {
+            case .mean:
+                result.testType = .leveneMean
+            case .median:
+                result.testType = .leveneMedian
+            case .trimmedMean:
+                result.testType = .leveneTrimmedMean
+            }
             return result
         }
         catch {

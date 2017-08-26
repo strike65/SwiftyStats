@@ -1260,7 +1260,8 @@ extension SSExamine {
         }
     }
     
-    
+    /// Returns the statistics needed to create a Box-Whisker Plot
+    /// - Returns: A SSBoxWhisker structure
     public var boxWhisker: SSBoxWhisker<SSElement>? {
         get {
             if isArithemtic {
@@ -1270,31 +1271,48 @@ extension SSExamine {
                     res.q25 = try self.quantile(q: 0.25)
                     res.q75 = try self.quantile(q: 0.75)
                     res.iqr = self.interquartileRange
-                    let a = self.elementsAsArray(sortOrder: .ascending)!
+                    let a = self.elementsAsArray(sortOrder: .descending)!
                     var iqr3h: Double
+                    var iqr3t: Double
+                    var notchCoeff: Double
+                    let N = Double(self.sampleSize)
                     if res.iqr != nil {
                         iqr3h = 1.5 * res.iqr!
+                        iqr3t = 2.0 * iqr3h
+//                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
+                        notchCoeff = 1.58 * res.iqr! / sqrt(N)
                     }
                     else {
                         return nil
                     }
+                    res.uNotch = res.median! + notchCoeff
+                    res.lNotch = res.median! - notchCoeff
                     res.extremes = Array<SSElement>()
+                    res.outliers = Array<SSElement>()
                     for i in 0..<self.sampleSize {
                         if let temp = castValueToDouble(a[i]) {
-                            if temp > res.q75! + iqr3h {
-                                res.extremes?.append(a[i])
+                            if temp > res.q75! + iqr3t {
+                                res.outliers?.append(a[i])
+                            }
+                            else if temp > res.q75! + iqr3h {
+                                    res.extremes?.append(a[i])
                             }
                             else {
+                                res.uWhiskerExtreme = a[i]
                                 break
                             }
                         }
                     }
                     for i in stride(from: self.sampleSize - 1, through: 0, by: -1) {
                         if let temp = castValueToDouble(a[i]) {
-                            if temp < res.q25! - iqr3h {
+                            if temp < res.q25! - iqr3t {
+                                res.outliers?.append(a[i])
+                            }
+                            else if temp < res.q25! - iqr3h {
                                 res.extremes?.append(a[i])
                             }
                             else {
+                                res.lWhiskerExtreme = a[i]
                                 break
                             }
                         }
