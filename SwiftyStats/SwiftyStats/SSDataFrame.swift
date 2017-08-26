@@ -233,7 +233,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
                 res.append(e)
             }
             else {
-                assert(false, "Index out of range")
+                fatalError("Index out of range")
             }
         }
         return res
@@ -250,7 +250,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
             return data[i]
         }
         else {
-            assert(false, "Index out of range")
+            fatalError("Index out of range")
         }
     }
     
@@ -281,7 +281,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
             return res
         }
         catch {
-            assert(false, "Copy failed")
+            fatalError("Copy failed")
         }
     }
     

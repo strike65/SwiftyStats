@@ -465,7 +465,7 @@ extension SSExamine {
                     return Double(tempMax - tempMin)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("internal error")
                 }
             }
             else {
@@ -503,6 +503,7 @@ extension SSExamine {
             }
             else {
                 assert(false, "internal error")
+                return nil
             }
         }
         else {

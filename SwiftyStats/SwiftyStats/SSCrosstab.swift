@@ -283,7 +283,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
                 return self.counts[r][c]
             }
             else {
-                assert(false, "Index out of range")
+                fatalError("Index out of range")
             }
         }
         set {
@@ -292,7 +292,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
                 self.counts[r][c] = newValue
             }
             else {
-                assert(false, "Index out of range")
+                fatalError("Index out of range")
             }
         }
     }
@@ -566,7 +566,7 @@ extension SSCrosstab {
                                 sum += temp1
                             }
                             else {
-                                assert(false, "internal error")
+                                fatalError("internal error")
                             }
                         }
                         temp.append(sum)
@@ -592,7 +592,7 @@ extension SSCrosstab {
                             sum += temp1
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                     temp.append(sum)
@@ -771,7 +771,7 @@ extension SSCrosstab {
                 return temp1
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -789,7 +789,7 @@ extension SSCrosstab {
                 return temp1
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -806,7 +806,7 @@ extension SSCrosstab {
                 return temp / self.total
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -824,7 +824,7 @@ extension SSCrosstab {
                 return temp / self.total
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -841,7 +841,7 @@ extension SSCrosstab {
                 return temp / self.rowSums![row]
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -858,7 +858,7 @@ extension SSCrosstab {
                 return temp / self.columnSums![column]
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -901,7 +901,7 @@ extension SSCrosstab {
                 return temp / self.total
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -944,7 +944,7 @@ extension SSCrosstab {
                 return temp - self.expectedFrequency(row: row, column: column)
             }
             else {
-                assert(false, "internal error")
+                fatalError("internal error")
             }
         }
         else {
@@ -1014,7 +1014,7 @@ extension SSCrosstab {
                             }
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                 }
@@ -1043,7 +1043,7 @@ extension SSCrosstab {
                     }
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("internal error")
                 }
 //                if N.self is Int.Type {
 //                    n11 = Double(self[0,0] as! Int)
@@ -1082,16 +1082,16 @@ extension SSCrosstab {
                                         sum1 += X * Y * frc
                                     }
                                     else {
-                                        assert(false, "internal error")
+                                        fatalError("internal error")
                                     }
                                 }
                                 else {
-                                    assert(false, "internal error")
+                                    fatalError("internal error")
                                 }
                             }
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                     var sum2: Double = 0.0
@@ -1100,7 +1100,7 @@ extension SSCrosstab {
                             sum2 += X * self.rowSum(row: r)
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                     var sum3: Double = 0.0
@@ -1109,7 +1109,7 @@ extension SSCrosstab {
                             sum3 += Y * self.columnSum(column: c)
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                     return sum1 - (sum2 * sum3) / self.total
@@ -1136,7 +1136,7 @@ extension SSCrosstab {
                         sum2 += X * self.rowSum(row: r)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("internal error")
                     }
                 }
                 SX = sum1 - pow(sum2, 2.0) / self.total
@@ -1148,7 +1148,7 @@ extension SSCrosstab {
                         sum2 += Y * self.columnSum(column: c)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("internal error")
                     }
                 }
                 SY = sum1 - pow(sum2, 2.0) / self.total
@@ -1238,7 +1238,7 @@ extension SSCrosstab {
                     return (n11 * n22) / (n12 * n21)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("internal error")
                 }
             }
             else {
@@ -1257,7 +1257,7 @@ extension SSCrosstab {
                     return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("internal error")
                 }
             }
             else {
@@ -1279,7 +1279,7 @@ extension SSCrosstab {
                             sum2 += pow(self.columnSum(column: c), 2.0)
                         }
                         else {
-                            assert(false, "internal error")
+                            fatalError("internal error")
                         }
                     }
                 }
