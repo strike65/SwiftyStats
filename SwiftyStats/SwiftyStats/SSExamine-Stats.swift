@@ -762,7 +762,7 @@ extension SSExamine {
                 var result = SSConfIntv()
                 result.lowerBound = lower
                 result.upperBound = upper
-                result.intervalWidth = width
+                result.intervalWidth = 2.0 * width
                 return result
             }
             catch {
@@ -789,7 +789,7 @@ extension SSExamine {
             m = arithmeticMean!
             if let s = self.standardDeviation(type: .unbiased) {
                 do {
-                    u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                    u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - a / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
                 }
                 catch {
                     return nil
@@ -800,7 +800,7 @@ extension SSExamine {
                 var result = SSConfIntv()
                 result.lowerBound = lower
                 result.upperBound = upper
-                result.intervalWidth = width
+                result.intervalWidth = 2.0 * width
                 return result
             }
             else {

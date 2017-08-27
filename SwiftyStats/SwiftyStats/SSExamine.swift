@@ -32,7 +32,7 @@ import os.log
 public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSCoding where SSElement: Hashable, SSElement: Comparable {
     
     // MARK: OPEN/PUBLIC VARS
-    
+
     /// User defined tag
     public var tag: Any?
     

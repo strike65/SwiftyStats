@@ -284,6 +284,11 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqualWithAccuracy(examineDouble.skewness!, 0.822945, accuracy: 1E-6)
             XCTAssertEqualWithAccuracy(examineDouble.kurtosis!, 3.091213, accuracy: 1E-6)
             XCTAssertEqualWithAccuracy(examineDouble.kurtosisExcess!, 0.091213, accuracy: 1E-6)
+            XCTAssertEqualWithAccuracy(examineDouble.normalCI(alpha: 0.05, populationSD: 6.0)!.intervalWidth!, 2.0 * 0.746747, accuracy: 1e-6)
+            XCTAssertEqualWithAccuracy(examineDouble.meanCI!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
+            XCTAssertEqualWithAccuracy(examineDouble.studentTCI(alpha: 0.05)!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
+            XCTAssertEqualWithAccuracy(examineDouble.studentTCI(alpha: 0.01)!.intervalWidth!, 2.0 * 1.053368, accuracy: 1e-6)
+            XCTAssertEqualWithAccuracy(examineDouble.studentTCI(alpha: 0.1)!.intervalWidth!, 2.0 * 0.669969, accuracy: 1e-6)
             
             XCTAssert(examineEmpty.arithmeticMean == nil)
             XCTAssert(examineEmpty.harmonicMean == nil)
@@ -519,7 +524,7 @@ class SwiftyStatsTests: XCTestCase {
         let g5 = SSExamine<Double>.init(withArray: largeNormal1, name: nil, characterSet: nil)
         let g6 = SSExamine<Double>.init(withArray: largeNormal2, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
-        XCTAssertEqualWithAccuracy(res.ZStatistic!, -2.7511815643464903, accuracy: 1E-7)
+        XCTAssertEqualWithAccuracy(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
         XCTAssertEqualWithAccuracy(res.pValueExact!, 0.00295538, accuracy: 1E-6)
     }
     
@@ -531,7 +536,7 @@ class SwiftyStatsTests: XCTestCase {
         let examine2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
         var wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.528, accuracy: 1E-3)
-        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 0.631, accuracy: 1E-3)
+        XCTAssertEqualWithAccuracy(wilcox.zStat!, 0.631, accuracy: 1E-3)
         XCTAssertEqualWithAccuracy(wilcox.sumNegRanks!, 22.5, accuracy: 1E-1)
         XCTAssertEqualWithAccuracy(wilcox.sumPosRanks!, 13.5, accuracy: 1E-1)
         // http://documentation.statsoft.com/STATISTICAHelp.aspx?path=Nonparametrics/NonparametricAnalysis/Examples/Example8WilcoxonMatchedPairsTest
@@ -541,7 +546,7 @@ class SwiftyStatsTests: XCTestCase {
         let examine4 = SSExamine.init(withArray: M4, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine3, set2: examine4)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.007649, accuracy: 1E-6)
-        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.667179, accuracy: 1E-6)
+        XCTAssertEqualWithAccuracy(wilcox.zStat!, 2.667179, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(wilcox.sumNegRanks!, 5, accuracy: 1E-1)
         XCTAssertEqualWithAccuracy(wilcox.sumPosRanks!, 73.0, accuracy: 1E-1)
         // http://influentialpoints.com/Training/wilcoxon_matched_pairs_signed_rank_test.htm
@@ -551,7 +556,7 @@ class SwiftyStatsTests: XCTestCase {
         let examine6 = SSExamine.init(withArray: M6, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine5, set2: examine6)
         XCTAssertEqualWithAccuracy(wilcox.p2Value!, 0.0076, accuracy: 1E-4)
-        XCTAssertEqualWithAccuracy(wilcox.ZStatistic!, 2.6679, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(wilcox.zStat!, 2.6679, accuracy: 1E-4)
     }
     
     func testHTest() {
@@ -618,22 +623,22 @@ class SwiftyStatsTests: XCTestCase {
         
         var runsTest: SSRunsTestResult
         runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .twoSided)
-        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.zStat!, 2.6938, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.007065, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
         runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .less)
-        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.zStat!, 2.6938, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.9965, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
 
         runsTest = try! SSHypothesisTesting.runsTest(array: lewData, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .greater)
-        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.6938, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.zStat!, 2.6938, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.003532, accuracy: 1E-6)
         XCTAssertEqualWithAccuracy(runsTest.criticalValue!, 1.96, accuracy: 1E-2)
 
         let data = [18.0,17,18,19,20,19,19,21,18,21,22]
         runsTest = try! SSHypothesisTesting.runsTest(array: data, alpha: 0.05, useCuttingPoint: .median, userDefinedCuttingPoint: nil, alternative: .twoSided)
-        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, -1.4489, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.zStat!, -1.4489, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.1474, accuracy: 1E-4)
         
         // http://www.reiter1.com/Glossar/Wald_Wolfowitz.htm
@@ -641,7 +646,7 @@ class SwiftyStatsTests: XCTestCase {
         let w = 1.0
         let ww1: Array<Double> = [m, m, w, w, m, w, m, m, w, w, m, w, m, w, m, w, m, m, w, m, m, w, m, w, m]
         runsTest = try! SSHypothesisTesting.runsTest(array: ww1, alpha: 0.05, useCuttingPoint: .mean, userDefinedCuttingPoint: nil, alternative: .twoSided)
-        XCTAssertEqualWithAccuracy(runsTest.ZStatistic!, 2.3563, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(runsTest.zStat!, 2.3563, accuracy: 1E-4)
         XCTAssertEqualWithAccuracy(runsTest.pValueAsymp!, 0.01846, accuracy: 1E-5)
 
         
@@ -652,7 +657,7 @@ class SwiftyStatsTests: XCTestCase {
         let set2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
         let ww: SSWaldWolfowitzTwoSampleTestResult = try! SSHypothesisTesting.waldWolfowitzTwoSampleTest(set1: set1, set2: set2)
         XCTAssertEqualWithAccuracy(ww.pValueAsymp!, 0.01512, accuracy: 1E-5)
-        XCTAssertEqualWithAccuracy(ww.ZStatistic!, 2.4296, accuracy: 1E-4)
+        XCTAssertEqualWithAccuracy(ww.zStat!, 2.4296, accuracy: 1E-4)
     }
     
     func testTTest()  {

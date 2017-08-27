@@ -660,7 +660,7 @@ public struct SSOneWayANOVATestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the F test for equal variances
-public struct SSFTestResult {
+public struct SSFTestResult: CustomStringConvertible {
     /// size of sample 1
     public var sampleSize1: Double?
     /// size of sample 2
@@ -691,10 +691,33 @@ public struct SSFTestResult {
     public var ciRatioLTE1: SSConfIntv?
     /// confidence intervall for var1 >= var2
     public var ciRatioGTE1: SSConfIntv?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let dfden = self.dfDenominator, let dfnum = self.dfNumerator, let var1 = self.variance1, let var2 = self.variance2, let f = self.FRatio, let n1 = self.sampleSize1, let n2 = self.sampleSize2, let cieq = self.ciRatioEQ1, let clt = self.ciRatioLTE1, let cig = self.ciRatioGTE1, let p1 = self.p1Value, let p2 = self.p2Value {
+                descr.append("F-TEST\n")
+                descr.append("******\n")
+                descr.append("variance 1: \(var1)\n")
+                descr.append("variance 2: \(var2)\n")
+                descr.append("n1: \(n1)\n")
+                descr.append("n2: \(n2)\n")
+                descr.append("F ratio: \(f)\n")
+                descr.append("denominator df: \(dfden)\n")
+                descr.append("numerator df: \(dfnum)\n")
+                descr.append("one sided p value: \(p1)\n")
+                descr.append("two sided p value: \(p2)\n")
+                descr.append("(1 - alpha)-CI for var1 = var2 \(cieq)\n")
+                descr.append("(1 - alpha)-CI for var1 <= var1 \(clt)\n")
+                descr.append("(1 - alpha)-CI for var1 >= var2 \(cig)\n")
+            }
+            return descr
+        }
+    }
 }
 
 /// Holds the results of Box Ljung Autocorrelation
-public struct SSBoxLjungResult {
+public struct SSBoxLjungResult: CustomStringConvertible {
     /// coefficients as Dictionary<lag: String, coeff: Double>
     public var coefficients: Array<Double>?
     /// Bartlett standard error as Dictionary<lag: String, se: Double>
@@ -705,10 +728,27 @@ public struct SSBoxLjungResult {
     public var testStatistic: Array<Double>?
     /// pavalues as  Dictionary<lag: String, pValue: Double>
     public var pValues: Array<Double>?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let coeff = self.coefficients, let seB = self.seBartlett, let sew = self.seWN, let stats = self.testStatistic, let p = self.pValues {
+                descr.append("Autocorrelation\n")
+                descr.append("***************\n")
+                descr.append("coefficients: \(coeff)\n")
+                descr.append("Bartlett standard error: \(seB)\n")
+                descr.append("White noise standard error: \(sew)\n")
+                descr.append("Box-Ljung statistics: \(stats)\n")
+                descr.append("p values: \(p)\n")
+            }
+            return descr
+        }
+    }
+
 }
 
 /// Holds the results of the runs test
-public struct SSRunsTestResult {
+public struct SSRunsTestResult: CustomStringConvertible {
     /// Number of items >= cutting point
     public var nGTEcp: Double?
     /// Number of items < cutting point
@@ -716,7 +756,7 @@ public struct SSRunsTestResult {
     /// Number of runs
     public var nRuns: Double?
     /// z value
-    public var ZStatistic: Double?
+    public var zStat: Double?
     /// critical value
     public var criticalValue: Double?
     /// p value
@@ -729,10 +769,30 @@ public struct SSRunsTestResult {
     public var diffs: Array<Double>?
     /// Randomness?
     public var randomness: Bool?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let ng = self.nGTEcp, let nl = self.nLTcp, let runs = self.nRuns, let z = self.zStat, let pe = self.pValueExact, let pa = self.pValueAsymp, let ccp = self.cp, let d = self.diffs, let rnd = self.randomness {
+                descr.append("RUNS TEST\n")
+                descr.append("*********\n")
+                descr.append("randomness?: \(rnd)\n")
+                descr.append("cutting point: \(ccp)\n")
+                descr.append("number of values > cutting point: \(ng)\n")
+                descr.append("number of values < cutting point: \(nl)\n")
+                descr.append("number of runs: \(runs)\n")
+                descr.append("z: \(z)\n")
+                descr.append("exact p value: \(pe)\n")
+                descr.append("asymp. p value: \(pa)\n")
+                descr.append("differenes: \(d)\n")
+            }
+            return descr
+        }
+    }
 }
 
 /// Holds the results of the Mann-Whitney U test
-public struct SSMannWhitneyUTestResult {
+public struct SSMannWhitneyUTestResult: CustomStringConvertible {
     /// sum of ranks in set 1
     public var sumRanks1: Double?
     /// sum of ranks in set 2
@@ -750,7 +810,7 @@ public struct SSMannWhitneyUTestResult {
     /// Wilcoxon W
     public var WilcoxonW: Double?
     /// Z
-    public var ZStatistic: Double?
+    public var zStat: Double?
     /// two sided approximated p value
     public var p2Approx: Double?
     /// two sided exact p value
@@ -761,11 +821,36 @@ public struct SSMannWhitneyUTestResult {
     public var p1Exact: Double?
     /// effect size
     public var effectSize: Double?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let sr1 = self.sumRanks1, let sr2 = self.sumRanks2, let mr1 = self.meanRank1, let mr2 = self.meanRank2, let str = self.sumTiedRanks, let nt = self.nTies, let U = self.UMannWhitney, let W = self.WilcoxonW, let z = self.zStat, let p1a = self.p1Approx, let p2a = self.p2Approx, let p1e = self.p1Exact, let p2e = self.p1Exact, let es = self.effectSize {
+                descr.append("MANN-WHITNEY U TEST\n")
+                descr.append("*******************\n")
+                descr.append("Mann-Whitney U: \(U)\n")
+                descr.append("Wilcoxon W: \(W)\n")
+                descr.append("z: \(z)\n")
+                descr.append("one sided exact p value: \(p1e)\n")
+                descr.append("two sided exact p value: \(p2e)\n")
+                descr.append("one sided asymp. p value: \(p1a)\n")
+                descr.append("two sided asymp. p value: \(p2a)\n")
+                descr.append("sum ranks group 1: \(sr1)\n")
+                descr.append("sum ranks group 2: \(sr2)\n")
+                descr.append("mean rank group 1: \(mr1)\n")
+                descr.append("mean rank group 2: \(mr2)\n")
+                descr.append("sum of tied ranks: \(str)\n")
+                descr.append("count of ties: \(nt)\n")
+                descr.append("effect size: \(es)\n")
+            }
+            return descr
+        }
+    }
 }
 
 
 /// Holds the results of the Wilcoxon test for matched pairs
-public struct SSWilcoxonMatchedPairsTestResult {
+public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible {
     /// two sided p value
     public var p2Value: Double?
     /// sample size
@@ -787,13 +872,36 @@ public struct SSWilcoxonMatchedPairsTestResult {
     /// mean of positive ranks
     public var meanNegRanks: Double?
     /// z statistic
-    public var ZStatistic: Double?
+    public var zStat: Double?
     /// Cohen's d
     public var dCohen: Double?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let p2 = self.p2Value, let n = self.sampleSize, let np = self.nPosRanks, let nn = self.nNegRanks, let nt = self.nTies, let nz = self.nZeroDiff, let snr = self.sumNegRanks, let spr = self.sumPosRanks, let mpr = self.meanPosRanks, let mnr = self.meanNegRanks, let z = self.zStat, let dc = self.dCohen {
+                descr.append("WILCOXON TEST FOR MATCHED PAIRS\n")
+                descr.append("*******************************\n")
+                descr.append("two sided p value: \(p2)\n")
+                descr.append("z: \(z)\n")
+                descr.append("Cohen's d: \(dc)\n")
+                descr.append("sample size: \(n)\n")
+                descr.append("mean of ranks > 0: \(mpr)\n")
+                descr.append("mean of ranks < 0: \(mnr)\n")
+                descr.append("sum of ranks > 0: \(spr)\n")
+                descr.append("sum of ranks < 0: \(snr)\n")
+                descr.append("count of ranks > 0: \(np)\n")
+                descr.append("count of ranks < 0: \(nn)\n")
+                descr.append("count of tied ranks: \(nt)\n")
+                descr.append("count of zeros: \(nz)\n")
+            }
+            return descr
+        }
+    }
     
 }
 /// Sign test results
-public struct SSSignTestRestult {
+public struct SSSignTestRestult: CustomStringConvertible {
     /// exact p value
     public var pValueExact: Double?
     /// asymptotic p value
@@ -807,11 +915,30 @@ public struct SSSignTestRestult {
     /// sample size
     public var total: Int?
     /// z value
-    public var ZStatistic: Double?
+    public var zStat: Double?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let pe = self.pValueExact, let pa = self.pValueApprox, let np = self.nPosDiff, let nn = self.nNegDiff, let nt = self.nTies, let n = self.total, let z = self.zStat {
+                descr.append("SIGN TEST\n")
+                descr.append("*********\n")
+                descr.append("p value exaxt: \(pe)\n")
+                descr.append("p value asymp: \(pa)\n")
+                descr.append("z: \(z)\n")
+                descr.append("count of \"+\": \(np)\n")
+                descr.append("count of \"-\": \(nn)\n")
+                descr.append("count of ties: \(nt)\n")
+                descr.append("n: \(n)\n")
+            }
+            return descr
+        }
+    }
+
 }
 
 /// Binomial test results
-public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+public struct SSBinomialTestResult<T>: CustomStringConvertible where T: Comparable, T: Hashable {
     /// number of trials
     public var nTrials: Int?
     /// number of successes
@@ -832,10 +959,31 @@ public struct SSBinomialTestResult<T> where T: Comparable, T: Hashable {
     public var confIntJeffreys: SSConfIntv?
     /// 1 - alpha confidence interval (Clopper/Pearson)
     public var confIntClopperPearson: SSConfIntv?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let nt = self.nTrials, let ns = self.nSuccess, let nf = self.nFailure, let pe = self.pValueExact, let ps = self.probSuccess, let pf = self.probFailure, let pt = self.probTest, let sc = self.successCode, let jeff = self.confIntJeffreys, let clopper = self.confIntClopperPearson {
+                descr.append("BINOMIAL TEST\n")
+                descr.append("*************\n")
+                descr.append("p value exaxt: \(pe)\n")
+                descr.append("count of trials: \(nt)\n")
+                descr.append("count of successes: \(ns)\n")
+                descr.append("count of failures: \(nf)\n")
+                descr.append("prob. for success: \(ps)\n")
+                descr.append("prob. for failure: \(pf)\n")
+                descr.append("test prob.: \(pt)\n")
+                descr.append("succes coded as: \(sc)\n")
+                descr.append("(1-alpha) CI (Jeffreys): \(jeff)\n")
+                descr.append("(1-alpha) CI (Clopper-Pearson): \(clopper)\n")
+            }
+            return descr
+        }
+    }
 }
 
 /// Results of the KS-2-Sample test
-public struct SSKSTwoSampleTestResult {
+public struct SSKSTwoSampleTestResult: CustomStringConvertible {
     /// max pos diff
     var dMaxPos: Double?
     /// max neg diff
@@ -850,15 +998,33 @@ public struct SSKSTwoSampleTestResult {
     var sampleSize1: Int?
     /// size of sample 2
     var sampleSize2: Int?
-    
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let dmp = self.dMaxPos, let dmn = self.dMaxNeg, let dma = self.dMaxAbs, let z = self.zStatistic, let p2 = self.p2Value, let n1 = self.sampleSize1, let n2 = self.sampleSize2 {
+                descr.append("KOLMOGOROV-SMIRNOV TWO SAMPLE TEST\n")
+                descr.append("**********************************\n")
+                descr.append("two sided p value: \(p2)\n")
+                descr.append("z: \(z)\n")
+                descr.append("n1: \(n1)\n")
+                descr.append("n1: \(n2)\n")
+                descr.append("D(-)max: \(dmn)\n")
+                descr.append("D(+)max: \(dmp)\n")
+                descr.append("|D|max: \(dma)\n")
+            }
+            return descr
+        }
+    }
+
 }
 
 /// Holds the results of the two sample runs test
-public struct SSWaldWolfowitzTwoSampleTestResult {
+public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible {
     /// Number of runs
     public var nRuns: Int?
     /// z value
-    public var ZStatistic: Double?
+    public var zStat: Double?
     // critical value
     //    public var criticalValue: Double?
     /// p value
@@ -869,7 +1035,7 @@ public struct SSWaldWolfowitzTwoSampleTestResult {
     public var mean: Double?
     /// variance
     public var variance: Double?
-    /// number of intergroup ties
+     /// number of intergroup ties
     public var nTiesIntergroup: Int?
     /// number of inner group ties
     public var nTiedCases: Int?
@@ -877,9 +1043,31 @@ public struct SSWaldWolfowitzTwoSampleTestResult {
     public var sampleSize1: Int?
     /// size of sample 2
     public var sampleSize2: Int?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let nr = self.nRuns, let z = self.zStat, let pe = self.pValueExact, let pa = self.pValueAsymp, let m = self.mean, let v = self.variance, let n1 = self.sampleSize1, let n2 = self.sampleSize2, let nt = self.nTiesIntergroup, let tc = self.nTiedCases {
+                descr.append("WALD-WOLFOWITZ TWO SAMPLE TEST\n")
+                descr.append("******************************\n")
+                descr.append("p value exact: \(pe)\n")
+                descr.append("p value asymp: \(pa)\n")
+                descr.append("z: \(z)\n")
+                descr.append("n1: \(n1)\n")
+                descr.append("n1: \(n2)\n")
+                descr.append("mean: \(m)\n")
+                descr.append("variance: \(v)\n")
+                descr.append("count of intergroup ties: \(nt)\n")
+                descr.append("count of tied cases: \(tc)\n")
+                descr.append("count runs: \(nr)\n")
+            }
+            return descr
+        }
+    }
+    
 }
 /// The results of the H test
-public struct SSKruskalWallisHTestResult {
+public struct SSKruskalWallisHTestResult: CustomStringConvertible {
     /// Chi
     public var Chi2: Double?
     /// Chi square corrected for ties
@@ -898,8 +1086,32 @@ public struct SSKruskalWallisHTestResult {
     public var sumRanks: Array<Double>?
     /// critical value at alpha
     public var cv: Double?
+    /// Number of ties
+    public var nTies: Int?
     /// alpha
     public var alpha: Double?
+    /// Returns a description
+    public var description: String {
+        get {
+            var descr = String()
+            if let chi = self.Chi2, let chic = self.Chi2corrected, let p = self.pValue, let ng = self.nGroups, let sdf = self.df, let no = self.nObservations, let mr = self.meanRanks, let sr = self.sumRanks, let scv = self.cv, let a = self.alpha, let nt = self.nTies {
+                descr.append("KRUSKAL-WALLIS H TEST\n")
+                descr.append("***************** ***\n")
+                descr.append("p value: \(p)\n")
+                descr.append("critical value: \(scv)\n")
+                descr.append("Chi square: \(chi)\n")
+                descr.append("Chi square corrected for ties: \(chic)\n")
+                descr.append("count of groups: \(ng)\n")
+                descr.append("degrees of freedom: \(sdf)\n")
+                descr.append("count of observations: \(no)\n")
+                descr.append("count of ties: \(nt)\n")
+                descr.append("mean of ranks: \(mr)\n")
+                descr.append("sum of ranks: \(sr)\n")
+                descr.append("alpha: \(a)\n")
+            }
+            return descr
+        }
+    }
 }
 
 /// Statistics needed to create a boxplot
@@ -1011,11 +1223,15 @@ public enum SSDataArraySortOrder {
     /// Undefined
     case none
 }
-
+/// Specifies the type of variance test
 public enum SSVarTestType {
+    /// Levene test using the median (Brown-Forsythe)
     case leveneMedian
+    /// Levene test using the mean
     case leveneMean
+    /// Levene test using the trimmed mean
     case leveneTrimmedMean
+    /// Bartlett test
     case bartlett
 }
 /// Defines the

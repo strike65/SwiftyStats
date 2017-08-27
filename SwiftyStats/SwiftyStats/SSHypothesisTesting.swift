@@ -623,7 +623,7 @@ public class SSHypothesisTesting {
         result.nGTEcp = n2
         result.nLTcp = n1
         result.nRuns = Double(r)
-        result.ZStatistic = z
+        result.zStat = z
         result.pValueExact = pExact
         result.pValueAsymp = pAsymp
         result.cp = cp
@@ -2130,228 +2130,6 @@ public class SSHypothesisTesting {
         }
         return sum
     }
-
-
-    /// Ranking
-    /// - Parameter set1: set1
-    /// - Parameter set2: set2
-    /// - Parameter identifierSet1: identifier for set1
-    /// - Parameter identifierSet2: identifier for set2
-    /// - Parameter inout ranks: contains the ranks upon return
-    /// - Parameter inout groups: contains the grpups upon return
-    /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
-    /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-    fileprivate class func rank2Arrays<T, U>(array1: Array<T>!, array2: Array<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable{
-        var hasTies: Bool = false
-        let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, name: nil, characterSet: nil)
-        let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, name: nil, characterSet: nil)
-        let a = set1.elementsAsArray(sortOrder: .original)
-        let b = set2.elementsAsArray(sortOrder: .original)
-        var combined: Array<T> = a!
-        combined.append(contentsOf: b!)
-        var combined_sorted = combined.sorted(by: {$0 < $1})
-        var i: Int = 0
-        var k: Int = 1
-        var sum: Double = 1.0
-        while i <= combined_sorted.count - 1 {
-            // determine frequencies in set1 and set2
-            let freq1 = set1.frequency(combined_sorted[i])
-            let freq2 = set2.frequency(combined_sorted[i])
-            if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
-                hasTies = true
-                let freq: Int = freq1 + freq2
-                ties.append(Double(freq))
-                k = 1
-                sum = 0.0
-                while k <= freq {
-                    sum += Double(i + k)
-                    k += 1
-                }
-                k = 1
-                while k <= freq {
-                    ranks.append(sum / Double(freq))
-                    if k <= set1.frequency(combined_sorted[i])  {
-                        groups.append(identifierSet1)
-                    }
-                    else {
-                        groups.append(identifierSet2)
-                    }
-                    k += 1
-                }
-                i += freq
-            }
-            else if set1.contains(combined_sorted[i]) {
-                if freq1 > 1 {
-                    ties.append(Double(freq1))
-                    k = 1
-                    sum = 0.0
-                    while k <= freq1 {
-                        sum += Double(i + k)
-                        k += 1
-                    }
-                    k = 1
-                    while k <= freq1 {
-                        ranks.append(sum / Double(freq1))
-                        groups.append(identifierSet1)
-                        k += 1
-                    }
-                    i += freq1
-                }
-                else {
-                    ranks.append(Double(i + 1))
-                    groups.append(identifierSet1)
-                    i += 1
-                }
-            }
-            else if set2.contains(combined_sorted[i]) {
-                if freq2 > 1 {
-                    ties.append(Double(freq2))
-                    k = 1
-                    sum = 0.0
-                    while k <= freq2 {
-                        sum += Double(i + k)
-                        k += 1
-                    }
-                    k = 1
-                    while k <= freq2 {
-                        ranks.append(sum / Double(freq2))
-                        groups.append(identifierSet2)
-                        k += 1
-                    }
-                    i += freq2
-                }
-                else {
-                    ranks.append(Double(i + 1))
-                    groups.append(identifierSet2)
-                    i += 1
-                }
-            }
-        }
-        i = 0
-        while i < ranks.count {
-            if groups[i] == identifierSet1 {
-                sumRanksSet1 = sumRanksSet1 + ranks[i]
-            }
-            else {
-                sumRanksSet2 = sumRanksSet2 + ranks[i]
-            }
-            i += 1
-        }
-        return hasTies
-
-    }
-    
-    /// Ranking
-    /// - Parameter set1: set1
-    /// - Parameter set2: set2
-    /// - Parameter identifierSet1: identifier for set1
-    /// - Parameter identifierSet2: identifier for set2
-    /// - Parameter inout ranks: contains the ranks upon return
-    /// - Parameter inout groups: contains the grpups upon return
-    /// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
-    /// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-    fileprivate class func rank2Arrays<T, U>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, sortedItems: inout Array<T>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable {
-        var hasTies: Bool = false
-        let a = set1.elementsAsArray(sortOrder: .original)!
-        let b = set2.elementsAsArray(sortOrder: .original)!
-        var combined: Array<T> = a
-        combined.append(contentsOf: b)
-        var combined_sorted = combined.sorted(by: {$0 < $1})
-        var i: Int = 0
-        var k: Int = 1
-        var sum: Double = 1.0
-        while i <= combined_sorted.count - 1 {
-            // determine frequencies in set1 and set2
-            let freq1 = set1.frequency(combined_sorted[i])
-            let freq2 = set2.frequency(combined_sorted[i])
-            if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
-                hasTies = true
-                let freq: Int = freq1 + freq2
-                ties.append(Double(freq))
-                k = 1
-                sum = 0.0
-                while k <= freq {
-                    sum += Double(i + k)
-                    k += 1
-                }
-                k = 1
-                while k <= freq {
-                    ranks.append(sum / Double(freq))
-                    if k <= set1.frequency(combined_sorted[i])  {
-                        groups.append(identifierSet1)
-                        sortedItems.append(combined_sorted[i])
-                    }
-                    else {
-                        groups.append(identifierSet2)
-                        sortedItems.append(combined_sorted[i])
-                    }
-                    k += 1
-                }
-                i += freq
-            }
-            else if set1.contains(combined_sorted[i]) {
-                if freq1 > 1 {
-                    ties.append(Double(freq1))
-                    k = 1
-                    sum = 0.0
-                    while k <= freq1 {
-                        sum += Double(i + k)
-                        k += 1
-                    }
-                    k = 1
-                    while k <= freq1 {
-                        ranks.append(sum / Double(freq1))
-                        groups.append(identifierSet1)
-                        sortedItems.append(combined_sorted[i])
-                        k += 1
-                    }
-                    i += freq1
-                }
-                else {
-                    ranks.append(Double(i + 1))
-                    groups.append(identifierSet1)
-                    sortedItems.append(combined_sorted[i])
-                    i += 1
-                }
-            }
-            else if set2.contains(combined_sorted[i]) {
-                if freq2 > 1 {
-                    ties.append(Double(freq2))
-                    k = 1
-                    sum = 0.0
-                    while k <= freq2 {
-                        sum += Double(i + k)
-                        k += 1
-                    }
-                    k = 1
-                    while k <= freq2 {
-                        ranks.append(sum / Double(freq2))
-                        groups.append(identifierSet2)
-                        sortedItems.append(combined_sorted[i])
-                        k += 1
-                    }
-                    i += freq2
-                }
-                else {
-                    ranks.append(Double(i + 1))
-                    groups.append(identifierSet2)
-                    sortedItems.append(combined_sorted[i])
-                    i += 1
-                }
-            }
-        }
-        i = 0
-        while i < ranks.count {
-            if groups[i] == identifierSet1 {
-                sumRanksSet1 = sumRanksSet1 + ranks[i]
-            }
-            else {
-                sumRanksSet2 = sumRanksSet2 + ranks[i]
-            }
-            i += 1
-        }
-        return hasTies
-    }
     
     /// Perform the Mann-Whitney U test for independent samples.
     /// ### Note ###
@@ -2478,7 +2256,7 @@ public class SSHypothesisTesting {
         result.meanRank2 = sumRanksSet2 / n2
         result.UMannWhitney = U
         result.WilcoxonW = W
-        result.ZStatistic = z
+        result.zStat = z
         result.p2Approx = pasymp2
         result.p2Exact = pexact2
         result.p1Approx = pasymp1
@@ -2608,7 +2386,7 @@ public class SSHypothesisTesting {
         result.sumPosRanks = sumposranks
         result.meanPosRanks = meanposranks
         result.meanNegRanks = meannegranks
-        result.ZStatistic = z
+        result.zStat = z
         result.dCohen = cohenD
         return result
     }
@@ -2698,7 +2476,7 @@ public class SSHypothesisTesting {
         result.nNegDiff = nn
         result.nTies = nties
         result.total = set1.sampleSize
-        result.ZStatistic = z
+        result.zStat = z
         return result
     }
     
@@ -3133,7 +2911,7 @@ public class SSHypothesisTesting {
             }
         }
         var result = SSWaldWolfowitzTwoSampleTestResult()
-        result.ZStatistic = z
+        result.zStat = z
         result.pValueExact = (1.0 - pExact) / 2.0
         result.pValueAsymp = pAsymp
         result.mean = mean
@@ -3316,6 +3094,7 @@ public class SSHypothesisTesting {
         }
         p = 1.0 - p
         var result = SSKruskalWallisHTestResult()
+        result.nTies = ranking.numberOfTies
         result.Chi2 = H
         result.Chi2corrected = Hc
         result.pValue = p
