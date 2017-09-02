@@ -622,7 +622,7 @@ extension SSExamine {
 //            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
                 var s: Double = 0.0
                 for item in self.uniqueElements(sortOrder: .none)! {
-                    s += self.relativeFrequency(item) * log2(self.relativeFrequency(item))
+                    s += self.rFrequency(item) * log2(self.rFrequency(item))
                 }
                 return -s
 //            }

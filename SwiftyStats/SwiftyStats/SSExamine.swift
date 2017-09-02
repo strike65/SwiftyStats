@@ -439,7 +439,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     
     /// Returns the relative Frequency of item
     /// - Parameter item: Item
-    public func relativeFrequency(_ element: SSElement) -> Double {
+    public func rFrequency(_ element: SSElement) -> Double {
         if contains(element) {
             return Double(self.elements[element]!) / Double(self.sampleSize)
         }
@@ -778,7 +778,7 @@ extension SSExamine {
     
     /// Empirical CDF of item
     /// - Parameter item: The item for which the cdf will be returned.
-    public func empiricalCDF(_ item: SSElement) -> Double {
+    public func eCDF(_ item: SSElement) -> Double {
         var result: Double = Double.nan
         if let min = self.minimum, let max = self.maximum {
             if item < min {

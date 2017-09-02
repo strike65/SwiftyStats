@@ -832,7 +832,7 @@ public class SSHypothesisTesting {
                     dtemp1 = ecdf[value]! - dtestCDF
                 }
                 else {
-                    dtemp1 = data.empiricalCDF(value) - dtestCDF
+                    dtemp1 = data.eCDF(value) - dtestCDF
                 }
                 if dtemp1 < dmax1n {
                     dmax1n = dtemp1
@@ -846,7 +846,7 @@ public class SSHypothesisTesting {
                         dtemp1 = ecdf[nt]! - dtestCDF
                     }
                     else {
-                        dtemp1 = data.empiricalCDF(nt) - dtestCDF
+                        dtemp1 = data.eCDF(nt) - dtestCDF
                     }
                 }
                 else {
@@ -2035,8 +2035,44 @@ public class SSHypothesisTesting {
         return result
     }
     
+    
+    // post hoc tests
+    
+    // TUKEY KRAMER
+    // All means are compared --> k(k - 1) / 2 comparisons (k = number of means)
+    // find a procedure
+    // 1. compute all means
+    // 2. compute test statistics
+    /*
+            m(1)      m(2)       m(3)       ...     m(k)
+     m(1)     -       T(1,2)     T(1,3)     ...     T(1,k)
+     m(2)   T(2,1)    -          T(2,3)     ...     T(2,k)
+     m(1)   T(2,1)    T(2,2)     -          ...     T(3,k)
+     .      .         .          .          ...     .
+     .      .         .          .          ...     .
+     .      .         .          .          ...     .
+     m(k)   T(k,1)    T(k,2)     T(k,3)     ...     -
+ 
+ */
     // MARK: non parametric
     
+    public func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) -> Double {
+        var means = Array<Double>()
+        for examine in data {
+            means.append(examine.arithmeticMean!)
+        }
+        var testStats = Array<Array<Double>>()
+        var tempArray: Array<Double>
+        for i in stride(from: 0, through: data.count, by: 1) {
+            for j in stride(from: 0, through: data.count, by: 1) {
+                if i != j {
+                    var temp = means[i] - means[j]
+                    
+                }
+            }
+        }
+        return Double.nan
+    }
     
     /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
     fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
@@ -2753,7 +2789,7 @@ public class SSHypothesisTesting {
         var maxPos: Double = 0.0
         if n1 > n2 {
             for element in a1 {
-                dcdf = set1.empiricalCDF(element) - set2.empiricalCDF(element)
+                dcdf = set1.eCDF(element) - set2.eCDF(element)
                 if dcdf < 0.0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }
@@ -2764,7 +2800,7 @@ public class SSHypothesisTesting {
         }
         else {
             for element in a1 {
-                dcdf = set2.empiricalCDF(element) - set1.empiricalCDF(element)
+                dcdf = set2.eCDF(element) - set1.eCDF(element)
                 if dcdf < 0.0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }

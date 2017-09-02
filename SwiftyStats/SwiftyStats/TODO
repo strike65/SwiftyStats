@@ -1,1 +1,11 @@
 - make error handling consistent (throw errors or return nan)
+
+
+Methosd naming:
+
+prefix      meaning
+===================
+r           relative
+is          Boolean
+seq         sqeuence
+ex          examine

@@ -110,7 +110,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssert(examineInt.contains(38))
         XCTAssert(!examineInt.contains(-1))
         XCTAssertEqual(examineInt.frequency(27), 10)
-        XCTAssertEqual(examineInt.relativeFrequency(27), 10.0 / Double(examineInt.sampleSize))
+        XCTAssertEqual(examineInt.rFrequency(27), 10.0 / Double(examineInt.sampleSize))
 
         XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .original)! == intData)
@@ -261,11 +261,11 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssertEqualWithAccuracy(examineDouble.cv!, 0.317912682758119939795, accuracy: 1E-15)
             XCTAssertEqualWithAccuracy(examineDouble.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
             XCTAssertEqualWithAccuracy(examineDouble.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
-            XCTAssertEqualWithAccuracy(examineDouble.empiricalCDF(23), 0.72983870967741935, accuracy: 1E-14)
-            XCTAssertEqualWithAccuracy(examineDouble.empiricalCDF(9), 0.0040322580645161290, accuracy: 1E-14)
-            XCTAssertEqualWithAccuracy(examineDouble.empiricalCDF(39), 1.0, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.empiricalCDF(-39), 0.0)
-            XCTAssertEqual(examineDouble.empiricalCDF(2000), 1.0)
+            XCTAssertEqualWithAccuracy(examineDouble.eCDF(23), 0.72983870967741935, accuracy: 1E-14)
+            XCTAssertEqualWithAccuracy(examineDouble.eCDF(9), 0.0040322580645161290, accuracy: 1E-14)
+            XCTAssertEqualWithAccuracy(examineDouble.eCDF(39), 1.0, accuracy: 1E-14)
+            XCTAssertEqual(examineDouble.eCDF(-39), 0.0)
+            XCTAssertEqual(examineDouble.eCDF(2000), 1.0)
             XCTAssertEqual(examineDouble.moment(r: 0, type: .central)!, 1.0)
             XCTAssertEqualWithAccuracy(examineDouble.moment(r: 1, type: .central)!, 0, accuracy: 1E-14)
             XCTAssertEqualWithAccuracy(examineDouble.moment(r: 2, type: .central)!, 40.671289672216441, accuracy: 1E-14)
@@ -604,13 +604,13 @@ class SwiftyStatsTests: XCTestCase {
     func testFrequencies() {
         let characters = ["A", "A", "A", "B", "B", "B","C","C","C"]
         let c:SSExamine<String> = try! SSExamine<String>.init(withObject: characters, levelOfMeasurement: .nominal, name: nil, characterSet: nil)
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("A"))
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("B"))
-        XCTAssertEqual(1.0 / 3.0, c.relativeFrequency("C"))
-        XCTAssertEqual(0, c.relativeFrequency("!"))
-        XCTAssertEqual(1.0 / 3.0, c.empiricalCDF("A"))
-        XCTAssertEqual(2.0 / 3.0, c.empiricalCDF("B"))
-        XCTAssertEqual(3.0 / 3.0, c.empiricalCDF("C"))
+        XCTAssertEqual(1.0 / 3.0, c.rFrequency("A"))
+        XCTAssertEqual(1.0 / 3.0, c.rFrequency("B"))
+        XCTAssertEqual(1.0 / 3.0, c.rFrequency("C"))
+        XCTAssertEqual(0, c.rFrequency("!"))
+        XCTAssertEqual(1.0 / 3.0, c.eCDF("A"))
+        XCTAssertEqual(2.0 / 3.0, c.eCDF("B"))
+        XCTAssertEqual(3.0 / 3.0, c.eCDF("C"))
     }
     
     func testAutocorrelation() {

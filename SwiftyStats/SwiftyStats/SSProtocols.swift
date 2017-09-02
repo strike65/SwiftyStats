@@ -38,7 +38,7 @@ public protocol SSExamineContainer {
     /// Frequency of element
     func frequency(_ element: ExamineElement) -> Int
     /// Relative frequency of element
-    func relativeFrequency(_ element: ExamineElement) -> Double
+    func rFrequency(_ element: ExamineElement) -> Double
     /// Appends an element
     mutating func append(_ element: ExamineElement!)
     /// Appends an element <count> times

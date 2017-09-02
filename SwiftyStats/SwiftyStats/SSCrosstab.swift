@@ -207,26 +207,26 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the row at rowIndex
-    public func row(rowIndex at: Int, sorted: Bool!) throws -> Array<N> {
-        if !(at >= 0 && at < self.rr) {
+    public func row(rowIndex idx: Int, sorted: Bool!) throws -> Array<N> {
+        if !(idx >= 0 && idx < self.rr) {
             throw SSSwiftyStatsError.init(type: .rowIndexOutOfRange, file: #file, line: #line, function: #function)
         }
         if sorted {
-            return self.counts[at].sorted(by: { $0 < $1 })
+            return self.counts[idx].sorted(by: { $0 < $1 })
         }
         else {
-            return self.counts[at]
+            return self.counts[idx]
         }
     }
     
     /// Returns the column at columnIndex
-    public func column(columnIndex at: Int, sorted: Bool!) throws -> Array<N> {
-        if !(at >= 0 && at < self.cc) {
+    public func column(columnIndex idx: Int, sorted: Bool!) throws -> Array<N> {
+        if !(idx >= 0 && idx < self.cc) {
             throw SSSwiftyStatsError.init(type: .columnIndexOutOfRange, file: #file, line: #line, function: #function)
         }
         var temp = Array<N>()
         for r in 0..<self.rr {
-            temp.append(self.counts[r][at])
+            temp.append(self.counts[r][idx])
         }
         if sorted {
             return temp.sorted(by: {$0 < $1})
@@ -237,7 +237,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the row with name rowName or nil
-    public func rowNamed(rowName: R, sorted: Bool!) throws -> Array<N>? {
+    public func rowNamed(_ rowName: R, sorted: Bool!) throws -> Array<N>? {
         if self.rnames != nil {
             if let i = self.rnames!.index(of: rowName) {
                 do {
@@ -257,7 +257,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the column with name columnName or nil
-    public func columnNamed(columnName: C, sorted: Bool) throws -> Array<N>? {
+    public func columnNamed(_ columnName: C, sorted: Bool) throws -> Array<N>? {
         if self.cnames != nil {
             if let i = self.cnames!.index(of: columnName) {
                 do {
@@ -352,7 +352,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     /// Removes the row with name
     public func removeRow(rowName name: R) throws -> Array<N> {
         if let i = self.indexOfRow(rowName: name) {
-            return self.removeRow(at: i)
+            return self.removeRow(i)
         }
         else {
             throw SSSwiftyStatsError.init(type: .rowNameUnknown, file: #file, line: #line, function: #function)
@@ -362,7 +362,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     /// Removes the column with name
     public func removeColumn(columnName name: C) throws -> Array<N> {
         if let i = self.indexOfColumn(columnName: name) {
-            return self.removeColumn(at: i)
+            return self.removeColumn(i)
         }
         else {
             throw SSSwiftyStatsError.init(type: .columnNameUnknown, file: #file, line: #line, function: #function)
@@ -370,25 +370,25 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Remove row at index at
-    public func removeRow(at: Int) -> Array<N> {
-        assert(at >= 0 && at < self.rr, "Row-Index out of range")
-        let removed = self.counts.remove(at: at)
+    public func removeRow(_ index: Int) -> Array<N> {
+        assert(index >= 0 && index < self.rr, "Row-Index out of range")
+        let removed = self.counts.remove(at: index)
         self.rr -= 1
         if self.rnames != nil {
-            self.rnames!.remove(at: at)
+            self.rnames!.remove(at: index)
         }
         return removed
     }
     
     /// Remove column at index at
-    public func removeColumn(at: Int) -> Array<N> {
-        assert(at >= 0 && at < self.cc, "Column-Index out of range")
+    public func removeColumn(_ idx: Int) -> Array<N> {
+        assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
         var temp: Array<N> = Array<N>()
         for i in 0..<self.counts.count {
-            temp.append(self.counts[i].remove(at: at))
+            temp.append(self.counts[i].remove(at: idx))
         }
         if self.cnames != nil {
-            self.cnames!.remove(at: at)
+            self.cnames!.remove(at: idx)
         }
         self.cc -= 1
         return temp
@@ -495,7 +495,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         catch {
             throw error
         }
-        let _ = self.removeRow(at: at + 1)
+        let _ = self.removeRow(at + 1)
     }
 
     
@@ -508,7 +508,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         catch {
             throw error
         }
-        let _ = self.removeColumn(at: at + 1)
+        let _ = self.removeColumn(at + 1)
     }
 
     
@@ -796,11 +796,11 @@ extension SSCrosstab {
             return Double.nan
         }
     }
-    
-    /// Returns the relative frequency of cell[row, column]
-    public func relativeFrequencyCell(row: Int, column: Int) throws -> Double {
-        assert(isValidRowIndex(row: row), "Row-Index out of range")
-        assert(isValidColumnIndex(column: column), "Column-Index out of range")
+
+    /// Returns the relative total frequency of a cell at [row, column]
+    public func rTotalFrequency(row: Int, column: Int) -> Double {
+        assert(isValidRowIndex(row: row), "Row-index out of range")
+        assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
             if let temp = castValueToDouble(self[row, column]) {
                 return temp / self.total
@@ -813,10 +813,10 @@ extension SSCrosstab {
             return Double.nan
         }
     }
-
     
+
     /// Returns the relative frequency of [rowName, columnName]
-    public func relativeFrequencyCell(rowName: R, columnName: C) throws -> Double {
+    public func rTotalFrequency(rowName: R, columnName: C) throws -> Double {
         assert(isValidRowName(name: rowName), "Row-Name unknown")
         assert(isValidColumnName(name: columnName), "Column-Name unknown")
         if self.isNumeric {
@@ -833,7 +833,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative row frequency of cell[row, column]
-    public func relativeRowFrequency(row: Int, column: Int) -> Double {
+    public func rRowFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
@@ -850,7 +850,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative column frequency of cell[row, column]
-    public func relativeColumnFrequency(row: Int, column: Int) -> Double {
+    public func rColumnFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
@@ -867,7 +867,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative margin row frequency of [row]
-    public func relativeRowMarginFrequency(row: Int) -> Double {
+    public func rRowMarginFrequency(row: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         var temp: Double = 0.0
         if self.isNumeric {
@@ -880,7 +880,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative margin row frequency of [row]
-    public func relativeColumnMarginFrequency(column: Int) -> Double {
+    public func rColumnMarginFrequency(column: Int) -> Double {
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         var temp: Double = 0.0
         if self.isNumeric {
@@ -892,23 +892,6 @@ extension SSCrosstab {
         }
     }
     
-    /// Returns the relative total frequency
-    public func relativeTotalFrequency(row: Int, column: Int) -> Double {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            if let temp = castValueToDouble(self[row, column]) {
-                return temp / self.total
-            }
-            else {
-                fatalError("internal error")
-            }
-        }
-        else {
-            return Double.nan
-        }
-    }
-
     /// Returns the expected frequency for cell[row, column]
     public func expectedFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
@@ -1045,18 +1028,6 @@ extension SSCrosstab {
                 else {
                     fatalError("internal error")
                 }
-//                if N.self is Int.Type {
-//                    n11 = Double(self[0,0] as! Int)
-//                    n12 = Double(self[0,1] as! Int)
-//                    n21 = Double(self[1,0] as! Int)
-//                    n22 = Double(self[1,1] as! Int)
-//                }
-//                else {
-//                    n11 = self[0,0] as! Double
-//                    n12 = self[0,1] as! Double
-//                    n21 = self[1,0] as! Double
-//                    n22 = self[1,1] as! Double
-//                }
             }
             else {
                 return Double.nan
