@@ -25,11 +25,16 @@
 		9F82D3CC1F1E8F57001BFC9D /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */; };
 		9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */; };
 		9F919AAA1F3DD09000FC4199 /* SSTukey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F919AA91F3DD09000FC4199 /* SSTukey.swift */; };
-		9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */; };
+		9FAB31291F2101E10082D890 /* SSHypothesisTesting-TTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAB31281F2101E10082D890 /* SSHypothesisTesting-TTests.swift */; };
 		9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */; };
 		9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */; };
 		9FE9A5491F374F0400BC37BF /* LargeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9A5481F374F0400BC37BF /* LargeSet.swift */; };
 		9FF073C01F3CD48200439F7F /* SSDataGroupSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */; };
+		9FF7E2E41F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7E2E31F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift */; };
+		9FF7E2E61F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7E2E51F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift */; };
+		9FF7E2E81F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7E2E71F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift */; };
+		9FF7E2EA1F62FBBD00A17B28 /* SSHypothesisTesting-Outliers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7E2E91F62FBBD00A17B28 /* SSHypothesisTesting-Outliers.swift */; };
+		9FF7E2EC1F62FC0F00A17B28 /* SSHypothesisTesting-Variances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF7E2EB1F62FC0F00A17B28 /* SSHypothesisTesting-Variances.swift */; };
 		9FFBAF981F3F882E0074FB41 /* SSCrosstab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */; };
 /* End PBXBuildFile section */
 
@@ -67,13 +72,18 @@
 		9F82D3C41F1E8F57001BFC9D /* SSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSUtils.swift; sourceTree = "<group>"; };
 		9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStats-EnumsStructs.swift"; sourceTree = "<group>"; };
 		9F919AA91F3DD09000FC4199 /* SSTukey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSTukey.swift; sourceTree = "<group>"; };
-		9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHypothesisTesting.swift; sourceTree = "<group>"; };
+		9FAB31281F2101E10082D890 /* SSHypothesisTesting-TTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-TTests.swift"; sourceTree = "<group>"; };
 		9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSContFrac.swift; sourceTree = "<group>"; };
 		9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 		9FC547491F2DDE2000F58541 /* scratch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FE9A5481F374F0400BC37BF /* LargeSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeSet.swift; sourceTree = "<group>"; };
 		9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDataGroupSorter.swift; sourceTree = "<group>"; };
 		9FF3DEF81F23634E004B6AA1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		9FF7E2E31F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-NPAR.swift"; sourceTree = "<group>"; };
+		9FF7E2E51F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Autocorrelation.swift"; sourceTree = "<group>"; };
+		9FF7E2E71F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Randomness.swift"; sourceTree = "<group>"; };
+		9FF7E2E91F62FBBD00A17B28 /* SSHypothesisTesting-Outliers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Outliers.swift"; sourceTree = "<group>"; };
+		9FF7E2EB1F62FC0F00A17B28 /* SSHypothesisTesting-Variances.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Variances.swift"; sourceTree = "<group>"; };
 		9FFBAF971F3F882E0074FB41 /* SSCrosstab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSCrosstab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,7 +146,12 @@
 				9F82D3A71F1E8F19001BFC9D /* Info.plist */,
 				9FC030201F1FA05A00CEE0BC /* SSContFrac.swift */,
 				9FC030221F1FBE4800CEE0BC /* SSSpecialFunctions.swift */,
-				9FAB31281F2101E10082D890 /* SSHypothesisTesting.swift */,
+				9FAB31281F2101E10082D890 /* SSHypothesisTesting-TTests.swift */,
+				9FF7E2E31F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift */,
+				9FF7E2E51F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift */,
+				9FF7E2E71F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift */,
+				9FF7E2E91F62FBBD00A17B28 /* SSHypothesisTesting-Outliers.swift */,
+				9FF7E2EB1F62FC0F00A17B28 /* SSHypothesisTesting-Variances.swift */,
 				9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */,
 				9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */,
 				9F919AA91F3DD09000FC4199 /* SSTukey.swift */,
@@ -271,18 +286,23 @@
 			files = (
 				9F0BDDC31F4DA70C00906257 /* SSExamine-Stats.swift in Sources */,
 				9F0BDDC11F4DA68A00906257 /* SSExamine-FileManagement.swift in Sources */,
+				9FF7E2E41F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift in Sources */,
+				9FF7E2EC1F62FC0F00A17B28 /* SSHypothesisTesting-Variances.swift in Sources */,
 				9F82D3CB1F1E8F57001BFC9D /* SSSwiftyStatsError.swift in Sources */,
 				9F82D3C51F1E8F57001BFC9D /* SSConstants.swift in Sources */,
 				9FFBAF981F3F882E0074FB41 /* SSCrosstab.swift in Sources */,
 				9FC030231F1FBE4800CEE0BC /* SSSpecialFunctions.swift in Sources */,
 				9F82D3C91F1E8F57001BFC9D /* SSProbabilityDistributions.swift in Sources */,
-				9FAB31291F2101E10082D890 /* SSHypothesisTesting.swift in Sources */,
+				9FAB31291F2101E10082D890 /* SSHypothesisTesting-TTests.swift in Sources */,
+				9FF7E2EA1F62FBBD00A17B28 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9F82D3C71F1E8F57001BFC9D /* SSFrequencyTables.swift in Sources */,
 				9FF073C01F3CD48200439F7F /* SSDataGroupSorter.swift in Sources */,
 				9F82D3CA1F1E8F57001BFC9D /* SSProtocols.swift in Sources */,
 				9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */,
+				9FF7E2E61F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift in Sources */,
 				9F82D3C61F1E8F57001BFC9D /* SSExamine.swift in Sources */,
 				9F82D3C81F1E8F57001BFC9D /* SSLogging.swift in Sources */,
+				9FF7E2E81F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift in Sources */,
 				9FC030211F1FA05A00CEE0BC /* SSContFrac.swift in Sources */,
 				9F82D3CE1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F919AAA1F3DD09000FC4199 /* SSTukey.swift in Sources */,

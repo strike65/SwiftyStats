@@ -71,6 +71,29 @@ class SwiftyStatsTests: XCTestCase {
     let concentr3 = [1.0,0,0,0,0]
     
     
+    func testTukeyKramer() {
+        let A = [27.0,27,25,26,25]
+        let B = [26.0,25,26,25,24]
+        let C = [21.0,21,20,20,22]
+        let D = [21.0,21,20,20,22]
+        // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
+        let G1 = [6.9, 5.4, 5.8, 4.6, 4.0]
+        let G2 = [8.3, 6.8, 7.8, 9.2, 6.5]
+        let G3 = [8.0, 10.5, 8.1, 6.9, 9.3]
+        let G4 = [5.8, 3.8, 6.1, 5.6, 6.2]
+        let exaA: SSExamine<Double> = SSExamine<Double>(withArray: A, name: "A", characterSet: nil)
+        let exaB: SSExamine<Double> = SSExamine<Double>(withArray: B, name: "B", characterSet: nil)
+        let exaC: SSExamine<Double> = SSExamine<Double>(withArray: C, name: "C", characterSet: nil)
+        let exaD: SSExamine<Double> = SSExamine<Double>(withArray: D, name: "D", characterSet: nil)
+        let exa1: SSExamine<Double> = SSExamine<Double>(withArray: G1, name: "Group 1", characterSet: nil)
+        let exa2: SSExamine<Double> = SSExamine<Double>(withArray: G2, name: "Group 2", characterSet: nil)
+        let exa3: SSExamine<Double> = SSExamine<Double>(withArray: G3, name: "Group 3", characterSet: nil)
+        let exa4: SSExamine<Double> = SSExamine<Double>(withArray: G4, name: "Group 4", characterSet: nil)
+        let mmt: SSOneWayANOVATestResult = try! SSHypothesisTesting.multipleMeansTest(data: [exa1, exa2, exa3, exa4], alpha: 0.05)!
+        var test = SSHypothesisTesting.tukeyKramerTest(data: [exa1, exa2, exa3, exa4], alpha: 0.05)
+        test = SSHypothesisTesting.tukeyKramerTest(data: [exaA, exaB, exaC], alpha: 0.05)
+    }
+    
     func testExamine() {
         let examineConc1:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr1, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
         XCTAssertEqualWithAccuracy(examineConc1.herfindahlIndex!, 0.2, accuracy: 1E-1)
