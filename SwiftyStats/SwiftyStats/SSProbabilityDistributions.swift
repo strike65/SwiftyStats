@@ -1354,7 +1354,10 @@ public class SSProbabilityDistributions {
             result.variance = Double.nan
         }
         if b > 4.0 {
-            result.kurtosis = (3.0 * (b - 2.0) * (2.0 + b + 3.0 * b * b)) / ((b - 4.0) * (b - 3.0) * b)
+            let b2 = b * b
+            let temp = (-12.0 + b2 * (-15.0 + 9.0 * b)) / ((-4.0 + b) * (-3.0 + b) * b)
+            result.kurtosis = temp
+//            result.kurtosis = (3.0 * (b - 2.0) * (2.0 + b + 3.0 * b * b)) / ((b - 4.0) * (b - 3.0) * b)
         }
         else {
             result.kurtosis = Double.nan
@@ -1382,7 +1385,9 @@ public class SSProbabilityDistributions {
             os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        let result = pow(a, b) * b * pow(x, -1.0 - b)
+        let a1 = pow(a, b)
+        let a2 = a1 * b
+        let result = a2 * pow(x, -1.0 - b)
         return result
     }
 
@@ -2178,7 +2183,12 @@ public class SSProbabilityDistributions {
             return (a * (a - 2.0 * x) + x * x) / (a * (a - b - c) + b * c)
         }
         else {
-            return 1.0 - ((b * (b - 2.0 * x) + x * x) / (b * (b - a - c) + a * c))
+            let b2 = b * b
+            let bx = b * x
+            let x2 = x * x
+            let result: Double = 1.0 + ((b2 - 2.0 * bx + x2) / ( a - b) * (b - c))
+            return result
+//            return 1.0 - ( ( b * ( b - 2.0 * x ) + x * x ) / ( b * ( b - a - c ) + a * c ) )
         }
     }
 

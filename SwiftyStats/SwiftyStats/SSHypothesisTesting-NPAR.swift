@@ -612,7 +612,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
+    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult {
         if set1.sampleSize <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1072,7 +1072,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
-    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T>  {
         if p0.isNaN {
             os_log("p0 is NaN", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1187,7 +1187,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: A SSExamine object containg data for set 1
     /// - Parameter set2: A SSExamine object containg data for set 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: SSExamine<T>, set2: SSExamine<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable {
+    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: SSExamine<T>, set2: SSExamine<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult {
         if set1.sampleSize <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1263,7 +1263,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations in group 1
     /// - Parameter set2: Observations in group 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult where T: Comparable, T: Hashable {
+    public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult {
         if set1.sampleSize <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1487,7 +1487,7 @@ extension SSHypothesisTesting {
         
     }
     
-    public class func kruskalWallisHTest<T>(data: Array<SSExamine<T>>, alpha: Double!) throws -> SSKruskalWallisHTestResult where T: Comparable, T: Hashable {
+    public class func kruskalWallisHTest<T>(data: Array<SSExamine<T>>, alpha: Double!) throws -> SSKruskalWallisHTestResult  {
         if data.count < 2 {
             os_log("number of groups is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)

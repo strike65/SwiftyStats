@@ -159,8 +159,8 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func leveneTest(array: Array<Array<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         var _N = 0.0
-        var _s1 = 0.0
-        var _s2 = 0.0
+        var _s1: Double = 0.0
+        var _s2: Double = 0.0
         var _t = 0.0
         var _zMean = 0.0
         var _cutoff90Percent: Double
@@ -260,7 +260,11 @@ extension SSHypothesisTesting {
             while i < Int(_k) {
                 j = 0
                 while j < Int(_ni[i]) {
-                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
+                    let zij = _zij[i][j]
+                    let zi = _zi[i]
+                    _s2 = _s2 + pow(zij, 2.0) - (2.0 * zi * zij) + pow(zij, 2.0)
+//                    _s2 = _s2 + p1 * p1
+//                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
                     j += 1
                 }
                 i += 1
