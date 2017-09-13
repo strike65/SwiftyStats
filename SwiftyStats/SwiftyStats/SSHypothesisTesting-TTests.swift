@@ -429,9 +429,11 @@ public class SSHypothesisTesting {
         var N: Int = 0
         var pBartlett: Double
         var pLevene: Double
-        var numerator = 0.0
-        var denominator = 0.0
-        var testStatistics: Double
+        // explained sum of squares
+        var ESS = 0.0
+        // residual sum of squares
+        var RSS = 0.0
+        var F: Double
         var pValue: Double
         var cdfValue: Double
         var cutoffAlpha: Double
@@ -464,22 +466,22 @@ public class SSHypothesisTesting {
         }
         overallMean = sum / Double(N)
         for examine in data {
-            numerator += pow(examine.arithmeticMean! - overallMean, 2.0) * Double(examine.sampleSize)
-            denominator += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)!
+            ESS += pow(examine.arithmeticMean! - overallMean, 2.0) * Double(examine.sampleSize)
+            RSS += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)!
         }
-        testStatistics = ((Double(N) - groups) / (groups - 1.0)) * numerator / denominator
+        F = ((Double(N) - groups) / (groups - 1.0)) * ESS / RSS
         do {
-            cdfValue = try SSProbabilityDistributions.cdfFRatio(f: testStatistics, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
+            cdfValue = try SSProbabilityDistributions.cdfFRatio(f: F, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
             cutoffAlpha = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha, numeratorDF: groups - 1.0, denominatorDF: Double(N) - groups)
         }
         catch {
             throw error
         }
         pValue = 1.0 - cdfValue
-        meansEqual = testStatistics <= cutoffAlpha
+        meansEqual = F <= cutoffAlpha
         var result = SSOneWayANOVATestResult()
         result.p2Value = pValue
-        result.FStatistic = testStatistics
+        result.FStatistic = F
         result.alpha = alpha
         result.meansEQUAL = meansEqual
         result.cv = cutoffAlpha

@@ -735,8 +735,8 @@ class SwiftyStatsTests: XCTestCase {
         let b3 = [75,93,78,71,63,76.0]
         let b4 = [55,66,49,64,70,68.0]
         multipleMeansRes = try! SSHypothesisTesting.multipleMeansTest(data: [b1,b2,b3,b4], alpha: 0.05)!
-        XCTAssertEqualWithAccuracy(multipleMeansRes.p2Value!, 0.0069, accuracy: 1E-4)
-        XCTAssertEqualWithAccuracy(multipleMeansRes.FStatistic!, 5.41, accuracy: 1E-2)
+        XCTAssertEqualWithAccuracy(multipleMeansRes.p2Value!, 0.00688, accuracy: 1E-5)
+        XCTAssertEqualWithAccuracy(multipleMeansRes.FStatistic!, 5.406, accuracy: 1E-3)
         
         
     }
