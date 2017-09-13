@@ -1755,7 +1755,13 @@ public class SSProbabilityDistributions {
             return 0.0
         }
         else {
-            return exp(-a * log(b) + (-x / b) + (-1.0 + a) * log(x) - lgamma(a))
+            let a1 = -a * log(b)
+            let a2 = -x / b
+            let a3 = -1.0 + a
+            let a4 = a1 + a2 + a3 * log(x) - lgamma(a)
+            let result = exp(a4)
+            return result
+//            return exp(-a * log(b) + (-x / b) + (-1.0 + a) * log(x) - lgamma(a))
         }
     }
 
@@ -2112,7 +2118,6 @@ public class SSProbabilityDistributions {
         }
         var result = SSContProbDistParams()
         result.mean = (a + b + c) / 3.0
-        result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
         result.kurtosis = 2.4
         let a2 = a * a
         let a3 = a2 * a
@@ -2120,7 +2125,13 @@ public class SSProbabilityDistributions {
         let b3 = b2 * b
         let c2 = c * c
         let c3 = c2 * c
-        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
+        let ab = a * b
+        let ac = a * c
+        let bc = b * c
+        result.variance = 1.0 / 18.0 * ( a2 - ab + b2 - ac - bc + c2 )
+//        result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
+        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * ab * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - ab + b2 - ac - bc + c2, 1.5))
+//        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
         return result
     }
     
