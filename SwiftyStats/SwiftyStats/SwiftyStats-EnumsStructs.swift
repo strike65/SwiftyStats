@@ -376,7 +376,7 @@ public struct SSVarianceEqualityTestResult: CustomStringConvertible {
 }
 
 /// Results of the two sample t-Test
-public struct SSTwoSampleTTestResult: CustomStringConvertible {
+public struct SS2SampleTTestResult: CustomStringConvertible {
     /// one sided p value for equal variances
     public var p1EQVAR: Double?
     /// one sided p value for unequal variances
@@ -641,11 +641,27 @@ public struct SSOneWayANOVATestResult: CustomStringConvertible {
     public var cv: Double?
     /// p value of the Levene test
     public var pLevene: Double?
+    /// total sum of square
+    public var SSTotal: Double?
+    /// residual sum of squares (within groups)
+    public var SSError: Double?
+    /// treatment sum of squares
+    public var SSTreatment: Double?
+    /// error mean sum of squares
+    public var MSError: Double?
+    /// treatment mean sum of squares
+    public var MSTreatment: Double?
+    /// error degrees of freedom
+    public var dfError: Double?
+    /// treatment degrees of freedom
+    public var dfTreatment: Double?
+    /// total degrees of freedom
+    public var dfTotal: Double?
     /// Returns a description
     public var description: String {
         get {
             var descr = String()
-            if let f = self.FStatistic, let pB = self.pBartlett, let cv = self.cv, let p2 = self.p2Value, let pL = self.pLevene {
+            if let f = self.FStatistic, let pB = self.pBartlett, let cv = self.cv, let p2 = self.p2Value, let pL = self.pLevene, let SST = SSTotal, let SSE = SSError, let SSF = SSTreatment, let MSE = MSError, let MST = MSTreatment, let dft = dfTotal, let dfF = dfTreatment, let dfe = dfError {
                 descr.append("MULTIPLE MEANS TEST\n")
                 descr.append("*******************\n")
                 descr.append("f: \(f)\n")
@@ -653,6 +669,14 @@ public struct SSOneWayANOVATestResult: CustomStringConvertible {
                 descr.append("p value Levene test: \(pL)\n")
                 descr.append("critical value: \(cv)\n")
                 descr.append("two sided p value: \(p2)\n")
+                descr.append("SS_total: \(SST)\n")
+                descr.append("SS_error: \(SSE)\n")
+                descr.append("SS_Treatment: \(SSF)\n")
+                descr.append("df_total: \(dft)\n")
+                descr.append("df_error: \(dfe)\n")
+                descr.append("df_Treatment: \(dfF)\n")
+                descr.append("MS_error: \(MSE)\n")
+                descr.append("MS_treatment: \(MST)\n")
             }
             return descr
         }

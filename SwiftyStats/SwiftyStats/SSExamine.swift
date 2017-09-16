@@ -235,7 +235,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
     /// - Throws: SSSwiftyStatsError if the file could not be written
-    public func saveTo(fileName path: String!, atomically: Bool!, overwrite: Bool!, separator: String!, asRow: Bool = true, stringEncoding: String.Encoding) throws -> Bool {
+    public func saveTo(fileName path: String!, atomically: Bool! = true, overwrite: Bool!, separator: String! = ",", asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         var result = true
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath

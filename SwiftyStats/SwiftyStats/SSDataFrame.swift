@@ -240,12 +240,12 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     }
     
     /// Subscript for columns
-    subscript(column: Int) -> SSExamine<SSElement> {
+    public subscript(column: Int) -> SSExamine<SSElement> {
         assert(isValidColumnIndex(column), "Index out of range")
         return data[column]
     }
     
-    subscript(name: String!) -> SSExamine<SSElement> {
+    public subscript(name: String!) -> SSExamine<SSElement> {
         if let i = cNames.index(of: name) {
             return data[i]
         }
@@ -373,7 +373,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     /// - Parameter stringEncoding: The encoding to use.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func dataFrame(fromFile path: String!, separator sep: String!, firstRowContainsNames cn: Bool, stringEncoding: String.Encoding!, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement> {
+    public class func dataFrame(fromFile path: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, stringEncoding: String.Encoding! = String.Encoding.utf8, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement> {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {

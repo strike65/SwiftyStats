@@ -36,7 +36,7 @@ public class SSHypothesisTesting {
     /// - Parameter sample2: Data2 as Array<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
-    public class func twoSampleTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SSTwoSampleTTestResult {
+    public class func twoSampleTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
         if data1.count < 2 {
             os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -60,7 +60,7 @@ public class SSHypothesisTesting {
     /// - Parameter sample2: Data2 as SSExamine<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
-    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SSTwoSampleTTestResult {
+    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
         if sample1.sampleSize < 2 {
             os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -158,7 +158,7 @@ public class SSHypothesisTesting {
                 twoSidedWelch = cdfWelch * 2.0
                 oneTailedWelch = cdfWelch
             }
-            var result: SSTwoSampleTTestResult = SSTwoSampleTTestResult()
+            var result: SS2SampleTTestResult = SS2SampleTTestResult()
             result.p2EQVAR = twoTailedEV
             result.p2UEQVAR = twoTailedUEV
             result.p1UEQVAR = oneTailedUEV
@@ -394,6 +394,40 @@ public class SSHypothesisTesting {
         }
     }
     
+    public class func oneWayANOVA(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
+        if dataFrame.columns <= 2 {
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            var exArray = Array<SSExamine<Double>>()
+            for ex in dataFrame.examines {
+                exArray.append(ex)
+            }
+            return try SSHypothesisTesting.multipleMeansTest(data: exArray, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+
+    public class func multipleMeansTest(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
+        if dataFrame.columns <= 2 {
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            var exArray = Array<SSExamine<Double>>()
+            for ex in dataFrame.examines {
+                exArray.append(ex)
+            }
+            return try SSHypothesisTesting.multipleMeansTest(data: exArray, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+    
     /// Performs a one way ANOVA (multiple means test)
     /// - Parameter data: data as Array<Double>
     /// - Parameter alpha: Alpha
@@ -426,13 +460,17 @@ public class SSHypothesisTesting {
         }
         var overallMean: Double
         var sum: Double = 0.0
+        // total number of observations
         var N: Int = 0
+        // p value of Bartlett test
         var pBartlett: Double
+        // p value of Levene test
         var pLevene: Double
         // explained sum of squares
-        var ESS = 0.0
+        var SST = 0.0
         // residual sum of squares
-        var RSS = 0.0
+        var SSE = 0.0
+        // test statistic
         var F: Double
         var pValue: Double
         var cdfValue: Double
@@ -466,10 +504,12 @@ public class SSHypothesisTesting {
         }
         overallMean = sum / Double(N)
         for examine in data {
-            ESS += pow(examine.arithmeticMean! - overallMean, 2.0) * Double(examine.sampleSize)
-            RSS += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)!
+            SST += pow(examine.arithmeticMean! - overallMean, 2.0) * Double(examine.sampleSize)
+            SSE += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)!
         }
-        F = ((Double(N) - groups) / (groups - 1.0)) * ESS / RSS
+        let MSE = SSE / (Double(N) - groups)
+        let MST = SST / (groups - 1.0)
+        F = MST / MSE
         do {
             cdfValue = try SSProbabilityDistributions.cdfFRatio(f: F, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
             cutoffAlpha = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha, numeratorDF: groups - 1.0, denominatorDF: Double(N) - groups)
@@ -487,11 +527,21 @@ public class SSHypothesisTesting {
         result.cv = cutoffAlpha
         result.pBartlett = pBartlett
         result.pLevene = pLevene
+        result.dfTotal = Double(N) - 1.0
+        result.dfError = Double(N) - groups
+        result.dfTreatment = groups - 1.0
+        result.SSError = SSE
+        result.SSTreatment = SST
+        result.MSError = MSE
+        result.MSTreatment = MST
         return result
     }
     
     
     // post hoc tests
+    
+    
+    
     
     // TUKEY KRAMER
     // All means are compared --> k(k - 1) / 2 comparisons (k = number of means)
@@ -525,6 +575,7 @@ public class SSHypothesisTesting {
  
  */
     public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) -> Double {
+        assert(false, "not implemented yet")
         var means = Array<Double>()
         for examine in data {
             means.append(examine.arithmeticMean!)

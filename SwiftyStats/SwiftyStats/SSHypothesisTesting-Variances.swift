@@ -262,7 +262,7 @@ extension SSHypothesisTesting {
                 while j < Int(_ni[i]) {
                     let zij = _zij[i][j]
                     let zi = _zi[i]
-                    _s2 = _s2 + pow(zij, 2.0) - (2.0 * zi * zij) + pow(zij, 2.0)
+                    _s2 = _s2 + pow(zij, 2.0) - (2.0 * zi * zij) + pow(zi, 2.0)
 //                    _s2 = _s2 + p1 * p1
 //                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
                     j += 1
