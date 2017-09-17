@@ -11,6 +11,7 @@
 		9F0050021F6C5841008DA286 /* IntData.examine in Resources */ = {isa = PBXBuildFile; fileRef = 9F0050011F6C5838008DA286 /* IntData.examine */; };
 		9F0BDDC11F4DA68A00906257 /* SSExamine-FileManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0BDDC01F4DA68A00906257 /* SSExamine-FileManagement.swift */; };
 		9F0BDDC31F4DA70C00906257 /* SSExamine-Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0BDDC21F4DA70C00906257 /* SSExamine-Stats.swift */; };
+		9F1285471F6E820E008A2411 /* TukeyKramerData_02.csv in Resources */ = {isa = PBXBuildFile; fileRef = 9F1285461F6E813E008A2411 /* TukeyKramerData_02.csv */; };
 		9F1593521F2520BA0050D6EC /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */; };
 		9F1B809B1F6D6E7F0044A4C3 /* RosnerData.examine in Resources */ = {isa = PBXBuildFile; fileRef = 9F1B809A1F6D6E7F0044A4C3 /* RosnerData.examine */; };
 		9F1B809D1F6D6F250044A4C3 /* DoubleData.examine in Resources */ = {isa = PBXBuildFile; fileRef = 9F1B809C1F6D6F250044A4C3 /* DoubleData.examine */; };
@@ -65,6 +66,7 @@
 		9F0050011F6C5838008DA286 /* IntData.examine */ = {isa = PBXFileReference; lastKnownFileType = text; path = IntData.examine; sourceTree = "<group>"; };
 		9F0BDDC01F4DA68A00906257 /* SSExamine-FileManagement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSExamine-FileManagement.swift"; sourceTree = "<group>"; };
 		9F0BDDC21F4DA70C00906257 /* SSExamine-Stats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSExamine-Stats.swift"; sourceTree = "<group>"; };
+		9F1285461F6E813E008A2411 /* TukeyKramerData_02.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = TukeyKramerData_02.csv; sourceTree = "<group>"; };
 		9F1593511F2520BA0050D6EC /* SSSimard-KSProb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSSimard-KSProb.swift"; sourceTree = "<group>"; };
 		9F1B809A1F6D6E7F0044A4C3 /* RosnerData.examine */ = {isa = PBXFileReference; lastKnownFileType = text; path = RosnerData.examine; sourceTree = "<group>"; };
 		9F1B809C1F6D6F250044A4C3 /* DoubleData.examine */ = {isa = PBXFileReference; lastKnownFileType = text; path = DoubleData.examine; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 		9F82D3B01F1E8F19001BFC9D /* SwiftyStatsTests */ = {
 			isa = PBXGroup;
 			children = (
+				9F1285461F6E813E008A2411 /* TukeyKramerData_02.csv */,
 				9FA2AC2D1F6D06D70008DADA /* largeNormal_01.examine */,
 				9FA2AC2E1F6D06D70008DADA /* largeNormal_02.examine */,
 				9F0050011F6C5838008DA286 /* IntData.examine */,
@@ -310,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F1285471F6E820E008A2411 /* TukeyKramerData_02.csv in Resources */,
 				9F1B809F1F6D6FC50044A4C3 /* IntDataWithOutliers.examine in Resources */,
 				9F1B80A11F6D70F70044A4C3 /* ZarrData.examine in Resources */,
 				9F1B80A51F6D72240044A4C3 /* NormalData02.examine in Resources */,

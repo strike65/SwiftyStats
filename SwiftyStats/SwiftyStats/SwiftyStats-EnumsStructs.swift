@@ -25,6 +25,9 @@
 
 import Foundation
 
+/// A tuple containing the results of one out of multiple comparisons. 
+public typealias SSHSDResultRow = (row: String, meanDiff: Double, qStat: Double, pValue: Double)
+
 
 /// Confidence interval struct
 public struct SSConfIntv: CustomStringConvertible {

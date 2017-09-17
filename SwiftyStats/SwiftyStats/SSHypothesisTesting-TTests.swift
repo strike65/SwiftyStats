@@ -574,32 +574,61 @@ public class SSHypothesisTesting {
      m(k - 1)       T(k - 1,0)  T(k - 1,1)  T(k - 1,2)  ...     -
  
  */
-    public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) -> Double {
-        assert(false, "not implemented yet")
+    /// Performs the Tukey-Kramer test for multiple comparisons
+    /// - Parameter data: data as SSDataFrame<Double>
+    /// - Parameter alpha: Alpha
+    /// - Returns:SSHSDResultRow
+    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Precondition: Each examine object should be named uniquely.
+    public class func tukeyKramerTest(dataFrame: SSDataFrame<Double>, alpha: Double!) throws -> Array<SSHSDResultRow>? {
+        do {
+            if dataFrame.examines.count <= 2 {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+            return try SSHypothesisTesting.tukeyKramerTest(data: dataFrame.examines, alpha: alpha)
+        }
+        catch {
+            throw error
+        }
+    }
+
+    /// Performs the Tukey-Kramer test for multiple comparisons
+    /// - Parameter data: data as SSExamine<Double>
+    /// - Parameter alpha: Alpha
+    /// - Returns:SSHSDResultRow
+    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Precondition: Each examine object should be named uniquely.
+    public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) throws -> Array<SSHSDResultRow>? {
+        if data.count <= 2 {
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
         var means = Array<Double>()
         for examine in data {
             means.append(examine.arithmeticMean!)
         }
-        var T = Array<Array<Double>>()
+        var Q = Array<Array<Double>>()
         var differences = Array<Array<Double>>()
         var temp: Double
         var sum1: Double = 0.0
         var sum2: Double = 0.0
+        let k: Int = data.count
+        var n_total: Double = 0.0
         // compute means
         for i in stride(from: 0, through: data.count - 1, by: 1) {
             differences.append(Array<Double>())
             for j in stride(from: 0, through: data.count - 1, by: 1) {
                 differences[i].append(Double.nan)
                 if j >= i + 1 {
-                    temp = means[j] - means[i]
+                    temp = means[i] - means[j]
                     differences[i][j] = temp
                 }
             }
         }
         // compute pooled variance
-        var N: Double = 0.0
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            N = N + Double(data[i].sampleSize)
+            n_total = n_total + Double(data[i].sampleSize)
             sum1 = 0.0
             for j in stride(from: 0, through: data[i].sampleSize - 1, by: 1) {
                 if let t = castValueToDouble(data[i][j]) {
@@ -611,70 +640,67 @@ public class SSHypothesisTesting {
             }
             sum2 = sum2 + sum1
         }
-        let s = sqrt(sum2 / (N - Double(data.count)))
-        var ni: Double
-        var nj: Double
+        let s = sqrt(sum2 / (n_total - Double(data.count)))
+        var n_i: Double
+        var n_j: Double
         // compute test statistics
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            T.append(Array<Double>())
-            ni = Double(data[i].sampleSize)
+            Q.append(Array<Double>())
+            n_i = Double(data[i].sampleSize)
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                T[i].append(Double.nan)
+                Q[i].append(Double.nan)
                 if j >= i + 1 {
-                    nj = Double(data[j].sampleSize)
-                    if ni == nj {
-                        let t = (means[i] - means[j]) / ( s * sqrt(1.0 / ni))
-                        T[i][j] = t
+                    n_j = Double(data[j].sampleSize)
+                    if n_i == n_j {
+                        Q[i][j] = fabs(differences[i][j]) / ( s * sqrt(1.0 / n_i))
                     }
                     else {
-                        let t = (means[i] - means[j]) / ( s * sqrt(0.5 * (1.0 / ni + 1.0 / nj)))
-                        T[i][j] = t
+                        Q[i][j] = fabs(differences[i][j]) / ( s * sqrt(0.5 * (1.0 / n_i + 1.0 / n_j)))
                     }
                 }
             }
         }
-        var pt = Array<Array<Double>>()
+        var pValues = Array<Array<Double>>()
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            pt.append(Array<Double>())
+            pValues.append(Array<Double>())
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                pt[i].append(Double.nan)
+                pValues[i].append(Double.nan)
                 if j >= i + 1 {
+                    temp = Double.nan
                     do {
-                        temp = try ptukey(q: T[i][j], nranges: 1, numberOfMeans: Double(data.count), df: N - Double(data.count), tail: .upper, returnLogP: false)
-                        pt[i][j] = temp
+                        temp = try ptukey(q: Q[i][j], nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, returnLogP: false)
                     }
                     catch {
                         os_log("unable to compute ptukey", log: log_stat, type: .error)
                     }
+                    pValues[i][j] = temp
                 }
             }
         }
-        
         var confIntv = Array<Array<SSConfIntv>>()
-        var ci: SSConfIntv
         var lb: Double
         var ub: Double
         var halfWidth: Double
         var criticalQ: Double = 0.0
         do {
-            criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: N - Double(data.count), tail: .upper, log_p: false)
+            criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, log_p: false)
         }
         catch {
             os_log("unable to compute qtukey", log: log_stat, type: .error)
-            return Double.nan
+            return nil
         }
         for i in stride(from: 0, through: data.count - 1 , by: 1) {
             confIntv.append(Array<SSConfIntv>())
-            ni = Double(data[i].sampleSize)
+            n_i = Double(data[i].sampleSize)
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                nj = Double(data[j].sampleSize)
+                n_j = Double(data[j].sampleSize)
                 confIntv[i].append(SSConfIntv())
                 if j >= i + 1 {
-                    if ni != nj {
-                        halfWidth = criticalQ * s * sqrt((1.0 / ni + 1.0 / nj) / 2.0)
+                    if n_i != n_j {
+                        halfWidth = criticalQ * s * sqrt((1.0 / n_i + 1.0 / n_j) / 2.0)
                     }
                     else {
-                        halfWidth = criticalQ * s * sqrt(1.0 / ni)
+                        halfWidth = criticalQ * s * sqrt(1.0 / n_i)
                     }
                     lb = differences[i][j] - halfWidth
                     ub = differences[i][j] + halfWidth
@@ -684,7 +710,16 @@ public class SSHypothesisTesting {
                 }
             }
         }
-        return Double.nan
+        
+        var summary: Array<SSHSDResultRow> = Array<SSHSDResultRow>()
+        var tempSummary: SSHSDResultRow
+        for i in stride(from: 0, through: k - 2, by: 1) {
+            for j in stride(from: i + 1, through: k - 1, by: 1) {
+                tempSummary = (row: data[i].name! + "-" +  data[j].name!, meanDiff: differences[i][j], qStat: Q[i][j], pValue:  pValues[i][j])
+                summary.append(tempSummary)
+            }
+        }
+        return summary
     }
     
 
