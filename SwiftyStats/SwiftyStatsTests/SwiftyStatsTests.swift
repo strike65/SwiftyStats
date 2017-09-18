@@ -76,18 +76,30 @@ class SwiftyStatsTests: XCTestCase {
         let df = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
         var mmt: SSOneWayANOVATestResult = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df, alpha: 0.05)!
         var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
-        XCTAssertEqual(test[0].qStat, 4.6133, accuracy: 1E-04)
-        XCTAssertEqual(test[1].qStat, 6.2416, accuracy: 1E-04)
-        XCTAssertEqual(test[2].qStat, 0.3101, accuracy: 1E-04)
-        XCTAssertEqual(test[3].qStat, 1.6282, accuracy: 1E-04)
-        XCTAssertEqual(test[4].qStat, 4.3032, accuracy: 1E-04)
-        XCTAssertEqual(test[5].qStat, 5.9314, accuracy: 1E-04)
+        XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
+        XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
+        XCTAssertEqual(test[2].testStat, 0.3101, accuracy: 1E-04)
+        XCTAssertEqual(test[3].testStat, 1.6282, accuracy: 1E-04)
+        XCTAssertEqual(test[4].testStat, 4.3032, accuracy: 1E-04)
+        XCTAssertEqual(test[5].testStat, 5.9314, accuracy: 1E-04)
         let df1 = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
         mmt = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df1, alpha: 0.05)!
         test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df1, alpha: 0.05)!
-        XCTAssertEqual(test[0].qStat, 2.0, accuracy: 1E-01)
-        XCTAssertEqual(test[1].qStat, 13.0, accuracy: 1E-01)
-        XCTAssertEqual(test[2].qStat, 11.0, accuracy: 1E-01)
+        XCTAssertEqual(test[0].testStat, 2.0, accuracy: 1E-01)
+        XCTAssertEqual(test[1].testStat, 13.0, accuracy: 1E-01)
+        XCTAssertEqual(test[2].testStat, 11.0, accuracy: 1E-01)
+        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df, alpha: 0.05)!
+        XCTAssertEqual(test[0].testStat, 3.2621, accuracy: 1E-04)
+        XCTAssertEqual(test[1].testStat, 4.4134, accuracy: 1E-04)
+        XCTAssertEqual(test[2].testStat, 0.2193, accuracy: 1E-04)
+        XCTAssertEqual(test[3].testStat, 1.1513, accuracy: 1E-04)
+        XCTAssertEqual(test[4].testStat, 3.0428, accuracy: 1E-04)
+        XCTAssertEqual(test[5].testStat, 4.1941, accuracy: 1E-04)
+        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df1, alpha: 0.05)!
+        XCTAssertEqual(test[0].testStat, 1.4142, accuracy: 1E-04)
+        XCTAssertEqual(test[1].testStat, 9.1924, accuracy: 1E-04)
+        XCTAssertEqual(test[2].testStat, 7.7782, accuracy: 1E-04)
+//        test = try! SSHypothesisTesting.bonferroniTest(dataFrame: df)!
     }
     
     func testExamine() {

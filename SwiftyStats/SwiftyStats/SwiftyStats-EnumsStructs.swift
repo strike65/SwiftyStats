@@ -25,8 +25,6 @@
 
 import Foundation
 
-/// A tuple containing the results of one out of multiple comparisons. 
-public typealias SSHSDResultRow = (row: String, meanDiff: Double, qStat: Double, pValue: Double)
 
 
 /// Confidence interval struct
@@ -1390,6 +1388,12 @@ public enum SSCDFTail {
     case lower, upper
 }
 
+public enum SSPostHocTestType {
+    case tukeyKramer, scheffe
+}
+
+/// A tuple containing the results of one out of multiple comparisons.
+public typealias SSPostHocTestResult = (row: String, meanDiff: Double, testStat: Double, pValue: Double, testType: SSPostHocTestType)
 
 
 

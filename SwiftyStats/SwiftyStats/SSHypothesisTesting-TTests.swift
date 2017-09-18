@@ -580,7 +580,7 @@ public class SSHypothesisTesting {
     /// - Returns:SSHSDResultRow
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
-    public class func tukeyKramerTest(dataFrame: SSDataFrame<Double>, alpha: Double!) throws -> Array<SSHSDResultRow>? {
+    public class func tukeyKramerTest(dataFrame: SSDataFrame<Double>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
         do {
             if dataFrame.examines.count <= 2 {
                 os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
@@ -599,7 +599,7 @@ public class SSHypothesisTesting {
     /// - Returns:SSHSDResultRow
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
-    public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) throws -> Array<SSHSDResultRow>? {
+    public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
         if data.count <= 2 {
             os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -711,19 +711,91 @@ public class SSHypothesisTesting {
             }
         }
         
-        var summary: Array<SSHSDResultRow> = Array<SSHSDResultRow>()
-        var tempSummary: SSHSDResultRow
+        var summary: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
+        var tempSummary: SSPostHocTestResult
         for i in stride(from: 0, through: k - 2, by: 1) {
             for j in stride(from: i + 1, through: k - 1, by: 1) {
-                tempSummary = (row: data[i].name! + "-" +  data[j].name!, meanDiff: differences[i][j], qStat: Q[i][j], pValue:  pValues[i][j])
+                tempSummary = (row: data[i].name! + "-" +  data[j].name!, meanDiff: differences[i][j], testStat: Q[i][j], pValue:  pValues[i][j], testType: .tukeyKramer)
                 summary.append(tempSummary)
             }
         }
         return summary
     }
     
-
+    /// Performs the post hoc test according to Scheffé
+    public class func scheffeTest(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> Array<SSPostHocTestResult>? {
+        do {
+            var tukeyR: Array<SSPostHocTestResult>?
+            tukeyR = try SSHypothesisTesting.tukeyKramerTest(dataFrame: dataFrame, alpha: alpha)
+            if let tukey = tukeyR {
+                var scheffeResults: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
+                var n_total: Double  = 0.0
+                var k: Double
+                var df_error: Double
+                var tempRes: SSPostHocTestResult
+                k = Double(dataFrame.examines.count)
+                for ex in dataFrame.examines {
+                    n_total = n_total + Double(ex.sampleSize)
+                }
+                df_error = n_total - k
+                for tk in tukey {
+                    tempRes.meanDiff = tk.meanDiff
+                    tempRes.row = tk.row
+                    tempRes.testType = .scheffe
+                    tempRes.testStat = tk.testStat / SQRTTWO
+                    tempRes.pValue = try SSProbabilityDistributions.cdfFRatio(f: pow(tempRes.testStat, 2.0) / (k - 1.0), numeratorDF: k - 1.0, denominatorDF: df_error)
+                    tempRes.pValue = 1.0 - tempRes.pValue
+                    scheffeResults.append(tempRes)
+                }
+                return scheffeResults
+            }
+            else {
+                return nil
+            }
+        }
+        catch {
+            throw error
+        }
+    }
     
+    public class func bonferroniTest(dataFrame: SSDataFrame<Double>) throws -> Array<SSPostHocTestResult>? {
+        assert( false, "not implemented yet")
+        if dataFrame.examines.count <= 2 {
+            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        do {
+            if let scheffeRes = try SSHypothesisTesting.scheffeTest(dataFrame: dataFrame, alpha: 0.05) {
+                var bonferroniResult: SSPostHocTestResult
+                var resultArray: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
+                var n_total: Double = 0.0
+                let k: Double = Double(dataFrame.examines.count)
+                let q = (k * (k - 1.0)) / 2.0
+                var temp: Double
+                for ex in dataFrame.examines {
+                    n_total = n_total + Double(ex.sampleSize)
+                }
+                for s in scheffeRes {
+                    bonferroniResult = s
+                    temp = try SSProbabilityDistributions.cdfStudentTDist(t: pow(bonferroniResult.testStat, 2.0) / (k - 1.0), degreesOfFreedom: n_total - k)
+                    bonferroniResult.pValue = (1.0 - temp) * q
+                    if bonferroniResult.pValue > 1.0 {
+                        bonferroniResult.pValue = 1.0
+                    }
+                    resultArray.append(bonferroniResult)
+                }
+                return resultArray
+            }
+            else {
+                return nil
+            }
+            
+        }
+        catch {
+            throw error
+        }
+
+    }
     
     
     
