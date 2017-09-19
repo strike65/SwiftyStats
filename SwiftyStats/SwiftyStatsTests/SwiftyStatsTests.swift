@@ -103,6 +103,7 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testExamine() {
+        do {
         let examineConc1:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr1, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
         XCTAssertEqual(examineConc1.herfindahlIndex!, 0.2, accuracy: 1E-1)
         XCTAssertEqual(examineConc1.gini!, 0.0, accuracy: 1E-15)
@@ -122,19 +123,19 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(examineConc3.CR(2)!, 1.0, accuracy: 1E-15)
         XCTAssertEqual(examineConc3.CR(3)!, 1.0, accuracy: 1E-15)
         
-        let examineInt = try! SSExamine<Int>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
-        let examineIntOutliers = try! SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+        let examineInt = try SSExamine<Int>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+        let examineIntOutliers = try SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
         let tempDir = NSTemporaryDirectory()
         let filename = NSUUID().uuidString
         let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
         
         XCTAssert(try! examineInt.saveTo(fileName: url?.path, atomically: true, overwrite: true, separator: ",", stringEncoding: .utf8))
-        if let testExamineInt = try! SSExamine<Int>.examine(fromFile: url?.path, separator: ",", stringEncoding: .utf8, scanInt) {
+        if let testExamineInt = try SSExamine<Int>.examine(fromFile: url?.path, separator: ",", stringEncoding: .utf8, scanInt) {
             XCTAssert(testExamineInt.isEqual(examineInt))
         }
         try! FileManager.default.removeItem(at: url!)
         XCTAssert(try! examineInt.archiveTo(filePath: url?.path, overwrite: true))
-        if let testExamineInt = try! SSExamine<Int>.unarchiveFrom(filePath: url?.path) {
+        if let testExamineInt = try SSExamine<Int>.unarchiveFrom(filePath: url?.path) {
             XCTAssert(testExamineInt.isEqual(examineInt))
         }
         try! FileManager.default.removeItem(at: url!)
@@ -149,21 +150,20 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
 
-        let examineDouble = try! SSExamine<Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        let examineString = try! SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data", characterSet: nil)
-        let _ = try! SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890"))
+        let examineDouble = try SSExamine<Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        let examineString = try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data", characterSet: nil)
+        let _ = try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890"))
         let _ = SSExamine<String>.examineWithString(intDataTestString, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890"))!
         
         let examineEmpty: SSExamine<String> = examineString.copy() as! SSExamine<String>
-        let examineWithZero: SSExamine<Double> = try! SSExamine.init(withObject: [1.0,1.0, 0.0, 1.2], levelOfMeasurement: .interval, name: "double with zero", characterSet: nil)
-        let examineWithZeroMean: SSExamine<Int> = try!
+        let examineWithZero: SSExamine<Double> = try SSExamine.init(withObject: [1.0,1.0, 0.0, 1.2], levelOfMeasurement: .interval, name: "double with zero", characterSet: nil)
+        let examineWithZeroMean: SSExamine<Int> = try
             SSExamine<Int>.init(withObject: [0,0,0,0,0], levelOfMeasurement: .interval, name: "all zero", characterSet: nil)
-        let examineSmall: SSExamine<Double> = try! SSExamine.init(withObject: [1.0], levelOfMeasurement: .interval, name: "double one element", characterSet: nil)
+        let examineSmall: SSExamine<Double> = try SSExamine.init(withObject: [1.0], levelOfMeasurement: .interval, name: "double one element", characterSet: nil)
         examineEmpty.removeAll()
         XCTAssert(examineEmpty.isEmpty)
         XCTAssertNil(examineEmpty.gini)
         XCTAssertNil(examineString.gini)
-        do {
             let bw = examineDouble.boxWhisker!
             XCTAssert(bw.median! == 19)
             XCTAssert(bw.q25! == 15)
@@ -190,13 +190,13 @@ class SwiftyStatsTests: XCTestCase {
 
             XCTAssertEqual(examineDouble.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
             // Descriptives
-            let platy:SSExamine<Double> = try! SSExamine<Double>.init(withObject: platykurtic, levelOfMeasurement: .interval, name: "platykurtic", characterSet: nil)
-            let lepto:SSExamine<Double> = try! SSExamine<Double>.init(withObject: leptokurtic, levelOfMeasurement: .interval, name: "leptokurtic", characterSet: nil)
+            let platy:SSExamine<Double> = try SSExamine<Double>.init(withObject: platykurtic, levelOfMeasurement: .interval, name: "platykurtic", characterSet: nil)
+            let lepto:SSExamine<Double> = try SSExamine<Double>.init(withObject: leptokurtic, levelOfMeasurement: .interval, name: "leptokurtic", characterSet: nil)
             XCTAssert(platy.kurtosisType == .platykurtic)
             XCTAssert(lepto.kurtosisType == .leptokurtic)
-            let left:SSExamine<Int> = try! SSExamine<Int>.init(withObject: leftskewed, levelOfMeasurement: .interval, name: "leftskewed", characterSet: nil)
-            let right:SSExamine<Int> = try! SSExamine<Int>.init(withObject: rightskewed, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
-            let sym:SSExamine<Int> = try! SSExamine<Int>.init(withObject: symmetric, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+            let left:SSExamine<Int> = try SSExamine<Int>.init(withObject: leftskewed, levelOfMeasurement: .interval, name: "leftskewed", characterSet: nil)
+            let right:SSExamine<Int> = try SSExamine<Int>.init(withObject: rightskewed, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+            let sym:SSExamine<Int> = try SSExamine<Int>.init(withObject: symmetric, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
             XCTAssert(left.skewnessType == .leftSkewed)
             XCTAssert(right.skewnessType == .rightSkewed)
             XCTAssert(sym.skewnessType == .symmetric)

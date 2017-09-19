@@ -72,17 +72,21 @@ myArray:Array<Double> = myExamineObject.uniqueElementsAsArray(sortOrder: .ascend
 # SSHypothesisTesting
 The framework implements the following tests so far:
 
-- One sample Kolmogorov Smirnov test
+- Kolmogorov Smirnov test (one/two sample))
 - Anderson Darling test
 - Bartlett test
 - Levene test (with variants)
 - Grubbs test
 - ESD test (Rosner test)
-- t tests
-- Mann Whitney test
+- t test (matched, 2-sample)
+- Mann Whitney U-test
 - Wilcoxon matched pairs test
 - sign test
-- ...
+- one factor ANOVA
+- Tukey-Kramer post hoc test
+- Scheffé-Test
+...
+
 
 # SSProbabilityDistributions
 The class provides the following functions/parameters for the probability distributions listed below:
