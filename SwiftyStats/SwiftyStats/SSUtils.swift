@@ -216,15 +216,6 @@ extension Double {
             }
         }
     }
-    
-//    func sgn() -> Double {
-//        if self.sign == .minus {
-//            return -1.0
-//        }
-//        else {
-//            return 1.0
-//        }
-//    }
 }
 
 /// Returns a SSExamine object of length one and count "count"

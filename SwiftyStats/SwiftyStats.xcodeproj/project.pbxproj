@@ -188,13 +188,13 @@
 		9F82D3B01F1E8F19001BFC9D /* SwiftyStatsTests */ = {
 			isa = PBXGroup;
 			children = (
+				9F82D3B11F1E8F19001BFC9D /* SwiftyStatsTests.swift */,
 				9F1285461F6E813E008A2411 /* TukeyKramerData_02.csv */,
 				9FA2AC2D1F6D06D70008DADA /* largeNormal_01.examine */,
 				9FA2AC2E1F6D06D70008DADA /* largeNormal_02.examine */,
 				9F0050011F6C5838008DA286 /* IntData.examine */,
 				9F004FFF1F6C559A008DA286 /* TukeyKramerData_01.csv */,
 				9F77FDDE1F6B0776008C283B /* geardata.csv */,
-				9F82D3B11F1E8F19001BFC9D /* SwiftyStatsTests.swift */,
 				9F82D3B31F1E8F19001BFC9D /* Info.plist */,
 				9FE9A5481F374F0400BC37BF /* LargeSet.swift */,
 				9F3C0EAE1F470CC8005E3890 /* clonidine_data.swift */,
