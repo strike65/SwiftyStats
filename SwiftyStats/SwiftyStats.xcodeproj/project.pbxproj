@@ -104,7 +104,6 @@
 		9FC547491F2DDE2000F58541 /* scratch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FE9A5481F374F0400BC37BF /* LargeSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeSet.swift; sourceTree = "<group>"; };
 		9FF073BF1F3CD48200439F7F /* SSDataGroupSorter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDataGroupSorter.swift; sourceTree = "<group>"; };
-		9FF3DEF81F23634E004B6AA1 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		9FF7E2E31F62F62C00A17B28 /* SSHypothesisTesting-NPAR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-NPAR.swift"; sourceTree = "<group>"; };
 		9FF7E2E51F62FA8200A17B28 /* SSHypothesisTesting-Autocorrelation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Autocorrelation.swift"; sourceTree = "<group>"; };
 		9FF7E2E71F62FAE500A17B28 /* SSHypothesisTesting-Randomness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSHypothesisTesting-Randomness.swift"; sourceTree = "<group>"; };
@@ -156,7 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				9FC547491F2DDE2000F58541 /* scratch */,
-				9FF3DEF81F23634E004B6AA1 /* TODO */,
 				9F82D3CD1F1E8FEA001BFC9D /* SwiftyStats-EnumsStructs.swift */,
 				9F82D3BD1F1E8F57001BFC9D /* SSConstants.swift */,
 				9F82D3BE1F1E8F57001BFC9D /* SSExamine.swift */,
