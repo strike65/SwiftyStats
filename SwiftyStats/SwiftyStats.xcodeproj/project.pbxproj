@@ -90,7 +90,7 @@
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FEA82381F76C95F005E4349 /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FEA82431F76C9F6005E4349 /* SSConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSConstants.swift; sourceTree = "<group>"; };
@@ -172,6 +172,7 @@
 				9FEA82401F76C9F6005E4349 /* CommonSource */,
 				9FEA825D1F76CA06005E4349 /* CommonTests */,
 				9F82D3A41F1E8F19001BFC9D /* Products */,
+				9FBB8AAC1F76D76500ED8755 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -180,9 +181,16 @@
 			children = (
 				9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */,
 				9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */,
-				9FEA82381F76C95F005E4349 /* SwiftyStats.framework */,
+				9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9FBB8AAC1F76D76500ED8755 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		9FEA82401F76C9F6005E4349 /* CommonSource */ = {
@@ -316,7 +324,7 @@
 			);
 			name = SwiftyStatsMobile;
 			productName = SwiftyStatsMobile;
-			productReference = 9FEA82381F76C95F005E4349 /* SwiftyStats.framework */;
+			productReference = 9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -325,7 +333,7 @@
 		9F82D39A1F1E8F19001BFC9D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = VTSoftware;
 				TargetAttributes = {
@@ -599,7 +607,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
@@ -623,7 +632,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
@@ -687,8 +697,9 @@
 				INFOPLIST_FILE = CommonSource/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
-				PRODUCT_NAME = SwiftyStats;
+				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -715,8 +726,9 @@
 				INFOPLIST_FILE = CommonSource/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
-				PRODUCT_NAME = SwiftyStats;
+				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

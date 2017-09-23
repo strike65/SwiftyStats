@@ -72,15 +72,29 @@ func fractionalPart(_ value: Double) -> Double {
 /// Tests, if a value is numeric
 /// - Paramter value: A value of type T
 func isNumber<T>(_ value: T) -> Bool {
-    if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
-        return true
-    }
-    else {
-        return false
-    }
+    #if arch(arm) || arch(arm64)
+        if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is NSNumber || value is NSDecimalNumber ) {
+            return true
+        }
+        else {
+            return false
+        }
+    #else
+        if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
+            return true
+        }
+        else {
+            return false
+        }
+    #endif
 }
 
 func castValueToDouble<T>(_ value: T) -> Double? {
+    #if arch(i386) || arch(x86_64)
+        if value is Float80 {
+            return Double(value as! Float80)
+        }
+    #endif
     if value is Int {
         return Double(value as! Int)
     }
@@ -116,9 +130,6 @@ func castValueToDouble<T>(_ value: T) -> Double? {
     }
     else if value is Float32 {
         return Double(value as! Float32)
-    }
-    else if value is Float80 {
-        return Double(value as! Float80)
     }
     else if value is Double {
         return value as? Double
