@@ -116,10 +116,18 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     var wi: Double
     var wincr: Double
     var xx: Double
-    var blb: Float80
-    var bub: Float80
-    var einsum: Float80
-    var elsum: Float80
+    if #available(iOS 9.0 , *) {
+        var blb: Double
+        var bub: Double
+        var einsum: Double
+        var elsum: Double
+    }
+    else {
+        var blb: Float80
+        var bub: Float80
+        var einsum: Float80
+        var elsum: Float80
+    }
     var j: Int
     var jj: Int
     qsqz = w * 0.5
