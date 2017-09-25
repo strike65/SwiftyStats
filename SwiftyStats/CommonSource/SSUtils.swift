@@ -72,15 +72,16 @@ func fractionalPart(_ value: Double) -> Double {
 /// Tests, if a value is numeric
 /// - Paramter value: A value of type T
 func isNumber<T>(_ value: T) -> Bool {
+    let valueMirror = Mirror(reflecting: value)
     #if arch(arm) || arch(arm64)
-        if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is NSNumber || value is NSDecimalNumber ) {
+        if (valueMirror.subjectType == Int.self || valueMirror.subjectType == UInt.self || valueMirror.subjectType == Double.self || valueMirror.subjectType == Int8.self || valueMirror.subjectType == Int16.self || valueMirror.subjectType == Int32.self || valueMirror.subjectType == Int64.self || valueMirror.subjectType == UInt8.self || valueMirror.subjectType == UInt16.self || valueMirror.subjectType == UInt32.self || valueMirror.subjectType == UInt64.self || valueMirror.subjectType == Float.self || valueMirror.subjectType == Float32.self || valueMirror.subjectType == NSNumber.self || valueMirror.subjectType == NSDecimalNumber.self ) {
             return true
         }
         else {
             return false
         }
     #else
-        if (value is Int || value is UInt || value is Double || value is Int8 || value is Int16 || value is Int32 || value is Int64 || value is UInt8 || value is UInt16 || value is UInt32 || value is UInt64 || value is Float || value is Float32 || value is Float80 || value is NSNumber || value is NSDecimalNumber ) {
+        if (valueMirror.subjectType == Int.self || valueMirror.subjectType == UInt.self || valueMirror.subjectType == Double.self || valueMirror.subjectType == Int8.self || valueMirror.subjectType == Int16.self || valueMirror.subjectType == Int32.self || valueMirror.subjectType == Int64.self || valueMirror.subjectType == UInt8.self || valueMirror.subjectType == UInt16.self || valueMirror.subjectType == UInt32.self || valueMirror.subjectType == UInt64.self || valueMirror.subjectType == Float.self || valueMirror.subjectType == Float32.self || valueMirror.subjectType == Float80.self || valueMirror.subjectType == NSNumber.self || valueMirror.subjectType == NSDecimalNumber.self ) {
             return true
         }
         else {
