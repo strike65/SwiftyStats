@@ -53,6 +53,8 @@ extension SSExamine {
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
         }
+        NSKeyedArchiver.setClassName("SwiftyStats.SSExamine" + ".\(SSElement.self)", for: SSExamine<SSElement>.classForKeyedArchiver()!)
+        print(NSKeyedArchiver.className(for: SSExamine<SSElement>.self)!)
         result = NSKeyedArchiver.archiveRootObject(self, toFile: fullFilename)
         return result
     }
@@ -67,7 +69,17 @@ extension SSExamine {
             os_log("File not readable", log: log_stat ,type: .error)
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
-        let result: SSExamine<SSElement>? = NSKeyedUnarchiver.unarchiveObject(withFile: fullFilename) as? SSExamine<SSElement>
-        return result
+        NSKeyedUnarchiver.setClass(SSExamine<SSElement>.classForKeyedArchiver(), forClassName: "SwiftyStats.SSExamine" + ".\(SSElement.self)")
+        print(NSKeyedUnarchiver.class(forClassName: "SwiftyStats.SSExamine" +  ".\(SSElement.self)")!)
+        let result: SSExamine<SSElement>
+        
+        if let ex = NSKeyedUnarchiver.unarchiveObject(withFile: fullFilename) {
+            result = ex as! SSExamine<SSElement>
+            return result
+        }
+        else {
+            return nil
+        }
+//        let result: SSExamine<SSElement>? = NSKeyedUnarchiver.unarchiveObject(withFile: fullFilename) as? SSExamine<SSElement>
     }
 }

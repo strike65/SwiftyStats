@@ -126,7 +126,8 @@ class SwiftyStatsTests: XCTestCase {
         let examineInt = try SSExamine<Int>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
         let examineIntOutliers = try SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
         let tempDir = NSTemporaryDirectory()
-        let filename = NSUUID().uuidString
+//        let filename = NSUUID().uuidString
+            let filename = "SwiftyStats.test"
         let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
         
         XCTAssert(try! examineInt.saveTo(fileName: url?.path, atomically: true, overwrite: true, separator: ",", stringEncoding: .utf8))
