@@ -116,10 +116,17 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     var wi: Double
     var wincr: Double
     var xx: Double
-    var blb: Float80
-    var bub: Float80
-    var einsum: Float80
-    var elsum: Float80
+    #if (arch(arm) || arch(arm64))
+        var blb: Double
+        var bub: Double
+        var einsum: Double
+        var elsum: Double
+    #else
+        var blb: Float80
+        var bub: Float80
+        var einsum: Float80
+        var elsum: Float80
+    #endif
     var j: Int
     var jj: Int
     qsqz = w * 0.5
@@ -158,23 +165,36 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     /* equal-length intervals are used. */
     
     /* blb and bub are lower and upper limits of integration. */
-    
-    blb = Float80(qsqz)
+    #if (arch(arm) || arch(arm64))
+        blb = qsqz
+    #else
+        blb = Float80(qsqz)
+    #endif
     binc = (bb - qsqz) / wincr
-    bub = blb + Float80(binc)
+    #if (arch(arm) || arch(arm64))
+        bub = blb + binc
+    #else
+        bub = blb + Float80(binc)
+    #endif
     einsum = 0.0
     /* integrate over each interval */
     
     cc1 = cc - 1.0
     wi = 1.0
     while wi <= wincr {
-//    for (wi = 1; wi <= wincr; wi +=1) {
         elsum = 0.0;
-        a = Double(Float80(0.5) * (bub + blb))
-        
+        #if (arch(arm) || arch(arm64))
+            a = Double(0.5 * (bub + blb))
+        #else
+            a = Double(Float80(0.5) * (bub + blb))
+        #endif
         /* legendre quadrature with order = nleg */
         
-        b = Double(Float80(0.5) * (bub - blb))
+        #if (arch(arm) || arch(arm64))
+            b = Double(0.5 * (bub - blb))
+        #else
+            b = Double(Float80(0.5) * (bub - blb))
+        #endif
         jj = 1
         while jj <= nleg {
             if (ihalf < jj) {
@@ -194,8 +214,6 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
             if (qexpo > C3) {
                 break
             }
-            
-//            pplus = 2 * SSProbabilityDistributions.cdfStandardNormalDist(u: ac)
             do {
                 pplus = try SSProbabilityDistributions.cdfNormalDist(x: ac, mean: 0, variance: 1) * 2.0 // SSProbabilityDistributions.cdfStandardNormalDist(u: ac)
                 pminus = try SSProbabilityDistributions.cdfNormalDist(x: ac, mean: w, variance: 1) * 2.0  // pnorm(ac, w,  1., 1,0)
@@ -210,14 +228,26 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
             rinsum = (pplus * 0.5) - (pminus * 0.5);
             if rinsum >= exp(C1 / cc1) {
                 rinsum = (aleg[j-1] * exp(-(0.5 * qexpo))) * pow(rinsum, cc1)
-                elsum += Float80(rinsum)
+                #if arch(arm) || arch(arm64)
+                    elsum += rinsum
+                #else
+                    elsum += Float80(rinsum)
+                #endif
             }
             jj += 1
         }
-        elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80(SQRT2PIINV))
+        #if arch(arm) || arch(arm64)
+            elsum *= (((2.0 * b) * cc) * SQRT2PIINV)
+        #else
+            elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80(SQRT2PIINV))
+        #endif
         einsum += elsum
         blb = bub
-        bub += Float80(binc)
+        #if arch(arm) || arch(arm64)
+            bub += binc
+        #else
+            bub += Float80(binc)
+        #endif
         wi += 1.0
     }
     /* if pr_w ^ rr < 9e-14, then return 0 */

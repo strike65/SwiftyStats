@@ -28,13 +28,13 @@ import os.log
 
 /// SSExamine
 /// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data conform to the protocols "Hashable" and "Comparable".
-/// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type actually being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.
-public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSCoding where SSElement: Hashable, SSElement: Comparable {
+/// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type actually being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.0
+public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable, SSElement: Comparable {
     
     // MARK: OPEN/PUBLIC VARS
 
     /// User defined tag
-    public var tag: Any?
+    public var tag: String?
     
     /// Human readable description
     public var descriptionString: String?
@@ -154,7 +154,12 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         super.init()
         if let n = name {
             self.name = n
+//            self.tag = n
         }
+//        else {
+//            self.tag = UUID.init().uuidString
+//            self.name = self.tag
+//        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
@@ -172,10 +177,12 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         super.init()
         if let n = name {
             self.name = n
+//            self.tag = n
         }
-        else {
-            self.name = nil
-        }
+//        else {
+//            self.name = UUID.init().uuidString
+//            self.tag = self.name
+//        }
         self.initializeWithArray(array)
     }
     
@@ -227,6 +234,48 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
             return nil
         }
     }
+    
+    /// Exports the object as JSON to the given path using the specified encoding.
+    /// - Parameter path: Path to the file
+    /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
+    /// - Parameter overwrite: If true, an existing file will be overwritten.
+    /// - Parameter stringEncoding: String encoding
+    /// - Throws: SSSwiftyStatsError if the file could not be written
+    public func exportJSONString(fileName path: String!, atomically: Bool! = true, overwrite: Bool!, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
+        let fileManager = FileManager.default
+        let fullName = NSString(string: path).expandingTildeInPath
+        if fileManager.fileExists(atPath: fullName) {
+            if !overwrite {
+                os_log("File already exists", log: log_stat, type: .error)
+                throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
+            }
+            else {
+                do {
+                    try fileManager.removeItem(atPath: fullName)
+                }
+                catch {
+                    os_log("Can't remove file", log: log_stat, type: .error)
+                    throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
+                }
+            }
+        }
+        let jsonEncode = JSONEncoder()
+        do {
+            let data = try jsonEncode.encode(self)
+            if let jsonString = String.init(data: data, encoding: stringEncoding) {
+                try jsonString.write(to: URL.init(fileURLWithPath: fullName), atomically: true, encoding: stringEncoding)
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch {
+            os_log("Unable to write json", log: log_stat, type: .error)
+            return false
+        }
+    }
+
     
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
@@ -340,40 +389,46 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, NSC
         isNumeric = true
     }
     
-    
-    // MARK: NSCoding protocol
-    public func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.sampleSize, forKey: "count")
-        aCoder.encode(tag, forKey: "tag")
-        aCoder.encode(descriptionString?.data(using: String.Encoding.unicode), forKey: "descriptionString")
-        aCoder.encode(name, forKey: "name")
-        aCoder.encode(alpha, forKey:"alpha")
-        aCoder.encode(levelOfMeasurement.rawValue, forKey: "levelOfMeasurement")
-        aCoder.encode(relFrequencies, forKey: "relFrequencies")
-        aCoder.encode(sequence, forKey: "sequence")
-        aCoder.encode(items, forKey: "items")
-        aCoder.encode(cumRelFrequencies, forKey: "cumRelFrequencies")
-        aCoder.encode(isNumeric, forKey: "isNumeric")
-        aCoder.encode(hasChanges, forKey: "hasChanges")
-        aCoder.encode(SSStatisticsFileVersionString, forKey: "fileVersionString")
+//    // MARK: Codable protocol
+    private enum CodingKeys: String, CodingKey {
+        case tag = "TAG"
+        case name
+        case descriptionString
+        case alpha
+        case levelOfMeasurement
+        case isNumeric
+        case data
     }
-    
-    
-    required public init?(coder aDecoder: NSCoder) {
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.tag, forKey: .tag)
+        try container.encodeIfPresent(self.descriptionString, forKey: .descriptionString)
+        try container.encodeIfPresent(self.alpha, forKey: .alpha)
+        try container.encodeIfPresent(self.levelOfMeasurement.rawValue, forKey: .levelOfMeasurement)
+        try container.encodeIfPresent(self.isNumeric, forKey: .isNumeric)
+        try container.encodeIfPresent(self.elementsAsArray(sortOrder: .original), forKey: .data)
+    }
+
+
+    required public init(from decoder: Decoder) throws {
         super.init()
-        count = aDecoder.decodeInteger(forKey: "count")
-        relFrequencies = aDecoder.decodeObject(forKey: "relFrequencies") as! Dictionary<SSElement, Double>
-        cumRelFrequencies = aDecoder.decodeObject(forKey: "cumRelFrequencies") as! Dictionary<SSElement, Double>
-        sequence = aDecoder.decodeObject(forKey: "sequence") as! Dictionary<SSElement, Array<Int>>
-        items = aDecoder.decodeObject(forKey: "items") as! Dictionary<SSElement, Int>
-        tag = aDecoder.decodeObject(forKey: "tag")
-        name = aDecoder.decodeObject(forKey: "name") as? String
-        descriptionString = aDecoder.decodeObject(forKey: "descriptionString") as? String
-        alpha = aDecoder.decodeObject(forKey: "alpha") as! Double
-        isNumeric = aDecoder.decodeObject(forKey: "isNumeric") as! Bool
-        hasChanges = aDecoder.decodeObject(forKey: "hasChanges") as! Bool
-        levelOfMeasurement = SSLevelOfMeasurement(rawValue: aDecoder.decodeInteger(forKey: "levelOfMeasurement"))
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.tag = try container.decodeIfPresent(String.self, forKey: .tag)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.descriptionString = try container.decodeIfPresent(String.self, forKey: .descriptionString)
+        self.alpha = try container.decodeIfPresent(Double.self, forKey: .alpha)
+        if let lm = try container.decodeIfPresent(Int.self, forKey: .levelOfMeasurement) {
+            self.levelOfMeasurement = SSLevelOfMeasurement(rawValue:lm)
+        }
+        self.isNumeric = try container.decodeIfPresent(Bool.self, forKey: .isNumeric)
+        if let data: Array<SSElement> = try container.decodeIfPresent(Array<SSElement>.self, forKey: .data) {
+            self.initializeWithArray(data)
+        }
     }
+    
+
     
     // MARK: NSCopying
     public func copy(with zone: NSZone? = nil) -> Any {

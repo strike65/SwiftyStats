@@ -19,7 +19,6 @@ extension SSExamine {
     /// - Parameter overwrite: If yes an existing file will be overwritten.
     /// - Throws: SSSwiftyStatsError.posixError (file can'r be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
     public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
-        var result: Bool = false
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         let dir: String = NSString(string: fullFilename).deletingLastPathComponent
@@ -53,10 +52,16 @@ extension SSExamine {
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
         }
-        NSKeyedArchiver.setClassName("SwiftyStats.SSExamine" + ".\(SSElement.self)", for: SSExamine<SSElement>.classForKeyedArchiver()!)
-        print(NSKeyedArchiver.className(for: SSExamine<SSElement>.self)!)
-        result = NSKeyedArchiver.archiveRootObject(self, toFile: fullFilename)
-        return result
+        let jsonEncode = JSONEncoder()
+        let data = try jsonEncode.encode(self)
+        do {
+            try data.write(to: URL.init(fileURLWithPath: fullFilename), options: Data.WritingOptions.atomic)
+            return true
+        }
+        catch {
+            os_log("Unable to write data", log: log_stat, type: .error)
+            return false
+        }
     }
     
     /// Initializes a new table from an archive saved by archiveTo(filePath path:overwrite:).
@@ -69,17 +74,15 @@ extension SSExamine {
             os_log("File not readable", log: log_stat ,type: .error)
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
-        NSKeyedUnarchiver.setClass(SSExamine<SSElement>.classForKeyedArchiver(), forClassName: "SwiftyStats.SSExamine" + ".\(SSElement.self)")
-        print(NSKeyedUnarchiver.class(forClassName: "SwiftyStats.SSExamine" +  ".\(SSElement.self)")!)
-        let result: SSExamine<SSElement>
-        
-        if let ex = NSKeyedUnarchiver.unarchiveObject(withFile: fullFilename) {
-            result = ex as! SSExamine<SSElement>
+        do {
+            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: fullFilename))
+            let jsonDecoder = JSONDecoder()
+            let result = try jsonDecoder.decode(SSExamine<SSElement>.self, from: data)
             return result
         }
-        else {
+        catch {
+            os_log("Failure", log: log_stat ,type: .error)
             return nil
         }
-//        let result: SSExamine<SSElement>? = NSKeyedUnarchiver.unarchiveObject(withFile: fullFilename) as? SSExamine<SSElement>
     }
 }

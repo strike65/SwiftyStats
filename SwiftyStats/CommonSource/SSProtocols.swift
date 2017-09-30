@@ -58,5 +58,7 @@ public protocol SSDataFrameContainer {
     var columns: Int { get }
     var sampleSize: Int { get  }
     var isEmpty: Bool { get }
-    mutating func append(_ examine: Examine)
+    mutating func append(_ examine: Examine, name: String?) throws
+    mutating func remove(name: String!) -> Examine?
+    mutating func removeAll()
 }

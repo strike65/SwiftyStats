@@ -127,7 +127,7 @@ class SwiftyStatsTests: XCTestCase {
         let examineIntOutliers = try SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
         let tempDir = NSTemporaryDirectory()
 //        let filename = NSUUID().uuidString
-            let filename = "SwiftyStats.test"
+        let filename = "test.dat"
         let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
         
         XCTAssert(try! examineInt.saveTo(fileName: url?.path, atomically: true, overwrite: true, separator: ",", stringEncoding: .utf8))
@@ -396,6 +396,15 @@ class SwiftyStatsTests: XCTestCase {
         let _ = try! df.exportCSV(path: resPath + "/test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf16, atomically: true)
         var df2:SSDataFrame<Double>
         df2 = try! SSDataFrame<Double>.dataFrame(fromFile: resPath + "/test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, scanDouble)
+        let filename = "test.dat"
+        let tempDir = NSTemporaryDirectory()
+        let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
+        XCTAssert(try! df2.archiveTo(filePath: url?.path, overwrite: true))
+        if let testDataFrame = try! SSDataFrame<Double>.unarchiveFrom(filePath: url?.path) {
+            XCTAssert(testDataFrame.isEqual(df2))
+        }
+        try! FileManager.default.removeItem(at: url!)
+
         XCTAssert(df.isEqual(df2))
         var row = df2.rowAtIndex(3)
         XCTAssertEqual(row[0], 0.51, accuracy: 1E-2)
