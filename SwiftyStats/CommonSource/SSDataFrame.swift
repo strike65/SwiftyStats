@@ -44,13 +44,131 @@ import os.log
  ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
 
 */
-public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCopying where SSElement: Comparable, SSElement: Hashable{
+public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable{
     
-    private var data:Array<SSExamine<SSElement>>
-    private var tags: Array<Any>
-    private var cNames: Array<String>
-    private var rows: Int
-    private var cols: Int
+    public typealias Examine = SSExamine<SSElement>
+    
+    
+    
+    // coding keys
+    private enum CodingKeys: String, CodingKey {
+        case data = "ExamineArray"
+        case tags
+        case cnames
+        case nrows
+        case ncolumns
+    }
+    
+    /// Required func to conform to Codable protocol
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.data, forKey: .data)
+        try container.encodeIfPresent(self.tags, forKey: .tags)
+        try container.encodeIfPresent(self.cNames, forKey: .cnames)
+        try container.encodeIfPresent(self.rows, forKey: .nrows)
+        try container.encodeIfPresent(self.cols, forKey: .ncolumns)
+    }
+
+    /// Required func to conform to Codable protocol
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let d = try container.decodeIfPresent(Array<SSExamine<SSElement>>.self, forKey: .data) {
+            self.data = d
+        }
+        if let t = try container.decodeIfPresent(Array<String>.self, forKey: .tags) {
+            self.tags = t
+        }
+        if let n = try container.decodeIfPresent(Array<String>.self, forKey: .cnames) {
+            self.cNames = n
+        }
+        if let r = try container.decodeIfPresent(Int.self, forKey: .nrows) {
+            self.rows = r
+        }
+        if let c = try container.decodeIfPresent(Int.self, forKey: .ncolumns) {
+            self.cols = c
+        }
+
+    }
+    
+    /// Saves the dataframe to filePath using JSONEncoder
+    /// - Parameter path: The full qualified filename.
+    /// - Parameter overwrite: If yes an existing file will be overwritten.
+    /// - Throws: SSSwiftyStatsError.posixError (file can'r be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
+    public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
+        let fm: FileManager = FileManager.default
+        let fullFilename: String = NSString(string: path).expandingTildeInPath
+        let dir: String = NSString(string: fullFilename).deletingLastPathComponent
+        var isDir = ObjCBool(false)
+        if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
+            if !isDir.boolValue || path.characters.count == 0{
+                os_log("No writeable path found", log: log_stat ,type: .error)
+                throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
+            }
+            os_log("File doesn't exist", log: log_stat ,type: .error)
+            throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
+        }
+        if fm.fileExists(atPath: fullFilename) {
+            if overwrite {
+                if fm.isWritableFile(atPath: fullFilename) {
+                    do {
+                        try fm.removeItem(atPath: fullFilename)
+                    }
+                    catch {
+                        os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                        throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
+                    }
+                }
+                else {
+                    os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                    throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
+                }
+            }
+            else {
+                os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
+            }
+        }
+        let jsonEncode = JSONEncoder()
+        let d = try jsonEncode.encode(self)
+        do {
+            try d.write(to: URL.init(fileURLWithPath: fullFilename), options: Data.WritingOptions.atomic)
+            return true
+        }
+        catch {
+            os_log("Unable to write data", log: log_stat, type: .error)
+            return false
+        }
+    }
+
+    /// Initializes a new dataframe from an archive saved by archiveTo(filePath path:overwrite:).
+    /// - Parameter path: The full qualified filename.
+    /// - Throws: SSSwiftyStatError.fileNotReadable
+    public class func unarchiveFrom(filePath path: String!) throws -> SSDataFrame<SSElement>? {
+        let fm: FileManager = FileManager.default
+        let fullFilename: String = NSString(string: path).expandingTildeInPath
+        if !fm.isReadableFile(atPath: fullFilename) {
+            os_log("File not readable", log: log_stat ,type: .error)
+            throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
+        }
+        do {
+            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: fullFilename))
+            let jsonDecoder = JSONDecoder()
+            let result = try jsonDecoder.decode(SSDataFrame<SSElement>.self, from: data)
+            return result
+        }
+        catch {
+            os_log("Failure", log: log_stat ,type: .error)
+            return nil
+        }
+    }
+
+    
+    
+    private var data:Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
+    private var tags: Array<String> = Array<String>()
+    private var cNames: Array<String> = Array<String>()
+    private var rows: Int = 0
+    private var cols: Int = 0
     
     public var examines: Array<SSExamine<SSElement>> {
         get {
@@ -101,7 +219,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     init(examineArray: Array<SSExamine<SSElement>>!) throws {
         let tempSampleSize = examineArray.first!.sampleSize
         data = Array<SSExamine<SSElement>>.init()
-        tags = Array<Any>()
+        tags = Array<String>()
         cNames = Array<String>()
         var i: Int = 0
         for a in examineArray {
@@ -120,7 +238,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
                 tags.append(t)
             }
             else {
-                tags.append("NA" as Any)
+                tags.append("NA")
             }
             if let n = a.name {
                 if let _ = cNames.index(of: n) {
@@ -147,17 +265,18 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
     
     override public init() {
         cNames = Array<String>()
-        tags = Array<Any>()
+        tags = Array<String>()
         data = Array<SSExamine<SSElement>>()
         rows = 0
         cols = 0
         super.init()
     }
+
     /// Appends a column
     /// - Parameter examine: The SSExamine object
     /// - Parameter name: Name of column
     /// - Throws: SSSwiftyStatsError examine.sampleSize != self.rows
-    public func append(examine: SSExamine<SSElement>, name: String?) throws {
+    public func append(_ examine: SSExamine<SSElement>, name: String?) throws {
         if examine.sampleSize != self.rows {
             os_log("Sample sizes are expected to be equal", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -254,23 +373,23 @@ public class SSDataFrame<SSElement>: NSObject, NSCoding, NSCopying, NSMutableCop
         }
     }
     
-    // MARK: NSCoding protocol
-    public func encode(with aCoder: NSCoder) {
-        aCoder.encode(cols, forKey: "cols")
-        aCoder.encode(rows, forKey: "rows")
-        aCoder.encode(cNames, forKey: "cNames")
-        aCoder.encode(data, forKey: "data")
-        aCoder.encode(tags, forKey:"tags")
-    }
-    
-    
-    required public init?(coder aDecoder: NSCoder) {
-        rows = aDecoder.decodeInteger(forKey: "rows")
-        cols = aDecoder.decodeInteger(forKey: "cols")
-        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
-        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement>>
-        tags = aDecoder.decodeObject(forKey: "tags") as! Array<Any>
-    }
+//    // MARK: NSCoding protocol
+//    public func encode(with aCoder: NSCoder) {
+//        aCoder.encode(cols, forKey: "cols")
+//        aCoder.encode(rows, forKey: "rows")
+//        aCoder.encode(cNames, forKey: "cNames")
+//        aCoder.encode(data, forKey: "data")
+//        aCoder.encode(tags, forKey:"tags")
+//    }
+//
+//
+//    required public init?(coder aDecoder: NSCoder) {
+//        rows = aDecoder.decodeInteger(forKey: "rows")
+//        cols = aDecoder.decodeInteger(forKey: "cols")
+//        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
+//        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement>>
+//        tags = aDecoder.decodeObject(forKey: "tags") as! Array<String>
+//    }
     
     // NSCopying / NSMutableCopying
     public func copy(with zone: NSZone? = nil) -> Any {

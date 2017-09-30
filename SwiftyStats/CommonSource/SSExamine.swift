@@ -241,6 +241,48 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         }
     }
     
+    /// Exports the object as JSON to the given path using the specified encoding.
+    /// - Parameter path: Path to the file
+    /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
+    /// - Parameter overwrite: If true, an existing file will be overwritten.
+    /// - Parameter stringEncoding: String encoding
+    /// - Throws: SSSwiftyStatsError if the file could not be written
+    public func exportJSONString(fileName path: String!, atomically: Bool! = true, overwrite: Bool!, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
+        let fileManager = FileManager.default
+        let fullName = NSString(string: path).expandingTildeInPath
+        if fileManager.fileExists(atPath: fullName) {
+            if !overwrite {
+                os_log("File already exists", log: log_stat, type: .error)
+                throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
+            }
+            else {
+                do {
+                    try fileManager.removeItem(atPath: fullName)
+                }
+                catch {
+                    os_log("Can't remove file", log: log_stat, type: .error)
+                    throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
+                }
+            }
+        }
+        let jsonEncode = JSONEncoder()
+        do {
+            let data = try jsonEncode.encode(self)
+            if let jsonString = String.init(data: data, encoding: stringEncoding) {
+                try jsonString.write(to: URL.init(fileURLWithPath: fullName), atomically: true, encoding: stringEncoding)
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch {
+            os_log("Unable to write json", log: log_stat, type: .error)
+            return false
+        }
+    }
+
+    
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
     /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
