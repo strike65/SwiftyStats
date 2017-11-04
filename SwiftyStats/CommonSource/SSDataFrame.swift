@@ -100,7 +100,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         let dir: String = NSString(string: fullFilename).deletingLastPathComponent
         var isDir = ObjCBool(false)
         if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
-            if !isDir.boolValue || path.characters.count == 0{
+            if !isDir.boolValue || path.count == 0 {
                 os_log("No writeable path found", log: log_stat ,type: .error)
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
             }
@@ -437,7 +437,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                         string = string + cNames[c] + sep
                     }
                 }
-                string = String(string.characters.dropLast())
+                string = String.init(string.dropLast())
                 string += "\n"
             }
             for r in 0..<self.rows {
@@ -449,10 +449,10 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                         string = string + "\(String(describing: self.data[c][r]!))" + sep
                     }
                 }
-                string = String(string.characters.dropLast())
+                string = String.init(string.dropLast())
                 string += "\n"
             }
-            string = String(string.characters.dropLast())
+            string = String.init(string.dropLast())
             let fileManager = FileManager.default
             let fullName = NSString(string: path).expandingTildeInPath
             if fileManager.fileExists(atPath: fullName) {
@@ -503,7 +503,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             var importedString = try String.init(contentsOfFile: fullFilename, encoding: stringEncoding)
             if let lastScalar = importedString.unicodeScalars.last {
                 if CharacterSet.newlines.contains(lastScalar) {
-                    importedString = String(importedString.characters.dropLast())
+                    importedString = String(importedString.dropLast())
                 }
             }
             let lines: Array<String> = importedString.components(separatedBy: CharacterSet.newlines)

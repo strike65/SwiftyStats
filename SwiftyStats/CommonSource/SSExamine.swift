@@ -205,10 +205,10 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         do {
             let importedString = try String.init(contentsOfFile: fullFilename, encoding: stringEncoding)
             if importedString.contains(separator) {
-                if importedString.characters.count > 0 {
+                if importedString.count > 0 {
                     let separatedStrings: Array<String> = importedString.components(separatedBy: separator)
                     for string in separatedStrings {
-                        if string.characters.count > 0 {
+                        if string.count > 0 {
                             if let value = parser(string) {
                                 numberArray.append(value)
                             }
@@ -350,7 +350,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
                 }
             }
             else {
-                for c: Character in string.characters {
+                for c: Character in string {
                     append(String(c) as! SSElement)
                 }
             }
@@ -597,7 +597,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
                     }
                 }
                 else {
-                    for c: Character in text.characters {
+                    for c: Character in text {
                         append(String(c) as! SSElement)
                     }
                 }
@@ -675,13 +675,13 @@ extension SSExamine {
             }
         }
         if let _ = del {
-            if del!.characters.count > 0 {
-                for _ in 1...del!.characters.count {
-                    res = String(res.characters.dropLast())
+            if del!.count > 0 {
+                for _ in 1...del!.count {
+                    res = String(res.dropLast())
                 }
             }
         }
-        if res.characters.count > 0 {
+        if res.count > 0 {
             return res
         }
         else {

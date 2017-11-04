@@ -24,7 +24,7 @@ extension SSExamine {
         let dir: String = NSString(string: fullFilename).deletingLastPathComponent
         var isDir = ObjCBool(false)
         if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
-            if !isDir.boolValue || path.characters.count == 0{
+            if !isDir.boolValue || path.count == 0 {
                 os_log("No writeable path found", log: log_stat ,type: .error)
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
             }
