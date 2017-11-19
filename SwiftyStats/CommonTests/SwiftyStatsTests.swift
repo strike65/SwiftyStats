@@ -74,7 +74,8 @@ class SwiftyStatsTests: XCTestCase {
     func testTukeyKramer() {
         // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
         let df = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
-        var mmt: SSOneWayANOVATestResult = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df, alpha: 0.05)!
+//        var mmt: SSOneWayANOVATestResult = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df, alpha: 0.05)!
+        var mmt: SSOneWayANOVATestResult
         var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
