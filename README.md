@@ -11,7 +11,7 @@ SwiftyStats is a generic statistical framework completely written in Swift 4. Th
 
 
 # SSExamine
-This is the central class. SSExamine objects encapsulate your data and delivers various statistics. To initialise a new instance follow the steps below.
+This is the central class. SSExamine objects encapsulate your data and delivers various statistics. To initialize a new instance follow the steps below.
 
 
 ```Swift
@@ -29,35 +29,23 @@ let testString = "This string must be analyzed!"
 let stringAnalyze = VTExamine<String>(withObject: data, levelOfMeasurement: .nominal, characterSet: CharacterSet.alphanumerics)
 print("\(stringAnalyze.frequency("i")")
 ```
-SSExamine objects can be stored on disk. You can then restore an SSExamine object from the hard drive:
+SSExamine objects can be stored and restored:
+
 ```Swift
 do {
 	try myExamineObject.archiveTo(filePath: "~/data/myexamine.ssexamine", overwrite: true)
 }
 catch {
-// error handling
+    // error handling
 }
 ...
 do {
 	newObject: SSExamine<Double> = try SSExamine<Double>.unarchiveFrom(filePath: "~/data/myexamine.ssexamine")
 }
 catch {
-// error handling
+    // error handling
 }
 ```
-
-You can get your data as an array in various sort orders (ascending, descending, as entered [original], unsorted):
-
-```Swift
-// all elements as array
-myArray:Array<Double> = myExamineObject.elementsAsArray(sortOrder: .original)! as Array<Double>
-myArray:Array<Double> = myExamineObject.elementsAsArray(sortOrder: .ascending)! as Array<Double>
-myArray:Array<Double> = myExamineObject.elementsAsArray(sortOrder: .descending)! as Array<Double>
-myArray:Array<Double> = myExamineObject.elementsAsArray(sortOrder: .none)! as Array<Double>
-// unique elements as array
-myArray:Array<Double> = myExamineObject.uniqueElementsAsArray(sortOrder: .ascending)! as Array<Double>
-```
-
 
 ## Obtainable Statistics
 (This list is not exhaustive.)
