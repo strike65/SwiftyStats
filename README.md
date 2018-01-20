@@ -1,9 +1,14 @@
 ![Version](https://img.shields.io/badge/version-0.5.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)
 # SwiftyStats
-SwiftyStats is a generic statistical framework completely written in Swift 3. The framework is basically a port from an existing Objective C framework I've written years ago. The original framework includes often used statistical routines.
+SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The original framework includes often used statistical routines. The project includes a macOS and iOS target.
 
 # Installation
-To include the framework in your project, just clone the repo and add SwiftyStats to your project. Don't forgett to aupdate your build phases (Target Dependencies) and link your target against SwiftyStats.
+- clone the repo
+- drag the SwiftyStats.xcodeproj into your project
+- add "SwiftyStats"/"SwiftyStatsMobile" to ``` "Targets" -> "Build Phases" -> "Target Dependencies "```
+- add "SwiftyStats"/"SwiftyStatsMobile" to ```"Targets" -> "Build Phases" -> "Link Binary With Libraries"```
+- add "SwiftyStats"/"SwiftyStatsMobile" to ```"Targets" -> "Build Phases" -> "Embed Frameworks"```
+
 
 # SSExamine
 This is the central class. SSExamine objects encapsulate your data and delivers various statistics. To initialise a new instance follow the steps below.
