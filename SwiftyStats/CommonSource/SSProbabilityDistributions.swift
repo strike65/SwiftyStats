@@ -292,7 +292,7 @@ public class SSProbabilityDistributions {
      END
     */
     
-    /// Returns the quantile function of the standard Gaussian distribution. Uses the algorithm at
+    /// Returns the quantile function of the standard Gaussian distribution. Uses algorithm AS241 at
     /// http://lib.stat.cmu.edu/apstat/241 (ALGORITHM AS241  APPL. STATIST. (1988) VOL. 37, NO. 3, 477-484.)
     /// - Parameter p: P
     /// - Throws: SSSwiftyStatsError if p < 0.0 or p > 1
