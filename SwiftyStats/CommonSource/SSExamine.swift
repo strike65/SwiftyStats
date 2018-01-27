@@ -33,6 +33,9 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     
     // MARK: OPEN/PUBLIC VARS
 
+    /// An object representing the content of the SSExamine instance (experimental)
+    public var rootObject: Any?
+    
     /// User defined tag
     public var tag: String?
     

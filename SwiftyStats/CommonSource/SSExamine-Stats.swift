@@ -619,17 +619,11 @@ extension SSExamine {
     /// Returns the entropy of the sample. Defined only for nominal or ordinal data
     public var entropy: Double? {
         if !isEmpty {
-//            if self.levelOfMeasurement == .ordinal || self.levelOfMeasurement == .nominal {
-                var s: Double = 0.0
-                for item in self.uniqueElements(sortOrder: .none)! {
-                    s += self.rFrequency(item) * log2(self.rFrequency(item))
-                }
-                return -s
-//            }
-//            else {
-//                // entropy is not defined for levels other than .nominal or .ordinal
-//                return nil
-//            }
+            var s: Double = 0.0
+            for item in self.uniqueElements(sortOrder: .none)! {
+                s += self.rFrequency(item) * log2(self.rFrequency(item))
+            }
+            return -s
         }
         else {
             return nil
