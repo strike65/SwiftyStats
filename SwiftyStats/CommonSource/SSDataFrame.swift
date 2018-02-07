@@ -29,7 +29,7 @@ import Foundation
 import os.log
 
 // Defines a structure holding multiple SSExamine objects:
-// Each column contains an SSExamine object. That way we can assign different samples to one column.
+// Each column contains an SSExamine object.
 /*
  Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:
  

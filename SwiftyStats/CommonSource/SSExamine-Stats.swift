@@ -9,6 +9,7 @@
 import Foundation
 import os.log
 
+
 extension SSExamine {
     
     // MARK: Totals
@@ -57,7 +58,7 @@ extension SSExamine {
             return nil
         }
     }
-    
+
     /// Total of all elements. Returns Double.nan iff data are non-numeric.
     public var total: Double? {
         if isArithmetic {
