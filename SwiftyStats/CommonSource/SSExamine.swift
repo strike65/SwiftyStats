@@ -195,7 +195,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!, _ parser: (String!) -> SSElement?) throws -> SSExamine<SSElement>? {
+    public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {

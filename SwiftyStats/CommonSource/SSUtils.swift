@@ -245,9 +245,12 @@ func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Compar
 */
 
 
-func scanDouble(string: String!) -> Double? {
+func scanDouble(string: String?) -> Double? {
+    guard string != nil else {
+        return nil
+    }
     var res: Double = 0.0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanDouble(&res) {
         return res
     }
@@ -256,9 +259,12 @@ func scanDouble(string: String!) -> Double? {
     }
 }
 
-func scanDecimal(string: String!) -> Decimal? {
+func scanDecimal(string: String?) -> Decimal? {
+    guard string != nil else {
+        return nil
+    }
     var res: Decimal = 0.0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanDecimal(&res) {
         return res
     }
@@ -267,9 +273,12 @@ func scanDecimal(string: String!) -> Decimal? {
     }
 }
 
-func scanFloat(string: String!) -> Float? {
+func scanFloat(string: String?) -> Float? {
+    guard string != nil else {
+        return nil
+    }
     var res: Float = 0.0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanFloat(&res) {
         return res
     }
@@ -278,9 +287,12 @@ func scanFloat(string: String!) -> Float? {
     }
 }
 
-func scanHexDouble(string: String!) -> Double? {
+func scanHexDouble(string: String?) -> Double? {
+    guard string != nil else {
+        return nil
+    }
     var res: Double = 0.0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanHexDouble(&res) {
         return res
     }
@@ -289,9 +301,12 @@ func scanHexDouble(string: String!) -> Double? {
     }
 }
 
-func scanHexFloat(string: String!) -> Float? {
+func scanHexFloat(string: String?) -> Float? {
+    guard string != nil else {
+        return nil
+    }
     var res: Float = 0.0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanHexFloat(&res) {
         return res
     }
@@ -300,9 +315,12 @@ func scanHexFloat(string: String!) -> Float? {
     }
 }
 
-func scanHexInt32(string: String!) -> UInt32? {
+func scanHexInt32(string: String?) -> UInt32? {
+    guard string != nil else {
+        return nil
+    }
     var res: UInt32 = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanHexInt32(&res) {
         return res
     }
@@ -311,9 +329,12 @@ func scanHexInt32(string: String!) -> UInt32? {
     }
 }
 
-func scanHexInt64(string: String!) -> UInt64? {
+func scanHexInt64(string: String?) -> UInt64? {
+    guard string != nil else {
+        return nil
+    }
     var res: UInt64 = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanHexInt64(&res) {
         return res
     }
@@ -322,9 +343,12 @@ func scanHexInt64(string: String!) -> UInt64? {
     }
 }
 
-func scanInt32(string: String!) -> Int32? {
+func scanInt32(string: String?) -> Int32? {
+    guard string != nil else {
+        return nil
+    }
     var res: Int32 = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanInt32(&res) {
         return res
     }
@@ -334,9 +358,12 @@ func scanInt32(string: String!) -> Int32? {
 }
 
 
-func scanInt64(string: String!) -> Int64? {
+func scanInt64(string: String?) -> Int64? {
+    guard string != nil else {
+        return nil
+    }
     var res: Int64 = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanInt64(&res) {
         return res
     }
@@ -345,9 +372,12 @@ func scanInt64(string: String!) -> Int64? {
     }
 }
 
-func scanUInt64(string: String!) -> UInt64? {
+func scanUInt64(string: String?) -> UInt64? {
+    guard string != nil else {
+        return nil
+    }
     var res: UInt64 = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanUnsignedLongLong(&res) {
         return res
     }
@@ -357,9 +387,12 @@ func scanUInt64(string: String!) -> UInt64? {
 }
 
 
-func scanInt(string: String!) -> Int? {
+func scanInt(string: String?) -> Int? {
+    guard string != nil else {
+        return nil
+    }
     var res: Int = 0
-    let s = Scanner.init(string: string)
+    let s = Scanner.init(string: string!)
     if s.scanInt(&res) {
         return res
     }
@@ -369,7 +402,10 @@ func scanInt(string: String!) -> Int? {
 }
 
 
-func scanString(string: String!) -> String {
+func scanString(string: String?) -> String? {
+    guard string != nil else {
+        return nil
+    }
     return string
 }
 
