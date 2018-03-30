@@ -89,13 +89,19 @@ public func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
     _a = a
     _b = b
     _x = x
+    // compt test value for else if
     if _a.isNaN || _b.isNaN || x.isNaN {
         return Double.nan
     }
-    else if (_x < 0) || (_x > 1) {
+    let s1 = (a + 1)
+    let s2 = (2.0 + b + a)
+    let s3 = (b + 1)
+    let s4 = (2 + b + a)
+    //
+    if (_x < 0) || (_x > 1) {
         return Double.nan
     }
-    else if ((x > (a + 1) / (2.0 + b + a) && ((1 - x) <= ((b + 1) / (2 + b + a) ) ) ) ) {
+    else if ((x > s1 / s2 && ((1 - x) <= (s3 / s4 ) ) ) ) {
         result = 1.0 - betaNormalized(x: 1.0 - x, a: b, b: a)
     }
     else {

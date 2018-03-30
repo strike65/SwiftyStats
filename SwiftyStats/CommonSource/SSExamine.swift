@@ -29,7 +29,7 @@ import os.log
 /// SSExamine
 /// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that the data conform to the protocols "Hashable" and "Comparable".
 /// The available statistics depend on whether the data are numeric or non-numeric. If statistics are requested that are not available for the data type actually being used, Double.nan or nil is returned. Some methods throws an error in such circumstances.0
-public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable, SSElement: Comparable {
+public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable, SSElement: Comparable, SSElement: Codable {
     
     // MARK: OPEN/PUBLIC VARS
 
@@ -341,7 +341,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         initializeSSExamine()
         isNumeric = false
         var index: String.Index = string.startIndex
-        var offset: String.IndexDistance = 0
+        var offset: Int = 0
         if index < string.endIndex {
             if let cs: CharacterSet = characterSet {
                 for scalar in string.unicodeScalars {
@@ -405,28 +405,28 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(self.name, forKey: .name)
-        try container.encodeIfPresent(self.tag, forKey: .tag)
-        try container.encodeIfPresent(self.descriptionString, forKey: .descriptionString)
-        try container.encodeIfPresent(self.alpha, forKey: .alpha)
-        try container.encodeIfPresent(self.levelOfMeasurement.rawValue, forKey: .levelOfMeasurement)
-        try container.encodeIfPresent(self.isNumeric, forKey: .isNumeric)
-        try container.encodeIfPresent(self.elementsAsArray(sortOrder: .original), forKey: .data)
+        try container.encodeIfPresent(self.name, forKey: CodingKeys.name)
+        try container.encodeIfPresent(self.tag, forKey: CodingKeys.tag)
+        try container.encodeIfPresent(self.descriptionString, forKey: CodingKeys.descriptionString)
+        try container.encodeIfPresent(self.alpha, forKey: CodingKeys.alpha)
+        try container.encodeIfPresent(self.levelOfMeasurement.rawValue, forKey: CodingKeys.levelOfMeasurement)
+        try container.encodeIfPresent(self.isNumeric, forKey: CodingKeys.isNumeric)
+        try container.encodeIfPresent(self.elementsAsArray(sortOrder: .original), forKey: CodingKeys.data)
     }
 
 
     required public init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.tag = try container.decodeIfPresent(String.self, forKey: .tag)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
-        self.descriptionString = try container.decodeIfPresent(String.self, forKey: .descriptionString)
-        self.alpha = try container.decodeIfPresent(Double.self, forKey: .alpha)
-        if let lm = try container.decodeIfPresent(Int.self, forKey: .levelOfMeasurement) {
+        self.tag = try container.decodeIfPresent(String.self, forKey: CodingKeys.tag)
+        self.name = try container.decodeIfPresent(String.self, forKey: CodingKeys.name)
+        self.descriptionString = try container.decodeIfPresent(String.self, forKey: CodingKeys.descriptionString)
+        self.alpha = try container.decodeIfPresent(Double.self, forKey: CodingKeys.alpha)
+        if let lm = try container.decodeIfPresent(Int.self, forKey: CodingKeys.levelOfMeasurement) {
             self.levelOfMeasurement = SSLevelOfMeasurement(rawValue:lm)
         }
         self.isNumeric = try container.decodeIfPresent(Bool.self, forKey: .isNumeric)
-        if let data: Array<SSElement> = try container.decodeIfPresent(Array<SSElement>.self, forKey: .data) {
+        if let data: Array<SSElement> = try container.decodeIfPresent(Array<SSElement>.self, forKey: CodingKeys.data) {
             self.initializeWithArray(data)
         }
     }
@@ -588,7 +588,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         }
         else {
             var index: String.Index = text.startIndex
-            var offset: String.IndexDistance = 0
+            var offset: Int = 0
             if index < text.endIndex {
                 if let cs: CharacterSet = characterSet {
                     for scalar in text.unicodeScalars {

@@ -29,7 +29,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    public class func grubbsTest<T>(array: Array<T>!, alpha: Double!) throws -> SSGrubbsTestResult? where T: Comparable, T: Hashable {
+    public class func grubbsTest<T>(array: Array<T>!, alpha: Double!) throws -> SSGrubbsTestResult? where T: Comparable, T: Hashable, T: Codable {
         if array.count == 3 {
             os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)

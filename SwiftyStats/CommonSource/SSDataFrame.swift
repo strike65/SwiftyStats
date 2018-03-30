@@ -44,7 +44,7 @@ import os.log
  ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
 
 */
-public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable{
+public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable {
     
     public typealias Examine = SSExamine<SSElement>
     

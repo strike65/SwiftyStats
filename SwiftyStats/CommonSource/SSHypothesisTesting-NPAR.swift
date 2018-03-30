@@ -589,7 +589,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1 as Array<T>
     /// - Parameter set2: Observations of group2 as Array<T>
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable {
+    public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable, T: Codable {
         if set1.count <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1037,7 +1037,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
-    public class func binomialTest<T>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable {
+    public class func binomialTest<T>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable, T: Codable {
         if p0.isNaN {
             os_log("p0 is NaN", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1159,7 +1159,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: A Array object containg data for set 1
     /// - Parameter set2: A Array object containg data for set 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: Array<T>, set2: Array<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable {
+    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: Array<T>, set2: Array<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable, T: Codable {
         if set1.count <= 2 {
             os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -1378,7 +1378,7 @@ extension SSHypothesisTesting {
     /// Ranks the data
     /// ### Note ###
     /// Groups must be coded as an integer value starting at 1. The arrays sumOfRanks, meanRanks and sampleSizes contains [numberOfGroups] values. For group 1 the associated value has index 0!
-    private struct rank<T> where T: Comparable, T: Hashable {
+    private struct rank<T> where T: Comparable, T: Hashable, T: Codable {
         /// The ranks
         public var ranks:Array<Double>!
         /// An Array containing "sample size" times a group identifier
@@ -1453,7 +1453,7 @@ extension SSHypothesisTesting {
         /// - Parameter inout ranks: Upon return contains the ranks
         /// - Parameter inout ties: Upon return contains the correction terms for ties
         /// - Parameter inout numberOfTies: Upon return contains number of ties
-        private func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable {
+        private func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable {
             var pos: Int
             let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, name: nil, characterSet: nil)
             var ptemp: Int

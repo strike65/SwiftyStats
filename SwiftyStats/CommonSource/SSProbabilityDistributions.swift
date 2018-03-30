@@ -745,13 +745,28 @@ public class SSProbabilityDistributions {
             result.variance = Double.nan
         }
         if (df2 > 6.0) {
-            result.skewness = ((2 * df1 + df2 - 2) / (df2 - 6)) * sqrt((8 * (df2 - 4)) / (df1 * (df1 + df2 - 2)))
+            let d1 = (2 * df1 + df2 - 2)
+            let d2 = (df2 - 6)
+            let s1 = (8 * (df2 - 4))
+            let s2 = (df1 * (df1 + df2 - 2))
+            result.skewness = (d1 / d2) * sqrt(s1 / s2)
         }
         else {
             result.skewness = Double.nan
         }
         if (df2 > 8.0) {
-            result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
+            let s1 = pow(df2 - 2,2.0)
+            let s2 = df2 - 4
+            let s3 = df1 + df2 - 2.0
+            let s4 = 5.0 * df2 - 22
+            let s5 = df2 - 6
+            let s6 = df2 - 8
+            let s7 = df1 + df2 - 2
+            let ss1 = (s1 * (s2) + df1 * (s3) * (s4))
+            let ss2 = df1 * (s5) * (s6) * (s7)
+            result.kurtosis = 3.0 + (12 * ss1) / (ss2)
+//            result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
+             //                                      s1            s2                 s3                   s4                        s5          s6            s7
         }
         else {
             result.kurtosis = Double.nan
@@ -988,8 +1003,20 @@ public class SSProbabilityDistributions {
         }
         result.mean = (a / (a + b))
         result.variance = (a * b) / (pow(a + b, 2.0) * (a + b + 1.0))
-        result.skewness = ((2.0 * (b - a)) / (a + b - 2.0)) * sqrt((a + b + 1.0) / (a * b))
-        result.kurtosis = (3.0 * (a + b + 1.0) * (pow(a, 2.0) * (b + 2) + pow(b, 2.0) * (a + 2.0) - 2.0 * a * b)) / (a * b * (a + b + 2.0) * (a + b + 3.0))
+        let s1 = (2.0 * (b - a))
+        let s2 = (a + b - 2.0)
+        let s3 = (a + b + 1.0)
+        let s4 = (a * b)
+        result.skewness = ( s1 / s2) * sqrt( s3 / s4 )
+        let k1 = (a + b + 1.0)
+        let k2 = pow(a, 2.0) * (b + 2)
+        let k3 = pow(b, 2.0) * (a + 2.0)
+        let k4 = 2.0 * a * b
+        let k5 = a + b + 2.0
+        let k6 = (a + b + 3.0)
+        let kk1 = (3.0 * k1 * ( k2 + k3 - k4 ))
+        let kk2 = (a * b * k5 * k6)
+        result.kurtosis = kk1 / kk2
         return result
     }
     
@@ -1348,14 +1375,19 @@ public class SSProbabilityDistributions {
             result.mean = Double.nan
         }
         if b > 2.0 {
-            result.variance = (a * a * b ) / ((b - 2.0) * (b - 1.0) * (b - 1.0))
+            let v1 = (a * a * b )
+            let v2 = (b - 2.0)
+            let v3 = (b - 1.0)
+            let v4 = (b - 1.0)
+            result.variance = v1 / ( v2 * v3 * v4 )
         }
         else {
             result.variance = Double.nan
         }
         if b > 4.0 {
             let b2 = b * b
-            let temp = (-12.0 + b2 * (-15.0 + 9.0 * b)) / ((-4.0 + b) * (-3.0 + b) * b)
+            let b3 = (-15.0 + 9.0 * b)
+            let temp = (-12.0 + b2 * b3 ) / ((-4.0 + b) * (-3.0 + b) * b)
             result.kurtosis = temp
 //            result.kurtosis = (3.0 * (b - 2.0) * (2.0 + b + 3.0 * b * b)) / ((b - 4.0) * (b - 3.0) * b)
         }
@@ -1363,7 +1395,10 @@ public class SSProbabilityDistributions {
             result.kurtosis = Double.nan
         }
         if b > 3.0 {
-            result.skewness = (2.0 * sqrt((-2.0 + b) / b) * (1.0 + b)) / (b - 3.0)
+            let s1 = sqrt((-2.0 + b) / b)
+            let s2 = (1.0 + b)
+            let s3 = (b - 3.0)
+            result.skewness = (2.0 * s1 * s2) / s3
         }
         else {
             result.skewness = Double.nan
@@ -2130,7 +2165,19 @@ public class SSProbabilityDistributions {
         let bc = b * c
         result.variance = 1.0 / 18.0 * ( a2 - ab + b2 - ac - bc + c2 )
 //        result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
-        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * ab * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - ab + b2 - ac - bc + c2, 1.5))
+        let s1 = 2.0 * a3
+        let s2 = 3.0 * a2 * b
+        let s3 = 3.0 * a * b2
+        let s4 = 2.0 * b3
+        let s5 = 3.0 * a3 * c
+        let s6 = 12.0 * ab * c
+        let s7 = 3.0 * b2 * c
+        let s8 = 3.0 * a * c2
+        let s9 = 3.0 * b * c2
+        let s10 = 2.0 * c3
+        let s11 = a2 - ab + b2 - ac - bc + c2
+        let ss1 = (s1 - s2 - s3 + s4 - s5 + s6 - s7 - s8 - s9 + s10)
+        result.skewness = (SQRTTWO * ss1) / (5.0 * pow(s11, 1.5))
 //        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
         return result
     }
@@ -2158,10 +2205,14 @@ public class SSProbabilityDistributions {
             return 0.0
         }
         else if ((x == a) || ((x > a) && (x <= c))) {
-            return (2.0 * ( x - a)) / (a * (a - b - c) + b * c)
+            let s1 = (2.0 * ( x - a))
+            let s2 = (a - b - c)
+            return s1 / (a * s2 + b * c)
         }
         else {
-            return (2.0 * (b - x)) / (b * (-a + b - c) + a * c)
+            let s1 = (2.0 * (b - x))
+            let s2 = (-a + b - c)
+            return s1 / (b * s2 + a * c)
         }
     }
 
@@ -2191,7 +2242,9 @@ public class SSProbabilityDistributions {
             return 1.0
         }
         else if ((x == a) || ((x > a) && (x <= c))) {
-            return (a * (a - 2.0 * x) + x * x) / (a * (a - b - c) + b * c)
+            let s1 = (a - 2.0 * x)
+            let s2 = (a - b - c)
+            return (a * s1 + x * x) / (a * s2 + b * c)
         }
         else {
             let b2 = b * b
@@ -2231,10 +2284,16 @@ public class SSProbabilityDistributions {
         }
         let t1 = (-a + c) / (-a + b)
         if p <= t1 {
-            return a + sqrt((-a + b) * (-a + c) * p)
+            let s1 = (-a + b)
+            let s2 = (-a + c)
+            let s3 = sqrt(s1 * s2 * p)
+            return a + s3
         }
         else {
-            return b - sqrt((-a + b) * (b - c) * (1.0 - p))
+            let s1 = (-a + b)
+            let s2 = (b - c)
+            let s3 = (1.0 - p)
+            return b - sqrt(s1 * s2 * s3)
         }
     }
 
