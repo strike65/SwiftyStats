@@ -637,7 +637,7 @@
 				INFOPLIST_FILE = CommonSource/Info.plist;
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStats;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -662,7 +662,7 @@
 				INFOPLIST_FILE = CommonSource/Info.plist;
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStats;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
