@@ -729,7 +729,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
-            os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
+            os_log("denominator degrees of freedom expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if (df2 > 2.0) {
@@ -785,7 +785,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
-            os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
+            os_log("denominator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         var result: Double
@@ -836,7 +836,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
-            os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
+            os_log("denominator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2.0, b: df2 / 2.0)
@@ -854,7 +854,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if df2 <= 0 {
-            os_log("denominator degrees of freedom exptected to be > 0", log: log_stat, type: .error)
+            os_log("denominator degrees of freedom expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {
@@ -1133,7 +1133,7 @@ public class SSProbabilityDistributions {
     /// - Throws: SSSwiftyStatsError if b <= 0
     public class func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
-            os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         return SSContProbDistParams()
@@ -1146,7 +1146,7 @@ public class SSProbabilityDistributions {
     /// - Throws: SSSwiftyStatsError if b <= 0
     public class func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
-            os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
@@ -1160,7 +1160,7 @@ public class SSProbabilityDistributions {
     /// - Throws: SSSwiftyStatsError if b <= 0
     public class func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
-            os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let result = 0.5 + 1.0 / Double.pi * atan((x - a) / b)
@@ -1174,7 +1174,7 @@ public class SSProbabilityDistributions {
     /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
     public class func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
-            os_log("shape parameter b is exptected to be > 0", log: log_stat, type: .error)
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if p < 0.0 || p > 1.0 {

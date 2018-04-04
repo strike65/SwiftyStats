@@ -30,7 +30,7 @@ public class SSDataGroupSorter<T> where T: Hashable, T: Comparable {
             os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
         }
         if groups.count != data.count {
-            os_log("number of observations and number of groups.length is expected to be equal", log: log_stat, type: .error)
+            os_log("number of observations and number of groups is expected to be equal", log: log_stat, type: .error)
         }
         self.o = data
         self.g = groups

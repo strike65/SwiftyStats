@@ -761,7 +761,7 @@ extension SSCrosstab {
     /// Returns the largest column total
     public var largestRowTotal: Double {
         get {
-            assert(self.rowCount > 0, "Now data")
+            assert(self.rowCount > 0, "Missing data")
             if let r = self.rowSums?.sorted(by: {$0 > $1}) {
                 return r.first!
             }
@@ -774,7 +774,7 @@ extension SSCrosstab {
     /// Returns the largest column total
     public var largestColumTotal: Double {
         get {
-            assert(self.columnCount > 0, "Now data")
+            assert(self.columnCount > 0, "Missing data")
             if let c = self.columnSums?.sorted(by: {$0 > $1}) {
                 return c.first!
             }
