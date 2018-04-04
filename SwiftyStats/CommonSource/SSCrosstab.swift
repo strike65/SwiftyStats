@@ -26,18 +26,18 @@
 import Foundation
 import os.log
 
-/// Class provides a matrix-like crosstable. Elements are accessibla by c[row, column].
-/// - Precondition: Rowa and columns must be named.
+/// Class provides a matrix-like crosstable. Elements are accessible by c[row, column].
+/// - Precondition: Rows and columns must be named.
 public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Comparable, R: Hashable, C: Comparable, C: Hashable {
     /// Number of rows
-    public var rows: Int {
+    public var rowCount: Int {
         get {
             return rr
         }
     }
     
     /// Number of columns
-    public var columns: Int {
+    public var columnCount: Int {
         get {
             return cc
         }
@@ -79,14 +79,14 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
-    /// returns the row names or nil
+    /// Returns the row names or nil
     public var rowNames: Array<R>? {
         get {
             return rnames
         }
     }
     
-    /// returns the column names or nil
+    /// Returns the column names or nil
     public var columnNames: Array<C>? {
         get {
             return cnames
@@ -103,7 +103,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
-    /// Defines the level od measurement of the row variable
+    /// Defines the level of measurement of the row variable
     public var rowLevelOfMeasurement: SSLevelOfMeasurement {
         get {
             return self.levelRows
@@ -126,9 +126,11 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     /// Initializes a new crosstab
     /// - Parameter rows: number of rows
     /// - Parameter columns: number of columns
-    /// - Parameter initialValue: Initial value
+    /// - Parameter initialValue: Initial value for cell count
+    /// - Parameter rowID: An array containing `rows` row identifiers
+    /// - Parameter columnID: An array containing `columns` column identifiers
+    /// - Throws: An error of type SSSwiftyStatsError
     init(rows: Int, columns: Int, initialValue: N, rowID: Array<R>, columnID: Array<C>) throws {
-        assert(rows > 0 && columns > 0, "Creating an empty crosstab is not possible, Use init() instead.")
         if rowID.count != rows {
             os_log("You must provide as many row id's as rows", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -165,13 +167,13 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         self.isNumeric = isNumber(initialValue)
     }
     
-    /// Returns true if rows = 2 and columns = 2
+    /// Returns `true` if rows = 2 and columns = 2
     public var is2x2Table: Bool {
         get {
-            return self.rows == 2 && self.columns == 2
+            return self.rowCount == 2 && self.columnCount == 2
         }
     }
-    /// Returns true if name is a valid row-name
+    /// Returns `true` if name is a valid row-name
     func isValidRowName(name: R) -> Bool {
         if let _ = indexOfRow(rowName: name) {
             return true
@@ -181,7 +183,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
 
-    /// Returns true if name is a valid column-name
+    /// Returns  `true`  if name is a valid column-name
     func isValidColumnName(name: C) -> Bool {
         if let _ = indexOfColumn(columnName: name) {
             return true
@@ -191,23 +193,24 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
 
-    /// Returns true if row is a valid index
-    func isValidRowIndex(row: Int) -> Bool {
-        return row >= 0 && row < self.rows
+    /// Returns `true` if row is a valid index
+    private func isValidRowIndex(row: Int) -> Bool {
+        return row >= 0 && row < self.rowCount
     }
 
-    /// Returns true if column is a valid column index
-    func isValidColumnIndex(column: Int) -> Bool {
-        return column >= 0 && column < self.columns
+    /// Returns `true` if column is a valid column index
+    private func isValidColumnIndex(column: Int) -> Bool {
+        return column >= 0 && column < self.columnCount
     }
 
-    /// Returns true if row and column are valid indexes
-    func isValidIndex(row: Int, column: Int) -> Bool {
+    /// Returns `true` if row and column are valid indexes
+    private func isValidIndex(row: Int, column: Int) -> Bool {
         return row >= 0 && row < self.rr && column >= 0 && column < self.cc
     }
     
     /// Returns the row at rowIndex
-    public func row(rowIndex idx: Int, sorted: Bool!) throws -> Array<N> {
+    /// - Throws: An error of type SSSwiftyStatsError
+    public func row(at idx: Int, sorted: Bool! = false) throws -> Array<N> {
         if !(idx >= 0 && idx < self.rr) {
             throw SSSwiftyStatsError.init(type: .rowIndexOutOfRange, file: #file, line: #line, function: #function)
         }
@@ -220,7 +223,8 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the column at columnIndex
-    public func column(columnIndex idx: Int, sorted: Bool!) throws -> Array<N> {
+    /// - Throws: An error of type SSSwiftyStatsError
+    public func column(at idx: Int, sorted: Bool! = false) throws -> Array<N> {
         if !(idx >= 0 && idx < self.cc) {
             throw SSSwiftyStatsError.init(type: .columnIndexOutOfRange, file: #file, line: #line, function: #function)
         }
@@ -237,11 +241,12 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the row with name rowName or nil
-    public func rowNamed(_ rowName: R, sorted: Bool!) throws -> Array<N>? {
+    /// - Throws: An error of type SSSwiftyStatsError
+    public func rowNamed(_ rowName: R, sorted: Bool! = false) throws -> Array<N>? {
         if self.rnames != nil {
             if let i = self.rnames!.index(of: rowName) {
                 do {
-                    return try self.row(rowIndex: i, sorted: sorted)
+                    return try self.row(at: i, sorted: sorted)
                 }
                 catch {
                     throw error
@@ -257,11 +262,12 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Returns the column with name columnName or nil
-    public func columnNamed(_ columnName: C, sorted: Bool) throws -> Array<N>? {
+    /// - Throws: An error of type SSSwiftyStatsError
+    public func columnNamed(_ columnName: C, sorted: Bool = false) throws -> Array<N>? {
         if self.cnames != nil {
             if let i = self.cnames!.index(of: columnName) {
                 do {
-                    return try self.column(columnIndex: i, sorted: sorted)
+                    return try self.column(at: i, sorted: sorted)
                 }
                 catch{
                     throw error
@@ -276,6 +282,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
+    /// Accesses the element at [rowName][columnName]
     subscript(rowName: R!, columnName: C!) -> N {
         get {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
@@ -297,6 +304,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         }
     }
     
+    /// Accesses the element at [row][column]
     subscript(row: Int, column: Int) -> N {
         get {
             assert(isValidRowIndex(row: row), "Row-Index out of range")
@@ -311,6 +319,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Appends a row
+    /// - Throws: An error of type SSSwiftyStatsError
     public func appendRow(_ row: Array<N>, name: R?) throws {
         if !(row.count == self.cc) {
             os_log("Rows to append must have self.columns columns", log: log_stat, type: .error)
@@ -326,6 +335,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Appends a column
+    /// - Throws: An error of type SSSwiftyStatsError
     public func appendColumn(_ column: Array<N>, name: C?) throws {
         if !(column.count == self.rr) {
             os_log("Columns to append must have self.rows rows", log: log_stat, type: .error)
@@ -350,27 +360,29 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Removes the row with name
+    /// - Throws: An error of type SSSwiftyStatsError
     public func removeRow(rowName name: R) throws -> Array<N> {
         if let i = self.indexOfRow(rowName: name) {
-            return self.removeRow(i)
+            return self.removeRow(at: i)
         }
         else {
-            throw SSSwiftyStatsError.init(type: .rowNameUnknown, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
     }
     
     /// Removes the column with name
+    /// - Throws: An error of type SSSwiftyStatsError
     public func removeColumn(columnName name: C) throws -> Array<N> {
         if let i = self.indexOfColumn(columnName: name) {
-            return self.removeColumn(i)
+            return self.removeColumn(at: i)
         }
         else {
-            throw SSSwiftyStatsError.init(type: .columnNameUnknown, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
     }
     
-    /// Remove row at index at
-    public func removeRow(_ index: Int) -> Array<N> {
+    /// Remove row at `index`
+    public func removeRow(at index: Int) -> Array<N> {
         assert(index >= 0 && index < self.rr, "Row-Index out of range")
         let removed = self.counts.remove(at: index)
         self.rr -= 1
@@ -380,8 +392,8 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         return removed
     }
     
-    /// Remove column at index at
-    public func removeColumn(_ idx: Int) -> Array<N> {
+    /// Remove column at `index`
+    public func removeColumn(at idx: Int) -> Array<N> {
         assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
         var temp: Array<N> = Array<N>()
         for i in 0..<self.counts.count {
@@ -395,56 +407,61 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Sets a row at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setRow(at: Int, newRow: Array<N>) throws {
         assert(isValidRowIndex(row: at), "Row-Index out of range")
-        if newRow.count != self.columns {
+        if newRow.count != self.columnCount {
             os_log("New row has the wrong length", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
-        for c in 0..<self.columns {
+        for c in 0..<self.columnCount {
             self[at, c] = newRow[c]
         }
     }
 
     /// Sets a row at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setRow(name: R, newRow: Array<N>) throws {
         assert(isValidRowName(name: name), "Row-Index out of range")
-        if newRow.count != self.columns {
+        if newRow.count != self.columnCount {
             os_log("New row has the wrong length", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
         let i = indexOfRow(rowName: name)!
-        for c in 0..<self.columns {
+        for c in 0..<self.columnCount {
             self[i, c] = newRow[c]
         }
     }
 
     /// Sets a column at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setColumn(name: C, newColumn: Array<N>) throws {
         assert(isValidColumnName(name: name), "Column-Index out of range")
-        if newColumn.count != self.rows {
+        if newColumn.count != self.rowCount {
             os_log("New column has the wrong length", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
         let i = indexOfColumn(columnName: name)!
-        for r in 0..<self.rows {
+        for r in 0..<self.rowCount {
             self[r, i] = newColumn[r]
         }
     }
     
     /// Sets a column at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setColumn(at: Int, newColumn: Array<N>) throws {
         assert(isValidColumnIndex(column: at), "Column-Index out of range")
-        if newColumn.count != self.rows {
+        if newColumn.count != self.rowCount {
             os_log("New column has the wrong length", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
-        for r in 0..<self.rows {
+        for r in 0..<self.rowCount {
             self[r, at] = newColumn[r]
         }
     }
     
     /// Inserts a row at index at
+    /// - Throws: An error of type SSSwiftyStatsError
     public func insertRow(newRow: Array<N>, at: Int, name: R?) throws {
         assert(at >= 0 && at < self.rr, "Row-Index out of range")
         if !(newRow.count == self.cc) {
@@ -464,6 +481,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Inserts a column at index at
+    /// - Throws: An error of type SSSwiftyStatsError
     public func insertColumn(newColumn: Array<N>, at: Int, name: C?) throws {
         assert(at >= 0 && at < self.cc, "Column-Index out of range")
         if !(newColumn.count == self.rr) {
@@ -487,6 +505,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Replaces the row at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func replaceRow(newRow: Array<N>, at: Int, name: R?) throws {
         assert(self.isValidRowIndex(row: at), "Row-Index out of range")
         do {
@@ -495,11 +514,12 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         catch {
             throw error
         }
-        let _ = self.removeRow(at + 1)
+        let _ = self.removeRow(at: at + 1)
     }
 
     
     /// Replaces the column at a given index
+    /// - Throws: An error of type SSSwiftyStatsError
     public func replaceColumn(newColumn: Array<N>, at: Int, name: C?) throws {
         assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
         do {
@@ -508,12 +528,13 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
         catch {
             throw error
         }
-        let _ = self.removeColumn(at + 1)
+        let _ = self.removeColumn(at: at + 1)
     }
 
     
     
     /// Sets the rows names. Length of rowNames must be equal to self.rows
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setRowNames(rowNames: Array<R>) throws {
         if !(rowNames.count == self.rr) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -522,6 +543,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Sets the column names. Length of columnNames must be equal to self.columns
+    /// - Throws: An error of type SSSwiftyStatsError
     public func setColumnNames(columnNames: Array<C>) throws {
         if !(columnNames.count == self.cc) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -538,11 +560,11 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
             }
             string.append("\n")
         }
-        for r in 0..<rows {
+        for r in 0..<rowCount {
             if let rn = self.rowNames {
                 string.append("\(rn[r])" + " | ")
             }
-            for c in 0..<columns {
+            for c in 0..<columnCount {
                 string.append("\(counts[r][c]) ")
             }
             string.append("\n")
@@ -553,15 +575,15 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
 
 extension SSCrosstab {
     
-    /// Returns the row sums as an array with self.rows values
+    /// Returns the row sums as an array with self.rowCount values
     public var rowSums: Array<Double>? {
         get {
                 if self.isNumeric {
                     var sum: Double = 0.0
                     var temp = Array<Double>()
-                    for r in 0..<self.rows {
+                    for r in 0..<self.rowCount {
                         sum = 0.0
-                        for c in 0..<self.columns {
+                        for c in 0..<self.columnCount {
                             if let temp1 = castValueToDouble(self[r, c]) {
                                 sum += temp1
                             }
@@ -579,15 +601,15 @@ extension SSCrosstab {
         }
     }
     
-    /// Returns the column sums as an array with self.columns values
+    /// Returns the column sums as an array with self.columnCount values
     public var columnSums: Array<Double>? {
         get {
             if self.isNumeric {
                 var sum: Double = 0.0
                 var temp = Array<Double>()
-                for c in 0..<self.columns {
+                for c in 0..<self.columnCount {
                     sum = 0.0
-                    for r in 0..<self.rows {
+                    for r in 0..<self.rowCount {
                         if let temp1 = castValueToDouble(self[r, c]) {
                             sum += temp1
                         }
@@ -605,9 +627,9 @@ extension SSCrosstab {
         }
     }
     
-    /// The sum of a row
+    /// Returns the sum of a row
     public func rowSum(row: Int) -> Double {
-        assert(row < self.rows && row >= 0, "Row-Index out of range")
+        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
         if let rs = self.rowSums {
             return rs[row]
         }
@@ -659,7 +681,7 @@ extension SSCrosstab {
 
     /// Returns the name of the column or nil if there is no name
     public func nameOfColumn(column: Int) -> C? {
-        assert(column < self.columns && column >= 0, "Column-Index out of range")
+        assert(column < self.columnCount && column >= 0, "Column-Index out of range")
         if let cn = self.columnNames {
             return cn[column]
         }
@@ -670,7 +692,7 @@ extension SSCrosstab {
     
     /// Returns the name of the row or nil if there is no name
     public func nameOfRow(row: Int) -> R? {
-        assert(row < self.rows && row >= 0, "Row-Index out of range")
+        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
         if let rn = self.rowNames {
             return rn[row]
         }
@@ -701,7 +723,7 @@ extension SSCrosstab {
     }
     
     
-    /// the total
+    /// Returns the total
     public var total: Double {
         get {
             return self.rowTotal()
@@ -739,7 +761,7 @@ extension SSCrosstab {
     /// Returns the largest column total
     public var largestRowTotal: Double {
         get {
-            assert(self.rows > 0, "Now data")
+            assert(self.rowCount > 0, "Now data")
             if let r = self.rowSums?.sorted(by: {$0 > $1}) {
                 return r.first!
             }
@@ -752,7 +774,7 @@ extension SSCrosstab {
     /// Returns the largest column total
     public var largestColumTotal: Double {
         get {
-            assert(self.columns > 0, "Now data")
+            assert(self.columnCount > 0, "Now data")
             if let c = self.columnSums?.sorted(by: {$0 > $1}) {
                 return c.first!
             }
@@ -763,10 +785,10 @@ extension SSCrosstab {
     }
     
     /// Returns the largest cell count for column
-    public func largestCellCount(column: Int) -> Double {
+    public func largestCellCount(atColumn: Int) -> Double {
         if self.isNumeric {
-            assert(isValidColumnIndex(column: column), "Row-Index out of range")
-            let column = try! self.column(columnIndex: column, sorted: true)
+            assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
+            let column = try! self.column(at: atColumn, sorted: true)
             if let temp1 = castValueToDouble(column.last) {
                 return temp1
             }
@@ -781,10 +803,10 @@ extension SSCrosstab {
 
     
     /// Returns the largest cell count for row
-    public func largestCellCount(row: Int) -> Double {
+    public func largestCellCount(atRow: Int) -> Double {
         if self.isNumeric {
-            assert(isValidRowIndex(row: row), "Row-Index out of range")
-            let row = try! self.row(rowIndex: row, sorted: true)
+            assert(isValidRowIndex(row: atRow), "Row-Index out of range")
+            let row = try! self.row(at: atRow, sorted: true)
             if let temp1 = castValueToDouble(row.last) {
                 return temp1
             }
@@ -798,7 +820,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative total frequency of a cell at [row, column]
-    public func rTotalFrequency(row: Int, column: Int) -> Double {
+    public func relativeTotalFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
@@ -816,7 +838,7 @@ extension SSCrosstab {
     
 
     /// Returns the relative frequency of [rowName, columnName]
-    public func rTotalFrequency(rowName: R, columnName: C) throws -> Double {
+    public func relativeTotalFrequency(rowName: R, columnName: C) throws -> Double {
         assert(isValidRowName(name: rowName), "Row-Name unknown")
         assert(isValidColumnName(name: columnName), "Column-Name unknown")
         if self.isNumeric {
@@ -833,7 +855,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative row frequency of cell[row, column]
-    public func rRowFrequency(row: Int, column: Int) -> Double {
+    public func relativeRowFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
@@ -850,7 +872,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative column frequency of cell[row, column]
-    public func rColumnFrequency(row: Int, column: Int) -> Double {
+    public func relativeColumnFrequency(row: Int, column: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
@@ -867,7 +889,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative margin row frequency of [row]
-    public func rRowMarginFrequency(row: Int) -> Double {
+    public func relativeRowMarginFrequency(row: Int) -> Double {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         var temp: Double = 0.0
         if self.isNumeric {
@@ -880,7 +902,7 @@ extension SSCrosstab {
     }
 
     /// Returns the relative margin row frequency of [row]
-    public func rColumnMarginFrequency(column: Int) -> Double {
+    public func relativeColumnMarginFrequency(column: Int) -> Double {
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         var temp: Double = 0.0
         if self.isNumeric {
@@ -904,7 +926,7 @@ extension SSCrosstab {
         }
     }
 
-    /// Returns the expected frequency for cell[row, column]
+    /// Returns the expected frequency for cell[rowName, columnName]
     public func expectedFrequency(rowName: R, columnName: C) -> Double {
         assert(isValidRowName(name: rowName), "Row-index out of range")
         assert(isValidColumnName(name: columnName), "Column-index out of range")
@@ -954,7 +976,7 @@ extension SSCrosstab {
     /// Degrees of freedom
     public var degreesOfFreedom: Double {
         get {
-            let df = Double(self.rows - 1) * Double(self.columns - 1)
+            let df = Double(self.rowCount - 1) * Double(self.columnCount - 1)
             if df >= 0.0 {
                 return df
             }
@@ -965,13 +987,13 @@ extension SSCrosstab {
     }
 
     /// Returns Pearson's Chi-Square
-    /// - Precondition: at least nominal scaled measurements
+    /// - Precondition: Mesurement must be at least nominal scaled
     public var chiSquare: Double {
         get {
             if self.isNumeric {
                 var sum: Double = 0.0
-                for r in 0..<self.rows {
-                    for c in 0..<self.columns {
+                for r in 0..<self.rowCount {
+                    for c in 0..<self.columnCount {
                         sum += pow(self.residual(row: r, column: c), 2.0) / self.expectedFrequency(row: r, column: c)
                     }
                 }
@@ -989,8 +1011,8 @@ extension SSCrosstab {
         get {
             var sum: Double = 0.0
             if self.isNumeric {
-                for r in 0..<self.rows {
-                    for c in 0..<self.columns {
+                for r in 0..<self.rowCount {
+                    for c in 0..<self.columnCount {
                         if let temp = castValueToDouble(self[r, c]) {
                             if temp != 0 {
                                 sum += temp * log(temp / self.expectedFrequency(row: r, column: c))
@@ -1045,9 +1067,9 @@ extension SSCrosstab {
             else {
                 var sum1: Double = 0.0
                 if self.isNumeric {
-                    for r in 0..<self.rows {
+                    for r in 0..<self.rowCount {
                         if let X = castValueToDouble(self.rowNames![r]) {
-                            for c in 0..<self.columns {
+                            for c in 0..<self.columnCount {
                                 if let Y = castValueToDouble(self.columnNames![c]) {
                                     if let frc = castValueToDouble(self[r, c]) {
                                         sum1 += X * Y * frc
@@ -1066,7 +1088,7 @@ extension SSCrosstab {
                         }
                     }
                     var sum2: Double = 0.0
-                    for r in 0..<self.rows {
+                    for r in 0..<self.rowCount {
                         if let X = castValueToDouble(self.rowNames![r]) {
                             sum2 += X * self.rowSum(row: r)
                         }
@@ -1075,7 +1097,7 @@ extension SSCrosstab {
                         }
                     }
                     var sum3: Double = 0.0
-                    for c in 0..<self.columns {
+                    for c in 0..<self.columnCount {
                         if let Y = castValueToDouble(self.columnNames![c]) {
                             sum3 += Y * self.columnSum(column: c)
                         }
@@ -1101,7 +1123,7 @@ extension SSCrosstab {
                 var sum2: Double = 0.0
                 var SX: Double
                 var SY: Double
-                for r in 0..<self.rows {
+                for r in 0..<self.rowCount {
                     if let X = castValueToDouble(self.rowNames![r]) {
                         sum1 += X * X * self.rowSum(row: r)
                         sum2 += X * self.rowSum(row: r)
@@ -1113,7 +1135,7 @@ extension SSCrosstab {
                 SX = sum1 - pow(sum2, 2.0) / self.total
                 sum1 = 0.0
                 sum2 = 0.0
-                for c in 0..<self.columns {
+                for c in 0..<self.columnCount {
                     if let Y = castValueToDouble(self.columnNames![c]) {
                         sum1 += Y * Y * self.columnSum(column: c)
                         sum2 += Y * self.columnSum(column: c)
@@ -1163,7 +1185,7 @@ extension SSCrosstab {
     /// Returns Cramer's V
     public var cramerV: Double {
         get {
-            let q = Double(min(self.rows, self.columns))
+            let q = Double(min(self.rowCount, self.columnCount))
             let chi = self.chiSquare
             return sqrt(chi / (self.total * (q - 1.0)))
         }
@@ -1174,8 +1196,8 @@ extension SSCrosstab {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let cm = self.largestColumTotal
             var sum: Double = 0.0
-            for r in 0..<self.rows {
-                sum += self.largestCellCount(row: r)
+            for r in 0..<self.rowCount {
+                sum += self.largestCellCount(atRow: r)
             }
             return (sum - cm) / (self.total - cm)
         }
@@ -1189,8 +1211,8 @@ extension SSCrosstab {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let rm = self.largestRowTotal
             var sum: Double = 0.0
-            for c in 0..<self.columns {
-                sum += self.largestCellCount(column: c)
+            for c in 0..<self.columnCount {
+                sum += self.largestCellCount(atColumn: c)
             }
             return (sum - rm) / (self.total - rm)
         }
@@ -1243,8 +1265,8 @@ extension SSCrosstab {
             if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
                 var sum1 = 0.0
                 var sum2 = 0.0
-                for r in 0..<self.rows {
-                    for c in 0..<self.columns {
+                for r in 0..<self.rowCount {
+                    for c in 0..<self.columnCount {
                         if let fij = castValueToDouble(self[r,c]) {
                             sum1 += pow(fij, 2.0) / self.rowSum(row: r)
                             sum2 += pow(self.columnSum(column: c), 2.0)

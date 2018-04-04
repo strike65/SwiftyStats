@@ -344,7 +344,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     }
     
     /// Returns the row at a given index
-    public func rowAtIndex(_ index: Int) -> Array<SSElement> {
+    public func row(at index: Int) -> Array<SSElement> {
         assert(isValidRowIndex(index), "Index out of range")
         var res = Array<SSElement>()
         for c in self.data {
@@ -358,12 +358,13 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         return res
     }
     
-    /// Subscript for columns
-    public subscript(column: Int) -> SSExamine<SSElement> {
-        assert(isValidColumnIndex(column), "Index out of range")
-        return data[column]
+    /// Accesses the column at `at`
+    public subscript(at: Int) -> SSExamine<SSElement> {
+        assert(isValidColumnIndex(at), "Index out of range")
+        return data[at]
     }
     
+    /// Accesses the column named `name`
     public subscript(name: String!) -> SSExamine<SSElement> {
         if let i = cNames.index(of: name) {
             return data[i]

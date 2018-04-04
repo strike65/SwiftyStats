@@ -46,9 +46,9 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         /// Column-Index out of range
         case columnIndexOutOfRange
         /// Row-name unknown
-        case rowNameUnknown
+        case unknownRowName
         /// Column name unknown
-        case columnNameUnknown
+        case unknownColumnName
         /// Function called is not available for the parameter given
         case functionNotDefinedInDomainProvided
         /// Missing data
@@ -90,9 +90,9 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
             return "Row index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .columnIndexOutOfRange:
             return "Column index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
-        case .rowNameUnknown:
+        case .unknownRowName:
             return "Unknown row name in: " + self.file + " Line: \(self.line) in function: " + self.function
-        case .columnNameUnknown:
+        case .unknownColumnName:
             return "Unknown column name in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .functionNotDefinedInDomainProvided:
             return "Called function is not defined in that domain in: " + self.file + " Line: \(self.line) in function: " + self.function

@@ -407,11 +407,11 @@ class SwiftyStatsTests: XCTestCase {
         try! FileManager.default.removeItem(at: url!)
 
         XCTAssert(df.isEqual(df2))
-        var row = df2.rowAtIndex(3)
+        var row = df2.row(at: 3)
         XCTAssertEqual(row[0], 0.51, accuracy: 1E-2)
         XCTAssertEqual(row[1], 0.72, accuracy: 1E-2)
         XCTAssertEqual(row[2], 0.72, accuracy: 1E-2)
-        row = df2.rowAtIndex(0)
+        row = df2.row(at: 0)
         XCTAssertEqual(row[0], 0.55, accuracy: 1E-2)
         XCTAssertEqual(row[1], 0.49, accuracy: 1E-2)
         XCTAssertEqual(row[2], 0.49, accuracy: 1E-2)
@@ -431,6 +431,7 @@ class SwiftyStatsTests: XCTestCase {
     
     func testCrossTabs() {
         let c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
+        print(c.description)
         try! c.setColumn(at: 0, newColumn:[52,46,25,26])
         try! c.setColumn(name: 2, newColumn:[89,35,15,10])
         try! c.setColumn(at: 2, newColumn:[123,23,13,5])

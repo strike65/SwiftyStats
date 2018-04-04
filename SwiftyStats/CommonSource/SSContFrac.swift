@@ -51,8 +51,7 @@ public class SSContFrac: NSObject {
     }
     
     /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the max iteration count is reached or one of the convergents is NAN.
-    /// Algorithm according to Lentz, modified by Thompson and Barnett
-    /// http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf
+    /// Algorithm according to Lentz, modified by Thompson and Barnett (http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf)
     /// - Parameter x: x
     /// - Parameter eps:       max error allowed
     /// - Parameter maxIter:     Maximum number of iterations
@@ -120,8 +119,7 @@ public class SSContFrac: NSObject {
     }
 }
 
-/// Class to compute the cf of the beta regularized function
-/// see http://dlmf.nist.gov/8.17#i
+/// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i)
 public class SSBetaRegularized: SSContFrac {
     
     public var a: Double = Double.nan
