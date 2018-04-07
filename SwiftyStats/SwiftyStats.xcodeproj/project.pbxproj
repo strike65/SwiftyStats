@@ -174,6 +174,9 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
+				9FEA825C1F76C9F6005E4349 /* TODO */,
+				9FEA82411F76C9F6005E4349 /* Info.plist */,
+				9FEA82421F76C9F6005E4349 /* scratch */,
 				9F368BE71F20F340004A5193 /* LICENSE */,
 				9F368BE81F20F340004A5193 /* README.md */,
 				9FEA82401F76C9F6005E4349 /* CommonSource */,
@@ -203,8 +206,6 @@
 		9FEA82401F76C9F6005E4349 /* CommonSource */ = {
 			isa = PBXGroup;
 			children = (
-				9FEA82411F76C9F6005E4349 /* Info.plist */,
-				9FEA82421F76C9F6005E4349 /* scratch */,
 				9FEA82431F76C9F6005E4349 /* SSConstants.swift */,
 				9FEA82441F76C9F6005E4349 /* SSContFrac.swift */,
 				9FEA82451F76C9F6005E4349 /* SSCrosstab.swift */,
@@ -230,7 +231,6 @@
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
 				9FEA825A1F76C9F6005E4349 /* SwiftyStats-EnumsStructs.swift */,
 				9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */,
-				9FEA825C1F76C9F6005E4349 /* TODO */,
 			);
 			path = CommonSource;
 			sourceTree = "<group>";
