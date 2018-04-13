@@ -34,6 +34,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     // MARK: OPEN/PUBLIC VARS
 
     /// An object representing the content of the SSExamine instance (experimental)
+    /// A placeholder to specify the type of stored data.
     public var rootObject: Any?
     
     /// User defined tag
@@ -190,7 +191,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     }
     
     
-    /// Loads the content of a file interpreting the elements separated by separator as double values using the specified encoding.
+    /// Loads the content of a file interpreting the elements separated by `separator` as double values using the specified encoding.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use.
@@ -232,6 +233,32 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         }
         if go {
             return SSExamine<SSElement>.init(withArray: numberArray, name: filename, characterSet: nil)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /// Imitializes a new Instance from a json file created by `exportJSONString(fileName:, atomically:, overwrite:, stringEncoding:)`
+    /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
+    /// - Parameter stringEncoding: The encoding to use.
+    /// - Throws: if the file doesn't exist or can't be accessed or a the json file is invalid
+    public class func examine(fromJSONFile path: String!, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> SSExamine<SSElement>? {
+        let fileManager = FileManager.default
+        let fullFilename: String = NSString(string: path).expandingTildeInPath
+        if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
+            os_log("File not found", log: log_stat, type: .error)
+            throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
+        }
+        let url = URL.init(fileURLWithPath: fullFilename)
+        if let jsonString = try? String.init(contentsOf: url), let data = jsonString.data(using: stringEncoding) {
+            do {
+                let result = try JSONDecoder().decode(SSExamine<SSElement>.self, from: data)
+                return result as SSExamine<SSElement>
+            }
+            catch {
+                throw error
+            }
         }
         else {
             return nil
