@@ -28,7 +28,7 @@ import os.log
 
 /// Class provides a matrix-like crosstable. Elements are accessible by c[row, column].
 /// - Precondition: Rows and columns must be named.
-public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Comparable, R: Hashable, C: Comparable, C: Hashable {
+public struct SSCrosstab<N,R,C> where N: Comparable, N: Hashable, R: Comparable, R: Hashable, C: Comparable, C: Hashable {
     /// Number of rows
     public var rowCount: Int {
         get {
@@ -320,7 +320,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Appends a row
     /// - Throws: An error of type SSSwiftyStatsError
-    public func appendRow(_ row: Array<N>, name: R?) throws {
+    public mutating  func appendRow(_ row: Array<N>, name: R?) throws {
         if !(row.count == self.cc) {
             os_log("Rows to append must have self.columns columns", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -336,7 +336,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Appends a column
     /// - Throws: An error of type SSSwiftyStatsError
-    public func appendColumn(_ column: Array<N>, name: C?) throws {
+    public mutating func appendColumn(_ column: Array<N>, name: C?) throws {
         if !(column.count == self.rr) {
             os_log("Columns to append must have self.rows rows", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -361,7 +361,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Removes the row with name
     /// - Throws: An error of type SSSwiftyStatsError
-    public func removeRow(rowName name: R) throws -> Array<N> {
+    public mutating func removeRow(rowName name: R) throws -> Array<N> {
         if let i = self.indexOfRow(rowName: name) {
             return self.removeRow(at: i)
         }
@@ -372,7 +372,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Removes the column with name
     /// - Throws: An error of type SSSwiftyStatsError
-    public func removeColumn(columnName name: C) throws -> Array<N> {
+    public mutating func removeColumn(columnName name: C) throws -> Array<N> {
         if let i = self.indexOfColumn(columnName: name) {
             return self.removeColumn(at: i)
         }
@@ -382,7 +382,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Remove row at `index`
-    public func removeRow(at index: Int) -> Array<N> {
+    public mutating func removeRow(at index: Int) -> Array<N> {
         assert(index >= 0 && index < self.rr, "Row-Index out of range")
         let removed = self.counts.remove(at: index)
         self.rr -= 1
@@ -393,7 +393,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Remove column at `index`
-    public func removeColumn(at idx: Int) -> Array<N> {
+    public mutating func removeColumn(at idx: Int) -> Array<N> {
         assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
         var temp: Array<N> = Array<N>()
         for i in 0..<self.counts.count {
@@ -408,7 +408,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Sets a row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setRow(at: Int, newRow: Array<N>) throws {
+    public mutating func setRow(at: Int, newRow: Array<N>) throws {
         assert(isValidRowIndex(row: at), "Row-Index out of range")
         if newRow.count != self.columnCount {
             os_log("New row has the wrong length", log: log_stat, type: .error)
@@ -421,7 +421,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
 
     /// Sets a row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setRow(name: R, newRow: Array<N>) throws {
+    public mutating func setRow(name: R, newRow: Array<N>) throws {
         assert(isValidRowName(name: name), "Row-Index out of range")
         if newRow.count != self.columnCount {
             os_log("New row has the wrong length", log: log_stat, type: .error)
@@ -435,7 +435,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
 
     /// Sets a column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setColumn(name: C, newColumn: Array<N>) throws {
+    public mutating func setColumn(name: C, newColumn: Array<N>) throws {
         assert(isValidColumnName(name: name), "Column-Index out of range")
         if newColumn.count != self.rowCount {
             os_log("New column has the wrong length", log: log_stat, type: .error)
@@ -449,7 +449,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Sets a column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setColumn(at: Int, newColumn: Array<N>) throws {
+    public mutating func setColumn(at: Int, newColumn: Array<N>) throws {
         assert(isValidColumnIndex(column: at), "Column-Index out of range")
         if newColumn.count != self.rowCount {
             os_log("New column has the wrong length", log: log_stat, type: .error)
@@ -462,7 +462,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Inserts a row at index at
     /// - Throws: An error of type SSSwiftyStatsError
-    public func insertRow(newRow: Array<N>, at: Int, name: R?) throws {
+    public mutating func insertRow(newRow: Array<N>, at: Int, name: R?) throws {
         assert(at >= 0 && at < self.rr, "Row-Index out of range")
         if !(newRow.count == self.cc) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -482,7 +482,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Inserts a column at index at
     /// - Throws: An error of type SSSwiftyStatsError
-    public func insertColumn(newColumn: Array<N>, at: Int, name: C?) throws {
+    public mutating func insertColumn(newColumn: Array<N>, at: Int, name: C?) throws {
         assert(at >= 0 && at < self.cc, "Column-Index out of range")
         if !(newColumn.count == self.rr) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
@@ -506,7 +506,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Replaces the row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func replaceRow(newRow: Array<N>, at: Int, name: R?) throws {
+    public mutating func replaceRow(newRow: Array<N>, at: Int, name: R?) throws {
         assert(self.isValidRowIndex(row: at), "Row-Index out of range")
         do {
             try self.insertRow(newRow: newRow, at: at, name: name)
@@ -520,7 +520,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Replaces the column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public func replaceColumn(newColumn: Array<N>, at: Int, name: C?) throws {
+    public mutating func replaceColumn(newColumn: Array<N>, at: Int, name: C?) throws {
         assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
         do {
             try self.insertColumn(newColumn: newColumn, at: at, name: name)
@@ -535,7 +535,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Sets the rows names. Length of rowNames must be equal to self.rows
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setRowNames(rowNames: Array<R>) throws {
+    public mutating func setRowNames(rowNames: Array<R>) throws {
         if !(rowNames.count == self.rr) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
@@ -544,7 +544,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     
     /// Sets the column names. Length of columnNames must be equal to self.columns
     /// - Throws: An error of type SSSwiftyStatsError
-    public func setColumnNames(columnNames: Array<C>) throws {
+    public mutating func setColumnNames(columnNames: Array<C>) throws {
         if !(columnNames.count == self.cc) {
             throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
         }
@@ -552,7 +552,7 @@ public class SSCrosstab<N,R,C>: NSObject where N: Comparable, N: Hashable, R: Co
     }
     
     /// Description string
-    override public var description: String {
+    public var description: String {
         var string = ""
         if let cn = self.columnNames {
             for s in cn {

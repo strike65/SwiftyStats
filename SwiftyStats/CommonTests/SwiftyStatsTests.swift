@@ -436,7 +436,7 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testCrossTabs() {
-        let c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
+        var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
         print(c.description)
         try! c.setColumn(at: 0, newColumn:[52,46,25,26])
         try! c.setColumn(name: 2, newColumn:[89,35,15,10])
@@ -450,7 +450,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c[1,1])
         print(c.residual(row: 1, column: 1))
         print(c.phi)
-        let c1 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
+        var c1 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c1.setColumn(at: 0, newColumn:[4,3])
         try! c1.setColumn(name: 2, newColumn:[2,3])
         print(c1.likelihoodRatio)
@@ -463,7 +463,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c1.phi)
         print(c1.cramerV)
         print(c1)
-        let c2 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
+        var c2 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c2.setColumn(at: 0, newColumn:[60,40])
         try! c2.setColumn(name: 2, newColumn:[30,70])
         print(c2.likelihoodRatio)
@@ -479,7 +479,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c2.r1)
         print(c2)
         //        TAU test
-        let tauTable = try! SSCrosstab.init(rows: 3, columns: 2, initialValue: 0.0, rowID: ["<= 20 a", "21 - 50 a", ">=51 a"], columnID: ["Raucher", "Nichtraucher"])
+        var tauTable = try! SSCrosstab.init(rows: 3, columns: 2, initialValue: 0.0, rowID: ["<= 20 a", "21 - 50 a", ">=51 a"], columnID: ["Raucher", "Nichtraucher"])
         try! tauTable.setColumn(name: "Raucher", newColumn: [0.4, 0.3, 0.30])
         try! tauTable.setColumn(name: "Nichtraucher", newColumn: [0.20, 0.30, 0.50])
         print(tauTable.rowLevelOfMeasurement)
