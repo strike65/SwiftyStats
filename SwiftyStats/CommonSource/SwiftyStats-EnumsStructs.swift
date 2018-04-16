@@ -28,7 +28,7 @@ import Foundation
 
 
 /// Confidence interval struct
-public struct SSConfIntv: CustomStringConvertible {
+public struct SSConfIntv: CustomStringConvertible, Codable {
     /// Lower bound of the CI
     public var lowerBound: Double?
     /// Upper bound of the CI
@@ -50,7 +50,7 @@ public struct SSConfIntv: CustomStringConvertible {
 
 
 /// Quartile struct
-public struct SSQuartile: CustomStringConvertible {
+public struct SSQuartile: CustomStringConvertible, Codable {
     /// 25% Quartile
     public var q25: Double
     /// 50% Quartile
@@ -80,7 +80,7 @@ public struct SSQuartile: CustomStringConvertible {
 }
 
 /// Struct containing descriptive stats
-public struct SSDescriptiveStats: CustomStringConvertible {
+public struct SSDescriptiveStats: CustomStringConvertible, Codable {
     /// arithmetic mean
     public var mean: Double
     /// Variance
@@ -112,7 +112,7 @@ public struct SSDescriptiveStats: CustomStringConvertible {
 }
 
 /// Parameters of a continuous probability distribution
-public struct SSContProbDistParams: CustomStringConvertible {
+public struct SSContProbDistParams: CustomStringConvertible, Codable {
     /// Kurtosis
     public var kurtosis: Double
     /// Mean
@@ -145,7 +145,7 @@ public struct SSContProbDistParams: CustomStringConvertible {
 }
 
 
-public struct SSGrubbsTestResult: CustomStringConvertible {
+public struct SSGrubbsTestResult: CustomStringConvertible, Codable {
     /// ciritcal value
     public var criticalValue: Double?
     /// largest value
@@ -187,7 +187,7 @@ public struct SSGrubbsTestResult: CustomStringConvertible {
     
     
 }
-public struct SSESDTestResult: CustomStringConvertible {
+public struct SSESDTestResult: CustomStringConvertible, Codable  {
     /// sd
     public var stdDeviations: Array<Double>?
     /// number of items removed during procedure
@@ -232,7 +232,7 @@ public struct SSESDTestResult: CustomStringConvertible {
 
 
 /// Results of the KS one sample test. The fields actually used depend on the target distribution.
-public struct SSKSTestResult: CustomStringConvertible {
+public struct SSKSTestResult: CustomStringConvertible, Codable  {
     /// emprical mean
     public var estimatedMean: Double?
     /// empirical sd
@@ -295,7 +295,7 @@ public struct SSKSTestResult: CustomStringConvertible {
 
 
 /// Results of the Anderson Darling test
-public struct SSADTestResult: CustomStringConvertible {
+public struct SSADTestResult: CustomStringConvertible, Codable  {
     /// p value (= (1 - alpha)-quantile of testStatistic
     public var pValue: Double?
     /// Anderson Darling statistics
@@ -336,7 +336,7 @@ public struct SSADTestResult: CustomStringConvertible {
 }
 
 /// Result of tests for equality of variances (Bartlett, Levene, Brown-Forsythe)
-public struct SSVarianceEqualityTestResult: CustomStringConvertible {
+public struct SSVarianceEqualityTestResult: CustomStringConvertible, Codable  {
     /// degrees of freedom
     public var df: Double?
     /// critical value for alpha = 0.1
@@ -377,7 +377,7 @@ public struct SSVarianceEqualityTestResult: CustomStringConvertible {
 }
 
 /// Results of the two sample t-Test
-public struct SS2SampleTTestResult: CustomStringConvertible {
+public struct SS2SampleTTestResult: CustomStringConvertible, Codable  {
     /// one sided p value for equal variances
     public var p1EQVAR: Double?
     /// one sided p value for unequal variances
@@ -473,7 +473,7 @@ public struct SS2SampleTTestResult: CustomStringConvertible {
 }
 
 /// Struct holding the results of the one sample t test
-public struct SSOneSampleTTestResult {
+public struct SSOneSampleTTestResult: CustomStringConvertible,Codable  {
     /// one sided p value
     public var p1Value: Double?
     /// one sided p value
@@ -535,7 +535,7 @@ public struct SSOneSampleTTestResult {
 }
 
 /// Encapsulates the results of a matched pairs t test
-public struct SSMatchedPairsTTestResult: CustomStringConvertible {
+public struct SSMatchedPairsTTestResult: CustomStringConvertible, Codable {
     /// Cov
     public var covariance: Double?
     /// standard error of the difference
@@ -586,7 +586,7 @@ public struct SSMatchedPairsTTestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the chi^2 variance test
-public struct SSChiSquareVarianceTestResult: CustomStringConvertible {
+public struct SSChiSquareVarianceTestResult: CustomStringConvertible, Codable {
     /// degrees of freedom
     public var df: Double?
     /// variance ratio
@@ -628,7 +628,7 @@ public struct SSChiSquareVarianceTestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the multiple means tes
-public struct SSOneWayANOVATestResult: CustomStringConvertible {
+public struct SSOneWayANOVATestResult: CustomStringConvertible, Codable {
     /// two sided p value
     public var p2Value: Double?
     /// F ratio
@@ -685,7 +685,7 @@ public struct SSOneWayANOVATestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the F test for equal variances
-public struct SSFTestResult: CustomStringConvertible {
+public struct SSFTestResult: CustomStringConvertible, Codable {
     /// size of sample 1
     public var sampleSize1: Double?
     /// size of sample 2
@@ -742,7 +742,7 @@ public struct SSFTestResult: CustomStringConvertible {
 }
 
 /// Holds the results of Box Ljung Autocorrelation
-public struct SSBoxLjungResult: CustomStringConvertible {
+public struct SSBoxLjungResult: CustomStringConvertible, Codable {
     /// coefficients as Dictionary<lag: String, coeff: Double>
     public var coefficients: Array<Double>?
     /// Bartlett standard error as Dictionary<lag: String, se: Double>
@@ -773,7 +773,7 @@ public struct SSBoxLjungResult: CustomStringConvertible {
 }
 
 /// Holds the results of the runs test
-public struct SSRunsTestResult: CustomStringConvertible {
+public struct SSRunsTestResult: CustomStringConvertible, Codable {
     /// Number of items >= cutting point
     public var nGTEcp: Double?
     /// Number of items < cutting point
@@ -817,7 +817,7 @@ public struct SSRunsTestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the Mann-Whitney U test
-public struct SSMannWhitneyUTestResult: CustomStringConvertible {
+public struct SSMannWhitneyUTestResult: CustomStringConvertible, Codable {
     /// sum of ranks in set 1
     public var sumRanks1: Double?
     /// sum of ranks in set 2
@@ -875,7 +875,7 @@ public struct SSMannWhitneyUTestResult: CustomStringConvertible {
 
 
 /// Holds the results of the Wilcoxon test for matched pairs
-public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible {
+public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible, Codable {
     /// two sided p value
     public var p2Value: Double?
     /// sample size
@@ -926,7 +926,7 @@ public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible {
     
 }
 /// Sign test results
-public struct SSSignTestRestult: CustomStringConvertible {
+public struct SSSignTestRestult: CustomStringConvertible, Codable {
     /// exact p value
     public var pValueExact: Double?
     /// asymptotic p value
@@ -963,7 +963,7 @@ public struct SSSignTestRestult: CustomStringConvertible {
 }
 
 /// Binomial test results
-public struct SSBinomialTestResult<T>: CustomStringConvertible where T: Comparable, T: Hashable {
+public struct SSBinomialTestResult<T>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable {
     /// number of trials
     public var nTrials: Int?
     /// number of successes
@@ -1008,7 +1008,7 @@ public struct SSBinomialTestResult<T>: CustomStringConvertible where T: Comparab
 }
 
 /// Results of the KS-2-Sample test
-public struct SSKSTwoSampleTestResult: CustomStringConvertible {
+public struct SSKSTwoSampleTestResult: CustomStringConvertible, Codable {
     /// max pos diff
     var dMaxPos: Double?
     /// max neg diff
@@ -1045,7 +1045,7 @@ public struct SSKSTwoSampleTestResult: CustomStringConvertible {
 }
 
 /// Holds the results of the two sample runs test
-public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible {
+public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible, Codable {
     /// Number of runs
     public var nRuns: Int?
     /// z value
@@ -1092,7 +1092,7 @@ public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible {
     
 }
 /// The results of the H test
-public struct SSKruskalWallisHTestResult: CustomStringConvertible {
+public struct SSKruskalWallisHTestResult: CustomStringConvertible, Codable {
     /// Chi
     public var Chi2: Double?
     /// Chi square corrected for ties
@@ -1140,7 +1140,7 @@ public struct SSKruskalWallisHTestResult: CustomStringConvertible {
 }
 
 /// Statistics needed to create a boxplot
-public struct SSBoxWhisker<T>: CustomStringConvertible where T: Comparable, T: Hashable {
+public struct SSBoxWhisker<T>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable {
     /// Median
     public var median: Double?
     /// Lower "hinge"
@@ -1185,47 +1185,47 @@ public struct SSBoxWhisker<T>: CustomStringConvertible where T: Comparable, T: H
 
 
 /// Type of confidence interval
-public enum SSCIType {
+public enum SSCIType: String, Codable {
     /// To use in cases were the unbiased standard deviation is known
-    case normal
+    case normal = "gaussian"
     /// To use in cases were the unbiased standard deviation is unknown
-    case student
+    case student = "student"
 }
 
 
 /// Defines the format of the Cumulative Frequency Table
-public enum SSCumulativeFrequencyTableFormat {
+public enum SSCumulativeFrequencyTableFormat: Int, Codable {
     /// Each item will be shown as many as found
-    case eachUniqueItem
+    case eachUniqueItem = 1
     /// Each item will be shown once
-    case eachItem
+    case eachItem = 2
 }
 
 /// Defines the level of measurement. In future versions this setting will be used to determine the available statistics.
-public enum SSLevelOfMeasurement: Int {
+public enum SSLevelOfMeasurement: String, Codable {
     /// nominal data (allowed operators: == and !=)
-    case nominal
+    case nominal = "nominal"
     /// ordinal data (allowed operators: ==, !=, <, >)
-    case ordinal
+    case ordinal = "ordinal"
     /// interval data (allowed operators: ==, !=, <, >, +, -)
-    case interval
+    case interval = "interval"
     /// ratio data (allowed operators: ==, !=, <, >, +, -, *, /)
-    case ratio
+    case ratio = "ratio"
 }
 
 
 /// Defines the sorting order of the elements.
-public enum SSSortUniqeItems {
+public enum SSSortUniqeItems: Int, Codable {
     /// Ascending order
-    case ascending
+    case ascending = 1
     /// Descending order
-    case descending
+    case descending = 2
     /// Undefined/not determined
-    case none
+    case none = 0xff
 }
 
 /// Defines the sort order of the Frequency Table
-public enum SSFrequencyTableSortOrder {
+public enum SSFrequencyTableSortOrder: Int, Codable {
     /// Sorts by frequency ascending
     case frequencyAscending
     /// Sorts by frequency descending
@@ -1238,7 +1238,7 @@ public enum SSFrequencyTableSortOrder {
     case none
 }
 /// Defines the sort order of items when exported as an array
-public enum SSDataArraySortOrder {
+public enum SSDataArraySortOrder: Int, Codable {
     /// Ascending order
     case ascending
     /// Descending order
@@ -1249,18 +1249,19 @@ public enum SSDataArraySortOrder {
     case none
 }
 /// Specifies the type of variance test
-public enum SSVarTestType {
+public enum SSVarTestType: String, Codable {
     /// Levene test using the median (Brown-Forsythe)
-    case leveneMedian
+    case leveneMedian = "Levene (Median)"
     /// Levene test using the mean
-    case leveneMean
+    case leveneMean = "Levene (Mean)"
     /// Levene test using the trimmed mean
-    case leveneTrimmedMean
+    case leveneTrimmedMean = "Levene (Trimmed Mean)"
     /// Bartlett test
-    case bartlett
+    case bartlett = "Bartlett"
 }
-/// Defines the
-public enum SSLeveneTestType {
+
+/// Defines the type if the Levene test.
+public enum SSLeveneTestType: Int, Codable {
     /// Use the median (Brown-Forsythe-Test)
     case median
     /// Use the arithmetic mean
@@ -1270,29 +1271,29 @@ public enum SSLeveneTestType {
 }
 
 /// Defines the cutting point used by the Runs test
-public enum SSRunsTestCuttingPoint {
+public enum SSRunsTestCuttingPoint: String, Codable {
     /// use the median
-    case median
+    case median = "median"
     /// use mean
-    case mean
+    case mean = "mean"
     /// use mode
-    case mode
+    case mode = "mode"
     /// use user defined cutting point
-    case userDefined
+    case userDefined = "undefined"
 }
 
 /// Defines the sort order of the Contingency Table
-public enum SSContingencyTableSortOrder {
+public enum SSContingencyTableSortOrder: Int, Codable {
     case ascending, descending, none
 }
 
 /// The 1D Chisquare-Hypothesis type
-public enum SS1DChiSquareHypothesisType {
+public enum SS1DChiSquareHypothesisType: Int, Codable {
     case uniform, irregular
 }
 
 /// Defines the type of the moment to compute
-public enum SSMomentType {
+public enum SSMomentType: Int, Codable {
     /// Central moment
     case central
     /// Moment about the origin
@@ -1302,19 +1303,19 @@ public enum SSMomentType {
 }
 
 /// Defines the type of variance to compute
-public enum SSVarianceType: Int {
+public enum SSVarianceType: Int, Codable {
     case biased = 0
     case unbiased = 1
 }
 
 /// Defines the type of sd to compute
-public enum SSStandardDeviationType: Int {
+public enum SSStandardDeviationType: Int, Codable {
     case biased = 0
     case unbiased = 1
 }
 
 /// Defines type of kurtosis
-public enum SSKurtosisType {
+public enum SSKurtosisType: Int, Codable {
     /// kurtosisExecs < 0
     case platykurtic
     /// kurtosisExecs == 0
@@ -1324,7 +1325,7 @@ public enum SSKurtosisType {
 }
 
 /// Skewness type
-public enum SSSkewness {
+public enum SSSkewness: Int, Codable {
     /// skewness < 0
     case leftSkewed
     /// skewness > 0
@@ -1334,7 +1335,7 @@ public enum SSSkewness {
 }
 
 /// Type of semi variance
-public enum SSSemiVariance {
+public enum SSSemiVariance: Int, Codable {
     /// lower semi-variance
     case lower
     /// upper semi-variance
@@ -1342,7 +1343,7 @@ public enum SSSemiVariance {
 }
 
 /// Type of outlier test
-public enum SSOutlierTest {
+public enum SSOutlierTest: Int, Codable {
     /// use Grubbs test
     case grubbs
     /// use ESD test
@@ -1352,7 +1353,7 @@ public enum SSOutlierTest {
 
 
 /// Type of the Rosner test for outliers (ESD test)
-public enum SSESDTestType {
+public enum SSESDTestType: Int, Codable {
     /// consider lower tail only
     case lowerTail
     /// consider upper tail only
@@ -1365,7 +1366,7 @@ public enum SSESDTestType {
 
 
 /// Enumarates the target distribution to use for GoF tests
-public enum SSGoFTarget {
+public enum SSGoFTarget: Int, Codable {
     /// Normal distribution. Estimated parameters: mean and variance
     case gaussian
     /// Student's t distribution. Estimated parameter: degrees of freedom
@@ -1380,15 +1381,15 @@ public enum SSGoFTarget {
 }
 
 
-public enum SSAlternativeHypotheses {
+public enum SSAlternativeHypotheses: Int, Codable {
     case less, greater, twoSided
 }
 
-public enum SSCDFTail {
+public enum SSCDFTail: Int, Codable {
     case lower, upper
 }
 
-public enum SSPostHocTestType {
+public enum SSPostHocTestType: Int, Codable {
     case tukeyKramer, scheffe
 }
 

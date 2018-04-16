@@ -28,7 +28,8 @@ import os.log
 
 /// Class provides a matrix-like crosstable. Elements are accessible by c[row, column].
 /// - Precondition: Rows and columns must be named.
-public struct SSCrosstab<N,R,C> where N: Comparable, N: Hashable, R: Comparable, R: Hashable, C: Comparable, C: Hashable {
+public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable {
+    
     /// Number of rows
     public var rowCount: Int {
         get {
@@ -113,6 +114,20 @@ public struct SSCrosstab<N,R,C> where N: Comparable, N: Hashable, R: Comparable,
         }
     }
     
+    
+    private enum CodingKeys: String, CodingKey {
+        case rnames = "rowNames"
+        case cnames = "columnNames"
+        case levelRows = "levelOfRows"
+        case levelColumns = "levelOfColumns"
+        case rr = "rowCount"
+        case cc = "columnCount"
+        case counts = "table"
+        case isNumeric = "isNumeric"
+    }
+    
+
+    
     private var rnames: Array<R>?
     private var cnames: Array<C>?
     private var levelRows: SSLevelOfMeasurement
@@ -122,6 +137,32 @@ public struct SSCrosstab<N,R,C> where N: Comparable, N: Hashable, R: Comparable,
     private var counts: Array<Array<N>>
     
     public var isNumeric: Bool
+    
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(rnames, forKey:CodingKeys.rnames)
+        try container.encode(cnames, forKey: CodingKeys.cnames)
+        try container.encode(levelRows.rawValue, forKey: CodingKeys.levelRows)
+        try container.encode(levelColumns.rawValue, forKey: CodingKeys.levelColumns)
+        try container.encode(rr, forKey: CodingKeys.rr)
+        try container.encode(cc, forKey: CodingKeys.cc)
+        try container.encode(counts, forKey: CodingKeys.counts)
+        try container.encode(isNumeric, forKey: CodingKeys.isNumeric)
+    }
+    
+
+    public init (from decoder: Decoder) throws {
+        let container = try  decoder.container(keyedBy: CodingKeys.self)
+        self.rnames = try container.decode(Array<R>.self, forKey: CodingKeys.rnames)
+        self.cnames = try container.decode(Array<C>.self, forKey: CodingKeys.cnames)
+        self.levelRows = try container.decode(SSLevelOfMeasurement.self, forKey: CodingKeys.levelRows)
+        self.levelColumns = try container.decode(SSLevelOfMeasurement.self, forKey: CodingKeys.levelColumns)
+        self.rr = try container.decode(Int.self, forKey: CodingKeys.rr)
+        self.cc = try container.decode(Int.self, forKey: CodingKeys.cc)
+        self.counts = try container.decode(Array<Array<N>>.self, forKey: CodingKeys.counts)
+        self.isNumeric = try container.decode(Bool.self, forKey: CodingKeys.isNumeric)
+    }
     
     /// Initializes a new crosstab
     /// - Parameter rows: number of rows
@@ -1168,7 +1209,7 @@ extension SSCrosstab {
     }
     
     /// Returns the coefficient of contingency
-    public var cc: Double {
+    public var ccont: Double {
         get {
             let chi = self.chiSquare
             return sqrt(chi / (chi + self.total))
@@ -1178,7 +1219,7 @@ extension SSCrosstab {
     /// Returns the coefficient of contingency
     public var coefficientOfContingency: Double {
         get {
-            return self.cc
+            return self.ccont
         }
     }
 

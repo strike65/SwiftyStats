@@ -449,7 +449,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         self.name = try container.decodeIfPresent(String.self, forKey: CodingKeys.name)
         self.descriptionString = try container.decodeIfPresent(String.self, forKey: CodingKeys.descriptionString)
         self.alpha = try container.decodeIfPresent(Double.self, forKey: CodingKeys.alpha)
-        if let lm = try container.decodeIfPresent(Int.self, forKey: CodingKeys.levelOfMeasurement) {
+        if let lm = try container.decodeIfPresent(String.self, forKey: CodingKeys.levelOfMeasurement) {
             self.levelOfMeasurement = SSLevelOfMeasurement(rawValue:lm)
         }
         self.isNumeric = try container.decodeIfPresent(Bool.self, forKey: .isNumeric)
