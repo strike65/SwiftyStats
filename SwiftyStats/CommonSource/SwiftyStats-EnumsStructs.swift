@@ -1215,17 +1215,28 @@ public enum SSLevelOfMeasurement: String, Codable {
 
 
 /// Defines the sorting order of the elements.
-public enum SSSortUniqeItems: Int, Codable {
+public enum SSSortUniqeItems: Int, CustomStringConvertible, Codable {
     /// Ascending order
     case ascending = 1
     /// Descending order
     case descending = 2
     /// Undefined/not determined
     case none = 0xff
+    
+    public var description: String {
+        switch self {
+        case .ascending:
+            return "ascending"
+        case .descending:
+            return "descending"
+        case .none:
+            return "none"
+        }
+    }
 }
 
 /// Defines the sort order of the Frequency Table
-public enum SSFrequencyTableSortOrder: Int, Codable {
+public enum SSFrequencyTableSortOrder: Int, Codable, CustomStringConvertible {
     /// Sorts by frequency ascending
     case frequencyAscending
     /// Sorts by frequency descending
@@ -1236,40 +1247,107 @@ public enum SSFrequencyTableSortOrder: Int, Codable {
     case valueDescending
     /// Undefined
     case none
+    public var description: String {
+        switch self {
+        case .frequencyAscending:
+            return "ascending by frequency"
+        case .frequencyDescending:
+            return "descending by frequency"
+        case .valueAscending:
+            return "ascending by value"
+        case .valueDescending:
+            return "descending by value"
+        case .none:
+            return "none"
+        }
+    }
+
+    
 }
 /// Defines the sort order of items when exported as an array
-public enum SSDataArraySortOrder: Int, Codable {
+public enum SSDataArraySortOrder: Int, Codable, CustomStringConvertible {
     /// Ascending order
     case ascending
     /// Descending order
     case descending
     /// Original order
-    case original
+    case raw
     /// Undefined
     case none
-}
-/// Specifies the type of variance test
-public enum SSVarTestType: String, Codable {
-    /// Levene test using the median (Brown-Forsythe)
-    case leveneMedian = "Levene (Median)"
-    /// Levene test using the mean
-    case leveneMean = "Levene (Mean)"
-    /// Levene test using the trimmed mean
-    case leveneTrimmedMean = "Levene (Trimmed Mean)"
-    /// Bartlett test
-    case bartlett = "Bartlett"
+    public var description: String {
+        switch self {
+        case .ascending:
+            return "ascending"
+        case .descending:
+            return "descending"
+        case .raw:
+            return "raw"
+        case .none:
+            return "none"
+        }
+    }
+
 }
 
 /// Defines the type if the Levene test.
-public enum SSLeveneTestType: Int, Codable {
-    /// Use the median (Brown-Forsythe-Test)
+public enum SSLeveneTestType: String, Codable {
+    /// Levene test using the median (Brown-Forsythe)
     case median
-    /// Use the arithmetic mean
+    /// Levene test using the mean
     case mean
-    /// Use the trimmed mean
+    /// Levene test using the trimmed mean
     case trimmedMean
 }
 
+
+/// Defines the type of variance test
+public enum SSVarTestType: CustomStringConvertible, Codable {
+    /// Bartlett test
+    case bartlett
+    /// Variant of the Levene-Test
+    case levene(SSLeveneTestType)
+    
+    public var description: String  {
+        switch self {
+        case .levene(.median):
+            return "Levene/Brown-Forsythe (median)"
+        case .levene(.mean):
+            return "Levene (mean)"
+        case .levene(.trimmedMean):
+            return "Levene (trimmedMean)"
+        case .bartlett:
+            return "Bartlett-Test"
+        }
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case bartlett
+        case levene
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .bartlett:
+            try container.encode("Bartlett", forKey: .bartlett)
+        case .levene(let value):
+            try container.encode(value, forKey: .levene)
+        }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let _ = try container.decodeIfPresent(String.self, forKey: .bartlett) {
+            self = .bartlett
+        }
+        else {
+            let value = try container.decode(SSLeveneTestType.self, forKey: .levene)
+            self = .levene(value)
+        }
+    }
+}
+
+ 
 /// Defines the cutting point used by the Runs test
 public enum SSRunsTestCuttingPoint: String, Codable {
     /// use the median
@@ -1283,39 +1361,85 @@ public enum SSRunsTestCuttingPoint: String, Codable {
 }
 
 /// Defines the sort order of the Contingency Table
-public enum SSContingencyTableSortOrder: Int, Codable {
+public enum SSContingencyTableSortOrder: Int, Codable, CustomStringConvertible {
     case ascending, descending, none
+    public var description: String {
+        switch self {
+        case .ascending:
+            return "ascending"
+        case .descending:
+            return "descending"
+        case .none:
+            return "none"
+        }
+    }
 }
 
 /// The 1D Chisquare-Hypothesis type
-public enum SS1DChiSquareHypothesisType: Int, Codable {
+public enum SS1DChiSquareHypothesisType: Int, Codable, CustomStringConvertible {
     case uniform, irregular
+    public var description: String {
+        switch self {
+        case .uniform:
+            return "uniform"
+        case .irregular:
+            return "irregular"
+        }
+    }
+
 }
 
 /// Defines the type of the moment to compute
-public enum SSMomentType: Int, Codable {
+public enum SSMomentType: Int, Codable, CustomStringConvertible {
     /// Central moment
     case central
     /// Moment about the origin
     case origin
     /// Standardized moment
     case standardized
+    public var description: String {
+        switch self {
+        case .central:
+            return "central"
+        case .origin:
+            return "about the origin"
+        case .standardized:
+            return "standardized"
+        }
+    }
 }
 
 /// Defines the type of variance to compute
-public enum SSVarianceType: Int, Codable {
+public enum SSVarianceType: Int, Codable, CustomStringConvertible {
     case biased = 0
     case unbiased = 1
+    public var description: String {
+        switch self {
+        case .biased:
+            return "biased"
+        case .unbiased:
+            return "unbiased"
+        }
+    }
+
 }
 
 /// Defines the type of sd to compute
-public enum SSStandardDeviationType: Int, Codable {
+public enum SSStandardDeviationType: Int, Codable, CustomStringConvertible  {
     case biased = 0
     case unbiased = 1
+    public var description: String {
+        switch self {
+        case .biased:
+            return "biased"
+        case .unbiased:
+            return "unbiased"
+        }
+    }
 }
 
 /// Defines type of kurtosis
-public enum SSKurtosisType: Int, Codable {
+public enum SSKurtosisType: String, Codable {
     /// kurtosisExecs < 0
     case platykurtic
     /// kurtosisExecs == 0
@@ -1325,48 +1449,87 @@ public enum SSKurtosisType: Int, Codable {
 }
 
 /// Skewness type
-public enum SSSkewness: Int, Codable {
+public enum SSSkewness: Int, Codable, CustomStringConvertible {
     /// skewness < 0
     case leftSkewed
     /// skewness > 0
     case rightSkewed
     /// skewness == 0
     case symmetric
+    public var description: String {
+        switch self {
+        case .leftSkewed:
+            return "left skewed"
+        case .rightSkewed:
+            return "right skewed"
+        case .symmetric:
+            return "symmetric"
+        }
+    }
+
 }
 
 /// Type of semi variance
-public enum SSSemiVariance: Int, Codable {
+public enum SSSemiVariance: Int, Codable, CustomStringConvertible {
     /// lower semi-variance
     case lower
     /// upper semi-variance
     case upper
+    public var description: String {
+        switch self {
+        case .lower:
+            return "lower"
+        case .upper:
+            return "upper"
+        }
+    }
+
 }
 
 /// Type of outlier test
-public enum SSOutlierTest: Int, Codable {
+public enum SSOutlierTest: Int, Codable, CustomStringConvertible {
     /// use Grubbs test
     case grubbs
     /// use ESD test
     case esd
+    public var description: String {
+        switch self {
+        case .grubbs:
+            return "Grubbs Test"
+        case .esd:
+            return "Rosner"
+        }
+    }
+
 }
 
 
 
 /// Type of the Rosner test for outliers (ESD test)
-public enum SSESDTestType: Int, Codable {
+public enum SSESDTestType: Int, Codable, CustomStringConvertible {
     /// consider lower tail only
     case lowerTail
     /// consider upper tail only
     case upperTail
     /// consider both tails
     case bothTails
+    public var description: String {
+        switch self {
+        case .lowerTail:
+            return "lower tail"
+        case .upperTail:
+            return "upper tail"
+        case .bothTails:
+            return "both tails"
+        }
+    }
 }
 
 
 
 
 /// Enumarates the target distribution to use for GoF tests
-public enum SSGoFTarget: Int, Codable {
+public enum SSGoFTarget: Int, Codable, CustomStringConvertible {
     /// Normal distribution. Estimated parameters: mean and variance
     case gaussian
     /// Student's t distribution. Estimated parameter: degrees of freedom
@@ -1378,19 +1541,63 @@ public enum SSGoFTarget: Int, Codable {
     /// Laplace distribution. Estimated parameters: upper and lower bound
     case uniform
     case none
+    public var description: String {
+        switch self {
+        case .gaussian:
+            return "Gaussian"
+        case .studentT:
+            return "Student"
+        case .laplace:
+            return "Laplace"
+        case .exponential:
+            return "Exponential"
+        case .uniform:
+            return "Uniform"
+        case .none:
+            return "none"
+        }
+    }
 }
 
 
-public enum SSAlternativeHypotheses: Int, Codable {
+public enum SSAlternativeHypotheses: Int, Codable, CustomStringConvertible {
     case less, greater, twoSided
+    public var description: String {
+        switch self {
+        case .less:
+            return "less"
+        case .greater:
+            return "greater"
+        case .twoSided:
+            return "two sided"
+        }
+    }
 }
 
-public enum SSCDFTail: Int, Codable {
+public enum SSCDFTail: Int, Codable, CustomStringConvertible {
     case lower, upper
+    public var description: String {
+        switch self {
+        case .lower:
+            return "lower tail"
+        case .upper:
+            return "upper tail"
+        }
+    }
+
 }
 
-public enum SSPostHocTestType: Int, Codable {
+public enum SSPostHocTestType: Int, Codable, CustomStringConvertible {
     case tukeyKramer, scheffe
+    public var description: String {
+        switch self {
+        case .tukeyKramer:
+            return "Tukey/Kramer"
+        case .scheffe:
+            return "Scheffé"
+        }
+    }
+
 }
 
 /// A tuple containing the results of one out of multiple comparisons.

@@ -87,7 +87,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var diff = Array<Double>()
-        let elements = data.elementsAsArray(sortOrder: .original)!
+        let elements = data.elementsAsArray(sortOrder: .raw)!
         var dtemp: Double = 0.0
         var n2: Double = 0.0
         var n1: Double = 0.0

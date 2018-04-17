@@ -647,7 +647,7 @@ extension SSExamine {
             var s: Double = 0.0
             var p: Double = 0.0
             if let tot = self.total {
-                for item in self.elementsAsArray(sortOrder: .original)! {
+                for item in self.elementsAsArray(sortOrder: .raw)! {
                     if let x = castValueToDouble(item) {
                         p = x / tot
                         s += p * p
@@ -1159,7 +1159,7 @@ extension SSExamine {
                 }
             case .esd:
                 var tempArray = Array<Double>()
-                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
                 for itm in a {
                     if let t = castValueToDouble(itm) {
                         tempArray.append(t)
@@ -1193,7 +1193,7 @@ extension SSExamine {
     public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<Double>? {
         if isArithmetic {
             var tempArray = Array<Double>()
-            let a:Array<SSElement> = self.elementsAsArray(sortOrder: .original)!
+            let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
             for itm in a {
                 if let temp = castValueToDouble(itm) {
                     tempArray.append(temp)

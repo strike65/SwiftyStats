@@ -41,7 +41,7 @@ extension SSHypothesisTesting {
         var array: Array<Array<Double>> = Array<Array<Double>>()
         for examine in data {
             if !examine.isEmpty {
-                array.append(examine.elementsAsArray(sortOrder: .original)!)
+                array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
                 os_log("sample size is expected to be > 2", log: log_stat, type: .error)
@@ -136,7 +136,7 @@ extension SSHypothesisTesting {
         var array: Array<Array<Double>> = Array<Array<Double>>()
         for examine in data {
             if !examine.isEmpty {
-                array.append(examine.elementsAsArray(sortOrder: .original)!)
+                array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
                 os_log("sample size is expected to be > 2", log: log_stat, type: .error)
@@ -203,7 +203,7 @@ extension SSHypothesisTesting {
                 _ntemp = Double(examine.sampleSize)
                 _N += _ntemp
                 _ni.append(_ntemp)
-                _y.append(examine.elementsAsArray(sortOrder: .original)!)
+                _y.append(examine.elementsAsArray(sortOrder: .raw)!)
                 switch testType {
                 case .mean:
                     if let m = examine.arithmeticMean {
@@ -287,11 +287,11 @@ extension SSHypothesisTesting {
             result.df = Double.nan
             switch testType {
             case .mean:
-                result.testType = .leveneMean
+                result.testType = .levene(.mean)
             case .median:
-                result.testType = .leveneMedian
+                result.testType = .levene(.median)
             case .trimmedMean:
-                result.testType = .leveneTrimmedMean
+                result.testType = .levene(.trimmedMean)
             }
             return result
         }

@@ -414,7 +414,7 @@ extension SSHypothesisTesting {
     public class func adNormalityTest(data: SSExamine<Double>!, alpha: Double!) throws -> SSADTestResult? {
         if !data.isEmpty {
             do {
-                return try adNormalityTest(array: data.elementsAsArray(sortOrder: .original)!, alpha: alpha)
+                return try adNormalityTest(array: data.elementsAsArray(sortOrder: .raw)!, alpha: alpha)
             }
             catch {
                 throw error
@@ -627,8 +627,8 @@ extension SSHypothesisTesting {
         var sumRanksSet2: Double = 0.0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
-        var tempData = set1.elementsAsArray(sortOrder: .original)!
-        tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .original)!)
+        var tempData = set1.elementsAsArray(sortOrder: .raw)!
+        tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .raw)!)
         let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
         let sorted = sorter.sortedArrays()
         let rr = rank.init(data: sorted.sortedData, groups: sorted.sortedGroups)
@@ -766,8 +766,8 @@ extension SSHypothesisTesting {
         var nties: Int = 0
         var temp: Double = 0.0
         var diff:Array<Double> = Array<Double>()
-        let a1: Array<Double> = set1.elementsAsArray(sortOrder: .original)!
-        let a2: Array<Double> = set2.elementsAsArray(sortOrder: .original)!
+        let a1: Array<Double> = set1.elementsAsArray(sortOrder: .raw)!
+        let a2: Array<Double> = set2.elementsAsArray(sortOrder: .raw)!
         let N = set1.sampleSize
         i = 0
         while i < N {
@@ -886,8 +886,8 @@ extension SSHypothesisTesting {
             os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let a1 = set1.elementsAsArray(sortOrder: .original)!
-        let a2 = set2.elementsAsArray(sortOrder: .original)!
+        let a1 = set1.elementsAsArray(sortOrder: .raw)!
+        let a2 = set2.elementsAsArray(sortOrder: .raw)!
         var np: Int = 0
         var nn: Int = 0
         var nties: Int = 0
@@ -1275,8 +1275,8 @@ extension SSHypothesisTesting {
         var groups = Array<Int>.init(repeating: 1, count: set1.sampleSize)
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
         var sortedData: Array<T> = Array<T>()
-        var data = set1.elementsAsArray(sortOrder: .original)!
-        data.append(contentsOf: set2.elementsAsArray(sortOrder: .original)!)
+        var data = set1.elementsAsArray(sortOrder: .raw)!
+        data.append(contentsOf: set2.elementsAsArray(sortOrder: .raw)!)
         let sorter = SSDataGroupSorter.init(data: data, groups: groups)
         let sorted = sorter.sortedArrays()
         groups = sorted.sortedGroups
@@ -1504,7 +1504,7 @@ extension SSHypothesisTesting {
             groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
             k += 1
             N += Double(examine.sampleSize)
-            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .original)!)
+            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
         }
         let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
         let sorted = sorter.sortedArrays()

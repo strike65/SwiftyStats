@@ -286,8 +286,8 @@ public class SSHypothesisTesting {
         let s1 = set1.variance(type: .unbiased)!
         let s2 = set2.variance(type: .unbiased)!
         let diffMeans = m1 - m2
-        let a1 = set1.elementsAsArray(sortOrder: .original)!
-        let a2 = set2.elementsAsArray(sortOrder: .original)!
+        let a1 = set1.elementsAsArray(sortOrder: .raw)!
+        let a2 = set2.elementsAsArray(sortOrder: .raw)!
         var sum: Double = 0.0
         let n: Int = set1.sampleSize
         var i: Int = 0

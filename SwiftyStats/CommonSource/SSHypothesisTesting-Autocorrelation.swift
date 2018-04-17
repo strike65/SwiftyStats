@@ -61,7 +61,7 @@ extension SSHypothesisTesting {
         let mean: Double = data.arithmeticMean!
         var i: Int = 0
         let n = data.sampleSize
-        let elements = data.elementsAsArray(sortOrder: .original)!
+        let elements = data.elementsAsArray(sortOrder: .raw)!
         while i < n - 1 {
             num += (elements[i] - mean) * (elements[i + 1] - mean)
             i += 1
@@ -126,7 +126,7 @@ extension SSHypothesisTesting {
         var i: Int = 0
         var k: Int = 0
         let n = data.sampleSize
-        let elements = data.elementsAsArray(sortOrder: .original)!
+        let elements = data.elementsAsArray(sortOrder: .raw)!
         while i < n {
             den += pow(elements[i] - mean, 2.0)
             i += 1

@@ -83,7 +83,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     public override var hashValue: Int {
         var temp: Int
         if !isEmpty {
-            var a = elementsAsArray(sortOrder: .original)!
+            var a = elementsAsArray(sortOrder: .raw)!
             let strings = self.elementsAsString(withDelimiter: "")!
             temp = (a[a.startIndex].hashValue)
             for item in a {
@@ -101,8 +101,8 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     public override func isEqual(_ object: Any?) -> Bool {
         if let o: SSExamine<SSElement> = object as? SSExamine<SSElement> {
             if !self.isEmpty && !o.isEmpty {
-                let a1 = self.elementsAsArray(sortOrder: .original)!
-                let a2 = o.elementsAsArray(sortOrder: .original)!
+                let a1 = self.elementsAsArray(sortOrder: .raw)!
+                let a2 = o.elementsAsArray(sortOrder: .raw)!
                 return a1 == a2
             }
             else {
@@ -438,7 +438,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         try container.encodeIfPresent(self.alpha, forKey: CodingKeys.alpha)
         try container.encodeIfPresent(self.levelOfMeasurement.rawValue, forKey: CodingKeys.levelOfMeasurement)
         try container.encodeIfPresent(self.isNumeric, forKey: CodingKeys.isNumeric)
-        try container.encodeIfPresent(self.elementsAsArray(sortOrder: .original), forKey: CodingKeys.data)
+        try container.encodeIfPresent(self.elementsAsArray(sortOrder: .raw), forKey: CodingKeys.data)
     }
 
 
@@ -470,7 +470,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
             res.alpha = self.alpha
             res.levelOfMeasurement = self.levelOfMeasurement
             res.hasChanges = self.hasChanges
-            let a: Array<SSElement> = elementsAsArray(sortOrder: .original)!
+            let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
             for item in a {
                 res.append(item)
             }
@@ -641,7 +641,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     public func remove(_ element: SSElement!, allOccurences all: Bool!) {
         if !isEmpty {
             if contains(element) {
-                var temp: Array<SSElement> = elementsAsArray(sortOrder: .original)!
+                var temp: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
                 // remove all elements
                 if all {
                     temp = temp.filter({ $0 != element})
@@ -686,7 +686,7 @@ extension SSExamine {
     /// Returns all elements as one string. Elements are delimited by del.
     /// Paramater del: The delimiter. Can be nil or empty.
     public func elementsAsString(withDelimiter del: String?, asRow: Bool = true) -> String? {
-        let a: Array<SSElement> = elementsAsArray(sortOrder: .original)!
+        let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
         var res: String = String()
         if !asRow {
             if let n = self.name {
@@ -729,7 +729,7 @@ extension SSExamine {
     subscript(_ index: Int) -> SSElement? {
         assert(isValidIndex(index: index), "Index out of range")
         if !self.isEmpty {
-            let a = self.elementsAsArray(sortOrder: .original)!
+            let a = self.elementsAsArray(sortOrder: .raw)!
             return a[index]
         }
         else {
@@ -756,7 +756,7 @@ extension SSExamine {
                 result = temp.sorted(by: {$0 > $1})
             case .none:
                 result = temp
-            case .original:
+            case .raw:
                 temp.removeAll(keepingCapacity: true)
                 for _ in 1...self.sampleSize {
                     temp.append(self.elements.keys[self.elements.keys.startIndex])
