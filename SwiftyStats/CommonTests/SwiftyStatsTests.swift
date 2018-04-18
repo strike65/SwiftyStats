@@ -360,6 +360,13 @@ class SwiftyStatsTests: XCTestCase {
             XCTAssert(examineIntOutliers.hasOutliers(testType: .grubbs)!)
             XCTAssert(examineIntOutliers.hasOutliers(testType: .esd)!)
             
+            print(examineDouble.hashValue)
+            let examine2: SSExamine<Double> = examineDouble.copy() as! SSExamine<Double>
+            print(examineDouble.hashValue)
+            print(examineDouble.hashValue == examine2.hashValue)
+            print(examineDouble == examine2)
+            dump(examine2)
+            dump(examineDouble)
         }
         catch {
             print("catch!")

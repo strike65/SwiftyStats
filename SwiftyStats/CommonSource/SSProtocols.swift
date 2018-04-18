@@ -34,11 +34,11 @@ public protocol SSExamineContainer {
     /// Contains the container any elements
     var isEmpty: Bool { get }
     /// Contains the container the element?
-    func contains(_ element: ExamineElement) -> Bool
+    mutating func contains(_ element: ExamineElement) -> Bool
     /// Frequency of element
-    func frequency(_ element: ExamineElement) -> Int
+    mutating func frequency(_ element: ExamineElement) -> Int
     /// Relative frequency of element
-    func rFrequency(_ element: ExamineElement) -> Double
+    mutating func rFrequency(_ element: ExamineElement) -> Double
     /// Appends an element
     mutating func append(_ element: ExamineElement!)
     /// Appends an element <count> times
