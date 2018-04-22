@@ -143,7 +143,7 @@ extension SSExamine {
     }
     
     
-    /// The scarcest elements. Can be nil for empty tables.
+    /// The scarcest element. Can be nil for empty tables.
     public var scarcest: Array<SSElement>? {
         if !isEmpty {
             var result: Array<SSElement> = Array<SSElement>()
