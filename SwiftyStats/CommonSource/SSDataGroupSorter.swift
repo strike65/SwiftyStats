@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 
-/// Sorts a given array in ascending order.
+/// Sorts a given array in ascending order. Used for ranking.
 /// Suppose we have a group named 'A' and a group 'B'.
 ///
 /// Let the the measurements for A be `a = [1,4,6]` and for B `b = [0,3,2]`. We construct the input array by appending b to a:

@@ -28,8 +28,10 @@ import os.log
 
 /// Class provides a matrix-like crosstable. Elements are accessible by c[row, column].
 /// - Precondition: Rows and columns must be named.
+/// N -> Cell contents
+/// R -> Row Names
+/// C -> Column Names
 public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable {
-    
     /// Number of rows
     public var rowCount: Int {
         get {
