@@ -23,8 +23,6 @@
 
  */
 
-// import Foundation
-
  /*
  Some numerical constants computed by Mathematica (R). Originaly defined for ObjC version of the framework
  */
