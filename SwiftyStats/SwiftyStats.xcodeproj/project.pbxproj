@@ -99,6 +99,7 @@
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
+		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
@@ -176,6 +177,7 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
+				9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */,
 				9FEA825C1F76C9F6005E4349 /* TODO */,
 				9FEA82411F76C9F6005E4349 /* Info.plist */,
 				9FEA82421F76C9F6005E4349 /* scratch */,
