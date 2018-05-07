@@ -545,9 +545,6 @@ public class SSHypothesisTesting {
     
     // TUKEY KRAMER
     // All means are compared --> k(k - 1) / 2 comparisons (k = number of means)
-    // find a procedure
-    // 1. compute all means
-    // 2. compute test statistics
     /*
      Structure of the differences array:
      
