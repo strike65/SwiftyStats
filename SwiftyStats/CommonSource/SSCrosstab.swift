@@ -1324,27 +1324,27 @@ extension SSCrosstab {
     
     public var tauCR: Double {
         assert( false, "not implemented yet")
-        get {
-            if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
-                var sum1 = 0.0
-                var sum2 = 0.0
-                for r in 0..<self.rowCount {
-                    for c in 0..<self.columnCount {
-                        if let fij = castValueToDouble(self[r,c]) {
-                            sum1 += pow(fij, 2.0) / self.rowSum(row: r)
-                            sum2 += pow(self.columnSum(column: c), 2.0)
-                        }
-                        else {
-                            fatalError("internal error")
-                        }
-                    }
-                }
-                return (self.total * sum1 - sum2) / (pow(self.total, 2.0) - sum2)
-            }
-            else {
-                return Double.nan
-            }
-        }
+//        get {
+//            if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
+//                var sum1 = 0.0
+//                var sum2 = 0.0
+//                for r in 0..<self.rowCount {
+//                    for c in 0..<self.columnCount {
+//                        if let fij = castValueToDouble(self[r,c]) {
+//                            sum1 += pow(fij, 2.0) / self.rowSum(row: r)
+//                            sum2 += pow(self.columnSum(column: c), 2.0)
+//                        }
+//                        else {
+//                            fatalError("internal error")
+//                        }
+//                    }
+//                }
+//                return (self.total * sum1 - sum2) / (pow(self.total, 2.0) - sum2)
+//            }
+//            else {
+//                return Double.nan
+//            }
+//        }
     }
 }
 
