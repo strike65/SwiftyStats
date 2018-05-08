@@ -65,8 +65,7 @@ print("\(stringAnalyze.frequency("i")")
 ```
 SSExamine objects can be stored and restored in various ways, e.g.:
 
-```
-Swift
+```Swift
 do {
 	try myExamineObject.archiveTo(filePath: "~/data/myexamine.ssexamine", overwrite: true)
 }
