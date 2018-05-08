@@ -48,8 +48,6 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     
     public typealias Examine = SSExamine<SSElement>
     
-    
-    
     // coding keys
     private enum CodingKeys: String, CodingKey {
         case data = "ExamineArray"
@@ -170,6 +168,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     private var rows: Int = 0
     private var cols: Int = 0
     
+    /// Returns the data
     public var examines: Array<SSExamine<SSElement>> {
         get {
             return data
@@ -201,8 +200,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             return false
         }
     }
+    /// NUmber of samples (Same as `columns`)
+    public var countOfSamples: Int {
+        get {
+            return cols
+        }
+    }
     
-    /// Number of samples
+    /// Number of samples (Same as `countOfSamples`)
     public var columns: Int {
         get {
             return cols
@@ -216,6 +221,10 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         }
     }
     
+    
+    /// Initializes a new instance and returns that instance in a fully initialized state
+    /// - Parameter examineArray: An Array of SSEXamine objects
+    /// - Throws: SSSwiftyStatsError
     init(examineArray: Array<SSExamine<SSElement>>!) throws {
         let tempSampleSize = examineArray.first!.sampleSize
         data = Array<SSExamine<SSElement>>.init()
@@ -263,6 +272,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         super.init()
     }
     
+    /// Required initializer
     override public init() {
         cNames = Array<String>()
         tags = Array<String>()
@@ -325,6 +335,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             return nil
         }
     }
+    
     
     private func isValidColumnIndex(_ index: Int) -> Bool {
         return (index >= 0 && index < self.columns) ? true : false

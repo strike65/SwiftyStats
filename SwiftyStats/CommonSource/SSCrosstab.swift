@@ -27,10 +27,7 @@ import Foundation
 import os.log
 
 /// Class provides a matrix-like crosstable. Elements are accessible by c[row, column].
-/// - Precondition: Rows and columns must be named.
-/// N -> Cell contents
-/// R -> Row Names
-/// C -> Column Names
+/// - Precondition: Rows and columns must be named. Row- <R> and column- <C> names are defined es generics. The content if one cell <N> is defined as generic too.
 public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable {
     /// Number of rows
     public var rowCount: Int {
@@ -82,14 +79,14 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
         }
     }
     
-    /// Returns the row names or nil
+    /// Returns the row-names or nil
     public var rowNames: Array<R>? {
         get {
             return rnames
         }
     }
     
-    /// Returns the column names or nil
+    /// Returns the column-names or nil
     public var columnNames: Array<C>? {
         get {
             return cnames
@@ -116,7 +113,7 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
         }
     }
     
-    
+    /// Support for Codable
     private enum CodingKeys: String, CodingKey {
         case rnames = "rowNames"
         case cnames = "columnNames"
@@ -130,17 +127,22 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
     
 
     
+    /// the row-names
     private var rnames: Array<R>?
+    /// the column-names
     private var cnames: Array<C>?
+    /// the level of measurement for rows
     private var levelRows: SSLevelOfMeasurement
+    /// the level of measurement for columns
     private var levelColumns: SSLevelOfMeasurement
     
     private var rr: Int, cc: Int
+
     private var counts: Array<Array<N>>
     
     public var isNumeric: Bool
     
-    
+    /// Encodes the instance to an encoder
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(rnames, forKey:CodingKeys.rnames)
@@ -153,7 +155,7 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
         try container.encode(isNumeric, forKey: CodingKeys.isNumeric)
     }
     
-
+    /// Decodes from a decoder
     public init (from decoder: Decoder) throws {
         let container = try  decoder.container(keyedBy: CodingKeys.self)
         self.rnames = try container.decode(Array<R>.self, forKey: CodingKeys.rnames)
@@ -216,6 +218,20 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
             return self.rowCount == 2 && self.columnCount == 2
         }
     }
+    /// Returns true if the table is empty
+    public var isEmpty: Bool {
+        get {
+            return self.rowCount == 0 && self.columnCount == 0
+        }
+    }
+    
+    /// Returns true if row-count == column-count
+    public var isSquare: Bool {
+        get {
+            return self.rowCount == self.columnCount
+        }
+    }
+    
     /// Returns `true` if name is a valid row-name
     func isValidRowName(name: R) -> Bool {
         if let _ = indexOfRow(rowName: name) {
@@ -1048,9 +1064,9 @@ extension SSCrosstab {
         }
     }
 
-    /// Returns Chi-Square Likelihood Ratio
+    /// Returns the Chi-Square Likelihood Ratio
     /// - Precondition: at least nominal scaled measurements
-    public var likelihoodRatio: Double {
+    public var chiSquareLikelihoodRatio: Double {
         get {
             var sum: Double = 0.0
             if self.isNumeric {
@@ -1059,6 +1075,9 @@ extension SSCrosstab {
                         if let temp = castValueToDouble(self[r, c]) {
                             if temp != 0 {
                                 sum += temp * log(temp / self.expectedFrequency(row: r, column: c))
+                            }
+                            else {
+                                sum = 0.0
                             }
                         }
                         else {
@@ -1196,17 +1215,17 @@ extension SSCrosstab {
         }
     }
     
-    /// Returns Phi
-    public var phi: Double {
-        get {
-            return sqrt(self.chiSquare / self.total)
-        }
-    }
-    
     /// Returns the Mantel-Haenszel Chi-Square
     public var chiSquareMH: Double {
         get {
             return (self.total - 1.0) * pow(self.pearsonR, 2.0)
+        }
+    }
+
+    /// Returns Phi
+    public var phi: Double {
+        get {
+            return sqrt(self.chiSquare / self.total)
         }
     }
     
@@ -1234,7 +1253,7 @@ extension SSCrosstab {
         }
     }
     
-    /// Returns Lambda
+    /// Returns "Column|Row -Lambda"
     public var lambda_C_R: Double {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let cm = self.largestColumTotal
@@ -1249,7 +1268,7 @@ extension SSCrosstab {
         }
     }
 
-    /// Returns Lambda
+    /// Returns the "Row|Column"-Lambda
     public var lambda_R_C: Double {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let rm = self.largestRowTotal
@@ -1265,7 +1284,7 @@ extension SSCrosstab {
     }
 
 
-    /// Returns the relative risk
+    /// Returns the Odds Ratio
     /// - Preconditions: Only applicable to a 2x2 table
     public var r0: Double {
         get {
@@ -1284,7 +1303,7 @@ extension SSCrosstab {
     }
 
     
-    /// Returns the relative risk in a cohort study
+    /// Returns the relative risk in a cohort study for column 1
     /// - Preconditions: Only applicable to a 2x2 table
     public var r1: Double {
         get {
@@ -1304,6 +1323,7 @@ extension SSCrosstab {
 
     
     public var tauCR: Double {
+        assert( false, "not implemented yet")
         get {
             if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
                 var sum1 = 0.0

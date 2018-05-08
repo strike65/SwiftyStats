@@ -443,13 +443,36 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testCrossTabs() {
-        var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: [1, 2, 3, 4], columnID: [1,2,3])
+        var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: ["Heavy", "Never", "Occas", "Regul"], columnID: ["Freq", "None", "Some"] )
         print(c.description)
-        try! c.setColumn(at: 0, newColumn:[52,46,25,26])
-        try! c.setColumn(name: 2, newColumn:[89,35,15,10])
-        try! c.setColumn(at: 2, newColumn:[123,23,13,5])
-        XCTAssertEqual(c.chiSquare, 57.28, accuracy: 1e-2)
-        print(c.likelihoodRatio)
+/*
+         R code:
+         
+         > library(MASS)
+         > tbl = table(survey$Smoke, survey$Exer)
+         > tbl
+         
+         Freq None Some
+         Heavy    7    1    3
+         Never   87   18   84
+         Occas   12    3    4
+         Regul    9    1    7
+         > chisq.test(tbl)
+         
+         Pearson's Chi-squared test
+         
+         data:  tbl
+         X-squared = 5.4885, df = 6, p-value = 0.4828
+*/
+        try! c.setColumn(name: "Freq", newColumn:[7, 87, 12, 9])
+        try! c.setColumn(name: "None" , newColumn:[1, 18, 3, 1])
+        try! c.setColumn(name: "Some" , newColumn:[3, 84, 4, 7])
+
+//        try! c.setColumn(at: 0, newColumn:[52,46,25,26])
+//        try! c.setColumn(name: 2, newColumn:[89,35,15,10])
+//        try! c.setColumn(at: 2, newColumn:[123,23,13,5])
+        XCTAssertEqual(c.chiSquare, 5.4885, accuracy: 1e-4)
+        print(c.chiSquareLikelihoodRatio)
         print(c.chiSquareYates)
         print(c.pearsonR)
         print(c.adjustedResidual(row: 1, column: 1))
@@ -460,7 +483,7 @@ class SwiftyStatsTests: XCTestCase {
         var c1 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c1.setColumn(at: 0, newColumn:[4,3])
         try! c1.setColumn(name: 2, newColumn:[2,3])
-        print(c1.likelihoodRatio)
+        print(c1.chiSquareLikelihoodRatio)
         print(c1.chiSquareYates)
         print(c1.adjustedResidual(row: 1, column: 1))
         print(c1.expectedFrequency(row: 1, column: 1))
@@ -473,7 +496,7 @@ class SwiftyStatsTests: XCTestCase {
         var c2 = try! SSCrosstab.init(rows: 2, columns: 2, initialValue: 0, rowID: [1, 2], columnID: [1,2])
         try! c2.setColumn(at: 0, newColumn:[60,40])
         try! c2.setColumn(name: 2, newColumn:[30,70])
-        print(c2.likelihoodRatio)
+        print(c2.chiSquareLikelihoodRatio)
         print(c2.chiSquareYates)
         print(c2.adjustedResidual(row: 1, column: 1))
         print(c2.expectedFrequency(row: 1, column: 1))

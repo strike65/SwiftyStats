@@ -152,7 +152,7 @@ public class SSBetaRegularized: SSContFrac {
     
 }
 
-/// Computes a(n) and b(n) for GammaQ
+/// Gamma function as cf
 public class SSGammaQ: SSContFrac {
     
     public var a: Double = Double.nan
