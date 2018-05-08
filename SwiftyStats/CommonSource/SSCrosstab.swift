@@ -1322,8 +1322,8 @@ extension SSCrosstab {
     }
 
     
-    public var tauCR: Double {
-        assert( false, "not implemented yet")
+//    public var tauCR: Double {
+//        assert( false, "not implemented yet")
 //        get {
 //            if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
 //                var sum1 = 0.0
@@ -1345,6 +1345,6 @@ extension SSCrosstab {
 //                return Double.nan
 //            }
 //        }
-    }
+//    }
 }
 
