@@ -132,6 +132,7 @@ extension SSHypothesisTesting {
     
     
     /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
+    /// <img src="../img/esd.png" alt="">
     /// - Parameter data: Array<Double>
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect

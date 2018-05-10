@@ -128,10 +128,6 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         return "A Reason"
     }
 
-//    override public var localizedRecoverySuggestion: String? {
-//        return "try it again"
-//    }
-    
     /// Init
     public init(type: ErrorType, file: String, line: Int, function: String) {
         super.init(domain: "de.swiftystats.SSSwiftyStats", code: type.rawValue, userInfo: nil)
@@ -145,41 +141,5 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         super.init(coder: aDecoder)
     }
     
-//    public override var userInfo: [AnyHashable : Any] {
-//        switch type {
-//            case .none:
-//                return ["description":"No error", "originalError": ""]
-//            case .invalidArgument:
-//                return ["description": "Invalid argument in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .indexOutOfRange:
-//            return "Index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .rowIndexOutOfRange:
-//            return "Row index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .columnIndexOutOfRange:
-//            return "Column index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .rowNameUnknown:
-//            return "Unknown row name in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .columnNameUnknown:
-//            return "Unknown column name in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .functionNotDefinedInDomainProvided:
-//            return "Called function is not defined in that domain in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .missingData:
-//            return "Missing data in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .wrongDataFormat:
-//            return "Wrong data format in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .sizeMismatch:
-//            return "Size mismatch in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .maxNumberOfIterationReached:
-//            return "Maximum number of iterations reached in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .availableOnlyForNumbers:
-//            return "Only available for numbers in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .posixError:
-//            return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
-//            case .fileNotReadable:
-//            return "File not readable error in: " + self.file + " Line: \(self.line) in function: " + self.function
-//            case .directoryDoesNotExist:
-//            return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
-//        }
-//    }
 }
 

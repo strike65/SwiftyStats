@@ -29,8 +29,9 @@ import Foundation
 /// <img src="../img/cf.png" alt="">
 public class SSContFrac: NSObject {
 
+    /// max error
     public var eps:Double = 1E-12
-
+    /// initializes a new instance
     override public init() {
         super.init()
         self.eps = 1E-12
@@ -119,23 +120,26 @@ public class SSContFrac: NSObject {
     }
 }
 
-/// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i)
+/// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i) I_x(a,b)
 public class SSBetaRegularized: SSContFrac {
     
+    /// Parameter a. Must be set by the caller
     public var a: Double = Double.nan
+    /// Parameter b. Must be set by the caller
     public var b: Double = Double.nan
     
+    /// Initializes a new instance
     override public init() {
         super.init()
         self.a = Double.nan
         self.b = Double.nan
     }
-    
+    /// Returns the n_th a. Will always be  one in this case
     override public func a_N(n: Int!, point x: Double?) -> Double {
         return 1.0
     }
     
-    /// Returns the parameter b used by cf
+    /// Returns the nt_th b used by cf
     override public func b_N(n: Int!, point x: Double!) -> Double {
         var res: Double = Double.nan
         var k: Double
@@ -152,21 +156,22 @@ public class SSBetaRegularized: SSContFrac {
     
 }
 
-/// Gamma function as cf
+/// The regularized Gamma function Q(a,z) (http://mathworld.wolfram.com/RegularizedGammaFunction.htm) function as cf
 public class SSGammaQ: SSContFrac {
     
+   /// Parameter a.Must be set by the caller
     public var a: Double = Double.nan
-    
+    /// Initializes a new instance
     override public init() {
         super.init()
         self.a = Double.nan
     }
-    
+    /// Returns the n_th a
     override public func a_N(n: Int!, point x: Double!) -> Double {
         return Double(n + n) + 1.0 - self.a + x
     }
     
-    
+    /// Returns the n_th b
     override public func b_N(n: Int!, point x: Double?) -> Double {
         return Double(n) * self.a - Double(n * n)
     }

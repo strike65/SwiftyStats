@@ -26,6 +26,7 @@ import Foundation
 
 /// Returns the beta function
 /// adapted from the Cephes library with kind permission by Stephen L. Moshier
+/// <img src="../img/Beta.png" alt="">
 /// - Parameter a: a
 /// - Parameter b: b
 public func betaFunction(a: Double!, b: Double!) -> Double {
@@ -73,6 +74,7 @@ public func betaFunction(a: Double!, b: Double!) -> Double {
 
 
 /// Returns the normalized beta function for at x for a and b. Using continued fractions.
+/// <img src="../img/BetaRegularized.png" alt="">
 public func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
     var result: Double = Double.nan
     var _a: Double = Double.nan
@@ -137,6 +139,7 @@ fileprivate func expSum(n: Double!, z: Double) -> Double {
 }
 
 /// Returns the normalized (regularized) Gammma function P (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
+/// <img src="../img/GammaP.png" alt="">
 public func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
     var result: Double
     var n: Double
@@ -180,6 +183,7 @@ public func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePoi
 }
 
 /// Returns the normalized (regularized) Gammma function Q (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
+/// <img src="../img/GammaQ.png" alt="">
 public func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
     if a > 0 && x == 0.0 {
         converged.pointee = true

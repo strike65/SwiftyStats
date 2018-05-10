@@ -26,6 +26,7 @@ import Foundation
 import os.log
 
 /// Provides some of the commonest probability distributions. In general, functions are prefixed by "pdf", "cdf", "quantile" for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively. Probablity distributions in general are defined in relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean". Sometimes it is possible, that a particular distribution isn't defined for a parameter provided.
+/// <img src="../img/pdf_cdf_def.png" alt="">
 /// ### Important ###
 /// This class throws an error object in such circumstances. Therefore the user must embed any call of such functions in a "do-catch" statement.
 
@@ -34,6 +35,7 @@ public class SSProbabilityDistributions {
 // MARK: GAUSSIAN
     
     /// Returns the CDF of a Gaussian distribution
+    /// <img src="../img/Gaussian_def.png" alt="">
     /// - Parameter x: x
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation

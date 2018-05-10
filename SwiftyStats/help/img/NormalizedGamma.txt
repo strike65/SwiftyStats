@@ -1,0 +1,1 @@
+P(a,x)\quad \equiv \quad \frac { \gamma (a,x) }{ \Gamma (a) } \\ Q(a,x)\quad \equiv \quad \frac { \Gamma (a,x) }{ \Gamma (a) } \\ P(a,x)\quad +\quad Q(a,x)\quad \equiv \quad 1\\ 
