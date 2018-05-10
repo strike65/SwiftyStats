@@ -28,13 +28,25 @@ import os.log
 
 /// Sorts a given array in ascending order. Used for ranking.
 /// Suppose we have a group named 'A' and a group 'B'.
+/// Let the the measurements for A be B
 ///
-/// Let the the measurements for A be</br> `a = [1,4,6]` and for B</br> `b = [0,3,2]`. We construct the input array by appending b to a:</br>
-/// `c = a + b = [1,4,6,0,3,1]`. </br>The input array for the group identifiers in this case ewould be</br> `[A,A,A,B,B,B]`.
+/// `a = [1,4,6]`
 ///
-/// sortedArrays().sortedGroups would then be: `[B,A,B,B,A,A]`
+/// `b = [0,3,2]`
 ///
-/// sortedArrays().sortedData would then be: `[0,1,2,3,4,6]`
+/// respectively. We construct the input array `data` by appending b to a:
+///
+/// `c = a + b = [1,4,6,0,3,1]`
+///
+/// The array `groups` is constructed in the same way:
+///
+/// `groups =  [A,A,A,B,B,B]`
+///
+/// ==>
+///
+/// `sortedArrays().sortedGroups` would be: `[B,A,B,B,A,A]`
+///
+/// `sortedArrays().sortedData` would then be: `[0,1,2,3,4,6]`
 public class SSDataGroupSorter<T> where T: Hashable, T: Comparable {
     private var g: Array<Int>
     private var o: Array<T>

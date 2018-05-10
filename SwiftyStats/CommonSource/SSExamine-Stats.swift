@@ -26,11 +26,9 @@
 import Foundation
 import os.log
 
-
+// Definition of statistics
 extension SSExamine {
     
-    // MARK: Totals
-
     private var isArithmetic: Bool {
         get {
             return (!self.isEmpty && self.isNumeric)
