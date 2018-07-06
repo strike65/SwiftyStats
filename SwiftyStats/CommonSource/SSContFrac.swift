@@ -24,7 +24,7 @@
 
 import Foundation
 
-/// An abstract class for the evaluation of continued fractions. This class must be subclassed.
+/// An abstract class used to evaluate continued fractions. This class must be subclassed.
 /// The n<sup>th</sup> coefficient is computed using the methods a_N:N point:x and b_N:N point:x<br/>
 /// <img src="../img/cf.png" alt="">
 public class SSContFrac: NSObject {
@@ -53,11 +53,11 @@ public class SSContFrac: NSObject {
     
     /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the max iteration count is reached or one of the convergents is NAN.
     /// Algorithm according to Lentz, modified by Thompson and Barnett (http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf)
-    /// - Parameter x: x
-    /// - Parameter eps:       max error allowed
-    /// - Parameter maxIter:     Maximum number of iterations
-    /// - Parameter converged: TRUE if the result is valid
-    /// - Parameter iterations:        On return it contains the number of iterations needed.
+    /// - Parameter x:              x
+    /// - Parameter eps:            max error allowed
+    /// - Parameter maxIter:        Maximum number of iterations
+    /// - Parameter converged:      TRUE if the result is valid
+    /// - Parameter iterations:     On return it contains the number of iterations needed.
     /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
     public func compute(x: Double!, eps: Double!, maxIter: Int!, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> Double {
         var n: Int = 1
