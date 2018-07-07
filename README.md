@@ -7,7 +7,7 @@ SwiftyStats is a generic statistical framework completely written in Swift 4. Th
 ## CocoaPods
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project.
 To do this, create (if it doesn't exist already) a file called `Podfile` in the root of your project (the place, where your .xcodeproj-file resides) e.g. by typing `touch Podfile` in a terminal window.
-Then insert the following lines:
+Then insert the following lines (replace YOURPROJECT by the name of your project):
 
 ```
 target 'YOURPROJECT' do
