@@ -28,7 +28,7 @@ import os.log
 
 /// Sorts a given array in ascending order. Used for ranking.
 /// Suppose we have a group named 'A' and a group 'B'.
-/// Let the the measurements for A be B
+/// Let the measurements for A and B be
 ///
 /// `a = [1,4,6]`
 ///
@@ -42,7 +42,7 @@ import os.log
 ///
 /// `groups =  [A,A,A,B,B,B]`
 ///
-/// ==>
+/// Result:
 ///
 /// `sortedArrays().sortedGroups` would be: `[B,A,B,B,A,A]`
 ///

@@ -240,10 +240,9 @@ func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Compar
 }
 
 
-/*********
- functions for basic types provided for use with SSDataFrame.dataFrame...
-*/
-
+/*************************************************************
+ scanning functions
+*************************************************************/
 
 func scanDouble(string: String?) -> Double? {
     guard string != nil else {

@@ -1046,7 +1046,7 @@ extension SSCrosstab {
     }
 
     /// Returns Pearson's Chi-Square
-    /// - Precondition: Mesurement must be at least nominal scaled
+    /// - Precondition: Measurements must be at least nominally scaled
     public var chiSquare: Double {
         get {
             if self.isNumeric {
@@ -1065,7 +1065,7 @@ extension SSCrosstab {
     }
 
     /// Returns the Chi-Square Likelihood Ratio
-    /// - Precondition: at least nominal scaled measurements
+    /// - Precondition: at least nominally scaled measurements
     public var chiSquareLikelihoodRatio: Double {
         get {
             var sum: Double = 0.0
@@ -1094,7 +1094,7 @@ extension SSCrosstab {
     }
     
     /// Returns the Yates continuity corrected Chi-Square for a 2 x 2 table
-    /// - Precondition: at least nominal scaled measurements
+    /// - Precondition: at least nominally scaled measurements
     public var chiSquareYates: Double {
         get {
             if self.is2x2Table {
@@ -1120,7 +1120,7 @@ extension SSCrosstab {
     }
 
     /// Returns the covariance
-    /// - Precondition: at least interval scaled measurements
+    /// - Precondition: at least interval-scaled measurements
     public var covariance: Double {
         get {
             if self.rowLevelOfMeasurement == .nominal || self.columnLevelOfMeasurement == .nominal {
@@ -1177,7 +1177,7 @@ extension SSCrosstab {
     }
     
     /// Returns the product moment correlation r (Pearson's r)
-    /// - Precondition: At least interval scaled measurements
+    /// - Precondition: At least interval-scaled measurements
     public var pearsonR: Double {
         get {
             if self.isNumeric && self.rowLevelOfMeasurement != .nominal && self.rowLevelOfMeasurement != .ordinal && self.columnLevelOfMeasurement != .nominal && self.columnLevelOfMeasurement != .ordinal {

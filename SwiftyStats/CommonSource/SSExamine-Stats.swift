@@ -868,9 +868,11 @@ extension SSExamine {
         }
     }
     
-    /// Returns the median absolute deviation around the reference point given. If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
+    /// Returns the median absolute deviation around the reference point given (`rp`). If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     /// - Parameter scaleFactor: Used for consistency reasons. If nil, the default value will be used.
+    /// ### Note ###
+    /// The scale factor is valid for normally distributed data only.
     public func medianAbsoluteDeviation(center rp: Double!, scaleFactor c: Double?) -> Double? {
         if !isArithmetic || rp.isNaN {
             return nil
@@ -898,7 +900,8 @@ extension SSExamine {
             cf = c!
         }
         else {
-            cf = 1.4826022185056018
+            // = 1 / quantileStandardNormalDist(0.75)
+            cf = 1.482602218505601860547
         }
         return cf * result
     }
