@@ -3,6 +3,9 @@ SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This is framework is far from being perfect and is "work in progress". Due to some external limitations (earning money) the code will be updated rather sporadically.
 
+# Documentation
+A jazzy-generated reference can be found here: [SwiftyStats Doc](https://www.vpedia.net/swiftystats)
+
 # How to Install
 ## CocoaPods
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project.
