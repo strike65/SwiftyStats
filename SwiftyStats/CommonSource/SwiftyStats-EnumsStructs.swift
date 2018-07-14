@@ -414,7 +414,7 @@ public struct SS2SampleTTestResult: CustomStringConvertible, Codable  {
     public var dfEQVAR: Double?
     /// degrees of freedom assuming unequal variances (Welch)
     public var dfUEQVAR: Double?
-    /// s(1) == s(2)
+    /// Returns `True`, if var1 is statistically equal for var2
     public var variancesAreEqual: Bool? = false
     /// mean1 >= mean2
     public var mean1GTEmean2: Bool? = false

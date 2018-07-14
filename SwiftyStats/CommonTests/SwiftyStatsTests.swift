@@ -516,7 +516,7 @@ class SwiftyStatsTests: XCTestCase {
         print(tauTable.columnLevelOfMeasurement)
         print(tauTable.lambda_C_R)
         print(tauTable.lambda_R_C)
-        print(tauTable.tauCR)
+//        print(tauTable.tauCR)
     }
     
     
