@@ -20,11 +20,14 @@
  
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
  */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 /// SSExamine
 /// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that data must conform to the protocols `Hashable`, `Comparable` and `Codable`.
@@ -32,7 +35,7 @@ import os.log
 public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable, SSElement: Comparable, SSElement: Codable {
     
     // MARK: OPEN/PUBLIC VARS
-
+    
     /// An object representing the content of the SSExamine instance (experimental)
     /// A placeholder to specify the type of stored data.
     public var rootObject: Any?
@@ -75,7 +78,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     
     /// Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, Double> {
-//        updateCumulativeFrequencies()
+        //        updateCumulativeFrequencies()
         return cumRelFrequencies
     }
     
@@ -152,18 +155,25 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     public init(withObject object: Any!, levelOfMeasurement lom: SSLevelOfMeasurement!, name: String?, characterSet: CharacterSet?) throws {
         // allow only arrays an strings as 'object'
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
-            os_log("Error creating SSExamine instance", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Error creating SSExamine instance", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .missingData, file: #file, line: #line, function: #function)
         }
         super.init()
         if let n = name {
             self.name = n
-//            self.tag = n
+            //            self.tag = n
         }
-//        else {
-//            self.tag = UUID.init().uuidString
-//            self.name = self.tag
-//        }
+        //        else {
+        //            self.tag = UUID.init().uuidString
+        //            self.name = self.tag
+        //        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
@@ -181,12 +191,12 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         super.init()
         if let n = name {
             self.name = n
-//            self.tag = n
+            //            self.tag = n
         }
-//        else {
-//            self.name = UUID.init().uuidString
-//            self.tag = self.name
-//        }
+        //        else {
+        //            self.name = UUID.init().uuidString
+        //            self.tag = self.name
+        //        }
         self.initializeWithArray(array)
     }
     
@@ -199,8 +209,18 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     public class func examine(fromFile path: String!, separator: String!, stringEncoding: String.Encoding!, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
+        #if DEBUG
+        print(fullFilename)
+        #endif
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
-            os_log("File not found", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("File not found", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         let filename = NSURL(fileURLWithPath: fullFilename).lastPathComponent!
@@ -247,7 +267,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
-            os_log("File not found", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("File not found", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         let url = URL.init(fileURLWithPath: fullFilename)
@@ -276,7 +303,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         let fullName = NSString(string: path).expandingTildeInPath
         if fileManager.fileExists(atPath: fullName) {
             if !overwrite {
-                os_log("File already exists", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("File already exists", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
             else {
@@ -284,7 +318,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
                     try fileManager.removeItem(atPath: fullName)
                 }
                 catch {
-                    os_log("Can't remove file", log: log_stat, type: .error)
+                    #if os(macOS) || os(iOS)
+                    
+                    if #available(macOS 10.12, iOS 10, *) {
+                        os_log("Can't remove file", log: log_stat, type: .error)
+                    }
+                    
+                    #endif
+                    
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
@@ -301,11 +342,18 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
             }
         }
         catch {
-            os_log("Unable to write json", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Unable to write json", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             return false
         }
     }
-
+    
     
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
@@ -320,7 +368,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         let fullName = NSString(string: path).expandingTildeInPath
         if fileManager.fileExists(atPath: fullName) {
             if !overwrite {
-                os_log("File already exists", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("File already exists", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
             else {
@@ -328,7 +383,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
                     try fileManager.removeItem(atPath: fullName)
                 }
                 catch {
-                    os_log("Can't remove file", log: log_stat, type: .error)
+                    #if os(macOS) || os(iOS)
+                    
+                    if #available(macOS 10.12, iOS 10, *) {
+                        os_log("Can't remove file", log: log_stat, type: .error)
+                    }
+                    
+                    #endif
+                    
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
@@ -338,7 +400,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
                 try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
             }
             catch {
-                os_log("File could not be written", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("File could not be written", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 result = false
             }
         }
@@ -354,7 +423,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
             return result
         }
         catch {
-            os_log("Error creating SSExamine instance", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Error creating SSExamine instance", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             return nil
         }
     }
@@ -419,7 +495,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         isNumeric = true
     }
     
-//    // MARK: Codable protocol
+    //    // MARK: Codable protocol
     private enum CodingKeys: String, CodingKey {
         case tag = "TAG"
         case name
@@ -429,7 +505,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         case isNumeric
         case data
     }
-
+    
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.name, forKey: CodingKeys.name)
@@ -440,8 +516,8 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         try container.encodeIfPresent(self.isNumeric, forKey: CodingKeys.isNumeric)
         try container.encodeIfPresent(self.elementsAsArray(sortOrder: .raw), forKey: CodingKeys.data)
     }
-
-
+    
+    
     required public init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -458,7 +534,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
         }
     }
     
-
+    
     
     // MARK: NSCopying
     public func copy(with zone: NSZone? = nil) -> Any {
@@ -610,7 +686,14 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
     /// - Throws: SSSwiftyStatsError if <SSElement> of the receiver is not of type String
     public func append(text: String!, characterSet: CharacterSet?) throws {
         if !(SSElement.self is String.Type) {
-            os_log("Can only append strings", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Can only append strings", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         else {
@@ -682,7 +765,7 @@ public class SSExamine<SSElement>:  NSObject, SSExamineContainer, NSCopying, Cod
 extension SSExamine {
     
     // MARK: Elements
-
+    
     /// Returns all elements as one string. Elements are delimited by del.
     /// Paramater del: The delimiter. Can be nil or empty.
     public func elementsAsString(withDelimiter del: String?, asRow: Bool = true) -> String? {
@@ -723,7 +806,7 @@ extension SSExamine {
     private func isValidIndex(index: Int) -> Bool {
         return index >= 0 && index < self.sampleSize
     }
-
+    
     
     /// Returns the indexed element
     subscript(_ index: Int) -> SSElement? {
@@ -905,7 +988,7 @@ extension SSExamine {
             return nil
         }
     }
-
-
+    
+    
 }
 

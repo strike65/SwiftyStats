@@ -26,7 +26,10 @@
 
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 // Defines a structure holding multiple SSExamine objects:
 // Each column contains an SSExamine object.
@@ -42,8 +45,8 @@ import os.log
  ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
  ...        ..........  .......... ...  ....................
  ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
-
-*/
+ 
+ */
 public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable {
     
     public typealias Examine = SSExamine<SSElement>
@@ -66,7 +69,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         try container.encodeIfPresent(self.rows, forKey: .nrows)
         try container.encodeIfPresent(self.cols, forKey: .ncolumns)
     }
-
+    
     /// Required func to conform to Codable protocol
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -85,9 +88,10 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         if let c = try container.decodeIfPresent(Int.self, forKey: .ncolumns) {
             self.cols = c
         }
-
+        
     }
-    
+    #if os(macOS) || os(iOS)
+//    @available(macOS 10.12, iOS 10, *)
     /// Saves the dataframe to filePath using JSONEncoder
     /// - Parameter path: The full qualified filename.
     /// - Parameter overwrite: If yes an existing file will be overwritten.
@@ -99,10 +103,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         var isDir = ObjCBool(false)
         if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
             if !isDir.boolValue || path.count == 0 {
-                os_log("No writeable path found", log: log_stat ,type: .error)
+                if #available(macOS 10.12, iOS 10.0, *) {
+                    os_log("No writeable path found", log: log_stat ,type: .error)
+                }
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
             }
+            if #available(macOS 10.12, iOS 10.0, *) {
             os_log("File doesn't exist", log: log_stat ,type: .error)
+            }
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         if fm.fileExists(atPath: fullFilename) {
@@ -112,17 +120,23 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                         try fm.removeItem(atPath: fullFilename)
                     }
                     catch {
-                        os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                        if #available(macOS 10.12, iOS 10.0, *) {
+                            os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                        }
                         throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                     }
                 }
                 else {
-                    os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                    if #available(macOS 10.12, iOS 10.0, *) {
+                        os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                    }
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
             else {
-                os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                if #available(macOS 10.12, iOS 10.0, *) {
+                    os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                }
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
         }
@@ -133,11 +147,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             return true
         }
         catch {
-            os_log("Unable to write data", log: log_stat, type: .error)
+            if #available(macOS 10.12, iOS 10.0, *) {
+                os_log("Unable to write data", log: log_stat, type: .error)
+            }
             return false
         }
     }
 
+//    @available(macOS 10.10, iOS 10, *)
     /// Initializes a new dataframe from an archive saved by archiveTo(filePath path:overwrite:).
     /// - Parameter path: The full qualified filename.
     /// - Throws: SSSwiftyStatError.fileNotReadable
@@ -145,7 +162,9 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
-            os_log("File not readable", log: log_stat ,type: .error)
+            if #available(macOS 10.12, iOS 10.0, *) {
+                os_log("File not readable", log: log_stat ,type: .error)
+            }
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         do {
@@ -155,11 +174,13 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             return result
         }
         catch {
-            os_log("Failure", log: log_stat ,type: .error)
+            if #available(macOS 10.12, iOS 10.0, *) {
+                os_log("Failure", log: log_stat ,type: .error)
+            }
             return nil
         }
     }
-
+    #endif
     
     
     private var data:Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
@@ -233,7 +254,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         var i: Int = 0
         for a in examineArray {
             if a.sampleSize != tempSampleSize {
-                os_log("Sample sizes are expected to be equal", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Sample sizes are expected to be equal", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 data.removeAll()
                 tags.removeAll()
                 cNames.removeAll()
@@ -281,14 +309,21 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         cols = 0
         super.init()
     }
-
+    
     /// Appends a column
     /// - Parameter examine: The SSExamine object
     /// - Parameter name: Name of column
     /// - Throws: SSSwiftyStatsError examine.sampleSize != self.rows
     public func append(_ examine: SSExamine<SSElement>, name: String?) throws {
         if examine.sampleSize != self.rows {
-            os_log("Sample sizes are expected to be equal", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Sample sizes are expected to be equal", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         self.data.append(examine)
@@ -385,23 +420,23 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         }
     }
     
-//    // MARK: NSCoding protocol
-//    public func encode(with aCoder: NSCoder) {
-//        aCoder.encode(cols, forKey: "cols")
-//        aCoder.encode(rows, forKey: "rows")
-//        aCoder.encode(cNames, forKey: "cNames")
-//        aCoder.encode(data, forKey: "data")
-//        aCoder.encode(tags, forKey:"tags")
-//    }
-//
-//
-//    required public init?(coder aDecoder: NSCoder) {
-//        rows = aDecoder.decodeInteger(forKey: "rows")
-//        cols = aDecoder.decodeInteger(forKey: "cols")
-//        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
-//        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement>>
-//        tags = aDecoder.decodeObject(forKey: "tags") as! Array<String>
-//    }
+    //    // MARK: NSCoding protocol
+    //    public func encode(with aCoder: NSCoder) {
+    //        aCoder.encode(cols, forKey: "cols")
+    //        aCoder.encode(rows, forKey: "rows")
+    //        aCoder.encode(cNames, forKey: "cNames")
+    //        aCoder.encode(data, forKey: "data")
+    //        aCoder.encode(tags, forKey:"tags")
+    //    }
+    //
+    //
+    //    required public init?(coder aDecoder: NSCoder) {
+    //        rows = aDecoder.decodeInteger(forKey: "rows")
+    //        cols = aDecoder.decodeInteger(forKey: "cols")
+    //        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
+    //        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement>>
+    //        tags = aDecoder.decodeObject(forKey: "tags") as! Array<String>
+    //    }
     
     // NSCopying / NSMutableCopying
     public func copy(with zone: NSZone? = nil) -> Any {
@@ -423,7 +458,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     public override func mutableCopy() -> Any {
         return self.copy(with: nil)
     }
-
+    
     public override func copy() -> Any {
         return copy(with: nil)
     }
@@ -431,7 +466,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// Exports the dataframe as csv
     /// - Parameter path: The full path
     /// - Parameter atomically: Write atomically
-    /// - Paremeter firstRowAsColumnName: If true, the row name is equal to the exported SSExamine object. If this object hasn't a name, an auto incremented integer is used.
+    /// - Parameter firstRowAsColumnName: If true, the row name is equal to the exported SSExamine object. If this object hasn't a name, an auto incremented integer is used.
     /// - Parameter useQuotes: If true all fields will be enclosed by quotation marks
     /// - Parameter overwrite: If true an existing file will be overwritten
     /// - Parameter stringEncoding: Encoding
@@ -469,7 +504,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             let fullName = NSString(string: path).expandingTildeInPath
             if fileManager.fileExists(atPath: fullName) {
                 if !overwrite {
-                    os_log("File already exists", log: log_stat, type: .error)
+                    #if os(macOS) || os(iOS)
+                    
+                    if #available(macOS 10.12, iOS 10, *) {
+                        os_log("File already exists", log: log_stat, type: .error)
+                    }
+                    
+                    #endif
+                    
                     throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
                 }
                 else {
@@ -477,7 +519,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                         try fileManager.removeItem(atPath: fullName)
                     }
                     catch {
-                        os_log("Can't remove file", log: log_stat, type: .error)
+                        #if os(macOS) || os(iOS)
+                        
+                        if #available(macOS 10.12, iOS 10, *) {
+                            os_log("Can't remove file", log: log_stat, type: .error)
+                        }
+                        
+                        #endif
+                        
                         throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                     }
                 }
@@ -488,7 +537,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                 result = true
             }
             catch {
-                os_log("File could not be written", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("File could not be written", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 result = false
             }
             return result
@@ -498,9 +554,87 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         }
     }
     
+    /// Initializes a new DataFrame instance.
+    /// - Parameter fromString: A string of objects (mostly numbers) separated by `separator`
+    /// - Parameter separator: The separator (delimiter) used. Default = ","
+    /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
+    /// - Parameter parser: A function to convert a string to the expected generic type
+    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
+    public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement> {
+        do {
+            var importedString = fromString
+            
+            if let lastScalar = importedString?.unicodeScalars.last {
+                if CharacterSet.newlines.contains(lastScalar) {
+                    importedString = String(importedString!.dropLast())
+                }
+            }
+            let lines: Array<String> = importedString!.components(separatedBy: CharacterSet.newlines)
+            var cnames: Array<String> = Array<String>()
+            var cols: Array<String>
+            var curString: String
+            var columns: Array<Array<SSElement>> = Array<Array<SSElement>>()
+            var k: Int = 0
+            var startRow: Int
+            if cn {
+                startRow = 1
+            }
+            else {
+                startRow = 0
+            }
+            for r in startRow..<lines.count {
+                cols = lines[r].components(separatedBy: sep)
+                if columns.count == 0 && cols.count > 0 {
+                    for _ in 1...cols.count {
+                        columns.append(Array<SSElement>())
+                    }
+                }
+                for c in 0..<cols.count {
+                    curString = cols[c].replacingOccurrences(of: "\"", with: "")
+                    if let d = parser(curString) {
+                        columns[c].append(d)
+                    }
+                    else {
+                        #if os(macOS) || os(iOS)
+                        
+                        if #available(macOS 10.12, iOS 10, *) {
+                            os_log("Error during processing data file", log: log_stat, type: .error)
+                        }
+                        
+                        #endif
+                        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+                    }
+                }
+            }
+            if cn {
+                let names = lines[0].components(separatedBy: sep)
+                for name in names {
+                    curString = name.replacingOccurrences(of: "\"", with: "")
+                    cnames.append(curString)
+                }
+            }
+            var examineArray: Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
+            for k in 0..<columns.count {
+                examineArray.append(SSExamine<SSElement>.init(withArray: columns[k], name: nil, characterSet: nil))
+            }
+            if cn {
+                k = 0
+                for e in examineArray {
+                    e.name = cnames[k]
+                    k += 1
+                }
+            }
+            return try SSDataFrame<SSElement>.init(examineArray: examineArray)
+        }
+        catch {
+            return SSDataFrame<SSElement>()
+        }
+    }
+    
     /// Loads the content of a file using the specified encoding.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
+    /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
     /// - Parameter stringEncoding: The encoding to use.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
@@ -508,7 +642,13 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
-            os_log("File not found", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("File not found", log: log_stat, type: .error)
+            }
+            
+            #endif
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         do {
@@ -544,7 +684,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                         columns[c].append(d)
                     }
                     else {
-                        os_log("Error during processing data file", log: log_stat, type: .error)
+                        #if os(macOS) || os(iOS)
+                        
+                        if #available(macOS 10.12, iOS 10, *) {
+                            os_log("Error during processing data file", log: log_stat, type: .error)
+                        }
+                        
+                        #endif
+                        
                         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
                     }
                 }
@@ -570,7 +717,8 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
             return try SSDataFrame<SSElement>.init(examineArray: examineArray)
         }
         catch {
-            return SSDataFrame<SSElement>()
+            throw error
+            //            return SSDataFrame<SSElement>()
         }
     }
     

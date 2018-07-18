@@ -24,7 +24,10 @@
  */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 
 extension SSExamine {
@@ -42,10 +45,24 @@ extension SSExamine {
         var isDir = ObjCBool(false)
         if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
             if !isDir.boolValue || path.count == 0 {
-                os_log("No writeable path found", log: log_stat ,type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("No writeable path found", log: log_stat ,type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
             }
-            os_log("File doesn't exist", log: log_stat ,type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("File doesn't exist", log: log_stat ,type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         if fm.fileExists(atPath: fullFilename) {
@@ -55,17 +72,38 @@ extension SSExamine {
                         try fm.removeItem(atPath: fullFilename)
                     }
                     catch {
-                        os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                        #if os(macOS) || os(iOS)
+                        
+                        if #available(macOS 10.12, iOS 10, *) {
+                            os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                        }
+                        
+                        #endif
+                        
                         throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                     }
                 }
                 else {
-                    os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                    #if os(macOS) || os(iOS)
+                    
+                    if #available(macOS 10.12, iOS 10, *) {
+                        os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                    }
+                    
+                    #endif
+                    
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
             else {
-                os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
         }
@@ -76,7 +114,14 @@ extension SSExamine {
             return true
         }
         catch {
-            os_log("Unable to write data", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Unable to write data", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             return false
         }
     }
@@ -88,7 +133,14 @@ extension SSExamine {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
-            os_log("File not readable", log: log_stat ,type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("File not readable", log: log_stat ,type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         do {
@@ -98,7 +150,14 @@ extension SSExamine {
             return result
         }
         catch {
-            os_log("Failure", log: log_stat ,type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Failure", log: log_stat ,type: .error)
+            }
+            
+            #endif
+            
             return nil
         }
     }

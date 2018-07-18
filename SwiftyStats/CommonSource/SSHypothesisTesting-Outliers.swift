@@ -22,7 +22,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 extension SSHypothesisTesting {
     /// Performs the Grubbs outlier test
@@ -31,15 +34,36 @@ extension SSHypothesisTesting {
     /// - Returns: SSGrubbsTestResult
     public class func grubbsTest<T>(array: Array<T>!, alpha: Double!) throws -> SSGrubbsTestResult? where T: Comparable, T: Hashable, T: Codable {
         if array.count == 3 {
-            os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if alpha <= 0 || alpha >= 1.0 {
-            os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             return nil
         }
         if !isNumber(array[0]) {
-            os_log("expected numerical type", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("expected numerical type", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -60,15 +84,36 @@ extension SSHypothesisTesting {
     /// - Returns: SSGrubbsTestResult
     public class func grubbsTest<T>(data: SSExamine<T>!, alpha: Double!) throws -> SSGrubbsTestResult {
         if data.sampleSize <= 3 {
-            os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if alpha <= 0 || alpha >= 1.0 {
-            os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !data.isNumeric {
-            os_log("expected numerical type", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("expected numerical type", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         //        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)

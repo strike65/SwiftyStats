@@ -71,11 +71,42 @@ class SwiftyStatsTests: XCTestCase {
     let concentr3 = [1.0,0,0,0,0]
     
     
+    var resPath: String! = nil
+    var linuxBundle: Bundle! = nil
+    
+    func linuxResourcePath(resource: String!, type: String!) -> String? {
+        if let s = linuxBundle.path(forResource: resource, ofType: type) {
+            return s
+        }
+        else {
+            return nil
+        }
+    }
+    override func setUp() {
+        super.setUp()
+        #if os(macOS) || os(iOS)
+            resPath = Bundle(for: type(of: self)).resourcePath
+        #else
+            linuxBundle = Bundle(path: (Bundle.main.resourcePath ?? ".") + "/Resources") ?? Bundle.main
+        #endif
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
+    
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
+    }
+    
+    
+    
     func testTukeyKramer() {
         // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
+        #if os(macOS) || os(iOS)
         let df = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
-        //        var mmt: SSOneWayANOVATestResult = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df, alpha: 0.05)!
-        var mmt: SSOneWayANOVATestResult
+        #else
+        let df = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
+        print("TukeyKramerData01 read")
+        #endif
         var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
@@ -83,8 +114,12 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(test[3].testStat, 1.6282, accuracy: 1E-04)
         XCTAssertEqual(test[4].testStat, 4.3032, accuracy: 1E-04)
         XCTAssertEqual(test[5].testStat, 5.9314, accuracy: 1E-04)
+        #if os(macOS) || os(iOS)
         let df1 = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
-        mmt = try! SSHypothesisTesting.multipleMeansTest(dataFrame:df1, alpha: 0.05)!
+        #else
+        let df1 = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: scanDouble)
+        print("TukeyKramerData02 read")
+        #endif
         test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df1, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 2.0, accuracy: 1E-01)
         XCTAssertEqual(test[1].testStat, 13.0, accuracy: 1E-01)
@@ -100,326 +135,448 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(test[0].testStat, 1.4142, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 9.1924, accuracy: 1E-04)
         XCTAssertEqual(test[2].testStat, 7.7782, accuracy: 1E-04)
-        //        test = try! SSHypothesisTesting.bonferroniTest(dataFrame: df)!
     }
     
     func testExamine() {
+        var examineConc1: SSExamine<Double>! = nil
+        var examineConc2: SSExamine<Double>! = nil
+        var examineConc3: SSExamine<Double>! = nil
+        
         do {
-            let examineConc1:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr1, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
-            XCTAssertEqual(examineConc1.herfindahlIndex!, 0.2, accuracy: 1E-1)
-            XCTAssertEqual(examineConc1.gini!, 0.0, accuracy: 1E-15)
-            XCTAssertEqual(examineConc1.giniNorm!, 0.0, accuracy: 1E-15)
-            XCTAssertEqual(examineConc1.CR(2)!, 0.4, accuracy: 1E-15)
-            XCTAssertEqual(examineConc1.CR(3)!, 0.6, accuracy: 1E-15)
-            let examineConc2:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr2, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
-            XCTAssertEqual(examineConc2.herfindahlIndex!, 0.32, accuracy: 1E-2)
-            XCTAssertEqual(examineConc2.gini!, 0.36, accuracy: 1E-2)
-            XCTAssertEqual(examineConc2.giniNorm!, 0.45, accuracy: 1E-2)
-            XCTAssertEqual(examineConc2.CR(2)!, 0.7, accuracy: 1E-15)
-            XCTAssertEqual(examineConc2.CR(3)!, 0.8, accuracy: 1E-15)
-            let examineConc3:SSExamine<Double> = try! SSExamine<Double>.init(withObject: concentr3, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
-            XCTAssertEqual(examineConc3.herfindahlIndex!, 1.0, accuracy: 1E-2)
-            XCTAssertEqual(examineConc3.gini!, 0.8, accuracy: 1E-2)
-            XCTAssertEqual(examineConc3.giniNorm!, 1.0, accuracy: 1E-2)
-            XCTAssertEqual(examineConc3.CR(2)!, 1.0, accuracy: 1E-15)
-            XCTAssertEqual(examineConc3.CR(3)!, 1.0, accuracy: 1E-15)
-            let examineInt = try SSExamine<Int>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
-            let examineIntOutliers = try SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
-            let tempDir = NSTemporaryDirectory()
-            //        let filename = NSUUID().uuidString
-            let filename = "test.dat"
-            var url = NSURL.fileURL(withPathComponents: [tempDir, filename])
-            
-            XCTAssert(try! examineInt.saveTo(fileName: url?.path, atomically: true, overwrite: true, separator: ",", stringEncoding: .utf8))
+            examineConc1 = try SSExamine<Double>.init(withObject: concentr1, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to get examineConc1: " + #file )
+        }
+        catch {
+            print("other error")
+        }
+        XCTAssertNotNil(examineConc1)
+        XCTAssertEqual(examineConc1.herfindahlIndex!, 0.2, accuracy: 1E-1)
+        XCTAssertEqual(examineConc1.gini!, 0.0, accuracy: 1E-15)
+        XCTAssertEqual(examineConc1.giniNorm!, 0.0, accuracy: 1E-15)
+        XCTAssertEqual(examineConc1.CR(2)!, 0.4, accuracy: 1E-15)
+        XCTAssertEqual(examineConc1.CR(3)!, 0.6, accuracy: 1E-15)
+        do {
+            examineConc2 = try SSExamine<Double>.init(withObject: concentr2, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to get examineConc2: " + #file )
+        }
+        catch {
+            print("other error")
+        }
+        XCTAssertNotNil(examineConc2)
+        XCTAssertEqual(examineConc2.herfindahlIndex!, 0.32, accuracy: 1E-2)
+        XCTAssertEqual(examineConc2.gini!, 0.36, accuracy: 1E-2)
+        XCTAssertEqual(examineConc2.giniNorm!, 0.45, accuracy: 1E-2)
+        XCTAssertEqual(examineConc2.CR(2)!, 0.7, accuracy: 1E-15)
+        XCTAssertEqual(examineConc2.CR(3)!, 0.8, accuracy: 1E-15)
+        do {
+            examineConc3 = try SSExamine<Double>.init(withObject: concentr3, levelOfMeasurement: .ordinal, name: "market share 1", characterSet: nil)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to get examineConc3: " + #file)
+        }
+        catch {
+            print("other error")
+        }
+        XCTAssertNotNil(examineConc3)
+        XCTAssertEqual(examineConc3.herfindahlIndex!, 1.0, accuracy: 1E-2)
+        XCTAssertEqual(examineConc3.gini!, 0.8, accuracy: 1E-2)
+        XCTAssertEqual(examineConc3.giniNorm!, 1.0, accuracy: 1E-2)
+        XCTAssertEqual(examineConc3.CR(2)!, 1.0, accuracy: 1E-15)
+        XCTAssertEqual(examineConc3.CR(3)!, 1.0, accuracy: 1E-15)
+        var examineInt: SSExamine<Int>! = nil
+        var examineIntOutliers: SSExamine<Int>! = nil
+        #if os(macOS) || os(iOS)
+        do {
+            examineInt = try SSExamine<Int>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+            examineIntOutliers = try SSExamine<Int>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to get examineInt/Outliers: " + #file)
+        }
+        catch {
+            print("other error")
+        }
+        #else
+        do {
+            if let p = linuxResourcePath(resource: "IntData", type: "examine") {
+                examineInt = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+            }
+            else {
+                fatalError("No testfiles " + #file + "\(#line)")
+            }
+            if let p = linuxResourcePath(resource: "IntDataWithOutliers", type: "examine") {
+                examineIntOutliers = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+            }
+            else {
+                fatalError("No testfiles " + #file + "\(#line)")
+            }
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to get examineInt/Outliers: " + #file)
+        }
+        catch {
+            print("other error")
+        }
+        #endif
+        XCTAssertNotNil(examineInt)
+        XCTAssertNotNil(examineIntOutliers)
+        let tempDir = NSTemporaryDirectory()
+        //        let filename = NSUUID().uuidString
+        let filename = "test.dat"
+        var url = NSURL.fileURL(withPathComponents: [tempDir, filename])
+        XCTAssertNotNil(url)
+        do {
+            let s = try examineInt.saveTo(fileName: url?.path, atomically: true, overwrite: true, separator: ",", stringEncoding: .utf8)
+            XCTAssert(s)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to save examineInt")
+        }
+        catch {
+            print("other error in save examine to file")
+        }
+        //        var testExamineInt: SSExamine<Int>! = nil
+        do {
             if let testExamineInt = try SSExamine<Int>.examine(fromFile: url?.path, separator: ",", stringEncoding: .utf8, scanInt) {
                 XCTAssert(testExamineInt.isEqual(examineInt))
             }
-            try! FileManager.default.removeItem(at: url!)
-            XCTAssert(try! examineInt.archiveTo(filePath: url?.path, overwrite: true))
+            try FileManager.default.removeItem(at: url!)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to load examineInt")
+        }
+        catch {
+            print("other error in load examine from file")
+        }
+        do {
+            XCTAssert(try examineInt.archiveTo(filePath: url?.path, overwrite: true))
             if let testExamineInt = try SSExamine<Int>.unarchiveFrom(filePath: url?.path) {
                 XCTAssert(testExamineInt.isEqual(examineInt))
             }
             try! FileManager.default.removeItem(at: url!)
-            XCTAssert(examineInt.contains(38))
-            XCTAssert(!examineInt.contains(-1))
-            XCTAssertEqual(examineInt.frequency(27), 10)
-            XCTAssertEqual(examineInt.rFrequency(27), 10.0 / Double(examineInt.sampleSize))
-            let intDataTestString = "18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28"
-            
-            XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
-            XCTAssert(examineInt.elementsAsArray(sortOrder: .raw)! == intData)
-            XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
-            XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
-            
-            let examineDouble = try SSExamine<Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-            let examineString = try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data", characterSet: nil)
-            let _ = try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890"))
-            let _ = SSExamine<String>.examineWithString(intDataTestString, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890"))!
-            
-            let examineEmpty: SSExamine<String> = examineString.copy() as! SSExamine<String>
-            let examineWithZero: SSExamine<Double> = try SSExamine.init(withObject: [1.0,1.0, 0.0, 1.2], levelOfMeasurement: .interval, name: "double with zero", characterSet: nil)
-            let examineWithZeroMean: SSExamine<Int> = try
-                SSExamine<Int>.init(withObject: [0,0,0,0,0], levelOfMeasurement: .interval, name: "all zero", characterSet: nil)
-            let examineSmall: SSExamine<Double> = try SSExamine.init(withObject: [1.0], levelOfMeasurement: .interval, name: "double one element", characterSet: nil)
-            examineEmpty.removeAll()
-            XCTAssert(examineEmpty.isEmpty)
-            XCTAssertNil(examineEmpty.gini)
-            XCTAssertNil(examineString.gini)
-            let bw = examineDouble.boxWhisker!
-            XCTAssert(bw.median! == 19)
-            XCTAssert(bw.q25! == 15)
-            XCTAssert(bw.q75! == 24)
-            XCTAssert(bw.iqr! == 9)
-            XCTAssert(bw.extremes! == [39.0, 38.0, 38.0])
-            XCTAssert(bw.outliers! == [])
-            XCTAssert(bw.lWhiskerExtreme! == 9)
-            XCTAssert(bw.uWhiskerExtreme! == 36)
-            XCTAssertEqual(bw.lNotch!,18.09703, accuracy: 1E-5)
-            XCTAssertEqual(bw.uNotch!,19.90297, accuracy: 1E-5)
-            let bwi = examineIntOutliers.boxWhisker!
-            XCTAssert(bwi.median! == 19)
-            XCTAssert(bwi.q25! == 15)
-            XCTAssert(bwi.q75! == 25)
-            XCTAssert(bwi.iqr! == 10)
-            XCTAssert(bwi.extremes! == [])
-            XCTAssert(bwi.outliers! == [300, 200, 200, 200, 101, 101, 101, 100, 100, 100, 100, 100, 100])
-            XCTAssert(bwi.lWhiskerExtreme! == 1)
-            XCTAssert(bwi.uWhiskerExtreme! == 39)
-            XCTAssertEqual(bwi.lNotch!,18.02941, accuracy: 1E-5)
-            XCTAssertEqual(bwi.uNotch!,19.97059, accuracy: 1E-5)
-            
-            
-            XCTAssertEqual(examineDouble.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
-            // Descriptives
-            let platy:SSExamine<Double> = try SSExamine<Double>.init(withObject: platykurtic, levelOfMeasurement: .interval, name: "platykurtic", characterSet: nil)
-            let lepto:SSExamine<Double> = try SSExamine<Double>.init(withObject: leptokurtic, levelOfMeasurement: .interval, name: "leptokurtic", characterSet: nil)
-            XCTAssert(platy.kurtosisType == .platykurtic)
-            XCTAssert(lepto.kurtosisType == .leptokurtic)
-            let left:SSExamine<Int> = try SSExamine<Int>.init(withObject: leftskewed, levelOfMeasurement: .interval, name: "leftskewed", characterSet: nil)
-            let right:SSExamine<Int> = try SSExamine<Int>.init(withObject: rightskewed, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
-            let sym:SSExamine<Int> = try SSExamine<Int>.init(withObject: symmetric, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
-            XCTAssert(left.skewnessType == .leftSkewed)
-            XCTAssert(right.skewnessType == .rightSkewed)
-            XCTAssert(sym.skewnessType == .symmetric)
-            XCTAssert(examineSmall.variance(type: .unbiased) == nil)
-            XCTAssert(examineSmall.standardDeviation(type: .unbiased) == nil)
-            XCTAssert(examineSmall.standardError == nil)
-            XCTAssertTrue(examineWithZeroMean.contraHarmonicMean! == -Double.infinity)
-            XCTAssert(examineString.total == nil)
-            XCTAssert(examineString.poweredTotal(power: 2.0) == nil)
-            XCTAssert(examineString.squareTotal == nil)
-            XCTAssert(examineString.inverseTotal == nil)
-            XCTAssert(examineString.arithmeticMean == nil)
-            XCTAssert(examineString.harmonicMean == nil)
-            XCTAssert(examineString.contraHarmonicMean == nil)
-            XCTAssert(try! examineString.trimmedMean(alpha: 0.03) == nil)
-            XCTAssert(try! examineString.winsorizedMean(alpha: 0.03) == nil)
-            XCTAssert(examineString.product == nil)
-            XCTAssertThrowsError(try examineString.quantile(q: 0.25))
-            XCTAssert(examineString.quartile == nil)
-            XCTAssert(examineString.moment(r: 1, type: .central) == nil)
-            XCTAssert(examineString.moment(r: 1, type: .origin) == nil)
-            XCTAssert(examineString.moment(r: 1, type: .standardized) == nil)
-            XCTAssert(examineString.kurtosisExcess == nil)
-            XCTAssert(examineString.kurtosis == nil)
-            XCTAssert(examineString.hasOutliers(testType: .esd) == nil)
-            XCTAssert(examineString.poweredMean(order: 1) == nil)
-            XCTAssert(examineString.hasOutliers(testType: .grubbs) == nil)
-            XCTAssert(examineString.mode![0] == ",")
-            XCTAssert(examineString.range == nil)
-            XCTAssert(examineString.interquartileRange == nil)
-            XCTAssert(try! examineString.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9)  == nil)
-            XCTAssertEqual(examineString.entropy!, 2.84335939877734, accuracy: 1E-14)
-            XCTAssertEqual(examineString.relativeEntropy!, 0.298193737094250, accuracy: 1E-14)
-            XCTAssert(examineString.kurtosis == nil)
-            XCTAssert(examineString.skewness == nil)
-            XCTAssert(examineString.kurtosisExcess == nil)
-            XCTAssert(examineString.kurtosisType == nil)
-            XCTAssert(examineString.skewnessType == nil)
-            XCTAssert(examineString.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
-            XCTAssert(examineString.isGaussian == nil)
-            
-            let outliers = examineIntOutliers.outliers(alpha: 0.05, max: 10, testType: .bothTails)!
-            let expectedOutliers: Array<Double> = [300,200,200,200,101,101,101,100,100,100]
-            XCTAssertEqual(examineDouble.herfindahlIndex!, 0.004438149, accuracy: 1E-9)
-            XCTAssertEqual(examineDouble.meanDifference!, 7.050566, accuracy: 1E-6)
-            XCTAssertEqual(examineDouble.gini!, 0.1753802, accuracy: 1E-7)
-            XCTAssert(outliers.count == expectedOutliers.count)
-            XCTAssert(examineIntOutliers.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
-            XCTAssertEqual(examineDouble.meanAbsoluteDeviation(center: examineDouble.arithmeticMean!)!, 5.14695, accuracy: 1E-5)
-            XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: 1.0)!, 4.0, accuracy: 1E-4)
-            XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: nil)!, 5.9304, accuracy: 1E-4)
-            XCTAssert(examineDouble.isGaussian!)
-            XCTAssertEqual(outliers, expectedOutliers)
-            XCTAssert(examineWithZero.product!.isZero)
-            XCTAssert(!examineDouble.hasOutliers(testType: .grubbs)!)
-            XCTAssertEqual(examineDouble.inverseTotal!, 13.540959278542406, accuracy: 1.0E-14)
-            XCTAssert(examineDouble.squareTotal == 110289)
-            XCTAssertEqual(examineDouble.total, 4985)
-            XCTAssert(examineDouble.mode![0] == 18.0)
-            XCTAssert(examineDouble.commonest![0] == 18.0)
-            XCTAssert(examineDouble.scarcest![0] == 9.0)
-            XCTAssert(examineDouble.scarcest![1] == 39.0)
-            XCTAssert(!examineDouble.hasOutliers(testType: .esd)!)
-            XCTAssert(examineDouble.quartile!.q25 == 15)
-            XCTAssert(examineDouble.quartile!.q50 == 19)
-            XCTAssert(examineDouble.quartile!.q75 == 24)
-            XCTAssertEqual(examineDouble.median, 19)
-            XCTAssert(try examineDouble.quantile(q: 0.1) == 13)
-            XCTAssertThrowsError(try examineDouble.quantile(q: 1.5))
-            XCTAssert(examineDouble.arithmeticMean! == 20.100806451612904)
-            XCTAssert(examineDouble.harmonicMean! == 18.314802880545665)
-            XCTAssertEqual(examineDouble.geometricMean!, 19.168086630042282)
-            XCTAssertEqual(examineDouble.contraHarmonicMean!, 22.124172517552658, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.poweredTotal(power: 6)!, 59385072309, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.poweredMean(order: 6)!, 24.919401155182530, accuracy: 1E-10)
-            XCTAssertEqual(try examineDouble.trimmedMean(alpha: 0.05), 19.736607142857143)
-            XCTAssertEqual(try examineDouble.trimmedMean(alpha: 0.4), 18.72)
-            XCTAssertEqual(try examineDouble.winsorizedMean(alpha: 0.05)!, 20.052419354838708, accuracy: 1E-14)
-            XCTAssertEqual(try examineDouble.winsorizedMean(alpha: 0.45)!, 18.508064516129032, accuracy: 1E-14)
-            XCTAssertThrowsError(try examineDouble.winsorizedMean(alpha: 0.6))
-            XCTAssertThrowsError(try examineDouble.winsorizedMean(alpha: 0.0))
-            XCTAssertEqual(examineDouble.poweredMean(order: 3), 22.095732180912705)
-            XCTAssertEqual(examineDouble.product, Double.infinity)
-            XCTAssertEqual(examineDouble.logProduct, 732.40519187630610)
-            XCTAssertEqual(examineDouble.maximum, 39)
-            XCTAssertEqual(examineDouble.minimum, 9)
-            XCTAssertEqual(examineDouble.range, 30)
-            XCTAssertEqual(examineDouble.midRange, 24)
-            XCTAssertEqual(examineDouble.interquartileRange, 9)
-            XCTAssertEqual(examineDouble.quartileDeviation, 4.5)
-            XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9), 16)
-            XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.9, upperQuantile: 0.9), 0)
-            XCTAssertEqual(examineDouble.relativeQuartileDistance!, 0.4736842, accuracy: 1E-7)
-            XCTAssertEqual(examineDouble.cv!, 0.317912682758119939795, accuracy: 1E-15)
-            XCTAssertEqual(examineDouble.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
-            XCTAssertEqual(examineDouble.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
-            XCTAssertEqual(examineDouble.eCDF(23), 0.72983870967741935, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.eCDF(9), 0.0040322580645161290, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.eCDF(39), 1.0, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.eCDF(-39), 0.0)
-            XCTAssertEqual(examineDouble.eCDF(2000), 1.0)
-            XCTAssertEqual(examineDouble.moment(r: 0, type: .central)!, 1.0)
-            XCTAssertEqual(examineDouble.moment(r: 1, type: .central)!, 0, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.moment(r: 2, type: .central)!, 40.671289672216441, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.moment(r: 3, type: .central)!, 213.45322268575241, accuracy: 1E-12)
-            XCTAssertEqual(examineDouble.moment(r: 4, type: .central)!, 5113.3413825102367, accuracy: 1E-12)
-            XCTAssertEqual(examineDouble.moment(r: 5, type: .central)!, 59456.550944779016, accuracy: 1E-10)
-            XCTAssertEqual(examineDouble.moment(r: 3, type: .origin)!, 10787.608870967742, accuracy: 1E-10)
-            XCTAssertEqual(examineDouble.moment(r: 5, type: .origin)!, 8020422.4798387097, accuracy: 1E-10)
-            XCTAssertEqual(examineDouble.moment(r: 2, type: .standardized)!, 1.0, accuracy: 1E-4)
-            XCTAssertEqual(examineDouble.moment(r: 0, type: .standardized)!, 1.0, accuracy: 1E-4)
-            XCTAssertEqual(examineDouble.moment(r: 1, type: .standardized)!, 0.0, accuracy: 1E-4)
-            XCTAssertEqual(examineDouble.standardDeviation(type: .unbiased)!, 6.3903013046339835, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.kurtosisExcess!, 0.0912127828607771, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.kurtosis!, 3.0912127828607771, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.skewness!, 0.82294497966005010, accuracy: 1E-14)
-            XCTAssertEqual(examineDouble.skewness!, 0.822945, accuracy: 1E-6)
-            XCTAssertEqual(examineDouble.kurtosis!, 3.091213, accuracy: 1E-6)
-            XCTAssertEqual(examineDouble.kurtosisExcess!, 0.091213, accuracy: 1E-6)
-            XCTAssertEqual(examineDouble.normalCI(alpha: 0.05, populationSD: 6.0)!.intervalWidth!, 2.0 * 0.746747, accuracy: 1e-6)
-            XCTAssertEqual(examineDouble.meanCI!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
-            XCTAssertEqual(examineDouble.studentTCI(alpha: 0.05)!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
-            XCTAssertEqual(examineDouble.studentTCI(alpha: 0.01)!.intervalWidth!, 2.0 * 1.053368, accuracy: 1e-6)
-            XCTAssertEqual(examineDouble.studentTCI(alpha: 0.1)!.intervalWidth!, 2.0 * 0.669969, accuracy: 1e-6)
-            
-            url = NSURL.fileURL(withPathComponents: [tempDir, "test.json"])
-            try! examineDouble.exportJSONString(fileName: url!.path, overwrite: true)
-            let exFromJSON = try! SSExamine<Double>.examine(fromJSONFile: url!.path)
-            XCTAssertEqual(examineDouble, exFromJSON)
-            try! FileManager.default.removeItem(at: url!)
-
-            
-            XCTAssert(examineEmpty.arithmeticMean == nil)
-            XCTAssert(examineEmpty.harmonicMean == nil)
-            XCTAssert(examineEmpty.contraHarmonicMean == nil)
-            XCTAssert(examineEmpty.mode == nil)
-            XCTAssert(examineEmpty.quartile == nil)
-            XCTAssert(try examineEmpty.quantile(q: 0.25) == nil)
-            XCTAssert(examineEmpty.commonest == nil)
-            XCTAssert(examineEmpty.scarcest == nil)
-            XCTAssert(examineEmpty.total == nil)
-            XCTAssert(examineEmpty.poweredTotal(power: 2.0) == nil)
-            XCTAssert(examineEmpty.squareTotal == nil)
-            XCTAssert(examineEmpty.inverseTotal == nil)
-            XCTAssert(examineEmpty.arithmeticMean == nil)
-            XCTAssert(examineEmpty.harmonicMean == nil)
-            XCTAssert(examineEmpty.geometricMean == nil)
-            XCTAssert(examineEmpty.contraHarmonicMean == nil)
-            XCTAssert(examineEmpty.poweredMean(order: 2.0) == nil)
-            XCTAssert(examineEmpty.moment(r: 2, type: .origin) == nil)
-            XCTAssert(try examineEmpty.winsorizedMean(alpha: 0.2) == nil)
-            XCTAssert(try examineEmpty.trimmedMean(alpha: 0.2) == nil)
-            XCTAssert(examineEmpty.median == nil)
-            XCTAssert(examineEmpty.moment(r: 1, type: .central) == nil)
-            XCTAssert(examineEmpty.moment(r: 1, type: .origin) == nil)
-            XCTAssert(examineEmpty.moment(r: 1, type: .standardized) == nil)
-            XCTAssert(examineEmpty.kurtosisExcess == nil)
-            XCTAssert(examineEmpty.kurtosis == nil)
-            
-            XCTAssert(examineIntOutliers.hasOutliers(testType: .grubbs)!)
-            XCTAssert(examineIntOutliers.hasOutliers(testType: .esd)!)
-            
-            print(examineDouble.hashValue)
-            let examine2: SSExamine<Double> = examineDouble.copy() as! SSExamine<Double>
-            print(examineDouble.hashValue)
-            print(examineDouble.hashValue == examine2.hashValue)
-            print(examineDouble == examine2)
-            dump(examine2)
-            dump(examineDouble)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to archive/unarchive examineInt")
         }
         catch {
-            print("catch!")
+            print("other error in archive/unarchive examine")
+        }
+        XCTAssert(examineInt.contains(38))
+        XCTAssert(!examineInt.contains(-1))
+        XCTAssertEqual(examineInt.frequency(27), 10)
+        XCTAssertEqual(examineInt.rFrequency(27), 10.0 / Double(examineInt.sampleSize))
+        let intDataTestString = "18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28"
+        
+        XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
+        XCTAssert(examineInt.elementsAsArray(sortOrder: .raw)! == intData)
+        XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
+        XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
+        var examineDouble: SSExamine<Double>! = nil
+        var examineString: SSExamine<String>! = nil
+        do {
+            #if os(macOS) || os(iOS)
+            examineDouble = try SSExamine<Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)
+            #else
+            if let p = linuxResourcePath(resource: "DoubleData", type: "examine") {
+                examineDouble = try SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)
+            }
+            #endif
+            examineString = try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data", characterSet: nil)
+            XCTAssertNotNil(try SSExamine<String>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890")))
+        }
+        catch is SSSwiftyStatsError {
+            print("unable to load examineDouble")
+        }
+        catch {
+            print("other error")
         }
         
+        XCTAssertNotNil(SSExamine<String>.examineWithString(intDataTestString, name: "string data only numbers", characterSet: CharacterSet.init(charactersIn: "1234567890")))
+        let examineEmpty: SSExamine<String> = examineString.copy() as! SSExamine<String>
+        var examineWithZero: SSExamine<Double>! = nil
+        var examineWithZeroMean: SSExamine<Int>! = nil
+        var examineSmall: SSExamine<Double>! = nil
+        do {
+            examineWithZero = try SSExamine.init(withObject: [1.0,1.0, 0.0, 1.2], levelOfMeasurement: .interval, name: "double with zero", characterSet: nil)
+            examineWithZeroMean = try
+                SSExamine<Int>.init(withObject: [0,0,0,0,0], levelOfMeasurement: .interval, name: "all zero", characterSet: nil)
+            examineSmall = try SSExamine.init(withObject: [1.0], levelOfMeasurement: .interval, name: "double one element", characterSet: nil)
+        }
+        catch is SSSwiftyStatsError {
+            print("unable examineWithZero, examineWithZeroMean, examineSmall")
+        }
+        catch {
+            print("other error")
+        }
+        examineEmpty.removeAll()
+        XCTAssert(examineEmpty.isEmpty)
+        XCTAssertNil(examineEmpty.gini)
+        XCTAssertNil(examineString.gini)
+        let bw = examineDouble.boxWhisker!
+        XCTAssert(bw.median! == 19)
+        XCTAssert(bw.q25! == 15)
+        XCTAssert(bw.q75! == 24)
+        XCTAssert(bw.iqr! == 9)
+        XCTAssert(bw.extremes! == [39.0, 38.0, 38.0])
+        XCTAssert(bw.outliers! == [])
+        XCTAssert(bw.lWhiskerExtreme! == 9)
+        XCTAssert(bw.uWhiskerExtreme! == 36)
+        XCTAssertEqual(bw.lNotch!,18.09703, accuracy: 1E-5)
+        XCTAssertEqual(bw.uNotch!,19.90297, accuracy: 1E-5)
+        let bwi = examineIntOutliers.boxWhisker!
+        XCTAssert(bwi.median! == 19)
+        XCTAssert(bwi.q25! == 15)
+        XCTAssert(bwi.q75! == 25)
+        XCTAssert(bwi.iqr! == 10)
+        XCTAssert(bwi.extremes! == [])
+        XCTAssert(bwi.outliers! == [300, 200, 200, 200, 101, 101, 101, 100, 100, 100, 100, 100, 100])
+        XCTAssert(bwi.lWhiskerExtreme! == 1)
+        XCTAssert(bwi.uWhiskerExtreme! == 39)
+        XCTAssertEqual(bwi.lNotch!,18.02941, accuracy: 1E-5)
+        XCTAssertEqual(bwi.uNotch!,19.97059, accuracy: 1E-5)
+        XCTAssertEqual(examineDouble.elementsAsString(withDelimiter: "*"), "18.0*15.0*18.0*16.0*17.0*15.0*14.0*14.0*14.0*15.0*15.0*14.0*15.0*14.0*22.0*18.0*21.0*21.0*10.0*10.0*11.0*9.0*28.0*25.0*19.0*16.0*17.0*19.0*18.0*14.0*14.0*14.0*14.0*12.0*13.0*13.0*18.0*22.0*19.0*18.0*23.0*26.0*25.0*20.0*21.0*13.0*14.0*15.0*14.0*17.0*11.0*13.0*12.0*13.0*15.0*13.0*13.0*14.0*22.0*28.0*13.0*14.0*13.0*14.0*15.0*12.0*13.0*13.0*14.0*13.0*12.0*13.0*18.0*16.0*18.0*18.0*23.0*11.0*12.0*13.0*12.0*18.0*21.0*19.0*21.0*15.0*16.0*15.0*11.0*20.0*21.0*19.0*15.0*26.0*25.0*16.0*16.0*18.0*16.0*13.0*14.0*14.0*14.0*28.0*19.0*18.0*15.0*15.0*16.0*15.0*16.0*14.0*17.0*16.0*15.0*18.0*21.0*20.0*13.0*23.0*20.0*23.0*18.0*19.0*25.0*26.0*18.0*16.0*16.0*15.0*22.0*22.0*24.0*23.0*29.0*25.0*20.0*18.0*19.0*18.0*27.0*13.0*17.0*13.0*13.0*13.0*30.0*26.0*18.0*17.0*16.0*15.0*18.0*21.0*19.0*19.0*16.0*16.0*16.0*16.0*25.0*26.0*31.0*34.0*36.0*20.0*19.0*20.0*19.0*21.0*20.0*25.0*21.0*19.0*21.0*21.0*19.0*18.0*19.0*18.0*18.0*18.0*30.0*31.0*23.0*24.0*22.0*20.0*22.0*20.0*21.0*17.0*18.0*17.0*18.0*17.0*16.0*19.0*19.0*36.0*27.0*23.0*24.0*34.0*35.0*28.0*29.0*27.0*34.0*32.0*28.0*26.0*24.0*19.0*28.0*24.0*27.0*27.0*26.0*24.0*30.0*39.0*35.0*34.0*30.0*22.0*27.0*20.0*18.0*28.0*27.0*34.0*31.0*29.0*27.0*24.0*23.0*38.0*36.0*25.0*38.0*26.0*22.0*36.0*27.0*27.0*32.0*28.0")
+        // Descriptives
+        let platy:SSExamine<Double> = try! SSExamine<Double>.init(withObject: platykurtic, levelOfMeasurement: .interval, name: "platykurtic", characterSet: nil)
+        let lepto:SSExamine<Double> = try! SSExamine<Double>.init(withObject: leptokurtic, levelOfMeasurement: .interval, name: "leptokurtic", characterSet: nil)
+        XCTAssert(platy.kurtosisType == .platykurtic)
+        XCTAssert(lepto.kurtosisType == .leptokurtic)
+        let left:SSExamine<Int> = try! SSExamine<Int>.init(withObject: leftskewed, levelOfMeasurement: .interval, name: "leftskewed", characterSet: nil)
+        let right:SSExamine<Int> = try! SSExamine<Int>.init(withObject: rightskewed, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+        let sym:SSExamine<Int> = try! SSExamine<Int>.init(withObject: symmetric, levelOfMeasurement: .interval, name: "rightskewed", characterSet: nil)
+        XCTAssert(left.skewnessType == .leftSkewed)
+        XCTAssert(right.skewnessType == .rightSkewed)
+        XCTAssert(sym.skewnessType == .symmetric)
+        XCTAssert(examineSmall.variance(type: .unbiased) == nil)
+        XCTAssert(examineSmall.standardDeviation(type: .unbiased) == nil)
+        XCTAssert(examineSmall.standardError == nil)
+        XCTAssertTrue(examineWithZeroMean.contraHarmonicMean! == -Double.infinity)
+        XCTAssert(examineString.total == nil)
+        XCTAssert(examineString.poweredTotal(power: 2.0) == nil)
+        XCTAssert(examineString.squareTotal == nil)
+        XCTAssert(examineString.inverseTotal == nil)
+        XCTAssert(examineString.arithmeticMean == nil)
+        XCTAssert(examineString.harmonicMean == nil)
+        XCTAssert(examineString.contraHarmonicMean == nil)
+        XCTAssert(try! examineString.trimmedMean(alpha: 0.03) == nil)
+        XCTAssert(try! examineString.winsorizedMean(alpha: 0.03) == nil)
+        XCTAssert(examineString.product == nil)
+        XCTAssertThrowsError(try examineString.quantile(q: 0.25))
+        XCTAssert(examineString.quartile == nil)
+        XCTAssert(examineString.moment(r: 1, type: .central) == nil)
+        XCTAssert(examineString.moment(r: 1, type: .origin) == nil)
+        XCTAssert(examineString.moment(r: 1, type: .standardized) == nil)
+        XCTAssert(examineString.kurtosisExcess == nil)
+        XCTAssert(examineString.kurtosis == nil)
+        XCTAssert(examineString.hasOutliers(testType: .esd) == nil)
+        XCTAssert(examineString.poweredMean(order: 1) == nil)
+        XCTAssert(examineString.hasOutliers(testType: .grubbs) == nil)
+        XCTAssert(examineString.mode![0] == ",")
+        XCTAssert(examineString.range == nil)
+        XCTAssert(examineString.interquartileRange == nil)
+        XCTAssert(try! examineString.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9)  == nil)
+        XCTAssertEqual(examineString.entropy!, 2.84335939877734, accuracy: 1E-14)
+        XCTAssertEqual(examineString.relativeEntropy!, 0.298193737094250, accuracy: 1E-14)
+        XCTAssert(examineString.kurtosis == nil)
+        XCTAssert(examineString.skewness == nil)
+        XCTAssert(examineString.kurtosisExcess == nil)
+        XCTAssert(examineString.kurtosisType == nil)
+        XCTAssert(examineString.skewnessType == nil)
+        XCTAssert(examineString.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
+        XCTAssert(examineString.isGaussian == nil)
+        
+        let outliers = examineIntOutliers.outliers(alpha: 0.05, max: 10, testType: .bothTails)!
+        let expectedOutliers: Array<Double> = [300,200,200,200,101,101,101,100,100,100]
+        XCTAssertEqual(examineDouble.herfindahlIndex!, 0.004438149, accuracy: 1E-9)
+        XCTAssertEqual(examineDouble.meanDifference!, 7.050566, accuracy: 1E-6)
+        XCTAssertEqual(examineDouble.gini!, 0.1753802, accuracy: 1E-7)
+        XCTAssert(outliers.count == expectedOutliers.count)
+        XCTAssert(examineIntOutliers.outliers(alpha: 0.00005, max: 10, testType: .bothTails) == nil)
+        XCTAssertEqual(examineDouble.meanAbsoluteDeviation(center: examineDouble.arithmeticMean!)!, 5.14695, accuracy: 1E-5)
+        XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: 1.0)!, 4.0, accuracy: 1E-4)
+        XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: nil)!, 5.9304, accuracy: 1E-4)
+        XCTAssert(examineDouble.isGaussian!)
+        XCTAssertEqual(outliers, expectedOutliers)
+        XCTAssert(examineWithZero.product!.isZero)
+        XCTAssert(!examineDouble.hasOutliers(testType: .grubbs)!)
+        XCTAssertEqual(examineDouble.inverseTotal!, 13.540959278542406, accuracy: 1.0E-14)
+        XCTAssert(examineDouble.squareTotal == 110289)
+        XCTAssertEqual(examineDouble.total, 4985)
+        XCTAssert(examineDouble.mode![0] == 18.0)
+        XCTAssert(examineDouble.commonest![0] == 18.0)
+        XCTAssert(examineDouble.scarcest![0] == 9.0)
+        XCTAssert(examineDouble.scarcest![1] == 39.0)
+        XCTAssert(!examineDouble.hasOutliers(testType: .esd)!)
+        XCTAssert(examineDouble.quartile!.q25 == 15)
+        XCTAssert(examineDouble.quartile!.q50 == 19)
+        XCTAssert(examineDouble.quartile!.q75 == 24)
+        XCTAssertEqual(examineDouble.median, 19)
+        XCTAssert(try! examineDouble.quantile(q: 0.1) == 13)
+        XCTAssertThrowsError(try examineDouble.quantile(q: 1.5))
+        XCTAssert(examineDouble.arithmeticMean! == 20.100806451612904)
+        XCTAssert(examineDouble.harmonicMean! == 18.314802880545665)
+        XCTAssertEqual(examineDouble.geometricMean!, 19.168086630042282)
+        XCTAssertEqual(examineDouble.contraHarmonicMean!, 22.124172517552658, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.poweredTotal(power: 6)!, 59385072309, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.poweredMean(order: 6)!, 24.919401155182530, accuracy: 1E-10)
+        XCTAssertEqual(try! examineDouble.trimmedMean(alpha: 0.05), 19.736607142857143)
+        XCTAssertEqual(try! examineDouble.trimmedMean(alpha: 0.4), 18.72)
+        XCTAssertEqual(try! examineDouble.winsorizedMean(alpha: 0.05)!, 20.052419354838708, accuracy: 1E-14)
+        XCTAssertEqual(try! examineDouble.winsorizedMean(alpha: 0.45)!, 18.508064516129032, accuracy: 1E-14)
+        XCTAssertThrowsError(try examineDouble.winsorizedMean(alpha: 0.6))
+        XCTAssertThrowsError(try examineDouble.winsorizedMean(alpha: 0.0))
+        XCTAssertEqual(examineDouble.poweredMean(order: 3), 22.095732180912705)
+        XCTAssertEqual(examineDouble.product, Double.infinity)
+        XCTAssertEqual(examineDouble.logProduct, 732.40519187630610)
+        XCTAssertEqual(examineDouble.maximum, 39)
+        XCTAssertEqual(examineDouble.minimum, 9)
+        XCTAssertEqual(examineDouble.range, 30)
+        XCTAssertEqual(examineDouble.midRange, 24)
+        XCTAssertEqual(examineDouble.interquartileRange, 9)
+        XCTAssertEqual(examineDouble.quartileDeviation, 4.5)
+        XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.1, upperQuantile: 0.9), 16)
+        XCTAssertEqual(try! examineDouble.interquantileRange(lowerQuantile: 0.9, upperQuantile: 0.9), 0)
+        XCTAssertEqual(examineDouble.relativeQuartileDistance!, 0.4736842, accuracy: 1E-7)
+        XCTAssertEqual(examineDouble.cv!, 0.317912682758119939795, accuracy: 1E-15)
+        XCTAssertEqual(examineDouble.semiVariance(type: .lower)!, 24.742644316247567, accuracy: 1E-12)
+        XCTAssertEqual(examineDouble.semiVariance(type: .upper)!, 65.467428319137056, accuracy: 1E-12)
+        XCTAssertEqual(examineDouble.eCDF(23), 0.72983870967741935, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.eCDF(9), 0.0040322580645161290, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.eCDF(39), 1.0, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.eCDF(-39), 0.0)
+        XCTAssertEqual(examineDouble.eCDF(2000), 1.0)
+        XCTAssertEqual(examineDouble.moment(r: 0, type: .central)!, 1.0)
+        XCTAssertEqual(examineDouble.moment(r: 1, type: .central)!, 0, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.moment(r: 2, type: .central)!, 40.671289672216441, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.moment(r: 3, type: .central)!, 213.45322268575241, accuracy: 1E-12)
+        XCTAssertEqual(examineDouble.moment(r: 4, type: .central)!, 5113.3413825102367, accuracy: 1E-12)
+        XCTAssertEqual(examineDouble.moment(r: 5, type: .central)!, 59456.550944779016, accuracy: 1E-10)
+        XCTAssertEqual(examineDouble.moment(r: 3, type: .origin)!, 10787.608870967742, accuracy: 1E-10)
+        XCTAssertEqual(examineDouble.moment(r: 5, type: .origin)!, 8020422.4798387097, accuracy: 1E-10)
+        XCTAssertEqual(examineDouble.moment(r: 2, type: .standardized)!, 1.0, accuracy: 1E-4)
+        XCTAssertEqual(examineDouble.moment(r: 0, type: .standardized)!, 1.0, accuracy: 1E-4)
+        XCTAssertEqual(examineDouble.moment(r: 1, type: .standardized)!, 0.0, accuracy: 1E-4)
+        XCTAssertEqual(examineDouble.standardDeviation(type: .unbiased)!, 6.3903013046339835, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.kurtosisExcess!, 0.0912127828607771, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.kurtosis!, 3.0912127828607771, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.skewness!, 0.82294497966005010, accuracy: 1E-14)
+        XCTAssertEqual(examineDouble.skewness!, 0.822945, accuracy: 1E-6)
+        XCTAssertEqual(examineDouble.kurtosis!, 3.091213, accuracy: 1E-6)
+        XCTAssertEqual(examineDouble.kurtosisExcess!, 0.091213, accuracy: 1E-6)
+        XCTAssertEqual(examineDouble.normalCI(alpha: 0.05, populationSD: 6.0)!.intervalWidth!, 2.0 * 0.746747, accuracy: 1e-6)
+        XCTAssertEqual(examineDouble.meanCI!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
+        XCTAssertEqual(examineDouble.studentTCI(alpha: 0.05)!.intervalWidth!, 2.0 * 0.7992392, accuracy: 1e-7)
+        XCTAssertEqual(examineDouble.studentTCI(alpha: 0.01)!.intervalWidth!, 2.0 * 1.053368, accuracy: 1e-6)
+        XCTAssertEqual(examineDouble.studentTCI(alpha: 0.1)!.intervalWidth!, 2.0 * 0.669969, accuracy: 1e-6)
+        
+        url = NSURL.fileURL(withPathComponents: [tempDir, "test.json"])
+        XCTAssert(try! examineDouble.exportJSONString(fileName: url!.path, overwrite: true))
+        let exFromJSON = try! SSExamine<Double>.examine(fromJSONFile: url!.path)
+        XCTAssertEqual(examineDouble, exFromJSON)
+        try! FileManager.default.removeItem(at: url!)
         
         
+        XCTAssert(examineEmpty.arithmeticMean == nil)
+        XCTAssert(examineEmpty.harmonicMean == nil)
+        XCTAssert(examineEmpty.contraHarmonicMean == nil)
+        XCTAssert(examineEmpty.mode == nil)
+        XCTAssert(examineEmpty.quartile == nil)
+        XCTAssert(try! examineEmpty.quantile(q: 0.25) == nil)
+        XCTAssert(examineEmpty.commonest == nil)
+        XCTAssert(examineEmpty.scarcest == nil)
+        XCTAssert(examineEmpty.total == nil)
+        XCTAssert(examineEmpty.poweredTotal(power: 2.0) == nil)
+        XCTAssert(examineEmpty.squareTotal == nil)
+        XCTAssert(examineEmpty.inverseTotal == nil)
+        XCTAssert(examineEmpty.arithmeticMean == nil)
+        XCTAssert(examineEmpty.harmonicMean == nil)
+        XCTAssert(examineEmpty.geometricMean == nil)
+        XCTAssert(examineEmpty.contraHarmonicMean == nil)
+        XCTAssert(examineEmpty.poweredMean(order: 2.0) == nil)
+        XCTAssert(examineEmpty.moment(r: 2, type: .origin) == nil)
+        XCTAssert(try! examineEmpty.winsorizedMean(alpha: 0.2) == nil)
+        XCTAssert(try! examineEmpty.trimmedMean(alpha: 0.2) == nil)
+        XCTAssert(examineEmpty.median == nil)
+        XCTAssert(examineEmpty.moment(r: 1, type: .central) == nil)
+        XCTAssert(examineEmpty.moment(r: 1, type: .origin) == nil)
+        XCTAssert(examineEmpty.moment(r: 1, type: .standardized) == nil)
+        XCTAssert(examineEmpty.kurtosisExcess == nil)
+        XCTAssert(examineEmpty.kurtosis == nil)
+        
+        XCTAssert(examineIntOutliers.hasOutliers(testType: .grubbs)!)
+        XCTAssert(examineIntOutliers.hasOutliers(testType: .esd)!)
+        
+        let examine2: SSExamine<Double> = examineDouble.copy() as! SSExamine<Double>
+        XCTAssert(examineDouble.hashValue == examine2.hashValue)
+        XCTAssert(examineDouble == examine2)
     }
-    var resPath: String! = nil
     
-    override func setUp() {
-        super.setUp()
-        resPath = Bundle(for: type(of: self)).resourcePath
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testClonidineData() {
-        let verum_ADR_before = SSExamine.init(withArray: v_adrenaline_vnw, name: "Verum", characterSet: nil)
-        verum_ADR_before.tag = "Verum"
-        let placebo_ADR_before = SSExamine.init(withArray: p_adrenaline_vnw, name: "Placebo", characterSet: nil)
-        verum_ADR_before.tag = "Placebo"
-        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
-        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
-        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
-        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
-        var res: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: verum_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
-        res = SSHypothesisTesting.esdOutlierTest(data: placebo_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
-        print(res)
-    }
+    //    func testClonidineData() {
+    //        let verum_ADR_before = SSExamine.init(withArray: v_adrenaline_vnw, name: "Verum", characterSet: nil)
+    //        verum_ADR_before.tag = "Verum"
+    //        let placebo_ADR_before = SSExamine.init(withArray: p_adrenaline_vnw, name: "Placebo", characterSet: nil)
+    //        verum_ADR_before.tag = "Placebo"
+    //        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
+    //        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.grubbs)!)
+    //        print(verum_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
+    //        print(placebo_ADR_before.hasOutliers(testType: SSOutlierTest.esd)!)
+    //        var res: SSESDTestResult = SSHypothesisTesting.esdOutlierTest(data: verum_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
+    //        res = SSHypothesisTesting.esdOutlierTest(data: placebo_ADR_before, alpha: 0.05, maxOutliers: 5, testType: .bothTails)!
+    //        print(res)
+    //    }
     
     func testDataFrame() {
         let set1 = SSExamine<Double>.init(withArray: wafer1, name: "Wafer_A", characterSet: nil)
         let set2 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_B", characterSet: nil)
         let set3 = SSExamine<Double>.init(withArray: wafer2, name: "Wafer_C", characterSet: nil)
-        var df = try! SSDataFrame<Double>.init(examineArray: [set1, set2, set3])
-        let _ = try! df.exportCSV(path: resPath + "/test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf16, atomically: true)
-        var df2:SSDataFrame<Double>
-        df2 = try! SSDataFrame<Double>.dataFrame(fromFile: resPath + "/test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, scanDouble)
-        let filename = "test.dat"
-        let tempDir = NSTemporaryDirectory()
-        let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
-        XCTAssert(try! df2.archiveTo(filePath: url?.path, overwrite: true))
-        if let testDataFrame = try! SSDataFrame<Double>.unarchiveFrom(filePath: url?.path) {
-            XCTAssert(testDataFrame.isEqual(df2))
-        }
-        try! FileManager.default.removeItem(at: url!)
         
-        XCTAssert(df.isEqual(df2))
+        var df = try! SSDataFrame<Double>.init(examineArray: [set1, set2, set3])
+        do {
+            #if os(macOS) || os(iOS)
+            let _ = try df.exportCSV(path: resPath + "test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf16, atomically: true)
+            #else
+            let _ = try df.exportCSV(path: "test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
+            #endif
+        }
+        catch {
+            print("error in exportCSV")
+        }
+        var df2:SSDataFrame<Double>! = nil
+        do {
+            #if os(macOS) || os(iOS)
+            df2 = try SSDataFrame<Double>.dataFrame(fromFile: resPath + "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, scanDouble)
+            #else
+            df2 = try SSDataFrame<Double>.dataFrame(fromFile: "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+            #endif
+        }
+        catch {
+            print("error in import data test.csv")
+        }
+        XCTAssertEqual(df, df2)
+        #if os(macOS) || os(iOS)
+            let filename = "test.dat"
+            let tempDir = NSTemporaryDirectory()
+            let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
+            do {
+                let s = try df2.archiveTo(filePath: url?.path, overwrite: true)
+                XCTAssert(s)
+            }
+            catch {
+                print("error in archiveTo")
+            }
+            do {
+                if let testDataFrame = try SSDataFrame<Double>.unarchiveFrom(filePath: url?.path) {
+                    XCTAssert(testDataFrame.isEqual(df2))
+                }
+                try! FileManager.default.removeItem(at: url!)
+            }
+            catch {
+                print("error in unarchive")
+            }
+        #endif
         var row = df2.row(at: 3)
         XCTAssertEqual(row[0], 0.51, accuracy: 1E-2)
         XCTAssertEqual(row[1], 0.72, accuracy: 1E-2)
@@ -428,24 +585,59 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(row[0], 0.55, accuracy: 1E-2)
         XCTAssertEqual(row[1], 0.49, accuracy: 1E-2)
         XCTAssertEqual(row[2], 0.49, accuracy: 1E-2)
-        let exa1 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        var exa1: SSExamine<Double>! = nil
+        var exa2: SSExamine<Double>! = nil
+        var exa3: SSExamine<Double>! = nil
+        #if os(macOS) || os(iOS)
+            exa1 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        #else
+        if let p = linuxResourcePath(resource: "NormalData01", type: "examine") {
+            exa1 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        #endif
+        print("==============!!!!!!!!!!!!!!!!!!!================")
         exa1.name = "Normal_01"
-        let exa2 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        exa1.name = "Normal_02"
-        let exa3 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        exa1.name = "Normal_03"
+        #if os(macOS) || os(iOS)
+        exa2 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        #else
+        if let p = linuxResourcePath(resource: "NormalData02", type: "examine") {
+            exa2 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        #endif
+        exa2.name = "Normal_02"
+        #if os(macOS) || os(iOS)
+        exa3 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        #else
+        if let p = linuxResourcePath(resource: "NormalData03", type: "examine") {
+            exa3 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        #endif
+        exa3.name = "Normal_03"
+        #if os(macOS) || os(iOS)
         df = try! SSDataFrame<Double>.init(examineArray: [exa1, exa2, exa3])
         let _ = try! df.exportCSV(path: resPath + "/normal.csv", separator: ",", useQuotes: true, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
+        #else
+        df = try! SSDataFrame<Double>.init(examineArray: [exa1, exa2, exa3])
+        let _ = try! df.exportCSV(path: "normal.csv", separator: ",", useQuotes: true, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
+        #endif
+        #if os(macOS) || os(iOS)
         df2 = try! SSDataFrame<Double>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+        #else
+        df2 = try! SSDataFrame<Double>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+        #endif
         XCTAssert(df.isEqual(df2))
+        #if os(macOS) || os(iOS)
         let df3 = try! SSDataFrame<String>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, scanString)
+        #else
+        let df3 = try! SSDataFrame<String>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, scanString)
+        #endif
         XCTAssert(df3[0].arithmeticMean == nil)
     }
     
     func testCrossTabs() {
         var c = try! SSCrosstab.init(rows: 4, columns: 3, initialValue: 0, rowID: ["Heavy", "Never", "Occas", "Regul"], columnID: ["Freq", "None", "Some"] )
         print(c.description)
-/*
+        /*
          R code:
          
          > library(MASS)
@@ -463,14 +655,14 @@ class SwiftyStatsTests: XCTestCase {
          
          data:  tbl
          X-squared = 5.4885, df = 6, p-value = 0.4828
-*/
+         */
         try! c.setColumn(name: "Freq", newColumn:[7, 87, 12, 9])
         try! c.setColumn(name: "None" , newColumn:[1, 18, 3, 1])
         try! c.setColumn(name: "Some" , newColumn:[3, 84, 4, 7])
-
-//        try! c.setColumn(at: 0, newColumn:[52,46,25,26])
-//        try! c.setColumn(name: 2, newColumn:[89,35,15,10])
-//        try! c.setColumn(at: 2, newColumn:[123,23,13,5])
+        
+        //        try! c.setColumn(at: 0, newColumn:[52,46,25,26])
+        //        try! c.setColumn(name: 2, newColumn:[89,35,15,10])
+        //        try! c.setColumn(at: 2, newColumn:[123,23,13,5])
         XCTAssertEqual(c.chiSquare, 5.4885, accuracy: 1e-4)
         print(c.chiSquareLikelihoodRatio)
         print(c.chiSquareYates)
@@ -516,7 +708,7 @@ class SwiftyStatsTests: XCTestCase {
         print(tauTable.columnLevelOfMeasurement)
         print(tauTable.lambda_C_R)
         print(tauTable.lambda_R_C)
-//        print(tauTable.tauCR)
+        //        print(tauTable.tauCR)
     }
     
     
@@ -605,8 +797,19 @@ class SwiftyStatsTests: XCTestCase {
         let g4 = SSExamine<Double>.init(withArray: sign4, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
         XCTAssertEqual(res.pValueExact!, 0.0384064, accuracy: 1E-6)
-        let g5 = try! SSExamine<Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        let g6 = try! SSExamine<Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        var g5: SSExamine<Double>! = nil
+        var g6: SSExamine<Double>! = nil
+        #if os(macOS) || os(iOS)
+        g5 = try! SSExamine<Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        g6 = try! SSExamine<Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        #else
+        if let p = linuxResourcePath(resource: "largeNormal_01", type: "examine") {
+            g5 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        if let p = linuxResourcePath(resource: "largeNormal_02", type: "examine") {
+            g6 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        #endif
         res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
         XCTAssertEqual(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
         XCTAssertEqual(res.pValueExact!, 0.00295538, accuracy: 1E-6)
@@ -745,13 +948,30 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testTTest()  {
-        let examine1 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        var examine1: SSExamine<Double>! = nil
+        var examine2: SSExamine<Double>! = nil
+        var examine3: SSExamine<Double>! = nil
+        #if os(macOS) || os(iOS)
+        examine1 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
         examine1.name = "Normal_01"
-        let examine2 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        examine2 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
         examine1.name = "Normal_02"
-        let examine3 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        examine3 = try! SSExamine<Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
         examine1.name = "Normal_03"
-        
+        #else
+        if let p = linuxResourcePath(resource: "NormalData01", type: "examine") {
+            examine1 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        examine1.name = "Normal_01"
+        if let p = linuxResourcePath(resource: "NormalData02", type: "examine") {
+            examine2 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        examine1.name = "Normal_02"
+        if let p = linuxResourcePath(resource: "NormalData03", type: "examine") {
+            examine3 = try! SSExamine<Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        }
+        examine1.name = "Normal_03"
+        #endif
         var ttestResult = try! SSHypothesisTesting.twoSampleTTest(sample1: examine1, sample2: examine2, alpha: 0.05)
         XCTAssertEqual(ttestResult.p2Welch!, 0.366334, accuracy: 1E-6)
         
@@ -777,8 +997,14 @@ class SwiftyStatsTests: XCTestCase {
         
         matchedPairsTTestRest = try! SSHypothesisTesting.matchedPairsTTest(set1: examine1, set2: examine1, alpha: 0.05)
         XCTAssertEqual(matchedPairsTTestRest.p2Value!, 1, accuracy: 1E-12)
-        
-        let ds1 = try! SSDataFrame<Double>.dataFrame(fromFile: resPath + "/geardata.csv", scanDouble)
+        var ds1: SSDataFrame<Double>! = nil
+        #if os(macOS) || os(iOS)
+        ds1 = try! SSDataFrame<Double>.dataFrame(fromFile: resPath + "/geardata.csv", scanDouble)
+        #else
+        if let p = linuxResourcePath(resource: "geardata", type: "csv") {
+            ds1 = try! SSDataFrame<Double>.dataFrame(fromFile: p, scanDouble)
+        }
+        #endif
         var multipleMeansRes = try! SSHypothesisTesting.multipleMeansTest(dataFrame: ds1, alpha: 0.05)!
         XCTAssertEqual(multipleMeansRes.p2Value!, 0.0227, accuracy: 1E-4)
         XCTAssertEqual(multipleMeansRes.FStatistic!, 2.297, accuracy: 1E-3)

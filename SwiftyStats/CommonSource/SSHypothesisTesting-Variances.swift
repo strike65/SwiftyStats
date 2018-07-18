@@ -22,7 +22,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 extension SSHypothesisTesting {
     
@@ -35,7 +38,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func bartlettTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
-            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<Double>> = Array<Array<Double>>()
@@ -44,7 +54,14 @@ extension SSHypothesisTesting {
                 array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
-                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -77,7 +94,14 @@ extension SSHypothesisTesting {
         var _data:Array<SSExamine<Double>> = Array<SSExamine<Double>>()
         var result: SSVarianceEqualityTestResult
         if array.count < 2 {
-            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         for a in array {
@@ -90,7 +114,14 @@ extension SSHypothesisTesting {
                 _s1 += (Double(examine.sampleSize) - 1.0) * log(v)
             }
             else {
-                os_log("for at least one sample a variance is not obtainable", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("for at least one sample a variance is not obtainable", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -130,7 +161,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
     public class func leveneTest(data: Array<SSExamine<Double>>!, testType: SSLeveneTestType, alpha: Double!) throws -> SSVarianceEqualityTestResult? {
         if data.count < 2 {
-            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<Double>> = Array<Array<Double>>()
@@ -139,7 +177,14 @@ extension SSHypothesisTesting {
                 array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
-                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -174,7 +219,14 @@ extension SSHypothesisTesting {
         var _k: Double
         var _data: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
         if array.count < 2 {
-            os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         for a in array {
@@ -182,7 +234,14 @@ extension SSHypothesisTesting {
                 _data.append(SSExamine<Double>.init(withArray: a, name: nil, characterSet: nil))
             }
             else {
-                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -263,8 +322,8 @@ extension SSHypothesisTesting {
                     let zij = _zij[i][j]
                     let zi = _zi[i]
                     _s2 = _s2 + pow(zij, 2.0) - (2.0 * zi * zij) + pow(zi, 2.0)
-//                    _s2 = _s2 + p1 * p1
-//                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
+                    //                    _s2 = _s2 + p1 * p1
+                    //                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
                     j += 1
                 }
                 i += 1
@@ -307,11 +366,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if data.sampleSize < 2 || s0 <= 0
     public class func chiSquareVarianceTest(array: Array<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult? {
         if array.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if s0 <= 0 {
-            os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -329,11 +402,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError if sample.sampleSize < 2 || s0 <= 0
     public class func chiSquareVarianceTest(sample: SSExamine<Double>, nominalVariance s0: Double!, alpha: Double!) throws -> SSChiSquareVarianceTestResult {
         if sample.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if s0 <= 0 {
-            os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -376,11 +463,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data1.sampleSize < 2 || data1.sampleSize < 2
     public class func fTestVarianceEquality(data1: Array<Double>!, data2: Array<Double>!, alpha: Double!) throws -> SSFTestResult {
         if data1.count < 2 {
-            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data2.count < 2 {
-            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -398,11 +499,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample1.sampleSize < 2
     public class func fTestVarianceEquality(sample1: SSExamine<Double>!, sample2: SSExamine<Double>!, alpha: Double!) throws -> SSFTestResult {
         if sample1.sampleSize < 2 {
-            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if sample2.sampleSize < 2 {
-            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let s1: Double
@@ -414,7 +529,14 @@ extension SSHypothesisTesting {
             testStat = s1 / s2
         }
         else {
-            os_log("error in obtaining the f ratio", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("error in obtaining the f ratio", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let df1 = Double(sample1.sampleSize) - 1.0
@@ -503,5 +625,5 @@ extension SSHypothesisTesting {
         result.ciRatioLTE1 = cilt
         return result
     }
-
+    
 }

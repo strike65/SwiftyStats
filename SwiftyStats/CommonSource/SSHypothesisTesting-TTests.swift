@@ -22,7 +22,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 public class SSHypothesisTesting {
     
@@ -38,11 +41,25 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
         if data1.count < 2 {
-            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data2.count < 2 {
-            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sample1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
@@ -62,11 +79,25 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
         if sample1.sampleSize < 2 {
-            os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if sample2.sampleSize < 2 {
-            os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var cdfLeveneMedian: Double = 0.0
@@ -119,7 +150,14 @@ public class SSHypothesisTesting {
                 variancesAreEqualMedian = leveneResult.equality!
             }
             else {
-                os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("data are not sufficient. skewness/kurtosis not obtainable", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
             if cdfTValueEqualVariances > 0.5 {
@@ -204,7 +242,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
     public class func oneSampleTTest(sample: SSExamine<Double>, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
         if sample.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var testStatisticValue: Double = 0.0
@@ -255,7 +300,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
     public class func oneSampleTTEst(data: Array<Double>!, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
         if data.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, name: nil, characterSet: nil)
@@ -274,11 +326,25 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
     public class func matchedPairsTTest(set1: SSExamine<Double>!, set2: SSExamine<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
         if set1.sampleSize < 2 || set2.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let m1 = set1.arithmeticMean!
@@ -342,11 +408,25 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data1.count < 2 || data2.count < 2 || data1.count != data2.count
     public class func matchedPairsTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
         if data1.count < 2 || data2.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data1.count != data2.count {
-            os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample sizes are expected to be equal", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let set1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
@@ -366,7 +446,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func oneWayANOVA(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -383,7 +470,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func oneWayANOVA(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -396,7 +490,14 @@ public class SSHypothesisTesting {
     
     public class func oneWayANOVA(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
         if dataFrame.columns <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -410,10 +511,17 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-
+    
     public class func multipleMeansTest(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
         if dataFrame.columns <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -434,7 +542,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var examines: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
@@ -455,7 +570,14 @@ public class SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
         if data.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var overallMean: Double
@@ -491,7 +613,14 @@ public class SSHypothesisTesting {
         }
         for examine in data {
             if examine.sampleSize == 0 {
-                os_log("at least one sample is empty", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("at least one sample is empty", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
             if let tot = examine.total {
@@ -548,7 +677,7 @@ public class SSHypothesisTesting {
     /*
      Structure of the differences array:
      
-                    m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
+     m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
      m(0)           -           d(0,1)      d(0,2)      m(0,3)      ...     d(0,k - 1)
      m(1)           d(1,0)      -           d(1,2)      m(1,3)      ...     d(1,k - 1)
      m(2)           d(2,0)      d(2,1)      -           m(2,3)      ...     d(2,k - 1)
@@ -556,12 +685,12 @@ public class SSHypothesisTesting {
      .              .           .           .           .           ...     d(2,k - 1)
      .              .           .           .           .           ...     .
      m(k - 1)       d(k - 1,0)  d(k - 1,1)  d(k - 1,2)  d(k - 1,3)  ...     -
-
+     
      
      
      Structure of the T array:
      
-                    m(0)        m(1)        m(2)        ...     m(k - 1)
+     m(0)        m(1)        m(2)        ...     m(k - 1)
      m(0)           -           T(0,1)      T(0,2)      ...     T(0,k - 1)
      m(1)           T(1,0)      -           T(1,2)      ...     T(1,k - 1)
      m(2)           T(2,0)      T(2,1)      -           ...     T(2,k - 1)
@@ -569,8 +698,8 @@ public class SSHypothesisTesting {
      .              .           .           .           ...     .
      .              .           .           .           ...     .
      m(k - 1)       T(k - 1,0)  T(k - 1,1)  T(k - 1,2)  ...     -
- 
- */
+     
+     */
     /// Performs the Tukey-Kramer test for multiple comparisons
     /// - Parameter data: data as SSDataFrame<Double>
     /// - Parameter alpha: Alpha
@@ -580,7 +709,14 @@ public class SSHypothesisTesting {
     public class func tukeyKramerTest(dataFrame: SSDataFrame<Double>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
         do {
             if dataFrame.examines.count <= 2 {
-                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
             return try SSHypothesisTesting.tukeyKramerTest(data: dataFrame.examines, alpha: alpha)
@@ -589,7 +725,7 @@ public class SSHypothesisTesting {
             throw error
         }
     }
-
+    
     /// Performs the Tukey-Kramer test for multiple comparisons
     /// - Parameter data: data as SSExamine<Double>
     /// - Parameter alpha: Alpha
@@ -598,7 +734,14 @@ public class SSHypothesisTesting {
     /// - Precondition: Each examine object should be named uniquely.
     public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
         if data.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var means = Array<Double>()
@@ -668,7 +811,14 @@ public class SSHypothesisTesting {
                         temp = try ptukey(q: Q[i][j], nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, returnLogP: false)
                     }
                     catch {
-                        os_log("unable to compute ptukey", log: log_stat, type: .error)
+                        #if os(macOS) || os(iOS)
+                        
+                        if #available(macOS 10.12, iOS 10, *) {
+                            os_log("unable to compute ptukey", log: log_stat, type: .error)
+                        }
+                        
+                        #endif
+                        
                     }
                     pValues[i][j] = temp
                 }
@@ -683,7 +833,14 @@ public class SSHypothesisTesting {
             criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, log_p: false)
         }
         catch {
-            os_log("unable to compute qtukey", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("unable to compute qtukey", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             return nil
         }
         for i in stride(from: 0, through: data.count - 1 , by: 1) {
@@ -758,7 +915,14 @@ public class SSHypothesisTesting {
     public class func bonferroniTest(dataFrame: SSDataFrame<Double>) throws -> Array<SSPostHocTestResult>? {
         assert( false, "not implemented yet")
         if dataFrame.examines.count <= 2 {
-            os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -791,7 +955,7 @@ public class SSHypothesisTesting {
         catch {
             throw error
         }
-
+        
     }
     
     

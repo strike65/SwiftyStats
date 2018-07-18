@@ -1,3 +1,7 @@
 *.pdf
 docs/
 *.zip
+.DS_Store
+/.build
+/Packages
+

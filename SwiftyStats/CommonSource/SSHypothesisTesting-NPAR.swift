@@ -25,7 +25,10 @@
  
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 extension SSHypothesisTesting {
     /************************************************************************************************/
@@ -48,7 +51,14 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         
@@ -70,7 +80,14 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         
@@ -101,7 +118,14 @@ extension SSHypothesisTesting {
     public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
         // error handling
         if data.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sortedData = data.uniqueElements(sortOrder: .ascending)!
@@ -421,7 +445,14 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
     }
@@ -441,7 +472,14 @@ extension SSHypothesisTesting {
         var tempArray: Array<Double>
         var pValue: Double
         if array.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let _data: SSExamine<Double>
@@ -449,7 +487,14 @@ extension SSHypothesisTesting {
             _data = try SSExamine<Double>.init(withObject: array, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         }
         catch {
-            os_log("unable to create examine object", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("unable to create examine object", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         estMean = _data.arithmeticMean!
@@ -494,7 +539,14 @@ extension SSHypothesisTesting {
     fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
         // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
         if m <= 0 || n <= 0 {
-            os_log("m and n is expected to be > 0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("m and n is expected to be > 0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if U > (Double(m) * Double(n)) {
@@ -516,7 +568,14 @@ extension SSHypothesisTesting {
         let zero = 0.0
         minmn = minimum(m, n)
         if minmn < 1 {
-            os_log("m and n is expected to be > 0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("m and n is expected to be > 0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         mn1 = m * n + 1
@@ -591,11 +650,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable, T: Codable {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -614,11 +687,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups:Array<Int> = Array<Int>()
@@ -641,7 +728,14 @@ extension SSHypothesisTesting {
         let n1 = Double(set1.sampleSize)
         let n2 = Double(set2.sampleSize)
         if (U1 + U2) != nm {
-            os_log("internal error", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("internal error", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
         let S = n1 + n2
@@ -723,15 +817,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func wilcoxonMatchedPairs(set1: Array<Double>!, set2: Array<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -749,15 +864,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func wilcoxonMatchedPairs(set1: SSExamine<Double>!, set2: SSExamine<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var i: Int
@@ -812,7 +948,14 @@ extension SSHypothesisTesting {
             i += 1
         }
         if sumnegranks + sumposranks != (Double(n) * (Double(n) + 1.0)) / 2.0 {
-            os_log("internal error", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("internal error", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
         meannegranks = nnegranks > 0 ? sumnegranks / Double(nnegranks) : 0.0
@@ -850,15 +993,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func signTest(set1: Array<Double>, set2: Array<Double>) throws -> SSSignTestRestult {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -875,15 +1039,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func signTest(set1: SSExamine<Double>, set2: SSExamine<Double>) throws -> SSSignTestRestult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be equal to sample size of set2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let a1 = set1.elementsAsArray(sortOrder: .raw)!
@@ -1039,16 +1224,37 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public class func binomialTest<T>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable, T: Codable {
         if p0.isNaN {
-            os_log("p0 is NaN", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("p0 is NaN", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data.count <= 2 {
-            os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let examine = SSExamine<T>.init(withArray: data, name: nil, characterSet: characterSet)
         if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
-            os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1074,15 +1280,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T>  {
         if p0.isNaN {
-            os_log("p0 is NaN", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("p0 is NaN", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data.sampleSize <= 2 {
-            os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
-            os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("observations are expected to be dichotomous", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let success: Double = Double(data.frequency(successID))
@@ -1161,11 +1388,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func kolmogorovSmirnovTwoSampleTest<T>(set1: Array<T>, set2: Array<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable, T: Codable {
         if set1.count <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -1189,11 +1430,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func kolmogorovSmirnovTwoSampleTest<T>(set1: SSExamine<T>, set2: SSExamine<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var a1 = set1.elementsAsArray(sortOrder: .ascending)!
@@ -1265,11 +1520,25 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult {
         if set1.sampleSize <= 2 {
-            os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 1 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size of set 2 is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups = Array<Int>.init(repeating: 1, count: set1.sampleSize)
@@ -1489,7 +1758,14 @@ extension SSHypothesisTesting {
     
     public class func kruskalWallisHTest<T>(data: Array<SSExamine<T>>, alpha: Double!) throws -> SSKruskalWallisHTestResult  {
         if data.count < 2 {
-            os_log("number of groups is expected to be > 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of groups is expected to be > 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups = Array<Int>()
@@ -1498,7 +1774,14 @@ extension SSHypothesisTesting {
         var N: Double = 0.0
         for examine in data {
             if examine.sampleSize < 2 {
-                os_log("sample sizes are expected to be > 2", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("sample sizes are expected to be > 2", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
             groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
@@ -1514,7 +1797,14 @@ extension SSHypothesisTesting {
             sumRanks += rank
         }
         if sumRanks != N * (N + 1) / 2.0 {
-            os_log("internal error - contact the developer", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("internal error - contact the developer", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
         var sum = 0.0
@@ -1560,5 +1850,5 @@ extension SSHypothesisTesting {
         return result
     }
     
-
+    
 }

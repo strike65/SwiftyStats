@@ -25,7 +25,10 @@
  
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 extension SSHypothesisTesting {
     /// Returns the autocorrelation coefficient for a particular lag
@@ -34,7 +37,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.count < 2
     public class func autocorrelationCoefficient(array: Array<Double>!, lag: Int!) throws -> Double {
         if array.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -52,7 +62,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelationCoefficient(data: SSExamine<Double>!, lag: Int!) throws -> Double {
         if data.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var r: Double
@@ -87,7 +104,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation(array: Array<Double>!) throws -> SSBoxLjungResult {
         if array.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let examine = SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil)
@@ -111,7 +135,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation(data: SSExamine<Double>!) throws -> SSBoxLjungResult {
         if data.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var acr = Array<Double>()
@@ -218,5 +249,5 @@ extension SSHypothesisTesting {
         result.testStatistic = statBoxLjung
         return result
     }
-
+    
 }

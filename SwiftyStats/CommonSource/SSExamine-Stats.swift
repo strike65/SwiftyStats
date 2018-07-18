@@ -24,7 +24,10 @@
  */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 // Definition of statistics
 extension SSExamine {
@@ -53,7 +56,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Sum of all elements raised to power p
     /// - Parameter p: Power
     public func poweredTotal(power p: Double) -> Double? {
@@ -73,7 +76,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Total of all elements. Returns Double.nan iff data are non-numeric.
     public var total: Double? {
         if isArithmetic {
@@ -183,11 +186,25 @@ extension SSExamine {
     /// Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric.
     public func quantile(q: Double) throws -> Double? {
         if q.isZero || q < 0.0 || q >= 1.0 {
-            os_log("p has to be > 0.0 and < 1.0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("p has to be > 0.0 and < 1.0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isNumeric {
-            os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Quantile is not defined for non-numeric data.", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var result: Double = 0.0
@@ -314,7 +331,14 @@ extension SSExamine {
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func trimmedMean(alpha: Double) throws -> Double? {
         if alpha <= 0.0 || alpha >= 0.5 {
-            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if isArithmetic {
@@ -344,7 +368,14 @@ extension SSExamine {
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func winsorizedMean(alpha: Double) throws -> Double? {
         if alpha <= 0.0 || alpha >= 0.5 {
-            os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("alpha has to be greater than zero and smaller than 0.5", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if isArithmetic {
@@ -444,7 +475,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     // MARK: Dispersion
     
     /// The largest item. Can be nil for empty tables.
@@ -551,11 +582,25 @@ extension SSExamine {
     /// - Throws: SSSwiftyStatsError.invalidArgument if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 || upper < lower
     public func interquantileRange(lowerQuantile lower: Double!, upperQuantile upper: Double!) throws -> Double? {
         if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 {
-            os_log("lower and upper quantile has to be > 0.0 and < 1.0", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("lower and upper quantile has to be > 0.0 and < 1.0", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if upper < lower {
-            os_log("lower quantile has to be less than upper quantile", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("lower quantile has to be less than upper quantile", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isNumeric {
@@ -576,7 +621,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Returns the sample variance.
     /// - Parameter type: Can be .sample and .unbiased
     public func variance(type: SSVarianceType) -> Double? {
@@ -604,7 +649,7 @@ extension SSExamine {
             }
         }
     }
-
+    
     /// Returns the sample standard deviation.
     /// - Parameter type: .biased or .unbiased
     public func standardDeviation(type: SSStandardDeviationType) -> Double? {
@@ -615,7 +660,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Returns the standard error of the sample
     public var standardError: Double? {
         if isArithmetic {
@@ -645,7 +690,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
     public var relativeEntropy: Double? {
         if let e = self.entropy {
@@ -655,7 +700,7 @@ extension SSExamine {
             return nil
         }
     }
-
+    
     // Returns the Herfindahl index
     public var herfindahlIndex: Double? {
         if isArithmetic {
@@ -671,7 +716,14 @@ extension SSExamine {
                 return s
             }
             else {
-                os_log("measure is not available", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("measure is not available", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 return nil
             }
         }
@@ -1292,7 +1344,7 @@ extension SSExamine {
                     if res.iqr != nil {
                         iqr3h = 1.5 * res.iqr!
                         iqr3t = 2.0 * iqr3h
-//                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
+                        //                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
                         notchCoeff = 1.58 * res.iqr! / sqrt(N)
                     }
                     else {
@@ -1308,7 +1360,7 @@ extension SSExamine {
                                 res.outliers?.append(a[i])
                             }
                             else if temp > res.q75! + iqr3h {
-                                    res.extremes?.append(a[i])
+                                res.extremes?.append(a[i])
                             }
                             else {
                                 res.uWhiskerExtreme = a[i]

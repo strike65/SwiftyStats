@@ -20,7 +20,7 @@
  
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
  */
 
 import Foundation
@@ -29,7 +29,7 @@ import Foundation
 /// Containe: absolute Freq, relative Freq, Percent
 public struct SSFrequencyTableItem<SSElement> where SSElement: Hashable, SSElement: Comparable {
     private var privateItem: SSElement!
-
+    
     /// The item
     public var item: SSElement {
         get {
@@ -105,9 +105,9 @@ public struct SSCumulativeFrequencyTableItem<SSElement> where SSElement: Hashabl
         self.privateCumAbs = cumFreq
         self.privateCumRel = cumRel
     }
-
-
-
-
-
+    
+    
+    
+    
+    
 }

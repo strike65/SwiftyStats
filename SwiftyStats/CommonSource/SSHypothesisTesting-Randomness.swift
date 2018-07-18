@@ -22,7 +22,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 extension SSHypothesisTesting {
     // MARK: Randomness
@@ -49,7 +52,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func runsTest(array: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
         if array.count < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -83,7 +93,14 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
         if data.sampleSize < 2 {
-            os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var diff = Array<Double>()
@@ -108,7 +125,14 @@ extension SSHypothesisTesting {
                 cp = cuttingPoint!
             }
             else {
-                os_log("no user defined cutting point specified", log: log_stat, type: .error)
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("no user defined cutting point specified", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -212,5 +236,5 @@ extension SSHypothesisTesting {
         return result
     }
     
-
+    
 }

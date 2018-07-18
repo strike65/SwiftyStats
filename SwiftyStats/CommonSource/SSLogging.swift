@@ -20,10 +20,14 @@
  
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
  */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
 /// Defines the logging subsystem used by the framework
+@available(iOS 10.0, macOS 10.12, *)
 let log_stat = OSLog(subsystem: "de.swiftystats.SSSwiftyStats", category: "SSSwiftyStats")
+#endif
+

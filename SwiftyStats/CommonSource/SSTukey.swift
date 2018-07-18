@@ -65,7 +65,10 @@
  */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     /*  wprob() :
@@ -135,15 +138,15 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     var wincr: Double
     var xx: Double
     #if (arch(arm) || arch(arm64))
-        var blb: Double
-        var bub: Double
-        var einsum: Double
-        var elsum: Double
+    var blb: Double
+    var bub: Double
+    var einsum: Double
+    var elsum: Double
     #else
-        var blb: Float80
-        var bub: Float80
-        var einsum: Float80
-        var elsum: Float80
+    var blb: Float80
+    var bub: Float80
+    var einsum: Float80
+    var elsum: Float80
     #endif
     var j: Int
     var jj: Int
@@ -157,7 +160,7 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     /* find (f(w/2) - 1) ^ cc */
     /* (first term in integral of hartley's form). */
     pr_w = 2.0 * SSProbabilityDistributions.cdfStandardNormalDist(u: qsqz) - 1.0 /* erf(qsqz / M_SQRT2) */
-
+    
     /* if pr_w ^ cc < 2e-22 then set pr_w = 0 */
     if pr_w >= exp(C2 / cc) {
         pr_w = pow(pr_w, cc)
@@ -184,15 +187,15 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     
     /* blb and bub are lower and upper limits of integration. */
     #if (arch(arm) || arch(arm64))
-        blb = qsqz
+    blb = qsqz
     #else
-        blb = Float80(qsqz)
+    blb = Float80(qsqz)
     #endif
     binc = (bb - qsqz) / wincr
     #if (arch(arm) || arch(arm64))
-        bub = blb + binc
+    bub = blb + binc
     #else
-        bub = blb + Float80(binc)
+    bub = blb + Float80(binc)
     #endif
     einsum = 0.0
     /* integrate over each interval */
@@ -202,16 +205,16 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     while wi <= wincr {
         elsum = 0.0;
         #if (arch(arm) || arch(arm64))
-            a = Double(0.5 * (bub + blb))
+        a = Double(0.5 * (bub + blb))
         #else
-            a = Double(Float80(0.5) * (bub + blb))
+        a = Double(Float80(0.5) * (bub + blb))
         #endif
         /* legendre quadrature with order = nleg */
         
         #if (arch(arm) || arch(arm64))
-            b = Double(0.5 * (bub - blb))
+        b = Double(0.5 * (bub - blb))
         #else
-            b = Double(Float80(0.5) * (bub - blb))
+        b = Double(Float80(0.5) * (bub - blb))
         #endif
         jj = 1
         while jj <= nleg {
@@ -247,24 +250,24 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
             if rinsum >= exp(C1 / cc1) {
                 rinsum = (aleg[j-1] * exp(-(0.5 * qexpo))) * pow(rinsum, cc1)
                 #if arch(arm) || arch(arm64)
-                    elsum += rinsum
+                elsum += rinsum
                 #else
-                    elsum += Float80(rinsum)
+                elsum += Float80(rinsum)
                 #endif
             }
             jj += 1
         }
         #if arch(arm) || arch(arm64)
-            elsum *= (((2.0 * b) * cc) * SQRT2PIINV)
+        elsum *= (((2.0 * b) * cc) * SQRT2PIINV)
         #else
-            elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80(SQRT2PIINV))
+        elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80(SQRT2PIINV))
         #endif
         einsum += elsum
         blb = bub
         #if arch(arm) || arch(arm64)
-            bub += binc
+        bub += binc
         #else
-            bub += Float80(binc)
+        bub += Float80(binc)
         #endif
         wi += 1.0
     }
@@ -647,22 +650,22 @@ public func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double
  *	is treated as infinity.
  */
 fileprivate func qinv(p: Double, c: Double, v: Double) -> Double {
-   let p0 = 0.322232421088
-   let q0 = 0.993484626060e-01
-   let p1 = -1.0
-   let q1 = 0.588581570495
-   let p2 = -0.342242088547
-   let q2 = 0.531103462366
-   let p3 = -0.204231210125
-   let q3 = 0.103537752850
-   let p4 = -0.453642210148e-04
-   let q4 = 0.38560700634e-02
-   let c1 = 0.8832
-   let c2 = 0.2368
-   let c3 = 1.214
-   let c4 = 1.208
-   let c5 = 1.4142
-   let vmax = 120.0
+    let p0 = 0.322232421088
+    let q0 = 0.993484626060e-01
+    let p1 = -1.0
+    let q1 = 0.588581570495
+    let p2 = -0.342242088547
+    let q2 = 0.531103462366
+    let p3 = -0.204231210125
+    let q3 = 0.103537752850
+    let p4 = -0.453642210148e-04
+    let q4 = 0.38560700634e-02
+    let c1 = 0.8832
+    let c2 = 0.2368
+    let c3 = 1.214
+    let c4 = 1.208
+    let c5 = 1.4142
+    let vmax = 120.0
     var ps: Double
     var q: Double
     var t: Double
@@ -725,7 +728,7 @@ public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double
     if (p.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN) {
         return p + nranges + numberOfMeans + df;
     }
-
+    
     /* df must be > 1 ; there must be at least two values */
     if (df < 2 || nranges < 1 || numberOfMeans < 2) {
         return Double.nan
@@ -753,8 +756,8 @@ public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double
         }
     }
     
- //   r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
-
+    //   r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
+    
     pp = r_dt_qiv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
     
     /* Initial value */
@@ -819,7 +822,14 @@ public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double
         iter += 1
     }
     /* The process did not converge in 'maxiter' iterations */
-    os_log("qtukey didn't converge", log: log_stat, type: .info)
+    #if os(macOS) || os(iOS)
+    
+    if #available(macOS 10.12, iOS 10, *) {
+        os_log("qtukey didn't converge", log: log_stat, type: .info)
+    }
+    
+    #endif
+    
     return ans
 }
 

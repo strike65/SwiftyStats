@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9F82D3AD1F1E8F19001BFC9D /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
+		9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9FEA826F1F76CA58005E4349 /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */; };
@@ -98,6 +99,8 @@
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F8F5C4920FD026C00DC29F4 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAsString.swift; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,6 +180,7 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
+				9F8F5C4920FD026C00DC29F4 /* Package.swift */,
 				9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */,
 				9FEA825C1F76C9F6005E4349 /* TODO */,
 				9FEA82411F76C9F6005E4349 /* Info.plist */,
@@ -184,6 +188,7 @@
 				9F368BE71F20F340004A5193 /* LICENSE */,
 				9F368BE81F20F340004A5193 /* README.md */,
 				9FEA82401F76C9F6005E4349 /* CommonSource */,
+				9F95476F20FFA996002F1E76 /* Resources */,
 				9FEA825D1F76CA06005E4349 /* CommonTests */,
 				9F82D3A41F1E8F19001BFC9D /* Products */,
 				9FBB8AAC1F76D76500ED8755 /* Frameworks */,
@@ -198,6 +203,26 @@
 				9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9F95476F20FFA996002F1E76 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9FEA825F1F76CA06005E4349 /* DoubleData.examine */,
+				9FEA82601F76CA06005E4349 /* geardata.csv */,
+				9FEA82621F76CA06005E4349 /* IntData.examine */,
+				9FEA82631F76CA06005E4349 /* IntDataWithOutliers.examine */,
+				9FEA82641F76CA06005E4349 /* largeNormal_01.examine */,
+				9FEA82651F76CA06005E4349 /* largeNormal_02.examine */,
+				9FEA82671F76CA06005E4349 /* NormalData01.examine */,
+				9FEA82681F76CA06005E4349 /* NormalData02.examine */,
+				9FEA82691F76CA06005E4349 /* NormalData03.examine */,
+				9FEA826A1F76CA06005E4349 /* RosnerData.examine */,
+				9FEA826C1F76CA06005E4349 /* TukeyKramerData_01.csv */,
+				9FEA826D1F76CA06005E4349 /* TukeyKramerData_02.csv */,
+				9FEA826E1F76CA06005E4349 /* ZarrData.examine */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		9FBB8AAC1F76D76500ED8755 /* Frameworks */ = {
@@ -244,22 +269,10 @@
 			isa = PBXGroup;
 			children = (
 				9FEA825E1F76CA06005E4349 /* clonidine_data.swift */,
-				9FEA825F1F76CA06005E4349 /* DoubleData.examine */,
-				9FEA82601F76CA06005E4349 /* geardata.csv */,
 				9FEA82611F76CA06005E4349 /* Info.plist */,
-				9FEA82621F76CA06005E4349 /* IntData.examine */,
-				9FEA82631F76CA06005E4349 /* IntDataWithOutliers.examine */,
-				9FEA82641F76CA06005E4349 /* largeNormal_01.examine */,
-				9FEA82651F76CA06005E4349 /* largeNormal_02.examine */,
 				9FEA82661F76CA06005E4349 /* LargeSet.swift */,
-				9FEA82671F76CA06005E4349 /* NormalData01.examine */,
-				9FEA82681F76CA06005E4349 /* NormalData02.examine */,
-				9FEA82691F76CA06005E4349 /* NormalData03.examine */,
-				9FEA826A1F76CA06005E4349 /* RosnerData.examine */,
 				9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */,
-				9FEA826C1F76CA06005E4349 /* TukeyKramerData_01.csv */,
-				9FEA826D1F76CA06005E4349 /* TukeyKramerData_02.csv */,
-				9FEA826E1F76CA06005E4349 /* ZarrData.examine */,
+				9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */,
 			);
 			path = CommonTests;
 			sourceTree = "<group>";
@@ -354,10 +367,11 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 8K3X84P22H;
 						LastSwiftMigration = 0830;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					9F82D3AB1F1E8F19001BFC9D = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 8K3X84P22H;
 						ProvisioningStyle = Automatic;
 					};
 					9FEA82371F76C95F005E4349 = {
@@ -461,6 +475,7 @@
 			files = (
 				9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */,
 				9FEA82A21F76CB48005E4349 /* LargeSet.swift in Sources */,
+				9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */,
 				9FEA82A11F76CB48005E4349 /* clonidine_data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -632,8 +647,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
@@ -657,8 +672,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
@@ -681,7 +696,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8K3X84P22H;
 				INFOPLIST_FILE = CommonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStatsTests;
@@ -694,7 +711,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8K3X84P22H;
 				INFOPLIST_FILE = CommonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStatsTests;

@@ -23,7 +23,10 @@
  
  */
 
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+
 
 
 /// Sorts a given array in ascending order. Used for ranking.
@@ -50,21 +53,38 @@ import os.log
 public class SSDataGroupSorter<T> where T: Hashable, T: Comparable {
     private var g: Array<Int>
     private var o: Array<T>
-
+    
     init(data: Array<T>!, groups: Array<Int>!) {
         if data.count < 2 {
-            os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+            }
+            #endif
+            
         }
         if groups.count < 2 {
-            os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+            }
+            #endif
+            
         }
         if groups.count != data.count {
-            os_log("number of observations and number of groups is expected to be equal", log: log_stat, type: .error)
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("number of observations and number of groups is expected to be equal", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
         }
         self.o = data
         self.g = groups
     }
-
+    
     fileprivate func quickSort(_ lo: Int, _ hi: Int, ref: SSDataGroupSorter ) {
         var i: Int = lo
         var j: Int = hi
