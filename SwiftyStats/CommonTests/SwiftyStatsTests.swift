@@ -1073,9 +1073,9 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testDistributions() {
-        XCTAssertEqual(try! SSProbabilityDistributions.pdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.0542627546491024962784, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbabilityDistributions.cdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.659489357534338952719, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbabilityDistributions.quantileChiSquareDist(p: 0.5, degreesOfFreedom: 20), 19.3374292294282623035, accuracy: 1E-12)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.0542627546491024962784, accuracy: 1E-12)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.659489357534338952719, accuracy: 1E-12)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 20), 19.3374292294282623035, accuracy: 1E-12)
     }
     
 //

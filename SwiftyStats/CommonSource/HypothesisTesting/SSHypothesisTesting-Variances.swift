@@ -131,11 +131,11 @@ extension SSHypothesisTesting {
         }
         _testStatisticValue = ((_N - _k) * log(_pS) - _s1) / (1.0 + (1.0 / (3.0 * (_k - 1.0))) * (_s2 - 1.0 / (_N - _k)))
         do {
-            _cdfChiSquare = try SSProbabilityDistributions.cdfChiSquareDist(chi: _testStatisticValue, degreesOfFreedom: _k - 1.0)
-            _cutoff90Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.9, degreesOfFreedom: _k - 1.0)
-            _cutoff95Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.95, degreesOfFreedom: _k - 1.0)
-            _cutoff99Percent = try SSProbabilityDistributions.quantileChiSquareDist(p: 0.99, degreesOfFreedom: _k - 1.0)
-            _cutoffAlpha = try SSProbabilityDistributions.quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: _k - 1.0)
+            _cdfChiSquare = try cdfChiSquareDist(chi: _testStatisticValue, degreesOfFreedom: _k - 1.0)
+            _cutoff90Percent = try quantileChiSquareDist(p: 0.9, degreesOfFreedom: _k - 1.0)
+            _cutoff95Percent = try quantileChiSquareDist(p: 0.95, degreesOfFreedom: _k - 1.0)
+            _cutoff99Percent = try quantileChiSquareDist(p: 0.99, degreesOfFreedom: _k - 1.0)
+            _cutoffAlpha = try quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: _k - 1.0)
             _df = _k - 1.0
             result = SSVarianceEqualityTestResult()
             result.testStatistic = _testStatisticValue
@@ -329,11 +329,11 @@ extension SSHypothesisTesting {
                 i += 1
             }
             _testStatisticValue = ((_N - _k) * _s1) / ((_k - 1.0) * _s2)
-            _cdfFRatio = try SSProbabilityDistributions.cdfFRatio(f: _testStatisticValue, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
-            _cutoffAlpha = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
-            _cutoff90Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.9, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
-            _cutoff95Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.95, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
-            _cutoff99Percent = try SSProbabilityDistributions.quantileFRatioDist(p: 0.99, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cdfFRatio = try cdfFRatio(f: _testStatisticValue, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoffAlpha = try quantileFRatioDist(p: 1.0 - alpha, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff90Percent = try quantileFRatioDist(p: 0.9, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff95Percent = try quantileFRatioDist(p: 0.95, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
+            _cutoff99Percent = try quantileFRatioDist(p: 0.99, numeratorDF: _k - 1.0, denominatorDF: _N - _k)
             _variancesAreEqual = !(_testStatisticValue > _cutoffAlpha)
             var result = SSVarianceEqualityTestResult()
             result.cv90Pct = _cutoff90Percent
@@ -427,7 +427,7 @@ extension SSHypothesisTesting {
             let df = Double(sample.sampleSize) - 1.0
             let ratio = sample.variance(type: .unbiased)! / s0
             let testStatisticValue = df * ratio
-            let cdfChiSquare = try SSProbabilityDistributions.cdfChiSquareDist(chi: testStatisticValue, degreesOfFreedom: df)
+            let cdfChiSquare = try cdfChiSquareDist(chi: testStatisticValue, degreesOfFreedom: df)
             let twoTailed: Double
             let oneTailed: Double
             if cdfChiSquare > 0.5 {
@@ -543,7 +543,7 @@ extension SSHypothesisTesting {
         let df2 = Double(sample2.sampleSize) - 1.0
         let cdfTestStat: Double
         do {
-            cdfTestStat = try SSProbabilityDistributions.cdfFRatio(f: testStat, numeratorDF: df1, denominatorDF: df2)
+            cdfTestStat = try cdfFRatio(f: testStat, numeratorDF: df1, denominatorDF: df2)
         }
         catch {
             throw error
@@ -585,11 +585,11 @@ extension SSHypothesisTesting {
         var ciGreaterAlphaLower: Double
         var ciGreaterAlphaUpper: Double
         do {
-            ciTwoSidedAlphaUpper = try (testStat / SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: df1, denominatorDF: df2))
-            ciTwoSidedAlphaLower = try (testStat * SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: df2, denominatorDF: df1))
+            ciTwoSidedAlphaUpper = try (testStat / quantileFRatioDist(p: alpha / 2.0, numeratorDF: df1, denominatorDF: df2))
+            ciTwoSidedAlphaLower = try (testStat * quantileFRatioDist(p: alpha / 2.0, numeratorDF: df2, denominatorDF: df1))
             ciLessAlphaLower = 0.0
-            ciLessAlphaUpper = try (testStat / SSProbabilityDistributions.quantileFRatioDist(p: alpha, numeratorDF: df1, denominatorDF: df2))
-            ciGreaterAlphaLower = try (testStat * SSProbabilityDistributions.quantileFRatioDist(p: alpha, numeratorDF: df2, denominatorDF: df1))
+            ciLessAlphaUpper = try (testStat / quantileFRatioDist(p: alpha, numeratorDF: df1, denominatorDF: df2))
+            ciGreaterAlphaLower = try (testStat * quantileFRatioDist(p: alpha, numeratorDF: df2, denominatorDF: df1))
             ciGreaterAlphaUpper = Double.infinity
         }
         catch {

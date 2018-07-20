@@ -140,10 +140,10 @@ public class SSHypothesisTesting {
         tValueEqualVariances = differenceInMeans / (pooledStdDev * sqrt(1.0 / n1 + 1.0 / n2))
         tValueUnequalVariances = differenceInMeans / sqrt(var1 / n1 + var2 / n2)
         do {
-            cdfTValueEqualVariances = try SSProbabilityDistributions.cdfStudentTDist(t: tValueEqualVariances, degreesOfFreedom: dfEqualVariances)
-            cdfTValueUnequalVariances = try SSProbabilityDistributions.cdfStudentTDist(t: tValueUnequalVariances, degreesOfFreedom: dfUnequalVariances)
-            criticalValueEqualVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfEqualVariances)
-            criticalValueUnequalVariances = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfUnequalVariances)
+            cdfTValueEqualVariances = try cdfStudentTDist(t: tValueEqualVariances, degreesOfFreedom: dfEqualVariances)
+            cdfTValueUnequalVariances = try cdfStudentTDist(t: tValueUnequalVariances, degreesOfFreedom: dfUnequalVariances)
+            criticalValueEqualVariances = try quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfEqualVariances)
+            criticalValueUnequalVariances = try quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfUnequalVariances)
             let lArray:Array<SSExamine<Double>> = [sample1, sample2]
             if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .median, alpha: alpha) {
                 cdfLeveneMedian = leveneResult.pValue!
@@ -185,7 +185,7 @@ public class SSHypothesisTesting {
             let denomnatorWelchDF = (var1 * var1 ) / ( n1 * n1 * (n1 - 1.0)) + ( var2 * var2 ) / ( n2 * n2 * (n2 - 1.0))
             let welchT = (mean1 - mean2) / sqrt(var1OverN1 + var2OverN2 )
             let welchDF = (sumVar * sumVar) / denomnatorWelchDF
-            let cdfWelch = try SSProbabilityDistributions.cdfStudentTDist(t: welchT, degreesOfFreedom: welchDF)
+            let cdfWelch = try cdfStudentTDist(t: welchT, degreesOfFreedom: welchDF)
             var twoSidedWelch: Double
             var oneTailedWelch: Double
             if cdfWelch > 0.5 {
@@ -260,7 +260,7 @@ public class SSHypothesisTesting {
         let oneTailed: Double
         do {
             testStatisticValue = diffmean / (sample.standardDeviation(type: .unbiased)! / sqrt(N))
-            pValue = try SSProbabilityDistributions.cdfStudentTDist(t: testStatisticValue, degreesOfFreedom: N - 1.0)
+            pValue = try cdfStudentTDist(t: testStatisticValue, degreesOfFreedom: N - 1.0)
             if pValue > 0.5 {
                 twoTailed = (1.0 - pValue) * 2.0
                 oneTailed = 1.0 - pValue
@@ -273,9 +273,9 @@ public class SSHypothesisTesting {
             result.p1Value = oneTailed
             result.p2Value = twoTailed
             result.tStat = testStatisticValue
-            result.cv90Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.05, degreesOfFreedom: N - 1.0)
-            result.cv95Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.025, degreesOfFreedom: N - 1.0)
-            result.cv99Pct = try SSProbabilityDistributions.quantileStudentTDist(p: 1 - 0.005, degreesOfFreedom: N - 1.0)
+            result.cv90Pct = try quantileStudentTDist(p: 1 - 0.05, degreesOfFreedom: N - 1.0)
+            result.cv95Pct = try quantileStudentTDist(p: 1 - 0.025, degreesOfFreedom: N - 1.0)
+            result.cv99Pct = try quantileStudentTDist(p: 1 - 0.005, degreesOfFreedom: N - 1.0)
             result.mean = sample.arithmeticMean!
             result.sampleSize = N
             result.mean0 = mean
@@ -369,10 +369,10 @@ public class SSHypothesisTesting {
         let t = diffMeans / sed
         let corr = cov / (sqrt(s1) * sqrt(s2))
         do {
-            let pCorr = try (2.0 * (1.0 - SSProbabilityDistributions.cdfStudentTDist(t: corr * sqrt(df - 1.0) / (1.0 - corr * corr), degreesOfFreedom: df - 1.0)))
-            let lowerCIDiff =  try (diffMeans - SSProbabilityDistributions.quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
-            let upperCIDiff =  try (diffMeans + SSProbabilityDistributions.quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
-            var pTwoTailed = try SSProbabilityDistributions.cdfStudentTDist(t: t, degreesOfFreedom: df)
+            let pCorr = try (2.0 * (1.0 - cdfStudentTDist(t: corr * sqrt(df - 1.0) / (1.0 - corr * corr), degreesOfFreedom: df - 1.0)))
+            let lowerCIDiff =  try (diffMeans - quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
+            let upperCIDiff =  try (diffMeans + quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
+            var pTwoTailed = try cdfStudentTDist(t: t, degreesOfFreedom: df)
             if pTwoTailed > 0.5 {
                 pTwoTailed = 1.0 - pTwoTailed
             }
@@ -640,8 +640,8 @@ public class SSHypothesisTesting {
         let MST = SST / (groups - 1.0)
         F = MST / MSE
         do {
-            cdfValue = try SSProbabilityDistributions.cdfFRatio(f: F, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
-            cutoffAlpha = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha, numeratorDF: groups - 1.0, denominatorDF: Double(N) - groups)
+            cdfValue = try cdfFRatio(f: F, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
+            cutoffAlpha = try quantileFRatioDist(p: 1.0 - alpha, numeratorDF: groups - 1.0, denominatorDF: Double(N) - groups)
         }
         catch {
             throw error
@@ -897,7 +897,7 @@ public class SSHypothesisTesting {
                     tempRes.row = tk.row
                     tempRes.testType = .scheffe
                     tempRes.testStat = tk.testStat / SQRTTWO
-                    tempRes.pValue = try SSProbabilityDistributions.cdfFRatio(f: pow(tempRes.testStat, 2.0) / (k - 1.0), numeratorDF: k - 1.0, denominatorDF: df_error)
+                    tempRes.pValue = try cdfFRatio(f: pow(tempRes.testStat, 2.0) / (k - 1.0), numeratorDF: k - 1.0, denominatorDF: df_error)
                     tempRes.pValue = 1.0 - tempRes.pValue
                     scheffeResults.append(tempRes)
                 }
@@ -938,7 +938,7 @@ public class SSHypothesisTesting {
                 }
                 for s in scheffeRes {
                     bonferroniResult = s
-                    temp = try SSProbabilityDistributions.cdfStudentTDist(t: pow(bonferroniResult.testStat, 2.0) / (k - 1.0), degreesOfFreedom: n_total - k)
+                    temp = try cdfStudentTDist(t: pow(bonferroniResult.testStat, 2.0) / (k - 1.0), degreesOfFreedom: n_total - k)
                     bonferroniResult.pValue = (1.0 - temp) * q
                     if bonferroniResult.pValue > 1.0 {
                         bonferroniResult.pValue = 1.0

@@ -816,7 +816,7 @@ extension SSExamine {
             var u: Double
             do {
                 let m = self.arithmeticMean
-                u = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1.0 - alpha / 2.0)
+                u = try quantileStandardNormalDist(p: 1.0 - alpha / 2.0)
                 t1 = sd / sqrt(Double(self.sampleSize))
                 width = u * t1
                 upper = m! + width
@@ -851,7 +851,7 @@ extension SSExamine {
             m = arithmeticMean!
             if let s = self.standardDeviation(type: .unbiased) {
                 do {
-                    u = try SSProbabilityDistributions.quantileStudentTDist(p: 1.0 - a / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                    u = try quantileStudentTDist(p: 1.0 - a / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
                 }
                 catch {
                     return nil

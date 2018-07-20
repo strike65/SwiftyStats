@@ -201,7 +201,7 @@ extension SSHypothesisTesting {
             switch target {
             case .gaussian:
                 do {
-                    dtestCDF = try SSProbabilityDistributions.cdfNormalDist(x: (value - dest1) / dest2, mean: 0, variance: 1)
+                    dtestCDF = try cdfNormalDist(x: (value - dest1) / dest2, mean: 0, variance: 1)
                     bok = true
                 }
                 catch {
@@ -209,7 +209,7 @@ extension SSHypothesisTesting {
                 }
             case .exponential:
                 do {
-                    dtestCDF = try SSProbabilityDistributions.cdfExponentialDist(x: value, lambda: dest1)
+                    dtestCDF = try cdfExponentialDist(x: value, lambda: dest1)
                     bok = true
                 }
                 catch {
@@ -217,7 +217,7 @@ extension SSHypothesisTesting {
                 }
             case .uniform:
                 do {
-                    dtestCDF = try SSProbabilityDistributions.cdfUniformDist(x: value, lowerBound: dest1, upperBound: dest2)
+                    dtestCDF = try cdfUniformDist(x: value, lowerBound: dest1, upperBound: dest2)
                     bok = true
                 }
                 catch {
@@ -225,7 +225,7 @@ extension SSHypothesisTesting {
                 }
             case .studentT:
                 do {
-                    dtestCDF = try SSProbabilityDistributions.cdfStudentTDist(t: value, degreesOfFreedom: dest1)
+                    dtestCDF = try cdfStudentTDist(t: value, degreesOfFreedom: dest1)
                     bok = true
                 }
                 catch {
@@ -233,7 +233,7 @@ extension SSHypothesisTesting {
                 }
             case .laplace:
                 do {
-                    dtestCDF = try SSProbabilityDistributions.cdfLaplaceDist(x: value, mean: dest1, scale: dest2)
+                    dtestCDF = try cdfLaplaceDist(x: value, mean: dest1, scale: dest2)
                     bok = true
                 }
                 catch {
@@ -515,7 +515,7 @@ extension SSHypothesisTesting {
             val = tempArray[i]
             val1 = tempArray[n - i - 1]
             k = Double(i)
-            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(SSProbabilityDistributions.cdfStandardNormalDist(u: val)) + log(1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: val1))))
+            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(cdfStandardNormalDist(u: val)) + log(1.0 - cdfStandardNormalDist(u: val1))))
             i += 1
         }
         a2 = -1.0 * Double(n) - ad
@@ -765,7 +765,7 @@ extension SSHypothesisTesting {
             denom = sqrt((nm / (S * (S - 1.0))) * ((pow(S, 3.0) - S) / 12.0 - temp1))
             num = fabs(U - nm / 2.0)
             z = num / denom
-            pasymp1 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+            pasymp1 = 1.0 - cdfStandardNormalDist(u: fabs(z))
             pasymp2 = pasymp1 * 2.0
             pexact1 = Double.nan
             pexact2 = Double.nan
@@ -791,7 +791,7 @@ extension SSHypothesisTesting {
                 pexact1 = Double.nan
                 pexact2 = Double.nan
             }
-            pasymp1 = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+            pasymp1 = 1.0 - cdfStandardNormalDist(u: fabs(z))
             pasymp2 = 2.0 * pasymp1
         }
         let W = sumRanksSet2
@@ -968,7 +968,7 @@ extension SSHypothesisTesting {
             i += 1
         }
         z = (fabs(min(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        let p = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: fabs(z))
+        let p = 1.0 - cdfStandardNormalDist(u: fabs(z))
         let cohenD = fabs(z) / sqrt(2.0 * Double(N))
         var result = SSWilcoxonMatchedPairsTestResult()
         result.p2Value = 2.0 * p
@@ -1105,7 +1105,7 @@ extension SSHypothesisTesting {
         }
         z = (temp - 0.5 * Double(nnpnp) - 0.5)
         z = -1.0 * z / (0.5 * sqrt(Double(nnpnp)))
-        let pasymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+        let pasymp = cdfStandardNormalDist(u: z)
         var result = SSSignTestRestult()
         result.pValueExact = pexact
         result.pValueApprox = pasymp
@@ -1137,13 +1137,13 @@ extension SSHypothesisTesting {
         var i: Int
         switch alternative {
         case .less:
-            pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
+            pV = cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
         case .greater:
-            pV = SSProbabilityDistributions.cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
+            pV = cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
         case .twoSided:
             // algorithm adapted fropm R function binom.test
             var c1: Int = 0
-            let d = SSProbabilityDistributions.pdfBinomialDistribution(k: success, n: trials, probability: p0)
+            let d = pdfBinomialDistribution(k: success, n: trials, probability: p0)
             let m = Double(trials) * p0
             if success == Int(ceil(m)) {
                 pV = 1.0
@@ -1151,24 +1151,24 @@ extension SSHypothesisTesting {
             else if success < Int(ceil(m)) {
                 i = Int(ceil(m))
                 for j in i...trials {
-                    if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
                         c1 = j - 1
                         break
                     }
                 }
-                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
-                pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
+                pV = cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
+                pV1 = cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
                 pV = pV + pV1
             }
             else {
                 i = 0
                 for j in 0...Int(floor(m)) {
-                    if SSProbabilityDistributions.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
                         c1 = j + 1
                     }
                 }
-                pV = SSProbabilityDistributions.cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
-                pV1 = SSProbabilityDistributions.cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
+                pV = cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
+                pV1 = cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
                 pV = pV + pV1
             }
         }
@@ -1183,8 +1183,8 @@ extension SSHypothesisTesting {
         }
         else {
             do {
-                res = try SSProbabilityDistributions.quantileBetaDist(p: alpha, shapeA: success, shapeB: trials - success + 1)
-                //                res = try SSProbabilityDistributions.quantileBetaDist(p: alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
+                res = try quantileBetaDist(p: alpha, shapeA: success, shapeB: trials - success + 1)
+                //                res = try quantileBetaDist(p: alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -1200,8 +1200,8 @@ extension SSHypothesisTesting {
         }
         else {
             do {
-                res = try SSProbabilityDistributions.quantileBetaDist(p: 1.0 - alpha, shapeA: success + 1, shapeB: trials - success)
-                //                res = try SSProbabilityDistributions.quantileBetaDist(p: 1.0 - alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
+                res = try quantileBetaDist(p: 1.0 - alpha, shapeA: success + 1, shapeB: trials - success)
+                //                res = try quantileBetaDist(p: 1.0 - alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -1326,7 +1326,7 @@ extension SSHypothesisTesting {
                 cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha)
                 cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
                 cintClopperPearson.lowerBound = 0.0
-                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
+                fQ = try quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
                 cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
                 cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
@@ -1338,7 +1338,7 @@ extension SSHypothesisTesting {
                 cintJeffreys.upperBound = 1.0
                 cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
                 cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
-                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
+                fQ = try quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
                 cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.upperBound = 1.0
                 cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
@@ -1351,9 +1351,9 @@ extension SSHypothesisTesting {
                 cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
                 cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
                 cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
-                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
+                fQ = try quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
                 cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
-                fQ = try SSProbabilityDistributions.quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
+                fQ = try quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
                 cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
@@ -1608,7 +1608,7 @@ extension SSHypothesisTesting {
         var sum = 0.0
         dtemp = Double(R) - mean
         z = dtemp / sigma
-        pAsymp = 2.0 * SSProbabilityDistributions.cdfStandardNormalDist(u: -fabs(z))
+        pAsymp = 2.0 * cdfStandardNormalDist(u: -fabs(z))
         if n1 + n2 <= 30 {
             if !isOdd(Double(R)) {
                 var r = 2
@@ -1828,8 +1828,8 @@ extension SSHypothesisTesting {
         var p: Double
         let cv: Double
         do {
-            p = try SSProbabilityDistributions.cdfChiSquareDist(chi: H, degreesOfFreedom: df)
-            cv = try SSProbabilityDistributions.quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: df)
+            p = try cdfChiSquareDist(chi: H, degreesOfFreedom: df)
+            cv = try quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: df)
         }
         catch {
             throw error

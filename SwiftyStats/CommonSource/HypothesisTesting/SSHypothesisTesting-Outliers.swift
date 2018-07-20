@@ -128,7 +128,7 @@ extension SSHypothesisTesting {
             maxDiff = maximum(fabs(ma - mean), fabs(mi - mean))
             g = maxDiff / s
             do {
-                quantile = try SSProbabilityDistributions.quantileStudentTDist(p: alpha / (2.0 * Double(data.sampleSize)), degreesOfFreedom: Double(data.sampleSize) - 2.0)
+                quantile = try quantileStudentTDist(p: alpha / (2.0 * Double(data.sampleSize)), degreesOfFreedom: Double(data.sampleSize) - 2.0)
             }
             catch {
                 throw error
@@ -165,7 +165,7 @@ extension SSHypothesisTesting {
         let df = Double(sampleSize - i) - 1.0
         let cdfStudentT: Double
         do {
-            cdfStudentT = try SSProbabilityDistributions.quantileStudentTDist(p: p, degreesOfFreedom: df)
+            cdfStudentT = try quantileStudentTDist(p: p, degreesOfFreedom: df)
         }
         catch {
             return Double.nan

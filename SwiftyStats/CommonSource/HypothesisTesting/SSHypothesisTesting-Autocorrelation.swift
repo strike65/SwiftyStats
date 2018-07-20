@@ -203,7 +203,7 @@ extension SSHypothesisTesting {
             }
             statBoxLjung.append(f * sum)
             do {
-                try sig.append(1.0 - SSProbabilityDistributions.cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: Double(k)))
+                try sig.append(1.0 - cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: Double(k)))
             }
             catch {
                 throw error

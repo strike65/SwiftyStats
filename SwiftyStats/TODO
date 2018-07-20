@@ -1,11 +1,6 @@
 - make error handling consistent (throw errors or return nan)
+- fix typos
+- add non-central ditributions
+- add power analysis
+- test ALL functions/features
 
-
-Methosd naming:
-
-prefix      meaning
-===================
-r           relative
-is          Boolean
-seq         sqeuence
-ex          examine

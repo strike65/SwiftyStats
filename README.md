@@ -145,14 +145,15 @@ The framework implements the following tests so far:
 
 
 
-## SSProbabilityDistributions
+## Probability Distributions
+This library provides some of the more common probability distributions. Functions are prefixed by `pdf`, `cdf`, `quantile` for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively.  
+The prefix `para` denotes functions returning a `SSContProbDistParams` struct (fields: `mean`, `variance`, `skewness`, `kurtosis`).  
+Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".
 
-- PDF (Probability Density Function)
-- CDF (Cumulative Distribution Function)
-- Quantile (= inverse CDF)
-- Parameters (kurtosis, skewness, variance, mean)
+***Important***  
+Almost every function throws error objects in certain circumstances. Therefore the user **must** embed any call of such a function in a `do-catch` statement. Moreover, the user must check, if the result is `Double.nan`.  
 
-###List of supported distributions:
+###List of supported distributions
 
 - Normal Distribution
 - F-Ratio Distribution

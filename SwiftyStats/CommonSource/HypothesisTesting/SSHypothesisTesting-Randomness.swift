@@ -173,7 +173,7 @@ extension SSHypothesisTesting {
         var pAsymp: Double = 0.0
         var cv: Double
         do {
-            cv = try SSProbabilityDistributions.quantileStandardNormalDist(p: 1 - alpha / 2.0)
+            cv = try quantileStandardNormalDist(p: 1 - alpha / 2.0)
         }
         catch {
             throw error
@@ -186,11 +186,11 @@ extension SSHypothesisTesting {
         //        }
         switch alternative {
         case .twoSided:
-            pAsymp = 2.0 * SSProbabilityDistributions.cdfStandardNormalDist(u: -fabs(z))
+            pAsymp = 2.0 * cdfStandardNormalDist(u: -fabs(z))
         case .less:
-            pAsymp = SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+            pAsymp = cdfStandardNormalDist(u: z)
         case .greater:
-            pAsymp = 1.0 - SSProbabilityDistributions.cdfStandardNormalDist(u: z)
+            pAsymp = 1.0 - cdfStandardNormalDist(u: z)
         }
         //        if pAsymp > 0.5 {
         //            pAsymp = (1.0 - pAsymp) * 2.0
