@@ -1,5 +1,5 @@
 //
-//  SSProbabilityDistributions.swift
+//  swift
 //  SwiftyStats
 //
 //  Created by Volker Thieme on 18.07.17.
@@ -33,8 +33,6 @@ import os.log
 /// ### Important ###
 /// Almost all functions throw error objects in such circumstances. Therefore the user must embed any call of such functions in a "do-catch" statement. Moreover, the user must check, if the result is `Double.nan`
 
-public class SSProbabilityDistributions {
-    
     // MARK: GAUSSIAN
     
     /// Returns the CDF of a Gaussian distribution
@@ -43,7 +41,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation
     /// - Throws: SSSwiftyStatsError if sd <= 0.0
-    public class func cdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
+    public func cdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -56,7 +54,7 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let u = (x - m) / sd
-        return SSProbabilityDistributions.cdfStandardNormalDist(u: u)
+        return cdfStandardNormalDist(u: u)
     }
     
     /// Returns the CDF of a Gaussian distribution
@@ -64,7 +62,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter v: Variance
     /// - Throws: SSSwiftyStatsError if v <= 0.0
-    public class func cdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
+    public func cdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -77,12 +75,12 @@ public class SSProbabilityDistributions {
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         let u = (x - m) / sqrt(v)
-        return SSProbabilityDistributions.cdfStandardNormalDist(u: u)
+        return cdfStandardNormalDist(u: u)
     }
     
     /// Returns the CDF of the standard Gaussian distribution (mean = 0.0, standard deviation = 1.0)
     /// - Parameter u: Standardized variate (u = (x - mean)/sd)
-    public class func cdfStandardNormalDist(u: Double!) -> Double {
+    public func cdfStandardNormalDist(u: Double!) -> Double {
         return 0.5 * (1.0 + erf(u / SQRTTWO))
     }
     
@@ -90,7 +88,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation
     /// - Throws: SSSwiftyStatsError if sd <= 0.0
-    public class func pdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
+    public func pdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -110,7 +108,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter v: Variance
     /// - Throws: SSSwiftyStatsError if v <= 0.0
-    public class func pdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
+    public func pdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -127,7 +125,7 @@ public class SSProbabilityDistributions {
     
     /// Returns the PDF of the standard Gaussian distribution (mean = 0.0, standard deviation = 1.0)
     /// - Parameter u: Standardized variate (u = (x - mean)/sd)
-    public class func pdfStandardNormalDist(u: Double!) -> Double {
+    public func pdfStandardNormalDist(u: Double!) -> Double {
         return SQRT2PIINV * exp(-1.0 * u * u / 2.0)
     }
     
@@ -329,7 +327,7 @@ public class SSProbabilityDistributions {
     /// http://lib.stat.cmu.edu/apstat/241 (ALGORITHM AS241  APPL. STATIST. (1988) VOL. 37, NO. 3, 477-484.)
     /// - Parameter p: P
     /// - Throws: SSSwiftyStatsError if p < 0.0 or p > 1
-    public class func quantileStandardNormalDist(p: Double!) throws -> Double {
+    public func quantileStandardNormalDist(p: Double!) throws -> Double {
         if (p == 0.0) {
             return -Double.infinity
         }
@@ -444,7 +442,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter sd: Standard deviation
     /// - Throws: SSSwiftyStatsError if sd <= 0.0
-    public class func quantileNormalDist(p: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
+    public func quantileNormalDist(p: Double!, mean m: Double!, standardDeviation sd: Double!) throws -> Double {
         if sd <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -463,7 +461,7 @@ public class SSProbabilityDistributions {
             return Double.infinity
         }
         do {
-            return try m + SQRTTWO * sd * SSProbabilityDistributions.inverf(z: -1.0 + 2.0 * p)
+            return try m + SQRTTWO * sd * inverf(z: -1.0 + 2.0 * p)
         }
         catch {
             return Double.nan
@@ -475,7 +473,7 @@ public class SSProbabilityDistributions {
     /// - Parameter m: Mean
     /// - Parameter v: Variance
     /// - Throws: SSSwiftyStatsError if v <= 0.0
-    public class func quantileNormalDist(p: Double!, mean m: Double!, variance v: Double!) throws -> Double {
+    public func quantileNormalDist(p: Double!, mean m: Double!, variance v: Double!) throws -> Double {
         if v <= 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -494,7 +492,7 @@ public class SSProbabilityDistributions {
             return Double.infinity
         }
         do {
-            return try SSProbabilityDistributions.quantileNormalDist(p:p, mean:m, standardDeviation: sqrt(v))
+            return try quantileNormalDist(p:p, mean:m, standardDeviation: sqrt(v))
         }
         catch {
             return Double.nan
@@ -504,7 +502,7 @@ public class SSProbabilityDistributions {
     /// Inverse error function using the identity inverf(x) = InverseCDFStdNormal( ( x + 1 ) / 2) / sqrt(2)
     /// - Parameter z: Z
     /// - Throws: SSSwiftyStatsError if z < -1.0 or z > 1.0
-    fileprivate class func inverf(z: Double!) throws -> Double {
+    fileprivate func inverf(z: Double!) throws -> Double {
         if (z == -1.0) {
             return -Double.infinity
         }
@@ -524,7 +522,7 @@ public class SSProbabilityDistributions {
         }
         let x = (z + 1.0) / 2.0
         do {
-            let invCDF = try SSProbabilityDistributions.quantileStandardNormalDist(p: x)
+            let invCDF = try quantileStandardNormalDist(p: x)
             let result = invCDF / SQRTTWO
             return result
         }
@@ -539,7 +537,7 @@ public class SSProbabilityDistributions {
     /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func paraStudentT(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
+    public func paraStudentT(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
         var result = SSContProbDistParams()
         if df < 0.0 {
             #if os(macOS) || os(iOS)
@@ -574,7 +572,7 @@ public class SSProbabilityDistributions {
     /// - Parameter df: Degrees of freedom
     /// - Parameter rlog: Return log(T_PDF(t, df))
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
+    public func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
         if df < 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -599,7 +597,7 @@ public class SSProbabilityDistributions {
     /// - Parameter t: t
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -631,7 +629,7 @@ public class SSProbabilityDistributions {
     /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
     /// ### Note ###
     /// Bisection
-    public class func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             #if os(macOS) || os(iOS)
             
@@ -689,7 +687,7 @@ public class SSProbabilityDistributions {
         tVal = (maxT + minT) / 2.0
         while (maxT - minT > (4.0 * eps)) {
             do {
-                pp = try SSProbabilityDistributions.cdfStudentTDist(t: tVal, degreesOfFreedom: df)
+                pp = try cdfStudentTDist(t: tVal, degreesOfFreedom: df)
             }
             catch {
                 return Double.nan
@@ -713,7 +711,7 @@ public class SSProbabilityDistributions {
     // MARK: NON-CENTRAL T-DISTRIBUTION
 
     
-    public class func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, rlog: Double!) throws -> Double {
+    public func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, rlog: Double!) throws -> Double {
         return 0.0
     }
     
@@ -722,7 +720,7 @@ public class SSProbabilityDistributions {
     
     
     
-    public class func pdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func pdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df < 0.0 {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
@@ -737,7 +735,7 @@ public class SSProbabilityDistributions {
         }
         if ncp == 0 {
             do {
-                return try SSProbabilityDistributions.pdfStudentTDist(t: t, degreesOfFreedom: df)
+                return try pdfStudentTDist(t: t, degreesOfFreedom: df)
             }
             catch {
                 throw error
@@ -806,7 +804,7 @@ return (give_log ? u : exp(u));
     /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func paraChiSquareDist(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
+    public func paraChiSquareDist(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
         var result = SSContProbDistParams()
         if df <= 0 {
             #if os(macOS) || os(iOS)
@@ -831,7 +829,7 @@ return (give_log ? u : exp(u));
     /// - Parameter chi: Chi
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func pdfChiSquareDist(chi: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func pdfChiSquareDist(chi: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -865,7 +863,7 @@ return (give_log ? u : exp(u));
     /// - Parameter chi: Chi
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func cdfChiSquareDist(chi: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func cdfChiSquareDist(chi: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -898,7 +896,7 @@ return (give_log ? u : exp(u));
     /// - Parameter p: p
     /// - Parameter df: Degrees of freedom
     /// - Throws: SSSwiftyStatsError if df <= 0
-    public class func quantileChiSquareDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
+    public func quantileChiSquareDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
         if df <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -929,7 +927,7 @@ return (give_log ? u : exp(u));
         var test: Double
         while (maxChi - minChi) > eps {
             do {
-                test = try SSProbabilityDistributions.cdfChiSquareDist(chi: chiVal, degreesOfFreedom: df)
+                test = try cdfChiSquareDist(chi: chiVal, degreesOfFreedom: df)
             }
             catch {
                 return Double.nan
@@ -1187,7 +1185,7 @@ return (give_log ? u : exp(u));
     /// - Parameter df1: numerator degrees of freedom
     /// - Parameter df2: denominator degrees of freedom
     /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-    public class func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> SSContProbDistParams {
+    public func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> SSContProbDistParams {
         var result = SSContProbDistParams()
         if df1 <= 0 {
             #if os(macOS) || os(iOS)
@@ -1258,7 +1256,7 @@ return (give_log ? u : exp(u));
     /// - Parameter df1: numerator degrees of freedom
     /// - Parameter df2: denominator degrees of freedom
     /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-    public class func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
+    public func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
         if df1 <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -1320,7 +1318,7 @@ return (give_log ? u : exp(u));
     /// - Parameter df1: numerator degrees of freedom
     /// - Parameter df2: denominator degrees of freedom
     /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-    public class func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
+    public func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
         if f <= 0.0 {
             return 0.0
         }
@@ -1355,7 +1353,7 @@ return (give_log ? u : exp(u));
     /// - Parameter df1: numerator degrees of freedom
     /// - Parameter df2: denominator degrees of freedom
     /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0 and/or p < 0 and/or p > 1
-    public class func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
+    public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
         if df1 <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -1410,7 +1408,7 @@ return (give_log ? u : exp(u));
                 break
             }
             do {
-                temp_p = try SSProbabilityDistributions.cdfFRatio(f: fVal, numeratorDF: df1, denominatorDF: df2)
+                temp_p = try cdfFRatio(f: fVal, numeratorDF: df1, denominatorDF: df2)
             }
             catch {
                 return Double.nan
@@ -1433,7 +1431,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter variance: variance
     /// - Throws: SSSwiftyStatsError if v <= 0
-    public class func paraLogNormalDist(mean: Double!, variance v: Double!) throws -> SSContProbDistParams {
+    public func paraLogNormalDist(mean: Double!, variance v: Double!) throws -> SSContProbDistParams {
         var result = SSContProbDistParams()
         if v <= 0 {
             #if os(macOS) || os(iOS)
@@ -1459,7 +1457,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter variance: variance
     /// - Throws: SSSwiftyStatsError if v <= 0
-    public class func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
+    public func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -1485,7 +1483,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter variance: variance
     /// - Throws: SSSwiftyStatsError if v <= 0
-    public class func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
+    public func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -1500,7 +1498,7 @@ return (give_log ? u : exp(u));
         if x <= 0 {
             return 0.0
         }
-        let r = SSProbabilityDistributions.cdfStandardNormalDist(u: (log(x) - mean) / sqrt(v))
+        let r = cdfStandardNormalDist(u: (log(x) - mean) / sqrt(v))
         return r
     }
     
@@ -1510,7 +1508,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter variance: variance
     /// - Throws: SSSwiftyStatsError if v <= 0 and/or p < 0 and/or p > 1
-    public class func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) throws -> Double {
+    public func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) throws -> Double {
         if v <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -1540,7 +1538,7 @@ return (give_log ? u : exp(u));
             return 0.0
         }
         do {
-            let u = try SSProbabilityDistributions.quantileStandardNormalDist(p: p)
+            let u = try quantileStandardNormalDist(p: p)
             return exp( mean + u * sqrt(v))
         }
         catch {
@@ -1554,7 +1552,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if a and/or b <= 0
-    public class func paraBetaDist(shapeA a:Double!, shapeB b: Double!) throws -> SSContProbDistParams {
+    public func paraBetaDist(shapeA a:Double!, shapeB b: Double!) throws -> SSContProbDistParams {
         var result = SSContProbDistParams()
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
@@ -1603,7 +1601,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if a and/or b <= 0
-    public class func pdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
+    public func pdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1641,7 +1639,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if a and/or b <= 0
-    public class func cdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
+    public func cdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1681,7 +1679,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if a and/or b <= 0 and/or p < 0 and/or p > 1
-    public class func quantileBetaDist(p: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
+    public func quantileBetaDist(p: Double!, shapeA a: Double!, shapeB b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1757,7 +1755,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Location parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSContProbDistParams {
+    public func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1777,7 +1775,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Location parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
+    public func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1798,7 +1796,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Location parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
+    public func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1819,7 +1817,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Location parameter a
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
-    public class func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) throws -> Double {
+    public func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1857,7 +1855,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
+    public func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1883,7 +1881,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1904,7 +1902,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1926,7 +1924,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-    public class func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -1968,7 +1966,7 @@ return (give_log ? u : exp(u));
     /// Returns the Logit for a given p
     /// - Parameter p: p
     /// - Throws: SSSwiftyStatsError if p <= 0 || p >= 1
-    public class func logit(p: Double!) throws -> Double {
+    public func logit(p: Double!) throws -> Double {
         if p <= 0.0 || p >= 1.0 {
             #if os(macOS) || os(iOS)
             
@@ -1987,7 +1985,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
+    public func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
         if b <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -2012,7 +2010,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -2033,7 +2031,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0
-    public class func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -2054,7 +2052,7 @@ return (give_log ? u : exp(u));
     /// - Parameter mean: mean
     /// - Parameter b: Scale parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-    public class func quantileLogisticDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
+    public func quantileLogisticDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
         if b <= 0 {
             #if os(macOS) || os(iOS)
             
@@ -2096,7 +2094,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: minimum
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-    public class func paraParetoDist(minimum a: Double!, shape b: Double!) throws -> SSContProbDistParams {
+    public func paraParetoDist(minimum a: Double!, shape b: Double!) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2163,7 +2161,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: minimum
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-    public class func pdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
+    public func pdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2197,7 +2195,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: minimum
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-    public class func cdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
+    public func cdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2234,7 +2232,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: minimum
     /// - Parameter b: Shape parameter b
     /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-    public class func quantileParetoDist(p: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
+    public func quantileParetoDist(p: Double!, minimum a: Double!, shape b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2284,7 +2282,7 @@ return (give_log ? u : exp(u));
     /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
     /// - Parameter l: Lambda
     /// - Throws: SSSwiftyStatsError if l <= 0
-    public class func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParams {
+    public func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParams {
         if (l <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2308,7 +2306,7 @@ return (give_log ? u : exp(u));
     /// - Parameter x: x
     /// - Parameter l: Lambda
     /// - Throws: SSSwiftyStatsError if l <= 0
-    public class func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
+    public func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2335,7 +2333,7 @@ return (give_log ? u : exp(u));
     /// - Parameter x: x
     /// - Parameter l: Lambda
     /// - Throws: SSSwiftyStatsError if l <= 0
-    public class func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
+    public func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2359,7 +2357,7 @@ return (give_log ? u : exp(u));
     /// - Parameter p: p
     /// - Parameter l: Lambda
     /// - Throws: SSSwiftyStatsError if l <= 0 || p < 0 || p > 1
-    public class func quantileExponentialDist(p: Double!, lambda l: Double!) throws -> Double {
+    public func quantileExponentialDist(p: Double!, lambda l: Double!) throws -> Double {
         if (l <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2399,7 +2397,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func paraWaldDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
+    public func paraWaldDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2435,7 +2433,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func pdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func pdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2471,7 +2469,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func cdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func cdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2494,8 +2492,8 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        let n1 = SSProbabilityDistributions.cdfStandardNormalDist(u: sqrt(b / x) * (x / a - 1.0))
-        let n2 = SSProbabilityDistributions.cdfStandardNormalDist(u: -sqrt(b / x) * (x / a + 1.0))
+        let n1 = cdfStandardNormalDist(u: sqrt(b / x) * (x / a - 1.0))
+        let n2 = cdfStandardNormalDist(u: -sqrt(b / x) * (x / a + 1.0))
         let result = n1 + exp(2.0 * b / a) * n2
         return result
     }
@@ -2505,7 +2503,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
-    public class func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2556,7 +2554,7 @@ return (give_log ? u : exp(u));
         var i: Int = 0
         while (MaxW - MinW) > 1.0E-16 {
             do {
-                pVal = try SSProbabilityDistributions.cdfWaldDist(x: wVal, mean: a, scale: b)
+                pVal = try cdfWaldDist(x: wVal, mean: a, scale: b)
             }
             catch {
                 return Double.nan
@@ -2580,7 +2578,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func paraInverseNormalDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
+    public func paraInverseNormalDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2603,7 +2601,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.paraWaldDist(mean:a, scale:b)
+        return try! paraWaldDist(mean:a, scale:b)
     }
     
     /// Returns the pdf of the Wald (inverse normal) distribution.
@@ -2611,7 +2609,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2634,7 +2632,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.pdfWaldDist(x:x, mean:a, scale:b)
+        return try! pdfWaldDist(x:x, mean:a, scale:b)
     }
     
     /// Returns the cdf of the Wald (inverse normal) distribution.
@@ -2642,7 +2640,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2665,7 +2663,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.cdfWaldDist(x:x, mean:a, scale:b)
+        return try! cdfWaldDist(x:x, mean:a, scale:b)
     }
     
     /// Returns the quantile of the Wald (inverse normal) distribution.
@@ -2673,7 +2671,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: mean
     /// - Parameter b: Scale
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
-    public class func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
+    public func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2707,7 +2705,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.quantileWaldDist(p:p, mean:a, scale:b)
+        return try! quantileWaldDist(p:p, mean:a, scale:b)
     }
     
     // MARK: Gamma
@@ -2716,7 +2714,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContProbDistParams {
+    public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2753,7 +2751,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+    public func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2795,7 +2793,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+    public func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2844,7 +2842,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
-    public class func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) throws -> Double {
+    public func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2923,7 +2921,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0
-    public class func paraErlangDist(shape a: Double!, scale b: UInt!) throws -> SSContProbDistParams {
+    public func paraErlangDist(shape a: Double!, scale b: UInt!) throws -> SSContProbDistParams {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2945,7 +2943,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0
-    public class func pdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+    public func pdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2965,7 +2963,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0
-    public class func cdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+    public func cdfErlangDist(x: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -2992,7 +2990,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Shape parameter
     /// - Parameter b: Scale parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || p < 0 || p > 1
-    public class func quantileErlangDist(p: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
+    public func quantileErlangDist(p: Double!, shape a: Double!, scale b: UInt!) throws -> Double {
         if (a <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -3032,7 +3030,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Scale parameter
     /// - Parameter c: Shape parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Double!) throws -> SSContProbDistParams {
+    public func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Double!) throws -> SSContProbDistParams {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -3069,7 +3067,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Scale parameter
     /// - Parameter c: Shape parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+    public func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -3105,7 +3103,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Scale parameter
     /// - Parameter c: Shape parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-    public class func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+    public func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -3141,7 +3139,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Scale parameter
     /// - Parameter c: Shape parameter
     /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
-    public class func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
+    public func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
         if (b <= 0.0) {
             #if os(macOS) || os(iOS)
             
@@ -3192,7 +3190,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+    public func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3217,7 +3215,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3242,7 +3240,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3270,7 +3268,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func quantileUniformDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func quantileUniformDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3303,7 +3301,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Upper bound
     /// - Parameter c: Mode
     /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-    public class func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> SSContProbDistParams {
+    public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> SSContProbDistParams {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3374,7 +3372,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Upper bound
     /// - Parameter c: Mode
     /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-    public class func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+    public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3429,7 +3427,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Upper bound
     /// - Parameter c: Mode
     /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-    public class func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+    public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3490,7 +3488,7 @@ return (give_log ? u : exp(u));
     /// - Parameter b: Upper bound
     /// - Parameter c: Mode
     /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b || p < 0 || p > 0
-    public class func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+    public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3559,7 +3557,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+    public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3584,7 +3582,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3596,7 +3594,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+        return try! pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
     }
     
     /// Returns the cdf of the Triangular distribution.
@@ -3604,7 +3602,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b
-    public class func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3616,7 +3614,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+        return try! cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
     }
     
     /// Returns the quantile of the Triangular distribution.
@@ -3624,7 +3622,7 @@ return (give_log ? u : exp(u));
     /// - Parameter a: Lower bound
     /// - Parameter b: Upper bound
     /// - Throws: SSSwiftyStatsError if a >= b || p < 0 || p > 0
-    public class func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+    public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
         if (a >= b) {
             #if os(macOS) || os(iOS)
             
@@ -3647,7 +3645,7 @@ return (give_log ? u : exp(u));
             
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
-        return try! SSProbabilityDistributions.quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+        return try! quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
     }
     
     // MARK: binomial
@@ -3657,7 +3655,7 @@ return (give_log ? u : exp(u));
     /// - Parameter n: number of trials
     /// - Parameter p0: probability fpr success
     /// - Parameter tail: .lower, .upper
-    public class func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tail: SSCDFTail) -> Double {
+    public func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tail: SSCDFTail) -> Double {
         var i = 0
         var lowerSum: Double = 0.0
         var upperSum: Double = 0.0
@@ -3679,21 +3677,8 @@ return (give_log ? u : exp(u));
     /// - Parameter k: number of successes
     /// - Parameter n: number of trials
     /// - Parameter p0: probability fpr success
-    public class func pdfBinomialDistribution(k: Int, n: Int, probability p0: Double!) -> Double {
+    public func pdfBinomialDistribution(k: Int, n: Int, probability p0: Double!) -> Double {
         var result: Double
         result = binomial2(Double(n), Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))
         return result
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-}

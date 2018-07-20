@@ -2,21 +2,26 @@ UNAME=$(shell uname)
 ifeq ($(UNAME), Darwin)
 	PLATFORM = x86_64-apple-macosx10.10
 	LIBRARY_DIRECTORY = ./.build/${PLATFORM}/debug
-	TEST_RESOURCE_DIRECTORY = ./.build/${PLATFORM}/>SwiftyStatsPackageTests.xctest/Contents/Resources
+	TEST_RESOURCE_DIRECTORY = ./.build/${PLATFORM}/debug/SwiftyStatsPackageTests.xctest/Contents/Resources
 else ifeq ($(UNAME), Linux)
 	PLATFORM = x86_64-unknown-linux
 	LIBRARY_DIRECTORY = ./.build/${PLATFORM}/debug
 	TEST_RESOURCE_DIRECTORY = ${LIBRARY_DIRECTORY}
 endif
 
-TEST_RESOURCES_DIRECTORY = ${LIBRARY_DIRECTORY}
+
+# TEST_RESOURCES_DIRECTORY = ${LIBRARY_DIRECTORY}
 
 build:
 		swift build
 
+release:
+		swift build -c release
+
 copyTestResources:
-		mkdir -p ${TEST_RESOURCES_DIRECTORY}
-		cp SwiftyStats/Resources/* ${TEST_RESOURCES_DIRECTORY}
+		@echo "copying testfiles to $(TEST_RESOURCE_DIRECTORY)"
+		mkdir -p ${TEST_RESOURCE_DIRECTORY}
+		cp SwiftyStats/Resources/* ${TEST_RESOURCE_DIRECTORY}
 
 test: copyTestResources
 		swift test
