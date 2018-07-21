@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name 		= 'SwiftyStats'
-	s.version 	= '0.8.6'
+	s.version 	= '0.8.7'
 	s.summary 	= 'Descriptive Statistics, Probability Functions (PDF, CDF, iCDF), parametric and nonparametric tests'
 	s.description 	= <<-DESC
 Includes (list is not exhaustive):
@@ -43,6 +43,7 @@ Probability functions
 - Normal Distribution
 - F-Ratio Distribution
 - Student's T Distribution
+- noncentral T Distribution
 - Chi^2 Distribution
 - Beta Distribution
 - Gamma Distribution
@@ -62,6 +63,6 @@ Probability functions
 	s.swift_version = '4.1'
 	s.ios.deployment_target = '10.0'
 	s.osx.deployment_target = '10.12'
-	s.source_files 	= 'SwiftyStats/CommonSource/*.swift'
+  s.source_files 	= 'SwiftyStats/CommonSource/**/*.swift'
 end
 
