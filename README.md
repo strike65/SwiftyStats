@@ -160,6 +160,7 @@ Almost every function throws error objects in certain circumstances. Therefore t
 - Normal Distribution
 - F-Ratio Distribution
 - Student's T Distribution
+- Noncentral Student's T Distribution
 - Chi^2 Distribution
 - Beta Distribution
 - Gamma Distribution
