@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
 		9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
@@ -132,10 +133,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		9F4D23FA2100647F00250627 /* asa243-noncentral-t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "asa243-noncentral-t.h"; sourceTree = "<group>"; };
-		9F4D23FB2100647F00250627 /* asa243-noncentral-t.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "asa243-noncentral-t.c"; sourceTree = "<group>"; };
 		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
 		9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-StudentT.swift"; sourceTree = "<group>"; };
 		9F7EFB2E2101ED2900F0F573 /* ProbDist-ChiSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ChiSquare.swift"; sourceTree = "<group>"; };
@@ -234,15 +234,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9F4D23F92100645700250627 /* Algo */ = {
-			isa = PBXGroup;
-			children = (
-				9F4D23FA2100647F00250627 /* asa243-noncentral-t.h */,
-				9F4D23FB2100647F00250627 /* asa243-noncentral-t.c */,
-			);
-			path = Algo;
-			sourceTree = "<group>";
-		};
 		9F7EFB5F2101F16400F0F573 /* ProbDist */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,7 +294,7 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
-				9F4D23F92100645700250627 /* Algo */,
+				9F1F70EB2103A0280037DFB5 /* CHANGELOG */,
 				9F8F5C4920FD026C00DC29F4 /* Package.swift */,
 				9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */,
 				9FEA825C1F76C9F6005E4349 /* TODO */,
@@ -513,6 +504,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,11 @@
+Version 0.8.7
+- added Swift Package Manager support
+-- makefile
+--- debug
+--- release
+--- test
+--- clean
+-- added support Linux
+- probability functions now "free" functions
+- added: noncentral T Distribution
+

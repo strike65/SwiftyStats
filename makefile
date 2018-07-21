@@ -12,8 +12,8 @@ endif
 
 # TEST_RESOURCES_DIRECTORY = ${LIBRARY_DIRECTORY}
 
-build:
-		swift build
+debug:
+		swift build -c debug
 
 release:
 		swift build -c release

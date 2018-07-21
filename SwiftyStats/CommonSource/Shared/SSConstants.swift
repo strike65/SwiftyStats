@@ -43,10 +43,11 @@ public let  THREEPIQUART : Double = 2.356194490192344928846982537459627163148
 public let  EULERGAMMA : Double = 0.577215664901532860606512090082402431042
 /// Returns sqrt(pi)
 public let  SQRTPI : Double = 1.772453850905516027298167483341145182798
-/// Returns pi
 #if arch(arm) || arch(arm64)
+/// Returns pi
     public let  PIL : Double = 3.141592653589793238462643383279502884197
 #else
+/// Returns pi
     public let  PIL : Float80 = 3.141592653589793238462643383279502884197
 #endif
 /// Returns sqrt(2)

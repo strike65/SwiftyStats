@@ -120,6 +120,7 @@ public func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!) throws -> 
 /// - Parameter p: p
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+///
 /// ### Note ###
 /// Bisection
 public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throws -> Double {
@@ -229,6 +230,7 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 /// - Parameter df: Degrees of freedom
 /// - Parameter rlog: Return log(cdf)
 /// - Throws: SSSwiftyStatsError if df <= 0
+///
 /// ### NOTE ###
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
@@ -515,6 +517,7 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
 /// - Parameter df: Degrees of freedom
 /// - Parameter rlog: Return log(pdf)
 /// - Throws: SSSwiftyStatsError if df <= 0
+///
 /// ### NOTE ###
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
