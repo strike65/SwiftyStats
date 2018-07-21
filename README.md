@@ -68,6 +68,8 @@ for macOS targets.
 As there is no Xcode-Project, you have to use the Swift Package Manager. See above.
 
 # How to Use
+## Accuracy and Precision
+Only the **first four decimal places** should be used. For more information about this topic click [here](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
 
 ## Descriptive stats
 
@@ -148,7 +150,7 @@ The framework implements the following tests so far:
 ## Probability Distributions
 This library provides some of the more common probability distributions. Functions are prefixed by `pdf`, `cdf`, `quantile` for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively.  
 The prefix `para` denotes functions returning a `SSContProbDistParams` struct (fields: `mean`, `variance`, `skewness`, `kurtosis`).  
-Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".
+Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".  
 
 ***Important***  
 Almost every function throws error objects in certain circumstances. Therefore the user **must** embed any call of such a function in a `do-catch` statement. Moreover, the user must check, if the result is `Double.nan`.  

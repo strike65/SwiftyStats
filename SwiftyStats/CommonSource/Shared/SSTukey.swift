@@ -284,86 +284,6 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     return pr_w
 }
 
-fileprivate func r_dt_0(tail: SSCDFTail, log_p: Bool) -> Double {
-    if tail == .lower {
-        if log_p {
-            return -Double.infinity
-        }
-        else {
-            return 0.0
-        }
-    }
-    else {
-        if log_p {
-            return 0.0
-        }
-        else {
-            return 1.0
-        }
-    }
-}
-
-fileprivate func r_dt_1(tail: SSCDFTail, log_p: Bool) -> Double {
-    if tail == .lower {
-        if log_p {
-            return 0.0
-        }
-        else {
-            return 1.0
-        }
-    }
-    else {
-        if log_p {
-            return -Double.infinity
-        }
-        else {
-            return 0.0
-        }
-    }
-}
-
-
-fileprivate func r_d_val(_ x: Double, log_p: Bool) -> Double {
-    if log_p {
-        return log(x)
-    }
-    else {
-        return x
-    }
-}
-
-fileprivate func r_d_clog(x: Double, log_p: Bool) -> Double {
-    if log_p {
-        return log1p(-x)
-    }
-    else {
-        return (0.5 - x + 0.5)
-    }
-}
-
-fileprivate func r_dt_val(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
-    if tail == .lower {
-        return r_d_val(x, log_p: log_p)
-    }
-    else {
-        return r_d_clog(x: x, log_p: log_p)
-    }
-}
-
-fileprivate func r_d_lval(x: Double, tail: SSCDFTail) -> Double {
-    return (tail == .lower) ? x : (0.5 - x + 0.5)
-}
-
-
-fileprivate func r_dt_qiv(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
-    if log_p {
-        return tail == .lower ? exp(x) : -expm1(x)
-    }
-    else {
-        return r_d_lval(x: x, tail: tail)
-    }
-}
-
 
 /// This a translation from the R function ptukey to Swift. See Remarks below
 /// q = value of studentized range
@@ -758,7 +678,7 @@ public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double
     
     //   r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
     
-    pp = r_dt_qiv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
+    pp = r_dt_qIv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
     
     /* Initial value */
     

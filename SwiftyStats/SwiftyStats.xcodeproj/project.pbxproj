@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
+		9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
 		9F7EFB2B2101E6BF00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
 		9F7EFB2D2101ECAF00F0F573 /* ProbDist-StudentT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */; };
@@ -130,16 +132,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9F1AC3CD2101B0E900CE9CF9 /* dnt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dnt.c; sourceTree = "<group>"; };
-		9F1AC3CE2101B0E900CE9CF9 /* qnt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qnt.c; sourceTree = "<group>"; };
-		9F1AC3CF2101B0E900CE9CF9 /* pnt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pnt.c; sourceTree = "<group>"; };
-		9F1AC3D32101B12700CE9CF9 /* nmath2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nmath2.h; sourceTree = "<group>"; };
-		9F1AC3D42101B12800CE9CF9 /* nmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nmath.h; sourceTree = "<group>"; };
-		9F1AC3D72101B14100CE9CF9 /* dpq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpq.h; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F4D23FA2100647F00250627 /* asa243-noncentral-t.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "asa243-noncentral-t.h"; sourceTree = "<group>"; };
 		9F4D23FB2100647F00250627 /* asa243-noncentral-t.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "asa243-noncentral-t.c"; sourceTree = "<group>"; };
+		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
 		9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-StudentT.swift"; sourceTree = "<group>"; };
 		9F7EFB2E2101ED2900F0F573 /* ProbDist-ChiSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ChiSquare.swift"; sourceTree = "<group>"; };
 		9F7EFB302101EDAC00F0F573 /* ProbDist-FRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-FRatio.swift"; sourceTree = "<group>"; };
@@ -237,23 +234,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9F1AC3CC2101B0AE00CE9CF9 /* r-non-central-t */ = {
-			isa = PBXGroup;
-			children = (
-				9F1AC3D72101B14100CE9CF9 /* dpq.h */,
-				9F1AC3D42101B12800CE9CF9 /* nmath.h */,
-				9F1AC3D32101B12700CE9CF9 /* nmath2.h */,
-				9F1AC3CD2101B0E900CE9CF9 /* dnt.c */,
-				9F1AC3CF2101B0E900CE9CF9 /* pnt.c */,
-				9F1AC3CE2101B0E900CE9CF9 /* qnt.c */,
-			);
-			path = "r-non-central-t";
-			sourceTree = "<group>";
-		};
 		9F4D23F92100645700250627 /* Algo */ = {
 			isa = PBXGroup;
 			children = (
-				9F1AC3CC2101B0AE00CE9CF9 /* r-non-central-t */,
 				9F4D23FA2100647F00250627 /* asa243-noncentral-t.h */,
 				9F4D23FB2100647F00250627 /* asa243-noncentral-t.c */,
 			);
@@ -299,6 +282,7 @@
 				9FEA82571F76C9F6005E4349 /* SSSwiftyStatsError.swift */,
 				9FEA82581F76C9F6005E4349 /* SSTukey.swift */,
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
+				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -567,6 +551,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F7EFB362101EE0A00F0F573 /* ProbDist-LogNormal.swift in Sources */,
+				9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */,
 				9FEA827F1F76CAF5005E4349 /* SSHypothesisTesting-Variances.swift in Sources */,
 				9F7EFB312101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
 				9FEA82761F76CAF5005E4349 /* SSExamine-FileManagement.swift in Sources */,
@@ -627,6 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FEA82971F76CB1D005E4349 /* SSHypothesisTesting-Variances.swift in Sources */,
+				9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */,
 				9FEA828E1F76CB1D005E4349 /* SSExamine-FileManagement.swift in Sources */,
 				9F7EFB342101EDB200F0F573 /* ProbDist-ChiSquare.swift in Sources */,
 				9F7EFB2B2101E6BF00F0F573 /* ProbDist-Gaussian.swift in Sources */,

@@ -203,18 +203,315 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 
 // MARK: NON-CENTRAL T-DISTRIBUTION
 
+/*  Algorithm AS 243  Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
+ *  ----------------
+ *  Cumulative probability at t of the non-central t-distribution
+ *  with df degrees of freedom (may be fractional) and non-centrality
+ *  parameter delta.
+ *
+ *  NOTE
+ *
+ *    Requires the following auxiliary routines:
+ *
+ *    lgammafn(x)    - log gamma function
+ *    pbeta(x, a, b)    - incomplete beta function
+ *    pnorm(x)    - normal distribution function
+ *
+ *  CONSTANTS
+ *
+ *    M_SQRT_2dPI  = 1/ {gamma(1.5) * sqrt(2)} = sqrt(2 / pi)
+ *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
+ */
 
-public func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, rlog: Double!) throws -> Double {
-    return 0.0
+/// Returns the lower tail cdf of the non-central Student's t-distribution
+/// - Parameter t: t
+/// - Parameter nonCentralityPara: noncentrality parameter
+/// - Parameter df: Degrees of freedom
+/// - Parameter rlog: Return log(cdf)
+/// - Throws: SSSwiftyStatsError if df <= 0
+/// ### NOTE ###
+/// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
+/// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
+/// This algorithm suffers from limited accuracy in the (very) left tail and for ncp > 38.
+public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
+    let tail: SSCDFTail = .lower
+    var albeta, a, b, del, errbd, lambda, rxb, tt, x: Double
+    #if arch(arm) || arch(arm64)
+    var geven, godd, p, q, s, tnc, xeven, xodd: Double
+    #else
+    var geven, godd, p, q, s, tnc, xeven, xodd: Float80
+    #endif
+    var it: Int
+    var negdel: Bool
+    
+    let itrmax = 1000
+    let errmax = 1E-12
+    if df <= 0.0 {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+        }
+        #endif
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if ncp.isZero {
+        do {
+            return try cdfStudentTDist(t: t, degreesOfFreedom: df)
+        }
+        catch {
+            throw error
+        }
+    }
+    if t.isInfinite {
+        if t < 0 {
+            return r_dt_0(tail: tail, log_p: rlog)
+        }
+        else {
+            return r_dt_1(tail: tail, log_p: rlog)
+        }
+    }
+    if t >= 0.0 {
+        negdel = false
+        tt = t
+        del = ncp
+    }
+    else {
+        if ncp > 40 && (!rlog || tail == .upper) {
+            return r_dt_0(tail: tail, log_p: rlog)
+        }
+        negdel = true
+        tt = -t
+        del = -ncp
+    }
+    if df > 4.0E5 || (del * del) > (2.0 * LOG2 * ( -(Double(Double.leastNormalMagnitude.exponent) + 1.0 ))) {
+        /*-- 2nd part: if del > 37.62, then p=0 below
+         FIXME: test should depend on `df', `tt' AND `del' ! */
+        /* Approx. from     Abramowitz & Stegun 26.7.10 (p.949) */
+        #if arch(arm) || arch(arm64)
+        s = 1.0 / (4.0 * df)
+        let x = tt * (1.0 - s)
+        let s1 = 1.0 + tt * tt * 2.0 * s
+        let sigma = sqrt(s1)
+        #else
+        s = 1.0 / (4.0 * Float80(df))
+        let x = Float80(tt) * (1.0 - s)
+        let s1 = 1.0 + Float80(tt) * Float80(tt) * 2.0 * s
+        let sigma = sqrt(s1)
+        #endif
+        do {
+            return try pdfNormalDist(x: Double(x), mean: del, standardDeviation: Double(sigma))
+        }
+        catch {
+            throw error
+        }
+    }
+    /* Guenther, J. (1978). Statist. Computn. Simuln. vol.6, 199. */
+    x = t * t
+    rxb = df / (x + df) /* := (1 - x) {x below} -- but more accurately */
+    x = x / (x + df)    /* in [0,1) */
+    if (x > 0.0) {
+        lambda = del * del
+        #if arch(arm) || arch(arm64)
+        p = 0.5 * exp(-0.5 * lambda)
+        #else
+        p = 0.5 * Float80(exp(-0.5 * lambda))
+        #endif
+        if(p == 0.0) { /* underflow! */
+            #if os(macOS) || os(iOS)
+            os_log("Error evaluating noncentral t distribution: non-centrality parameter too large", log: log_stat, type: .error)
+            #endif
+            throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        #if arch(arm) || arch(arm64)
+        q = SQRT2DIVPI * p * del
+        s = 0.5 - p
+        if(s < 1E-7) {
+            s = -0.5 * expm1(-0.5 * lambda)
+        }
+        #else
+        q = SQRT2DIVPIL * p * Float80(del)
+        s = 0.5 - p
+        if(s < 1e-7) {
+            s = -0.5 * Float80(expm1(-0.5 * lambda))
+        }
+        #endif
+        a = 0.5
+        b = 0.5 * df;
+        rxb = pow(rxb, b)
+        albeta = LNSQRTPI + lgamma(b) - lgamma(0.5 + b)
+        // FIXME: CHECK CORRECT TAIL
+        #if arch(arm) || arch(arm64)
+        do {
+            xodd = try cdfBetaDist(x: x, shapeA: a, shapeB: b)
+            godd = 2.0 * rxb * exp(a * log(x) - albeta)
+            tnc = b * x;
+            xeven = (tnc < Double.ulpOfOne) ? tnc : 1.0 - rxb
+            geven = tnc * rxb
+        }
+        catch {
+            throw error
+        }
+        #else
+        do {
+            xodd = Float80(try cdfBetaDist(x: x, shapeA: a, shapeB: b))
+            godd = 2.0 * Float80(rxb) * Float80(exp(a * log(x) - albeta))
+            tnc = Float80(b) * Float80(x)
+            xeven = (tnc < Float80.ulpOfOne) ? tnc : 1.0 - Float80(rxb)
+            geven = tnc * Float80(rxb)
+        }
+        catch {
+            throw error
+        }
+        #endif
+        tnc = p * xodd + q * xeven;
+        /* repeat until convergence or iteration limit */
+        it = 1
+        for _ in stride(from: 1, through: itrmax, by: 1) {
+            #if arch(arm) || arch(arm64)
+            a += 1.0
+            xodd  -= godd
+            xeven -= geven
+            godd  *= x * (a + b - 1.0) / a
+            geven *= x * (a + b - 0.5) / (a + 0.5)
+            p *= lambda / (2.0 * Double(it));
+            q *= lambda / (2.0 * Double(it) + 1.0)
+            tnc += p * xodd + q * xeven
+            s -= p
+            /* R 2.4.0 added test for rounding error here. */
+            if(s < -1.0E-10) { /* happens e.g. for (t,df,ncp)=(40,10,38.5), after 799 it.*/
+                #if os(macOS) || os(iOS)
+                os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                #endif
+                throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if(s <= 0 && it > 1) {
+                break
+            }
+            errbd = Double(2.0 * s * (xodd - godd))
+            if(fabs(errbd) < errmax) { /*convergence*/
+                break
+            }
+            #else
+            a += 1.0
+            xodd  -= godd
+            xeven -= geven
+            godd  *= Float80(x) * (Float80(a) + Float80(b) - 1.0) / Float80(a)
+            geven *= Float80(x) * (Float80(a) + Float80(b) - 0.5) / (Float80(a) + 0.5)
+            p *= Float80(lambda) / (2.0 * Float80(it));
+            q *= Float80(lambda) / (2.0 * Float80(it) + 1.0)
+            tnc += p * xodd + q * xeven
+            s -= p
+            /* R 2.4.0 added test for rounding error here. */
+            if(s < -1.0E-10) { /* happens e.g. for (t,df,ncp)=(40,10,38.5), after 799 it.*/
+                #if os(macOS) || os(iOS)
+                os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                #endif
+                throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if(s <= 0 && it > 1) {
+                break
+            }
+            errbd = Double(2.0 * s * (xodd - godd))
+            if(fabs(errbd) < errmax) { /*convergence*/
+                break
+            }
+            #endif
+            it = it + 1
+        }
+        if it >= itrmax {
+            /* non-convergence:*/
+            #if os(macOS) || os(iOS)
+            os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+            #else
+            print("Error evaluating noncentral t distribution: non-convergence")
+            #endif
+        }
+    }
+    else { /* x = t = 0 */
+        tnc = 0.0
+    }
+    #if arch(arm) || arch(arm64)
+    do {
+        // FIXME: CHECK TAIL
+        let r = try cdfNormalDist(x: -del, mean: 0.0, standardDeviation: 1.0)
+        tnc = tnc + r
+    }
+    catch {
+        throw error
+    }
+    #else
+    do {
+        // FIXME: CHECK TAIL
+        let r = Float80(try cdfNormalDist(x: -del, mean: 0.0, standardDeviation: 1.0))
+        tnc = tnc + r
+    }
+    catch {
+        throw error
+    }
+    #endif
+    var lower_tail: Bool = tail == .lower ? true : false
+    lower_tail = lower_tail != negdel; /* xor */
+    if(tnc > 1 - 1E-10 && lower_tail) {
+//        ML_ERROR(ME_PRECISION, "pnt{final}");
+        print("final!")
+    }
+    if tnc.isNaN {
+        return Double.nan
+    }
+    else {
+        return r_dt_val(x: fmin(Double(tnc), 1.0), tail: lower_tail ? .lower : .upper, log_p: rlog)
+    }
 }
 
+/* ORIGINAL AUTHOR
+ *    Claus Ekström, ekstrom@dina.kvl.dk
+ *    July 15, 2003.
+ * Swift Version:
+ *    Volker Thieme
+ *    June 21, 2018
+ *
+ *    Copyright (C) 2003-2015 The R Foundation
+ *
+ * DESCRIPTION
+ *
+ *    From Johnson, Kotz and Balakrishnan (1995) [2nd ed.; formula (31.15), p.516],
+ *    the non-central t density is
+ *
+ *      f(x, df, ncp) =
+ *
+ *        exp(-.5*ncp^2) * gamma((df+1)/2) / (sqrt(pi*df)* gamma(df/2)) * (df/(df+x^2))^((df+1)/2) *
+ *          sum_{j=0}^Inf  gamma((df+j+1)/2)/(factorial(j)* gamma((df+1)/2)) * (x*ncp*sqrt(2)/sqrt(df+x^2))^ j
+ *
+ *
+ *    The functional relationship
+ *
+ *       f(x, df, ncp) = df/x *
+ *                  (F(sqrt((df+2)/df)*x, df+2, ncp) - F(x, df, ncp))
+ *
+ *    is used to evaluate the density at x != 0 and
+ *
+ *       f(0, df, ncp) = exp(-.5*ncp^2) /
+ *                (sqrt(pi)*sqrt(df)*gamma(df/2))*gamma((df+1)/2)
+ *
+ *    is used for x=0.
+ *
+ *    All calculations are done on log-scale to increase stability.
+ *
+ * FIXME: pnt() is known to be inaccurate in the (very) left tail and for ncp > 38
+ *       ==> use a direct log-space summation formula in that case
+ */
 
-
-
-
-
-public func pdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!) throws -> Double {
-    if df < 0.0 {
+/// Returns the lower tail cdf of the non-central Student's t-distribution
+/// - Parameter x: x
+/// - Parameter nonCentralityPara: noncentrality parameter
+/// - Parameter df: Degrees of freedom
+/// - Parameter rlog: Return log(pdf)
+/// - Throws: SSSwiftyStatsError if df <= 0
+/// ### NOTE ###
+/// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
+/// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
+public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
+    if df <= 0.0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
             os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
@@ -223,307 +520,152 @@ public func pdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     var u: Double = 0.0
-    if t.isNaN || df.isNaN || ncp.isNaN {
+    if x.isNaN || df.isNaN || ncp.isNaN {
         return Double.nan
     }
     if ncp == 0 {
         do {
-            return try pdfStudentTDist(t: t, degreesOfFreedom: df)
+            return try pdfStudentTDist(t: x, degreesOfFreedom: df)
         }
         catch {
             throw error
         }
     }
-    if t.isInfinite {
+    if x.isInfinite {
         return 0
     }
-    if df >= 1E9 || df.isInfinite {
+    if df >= 1E8 || df.isInfinite {
         do {
-            return try pdfNormalDist(x: t, mean: ncp, standardDeviation: 1.0)
+            return try pdfNormalDist(x: x, mean: ncp, standardDeviation: 1.0)
         }
         catch {
             throw error
         }
     }
-    return 0.0
+    
+    if fabs(x) > sqrt(df * Double.ulpOfOne) {
+        do {
+            let p1 = try cdfStudentTNonCentral(t: x * sqrt((df + 2.0) / df), nonCentralityPara: ncp, degreesOfFreedom: df + 2.0)
+            let p2 = try cdfStudentTNonCentral(t: x, nonCentralityPara: ncp, degreesOfFreedom: df)
+            u = log(df) - log(fabs(x)) + log(fabs(p1 - p2))
+        }
+        catch {
+            throw error
+        }
+    }
+    else {
+        u = lgamma((df + 1.0) / 2.0) - lgamma(df / 2.0) - LNSQRTPI + 0.5 * (log(df) + ncp * ncp)
+    }
+    return (rlog ? u : exp(u))
 }
-/*
- double dnt(double x, double df, double ncp, int give_log)
- {
- double u;
- #ifdef IEEE_754
- if (ISNAN(x) || ISNAN(df))
- return x + df;
- #endif
- 
- /* If non-positive df then error */
- if (df <= 0.0) ML_ERR_return_NAN;
- 
- if(ncp == 0.0) return dt(x, df, give_log);
- 
- /* If x is infinite then return 0 */
- if(!R_FINITE(x))
- return R_D__0;
- 
- /* If infinite df then the density is identical to a
- normal distribution with mean = ncp.  However, the formula
- loses a lot of accuracy around df=1e9
- */
- if(!R_FINITE(df) || df > 1e8)
- return dnorm(x, ncp, 1., give_log);
- 
- /* Do calculations on log scale to stabilize */
- 
- /* Consider two cases: x ~= 0 or not */
- if (fabs(x) > sqrt(df * DBL_EPSILON)) {
- u = log(df) - log(fabs(x)) +
- log(fabs(pnt(x*sqrt((df+2)/df), df+2, ncp, 1, 0) -
- pnt(x, df, ncp, 1, 0)));
- /* FIXME: the above still suffers from cancellation (but not horribly) */
- }
- else {  /* x ~= 0 : -> same value as for  x = 0 */
- u = lgammafn((df+1)/2) - lgammafn(df/2)
- - (M_LN_SQRT_PI + .5*(log(df) + ncp*ncp));
- }
- 
- return (give_log ? u : exp(u));
- }
- 
- */
 
 
+/// Returns the quantile function of the noncentral Student's t-distribution
+/// - Parameter p: p
+/// - Parameter nonCentralityPara: noncentrality parameter
+/// - Parameter df: Degrees of freedom
+/// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!, nonCentralityPara ncp: Double!, rlog: Bool! = false) throws -> Double {
+   let accu: Double = 1E-13
+    let eps: Double = 1E-11
+    var ux, lx, nx, pp: Double
+    if df.isNaN || p.isNaN || ncp.isNaN {
+        return Double.nan
+    }
+    if df <= 0.0 {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+        }
+        #endif
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if ncp.isZero {
+        do {
+            return try quantileStudentTDist(p: p, degreesOfFreedom: df)
+        }
+        catch {
+            throw error
+        }
+    }
+    if p < 0.0 || p > 1.0 {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if let test = r_q_p01_boundaries(p: p, left: -Double.infinity, right: Double.infinity) {
+        return test
+    }
+    if df.isInfinite {
+        do {
+            return try quantileNormalDist(p: p, mean: ncp, standardDeviation: 1.0)
+        }
+        catch {
+            throw error
+        }
+    }
+    let p0 = r_dt_qIv(x: p, tail: .lower, log_p: rlog)
+    if p0 > (1.0 - Double.ulpOfOne) {
+        return Double.infinity
+    }
+    if p0 < Double.leastNonzeroMagnitude {
+        return -Double.infinity
+    }
+    func q(t:Double!, ncp: Double!, df:Double!) -> Double! {
+        do {
+            return try cdfStudentTNonCentral(t: t, nonCentralityPara: ncp, degreesOfFreedom: df)
+        }
+        catch {
+            return Double.nan
+        }
+    }
+    pp = fmin(1.0 - Double.ulpOfOne, p0 * (1.0 + eps))
+    ux = fmax(1.0, ncp)
+//    var q: Double = try cdfStudentTNonCentral(t: ux, nonCentralityPara: ncp, degreesOfFreedom: df)
+    while (ux < Double.greatestFiniteMagnitude) && (q(t: ux, ncp: ncp, df: df) < pp) {
+        ux = 2.0 * ux
+    }
+
+    pp = p0 * (1.0 - eps)
+
+    lx = fmin(-1.0, -ncp)
+    while ((lx > -Double.greatestFiniteMagnitude) && (q(t: lx, ncp: ncp, df: df) > pp)) {
+        lx = 2.0 * lx
+    }
+    repeat {
+        nx = 0.5 * (lx + ux)
+        if try cdfStudentTNonCentral(t: nx, nonCentralityPara: ncp, degreesOfFreedom: df) > p {
+            ux = nx
+        }
+        else {
+            lx = nx
+        }
+    } while ((ux - lx) > accu * fmax(fabs(lx), fabs(ux)))
+    return 0.5 * (lx + ux)
+}
+
 /*
- /**********************************************************************
- 
- void cumtnc(double *t,double *df,double *pnonc,double *cum,
- double *ccum)
- 
- CUMulative Non-Central T-distribution
- 
- 
- Function
- 
- 
- Computes the integral from -infinity to T of the non-central
- t-density.
- 
- 
- Arguments
- 
- 
- T --> Upper limit of integration of the non-central t-density.
- 
- DF --> Degrees of freedom of the non-central t-distribution.
- 
- PNONC --> Non-centrality parameter of the non-central t distibutio
- 
- CUM <-- Cumulative t-distribution.
- 
- CCUM <-- Compliment of Cumulative t-distribution.
- 
- 
- Method
- 
- Upper tail    of  the  cumulative  noncentral t   using
- formulae from page 532  of Johnson, Kotz,  Balakrishnan, Coninuous
- Univariate Distributions, Vol 2, 2nd Edition.  Wiley (1995)
- 
- This implementation starts the calculation at i = lambda,
- which is near the largest Di.  It then sums forward and backward.
- **********************************************************************/
- {
- #define one 1.0e0
- #define zero 0.0e0
- #define half 0.5e0
- #define two 2.0e0
- #define onep5 1.5e0
- #define conv 1.0e-7
- #define tiny 1.0e-10
- static double alghdf,b,bb,bbcent,bcent,cent,d,dcent,dpnonc,dum1,dum2,e,ecent,
- halfdf,lambda,lnomx,lnx,omx,pnonc2,s,scent,ss,sscent,t2,term,tt,twoi,x,xi,
- xlnd,xlne;
- static int ierr;
- static unsigned long qrevs;
- static double T1,T2,T3,T4,T5,T6,T7,T8,T9,T10;
- /*
- ..
- .. Executable Statements ..
- */
- /*
- Case pnonc essentially zero
- */
- if(fabs(*pnonc) <= tiny) {
- cumt(t,df,cum,ccum);
- return;
+ for(ux = fmax2(1., ncp); ux < DBL_MAX && pnt(ux, df, ncp, TRUE, FALSE) < pp; ux *= 2);
+    pp = p * (1 - Eps);
+
+ for(lx = fmin2(-1., -ncp); lx > -DBL_MAX && pnt(lx, df, ncp, TRUE, FALSE) > pp; lx *= 2);
+    /* 2. interval (lx,ux)  halving : */
+    do {
+        nx = 0.5 * (lx + ux); // could be zero
+        if (pnt(nx, df, ncp, TRUE, FALSE) > p)
+            ux = nx;
+        else
+            lx = nx;
+    } while ((ux - lx) > accu * fmax2(fabs(lx), fabs(ux)));
+    return 0.5 * (lx + ux);
  }
- qrevs = *t < zero;
- if(qrevs) {
- tt = -*t;
- dpnonc = -*pnonc;
- }
- else  {
- tt = *t;
- dpnonc = *pnonc;
- }
- pnonc2 = dpnonc * dpnonc;
- t2 = tt * tt;
- if(fabs(tt) <= tiny) {
- T1 = -*pnonc;
- cumnor(&T1,cum,ccum);
- return;
- }
- lambda = half * pnonc2;
- x = *df / (*df + t2);
- omx = one - x;
- lnx = log(x);
- lnomx = log(omx);
- halfdf = half * *df;
- alghdf = gamln(&halfdf);
- /*
- ******************** Case i = lambda
- */
- cent = fifidint(lambda);
- if(cent < one) cent = one;
- /*
- Compute d=T(2i) in log space and offset by exp(-lambda)
- */
- T2 = cent + one;
- xlnd = cent * log(lambda) - gamln(&T2) - lambda;
- dcent = exp(xlnd);
- /*
- Compute e=t(2i+1) in log space offset by exp(-lambda)
- */
- T3 = cent + onep5;
- xlne = (cent + half) * log(lambda) - gamln(&T3) - lambda;
- ecent = exp(xlne);
- if(dpnonc < zero) ecent = -ecent;
- /*
- Compute bcent=B(2*cent)
- */
- T4 = cent + half;
- bratio(&halfdf,&T4,&x,&omx,&bcent,&dum1,&ierr);
- /*
- compute bbcent=B(2*cent+1)
- */
- T5 = cent + one;
- bratio(&halfdf,&T5,&x,&omx,&bbcent,&dum2,&ierr);
- /*
- Case bcent and bbcent are essentially zero
- Thus t is effectively infinite
- */
- if(bcent + bbcent < tiny) {
- if(qrevs) {
- *cum = zero;
- *ccum = one;
- }
- else  {
- *cum = one;
- *ccum = zero;
- }
- return;
- }
- /*
- Case bcent and bbcent are essentially one
- Thus t is effectively zero
- */
- if(dum1 + dum2 < tiny) {
- T6 = -*pnonc;
- cumnor(&T6,cum,ccum);
- return;
- }
- /*
- First term in ccum is D*B + E*BB
- */
- *ccum = dcent * bcent + ecent * bbcent;
- /*
- compute s(cent) = B(2*(cent+1)) - B(2*cent))
- */
- T7 = halfdf + cent + half;
- T8 = cent + onep5;
- scent = gamln(&T7) - gamln(&T8) - alghdf + halfdf * lnx + (cent + half) *
- lnomx;
- scent = exp(scent);
- /*
- compute ss(cent) = B(2*cent+3) - B(2*cent+1)
- */
- T9 = halfdf + cent + one;
- T10 = cent + two;
- sscent = gamln(&T9) - gamln(&T10) - alghdf + halfdf * lnx + (cent + one) *
- lnomx;
- sscent = exp(sscent);
- /*
- ******************** Sum Forward
- */
- xi = cent + one;
- twoi = two * xi;
- d = dcent;
- e = ecent;
- b = bcent;
- bb = bbcent;
- s = scent;
- ss = sscent;
- S10:
- b += s;
- bb += ss;
- d = lambda / xi * d;
- e = lambda / (xi + half) * e;
- term = d * b + e * bb;
- *ccum += term;
- s = s * omx * (*df + twoi - one) / (twoi + one);
- ss = ss * omx * (*df + twoi) / (twoi + two);
- xi += one;
- twoi = two * xi;
- if(fabs(term) > conv * *ccum) goto S10;
- /*
- ******************** Sum Backward
- */
- xi = cent;
- twoi = two * xi;
- d = dcent;
- e = ecent;
- b = bcent;
- bb = bbcent;
- s = scent * (one + twoi) / ((*df + twoi - one) * omx);
- ss = sscent * (two + twoi) / ((*df + twoi) * omx);
- S20:
- b -= s;
- bb -= ss;
- d *= (xi / lambda);
- e *= ((xi + half) / lambda);
- term = d * b + e * bb;
- *ccum += term;
- xi -= one;
- if(xi < half) goto S30;
- twoi = two * xi;
- s = s * (one + twoi) / ((*df + twoi - one) * omx);
- ss = ss * (two + twoi) / ((*df + twoi) * omx);
- if(fabs(term) > conv * *ccum) goto S20;
- S30:
- if(qrevs) {
- *cum = half * *ccum;
- *ccum = one - *cum;
- }
- else  {
- *ccum = half * *ccum;
- *cum = one - *ccum;
- }
- /*
- Due to roundoff error the answer may not lie between zero and one
- Force it to do so
- */
- *cum = fifdmax1(fifdmin1(*cum,one),zero);
- *ccum = fifdmax1(fifdmin1(*ccum,one),zero);
- return;
- #undef one
- #undef zero
- #undef half
- #undef two
- #undef onep5
- #undef conv
- #undef tiny
- }
- 
- 
+
  */
 
 
