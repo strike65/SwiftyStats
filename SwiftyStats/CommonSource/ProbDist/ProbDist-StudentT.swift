@@ -318,7 +318,9 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         #endif
         if(p == 0.0) { /* underflow! */
             #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
             os_log("Error evaluating noncentral t distribution: non-centrality parameter too large", log: log_stat, type: .error)
+            }
             #endif
             throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
@@ -380,7 +382,9 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
             /* R 2.4.0 added test for rounding error here. */
             if(s < -1.0E-10) { /* happens e.g. for (t,df,ncp)=(40,10,38.5), after 799 it.*/
                 #if os(macOS) || os(iOS)
-                os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                }
                 #endif
                 throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
@@ -404,7 +408,9 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
             /* R 2.4.0 added test for rounding error here. */
             if(s < -1.0E-10) { /* happens e.g. for (t,df,ncp)=(40,10,38.5), after 799 it.*/
                 #if os(macOS) || os(iOS)
-                os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+                }
                 #endif
                 throw SSSwiftyStatsError(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
@@ -421,7 +427,9 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         if it >= itrmax {
             /* non-convergence:*/
             #if os(macOS) || os(iOS)
-            os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
+            }
             #else
             print("Error evaluating noncentral t distribution: non-convergence")
             #endif
@@ -649,23 +657,4 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
     } while ((ux - lx) > accu * fmax(fabs(lx), fabs(ux)))
     return 0.5 * (lx + ux)
 }
-
-/*
- for(ux = fmax2(1., ncp); ux < DBL_MAX && pnt(ux, df, ncp, TRUE, FALSE) < pp; ux *= 2);
-    pp = p * (1 - Eps);
-
- for(lx = fmin2(-1., -ncp); lx > -DBL_MAX && pnt(lx, df, ncp, TRUE, FALSE) > pp; lx *= 2);
-    /* 2. interval (lx,ux)  halving : */
-    do {
-        nx = 0.5 * (lx + ux); // could be zero
-        if (pnt(nx, df, ncp, TRUE, FALSE) > p)
-            ux = nx;
-        else
-            lx = nx;
-    } while ((ux - lx) > accu * fmax2(fabs(lx), fabs(ux)));
-    return 0.5 * (lx + ux);
- }
-
- */
-
 
