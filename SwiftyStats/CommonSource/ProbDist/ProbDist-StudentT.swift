@@ -77,7 +77,7 @@ public func pdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, rlog: Bool
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let lpdf = exp( lgamma( 0.5 * ( df + 1.0 ) ) - 0.5 * log( df * Double.pi ) - lgamma( 0.5 * df ) - ( ( df + 1.0 ) / 2.0 * log( 1.0 + t * t / df ) ) )
+    let lpdf = lgamma( 0.5 * ( df + 1.0 ) ) - 0.5 * log( df * Double.pi ) - lgamma( 0.5 * df ) - ( ( df + 1.0 ) / 2.0 * log( 1.0 + t * t / df ) )
     if rlog {
         return lpdf
     }
@@ -565,7 +565,7 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
         }
     }
     else {
-        u = lgamma((df + 1.0) / 2.0) - lgamma(df / 2.0) - LNSQRTPI + 0.5 * (log(df) + ncp * ncp)
+        u = lgamma((df + 1.0) / 2.0) - lgamma(df / 2.0) - (LNSQRTPI + 0.5 * (log(df) + ncp * ncp))
     }
     return (rlog ? u : exp(u))
 }
