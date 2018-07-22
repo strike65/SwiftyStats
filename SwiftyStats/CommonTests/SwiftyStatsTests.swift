@@ -794,29 +794,62 @@ class SwiftyStatsTests: XCTestCase {
         let M2 = [0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51]
         let examine1 = SSExamine.init(withArray: M1, name: nil, characterSet: nil)
         let examine2 = SSExamine.init(withArray: M2, name: nil, characterSet: nil)
+        /*
+             > M1 <- c(0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47)
+             > M2 <- c(0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51)
+             > wilcox.test(x = M1, y = M2,paired = TRUE, alternative = "two.sided")
+             
+             Wilcoxon signed rank test with continuity correction
+             
+             data:  M1 and M2
+             V = 22.5, p-value = 0.5749
+             alternative hypothesis: true location shift is not equal to 0
+        */
         var wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
-        XCTAssertEqual(wilcox.p2Value!, 0.528, accuracy: 1E-3)
-        XCTAssertEqual(wilcox.zStat!, 0.631, accuracy: 1E-3)
+        XCTAssertEqual(wilcox.p2Value!, 0.5749, accuracy: 1E-3)
+        XCTAssertEqual(wilcox.zStat!, -0.5607, accuracy: 1E-3)
         XCTAssertEqual(wilcox.sumNegRanks!, 22.5, accuracy: 1E-1)
         XCTAssertEqual(wilcox.sumPosRanks!, 13.5, accuracy: 1E-1)
         // http://documentation.statsoft.com/STATISTICAHelp.aspx?path=Nonparametrics/NonparametricAnalysis/Examples/Example8WilcoxonMatchedPairsTest
+        /*
+         > M3 <- c(20.3,17,6.5,25,5.4,29.2,2.9,6.6,15.8,8.3,34.0,8)
+         > M4 <- c(50.4,87,25.1,28.5,26.9,36.6,1.0,43.8,44.2,10.4,29.9,27.7)
+         > wilcox.test(x = M3, y = M4,paired = TRUE, alternative = "two.sided", exact = FALSE)
+         
+         Wilcoxon signed rank test with continuity correction
+         
+         data:  M3 and M4
+         V = 5, p-value = 0.00859
+         alternative hypothesis: true location shift is not equal to 0
+        */
         let M3 = [20.3,17,6.5,25,5.4,29.2,2.9,6.6,15.8,8.3,34.0,8]
         let M4 = [50.4,87,25.1,28.5,26.9,36.6,1.0,43.8,44.2,10.4,29.9,27.7]
         let examine3 = SSExamine.init(withArray: M3, name: nil, characterSet: nil)
         let examine4 = SSExamine.init(withArray: M4, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine3, set2: examine4)
-        XCTAssertEqual(wilcox.p2Value!, 0.007649, accuracy: 1E-6)
-        XCTAssertEqual(wilcox.zStat!, 2.667179, accuracy: 1E-6)
+        XCTAssertEqual(wilcox.p2Value!, 0.00859, accuracy: 1E-6)
+        XCTAssertEqual(wilcox.zStat!, -2.6279562108516661, accuracy: 1E-6)
         XCTAssertEqual(wilcox.sumNegRanks!, 5, accuracy: 1E-1)
         XCTAssertEqual(wilcox.sumPosRanks!, 73.0, accuracy: 1E-1)
         // http://influentialpoints.com/Training/wilcoxon_matched_pairs_signed_rank_test.htm
+        /*
+         > M6 <- c(1.0, 2, 1, 1, 3, 3, 2, 4, 2)
+         > wilcox.test(x = M5, y = M6,paired = TRUE, alternative = "two.sided", exact = FALSE)
+         
+         Wilcoxon signed rank test with continuity correction
+         
+         data:  M5 and M6
+         V = 45, p-value = 0.009091
+         alternative hypothesis: true location shift is not equal to 0
+        */
         let M5 = [13.0, 11, 6, 14, 6, 15, 13, 14, 8]
         let M6 = [1.0, 2, 1, 1, 3, 3, 2, 4, 2]
         let examine5 = SSExamine.init(withArray: M5, name: nil, characterSet: nil)
         let examine6 = SSExamine.init(withArray: M6, name: nil, characterSet: nil)
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine5, set2: examine6)
-        XCTAssertEqual(wilcox.p2Value!, 0.0076, accuracy: 1E-4)
-        XCTAssertEqual(wilcox.zStat!, 2.6679, accuracy: 1E-4)
+        XCTAssertEqual(wilcox.p2Value!, 0.009091, accuracy: 1E-4)
+        XCTAssertEqual(wilcox.zStat!, -2.60862, accuracy: 1E-4)
+
     }
     
     func testHTest() {
@@ -841,7 +874,7 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     
-    func testManWhitney() {
+    func testMannWhitney() {
         // tested using IBM SPSS 24
         let A1: Array<Int> = [5,5,8,9,13,13,13,15]
         let B1: Array<Int> = [3,3,4,5,5,8,10,16]
@@ -859,6 +892,28 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(mw.p2Approx!, 0.027, accuracy: 1E-3)
         XCTAssertEqual(mw.UMannWhitney!, 11.0, accuracy: 1E-1)
         XCTAssertEqual(mw.p2Exact!, 0.028, accuracy: 1E-3)
+        /*
+         > A <- c(65, 79, 90, 75, 61, 98, 80, 75); na <- length(A)
+         > B <- c(90, 98, 73, 79, 84, 98, 90, 88); nb <- length(B)
+         > T.o   <- sum(A)
+         > library(coin)
+         > x <- c(A, B)
+         > g <- as.factor(c(rep("A", length(A)), rep("B", length(B))))
+         > wilcox_test(x ~ g, distribution = "asymptotic", alternative="two.sided")
+         
+         Asymptotic Wilcoxon-Mann-Whitney Test
+         
+         data:  x by g (A, B)
+         Z = -1.5341, p-value = 0.125
+         alternative hypothesis: true mu is not equal to 0
+        */
+        let M7 = [65.0,79,90,75,61,98,80,75]
+        let M8 = [90.0,98,73,79,84,98,90,88]
+        let setM7 = SSExamine.init(withArray: M7, name: nil, characterSet: nil)
+        let setM8 = SSExamine.init(withArray: M8, name: nil, characterSet: nil)
+        mw = try! SSHypothesisTesting.mannWhitneyUTest(set1: setM7, set2: setM8)
+        XCTAssertEqual(mw.p2Approx!, 0.125, accuracy: 1E-3)
+        XCTAssertEqual(mw.zStat!, 1.5341, accuracy: 1E-3)
     }
     
     func testFrequencies() {

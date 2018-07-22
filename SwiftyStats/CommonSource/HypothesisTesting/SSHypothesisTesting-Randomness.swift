@@ -186,11 +186,12 @@ extension SSHypothesisTesting {
         //        }
         switch alternative {
         case .twoSided:
-            pAsymp = 2.0 * cdfStandardNormalDist(u: -fabs(z))
+            pAsymp = 2.0 * min(cdfStandardNormalDist(u: fabs(z)), 1.0 - cdfStandardNormalDist(u: z))
+//            pAsymp = 2.0 * cdfStandardNormalDist(u: z)
         case .less:
-            pAsymp = cdfStandardNormalDist(u: z)
-        case .greater:
             pAsymp = 1.0 - cdfStandardNormalDist(u: z)
+        case .greater:
+            pAsymp = cdfStandardNormalDist(u: z)
         }
         //        if pAsymp > 0.5 {
         //            pAsymp = (1.0 - pAsymp) * 2.0

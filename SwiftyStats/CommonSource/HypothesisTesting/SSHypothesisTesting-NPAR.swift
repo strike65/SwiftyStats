@@ -515,7 +515,7 @@ extension SSHypothesisTesting {
             val = tempArray[i]
             val1 = tempArray[n - i - 1]
             k = Double(i)
-            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(cdfStandardNormalDist(u: val)) + log(1.0 - cdfStandardNormalDist(u: val1))))
+            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(0.5 * (1.0 + erf(val / SQRTTWO))) + log(1.0 - 0.5 * (1.0 + erf(val1 / SQRTTWO)))))
             i += 1
         }
         a2 = -1.0 * Double(n) - ad
@@ -765,7 +765,7 @@ extension SSHypothesisTesting {
             denom = sqrt((nm / (S * (S - 1.0))) * ((pow(S, 3.0) - S) / 12.0 - temp1))
             num = fabs(U - nm / 2.0)
             z = num / denom
-            pasymp1 = 1.0 - cdfStandardNormalDist(u: fabs(z))
+            pasymp1 = min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
             pasymp2 = pasymp1 * 2.0
             pexact1 = Double.nan
             pexact2 = Double.nan
@@ -791,7 +791,7 @@ extension SSHypothesisTesting {
                 pexact1 = Double.nan
                 pexact2 = Double.nan
             }
-            pasymp1 = 1.0 - cdfStandardNormalDist(u: fabs(z))
+            pasymp1 = min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
             pasymp2 = 2.0 * pasymp1
         }
         let W = sumRanksSet2
@@ -858,7 +858,7 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs the Wilcoxon signed ranks test for matched pairs
+    /// Performs the Wilcoxon signed ranks test for matched pairs with continuity correction (no exact p values!)
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
@@ -967,11 +967,22 @@ extension SSHypothesisTesting {
             ts += ties[i] / 48.0
             i += 1
         }
-        z = (fabs(min(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        let p = 1.0 - cdfStandardNormalDist(u: fabs(z))
+        let z0 = fabs(min(sumnegranks, sumposranks)) - Double(n) * (Double(n) + 1.0) / 4.0
+        let sigma = sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
+        var correct: Double = 0.5 * z0.sgn
+//        if z0 < 0.0 {
+//            correct = -0.5
+//        }
+//        else {
+//            correct = 0.5
+//        }
+        z = (z0 - correct) / sigma
+//        z = (fabs(max(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
+        let pp = cdfStandardNormalDist(u: z)
+        let p = 1.0 - cdfStandardNormalDist(u: z)
         let cohenD = fabs(z) / sqrt(2.0 * Double(N))
         var result = SSWilcoxonMatchedPairsTestResult()
-        result.p2Value = 2.0 * p
+        result.p2Value = 2.0 * min(pp, p)
         result.sampleSize = Double(N)
         result.nPosRanks = nposranks
         result.nNegRanks = nnegranks
@@ -1608,7 +1619,7 @@ extension SSHypothesisTesting {
         var sum = 0.0
         dtemp = Double(R) - mean
         z = dtemp / sigma
-        pAsymp = 2.0 * cdfStandardNormalDist(u: -fabs(z))
+        pAsymp = 2.0 * min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
         if n1 + n2 <= 30 {
             if !isOdd(Double(R)) {
                 var r = 2

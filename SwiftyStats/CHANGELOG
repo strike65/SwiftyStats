@@ -1,3 +1,7 @@
+Version 0.8.9
+- FIXED: computing p values (Mann Whitney, Wilcoxon, Anderson-Darling, Wald Wolfowitz, Runs Test)
+- updated: test cases
+
 Version 0.8.8
 - FIXED: cdfNormalDistribution
 
