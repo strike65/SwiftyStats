@@ -54,4 +54,4 @@ let package = Package(
     swiftLanguageVersions: [4]
 )
 
-let version = Version("0.8.7")
+let version = Version("0.8.8")
