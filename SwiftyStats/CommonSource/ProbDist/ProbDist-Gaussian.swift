@@ -49,7 +49,7 @@ public func cdfNormalDist(x: Double!, mean m: Double!, standardDeviation sd: Dou
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let u = (x - m) / sd
+    let u = (m - x) / sd
     return cdfStandardNormalDist(u: u)
 }
 
@@ -70,14 +70,15 @@ public func cdfNormalDist(x: Double!, mean m: Double!, variance v: Double!) thro
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let u = (x - m) / sqrt(v)
+    let u = (m - x) / sqrt(v)
     return cdfStandardNormalDist(u: u)
 }
 
 /// Returns the CDF of the standard Gaussian distribution (mean = 0.0, standard deviation = 1.0)
 /// - Parameter u: Standardized variate (u = (x - mean)/sd)
 public func cdfStandardNormalDist(u: Double!) -> Double {
-    return 0.5 * (1.0 + erf(u / SQRTTWO))
+    return 0.5 * erfc(u / SQRTTWO)
+//    return 0.5 * (1.0 + erf(u / SQRTTWO))
 }
 
 /// Returns the PDF of a Gaussian distribution

@@ -301,7 +301,7 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         let sigma = sqrt(s1)
         #endif
         do {
-            return try pdfNormalDist(x: Double(x), mean: del, standardDeviation: Double(sigma))
+            return try cdfNormalDist(x: Double(x), mean: del, standardDeviation: Double(sigma))
         }
         catch {
             throw error
