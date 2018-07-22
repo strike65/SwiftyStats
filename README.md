@@ -49,7 +49,7 @@ import PackageDescription
 let package = Package(
 	name: "<YOUR_PACKAGE_NAME>",
 	dependencies: [
-		.package(url: "https://gitlab.com/strike65/SwiftyStats", from: "0.8.7")
+		.package(url: "https://gitlab.com/strike65/SwiftyStats", from: "0.8.8")
 	]
 )
 ```
