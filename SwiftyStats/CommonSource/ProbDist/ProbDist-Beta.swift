@@ -105,12 +105,12 @@ public func pdfBetaDist(x: Double!, shapeA a: Double!, shapeB b: Double!) throws
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (x <= 0) {
-        return 0.0
-    }
-    if(x >= 1.0) {
-        return 0.0
-    }
+//    if (x < 0) {
+//        return 0.0
+//    }
+//    if(x >= 1.0) {
+//        return 0.0
+//    }
     let result = pow(x, a - 1.0) * pow(1.0 - x, b - 1.0) / betaFunction(a: a, b: b)
     return result
 }

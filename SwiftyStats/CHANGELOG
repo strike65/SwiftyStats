@@ -2,6 +2,8 @@ Version 0.8.11
 - uodate README.md
 - FIXED: quantileChiSquare (edge cases)
 - added: more tests
+- fixed: Beta Distribution (edge cases)
+- FIXED: Severe Error in Cauchy Distribution (pdf)
 
 Version 0.8.10
 - FIXED: normal distribution

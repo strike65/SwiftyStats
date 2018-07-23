@@ -30,9 +30,9 @@ import os.log
 // MARK: Cauchy
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
 /// - Parameter a: Location parameter a
-/// - Parameter b: Shape parameter b
+/// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSContProbDistParams {
+public func paraCauchyDist(location a: Double!, scale b: Double!) throws -> SSContProbDistParams {
     if (b <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -50,9 +50,9 @@ public func paraCauchyDist(location a: Double!, shape b: Double!) throws -> SSCo
 /// Returns the pdf of the Cauchy distribution.
 /// - Parameter x: x
 /// - Parameter a: Location parameter a
-/// - Parameter b: Shape parameter b
+/// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
+public func pdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
     if (b <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -64,16 +64,18 @@ public func pdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
-    return result
+    let p = (x - a) / b
+    let result = Double.pi * b * (1.0 + (p * p))
+//    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
+    return 1.0 / result
 }
 
 /// Returns the cdf of the Cauchy distribution.
 /// - Parameter x: x
 /// - Parameter a: Location parameter a
-/// - Parameter b: Shape parameter b
+/// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) throws -> Double {
+public func cdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
     if (b <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -92,9 +94,9 @@ public func cdfCauchyDist(x: Double!, location a: Double!, shape b: Double!) thr
 /// Returns the pdf of the Cauchy distribution.
 /// - Parameter x: x
 /// - Parameter a: Location parameter a
-/// - Parameter b: Shape parameter b
+/// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
-public func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!) throws -> Double {
+public func quantileCauchyDist(p: Double!, location a: Double!, scale b: Double!) throws -> Double {
     if (b <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -120,7 +122,7 @@ public func quantileCauchyDist(p: Double!, location a: Double!, shape b: Double!
     if p.isZero {
         return -Double.infinity
     }
-    if fabs(p - 1.0) > 1E-12 {
+    if fabs(p - 1.0) < Double.leastNonzeroMagnitude {
         return Double.infinity
     }
     let result = a + b * tan((-0.5 + p) * Double.pi)

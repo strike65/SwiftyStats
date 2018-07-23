@@ -1501,8 +1501,183 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileLogNormal(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
         XCTAssertEqual(try! quantileLogNormal(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
         XCTAssert(try! quantileLogNormal(p: 1.0, mean: 0, variance: 1).isInfinite)
+        /*
+         R code:
+         > pbeta(q = 0.2,shape1 = 1,shape2 = 2)
+         [1] 0.36
+         > pbeta(q = 0.6,shape1 = 1,shape2 = 2)
+         [1] 0.84
+         > pbeta(q = 0.9,shape1 = 1,shape2 = 2)
+         [1] 0.99
+         > pbeta(q = 0.2,shape1 = 3,shape2 = 2)
+         [1] 0.0272
+         > pbeta(q = 0.6,shape1 = 3,shape2 = 2.5)
+         [1] 0.587639
+         > pbeta(q = 0.6,shape1 = 0.5,shape2 = 2.5)
+         [1] 0.9591406
+         > pbeta(q = 0.6,shape1 = 0.5,shape2 = 0.5)
+         [1] 0.5640942
+         > pbeta(q = 0.6,shape1 = 0.99,shape2 = 0)
+         [1] 0
+        */
+        XCTAssertEqual(try! cdfBetaDist(x: 0.2, shapeA: 1, shapeB: 2), 0.36, accuracy: 1e-2)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 1, shapeB: 2), 0.84, accuracy: 1e-2)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.9, shapeA: 1, shapeB: 2), 0.99, accuracy: 1e-2)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.2, shapeA: 3, shapeB: 2), 0.0272, accuracy: 1e-4)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 3, shapeB: 2.5), 0.587639, accuracy: 1e-6)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.9591406, accuracy: 1e-6)
+        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.5640942, accuracy: 1e-6)
+        XCTAssertThrowsError(try cdfBetaDist(x: 0.6, shapeA: 0.99, shapeB: 0))
+        /*
+         dbeta(x = 0.2,shape1 = 1,shape2 = 2)
+         [1] 1.6
+         > dbeta(x = 0,shape1 = 1,shape2 = 2)
+         [1] 2
+         > dbeta(x = 0.9,shape1 = 1,shape2 = 2)
+         [1] 0.2
+         > dbeta(x = 0.2,shape1 = 3,shape2 = 2)
+         [1] 0.384
+         > dbeta(x = 0.6,shape1 = 3,shape2 = 2.5)
+         [1] 1.793011
+         > dbeta(x = 0.6,shape1 = 0.5,shape2 = 2.5)
+         [1] 0.2772255
+         > dbeta(x = 0.6,shape1 = 0.5,shape2 = 0.5)
+         [1] 0.6497473
+         */
+        XCTAssertEqual(try! pdfBetaDist(x: 0.2, shapeA: 1, shapeB: 2), 1.6, accuracy: 1e-1)
+        XCTAssertEqual(try! pdfBetaDist(x: 0, shapeA: 1, shapeB: 2), 2.0, accuracy: 1e-1)
+        XCTAssertEqual(try! pdfBetaDist(x: 0.9, shapeA: 1, shapeB: 2), 0.2, accuracy: 1e-1)
+        XCTAssertEqual(try! pdfBetaDist(x: 0.2, shapeA: 3, shapeB: 2), 0.384, accuracy: 1e-3)
+        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 3, shapeB: 2.5), 1.793011, accuracy: 1e-6)
+        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.2772255, accuracy: 1e-7)
+        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.6497473, accuracy: 1e-7)
+        /*
+         > qbeta(p = 0,shape1 = 1,shape2 = 2)
+         [1] 0
+         > qbeta(p = 0.25,shape1 = 1,shape2 = 2)
+         [1] 0.1339746
+         > qbeta(p = 0.5,shape1 = 1,shape2 = 2)
+         [1] 0.2928932
+         > qbeta(p = 0.75,shape1 = 1,shape2 = 2)
+         [1] 0.5
+         > qbeta(p = 0.99,shape1 = 1,shape2 = 2)
+         [1] 0.9
+         > qbeta(p = 1,shape1 = 1,shape2 = 2)
+         [1] 1
+         */
+        XCTAssertEqual(try! quantileBetaDist(p: 0, shapeA: 1, shapeB: 2), 0, accuracy: 1e-1)
+        XCTAssertEqual(try! quantileBetaDist(p: 0.25, shapeA: 1, shapeB: 2), 0.1339746, accuracy: 1e-7)
+        XCTAssertEqual(try! quantileBetaDist(p: 0.5, shapeA: 1, shapeB: 2), 0.2928932, accuracy: 1e-7)
+        XCTAssertEqual(try! quantileBetaDist(p: 0.75, shapeA: 1, shapeB: 2), 0.5, accuracy: 1e-1)
+        XCTAssertEqual(try! quantileBetaDist(p: 0.99, shapeA: 1, shapeB: 2), 0.9, accuracy: 1e-1)
+        XCTAssertEqual(try! quantileBetaDist(p: 1.0, shapeA: 1, shapeB: 2), 1.0, accuracy: 1e-1)
+        /*
+         R code:
+         > pcauchy(q = 1,location = 1,scale = 1/2)
+         [1] 0.5
+         > pcauchy(q = -10,location = -2,scale = 3)
+         [1] 0.1142003
+         > pcauchy(q = 10,location = -2,scale = 3)
+         [1] 0.9220209
+         > pcauchy(q = 0,location = 99,scale = 3)
+         [1] 0.009642803
+         > pcauchy(q = 2,location = 3,scale = 0.25)
+         [1] 0.07797913
+        */
+        XCTAssertEqual(try! cdfCauchyDist(x: 1, location: 1, scale: 0.5), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! cdfCauchyDist(x: -10, location: -2, scale: 3), 0.1142003, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfCauchyDist(x: 10, location: -2, scale: 3), 0.9220209, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfCauchyDist(x: 0, location: 99, scale: 3), 0.009642803, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfCauchyDist(x: 2, location: 3, scale: 0.25), 0.07797913, accuracy: 1E-7)
+        
+        /*
+         R code:
+         > pcauchy(q = 1,location = 1,scale = 1/2)
+         [1] 0.5
+         > pcauchy(q = -10,location = -2,scale = 3)
+         [1] 0.1142003
+         > pcauchy(q = 10,location = -2,scale = 3)
+         [1] 0.9220209
+         > pcauchy(q = 0,location = 99,scale = 3)
+         [1] 0.009642803
+         > pcauchy(q = 2,location = 3,scale = 0.25)
+         [1] 0.07797913
+         */
+        XCTAssertEqual(try! pdfCauchyDist(x: 1, location: 1, scale: 0.5), 0.6366198, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfCauchyDist(x: -10, location: -2, scale: 3), 0.01308123, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfCauchyDist(x: 10, location: -2, scale: 3), 0.00624137, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfCauchyDist(x: 0, location: 99, scale: 3), 9.734247e-05, accuracy: 1E-11)
+        XCTAssertEqual(try! pdfCauchyDist(x: 2, location: 3, scale: 0.25), 0.07489644, accuracy: 1E-7)
 
+        /*
+         R code:
+         > qcauchy(p = 0,location = 1, scale = 0.5)
+         [1] -Inf
+         > qcauchy(p = 0.25,location = -2, scale = 3)
+         [1] -5
+         > qcauchy(p = 0.5,location = -2, scale = 3)
+         [1] -2
+         > qcauchy(p = 0.75,location = 99, scale = 3)
+         [1] 102
+         > qcauchy(p = 0.99,location = 3, scale = 0.25)
+         [1] 10.95513
+         > qcauchy(p = 1,location = 3, scale = 0.25)
+         [1] Inf
+         */
+        XCTAssertEqual(try! quantileCauchyDist(p: 0, location: 1, scale: 0.5), -Double.infinity)
+        XCTAssertEqual(try! quantileCauchyDist(p: 0.25, location: -2, scale: 3), -5.0, accuracy: 1E-1)
+        XCTAssertEqual(try! quantileCauchyDist(p: 0.5, location: -2, scale: 3), -2.0, accuracy: 1E-1)
+        XCTAssertEqual(try! quantileCauchyDist(p: 0.75, location: 99, scale: 3), 102.0, accuracy: 1E-1)
+        XCTAssertEqual(try! quantileCauchyDist(p: 0.99, location: 3, scale: 0.25), 10.95513, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileCauchyDist(p: 1, location: 3, scale: 0.25), Double.infinity)
 
+        /*
+         Mathematica
+         loc = 0;
+         scale = 1;
+         cd = LaplaceDistribution[loc, scale];
+         N[CDF[cd, 1], 7]
+         N[CDF[cd, -8], 7]
+         N[CDF[cd, 19], 7]
+         N[CDF[cd, 1/2], 7]
+         */
+        XCTAssertEqual(try! cdfLaplaceDist(x: 1, mean: 0, scale: 1), 0.8160603, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfLaplaceDist(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
+        XCTAssertEqual(try! cdfLaplaceDist(x: 19, mean: 0, scale: 1), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! cdfLaplaceDist(x: 0.5, mean: 0, scale: 1), 0.6967347, accuracy: 1e-7)
+        /*
+         Mathematica
+         loc = 0;
+         scale = 1;
+         cd = LaplaceDistribution[loc, scale];
+         N[PDF[cd, 1], 7]
+         N[PDF[cd, -8], 7]
+         N[PDF[cd, 19], 7]
+         N[PDF[cd, 1/2], 7]
+         */
+        XCTAssertEqual(try! pdfLaplaceDist(x: 1, mean: 0, scale: 1), 0.1839397, accuracy: 1e-7)
+        XCTAssertEqual(try! pdfLaplaceDist(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
+        XCTAssertEqual(try! pdfLaplaceDist(x: 19, mean: 0, scale: 1), 2.801398E-9, accuracy: 1e-15)
+        XCTAssertEqual(try! pdfLaplaceDist(x: 0.5, mean: 0, scale: 1), 0.3032653, accuracy: 1e-7)
+        /*
+         Mathematica
+         loc = 0;
+         scale = 1;
+         cd = LaplaceDistribution[loc, scale];
+         N[InverseCDF[cd, 1], 7]
+         N[InverseCDF[cd, 1/2], 7]
+         N[InverseCDF[cd, 75/100], 7]
+         N[InverseCDF[cd, 99/100], 7]
+         N[InverseCDF[cd, 0], 7]
+         */
+        XCTAssertEqual(try! quantileLaplaceDist(p: 1, mean: 0, scale: 1), Double.infinity)
+        XCTAssertEqual(try! quantileLaplaceDist(p: 0.5, mean: 0, scale: 1), 0)
+        XCTAssertEqual(try! quantileLaplaceDist(p: 0.75, mean: 0, scale: 1), 0.6931472, accuracy: 1e-7)
+        XCTAssertEqual(try! quantileLaplaceDist(p: 0.99, mean: 0, scale: 1), 3.912023, accuracy: 1e-7)
+        XCTAssertEqual(try! quantileLaplaceDist(p: 0, mean: 0, scale: 1), -Double.infinity)
+
+        
+        
     }
     
 //
