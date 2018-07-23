@@ -1130,8 +1130,24 @@ class SwiftyStatsTests: XCTestCase {
         res = try! SSHypothesisTesting.ksGoFTest(array: laplace.elementsAsArray(sortOrder: .raw)!, targetDistribution: .laplace)!
         XCTAssertEqual(res.pValue!, 0.0771619, accuracy: 1E-5)
         
+        /*
+         Mathematica:
+         normal1 = {-1.39472, 0.572422, -0.807981, 1.12284, 0.582314, -2.02361, -1.07106, -1.07723, 0.105198, -0.806512, -1.47555, 0.117081, -0.40699, -0.554643, -0.0838551, -2.38265, -0.748096,1.13259, 0.134903, -1.11957, -0.268167, -0.249893, -0.636138, 0.411145, 1.40698, 0.868583,0.221741, -0.751367, -0.843731, -1.92446, -0.770097, 1.34406,0.113856, 0.442025, 0.206676, 0.448239, 0.701375, -1.50239,0.118701, 0.992643, 0.119639, -0.0365253,0.205961, -0.37079, -0.224489, -0.428072, 0.911177, -0.279192,0.560748, -0.24796, -1.05229,2.03458, -2.02889, -1.08878, -0.826172,0.381449, -0.134957, -0.07598, -1.03606, 1.65422, -0.290542,0.221982, 0.0674381, -0.32888, 1.59649, 0.418209, -0.899435,0.329175, -0.177973, 1.62596, 0.599629, -1.5299, -2.18709,0.297174, 0.997437, 1.55026, 0.857938, 0.177222,1.62641, -0.982871, 0.307966, -0.518949, 2.34573, -0.17761, 2.3379,0.598934, -0.727655, 0.320675, 1.5864, 0.0940648,0.350143, -0.617015, 0.839371, 0.224846, 0.0201539, -1.49075,0.847894, -0.790432, 1.80993, 1.32279, 0.141171, -1.14471,0.601558, 0.678619, -0.45809, 0.312201, 1.3017, 0.0407581,0.993514, 0.931535, 1.13858};
+         Needs["HypothesisTesting`"];
+         N[AndersonDarlingTest[normal1, NormalDistribution[Mean[normal1], StandardDeviation[normal1]]],21]
+         
+         ==> 0.987337
+        */
+        
         var adRes = try! SSHypothesisTesting.adNormalityTest(array: normal1, alpha: 0.05)!
         XCTAssertEqual(adRes.pValue!, 0.987, accuracy: 1E-3)
+        
+        /*
+         laplace = {-2.03679,0.518416,-1.72556,3.07248,1.58415,0.55357,1.13785,2.77352,0.692562,-0.246844,1.07308,0.676815,2.61719,0.839612,0.657608,1.60029,0.934251,1.64299,4.83994,-0.572193,0.590732,-2.30579,-3.46328,4.6823,2.65601,1.66736,0.0644071,0.561031,2.19092,1.10959,0.952764,4.28232,0.360738,3.43897,-0.122254,-3.22326,7.96229,-5.32675,1.4503,-2.94508,1.36242,1.0414,0.421444,3.61022,1.26506,-3.94449,-0.544188,2.88665,2.00745,-3.01688,1.0722,-0.327354,1.46366,1.52667,3.71474,1.24921,2.36462,2.111,-0.704057,6.7197,7.54793,2.76588,0.470362,0.467676,1.16809,2.11906,-3.79051,2.17474,4.64406,-1.69926,0.967686,-3.22085,1.72475,1.17087,1.03924,0.230923,1.4176,0.897564,-6.89486,-5.64721,1.07495,1.78927,8.24184,5.95395,0.793648,1.89169,1.25558,4.3064,-1.33544,5.67814,-6.36738,-0.372883,0.13142,0.786708,-0.0932199,-4.06743,4.07498,-0.482598,-1.49333,1.61442,-2.27068,1.55111,-2.59695,4.47164,-0.776884,0.884446,3.70967,0.858531,3.33213,-7.62385,0.0583429,-0.148588,-1.24765,8.67548,0.860613,1.36125,-9.48455,-0.831406,-1.86396,2.10917,4.551,1.064,1.97283,3.82057,2.29935,-1.74418,0.244115,-0.837016,2.53457,1.61,1.54181,-1.54528,-0.943004,-0.738644,-0.680302,0.358243,5.85945,0.920141,0.645741,0.675258,0.833122,0.0261111,0.593711,1.10065,0.956418,-0.194063,3.37702,-1.40828,0.853448,-1.26089};
+         N[AndersonDarlingTest[laplace, NormalDistribution[Mean[laplace], StandardDeviation[laplace]]], 21]
+
+         ==> 0.0414159
+        */
         
         adRes = try! SSHypothesisTesting.adNormalityTest(array: laplaceData, alpha: 0.05)!
         XCTAssertEqual(adRes.pValue!, 0.04, accuracy: 1E-2)
@@ -1235,14 +1251,39 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, nonCentralityPara: 10, degreesOfFreedom: 22), 1.301945e-12, accuracy: 1E-16)
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 2), 0.3714677, accuracy: 1E-7)
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 223322), 0.4999955, accuracy: 1E-7)
-        
+        /*
+         R code:
+         > pnorm(q = 2,mean = 0,sd = 1)
+         [1] 0.9772499
+         > pnorm(q = -2,mean = 0,sd = 1)
+         [1] 0.02275013
+         > pnorm(q = 3,mean = 22,sd = 3)
+         [1] 1.199602e-10
+         > pnorm(q = -3,mean = 22,sd = 3)
+         [1] 3.929873e-17
+         > pnorm(q = -3,mean = -3.5,sd = 0.5)
+         [1] 0.8413447
+        */
         XCTAssertEqual(try! cdfNormalDist(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
         XCTAssertEqual(cdfStandardNormalDist(u: 2), 0.977249868, accuracy: 1E-8)
         XCTAssertEqual(cdfStandardNormalDist(u: -2), 0.0227501319, accuracy: 1E-8)
         XCTAssertEqual(try! cdfNormalDist(x: 3, mean: 22, standardDeviation: 3), 1.19960226E-10, accuracy: 1E-18)
         XCTAssertEqual(try! cdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 3.92987343E-17, accuracy: 1E-25)
         XCTAssertEqual(try! cdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.841344746, accuracy: 1E-9)
-        
+        /*
+         R code:
+         > dnorm(x = 2,mean = 0, sd = 1)
+         [1] 0.05399097
+         > dnorm(x = -2,mean = 0, sd = 1)
+         [1] 0.05399097
+         > dnorm(x = 3,mean = 22, sd = 3)
+         [1] 2.592816e-10
+         > dnorm(x = -3,mean = 22, sd = 3)
+         [1] 1.106928e-16
+         > dnorm(x = -3,mean = -3.5, sd = 0.5)
+         [1] 0.4839414
+         >
+        */
         XCTAssertEqual(try! pdfNormalDist(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(pdfStandardNormalDist(u: 2), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(pdfStandardNormalDist(u: -2), 0.0539909665, accuracy: 1E-8)
@@ -1250,8 +1291,218 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! pdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
         XCTAssertEqual(try! pdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
 
+        /*
+         R code:
+         > qnorm(p = 1/3, mean = 0, sd = 1)
+         [1] -0.4307273
+         > qnorm(p = 5/100, mean = 0, sd = 1)
+         [1] -1.644854
+         > qnorm(p = 5/10, mean = 0, sd = 1)
+         [1] 0
+         > qnorm(p = 1/3, mean = 2, sd = 0.5)
+         [1] 1.784636
+         > qnorm(p = 5/100, mean = 2, sd = 0.5)
+         [1] 1.177573
+         > qnorm(p = 5/10, mean = 2, sd = 0.5)
+         [1] 2
+        */
+        XCTAssertEqual(try! quantileStandardNormalDist(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileStandardNormalDist(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileStandardNormalDist(p: 5.0/10.0), 0, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileNormalDist(p: 1.0/3.0, mean: 2, standardDeviation: 0.5), 1.78464, accuracy: 1E-4)
+        XCTAssertEqual(try! quantileNormalDist(p: 5/100.0, mean: 2, standardDeviation: 0.5), 1.17757, accuracy: 1E-4)
+        XCTAssertEqual(try! quantileNormalDist(p: 5/10.0, mean: 2, standardDeviation: 0.5), 2, accuracy: 1E-6)
+        /*
+         R code:
+        > pchisq(q = 1,df = 10,ncp = 0)
+        [1] 0.0001721156
+        > pchisq(q = 1,df = 16,ncp = 0)
+        [1] 6.219691e-08
+        > pchisq(q = -1,df = 16,ncp = 0)
+        [1] 0
+        > pchisq(q = 16,df = 16,ncp = 0)
+        [1] 0.5470392
+        > pchisq(q = -16,df = 16,ncp = 0)
+        [1] 0
+        */
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 1, degreesOfFreedom: 16), 6.219691E-08, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 16, degreesOfFreedom: 16), 0.5470392, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
+        /*
+         R code:
+         > dchisq(x = 1,df = 16,ncp = 0)
+         [1] 4.700913e-07
+         > dchisq(x = -1,df = 16,ncp = 0)
+         [1] 0
+         > dchisq(x = 16,df = 16,ncp = 0)
+         [1] 0.06979327
+         > dchisq(x = -16,df = 16,ncp = 0)
+         [1] 0
+        */
         
-        
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 1, degreesOfFreedom: 16), 4.700913e-07, accuracy: 1E-13)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 16, degreesOfFreedom: 16), 0.06979327, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
+        /*
+         R code:
+         > qchisq(p = 0, df = 16)
+         [1] 0
+         > qchisq(p = 0.25, df = 16)
+         [1] 11.91222
+         > qchisq(p = 0.5, df = 16)
+         [1] 15.3385
+         > qchisq(p = 0.75, df = 16)
+         [1] 19.36886
+         > qchisq(p = 0.99, df = 16)
+         [1] 31.99993
+         > qchisq(p = 1, df = 16)
+         [1] Inf
+        */
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0, degreesOfFreedom: 16), 0, accuracy: 1E-13)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.25, degreesOfFreedom: 16), 11.91222, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 16), 15.3385, accuracy: 1E-4)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 16), 19.36886, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 16), 31.99993, accuracy: 1E-5)
+        XCTAssert(try! quantileChiSquareDist(p: 1.0, degreesOfFreedom: 16).isInfinite)
+
+        /*
+         R code:
+         > pf(q = 2,df1 = 2,df2 = 3)
+         [1] 0.7194341
+         > pf(q = 2,df1 = 22,df2 = 3)
+         [1] 0.6861387
+         > pf(q = 2,df1 = 3,df2 = 22)
+         [1] 0.8565898
+         > pf(q = -2,df1 = 3,df2 = 22)
+         [1] 0
+         > pf(q = -2/100000,df1 = 3,df2 = 22)
+         [1] 0
+         > pf(q = 0,df1 = 3,df2 = 22)
+         [1] 0
+         > pf(q = 33,df1 = 3,df2 = 22)
+         [1] 1
+         > pf(q = 3,df1 = 3,df2 = 22)
+         [1] 0.9475565
+        */
+        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: 33, numeratorDF: 3, denominatorDF: 22), 1, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatio(f: 3, numeratorDF: 3, denominatorDF: 22), 0.9475565, accuracy: 1E-7)
+        /*
+         R code
+         > df(x = 2,df1 = 2,df2 = 3)
+         [1] 0.1202425
+         > df(x = 2,df1 = 22,df2 = 3)
+         [1] 0.1660825
+         > df(x = 2,df1 = 3,df2 = 22)
+         [1] 0.1486917
+         > df(x = -2,df1 = 3,df2 = 22)
+         [1] 0
+         > df(x = 0,df1 = 3,df2 = 22)
+         [1] 0
+         > df(x = 33,df1 = 3,df2 = 22)
+         [1] 6.849943e-09
+         > df(x = 3,df1 = 3,df2 = 22)
+         [1] 0.05102542
+        */
+        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 2, denominatorDF: 3), 0.1202425, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 22, denominatorDF: 3), 0.1660825, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 3, denominatorDF: 22), 0.1486917, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfFRatioDist(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfFRatioDist(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfFRatioDist(f: 33, numeratorDF: 3, denominatorDF: 22), 6.849943e-09, accuracy: 1E-15)
+        XCTAssertEqual(try! pdfFRatioDist(f: 3, numeratorDF: 3, denominatorDF: 22), 0.05102542, accuracy: 1E-7)
+        /*
+         R code:
+         > qf(p = 0,df1 = 2,df2 = 3)
+         [1] 0
+         > qf(p = 0.25,df1 = 2,df2 = 3)
+         [1] 0.3171206
+         > qf(p = 0.5,df1 = 2,df2 = 3)
+         [1] 0.8811016
+         > qf(p = 0.75,df1 = 2,df2 = 3)
+         [1] 2.279763
+         > qf(p = 0.99,df1 = 2,df2 = 3)
+         [1] 30.81652
+         > qf(p = 0.25,df1 = 22,df2 = 3)
+         [1] 0.6801509
+         > qf(p = 0.5,df1 = 22,df2 = 3)
+         [1] 1.229022
+         > qf(p = 0.75,df1 = 22,df2 = 3)
+         [1] 2.461528
+         > qf(p = 0.99,df1 = 22,df2 = 3)
+         [1] 26.63955
+         > qf(p = 1,df1 = 22,df2 = 3)
+         [1] Inf
+        */
+        XCTAssertEqual(try! quantileFRatioDist(p: 0, numeratorDF: 2, denominatorDF: 3), 0, accuracy: 0)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.25, numeratorDF: 2, denominatorDF: 3), 0.3171206, accuracy: 1E-7)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.5, numeratorDF: 2, denominatorDF: 3), 0.8811016, accuracy: 1E-7)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.75, numeratorDF: 2, denominatorDF: 3), 2.279763, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.99, numeratorDF: 2, denominatorDF: 3), 30.81652, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.25, numeratorDF: 22, denominatorDF: 3), 0.6801509, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.5, numeratorDF: 22, denominatorDF: 3), 1.229022, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.75, numeratorDF: 22, denominatorDF: 3), 2.461528, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileFRatioDist(p: 0.99, numeratorDF: 22, denominatorDF: 3), 26.63955, accuracy: 1E-5)
+        XCTAssert(try! quantileFRatioDist(p: 1.0, numeratorDF: 22, denominatorDF: 3).isInfinite)
+        /*
+         R code
+         > plnorm(1,meanlog = 0,sdlog = 1)
+         [1] 0.5
+         > plnorm(1,meanlog = 0,sdlog = 0.5)
+         [1] 0.5
+         > plnorm(2,meanlog = 0,sdlog = 0.5)
+         [1] 0.9171715
+         > plnorm(2,meanlog = 3,sdlog = 0.5)
+         [1] 1.977763e-06
+        */
+        XCTAssertEqual(try! cdfLogNormal(x: 1, mean: 0, variance: 1), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! cdfLogNormal(x: 1, mean: 0, variance: 0.25), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! cdfLogNormal(x: 2, mean: 0, variance: 0.25), 0.9171715, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfLogNormal(x: 2, mean: 3, variance: 0.25), 1.977763E-06, accuracy: 1E-12)
+        /*
+         R code
+         > dlnorm(2,meanlog = 0,sdlog = 1)
+         [1] 0.156874
+         > dlnorm(1,meanlog = 0,sdlog = 1)
+         [1] 0.3989423
+         > dlnorm(1,meanlog = 0,sdlog = 0.5)
+         [1] 0.7978846
+         > dlnorm(2,meanlog = 0,sdlog = 0.5)
+         [1] 0.1526138
+         > dlnorm(2,meanlog = 3,sdlog = 0.5)
+         [1] 9.520355e-06
+        */
+        XCTAssertEqual(try! pdfLogNormalDist(x: 1, mean: 0, variance: 1), 0.3989423, accuracy: 1E-6)
+        XCTAssertEqual(try! pdfLogNormalDist(x: 1, mean: 0, variance: 0.25), 0.7978846, accuracy: 1E-6)
+        XCTAssertEqual(try! pdfLogNormalDist(x: 2, mean: 0, variance: 0.25), 0.1526138, accuracy: 1E-6)
+        XCTAssertEqual(try! pdfLogNormalDist(x: 2, mean: 3, variance: 0.25), 9.520355e-06, accuracy: 1E-12)
+        /*
+         > qlnorm(0,meanlog = 0,sdlog = 1)
+         [1] 0
+         > qlnorm(0.25,meanlog = 0,sdlog = 1)
+         [1] 0.5094163
+         > qlnorm(0.5,meanlog = 0,sdlog = 1)
+         [1] 1
+         > qlnorm(0.75,meanlog = 0,sdlog = 1)
+         [1] 1.963031
+         > qlnorm(0.99,meanlog = 0,sdlog = 1)
+         [1] 10.24047
+         > qlnorm(1,meanlog = 0,sdlog = 1)
+         [1] Inf
+        */
+        XCTAssertEqual(try! quantileLogNormal(p: 0, mean: 0, variance: 1), 0, accuracy: 0)
+        XCTAssertEqual(try! quantileLogNormal(p: 0.25, mean: 0, variance: 1), 0.5094163, accuracy: 1E-6)
+        XCTAssertEqual(try! quantileLogNormal(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
+        XCTAssertEqual(try! quantileLogNormal(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
+        XCTAssert(try! quantileLogNormal(p: 1.0, mean: 0, variance: 1).isInfinite)
+
+
     }
     
 //

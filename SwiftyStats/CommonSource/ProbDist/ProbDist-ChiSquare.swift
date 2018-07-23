@@ -147,6 +147,12 @@ public func quantileChiSquareDist(p: Double!, degreesOfFreedom df: Double!) thro
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
+    if p < Double.leastNonzeroMagnitude {
+        return 0.0
+    }
+    if (1.0 - p) < Double.leastNonzeroMagnitude {
+        return Double.infinity
+    }
     let eps = 1.0E-12
     var minChi: Double = 0.0
     var maxChi: Double = 9999.0

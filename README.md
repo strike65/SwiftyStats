@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.8.10-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-0.8.11-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
@@ -86,6 +86,7 @@ As there is no Xcode-Project, you have to use the Swift Package Manager. See abo
 * `make` or `make debug` builds the module in debug-configuration
 * `make release` builds the module in release-configuration
 * `make test` builds the module and performs some tests
+ * numerical results to compare to are generated using Mathematics / R
 * `make clean` resets the build-process
 
 # How to Use
