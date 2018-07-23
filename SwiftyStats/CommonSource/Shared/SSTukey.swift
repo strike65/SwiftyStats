@@ -725,7 +725,7 @@ public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double
         }
         /* Find prob(value < new iterate) */
         do {
-            valx1 = try ptukey(q: ans, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, returnLogP: false) - p
+            valx1 = try ptukey(q: ans, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, returnLogP: false) - pp
         }
         catch {
             throw error
