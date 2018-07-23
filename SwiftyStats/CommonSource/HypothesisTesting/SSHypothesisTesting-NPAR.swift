@@ -969,7 +969,7 @@ extension SSHypothesisTesting {
         }
         let z0 = fabs(min(sumnegranks, sumposranks)) - Double(n) * (Double(n) + 1.0) / 4.0
         let sigma = sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        var correct: Double = 0.5 * z0.sgn
+        let correct: Double = 0.5 * z0.sgn
 //        if z0 < 0.0 {
 //            correct = -0.5
 //        }

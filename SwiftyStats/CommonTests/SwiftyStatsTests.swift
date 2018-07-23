@@ -100,31 +100,40 @@ class SwiftyStatsTests: XCTestCase {
     
     
     func testTukeyKramer() {
-        // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
+
+ // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
         #if os(macOS) || os(iOS)
         let df = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
+        let df1 = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
         #else
         let df = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
+        let df1 = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: scanDouble)
         print("TukeyKramerData01 read")
         #endif
-        var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
+/*
+         var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
         XCTAssertEqual(test[2].testStat, 0.3101, accuracy: 1E-04)
         XCTAssertEqual(test[3].testStat, 1.6282, accuracy: 1E-04)
         XCTAssertEqual(test[4].testStat, 4.3032, accuracy: 1E-04)
         XCTAssertEqual(test[5].testStat, 5.9314, accuracy: 1E-04)
-        #if os(macOS) || os(iOS)
-        let df1 = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
-        #else
-        let df1 = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: scanDouble)
-        print("TukeyKramerData02 read")
-        #endif
-        test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df1, alpha: 0.05)!
+ */
+        /*
+         A <- c(27, 27, 25, 26, 25)       # multiple Vergleiche nach Tukey-Kramer
+         > B <- c(26, 25, 26, 25, 24)
+         > C <- c(21, 21, 20, 20, 22)
+         > nA <- length(A); nB <- length(B); nC <- length(C)
+         > f  <- nA + nB + nC - 3
+         > mA <- mean(A);   mB <- mean(B);   mC <- mean(C)
+         > s  <- sqrt((sum((A-mA)^2)+sum((B-mB)^2)+sum((C-mC)^2)) / f)
+         > T.AB <- (mA - mB) / (s*sqrt(0.5*(1/nA + 1/nB))); T.AB
+        */
+        var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df1, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 2.0, accuracy: 1E-01)
         XCTAssertEqual(test[1].testStat, 13.0, accuracy: 1E-01)
         XCTAssertEqual(test[2].testStat, 11.0, accuracy: 1E-01)
-        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df, alpha: 0.05)!
+/*        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 3.2621, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 4.4134, accuracy: 1E-04)
         XCTAssertEqual(test[2].testStat, 0.2193, accuracy: 1E-04)
@@ -135,6 +144,8 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(test[0].testStat, 1.4142, accuracy: 1E-04)
         XCTAssertEqual(test[1].testStat, 9.1924, accuracy: 1E-04)
         XCTAssertEqual(test[2].testStat, 7.7782, accuracy: 1E-04)
+*/
+        
     }
     
     func testExamine() {
@@ -1224,21 +1235,23 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, nonCentralityPara: 10, degreesOfFreedom: 22), 1.301945e-12, accuracy: 1E-16)
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 2), 0.3714677, accuracy: 1E-7)
         XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 223322), 0.4999955, accuracy: 1E-7)
-
-
+        
+        XCTAssertEqual(try! cdfNormalDist(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
+        XCTAssertEqual(cdfStandardNormalDist(u: 2), 0.977249868, accuracy: 1E-8)
+        XCTAssertEqual(cdfStandardNormalDist(u: -2), 0.0227501319, accuracy: 1E-8)
+        XCTAssertEqual(try! cdfNormalDist(x: 3, mean: 22, standardDeviation: 3), 1.19960226E-10, accuracy: 1E-18)
+        XCTAssertEqual(try! cdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 3.92987343E-17, accuracy: 1E-25)
+        XCTAssertEqual(try! cdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.841344746, accuracy: 1E-9)
+        
+        XCTAssertEqual(try! pdfNormalDist(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(pdfStandardNormalDist(u: 2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(pdfStandardNormalDist(u: -2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(try! pdfNormalDist(x: 3, mean: 22, standardDeviation: 3), 2.59281602E-10, accuracy: 1E-18)
+        XCTAssertEqual(try! pdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
+        XCTAssertEqual(try! pdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
 
         
-/*        XCTAssertEqual(try! pdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.0542627546491024962784, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 22, degreesOfFreedom: 20), 0.659489357534338952719, accuracy: 1E-12)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 20), 19.3374292294282623035, accuracy: 1E-12)
- */
-        print(try! cdfStudentTNonCentral(t: 1, nonCentralityPara: 15, degreesOfFreedom: 33))
-        print(try! pdfStudentTNonCentral(x: 1, nonCentralityPara: 15, degreesOfFreedom: 33))
-        print(try! pdfStudentTNonCentral(x: 1, nonCentralityPara: 3, degreesOfFreedom: 33))
-        print(try! quantileStudentTNonCentral(p: 0.5, degreesOfFreedom: 33, nonCentralityPara: 3))
-        print(try! quantileStudentTNonCentral(p: 0.1, degreesOfFreedom: 33, nonCentralityPara: 3))
-        print(try! quantileStudentTNonCentral(p: 0.001, degreesOfFreedom: 33, nonCentralityPara: 3))
-        print(try! quantileStudentTNonCentral(p: 0.999, degreesOfFreedom: 33, nonCentralityPara: 3))
+        
     }
     
 //

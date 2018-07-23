@@ -830,7 +830,7 @@ public class SSHypothesisTesting {
         var halfWidth: Double
         var criticalQ: Double = 0.0
         do {
-            criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, log_p: false)
+            criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .lower, log_p: false)
         }
         catch {
             #if os(macOS) || os(iOS)
