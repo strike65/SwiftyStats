@@ -152,6 +152,7 @@ public func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePoi
     if a == floor(a) && a > 0 {
         let t = expSum(n: a - 1, z: x)
         result = 1.0 - exp(-x) * t
+        converged.pointee = true;
         return result
     }
     if x < 0.0 || a <= 0.0 {
@@ -234,6 +235,17 @@ public func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePoi
             return exp(-x + (a * log(x)) - lgamma(a)) * temp
         }
     }
-    
 }
+
+public func pochhammer(a: Double, b: Double) -> Double {
+    let res: Double = lgamma(a + b) - lgamma(a)
+    return exp(res)
+}
+
+public func lpochhammer(a: Double, b: Double) -> Double {
+    let res: Double = lgamma(a + b) - lgamma(a)
+    return res
+}
+
+
 

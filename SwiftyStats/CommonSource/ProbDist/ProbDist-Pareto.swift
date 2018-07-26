@@ -122,6 +122,9 @@ public func pdfParetoDist(x: Double!, minimum a: Double!, shape b: Double!) thro
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
+    if x < a {
+        return 0.0
+    }
     let a1 = pow(a, b)
     let a2 = a1 * b
     let result = a2 * pow(x, -1.0 - b)

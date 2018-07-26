@@ -33,8 +33,8 @@ import os.log
 /// - Parameter b: Scale parameter
 /// - Parameter c: Shape parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Double!) throws -> SSContProbDistParams {
-    if (b <= 0.0) {
+public func paraWeibullDist(location loc: Double!, scale: Double!, shape: Double!) throws -> SSContProbDistParams {
+    if (scale <= 0.0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -45,7 +45,7 @@ public func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Doub
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (c <= 0.0) {
+    if (shape <= 0.0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -57,10 +57,21 @@ public func paraWeibullDist(location a: Double!, scale b: Double!, shape c: Doub
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     var result = SSContProbDistParams()
-    result.mean = a + b * tgamma(1.0 + (1.0 / c))
-    result.variance = b * b * tgamma(1.0 + (2.0 / c)) - pow(tgamma(1.0 + (1.0 / c)), 2.0)
-    result.kurtosis = Double.nan
-    result.skewness = Double.nan
+    result.mean = loc + scale * (1.0 + (1.0 / shape)).gammaValue
+    result.variance = pow(scale, 2.0) * ((1 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0))
+    var a:Double = -3.0 * pow((1 + shape.inverse).gammaValue, 4.0)
+    var b:Double = 6.0 * pow((1 + shape.inverse).gammaValue, 2.0) * (1.0 + 2.0 / shape).gammaValue
+    var c: Double = -4.0 * (1.0 + shape.inverse).gammaValue * (1.0 + 3.0 / shape).gammaValue
+    var d: Double = (1.0 + 4.0 / shape).gammaValue
+    let e: Double = (1.0 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0)
+    result.kurtosis = (a + b + c + d) / pow(e, 2.0)
+    
+    a = 2.0 * pow((1.0 + shape.inverse).gammaValue, 3.0)
+    b = -3.0 * (1.0 + shape.inverse).gammaValue * (1.0 + 2.0 / shape).gammaValue
+    c = (1.0 + 3.0 / shape).gammaValue
+    d = (1.0 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0)
+    
+    result.skewness = (a + b + c) / pow(d, 1.5)
     return result
 }
 
@@ -177,7 +188,7 @@ public func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if p == 0.0 {
-        return 0.0
+        return a
     }
     if p == 1.0 {
         return Double.infinity

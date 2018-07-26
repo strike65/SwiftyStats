@@ -58,7 +58,7 @@ public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContPr
     var result = SSContProbDistParams()
     result.mean = a * b
     result.variance = a * b * b
-    result.kurtosis = 3.0 + 6.0 / b
+    result.kurtosis = 3.0 + 6.0 / a
     result.skewness = 2.0 / sqrt(a)
     return result
 }

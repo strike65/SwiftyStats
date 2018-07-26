@@ -32,7 +32,7 @@ import os.log
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraWaldDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
+public func paraWaldDist(mean a: Double!, lambda b: Double) throws -> SSContProbDistParams {
     if (a <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -68,7 +68,7 @@ public func paraWaldDist(mean a: Double!, scale b: Double) throws -> SSContProbD
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func pdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+public func pdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws -> Double {
     if (a <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -104,7 +104,7 @@ public func pdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> 
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func cdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
+public func cdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws -> Double {
     if (a <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -138,7 +138,7 @@ public func cdfWaldDist(x: Double!, mean a: Double!, scale b: Double) throws -> 
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
-public func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
+public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) throws -> Double {
     if (a <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -189,7 +189,7 @@ public func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throw
     var i: Int = 0
     while (MaxW - MinW) > 1.0E-16 {
         do {
-            pVal = try cdfWaldDist(x: wVal, mean: a, scale: b)
+            pVal = try cdfWaldDist(x: wVal, mean: a, lambda: b)
         }
         catch {
             return Double.nan
@@ -213,7 +213,7 @@ public func quantileWaldDist(p: Double!, mean a: Double!, scale b: Double) throw
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraInverseNormalDist(mean a: Double!, scale b: Double) throws -> SSContProbDistParams {
+public func paraInverseNormalDist(mean a: Double!, lamdba b: Double) throws -> SSContProbDistParams {
     if (a <= 0.0) {
         #if os(macOS) || os(iOS)
         
@@ -236,7 +236,7 @@ public func paraInverseNormalDist(mean a: Double!, scale b: Double) throws -> SS
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! paraWaldDist(mean:a, scale:b)
+    return try! paraWaldDist(mean:a, lambda:b)
 }
 
 /// Returns the pdf of the Wald (inverse normal) distribution.
@@ -267,7 +267,7 @@ public func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! pdfWaldDist(x:x, mean:a, scale:b)
+    return try! pdfWaldDist(x:x, mean:a, lambda:b)
 }
 
 /// Returns the cdf of the Wald (inverse normal) distribution.
@@ -298,7 +298,7 @@ public func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! cdfWaldDist(x:x, mean:a, scale:b)
+    return try! cdfWaldDist(x:x, mean:a, lambda:b)
 }
 
 /// Returns the quantile of the Wald (inverse normal) distribution.
@@ -340,5 +340,5 @@ public func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Doub
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! quantileWaldDist(p:p, mean:a, scale:b)
+    return try! quantileWaldDist(p:p, mean:a, lambda:b)
 }

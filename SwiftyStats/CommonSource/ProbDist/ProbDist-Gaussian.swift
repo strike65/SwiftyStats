@@ -31,6 +31,21 @@ import os.log
 
 // MARK: GAUSSIAN
 
+
+
+/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Gaussian distribution.
+/// - Parameter m: Mean
+/// - Parameter sd: Standard deviation
+/// - Throws: SSSwiftyStatsError if df <= 0
+public func paraNormalDistribution(mean m: Double!, standardDeviation s: Double!) -> SSContProbDistParams? {
+    var result: SSContProbDistParams = SSContProbDistParams()
+    result.mean = m
+    result.variance = pow(s, 2)
+    result.skewness = 0.0
+    result.kurtosis = 3.0
+    return result
+}
+
 /// Returns the CDF of a Gaussian distribution
 /// <img src="../img/Gaussian_def.png" alt="">
 /// - Parameter x: x

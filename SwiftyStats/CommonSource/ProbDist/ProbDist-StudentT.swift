@@ -204,6 +204,96 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 
 // MARK: NON-CENTRAL T-DISTRIBUTION
 
+
+/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
+/// - Parameter df: Degrees of freedom
+/// - Throws: SSSwiftyStatsError if df <= 0
+public func paraStudentTNonCentral(degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!) throws -> SSContProbDistParams {
+    var result = SSContProbDistParams()
+    if df < 0.0 {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if lambda.isZero {
+        do {
+            return try paraStudentT(degreesOfFreedom: df)
+        }
+        catch {
+            throw error
+        }
+    }
+    let df_half = df / 2.0
+    let df_half_m1 = (df - 1.0) / 2.0
+    let lg_df_half: Double = lgamma(df_half)
+    let lg_df_half_m1: Double = lgamma(df_half_m1)
+    let lambda_sq = lambda * lambda
+    if df > 2 {
+        result.variance = ((lambda_sq + 1.0) * df) / (df - 2.0) - (lambda_sq * df * exp(lg_df_half_m1 + lg_df_half_m1)) / (2.0 * exp(lg_df_half + lg_df_half))
+    }
+    else {
+        result.variance = 0.0
+    }
+    result.mean = lambda * sqrt(df_half) * exp(lg_df_half_m1 - lg_df_half)
+    /* Kurtosis in defined for df > 4 */
+    /*
+     compiler: syntax too complex ==> splitting up
+        m3 =(a / b) - (c / d) + (e / f)
+        a = la^3 n^(3/2) Gamma[1/2 (-1 + n)]^3
+        b = Sqrt[2] Gamma[n/2]^3
+        c =3 la (1 + la^2) n^(3/2) Gamma[1/2 (-1 + n)]
+        d = 2 Sqrt[2] (-1 + n/2) Gamma[n/2]
+        e = 3 la (1 + la^2/3) n^(3/2) Pochhammer[n/2, -(3/2)]
+        f = 2 Sqrt[2]
+     
+        m4 = g * ( (h / i) + (j / k)
+        g = (1/4) (n^2)
+        h = 4 (3 + 6 la^2 + la^4)
+        i = 8 - 6 n + n^2
+        j = 4^-n (-3 4^n la^4 Gamma[1/2 (-1 + n)]^4 + 64 la^2 (3 + la^2 (-5 + n) - 3 n) \[Pi] Gamma[-3 + n] Gamma[-1 + n])
+        k = Gamma[n/2]^4
+    */
+    if df > 3 {
+        let a: Double = pow(lambda, 3) * pow(df, 1.5) * pow((0.5 * (-1.0 + df)).gammaValue, 3.0)
+        let b: Double = SQRTTWO * pow(df_half.gammaValue, 3.0)
+        let c: Double = 3.0 * lambda * (1 + pow(lambda, 2.0)) * pow(df, 1.5) * (0.5 * (-1.0 + df)).gammaValue
+        let d: Double = 2.0 * SQRTTWO * (-1.0 + df_half) * df_half.gammaValue
+        let e: Double = 3.0 * lambda * (pow(lambda, 2) / 3.0 + 1.0) * pow(df, 1.5) * pochhammer(a: df_half, b: -1.5)
+        let f: Double = 2.0 * SQRTTWO
+        let m3: Double = (a / b) - (c / d) + (e / f)
+        result.skewness = m3 / pow(result.variance, 1.5)
+    }
+    else {
+        result.skewness = Double.nan
+    }
+    if df > 4.0 {
+        
+        let g:Double = 0.25 * df * df
+        let h: Double = 4.0 * (3.0 + 6 * pow(lambda,2) + pow(lambda, 4))
+        let i: Double = 8 - 6 * df + df * df
+        let j_1: Double = pow(4, -df)
+        let j_2: Double = -3 * pow(4, df) * pow(lambda, 4.0) * pow(((-1.0 + df) / 2).gammaValue, 4)
+        let j_3: Double = 64.0 * pow(lambda, 2) * (3.0 + pow(lambda, 2) * (-5.0 + df) - 3.0 * df) * Double.pi * (-3.0 + df).gammaValue * (-1 + df).gammaValue
+        let j = j_1 * (j_2 + j_3)
+        let k = pow(df_half.gammaValue, 4.0)
+        let m4 = g * ((h / i) + (j / k))
+        result.kurtosis = m4 / pow(result.variance, 2.0)
+    }
+    else {
+        result.kurtosis = Double.nan
+    }
+    return result
+}
+
+
+
+
 /*  Algorithm AS 243  Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
  *  ----------------
  *  Cumulative probability at t of the non-central t-distribution
@@ -235,9 +325,9 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
 /// This algorithm suffers from limited accuracy in the (very) left tail and for ncp > 38.
-public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
+public func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
     let tail: SSCDFTail = .lower
-    var albeta, a, b, del, errbd, lambda, rxb, tt, x: Double
+    var albeta, a, b, del, errbd, lambda1, rxb, tt, x: Double
     #if arch(arm) || arch(arm64)
     var geven, godd, p, q, s, tnc, xeven, xodd: Double
     #else
@@ -256,7 +346,7 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if ncp.isZero {
+    if lambda.isZero {
         do {
             return try cdfStudentTDist(t: t, degreesOfFreedom: df)
         }
@@ -275,15 +365,15 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
     if t >= 0.0 {
         negdel = false
         tt = t
-        del = ncp
+        del = lambda
     }
     else {
-        if ncp > 40 && (!rlog || tail == .upper) {
+        if lambda > 40 && (!rlog || tail == .upper) {
             return r_dt_0(tail: tail, log_p: rlog)
         }
         negdel = true
         tt = -t
-        del = -ncp
+        del = -lambda
     }
     if df > 4.0E5 || (del * del) > (2.0 * LOG2 * ( -(Double(Double.leastNormalMagnitude.exponent) + 1.0 ))) {
         /*-- 2nd part: if del > 37.62, then p=0 below
@@ -312,11 +402,11 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
     rxb = df / (x + df) /* := (1 - x) {x below} -- but more accurately */
     x = x / (x + df)    /* in [0,1) */
     if (x > 0.0) {
-        lambda = del * del
+        lambda1 = del * del
         #if arch(arm) || arch(arm64)
-        p = 0.5 * exp(-0.5 * lambda)
+        p = 0.5 * exp(-0.5 * lambda1)
         #else
-        p = 0.5 * Float80(exp(-0.5 * lambda))
+        p = 0.5 * Float80(exp(-0.5 * lambda1))
         #endif
         if(p == 0.0) { /* underflow! */
             #if os(macOS) || os(iOS)
@@ -330,13 +420,13 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
         q = SQRT2DIVPI * p * del
         s = 0.5 - p
         if(s < 1E-7) {
-            s = -0.5 * expm1(-0.5 * lambda)
+            s = -0.5 * expm1(-0.5 * lambda1)
         }
         #else
         q = SQRT2DIVPIL * p * Float80(del)
         s = 0.5 - p
         if(s < 1e-7) {
-            s = -0.5 * Float80(expm1(-0.5 * lambda))
+            s = -0.5 * Float80(expm1(-0.5 * lambda1))
         }
         #endif
         a = 0.5
@@ -377,8 +467,8 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
             xeven -= geven
             godd  *= x * (a + b - 1.0) / a
             geven *= x * (a + b - 0.5) / (a + 0.5)
-            p *= lambda / (2.0 * Double(it));
-            q *= lambda / (2.0 * Double(it) + 1.0)
+            p *= lambda1 / (2.0 * Double(it));
+            q *= lambda1 / (2.0 * Double(it) + 1.0)
             tnc += p * xodd + q * xeven
             s -= p
             /* R 2.4.0 added test for rounding error here. */
@@ -403,8 +493,8 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
             xeven -= geven
             godd  *= Float80(x) * (Float80(a) + Float80(b) - 1.0) / Float80(a)
             geven *= Float80(x) * (Float80(a) + Float80(b) - 0.5) / (Float80(a) + 0.5)
-            p *= Float80(lambda) / (2.0 * Float80(it));
-            q *= Float80(lambda) / (2.0 * Float80(it) + 1.0)
+            p *= Float80(lambda1) / (2.0 * Float80(it));
+            q *= Float80(lambda1) / (2.0 * Float80(it) + 1.0)
             tnc += p * xodd + q * xeven
             s -= p
             /* R 2.4.0 added test for rounding error here. */
@@ -521,7 +611,7 @@ public func cdfStudentTNonCentral(t: Double!, nonCentralityPara ncp: Double!, de
 /// ### NOTE ###
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
-public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, degreesOfFreedom df: Double!, rlog: Bool! = false) throws -> Double {
+public func pdfStudentTNonCentral(x: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
     if df <= 0.0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
@@ -531,10 +621,10 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     var u: Double = 0.0
-    if x.isNaN || df.isNaN || ncp.isNaN {
+    if x.isNaN || df.isNaN || lambda.isNaN {
         return Double.nan
     }
-    if ncp == 0 {
+    if lambda == 0 {
         do {
             return try pdfStudentTDist(t: x, degreesOfFreedom: df)
         }
@@ -547,7 +637,7 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
     }
     if df >= 1E8 || df.isInfinite {
         do {
-            return try pdfNormalDist(x: x, mean: ncp, standardDeviation: 1.0)
+            return try pdfNormalDist(x: x, mean: lambda, standardDeviation: 1.0)
         }
         catch {
             throw error
@@ -556,8 +646,8 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
     
     if fabs(x) > sqrt(df * Double.ulpOfOne) {
         do {
-            let p1 = try cdfStudentTNonCentral(t: x * sqrt((df + 2.0) / df), nonCentralityPara: ncp, degreesOfFreedom: df + 2.0)
-            let p2 = try cdfStudentTNonCentral(t: x, nonCentralityPara: ncp, degreesOfFreedom: df)
+            let p1 = try cdfStudentTNonCentral(t: x * sqrt((df + 2.0) / df), degreesOfFreedom: df + 2.0, nonCentralityPara: lambda)
+            let p2 = try cdfStudentTNonCentral(t: x, degreesOfFreedom: df, nonCentralityPara: lambda)
             u = log(df) - log(fabs(x)) + log(fabs(p1 - p2))
         }
         catch {
@@ -565,7 +655,7 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
         }
     }
     else {
-        u = lgamma((df + 1.0) / 2.0) - lgamma(df / 2.0) - (LNSQRTPI + 0.5 * (log(df) + ncp * ncp))
+        u = lgamma((df + 1.0) / 2.0) - lgamma(df / 2.0) - (LNSQRTPI + 0.5 * (log(df) + lambda * lambda))
     }
     return (rlog ? u : exp(u))
 }
@@ -576,11 +666,11 @@ public func pdfStudentTNonCentral(x: Double!, nonCentralityPara ncp: Double!, de
 /// - Parameter nonCentralityPara: noncentrality parameter
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
-public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!, nonCentralityPara ncp: Double!, rlog: Bool! = false) throws -> Double {
+public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
    let accu: Double = 1E-13
     let eps: Double = 1E-11
     var ux, lx, nx, pp: Double
-    if df.isNaN || p.isNaN || ncp.isNaN {
+    if df.isNaN || p.isNaN || lambda.isNaN {
         return Double.nan
     }
     if df <= 0.0 {
@@ -591,7 +681,7 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if ncp.isZero {
+    if lambda.isZero {
         do {
             return try quantileStudentTDist(p: p, degreesOfFreedom: df)
         }
@@ -615,7 +705,7 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
     }
     if df.isInfinite {
         do {
-            return try quantileNormalDist(p: p, mean: ncp, standardDeviation: 1.0)
+            return try quantileNormalDist(p: p, mean: lambda, standardDeviation: 1.0)
         }
         catch {
             throw error
@@ -630,28 +720,28 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
     }
     func q(t:Double!, ncp: Double!, df:Double!) -> Double! {
         do {
-            return try cdfStudentTNonCentral(t: t, nonCentralityPara: ncp, degreesOfFreedom: df)
+            return try cdfStudentTNonCentral(t: t, degreesOfFreedom: df, nonCentralityPara: ncp)
         }
         catch {
             return Double.nan
         }
     }
     pp = fmin(1.0 - Double.ulpOfOne, p0 * (1.0 + eps))
-    ux = fmax(1.0, ncp)
+    ux = fmax(1.0, lambda)
 //    var q: Double = try cdfStudentTNonCentral(t: ux, nonCentralityPara: ncp, degreesOfFreedom: df)
-    while (ux < Double.greatestFiniteMagnitude) && (q(t: ux, ncp: ncp, df: df) < pp) {
+    while (ux < Double.greatestFiniteMagnitude) && (q(t: ux, ncp: lambda, df: df) < pp) {
         ux = 2.0 * ux
     }
 
     pp = p0 * (1.0 - eps)
 
-    lx = fmin(-1.0, -ncp)
-    while ((lx > -Double.greatestFiniteMagnitude) && (q(t: lx, ncp: ncp, df: df) > pp)) {
+    lx = fmin(-1.0, -lambda)
+    while ((lx > -Double.greatestFiniteMagnitude) && (q(t: lx, ncp: lambda, df: df) > pp)) {
         lx = 2.0 * lx
     }
     repeat {
         nx = 0.5 * (lx + ux)
-        if try cdfStudentTNonCentral(t: nx, nonCentralityPara: ncp, degreesOfFreedom: df) > p {
+        if try cdfStudentTNonCentral(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda) > p {
             ux = nx
         }
         else {

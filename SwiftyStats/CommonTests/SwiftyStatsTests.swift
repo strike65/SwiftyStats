@@ -1155,6 +1155,24 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testDistributions() {
+        var para: SSContProbDistParams?
+        /*
+         df = 21;
+         td = StudentTDistribution[df];
+         N[Kurtosis[td], 21]
+         N[Mean[td], 21]
+         N[Skewness[td], 21]
+         N[Variance[td], 21]
+         Out[21]= 3.35294117647058823529
+         Out[22]= 0
+         Out[23]= 0
+         Out[24]= 1.10526315789473684211
+        */
+        para = try! paraStudentT(degreesOfFreedom: 21)
+        XCTAssertEqual(para!.kurtosis, 3.35294117647058823529, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 1.10526315789473684211, accuracy: 1e-12)
         /********************************************************/
         /* Student T                                            */
         /********************************************************/
@@ -1190,6 +1208,24 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22), 0.5)
         XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22), 0.9898164, accuracy: 1E-7)
         XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 2), 0.9950738, accuracy: 1E-7)
+        /*
+         df = 21;
+         td = StudentTDistribution[df];
+         N[Kurtosis[td], 21]
+         N[Mean[td], 21]
+         N[Skewness[td], 21]
+         N[Variance[td], 21]
+         Out[21]= 3.35294117647058823529
+         Out[22]= 0
+         Out[23]= 0
+         Out[24]= 1.10526315789473684211
+         */
+        para = try! paraStudentTNonCentral(degreesOfFreedom: 21, nonCentralityPara: 3)
+        XCTAssertEqual(para!.kurtosis, 3.61902917492752013195, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.430814083288819887296, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 1.36350431840384919250, accuracy: 1e-12)
+
         /* noncentral PDF
          R code:
          > dt(x = -10, ncp = 3, df = 22)
@@ -1208,15 +1244,15 @@ class SwiftyStatsTests: XCTestCase {
          [1] 1.214813e-11
          > dt(x = 10, ncp = 10, df = 2)
          [1] 0.07213699
-        */
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10, nonCentralityPara: 3, degreesOfFreedom: 22), 9.281464e-15, accuracy: 1E-20)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, nonCentralityPara: 3, degreesOfFreedom: 22), 0.004381789, accuracy: 1E-9)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, nonCentralityPara: 3, degreesOfFreedom: 22), 0.3346016, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, nonCentralityPara: 3, degreesOfFreedom: 2), 0.01746092, accuracy: 1E-9)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10, nonCentralityPara: 10, degreesOfFreedom: 22), 3.810285e-14, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, nonCentralityPara: 10, degreesOfFreedom: 22), 7.607685e-23, accuracy: 1E-27)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, nonCentralityPara: 10, degreesOfFreedom: 22), 1.214813e-11, accuracy: 1E-16)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, nonCentralityPara: 10, degreesOfFreedom: 2), 0.07213699, accuracy: 1E-8)
+         */
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 9.281464e-15, accuracy: 1E-20)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.004381789, accuracy: 1E-9)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3346016, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.01746092, accuracy: 1E-9)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 3.810285e-14, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.607685e-23, accuracy: 1E-27)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.214813e-11, accuracy: 1E-16)
+        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.07213699, accuracy: 1E-8)
         /* noncentral CDF
          R code:
          > pt(q = 10, ncp = 10, df = 22)
@@ -1242,15 +1278,49 @@ class SwiftyStatsTests: XCTestCase {
          > pt(q = 10, ncp = 10, df = 223322)
          [1] 0.4999955
         */
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, nonCentralityPara: 3, degreesOfFreedom: 22), 1.479927e-13, accuracy: 1E-19)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, nonCentralityPara: 3, degreesOfFreedom: 22), 0.001349898, accuracy: 1E-9)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, nonCentralityPara: 3, degreesOfFreedom: 22), 0.3101249, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 3, degreesOfFreedom: 2), 0.9065271, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, nonCentralityPara: 10, degreesOfFreedom: 22), 1.382228e-13, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, nonCentralityPara: 10, degreesOfFreedom: 22), 7.619853e-24, accuracy: 1E-27)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, nonCentralityPara: 10, degreesOfFreedom: 22), 1.301945e-12, accuracy: 1E-16)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 2), 0.3714677, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, nonCentralityPara: 10, degreesOfFreedom: 223322), 0.4999955, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 1.479927e-13, accuracy: 1E-19)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.001349898, accuracy: 1E-9)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3101249, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.9065271, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 1.382228e-13, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.619853e-24, accuracy: 1E-27)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.301945e-12, accuracy: 1E-16)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.3714677, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 223322, nonCentralityPara: 10), 0.4999955, accuracy: 1E-7)
+        /*
+         R code:
+         > qt(p = 0,df = 21,ncp = 3)
+         [1] -Inf
+         > qt(p = 0.25,df = 21,ncp = 3)
+         [1] 2.312281
+         > qt(p = 0.5,df = 21,ncp = 3)
+         [1] 3.038146
+         > qt(p = 0.75,df = 21,ncp = 3)
+         [1] 3.82973
+         > qt(p = 0.99,df = 21,ncp = 3)
+         [1] 6.238628
+         > qt(p = 1,df = 21,ncp = 3)
+         [1] Inf
+        */
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTNonCentral(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
+        /*
+         nd = NormalDistribution[3, 1/2];
+         N[Kurtosis[nd], 21]
+         N[Mean[nd], 21]
+         N[Skewness[nd], 21]
+         N[Variance[nd], 21]
+         */
+        para = paraNormalDistribution(mean: 2, standardDeviation: 0.5)
+        XCTAssertEqual(para!.kurtosis, 3.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 2.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 0.25, accuracy: 1e-12)
+
         /*
          R code:
          > pnorm(q = 2,mean = 0,sd = 1)
@@ -1313,6 +1383,20 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileNormalDist(p: 5/100.0, mean: 2, standardDeviation: 0.5), 1.17757, accuracy: 1E-4)
         XCTAssertEqual(try! quantileNormalDist(p: 5/10.0, mean: 2, standardDeviation: 0.5), 2, accuracy: 1E-6)
         /*
+         df = 11;
+         chd = ChiSquareDistribution[df];
+         N[Mean[chd], 21]
+         N[Variance[chd], 21]
+         N[Skewness[chd], 21]
+         N[Kurtosis[chd], 21]
+         */
+        para = try! paraChiSquareDist(degreesOfFreedom: 11)
+        XCTAssertEqual(para!.kurtosis, 4.09090909090909090909, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 11, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.852802865422441737194, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 22, accuracy: 1e-12)
+
+        /*
          R code:
         > pchisq(q = 1,df = 10,ncp = 0)
         [1] 0.0001721156
@@ -1366,6 +1450,22 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 16), 19.36886, accuracy: 1E-5)
         XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 16), 31.99993, accuracy: 1E-5)
         XCTAssert(try! quantileChiSquareDist(p: 1.0, degreesOfFreedom: 16).isInfinite)
+
+        
+        /*
+         df1 = 4;
+         df2 = 9;
+         fd = FRatioDistribution[df1, df2];
+         N[Mean[fd], 21]
+         N[Variance[fd], 21]
+         N[Skewness[fd], 21]
+         N[Kurtosis[fd], 21]
+         */
+        para = try! paraFRatioDist(numeratorDF: 4, denominatorDF: 9)
+        XCTAssertEqual(para!.kurtosis, 117.272727272727272727, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 1.28571428571428571429, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 4.76731294622796157723, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 1.81836734693877551020, accuracy: 1e-12)
 
         /*
          R code:
@@ -1451,6 +1551,21 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileFRatioDist(p: 0.99, numeratorDF: 22, denominatorDF: 3), 26.63955, accuracy: 1E-5)
         XCTAssert(try! quantileFRatioDist(p: 1.0, numeratorDF: 22, denominatorDF: 3).isInfinite)
         /*
+         df1 = 4;
+         df2 = 9;
+         fd = FRatioDistribution[df1, df2];
+         N[Mean[fd], 21]
+         N[Variance[fd], 21]
+         N[Skewness[fd], 21]
+         N[Kurtosis[fd], 21]
+         */
+        para = try! paraLogNormalDist(mean: 3, variance: 0.25)
+        XCTAssertEqual(para!.kurtosis, 8.89844567378477901300, accuracy: 1e-12)
+        XCTAssertEqual(para!.mean, 22.7598950935267279834, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 1.75018965506971818265, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 147.128808376019814754, accuracy: 1e-12)
+
+        /*
          R code
          > plnorm(1,meanlog = 0,sdlog = 1)
          [1] 0.5
@@ -1501,6 +1616,21 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileLogNormal(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
         XCTAssertEqual(try! quantileLogNormal(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
         XCTAssert(try! quantileLogNormal(p: 1.0, mean: 0, variance: 1).isInfinite)
+
+        /*
+         shapeA = 2;
+         shapeB = 25/10;
+         bd = BetaDistribution[shapeA, shapeB];
+         N[Mean[bd], 21]
+         N[Variance[bd], 21]
+         N[Skewness[bd], 21]
+         N[Kurtosis[bd], 21]
+         */
+        para = try! paraBetaDist(shapeA: 2, shapeB: 2.5)
+        XCTAssertEqual(para!.mean, 0.444444444444444444444, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 0.0448933782267115600449, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.161355207410792545691, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 2.23384615384615384615, accuracy: 1e-12)
         /*
          R code:
          > pbeta(q = 0.2,shape1 = 1,shape2 = 2)
@@ -1572,6 +1702,20 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileBetaDist(p: 0.99, shapeA: 1, shapeB: 2), 0.9, accuracy: 1e-1)
         XCTAssertEqual(try! quantileBetaDist(p: 1.0, shapeA: 1, shapeB: 2), 1.0, accuracy: 1e-1)
         /*
+         loc = 99;
+         scale = 25/100;
+         cd = CauchyDistribution[loc, scale];
+         N[Mean[cd], 21]
+         N[Variance[cd], 21]
+         N[Skewness[cd], 21]
+         N[Kurtosis[cd], 21]
+         */
+        para = try! paraCauchyDist(location: 99, scale: 0.25)
+        XCTAssert(para!.mean.isNaN)
+        XCTAssert(para!.variance.isNaN)
+        XCTAssert(para!.skewness.isNaN)
+        XCTAssert(para!.kurtosis.isNaN)
+        /*
          R code:
          > pcauchy(q = 1,location = 1,scale = 1/2)
          [1] 0.5
@@ -1630,6 +1774,20 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileCauchyDist(p: 0.75, location: 99, scale: 3), 102.0, accuracy: 1E-1)
         XCTAssertEqual(try! quantileCauchyDist(p: 0.99, location: 3, scale: 0.25), 10.95513, accuracy: 1E-5)
         XCTAssertEqual(try! quantileCauchyDist(p: 1, location: 3, scale: 0.25), Double.infinity)
+        /*
+         loc = 0;
+         scale = 1;
+         cd = LaplaceDistribution[loc, scale];
+         N[Mean[cd], 21]
+         N[Variance[cd], 21]
+         N[Skewness[cd], 21]
+         N[Kurtosis[cd], 21]
+         */
+        para = try! paraLaplaceDist(mean: 0, scale: 1)
+        XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 2.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 6.0, accuracy: 1e-12)
 
         /*
          Mathematica
@@ -1676,7 +1834,879 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileLaplaceDist(p: 0.99, mean: 0, scale: 1), 3.912023, accuracy: 1e-7)
         XCTAssertEqual(try! quantileLaplaceDist(p: 0, mean: 0, scale: 1), -Double.infinity)
 
+        /*
+         loc = 3;
+         scale = 2;
+         d = LogisticDistribution[loc, scale];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraLogisticDist(mean: 3, scale: 2)
+        XCTAssertEqual(para!.mean, 3.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 13.1594725347858114918, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 4.20000000000000000000, accuracy: 1e-12)
+
+        /*
+         R code
+         > plogis(q = 1,location = 3,scale = 2)
+         [1] 0.2689414
+         > plogis(q = 55,location = 3,scale = 2)
+         [1] 1
+         > plogis(q = 3,location = -2,scale = 22)
+         [1] 0.5592442
+        */
+        XCTAssertEqual(try! cdfLogisticDist(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfLogisticDist(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! cdfLogisticDist(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
+        XCTAssertThrowsError(try cdfLogisticDist(x: -3, mean: 3, scale: 0))
         
+        /*
+         R code
+         > plogis(q = 1,location = 3,scale = 2)
+         [1] 0.2689414
+         > plogis(q = 55,location = 3,scale = 2)
+         [1] 1
+         > plogis(q = 3,location = -2,scale = 22)
+         [1] 0.5592442
+         */
+        XCTAssertEqual(try! cdfLogisticDist(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfLogisticDist(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! cdfLogisticDist(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
+        XCTAssertThrowsError(try cdfLogisticDist(x: -3, mean: 3, scale: 0))
+        /*
+         > dlogis(x = 1,location = 3,scale = 2)
+         [1] 0.09830597
+         > dlogis(x = 55,location = 3,scale = 2)
+         [1] 2.554545e-12
+         > dlogis(x = 3,location = -2,scale = 22)
+         [1] 0.01121815
+         */
+        XCTAssertEqual(try! pdfLogisticDist(x: 1, mean: 3, scale: 2), 0.09830597, accuracy: 1e-7)
+        XCTAssertEqual(try! pdfLogisticDist(x: 55, mean: 3, scale: 2), 2.554545e-12, accuracy: 1e-18)
+        XCTAssertEqual(try! pdfLogisticDist(x: 3, mean: -2, scale: 22), 0.01121815, accuracy: 1e-7)
+        XCTAssertThrowsError(try pdfLogisticDist(x: -3, mean: 3, scale: 0))
+        /*
+         > qlogis(p = 0, location = 3,scale = 22)
+         [1] -Inf
+         > qlogis(p = 0.25, location = 3,scale = 22)
+         [1] -21.16947
+         > qlogis(p = 0.5, location = 3,scale = 22)
+         [1] 3
+         > qlogis(p = 0.75, location = 3,scale = 22)
+         [1] 27.16947
+         > qlogis(p = 0.99, location = 3,scale = 22)
+         [1] 104.0926
+         > qlogis(p = 1, location = 3,scale = 22)
+         [1] Inf
+        */
+        XCTAssertEqual(try! quantileLogisticDist(p: 0, mean: 3, scale: 22), -Double.infinity)
+        XCTAssertEqual(try! quantileLogisticDist(p: 0.25, mean: 3, scale: 22), -21.16947, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileLogisticDist(p: 0.5, mean: 3, scale: 22), 3.0, accuracy: 1E-1)
+        XCTAssertEqual(try! quantileLogisticDist(p: 0.75, mean: 3, scale: 22), 27.16947, accuracy: 1E-5)
+        XCTAssertEqual(try! quantileLogisticDist(p: 0.99, mean: 3, scale: 22), 104.0926, accuracy: 1E-4)
+        XCTAssertEqual(try! quantileLogisticDist(p: 1.0, mean: 3, scale: 22), Double.infinity)
+        /*
+         min = 1;
+         shape = 22;
+         d = ParetoDistribution[min, shape];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraParetoDist(minimum: 1, shape: 22)
+        XCTAssertEqual(para!.mean, 1.04761904761904761905, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 0.00249433106575963718821, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 2.30838311080511823740, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 11.7703349282296650718, accuracy: 1e-12)
+
+        /*
+         Mathematica:
+         
+         min = 1;
+         shape = 22;
+         pd = ParetoDistribution[min, shape];
+         N[CDF[pd, 0], 21]
+         N[CDF[pd, 1], 21]
+         N[CDF[pd, 1001/1000], 21]
+         N[CDF[pd, 1050/1000], 21]
+         N[CDF[pd, 1850/1000], 21]
+         N[CDF[pd, 2], 21]
+         N[CDF[pd, 25/10], 21]
+         Out[154]= 0
+         Out[155]= 0
+         Out[156]= 0.0217490114154851697621
+         Out[157]= 0.658150128913378047621
+         Out[158]= 0.999998674981398802671
+         Out[159]= 0.999999761581420898438
+         Out[160]= 0.999999998240781395558
+        */
+        XCTAssertThrowsError(try cdfParetoDist(x: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try cdfParetoDist(x: 0, minimum: -2, shape: 1))
+        XCTAssertEqual(try! cdfParetoDist(x: 0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! cdfParetoDist(x: 1.0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! cdfParetoDist(x: 1.001, minimum: 1, shape: 22), 0.02174901, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfParetoDist(x: 1.05, minimum: 1, shape: 22), 0.6581501, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfParetoDist(x: 1.85, minimum: 1, shape: 22), 0.9999987, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfParetoDist(x: 2, minimum: 1, shape: 22), 0.9999998, accuracy: 1e-7)
+        XCTAssertEqual(try! cdfParetoDist(x: 2.5, minimum: 1, shape: 22), 0.999999998240781395558, accuracy: 1e-12)
+
+        
+        /*
+         Mathematica:
+         
+         min = 1;
+         shape = 22;
+         pd = ParetoDistribution[min, shape];
+         N[PDF[pd, 0], 21]
+         N[PDF[pd, 1], 21]
+         N[PDF[pd, 1001/1000], 21]
+         N[PDF[pd, 1050/1000], 21]
+         N[PDF[pd, 1850/1000], 21]
+         N[PDF[pd, 2], 21]
+         N[PDF[pd, 25/10], 21]
+         Out[176]= 0
+         Out[177]= 22.0000000000000000000
+         Out[178]= 21.5000217271321940712
+         Out[179]= 7.16256872752922185937
+         Out[180]= 0.0000157569779601844505236
+         Out[181]= 2.62260437011718750000*10^-6
+         Out[182]= 1.54811237190860800000*10^-8
+        */
+        XCTAssertThrowsError(try pdfParetoDist(x: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try pdfParetoDist(x: 0, minimum: -2, shape: 1))
+        XCTAssertEqual(try! pdfParetoDist(x: 0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! pdfParetoDist(x: 1.0, minimum: 1, shape: 22), 22)
+        XCTAssertEqual(try! pdfParetoDist(x: 1.001, minimum: 1, shape: 22), 21.5000217271321940712, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfParetoDist(x: 1.05, minimum: 1, shape: 22), 7.16256872752922185937, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfParetoDist(x: 1.85, minimum: 1, shape: 22), 0.0000157569779601844505236, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfParetoDist(x: 2, minimum: 1, shape: 22),   2.622604e-6, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfParetoDist(x: 2.5, minimum: 1, shape: 22), 1.548112e-8, accuracy: 1e-14)
+
+        /*
+         Mathematica:
+         
+         min = 1;
+         shape = 22;
+         pd = ParetoDistribution[min, shape];
+         N[InverseCDF[pd, 0], 21]
+         N[InverseCDF[pd, 25/100], 21]
+         N[InverseCDF[pd, 5/10], 21]
+         N[InverseCDF[pd, 75/100], 21]
+         N[InverseCDF[pd, 99/100], 21]
+         N[InverseCDF[pd, 1], 21]
+         Out[215]= 1.00000000000000000000
+         Out[216]= 1.01316232860042649240
+         Out[217]= 1.03200827973420963159
+         Out[218]= 1.06504108943996267819
+         Out[219]= 1.23284673944206613905
+         Out[220]= \[Infinity]         */
+        XCTAssertThrowsError(try quantileParetoDist(p: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try quantileParetoDist(p: 0, minimum: -2, shape: 2))
+        XCTAssertThrowsError(try quantileParetoDist(p: -1, minimum: 1, shape: 22))
+        XCTAssertEqual(try! quantileParetoDist(p: 0, minimum: 1, shape: 22), 1.0)
+        XCTAssertEqual(try! quantileParetoDist(p: 0.25, minimum: 1, shape: 22), 1.01316232860042649240, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileParetoDist(p: 0.5, minimum: 1, shape: 22), 1.03200827973420963159, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileParetoDist(p: 0.75, minimum: 1, shape: 22), 1.06504108943996267819, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileParetoDist(p: 0.99, minimum: 1, shape: 22), 1.23284673944206613905, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileParetoDist(p: 1.0, minimum: 1, shape: 22), Double.infinity)
+        XCTAssertThrowsError(try quantileParetoDist(p: 1.1, minimum: 1, shape: 22))
+        
+        /*
+         lambda = 1/4;
+         d = ExponentialDistribution[lambda];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraExponentialDist(lambda: 0.25)
+        XCTAssertEqual(para!.mean, 4, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 16, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 2, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 9, accuracy: 1e-12)
+
+        /*
+         Mathematica:
+         N[CDF[ed, -2], 21]
+         N[CDF[ed, 0], 21]
+         N[CDF[ed, 1/2], 21]
+         N[CDF[ed, 3], 21]
+         N[CDF[ed, 5], 21]
+         N[CDF[ed, 22], 21]
+         N[CDF[ed, 50], 21]
+         Out[242]= 0
+         Out[243]= 0
+         Out[244]= 0.117503097415404597135
+         Out[245]= 0.527633447258985292862
+         Out[246]= 0.713495203139809899675
+         Out[247]= 0.995913228561535933007
+         Out[248]= 0.999996273346827921329
+         */
+        XCTAssertThrowsError(try cdfExponentialDist(x: 1, lambda: 0))
+        XCTAssertThrowsError(try cdfExponentialDist(x: 1, lambda: -1))
+        XCTAssertEqual(try! cdfExponentialDist(x: -2, lambda: 0.25), 0)
+        XCTAssertEqual(try! cdfExponentialDist(x: 0, lambda: 0.25), 0)
+        XCTAssertEqual(try! cdfExponentialDist(x: 0.5, lambda: 0.25), 0.117503097415404597135, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfExponentialDist(x: 3, lambda: 0.25), 0.527633447258985292862, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfExponentialDist(x: 5, lambda: 0.25), 0.713495203139809899675, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfExponentialDist(x: 22, lambda: 0.25), 0.995913228561535933007, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfExponentialDist(x: 50, lambda: 0.25), 0.999996273346827921329, accuracy: 1e-14)
+        /*
+         N[PDF[ed, -2], 21]
+         N[PDF[ed, 0], 21]
+         N[PDF[ed, 1/2], 21]
+         N[PDF[ed, 3], 21]
+         N[PDF[ed, 5], 21]
+         N[PDF[ed, 22], 21]
+         N[PDF[ed, 50], 21]
+         Out[249]= 0
+         Out[250]= 0.250000000000000000000
+         Out[251]= 0.220624225646148850716
+         Out[252]= 0.118091638185253676785
+         Out[253]= 0.0716261992150475250812
+         Out[254]= 0.00102169285961601674837
+         Out[255]= 9.31663293019667748231*10^-7
+        */
+        XCTAssertThrowsError(try pdfExponentialDist(x: 1, lambda: 0))
+        XCTAssertThrowsError(try pdfExponentialDist(x: 1, lambda: -1))
+        XCTAssertEqual(try! pdfExponentialDist(x: -2, lambda: 0.25), 0)
+        XCTAssertEqual(try! pdfExponentialDist(x: 0, lambda: 0.25), 0.25)
+        XCTAssertEqual(try! pdfExponentialDist(x: 0.5, lambda: 0.25), 0.220624225646148850716, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfExponentialDist(x: 3, lambda: 0.25), 0.118091638185253676785, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfExponentialDist(x: 5, lambda: 0.25), 0.0716261992150475250812, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfExponentialDist(x: 22, lambda: 0.25), 0.00102169285961601674837, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfExponentialDist(x: 50, lambda: 0.25), 9.31663293019667748231e-7, accuracy: 1e-14)
+        /*
+         N[InverseCDF[ed, 0], 21]
+         N[InverseCDF[ed, 25/100], 21]
+         N[InverseCDF[ed, 5/10], 21]
+         N[InverseCDF[ed, 75/100], 21]
+         N[InverseCDF[ed, 99/100], 21]
+         N[InverseCDF[ed, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileExponentialDist(p: 1, lambda: 0))
+        XCTAssertThrowsError(try quantileExponentialDist(p: 1, lambda: -1))
+        XCTAssertEqual(try! quantileExponentialDist(p: 0, lambda: 0.25), 0)
+        XCTAssertEqual(try! quantileExponentialDist(p: 0.25, lambda: 0.25), 1.15072828980712370976, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileExponentialDist(p: 0.5, lambda: 0.25), 2.77258872223978123767, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileExponentialDist(p: 0.75, lambda: 0.25), 5.54517744447956247534, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileExponentialDist(p: 0.99, lambda: 0.25), 18.4206807439523654721, accuracy: 1e-14)
+        XCTAssert(try! quantileExponentialDist(p: 1, lambda: 0.25).isInfinite)
+
+        /*
+         mu = 6;
+         lambda = 9;
+         wd = InverseGaussianDistribution[mu, lambda];
+         N[CDF[wd, 0], 21]
+         N[CDF[wd, 1], 21]
+         N[CDF[wd, 2], 21]
+         N[CDF[wd, 3], 21]
+         N[CDF[wd, 10], 21]
+         N[CDF[wd, 33], 21]
+         N[CDF[wd, 145], 21]
+         Out[311]= 0
+         Out[312]= 0.0108821452821513154870
+         Out[313]= 0.125627012864498276906
+         Out[314]= 0.287386744404773626164
+         Out[315]= 0.851063810667129652088
+         Out[316]= 0.997518962516710678217
+         Out[317]= 0.999999999702767058076         */
+        XCTAssertThrowsError(try cdfWaldDist(x: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try cdfWaldDist(x: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! cdfWaldDist(x: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! cdfWaldDist(x: 1, mean: 6, lambda: 9), 0.0108821452821513154870, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfWaldDist(x: 2, mean: 6, lambda: 9), 0.125627012864498276906, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfWaldDist(x: 3, mean: 6, lambda: 9), 0.287386744404773626164, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfWaldDist(x: 10, mean: 6, lambda: 9), 0.851063810667129652088, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfWaldDist(x: 33, mean: 6, lambda: 9), 0.997518962516710678217, accuracy: 1e-14)
+        XCTAssertEqual(try! cdfWaldDist(x: 145, mean: 6, lambda: 9), 0.999999999702767058076, accuracy: 1e-14)
+
+        /*
+         mu = 6;
+         lambda = 9;
+         wd = InverseGaussianDistribution[mu, lambda];
+         N[CDF[wd, 0], 21]
+         N[CDF[wd, 1], 21]
+         N[CDF[wd, 2], 21]
+         N[CDF[wd, 3], 21]
+         N[CDF[wd, 10], 21]
+         N[CDF[wd, 33], 21]
+         N[CDF[wd, 145], 21]
+         Out[311]= 0
+         Out[312]= 0.0108821452821513154870
+         Out[313]= 0.125627012864498276906
+         Out[314]= 0.287386744404773626164
+         Out[315]= 0.851063810667129652088
+         Out[316]= 0.997518962516710678217
+         Out[317]= 0.999999999702767058076
+        */
+        XCTAssertThrowsError(try pdfWaldDist(x: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try pdfWaldDist(x: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! pdfWaldDist(x: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! pdfWaldDist(x: 1, mean: 6, lambda: 9), 0.0525849014807056120865, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfWaldDist(x: 2, mean: 6, lambda: 9), 0.155665311532723013753, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfWaldDist(x: 3, mean: 6, lambda: 9), 0.158302949877769673488, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfWaldDist(x: 10, mean: 6, lambda: 9), 0.0309864928480366992183, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfWaldDist(x: 33, mean: 6, lambda: 9), 0.000399039071184676275858, accuracy: 1e-14)
+        XCTAssertEqual(try! pdfWaldDist(x: 145, mean: 6, lambda: 9), 4.00272220943724302952e-11, accuracy: 1e-23)
+        
+        /*
+         mu = 6;
+         lambda = 9;
+         wd = InverseGaussianDistribution[mu, lambda];
+         N[InverseCDF[wd, 0], 21]
+         N[InverseCDF[wd, 25/100], 21]
+         N[InverseCDF[wd, 5/10], 21]
+         N[InverseCDF[wd, 75/100], 21]
+         N[InverseCDF[wd, 99/100], 21]
+         N[InverseCDF[wd, 999/1000], 21]
+         N[InverseCDF[wd, 1], 21]
+         Out[332]= 0
+         Out[333]= 2.76686873332207861117
+         Out[334]= 4.53675199081610130561
+         Out[335]= 7.57917596871024542035
+         Out[336]= 24.5614684372629823155
+         Out[337]= 38.7320805901883006582
+         Out[338]= \[Infinity]
+        */
+        XCTAssertThrowsError(try quantileWaldDist(p: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try quantileWaldDist(p: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! quantileWaldDist(p: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! quantileWaldDist(p: 0.25, mean: 6, lambda: 9), 2.76686873332207861117, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileWaldDist(p: 0.5, mean: 6, lambda: 9), 4.53675199081610130561, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileWaldDist(p: 0.75, mean: 6, lambda: 9), 7.57917596871024542035, accuracy: 1e-14)
+        XCTAssertEqual(try! quantileWaldDist(p: 0.99, mean: 6, lambda: 9), 24.5614684372629823155, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWaldDist(p: 0.999, mean: 6, lambda: 9), 38.7320805901883006582, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWaldDist(p: 1, mean: 6, lambda: 9), Double.infinity)
+        /*
+         mu = 6;
+         lambda = 9;
+         wd = InverseGaussianDistribution[mu, lambda];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraWaldDist(mean: 6, lambda: 9)
+        XCTAssertEqual(para!.mean, 6, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 24, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 2.44948974278317809820, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 13, accuracy: 1e-12)
+
+        /*
+         shape = 2;
+         scale = 3;
+         d = InverseGaussianDistribution[shape, scale];
+         N[CDF[d, 0], 21]
+         N[CDF[d, 1], 21]
+         N[CDF[d, 2], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 10], 21]
+         N[CDF[d, 33], 21]
+         N[CDF[d, 145], 21]
+        */
+        XCTAssertThrowsError(try cdfGammaDist(x: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try cdfGammaDist(x: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! cdfGammaDist(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 1, shape: 2, scale: 3), 0.0446249192349476660992, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 2, shape: 2, scale: 3), 0.144304801612346621880, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 3, shape: 2, scale: 3), 0.264241117657115356809, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 10, shape: 2, scale: 3), 0.845412695495239610381, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 33, shape: 2, scale: 3), 0.999799579590517052088, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfGammaDist(x: 145, shape: 2, scale: 3), 0.999999999999999999950, accuracy: 1e-12)
+
+        /*
+         shape = 2;
+         scale = 3;
+         d = InverseGaussianDistribution[shape, scale];
+         N[PDF[d, 0], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 2], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 10], 21]
+         N[PDF[d, 33], 21]
+         N[PDF[d, 145], 21]
+         */
+        XCTAssertThrowsError(try pdfGammaDist(x: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try pdfGammaDist(x: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! pdfGammaDist(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 1, shape: 2, scale: 3), 0.0796145900637543611584, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 2, shape: 2, scale: 3), 0.114092693118353783749, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 3, shape: 2, scale: 3), 0.122626480390480773865, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 10, shape: 2, scale: 3), 0.0396377703858359973383, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 33, shape: 2, scale: 3), 0.0000612395695642340841463, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfGammaDist(x: 145, shape: 2, scale: 3), 1.64522588620458773000e-20, accuracy: 1e-27)
+
+        /*
+         shape = 2;
+         scale = 3;
+         d = InverseGaussianDistribution[shape, scale];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileGammaDist(p: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try quantileGammaDist(p: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! quantileGammaDist(p: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileGammaDist(p: 0.25, shape: 2, scale: 3), 2.88383628934433128754, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileGammaDist(p: 0.5, shape: 2, scale: 3), 5.03504097004998196024, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileGammaDist(p: 0.75, shape: 2, scale: 3), 8.07790358666908731226, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileGammaDist(p: 0.99, shape: 2, scale: 3), 19.9150562039814368081, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileGammaDist(p: 0.999, shape: 2, scale: 3), 27.7002404293547571913, accuracy: 1e-12)
+        XCTAssert(try! quantileGammaDist(p: 1, shape: 2, scale: 3).isInfinite)
+        /*
+         shape = 2;
+         scale = 3;
+         d = InverseGaussianDistribution[shape, scale];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraGammaDist(shape: 2, scale: 3)
+        XCTAssertEqual(para!.mean, 6, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 18, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 1.41421356237309504880, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 6, accuracy: 1e-12)
+
+        // MARK: ERLANG
+        /*
+         shape = 8;
+         scale = 19/10;
+         d = ErlangDistribution[shape, scale];
+         N[CDF[d, -1], 21]
+         N[CDF[d, 1], 21]
+         N[CDF[d, 2], 21]
+         N[CDF[d, 22/10], 21]
+         N[CDF[d, 45/10], 21]
+         N[CDF[d, 7], 21]
+         N[CDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try cdfErlangDist(x: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! cdfErlangDist(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 1, shape: 8, rate: 1.9), 0.000793457613267557042372, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 2, shape: 8, rate: 1.9), 0.0401073776861547292702, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 2.2, shape: 8, rate: 1.9), 0.0625806276334696425021, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 4.5, shape: 8, rate: 1.9), 0.620845136890394243952, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 7, shape: 8, rate: 1.9), 0.953851071263071931215, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfErlangDist(x: 10, shape: 8, rate: 1.9), 0.998486657386375206401, accuracy: 1e-12)
+        
+        /*
+         shape = 8;
+         scale = 19/10;
+         d = ErlangDistribution[shape, scale];
+         N[PDF[d, -1], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 2], 21]
+         N[PDF[d, 22/10], 21]
+         N[PDF[d, 45/10], 21]
+         N[PDF[d, 7], 21]
+         N[PDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try pdfErlangDist(x: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! pdfErlangDist(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 1, shape: 8, rate: 1.9), 0.00504009538397410085449, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 2, shape: 8, rate: 1.9), 0.0964915337384170109056, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 2.2, shape: 8, rate: 1.9), 0.128589676154648556029, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 4.5, shape: 8, rate: 1.9), 0.243707024534075753055, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 7, shape: 8, rate: 1.9), 0.0464694938322868155464, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfErlangDist(x: 10, shape: 8, rate: 1.9), 0.00188800489092865877089, accuracy: 1e-12)
+        
+        /*
+         shape = 8;
+         scale = 19/10;
+         d = ErlangDistribution[shape, scale];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileErlangDist(p: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! quantileErlangDist(p: 0, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileErlangDist(p: 0.25, shape: 8, rate: 1.9), 3.13479465721473572797, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileErlangDist(p: 0.5, shape: 8, rate: 1.9), 4.03644707500042310756, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileErlangDist(p: 0.75, shape: 8, rate: 1.9), 5.09706847910118785655, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileErlangDist(p: 0.99, shape: 8, rate: 1.9), 8.42103339705662662358, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileErlangDist(p: 0.999, shape: 8, rate: 1.9), 10.3295670502022305302, accuracy: 1e-12)
+        XCTAssert(try! quantileErlangDist(p: 1, shape: 8, rate: 1.9).isInfinite)
+        /*
+         shape = 8;
+         scale = 19/10;
+         d = ErlangDistribution[shape, scale];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraErlangDist(shape: 8, rate: 1.9)
+        XCTAssertEqual(para!.mean, 4.21052631578947368421, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 2.21606648199445983380, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.707106781186547524401, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 3.75000000000000000000, accuracy: 1e-12)
+
+        // MARK: Weibull
+        /*
+         shape = 3;
+         scale = 4;
+         loc = 2
+         d = WeibullDistribution[shape, scale, loc];
+         N[CDF[d, -1], 21]
+         N[CDF[d, 1], 21]
+         N[CDF[d, 2], 21]
+         N[CDF[d, 22/10], 21]
+         N[CDF[d, 45/10], 21]
+         N[CDF[d, 7], 21]
+         N[CDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 4, shape: -1))
+        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: -24, shape: -1))
+        XCTAssertEqual(try! cdfWeibullDist(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 2.9, location: 2, scale: 4, shape: 3), 0.0113259974465415820934, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 3,   location: 2, scale: 4, shape: 3), 0.0155035629945915940130, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 3.1, location: 2, scale: 4, shape: 3), 0.0205821113758218963048, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 4.5, location: 2, scale: 4, shape: 3), 0.216622535939181796504, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 7,   location: 2, scale: 4, shape: 3), 0.858169840912657470462, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfWeibullDist(x: 22,  location: 2, scale: 4, shape: 3), 1.00000000000000000000, accuracy: 1e-12)
+
+        /*
+         shape = 3;
+         scale = 4;
+         loc = 2
+         d = WeibullDistribution[shape, scale, loc];
+         N[PDF[d, -1], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 2], 21]
+         N[PDF[d, 22/10], 21]
+         N[PDF[d, 45/10], 21]
+         N[PDF[d, 7], 21]
+         N[PDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 4, shape: -2))
+        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: -4, shape: 3))
+        XCTAssertEqual(try! pdfWeibullDist(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 2.9, location: 2, scale: 4, shape: 3), 0.0375387160344516243049, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 3,   location: 2, scale: 4, shape: 3), 0.0461482704846285190306, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 3.1, location: 2, scale: 4, shape: 3), 0.0555513583704026018190, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 4.5, location: 2, scale: 4, shape: 3), 0.229505116424067833055, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 7,   location: 2, scale: 4, shape: 3), 0.166207217680479526802, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfWeibullDist(x: 22,  location: 2, scale: 4, shape: 3), 9.68703868657098933797e-54, accuracy: 1e-60)
+
+        /*
+         shape = 3;
+         scale = 4;
+         loc = 2
+         d = WeibullDistribution[shape, scale, loc];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 0, shape: 0))
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: -4, shape: 3))
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 4, shape: -3))
+        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: -4, shape: -3))
+        XCTAssertEqual(try! quantileWeibullDist(p: 0, location: 2, scale: 4, shape: 3), 2, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWeibullDist(p: 0.25, location: 2, scale: 4, shape: 3), 4.64056942859838095934, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWeibullDist(p: 0.5, location: 2, scale: 4, shape: 3), 5.53998817800207087498, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWeibullDist(p: 0.75, location: 2, scale: 4, shape: 3), 6.46010562184380828507, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWeibullDist(p: 0.99, location: 2, scale: 4, shape: 3), 8.65490539680019769957, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileWeibullDist(p: 0.999, location: 2, scale: 4, shape: 3), 9.61796499056221876841, accuracy: 1e-12)
+        XCTAssert(try! quantileWeibullDist(p: 1, location: 2, scale: 4, shape: 3).isInfinite)
+        /*
+         shape = 3;
+         scale = 4;
+         loc = 2
+         d = WeibullDistribution[shape, scale, loc];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraWeibullDist(location: 2, scale: 4, shape: 3)
+        XCTAssertEqual(para!.mean, 5.57191804627699684487, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 1.68532615789565960689, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.168102842229401082430, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 2.72946363309612067010, accuracy: 1e-12)
+
+        // MARK: Uniform
+        /*
+         min = 1;
+         max = 10;
+         d = UniformDistribution[{min, max}];
+         N[CDF[d, 0], 21]
+         N[CDF[d, 29/10], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 31/10], 21]
+         N[CDF[d, 45/10], 21]
+         N[CDF[d, 7], 21]
+         N[CDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try cdfUniformDist(x: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try cdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertEqual(try! cdfUniformDist(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 2.9, lowerBound: 1, upperBound: 10), 0.211111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 3,   lowerBound: 1, upperBound: 10), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 3.1, lowerBound: 1, upperBound: 10), 0.233333333333333333333, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 4.5, lowerBound: 1, upperBound: 10), 0.388888888888888888889, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 7,   lowerBound: 1, upperBound: 10), 0.666666666666666666667, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfUniformDist(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
+
+        /*
+         min = 1;
+         max = 10;
+         d = UniformDistribution[{min, max}];
+         N[PDF[d, 0], 21]
+         N[PDF[d, 29/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 31/10], 21]
+         N[PDF[d, 45/10], 21]
+         N[PDF[d, 7], 21]
+         N[PDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertEqual(try! pdfUniformDist(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 2.9,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 3,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 3.1,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 4.5,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 7,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfUniformDist(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+
+        /*
+         min = 1;
+         max = 10;
+         d = UniformDistribution[{min, max}];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try quantileUniformDist(p: -1, lowerBound: 1, upperBound: 10))
+        XCTAssertThrowsError(try quantileUniformDist(p: 2, lowerBound: 1, upperBound: 10))
+        XCTAssertEqual(try! quantileUniformDist(p: 0, lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 0.25, lowerBound: 1, upperBound: 10), 3.25, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 0.5, lowerBound: 1, upperBound: 10), 5.5, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 0.75, lowerBound: 1, upperBound: 10), 7.75, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 0.99, lowerBound: 1, upperBound: 10), 9.91, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 0.999, lowerBound: 1, upperBound: 10), 9.991, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileUniformDist(p: 1, lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
+        /*
+         min = 1;
+         max = 10;
+         d = UniformDistribution[{min, max}];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraUniformDist(lowerBound: 1, upperBound: 10)
+        XCTAssertEqual(para!.mean, 5.5, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 6.75, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 1.8, accuracy: 1e-12)
+
+        // MARK: Triangular - 3 Param
+        
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[CDF[d, 0], 21]
+         N[CDF[d, 29/10], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 31/10], 21]
+         N[CDF[d, 45/10], 21]
+         N[CDF[d, 7], 21]
+         N[CDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! cdfTriangularDist(x: 0,   lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 2.9, lowerBound: 1, upperBound: 10, mode: 3), 0.200555555555555555556, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 3,   lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 3.1, lowerBound: 1, upperBound: 10, mode: 3), 0.244285714285714285714, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 4.5, lowerBound: 1, upperBound: 10, mode: 3), 0.519841269841269841270, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 7,   lowerBound: 1, upperBound: 10, mode: 3), 0.857142857142857142857, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 22,  lowerBound: 1, upperBound: 10, mode: 3), 1.0, accuracy: 1e-12)
+        
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[PDF[d, 0], 21]
+         N[PDF[d, 29/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 31/10], 21]
+         N[PDF[d, 45/10], 21]
+         N[PDF[d, 7], 21]
+         N[PDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! pdfTriangularDist(x: 0,     lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 2.9,   lowerBound: 1, upperBound: 10, mode: 3), 0.211111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 3,     lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 3.1,   lowerBound: 1, upperBound: 10, mode: 3), 0.219047619047619047619, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 4.5,   lowerBound: 1, upperBound: 10, mode: 3), 0.174603174603174603175, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 7,     lowerBound: 1, upperBound: 10, mode: 3), 0.0952380952380952380952, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 22,    lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! quantileTriangularDist(p: 0,    lowerBound: 1, upperBound: 10, mode: 3), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.25, lowerBound: 1, upperBound: 10, mode: 3), 3.12613645756623999012, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.5,  lowerBound: 1, upperBound: 10, mode: 3), 4.38751391983908792162, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.75, lowerBound: 1, upperBound: 10, mode: 3), 6.03137303340311411425, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.99, lowerBound: 1, upperBound: 10, mode: 3), 9.20627460668062282285, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.999,lowerBound: 1, upperBound: 10, mode: 3), 9.74900199203977733561, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 1,    lowerBound: 1, upperBound: 10, mode: 3), 10.0, accuracy: 1e-12)
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraTriangularDist(lowerBound: 1, upperBound: 10, mode: 3)
+        XCTAssertEqual(para!.mean, 4.66666666666666666667, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 3.72222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0.453853262394983221953, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 2.40000000000000000000, accuracy: 1e-12)
+
+        // MARK: Triangular - 2 Param
+        
+        /*
+         min = 1;
+         max = 10;
+         d = TriangularDistribution[{min, max}, mode];
+         N[CDF[d, 0], 21]
+         N[CDF[d, 29/10], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 31/10], 21]
+         N[CDF[d, 45/10], 21]
+         N[CDF[d, 7], 21]
+         N[CDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! cdfTriangularDist(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 2.9, lowerBound: 1, upperBound: 10), 0.0891358024691358024691, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 3,   lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 3.1, lowerBound: 1, upperBound: 10), 0.108888888888888888889, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 4.5, lowerBound: 1, upperBound: 10), 0.302469135802469135802, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 7,   lowerBound: 1, upperBound: 10), 0.777777777777777777778, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfTriangularDist(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
+        
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[PDF[d, 0], 21]
+         N[PDF[d, 29/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 31/10], 21]
+         N[PDF[d, 45/10], 21]
+         N[PDF[d, 7], 21]
+         N[PDF[d, 22], 21]
+         */
+        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! pdfTriangularDist(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 2.9,   lowerBound: 1, upperBound: 10), 0.0938271604938271604938, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 3,     lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 3.1,   lowerBound: 1, upperBound: 10), 0.103703703703703703704, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 4.5,   lowerBound: 1, upperBound: 10), 0.172839506172839506173, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 7,     lowerBound: 1, upperBound: 10), 0.148148148148148148148, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfTriangularDist(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! quantileTriangularDist(p: 0,    lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.25, lowerBound: 1, upperBound: 10), 4.18198051533946385980, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.5,  lowerBound: 1, upperBound: 10), 5.50000000000000000000, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.75, lowerBound: 1, upperBound: 10), 6.81801948466053614020, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.99, lowerBound: 1, upperBound: 10), 9.36360389693210722804, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 0.999,lowerBound: 1, upperBound: 10), 9.79875388202501892732, accuracy: 1e-12)
+        XCTAssertEqual(try! quantileTriangularDist(p: 1,    lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
+        /*
+         min = 1;
+         max = 10;
+         mode = 3;
+         d = TriangularDistribution[{min, max}, mode];
+         N[Mean[d], 21]
+         N[Variance[d], 21]
+         N[Skewness[d], 21]
+         N[Kurtosis[d], 21]
+         */
+        para = try! paraTriangularDist(lowerBound: 1, upperBound: 10)
+        XCTAssertEqual(para!.mean, 5.5, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 3.375, accuracy: 1e-12)
+        XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
+        XCTAssertEqual(para!.kurtosis, 2.4, accuracy: 1e-12)
+
         
     }
     

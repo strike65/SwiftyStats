@@ -199,18 +199,11 @@ public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
     else if (x > b) {
         return 1.0
     }
-    else if ((x == a) || ((x > a) && (x <= c))) {
-        let s1 = (a - 2.0 * x)
-        let s2 = (a - b - c)
-        return (a * s1 + x * x) / (a * s2 + b * c)
+    else if ((x > a) || (x == a)) && ((x < c) || (x == c)) {
+        return pow(x - a, 2.0) / ((b - a) * (c - a))
     }
     else {
-        let b2 = b * b
-        let bx = b * x
-        let x2 = x * x
-        let result: Double = 1.0 + ((b2 - 2.0 * bx + x2) / ( a - b) * (b - c))
-        return result
-        //            return 1.0 - ( ( b * ( b - 2.0 * x ) + x * x ) / ( b * ( b - a - c ) + a * c ) )
+        return 1.0 - pow(b - x, 2.0) / ((b - a) * (b - c))
     }
 }
 

@@ -49,6 +49,8 @@
 		9F7EFB622101F25200F0F573 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9F82D3AD1F1E8F19001BFC9D /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
 		9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */; };
+		9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
+		9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9FEA826F1F76CA58005E4349 /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */; };
@@ -158,6 +160,7 @@
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F8F5C4920FD026C00DC29F4 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAsString.swift; sourceTree = "<group>"; };
+		9FAACB6F2108730000C031F3 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -274,6 +277,7 @@
 				9FEA82581F76C9F6005E4349 /* SSTukey.swift */,
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
 				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
+				9FAACB6F2108730000C031F3 /* Double-Extension.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -564,6 +568,7 @@
 				9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */,
 				9FEA82721F76CAF5005E4349 /* SSContFrac.swift in Sources */,
+				9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */,
 				9FEA827D1F76CAF5005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
 				9F7EFB4B2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
 				9F7EFB4E2101EFFF00F0F573 /* ProbDist-Gamma.swift in Sources */,
@@ -625,6 +630,7 @@
 				9F7EFB322101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
 				9FEA82941F76CB1D005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9F7EFB492101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,
+				9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */,
 				9FEA82981F76CB1D005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB552101F06300F0F573 /* ProbDist-Weibull.swift in Sources */,
 				9FEA828A1F76CB1D005E4349 /* SSContFrac.swift in Sources */,

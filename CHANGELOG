@@ -1,9 +1,20 @@
+Version 0.8.12
+- added: Pochhammer and LogPochhammer (pochammer(double:,double:), lpochhammer(double:,double:))
+- added: parameters of noncentral Student's T Distr.
+- FIXED: parameters of beta distribution
+- FIXED: normalized gamma P setting converged.pointee
+- FIXED: kurtosis gamma distribution
+- FIXED: Erlang distribution
+- FIXED: Weibull dustribution
+- FIXED: 3 Param Triangular CDF
+
 Version 0.8.11
 - uodate README.md
 - FIXED: quantileChiSquare (edge cases)
 - added: more tests
 - fixed: Beta Distribution (edge cases)
 - FIXED: Severe Error in Cauchy Distribution (pdf)
+
 
 Version 0.8.10
 - FIXED: normal distribution
