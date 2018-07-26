@@ -1,3 +1,7 @@
+Version 0.8.13
+- renamed: StudentTNoncentral --> StudentTDist
+
+
 Version 0.8.12
 - added: Pochhammer and LogPochhammer (pochammer(double:,double:), lpochhammer(double:,double:))
 - added: parameters of noncentral Student's T Distr.

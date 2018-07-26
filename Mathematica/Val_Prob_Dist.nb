@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    162705,       4130]
-NotebookOptionsPosition[    150874,       3782]
-NotebookOutlinePosition[    151254,       3799]
-CellTagsIndexPosition[    151211,       3796]
+NotebookDataLength[    162842,       4135]
+NotebookOptionsPosition[    150971,       3786]
+NotebookOutlinePosition[    151351,       3803]
+CellTagsIndexPosition[    151308,       3800]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -3778,7 +3778,11 @@ Cell[BoxData["0"], "Output",
 Cell[BoxData["2.3999999999999999999999999999999999999999999999999999999999`21.\
 "], "Output",
  CellChangeTimes->{3.7415885835035543`*^9}]
-}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], ";"}]], "Input"]
 },
 WindowSize->{1333, 1049},
 WindowMargins->{{15, Automatic}, {Automatic, 0}},
@@ -4124,7 +4128,8 @@ Cell[150486, 3768, 76, 1, 35, "Output"],
 Cell[150565, 3771, 78, 1, 35, "Output"],
 Cell[150646, 3774, 72, 1, 35, "Output"],
 Cell[150721, 3777, 137, 2, 35, "Output"]
-}, Open  ]]
+}, Open  ]],
+Cell[150873, 3782, 94, 2, 35, "Input"]
 }
 ]
 *)

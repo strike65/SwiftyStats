@@ -1168,7 +1168,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
         */
-        para = try! paraStudentT(degreesOfFreedom: 21)
+        para = try! paraStudentTDist(degreesOfFreedom: 21)
         XCTAssertEqual(para!.kurtosis, 3.35294117647058823529, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
@@ -1220,7 +1220,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
          */
-        para = try! paraStudentTNonCentral(degreesOfFreedom: 21, nonCentralityPara: 3)
+        para = try! paraStudentTDist(degreesOfFreedom: 21, nonCentralityPara: 3)
         XCTAssertEqual(para!.kurtosis, 3.61902917492752013195, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.430814083288819887296, accuracy: 1e-12)
@@ -1245,14 +1245,14 @@ class SwiftyStatsTests: XCTestCase {
          > dt(x = 10, ncp = 10, df = 2)
          [1] 0.07213699
          */
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 9.281464e-15, accuracy: 1E-20)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.004381789, accuracy: 1E-9)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3346016, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.01746092, accuracy: 1E-9)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 3.810285e-14, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.607685e-23, accuracy: 1E-27)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.214813e-11, accuracy: 1E-16)
-        XCTAssertEqual(try! pdfStudentTNonCentral(x: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.07213699, accuracy: 1E-8)
+        XCTAssertEqual(try! pdfStudentTDist(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 9.281464e-15, accuracy: 1E-20)
+        XCTAssertEqual(try! pdfStudentTDist(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.004381789, accuracy: 1E-9)
+        XCTAssertEqual(try! pdfStudentTDist(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3346016, accuracy: 1E-7)
+        XCTAssertEqual(try! pdfStudentTDist(x: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.01746092, accuracy: 1E-9)
+        XCTAssertEqual(try! pdfStudentTDist(x: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 3.810285e-14, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfStudentTDist(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.607685e-23, accuracy: 1E-27)
+        XCTAssertEqual(try! pdfStudentTDist(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.214813e-11, accuracy: 1E-16)
+        XCTAssertEqual(try! pdfStudentTDist(x: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.07213699, accuracy: 1E-8)
         /* noncentral CDF
          R code:
          > pt(q = 10, ncp = 10, df = 22)
@@ -1278,15 +1278,15 @@ class SwiftyStatsTests: XCTestCase {
          > pt(q = 10, ncp = 10, df = 223322)
          [1] 0.4999955
         */
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 1.479927e-13, accuracy: 1E-19)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.001349898, accuracy: 1E-9)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3101249, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.9065271, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 1.382228e-13, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.619853e-24, accuracy: 1E-27)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.301945e-12, accuracy: 1E-16)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.3714677, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTNonCentral(t: 10, degreesOfFreedom: 223322, nonCentralityPara: 10), 0.4999955, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTDist(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 1.479927e-13, accuracy: 1E-19)
+        XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.001349898, accuracy: 1E-9)
+        XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.3101249, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 2, nonCentralityPara: 3), 0.9065271, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTDist(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 1.382228e-13, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.619853e-24, accuracy: 1E-27)
+        XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.301945e-12, accuracy: 1E-16)
+        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 2, nonCentralityPara: 10), 0.3714677, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 223322, nonCentralityPara: 10), 0.4999955, accuracy: 1E-7)
         /*
          R code:
          > qt(p = 0,df = 21,ncp = 3)
@@ -1302,12 +1302,12 @@ class SwiftyStatsTests: XCTestCase {
          > qt(p = 1,df = 21,ncp = 3)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTNonCentral(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
+        XCTAssertEqual(try! quantileStudentTDist(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
+        XCTAssertEqual(try! quantileStudentTDist(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTDist(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTDist(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTDist(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
+        XCTAssertEqual(try! quantileStudentTDist(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
         /*
          nd = NormalDistribution[3, 1/2];
          N[Kurtosis[nd], 21]

@@ -30,7 +30,7 @@ import os.log
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func paraStudentT(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
+public func paraStudentTDist(degreesOfFreedom df: Double!) throws -> SSContProbDistParams {
     var result = SSContProbDistParams()
     if df < 0.0 {
         #if os(macOS) || os(iOS)
@@ -208,7 +208,7 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func paraStudentTNonCentral(degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!) throws -> SSContProbDistParams {
+public func paraStudentTDist(degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!) throws -> SSContProbDistParams {
     var result = SSContProbDistParams()
     if df < 0.0 {
         #if os(macOS) || os(iOS)
@@ -223,7 +223,7 @@ public func paraStudentTNonCentral(degreesOfFreedom df: Double!, nonCentralityPa
     }
     if lambda.isZero {
         do {
-            return try paraStudentT(degreesOfFreedom: df)
+            return try paraStudentTDist(degreesOfFreedom: df)
         }
         catch {
             throw error
@@ -241,24 +241,6 @@ public func paraStudentTNonCentral(degreesOfFreedom df: Double!, nonCentralityPa
         result.variance = 0.0
     }
     result.mean = lambda * sqrt(df_half) * exp(lg_df_half_m1 - lg_df_half)
-    /* Kurtosis in defined for df > 4 */
-    /*
-     compiler: syntax too complex ==> splitting up
-        m3 =(a / b) - (c / d) + (e / f)
-        a = la^3 n^(3/2) Gamma[1/2 (-1 + n)]^3
-        b = Sqrt[2] Gamma[n/2]^3
-        c =3 la (1 + la^2) n^(3/2) Gamma[1/2 (-1 + n)]
-        d = 2 Sqrt[2] (-1 + n/2) Gamma[n/2]
-        e = 3 la (1 + la^2/3) n^(3/2) Pochhammer[n/2, -(3/2)]
-        f = 2 Sqrt[2]
-     
-        m4 = g * ( (h / i) + (j / k)
-        g = (1/4) (n^2)
-        h = 4 (3 + 6 la^2 + la^4)
-        i = 8 - 6 n + n^2
-        j = 4^-n (-3 4^n la^4 Gamma[1/2 (-1 + n)]^4 + 64 la^2 (3 + la^2 (-5 + n) - 3 n) \[Pi] Gamma[-3 + n] Gamma[-1 + n])
-        k = Gamma[n/2]^4
-    */
     if df > 3 {
         let a: Double = pow(lambda, 3) * pow(df, 1.5) * pow((0.5 * (-1.0 + df)).gammaValue, 3.0)
         let b: Double = SQRTTWO * pow(df_half.gammaValue, 3.0)
@@ -325,7 +307,7 @@ public func paraStudentTNonCentral(degreesOfFreedom df: Double!, nonCentralityPa
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
 /// This algorithm suffers from limited accuracy in the (very) left tail and for ncp > 38.
-public func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
+public func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
     let tail: SSCDFTail = .lower
     var albeta, a, b, del, errbd, lambda1, rxb, tt, x: Double
     #if arch(arm) || arch(arm64)
@@ -611,7 +593,7 @@ public func cdfStudentTNonCentral(t: Double!, degreesOfFreedom df: Double!, nonC
 /// ### NOTE ###
 /// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
 /// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
-public func pdfStudentTNonCentral(x: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
+public func pdfStudentTDist(x: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
     if df <= 0.0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
@@ -646,8 +628,8 @@ public func pdfStudentTNonCentral(x: Double!, degreesOfFreedom df: Double!, nonC
     
     if fabs(x) > sqrt(df * Double.ulpOfOne) {
         do {
-            let p1 = try cdfStudentTNonCentral(t: x * sqrt((df + 2.0) / df), degreesOfFreedom: df + 2.0, nonCentralityPara: lambda)
-            let p2 = try cdfStudentTNonCentral(t: x, degreesOfFreedom: df, nonCentralityPara: lambda)
+            let p1 = try cdfStudentTDist(t: x * sqrt((df + 2.0) / df), degreesOfFreedom: df + 2.0, nonCentralityPara: lambda)
+            let p2 = try cdfStudentTDist(t: x, degreesOfFreedom: df, nonCentralityPara: lambda)
             u = log(df) - log(fabs(x)) + log(fabs(p1 - p2))
         }
         catch {
@@ -666,7 +648,7 @@ public func pdfStudentTNonCentral(x: Double!, degreesOfFreedom df: Double!, nonC
 /// - Parameter nonCentralityPara: noncentrality parameter
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
-public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
+public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!, rlog: Bool! = false) throws -> Double {
    let accu: Double = 1E-13
     let eps: Double = 1E-11
     var ux, lx, nx, pp: Double
@@ -720,7 +702,7 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
     }
     func q(t:Double!, ncp: Double!, df:Double!) -> Double! {
         do {
-            return try cdfStudentTNonCentral(t: t, degreesOfFreedom: df, nonCentralityPara: ncp)
+            return try cdfStudentTDist(t: t, degreesOfFreedom: df, nonCentralityPara: ncp)
         }
         catch {
             return Double.nan
@@ -741,7 +723,7 @@ public func quantileStudentTNonCentral(p: Double!, degreesOfFreedom df: Double!,
     }
     repeat {
         nx = 0.5 * (lx + ux)
-        if try cdfStudentTNonCentral(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda) > p {
+        if try cdfStudentTDist(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda) > p {
             ux = nx
         }
         else {
