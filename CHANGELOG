@@ -1,3 +1,7 @@
+Version 0.8.14
+- added: Poisson distribution
+- added: hypergeometric1F1
+
 Version 0.8.13
 - renamed: StudentTNoncentral --> StudentTDist
 

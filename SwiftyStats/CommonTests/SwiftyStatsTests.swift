@@ -2706,8 +2706,55 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 3.375, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 2.4, accuracy: 1e-12)
+        
+        /*
+         lambda = 1/2;
+         d = PoissonDistribution[lambda];
+         N[PDF[d, 0], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 2], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 4], 21]
+         N[PDF[d, 5], 21]
+         N[PDF[d, 6], 21]
+         N[PDF[d, 7], 21]
+        */
+        XCTAssertThrowsError(try pdfPoissonDist(k: -1, rate: 1))
+        XCTAssertThrowsError(try pdfPoissonDist(k: 1, rate: 0))
+        XCTAssertEqual(try! pdfPoissonDist(k: 0, rate: 0.5), 0.606530659712633423604, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 1, rate: 0.5), 0.303265329856316711802, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 2, rate: 0.5), 0.0758163324640791779505, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 3, rate: 0.5), 0.0126360554106798629917, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 4, rate: 0.5), 0.00157950692633498287397, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 5, rate: 0.5), 0.000157950692633498287397, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 6, rate: 0.5), 0.0000131625577194581906164, accuracy: 1e-12)
+        XCTAssertEqual(try! pdfPoissonDist(k: 7, rate: 0.5), 9.40182694247013615457e-7, accuracy: 1e-15)
+
+        /*
+         lambda = 1/2;
+         d = PoissonDistribution[lambda];
+        N[CDF[d, 0], 21]
+        N[CDF[d, 1], 21]
+        N[CDF[d, 2], 21]
+        N[CDF[d, 3], 21]
+        N[CDF[d, 4], 21]
+        N[CDF[d, 5], 21]
+        N[CDF[d, 6], 21]
+        N[CDF[d, 7], 21]
+        */
+        XCTAssertThrowsError(try cdfPoissonDist(k: -1, rate: 1, tail: .lower))
+        XCTAssertThrowsError(try cdfPoissonDist(k: 1, rate: 0, tail: .lower))
+        XCTAssertEqual(try! cdfPoissonDist(k: 0, rate: 0.5, tail: .lower), 0.606530659712633423604, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 1, rate: 0.5, tail: .lower), 0.909795989568950135406, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 2, rate: 0.5, tail: .lower), 0.985612322033029313356, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 3, rate: 0.5, tail: .lower), 0.998248377443709176348, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 4, rate: 0.5, tail: .lower), 0.999827884370044159222, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 5, rate: 0.5, tail: .lower), 0.999985835062677657509, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 6, rate: 0.5, tail: .lower), 0.999998997620397115700, accuracy: 1e-12)
+        XCTAssertEqual(try! cdfPoissonDist(k: 7, rate: 0.5, tail: .lower), 0.999999937803091362714, accuracy: 1e-12)
 
         
+        print("\(hypergeometric1F1(a: 1, b: 2, x: 2))")
     }
     
 //

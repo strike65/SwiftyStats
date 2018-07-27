@@ -51,7 +51,7 @@ public class SSContFrac: NSObject {
         return Double.nan
     }
     
-    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when the max iteration count is reached or one of the convergents is NAN.
+    /// Evaluates the continued fraction at point x. The evaluation will be stopped, when max iteration count is reached or one of the convergents is NAN.
     /// Algorithm according to Lentz, modified by Thompson and Barnett (http://www.fresco.org.uk/papers/Thompson-JCP64p490.pdf)
     /// - Parameter x:              x
     /// - Parameter eps:            max error allowed

@@ -94,7 +94,7 @@ public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mod
     let s11 = a2 - ab + b2 - ac - bc + c2
     let ss1 = (s1 - s2 - s3 + s4 - s5 + s6 - s7 - s8 - s9 + s10)
     result.skewness = (SQRTTWO * ss1) / (5.0 * pow(s11, 1.5))
-    //        result.skewness = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
+    //        result.var skewness:Double = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
     return result
 }
 

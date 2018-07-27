@@ -177,4 +177,32 @@ public func quantileChiSquareDist(p: Double!, degreesOfFreedom df: Double!) thro
     result = chiVal
     return result
 }
+/*
+
+// MARK: NONCENTRAL CHI-SQUARED DISTRIBUTION
+/*
+ *  Copyright (C) 1998 Ross Ihaka
+ *  Copyright (C) 2000-15 The R Core Team
+ *  Copyright (C) 2004-15 The R Foundation
+ *  Copyright (C) 2018 Volker Thieme (Swift Version)
+ */
+public func pdfChiSquareDist(x: Double!, degreesOfFreedom df: Double!, nonCentralityParam lambda: Double!) throws -> Double {
+
+    return 0.0
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
 

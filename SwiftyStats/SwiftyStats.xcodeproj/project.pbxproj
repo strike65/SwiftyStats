@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
+		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
+		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
@@ -52,6 +54,8 @@
 		9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
+		9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
+		9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FEA826F1F76CA58005E4349 /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */; };
 		9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82431F76C9F6005E4349 /* SSConstants.swift */; };
@@ -136,6 +140,7 @@
 
 /* Begin PBXFileReference section */
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
+		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
@@ -163,6 +168,7 @@
 		9FAACB6F2108730000C031F3 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
+		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
@@ -258,6 +264,7 @@
 				9F7EFB592101F0B300F0F573 /* ProbDist-Triangular.swift */,
 				9F7EFB5C2101F0EF00F0F573 /* ProbDist-Binomial.swift */,
 				9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */,
+				9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */,
 			);
 			path = ProbDist;
 			sourceTree = "<group>";
@@ -278,6 +285,7 @@
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
 				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
 				9FAACB6F2108730000C031F3 /* Double-Extension.swift */,
+				9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -577,6 +585,7 @@
 				9F7EFB482101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,
 				9FEA82741F76CAF5005E4349 /* SSDataFrame.swift in Sources */,
 				9F7EFB3F2101EEB900F0F573 /* ProbDist-Laplace.swift in Sources */,
+				9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */,
 				9FEA82841F76CAF5005E4349 /* SSSpecialFunctions.swift in Sources */,
 				9FEA82881F76CAF5005E4349 /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F7EFB5A2101F0B300F0F573 /* ProbDist-Triangular.swift in Sources */,
@@ -585,6 +594,7 @@
 				9FEA82821F76CAF5005E4349 /* SSProtocols.swift in Sources */,
 				9FEA827E1F76CAF5005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9FEA82781F76CAF5005E4349 /* SSExamine.swift in Sources */,
+				9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */,
 				9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */,
 				9F7EFB422101EF2C00F0F573 /* ProbDist-Logistic.swift in Sources */,
 				9F7EFB572101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
@@ -639,6 +649,7 @@
 				9F7EFB4C2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
 				9FEA82921F76CB1D005E4349 /* SSHypothesisTesting-Autocorrelation.swift in Sources */,
 				9F7EFB622101F25200F0F573 /* String-Extension-Hash.swift in Sources */,
+				9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */,
 				9FEA828C1F76CB1D005E4349 /* SSDataFrame.swift in Sources */,
 				9FEA829C1F76CB1D005E4349 /* SSSpecialFunctions.swift in Sources */,
 				9F7EFB402101EEB900F0F573 /* ProbDist-Laplace.swift in Sources */,
@@ -647,6 +658,7 @@
 				9FEA82911F76CB1D005E4349 /* SSFrequencyTables.swift in Sources */,
 				9F7EFB522101F02600F0F573 /* ProbDist-Erlang.swift in Sources */,
 				9F7EFB462101EF5800F0F573 /* ProbDist-Pareto.swift in Sources */,
+				9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */,
 				9FEA829A1F76CB1D005E4349 /* SSProtocols.swift in Sources */,
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
