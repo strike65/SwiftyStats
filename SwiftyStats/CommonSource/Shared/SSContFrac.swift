@@ -27,7 +27,7 @@ import Foundation
 /// An abstract class used to evaluate continued fractions. This class must be subclassed.
 /// The n<sup>th</sup> coefficient is computed using the methods a_N:N point:x and b_N:N point:x<br/>
 /// <img src="../img/cf.png" alt="">
-public class SSContFrac: NSObject {
+internal class SSContFrac: NSObject {
 
     /// max error
     public var eps:Double = 1E-12
@@ -121,7 +121,7 @@ public class SSContFrac: NSObject {
 }
 
 /// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i) I_x(a,b)
-public class SSBetaRegularized: SSContFrac {
+internal class SSBetaRegularized: SSContFrac {
     
     /// Parameter a. Must be set by the caller
     public var a: Double = Double.nan
@@ -157,7 +157,7 @@ public class SSBetaRegularized: SSContFrac {
 }
 
 /// The regularized Gamma function Q(a,z) (http://mathworld.wolfram.com/RegularizedGammaFunction.htm) function as cf
-public class SSGammaQ: SSContFrac {
+internal class SSGammaQ: SSContFrac {
     
    /// Parameter a.Must be set by the caller
     public var a: Double = Double.nan

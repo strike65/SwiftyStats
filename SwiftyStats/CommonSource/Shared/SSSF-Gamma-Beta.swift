@@ -45,7 +45,7 @@ import Foundation
 /// <img src="../img/Beta.png" alt="">
 /// - Parameter a: a
 /// - Parameter b: b
-public func betaFunction(a: Double!, b: Double!) -> Double {
+internal func betaFunction(a: Double!, b: Double!) -> Double {
     if b.isZero || a.isZero {
         return Double.infinity
     }
@@ -91,7 +91,7 @@ public func betaFunction(a: Double!, b: Double!) -> Double {
 
 /// Returns the normalized beta function for at x for a and b. Using continued fractions.
 /// <img src="../img/BetaRegularized.png" alt="">
-public func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
+internal func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
     var result: Double = Double.nan
     var _a: Double = Double.nan
     var _b: Double = Double.nan
@@ -156,7 +156,7 @@ fileprivate func expSum(n: Double!, z: Double) -> Double {
 
 /// Returns the normalized (regularized) Gammma function P (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
 /// <img src="../img/GammaP.png" alt="">
-public func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
+internal func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
     var result: Double
     var n: Double
     var sn: Double
@@ -201,7 +201,7 @@ public func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePoi
 
 /// Returns the normalized (regularized) Gammma function Q (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
 /// <img src="../img/GammaQ.png" alt="">
-public func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
+internal func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
     if a > 0 && x == 0.0 {
         converged.pointee = true
         return 1.0
@@ -253,15 +253,12 @@ public func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePoi
     }
 }
 
-public func pochhammer(a: Double, b: Double) -> Double {
+internal func pochhammer(a: Double, b: Double) -> Double {
     let res: Double = lgamma(a + b) - lgamma(a)
     return exp(res)
 }
 
-public func lpochhammer(a: Double, b: Double) -> Double {
+internal func lpochhammer(a: Double, b: Double) -> Double {
     let res: Double = lgamma(a + b) - lgamma(a)
     return res
 }
-
-
-

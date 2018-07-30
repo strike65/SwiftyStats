@@ -1736,16 +1736,16 @@ class SwiftyStatsTests: XCTestCase {
         
         /*
          R code:
-         > pcauchy(q = 1,location = 1,scale = 1/2)
-         [1] 0.5
-         > pcauchy(q = -10,location = -2,scale = 3)
-         [1] 0.1142003
-         > pcauchy(q = 10,location = -2,scale = 3)
-         [1] 0.9220209
-         > pcauchy(q = 0,location = 99,scale = 3)
-         [1] 0.009642803
-         > pcauchy(q = 2,location = 3,scale = 0.25)
-         [1] 0.07797913
+         > dcauchy(x = 1,location = 1,scale = 0.5)
+         [1] 0.6366198
+         > dcauchy(x = -10,location = -2,scale = 3)
+         [1] 0.01308123
+         > dcauchy(x = 10,location = -2,scale = 3)
+         [1] 0.00624137
+         > dcauchy(x = 0,location = 99,scale = 3)
+         [1] 9.734247e-05
+         > dcauchy(x = 2,location = 3,scale = 0.25)
+         [1] 0.07489644
          */
         XCTAssertEqual(try! pdfCauchyDist(x: 1, location: 1, scale: 0.5), 0.6366198, accuracy: 1E-7)
         XCTAssertEqual(try! pdfCauchyDist(x: -10, location: -2, scale: 3), 0.01308123, accuracy: 1E-7)
@@ -2753,8 +2753,89 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! cdfPoissonDist(k: 6, rate: 0.5, tail: .lower), 0.999998997620397115700, accuracy: 1e-12)
         XCTAssertEqual(try! cdfPoissonDist(k: 7, rate: 0.5, tail: .lower), 0.999999937803091362714, accuracy: 1e-12)
 
+        /*
+         a = -3;
+         b = 4;
+         d = VonMisesDistribution[a, b];
+         N[CDF[d, a - Pi - 1], 21]
+         N[CDF[d, -Pi - 1], 21]
+         N[CDF[d, -25/10], 21]
+         N[CDF[d, -20/100], 21]
+         N[CDF[d, -44/10], 21]
+         N[CDF[d, 0 - Pi/2], 21]
+         N[CDF[d, 0], 21]
+         N[CDF[d, a + Pi + 1], 21]
+        */
+        XCTAssertThrowsError(try cdfVonMisesDist(x: 2, mean: -3, concentration: 0))
+        XCTAssertThrowsError(try cdfVonMisesDist(x: 2, mean: -3, concentration: -1))
+        XCTAssertEqual(try! cdfVonMisesDist(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0 ,accuracy: 1E-5)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0.0195387021367985546020 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -2.5, mean: -3, concentration: 4, useExpIntegration: true),0.829488464005985508796 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -0.2, mean: -3, concentration: 4, useExpIntegration: true),0.999904581125379364584 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -4.4, mean: -3, concentration: 4, useExpIntegration: true),0.00722697637072942637724 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -Double.pi / 2.0, mean: -3, concentration: 4, useExpIntegration: true),0.993539629762563788614 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: 0, mean: -3, concentration: 4, useExpIntegration: true),0.999962986474166847826 ,accuracy: 1E-12)
+        XCTAssertEqual(try! cdfVonMisesDist(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4, useExpIntegration: true),1.0 ,accuracy: 1E-7)
+        /*
+         a = -3;
+         b = 4;
+         d = VonMisesDistribution[a, b];
+         N[PDF[d, a - Pi - 1], 21]
+         N[PDF[d, -Pi - 1], 21]
+         N[PDF[d, -25/10], 21]
+         N[PDF[d, -20/100], 21]
+         N[PDF[d, -44/10], 21]
+         N[PDF[d, 0 - Pi/2], 21]
+         N[PDF[d, 0], 21]
+         N[PDF[d, a + Pi + 1], 21]
+         */
+        XCTAssertThrowsError(try pdfVonMisesDist(x: 2, mean: -3, concentration: 0))
+        XCTAssertThrowsError(try pdfVonMisesDist(x: 2, mean: -3, concentration: -1))
+        XCTAssertEqual(try! pdfVonMisesDist(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-5)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -Double.pi - 1.0, mean: -3, concentration: 4),0.0744027395631070328565 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -2.5, mean: -3, concentration: 4),0.471177869330735027666 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -0.2, mean: -3, concentration: 4),0.000324982499557601827956 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -4.4, mean: -3, concentration: 4),0.0277927164636370027697 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -Double.pi / 2.0, mean: -3, concentration: 4),0.0247638628979559132417 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: 0, mean: -3, concentration: 4),0.000268456988587833058582 ,accuracy: 1E-12)
+        XCTAssertEqual(try! pdfVonMisesDist(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-7)
+        /*
+         a = -3;
+         b = 4;
+         d = VonMisesDistribution[a, b];
+         N[InverseCDF[d, 0], 21]
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileVonMisesDist(p: -1, mean: -3, concentration: 4))
+        XCTAssertThrowsError(try quantileVonMisesDist(p: 2, mean: -3, concentration: 4))
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0, mean: -3, concentration: 4),-6.14159265358979323846 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0.25, mean: -3, concentration: 4),-3.35205527357190904480 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0.5, mean: -3, concentration: 4),-3.00000000000000000000 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0.75, mean: -3, concentration: 4),-2.64794472642809095508 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0.99, mean: -3, concentration: 4),-1.68421199711729556367 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 0.999, mean: -3, concentration: 4),-1.04475697892580395363 ,accuracy: 1E-5)
+        XCTAssertEqual(try! quantileVonMisesDist(p: 1, mean: -3, concentration: 4),0.141592653589793238463 ,accuracy: 1E-5)
+        /*
+         a = -3;
+         b = 4;
+         d = VonMisesDistribution[a, b];
+         [Mean[d], 21]
+         V = 1 - BesselI[1, b]/BesselI[0, b]
+         N[%,21]
+         */
+        XCTAssertThrowsError(try paraVonMisesDist(mean: -3, concentration: 0))
+        XCTAssertThrowsError(try paraVonMisesDist(mean: -3, concentration: -1))
+        para = try! paraVonMisesDist(mean: -3, concentration: 4)
+        XCTAssertEqual(para!.mean, -3, accuracy: 1e-12)
+        XCTAssertEqual(para!.variance, 0.136477388975449417145, accuracy: 1e-12)
+        XCTAssert(para!.skewness.isNaN)
+        XCTAssert(para!.kurtosis.isNaN)
         
-        print("\(hypergeometric1F1(a: 1, b: 2, x: 2))")
     }
     
 //

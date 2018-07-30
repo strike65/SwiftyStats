@@ -25,6 +25,7 @@ import os.log
 /*                            hyperg.c
  *
  *    Confluent hypergeometric function
+ *      = M(a,b;z) (DLMF 13.2)
  *
  *
  *
@@ -93,6 +94,16 @@ import os.log
 public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
     var asum, psum, acanc, pcanc, temp: Double
     
+    
+    // special case, M(a,b,x) = 1 if a == 0
+    if a.isZero || x.isZero {
+        return 1.0
+    }
+    
+    if (a == 1) && (b == 2) {
+        return (exp(x) - 1.0) / x
+    }
+
     /* See if a Kummer transformation will help */
     temp = b - a
     if( fabs(temp) < 0.001 * fabs(a) ) {
@@ -102,9 +113,11 @@ public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
     psum = hy1f1p( a: a, b: b, x: x, err: &pcanc )
     if( pcanc < 1.0e-12 ) {
         #if os(macOS) || os(iOS)
-        os_log("Partial loss of precision", log: log_stat, type: .info)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Partial loss of precision", log: log_stat, type: .info)
+        }
         #else
-        print("Partial loss of precision")
+        printError("Partial loss of precision")
         #endif
         return psum
     }
@@ -123,9 +136,11 @@ public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
     
     if( pcanc > 1.0e-12 ) {
         #if os(macOS) || os(iOS)
-        os_log("Partial loss of precision", log: log_stat, type: .info)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Partial loss of precision", log: log_stat, type: .info)
+        }
         #else
-        print("Partial loss of precision")
+        printError("Partial loss of precision")
         #endif
     }
     return( psum )
@@ -155,9 +170,13 @@ fileprivate func hy1f1p( a: Double!, b: Double!, x: Double!, err: inout Double )
         if( bn == 0 )            /* check bn first since if both    */
         {
             #if os(macOS) || os(iOS)
-            os_log("Argument Singularity", log: log_stat, type: .info)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Argument Singularity", log: log_stat, type: .info)
+            }
             #else
-            print("Argument Singularity in hypergeometric1F1.")
+            if #available(macOS 10.12, iOS 10, *) {
+                printError("Argument Singularity in hypergeometric1F1.")
+            }
             #endif
             return Double.infinity
         }
@@ -323,9 +342,11 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
         if( (temp > 1.0 ) && (maxt > (Double.greatestFiniteMagnitude / temp)) ) {
             err = Double.greatestFiniteMagnitude
             #if os(macOS) || os(iOS)
-            os_log("Total loss of precision", log: log_stat, type: .info)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Total loss of precision", log: log_stat, type: .info)
+            }
             #else
-            print("Total loss of precision.")
+            printError("Total loss of precision.")
             #endif
             return( sum )
         }
@@ -339,13 +360,13 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
              * but do not actually seem to accomplish very much. */
             
             n -= 1.0
-            var xx = 1.0 / x
+            let xx = 1.0 / x
             
             switch( type ) {    /* "type" given as subroutine argument */
             case 1:
-                var a1 = 0.125 + 0.25 * b
-                var a2 = -0.5 * a + 0.25 * xx
-                var a3 = -0.25 * n
+                let a1 = 0.125 + 0.25 * b
+                let a2 = -0.5 * a + 0.25 * xx
+                let a3 = -0.25 * n
                 alast *= ( 0.5 + ( a1 + a2 + a3 ) / xx )
                 break
                 

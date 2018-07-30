@@ -50,12 +50,25 @@
 		9F7EFB5E2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7EFB5C2101F0EF00F0F573 /* ProbDist-Binomial.swift */; };
 		9F7EFB622101F25200F0F573 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9F82D3AD1F1E8F19001BFC9D /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
+		9F9E6065210DAFE40059DF46 /* SSSF-BesselI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6063210DAFE40059DF46 /* SSSF-BesselI.swift */; };
+		9F9E6068210DB0230059DF46 /* SSSF-BesseJ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6066210DB0230059DF46 /* SSSF-BesseJ.swift */; };
+		9F9E6069210DBDD80059DF46 /* SSSF-Gamma-Beta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */; };
+		9F9E606A210DBDD80059DF46 /* SSSF-BesselI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6063210DAFE40059DF46 /* SSSF-BesselI.swift */; };
+		9F9E606B210DBDD80059DF46 /* SSSF-BesseJ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6066210DB0230059DF46 /* SSSF-BesseJ.swift */; };
+		9F9E606D210DC2900059DF46 /* Polyeval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E606C210DC2900059DF46 /* Polyeval.swift */; };
+		9F9E606E210DC2900059DF46 /* Polyeval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E606C210DC2900059DF46 /* Polyeval.swift */; };
+		9F9E6070210DD0B10059DF46 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E606F210DD0B10059DF46 /* Integrator.swift */; };
+		9F9E6071210DD0B10059DF46 /* Integrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E606F210DD0B10059DF46 /* Integrator.swift */; };
+		9F9E6073210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */; };
+		9F9E6074210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */; };
 		9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */; };
 		9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
+		9FDEEFA9210D097200AC6FB7 /* Chebyshev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */; };
+		9FDEEFAA210D097200AC6FB7 /* Chebyshev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */; };
 		9FEA826F1F76CA58005E4349 /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */; };
 		9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82431F76C9F6005E4349 /* SSConstants.swift */; };
@@ -76,7 +89,7 @@
 		9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82521F76C9F6005E4349 /* SSLogging.swift */; };
 		9FEA82821F76CAF5005E4349 /* SSProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82541F76C9F6005E4349 /* SSProtocols.swift */; };
 		9FEA82831F76CAF5005E4349 /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82551F76C9F6005E4349 /* SSSimard-KSProb.swift */; };
-		9FEA82841F76CAF5005E4349 /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82561F76C9F6005E4349 /* SSSpecialFunctions.swift */; };
+		9FEA82841F76CAF5005E4349 /* SSSF-Gamma-Beta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */; };
 		9FEA82851F76CAF5005E4349 /* SSSwiftyStatsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82571F76C9F6005E4349 /* SSSwiftyStatsError.swift */; };
 		9FEA82861F76CAF5005E4349 /* SSTukey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82581F76C9F6005E4349 /* SSTukey.swift */; };
 		9FEA82871F76CAF5005E4349 /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82591F76C9F6005E4349 /* SSUtils.swift */; };
@@ -99,7 +112,6 @@
 		9FEA82981F76CB1D005E4349 /* SSLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82521F76C9F6005E4349 /* SSLogging.swift */; };
 		9FEA829A1F76CB1D005E4349 /* SSProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82541F76C9F6005E4349 /* SSProtocols.swift */; };
 		9FEA829B1F76CB1D005E4349 /* SSSimard-KSProb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82551F76C9F6005E4349 /* SSSimard-KSProb.swift */; };
-		9FEA829C1F76CB1D005E4349 /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82561F76C9F6005E4349 /* SSSpecialFunctions.swift */; };
 		9FEA829D1F76CB1D005E4349 /* SSSwiftyStatsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82571F76C9F6005E4349 /* SSSwiftyStatsError.swift */; };
 		9FEA829E1F76CB1D005E4349 /* SSTukey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82581F76C9F6005E4349 /* SSTukey.swift */; };
 		9FEA829F1F76CB1D005E4349 /* SSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82591F76C9F6005E4349 /* SSUtils.swift */; };
@@ -164,11 +176,17 @@
 		9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F8F5C4920FD026C00DC29F4 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		9F9E6063210DAFE40059DF46 /* SSSF-BesselI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-BesselI.swift"; sourceTree = "<group>"; };
+		9F9E6066210DB0230059DF46 /* SSSF-BesseJ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-BesseJ.swift"; sourceTree = "<group>"; };
+		9F9E606C210DC2900059DF46 /* Polyeval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyeval.swift; sourceTree = "<group>"; };
+		9F9E606F210DD0B10059DF46 /* Integrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
+		9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-vMises-Circular.swift"; sourceTree = "<group>"; };
 		9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAsString.swift; sourceTree = "<group>"; };
 		9FAACB6F2108730000C031F3 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
 		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
+		9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chebyshev.swift; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
@@ -191,7 +209,7 @@
 		9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Gaussian.swift"; sourceTree = "<group>"; };
 		9FEA82541F76C9F6005E4349 /* SSProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSProtocols.swift; sourceTree = "<group>"; };
 		9FEA82551F76C9F6005E4349 /* SSSimard-KSProb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSimard-KSProb.swift"; sourceTree = "<group>"; };
-		9FEA82561F76C9F6005E4349 /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
+		9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-Gamma-Beta.swift"; sourceTree = "<group>"; };
 		9FEA82571F76C9F6005E4349 /* SSSwiftyStatsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSwiftyStatsError.swift; sourceTree = "<group>"; };
 		9FEA82581F76C9F6005E4349 /* SSTukey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSTukey.swift; sourceTree = "<group>"; };
 		9FEA82591F76C9F6005E4349 /* SSUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSUtils.swift; sourceTree = "<group>"; };
@@ -247,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */,
+				9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */,
 				9F7EFB2E2101ED2900F0F573 /* ProbDist-ChiSquare.swift */,
 				9F7EFB302101EDAC00F0F573 /* ProbDist-FRatio.swift */,
 				9F7EFB352101EE0A00F0F573 /* ProbDist-LogNormal.swift */,
@@ -274,7 +293,9 @@
 			children = (
 				9FEA825A1F76C9F6005E4349 /* SwiftyStats-EnumsStructs.swift */,
 				9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */,
-				9FEA82561F76C9F6005E4349 /* SSSpecialFunctions.swift */,
+				9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */,
+				9F9E6063210DAFE40059DF46 /* SSSF-BesselI.swift */,
+				9F9E6066210DB0230059DF46 /* SSSF-BesseJ.swift */,
 				9FEA82551F76C9F6005E4349 /* SSSimard-KSProb.swift */,
 				9FEA82541F76C9F6005E4349 /* SSProtocols.swift */,
 				9FEA82521F76C9F6005E4349 /* SSLogging.swift */,
@@ -286,6 +307,9 @@
 				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
 				9FAACB6F2108730000C031F3 /* Double-Extension.swift */,
 				9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */,
+				9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */,
+				9F9E606C210DC2900059DF46 /* Polyeval.swift */,
+				9F9E606F210DD0B10059DF46 /* Integrator.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -557,6 +581,7 @@
 				9F7EFB362101EE0A00F0F573 /* ProbDist-LogNormal.swift in Sources */,
 				9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */,
 				9FEA827F1F76CAF5005E4349 /* SSHypothesisTesting-Variances.swift in Sources */,
+				9F9E6065210DAFE40059DF46 /* SSSF-BesselI.swift in Sources */,
 				9F7EFB312101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
 				9FEA82761F76CAF5005E4349 /* SSExamine-FileManagement.swift in Sources */,
 				9F7EFB2F2101ED2900F0F573 /* ProbDist-ChiSquare.swift in Sources */,
@@ -570,12 +595,14 @@
 				9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */,
 				9F7EFB392101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82851F76CAF5005E4349 /* SSSwiftyStatsError.swift in Sources */,
+				9F9E6074210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */,
 				9F7EFB5D2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
 				9FEA827B1F76CAF5005E4349 /* SSHypothesisTesting-NPAR.swift in Sources */,
 				9FEA827C1F76CAF5005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */,
 				9FEA82721F76CAF5005E4349 /* SSContFrac.swift in Sources */,
+				9F9E6070210DD0B10059DF46 /* Integrator.swift in Sources */,
 				9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */,
 				9FEA827D1F76CAF5005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
 				9F7EFB4B2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
@@ -586,11 +613,13 @@
 				9FEA82741F76CAF5005E4349 /* SSDataFrame.swift in Sources */,
 				9F7EFB3F2101EEB900F0F573 /* ProbDist-Laplace.swift in Sources */,
 				9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */,
-				9FEA82841F76CAF5005E4349 /* SSSpecialFunctions.swift in Sources */,
+				9FEA82841F76CAF5005E4349 /* SSSF-Gamma-Beta.swift in Sources */,
 				9FEA82881F76CAF5005E4349 /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F7EFB5A2101F0B300F0F573 /* ProbDist-Triangular.swift in Sources */,
 				9F7EFB3C2101EE8B00F0F573 /* ProbDist-Cauchy.swift in Sources */,
 				9FEA82791F76CAF5005E4349 /* SSFrequencyTables.swift in Sources */,
+				9F9E6068210DB0230059DF46 /* SSSF-BesseJ.swift in Sources */,
+				9FDEEFA9210D097200AC6FB7 /* Chebyshev.swift in Sources */,
 				9FEA82821F76CAF5005E4349 /* SSProtocols.swift in Sources */,
 				9FEA827E1F76CAF5005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9FEA82781F76CAF5005E4349 /* SSExamine.swift in Sources */,
@@ -600,6 +629,7 @@
 				9F7EFB572101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
 				9F7EFB452101EF5800F0F573 /* ProbDist-Pareto.swift in Sources */,
 				9F7EFB542101F06300F0F573 /* ProbDist-Weibull.swift in Sources */,
+				9F9E606D210DC2900059DF46 /* Polyeval.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,6 +648,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F9E606B210DBDD80059DF46 /* SSSF-BesseJ.swift in Sources */,
 				9FEA82971F76CB1D005E4349 /* SSHypothesisTesting-Variances.swift in Sources */,
 				9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */,
 				9FEA828E1F76CB1D005E4349 /* SSExamine-FileManagement.swift in Sources */,
@@ -634,10 +665,14 @@
 				9FEA829B1F76CB1D005E4349 /* SSSimard-KSProb.swift in Sources */,
 				9F7EFB3A2101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82891F76CB1D005E4349 /* SSConstants.swift in Sources */,
+				9F9E6073210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */,
+				9F9E606A210DBDD80059DF46 /* SSSF-BesselI.swift in Sources */,
 				9F7EFB372101EE0A00F0F573 /* ProbDist-LogNormal.swift in Sources */,
 				9FEA829D1F76CB1D005E4349 /* SSSwiftyStatsError.swift in Sources */,
+				9F9E6069210DBDD80059DF46 /* SSSF-Gamma-Beta.swift in Sources */,
 				9FEA82931F76CB1D005E4349 /* SSHypothesisTesting-NPAR.swift in Sources */,
 				9F7EFB322101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
+				9F9E6071210DD0B10059DF46 /* Integrator.swift in Sources */,
 				9FEA82941F76CB1D005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9F7EFB492101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,
 				9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */,
@@ -651,10 +686,10 @@
 				9F7EFB622101F25200F0F573 /* String-Extension-Hash.swift in Sources */,
 				9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */,
 				9FEA828C1F76CB1D005E4349 /* SSDataFrame.swift in Sources */,
-				9FEA829C1F76CB1D005E4349 /* SSSpecialFunctions.swift in Sources */,
 				9F7EFB402101EEB900F0F573 /* ProbDist-Laplace.swift in Sources */,
 				9FEA82A01F76CB1D005E4349 /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F7EFB582101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
+				9FDEEFAA210D097200AC6FB7 /* Chebyshev.swift in Sources */,
 				9FEA82911F76CB1D005E4349 /* SSFrequencyTables.swift in Sources */,
 				9F7EFB522101F02600F0F573 /* ProbDist-Erlang.swift in Sources */,
 				9F7EFB462101EF5800F0F573 /* ProbDist-Pareto.swift in Sources */,
@@ -664,6 +699,7 @@
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9F7EFB5E2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
 				9FEA82901F76CB1D005E4349 /* SSExamine.swift in Sources */,
+				9F9E606E210DC2900059DF46 /* Polyeval.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -205,8 +205,9 @@ public func quantileStudentTDist(p: Double!, degreesOfFreedom df: Double!) throw
 // MARK: NON-CENTRAL T-DISTRIBUTION
 
 
-/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
+/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral Student's T distribution.
 /// - Parameter df: Degrees of freedom
+/// - Parameter nonCentralityPara: noncentrality parameter
 /// - Throws: SSSwiftyStatsError if df <= 0
 public func paraStudentTDist(degreesOfFreedom df: Double!, nonCentralityPara lambda: Double!) throws -> SSContProbDistParams {
     var result = SSContProbDistParams()
@@ -505,7 +506,7 @@ public func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, nonCentral
                 os_log("Error evaluating noncentral t distribution: non-convergence", log: log_stat, type: .error)
             }
             #else
-            print("Error evaluating noncentral t distribution: non-convergence")
+            printError("Error evaluating noncentral t distribution: non-convergence")
             #endif
         }
     }
@@ -535,7 +536,7 @@ public func cdfStudentTDist(t: Double!, degreesOfFreedom df: Double!, nonCentral
     lower_tail = lower_tail != negdel; /* xor */
     if(tnc > 1 - 1E-10 && lower_tail) {
 //        ML_ERROR(ME_PRECISION, "pnt{final}");
-        print("final!")
+        printError("final!")
     }
     if tnc.isNaN {
         return Double.nan

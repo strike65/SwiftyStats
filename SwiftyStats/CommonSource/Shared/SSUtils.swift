@@ -27,7 +27,7 @@ import Foundation
 
 
 /// Binomial
-public func binomial2(_ n: Double!, _ k: Double!) -> Double {
+internal func binomial2(_ n: Double!, _ k: Double!) -> Double {
     if k == 0.0 {
         return 1.0
     }
@@ -40,13 +40,13 @@ public func binomial2(_ n: Double!, _ k: Double!) -> Double {
 
 /// Tests, if a value is integer.
 /// - Paramter value: A double-value.
-func isInteger(_ value: Double) -> Bool {
+internal func isInteger(_ value: Double) -> Bool {
     return value.truncatingRemainder(dividingBy: 1) == 0
 }
 
 /// Tests, if a value is odd.
 /// - Paramter value: A double-value.
-func isOdd(_ value: Double) -> Bool {
+internal func isOdd(_ value: Double) -> Bool {
     var frac: Double
     var intp: Double = 0.0
     frac = modf(value, &intp)
@@ -63,7 +63,7 @@ func isOdd(_ value: Double) -> Bool {
 
 /// Returns the fractional part of a double-value
 /// - Paramter value: A double-value.
-func fractionalPart(_ value: Double) -> Double {
+internal func fractionalPart(_ value: Double) -> Double {
     var intpart: Double = 0.0
     let result: Double = modf(value, &intpart)
     return result
@@ -71,7 +71,7 @@ func fractionalPart(_ value: Double) -> Double {
 
 /// Tests, if a value is numeric
 /// - Paramter value: A value of type T
-func isNumber<T>(_ value: T) -> Bool {
+internal func isNumber<T>(_ value: T) -> Bool {
     let valueMirror = Mirror(reflecting: value)
     #if arch(arm) || arch(arm64)
         if (valueMirror.subjectType == Int.self || valueMirror.subjectType == UInt.self || valueMirror.subjectType == Double.self || valueMirror.subjectType == Int8.self || valueMirror.subjectType == Int16.self || valueMirror.subjectType == Int32.self || valueMirror.subjectType == Int64.self || valueMirror.subjectType == UInt8.self || valueMirror.subjectType == UInt16.self || valueMirror.subjectType == UInt32.self || valueMirror.subjectType == UInt64.self || valueMirror.subjectType == Float.self || valueMirror.subjectType == Float32.self || valueMirror.subjectType == NSNumber.self || valueMirror.subjectType == NSDecimalNumber.self ) {
@@ -90,7 +90,7 @@ func isNumber<T>(_ value: T) -> Bool {
     #endif
 }
 
-func castValueToDouble<T>(_ value: T) -> Double? {
+internal func castValueToDouble<T>(_ value: T) -> Double? {
     #if arch(i386) || arch(x86_64)
         if value is Float80 {
             return Double(value as! Float80)
@@ -143,7 +143,7 @@ func castValueToDouble<T>(_ value: T) -> Double? {
 
 
 /// Returns the maximum of two comparable values
-func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
+internal func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     if t1 > t2 {
         return t1
     }
@@ -153,7 +153,7 @@ func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
 }
 
 /// Returns the minimum of two comparable values
-func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
+internal func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     if t1 < t2 {
         return t1
     }
@@ -170,7 +170,7 @@ fileprivate let LnFactorial: Array<Double> = [
 /*------------------------------------------------------------------------*/
 
 /// Returns the logarithm of n!
-func logFactorial(_ n: Int) -> Double {
+internal func logFactorial(_ n: Int) -> Double {
     /* Returns the natural logarithm of factorial n! */
     if (n <= 60) {
         return LnFactorial[n]
@@ -188,7 +188,7 @@ func logFactorial(_ n: Int) -> Double {
 /// Returns a SSExamine object of length one and count "count"
 /// - Parameter value: Value
 /// - Parameter count: Number of values
-func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Comparable, T: Hashable {
+internal func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Comparable, T: Hashable {
     let array = Array<T>.init(repeating: value, count: count)
     let res = SSExamine<T>.init(withArray: array, name: nil, characterSet: nil)
     return res
@@ -199,7 +199,7 @@ func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Compar
  scanning functions
 *************************************************************/
 
-func scanDouble(string: String?) -> Double? {
+internal func scanDouble(string: String?) -> Double? {
     guard string != nil else {
         return nil
     }
@@ -213,7 +213,7 @@ func scanDouble(string: String?) -> Double? {
     }
 }
 
-func scanDecimal(string: String?) -> Decimal? {
+internal func scanDecimal(string: String?) -> Decimal? {
     guard string != nil else {
         return nil
     }
@@ -227,7 +227,7 @@ func scanDecimal(string: String?) -> Decimal? {
     }
 }
 
-func scanFloat(string: String?) -> Float? {
+internal func scanFloat(string: String?) -> Float? {
     guard string != nil else {
         return nil
     }
@@ -241,7 +241,7 @@ func scanFloat(string: String?) -> Float? {
     }
 }
 
-func scanHexDouble(string: String?) -> Double? {
+internal func scanHexDouble(string: String?) -> Double? {
     guard string != nil else {
         return nil
     }
@@ -255,7 +255,7 @@ func scanHexDouble(string: String?) -> Double? {
     }
 }
 
-func scanHexFloat(string: String?) -> Float? {
+internal func scanHexFloat(string: String?) -> Float? {
     guard string != nil else {
         return nil
     }
@@ -269,7 +269,7 @@ func scanHexFloat(string: String?) -> Float? {
     }
 }
 
-func scanHexInt32(string: String?) -> UInt32? {
+internal func scanHexInt32(string: String?) -> UInt32? {
     guard string != nil else {
         return nil
     }
@@ -283,7 +283,7 @@ func scanHexInt32(string: String?) -> UInt32? {
     }
 }
 
-func scanHexInt64(string: String?) -> UInt64? {
+internal func scanHexInt64(string: String?) -> UInt64? {
     guard string != nil else {
         return nil
     }
@@ -297,7 +297,7 @@ func scanHexInt64(string: String?) -> UInt64? {
     }
 }
 
-func scanInt32(string: String?) -> Int32? {
+internal func scanInt32(string: String?) -> Int32? {
     guard string != nil else {
         return nil
     }
@@ -312,7 +312,7 @@ func scanInt32(string: String?) -> Int32? {
 }
 
 
-func scanInt64(string: String?) -> Int64? {
+internal func scanInt64(string: String?) -> Int64? {
     guard string != nil else {
         return nil
     }
@@ -326,7 +326,7 @@ func scanInt64(string: String?) -> Int64? {
     }
 }
 
-func scanUInt64(string: String?) -> UInt64? {
+internal func scanUInt64(string: String?) -> UInt64? {
     guard string != nil else {
         return nil
     }
@@ -341,7 +341,7 @@ func scanUInt64(string: String?) -> UInt64? {
 }
 
 
-func scanInt(string: String?) -> Int? {
+internal func scanInt(string: String?) -> Int? {
     guard string != nil else {
         return nil
     }
@@ -356,13 +356,29 @@ func scanInt(string: String?) -> Int? {
 }
 
 
-func scanString(string: String?) -> String? {
+internal func scanString(string: String?) -> String? {
     guard string != nil else {
         return nil
     }
     return string
 }
 
+class StandardErrorOutputStream: TextOutputStream {
+    func write(_ string: String) {
+        let stdErr = FileHandle.standardError
+        if let data = string.data(using: .utf8) {
+            stdErr.write(data)
+        }
+        else {
+            stdErr.write("ERROR WRITING TO stdErr in SwiftyStats".data(using: .utf8)!)
+        }
+    }
+}
+
+internal func printError(_ message: String!) {
+    var outputStream = StandardErrorOutputStream()
+    print(message, to: &outputStream)
+}
 
 
 

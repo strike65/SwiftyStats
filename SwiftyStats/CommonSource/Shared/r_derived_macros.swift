@@ -27,7 +27,7 @@ import Foundation
 /* The R macros as free swift functions                      */
 /*************************************************************/
 
-public func r_dt_0(tail: SSCDFTail, log_p: Bool) -> Double {
+internal func r_dt_0(tail: SSCDFTail, log_p: Bool) -> Double {
     if tail == .lower {
         if log_p {
             return -Double.infinity
@@ -46,7 +46,7 @@ public func r_dt_0(tail: SSCDFTail, log_p: Bool) -> Double {
     }
 }
 
-public func r_dt_1(tail: SSCDFTail, log_p: Bool) -> Double {
+internal func r_dt_1(tail: SSCDFTail, log_p: Bool) -> Double {
     if tail == .lower {
         if log_p {
             return 0.0
@@ -66,7 +66,7 @@ public func r_dt_1(tail: SSCDFTail, log_p: Bool) -> Double {
 }
 
 
-public func r_d_val(_ x: Double, log_p: Bool) -> Double {
+internal func r_d_val(_ x: Double, log_p: Bool) -> Double {
     if log_p {
         return log(x)
     }
@@ -75,7 +75,7 @@ public func r_d_val(_ x: Double, log_p: Bool) -> Double {
     }
 }
 
-public func r_d_clog(x: Double, log_p: Bool) -> Double {
+internal func r_d_clog(x: Double, log_p: Bool) -> Double {
     if log_p {
         return log1p(-x)
     }
@@ -84,7 +84,7 @@ public func r_d_clog(x: Double, log_p: Bool) -> Double {
     }
 }
 
-public func r_dt_val(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
+internal func r_dt_val(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
     if tail == .lower {
         return r_d_val(x, log_p: log_p)
     }
@@ -93,12 +93,12 @@ public func r_dt_val(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
     }
 }
 
-public func r_d_lval(x: Double, tail: SSCDFTail) -> Double {
+internal func r_d_lval(x: Double, tail: SSCDFTail) -> Double {
     return (tail == .lower) ? x : (0.5 - x + 0.5)
 }
 
 
-public func r_dt_qIv(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
+internal func r_dt_qIv(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
     if log_p {
         return tail == .lower ? exp(x) : -expm1(x)
     }
@@ -107,7 +107,7 @@ public func r_dt_qIv(x: Double, tail: SSCDFTail, log_p: Bool) -> Double {
     }
 }
 
-public func r_q_p01_boundaries(p: Double!, left: Double!, right: Double!, tail: SSCDFTail! = .lower,  _ log_p: Bool! = false) -> Double? {
+internal func r_q_p01_boundaries(p: Double!, left: Double!, right: Double!, tail: SSCDFTail! = .lower,  _ log_p: Bool! = false) -> Double? {
     if log_p {
         if p > 0.0 {
             return Double.nan
