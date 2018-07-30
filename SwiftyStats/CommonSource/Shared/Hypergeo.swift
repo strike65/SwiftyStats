@@ -393,13 +393,13 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
              * but do not actually seem to accomplish very much. */
             
             n -= 1.0
-            var xx = 1.0 / x
+            let xx = 1.0 / x
             
             switch( type ) {    /* "type" given as subroutine argument */
             case 1:
-                var a1 = 0.125 + 0.25 * b
-                var a2 = -0.5 * a + 0.25 * xx
-                var a3 = -0.25 * n
+                let  a1 = 0.125 + 0.25 * b
+                let  a2 = -0.5 * a + 0.25 * xx
+                let  a3 = -0.25 * n
                 alast *= ( 0.5 + ( a1 + a2 + a3 ) / xx )
                 break
                 

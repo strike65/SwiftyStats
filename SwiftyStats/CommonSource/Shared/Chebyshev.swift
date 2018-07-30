@@ -83,7 +83,6 @@ import Foundation
 */
 internal func chebyshevEval(x: Double!, array: [Double]!, n: Int!) -> Double {
     var b0, b1, b2: Double;
-    var p: Double
     var i: Int = n - 1
     var k: Int = 0
     b0 = array[k]
