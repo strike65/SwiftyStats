@@ -1,3 +1,7 @@
+Version 0.8.15
+- added: Rayleigh distribution
+
+
 Version 0.8.14
 - added: Poisson distribution
 - added: hypergeometric1F1

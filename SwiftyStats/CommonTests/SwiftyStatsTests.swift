@@ -2835,7 +2835,70 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 0.136477388975449417145, accuracy: 1e-12)
         XCTAssert(para!.skewness.isNaN)
         XCTAssert(para!.kurtosis.isNaN)
-        
+        /*
+         ClearAll["Global`*"];
+         s = 3/2;
+         d = RayleighDistribution[s];
+         N[PDF[d, -1], 21]
+         N[PDF[d, 0], 21]
+         N[PDF[d, 1/100], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 11/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try pdfRayleighDist(x: 1, scale: 0))
+        XCTAssertThrowsError(try pdfRayleighDist(x: 1, scale: -1))
+        XCTAssertEqual(try! pdfRayleighDist(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 0.01, scale: 1.5),0.00444434568010973124020 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 1, scale: 1.5),0.355883290185248018124 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 1.1, scale: 1.5),0.373622658528284221473 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 3, scale: 1.5),0.180447044315483589192 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfRayleighDist(x: 10, scale: 1.5),9.92725082756961935157e-10 ,accuracy: 1E-20)
+        /*
+         ClearAll["Global`*"];
+         s = 3/2;
+         d = RayleighDistribution[s];
+         N[CDF[d, -1], 21]
+         N[CDF[d, 0], 21]
+         N[CDF[d, 1/100], 21]
+         N[CDF[d, 1], 21]
+         N[CDF[d, 11/10], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try cdfRayleighDist(x: 1, scale: 0))
+        XCTAssertThrowsError(try cdfRayleighDist(x: 1, scale: -1))
+        XCTAssertEqual(try! cdfRayleighDist(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 0.01, scale: 1.5),0.0000222219753104709546309 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 1, scale: 1.5),0.199262597083191959222 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 1.1, scale: 1.5),0.235771834828509546987 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 3, scale: 1.5),0.864664716763387308106 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfRayleighDist(x: 10, scale: 1.5),0.999999999776636856380 ,accuracy: 1E-14)
+
+        /*
+         ClearAll["Global`*"];
+         s = 3/2;
+         d = RayleighDistribution[s];
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileRayleighDist(p: -1, scale: 1.5))
+        XCTAssertThrowsError(try quantileRayleighDist(p: 2, scale: 1.5))
+        XCTAssertEqual(try! quantileRayleighDist(p: 0, scale: 1.5),0 ,accuracy: 1E-15)
+        XCTAssertEqual(try! quantileRayleighDist(p: 0.25, scale: 1.5),1.13779142466139819887 ,accuracy: 1E-15)
+        XCTAssertEqual(try! quantileRayleighDist(p: 0.5, scale: 1.5),1.76611503377321203652 ,accuracy: 1E-15)
+        XCTAssertEqual(try! quantileRayleighDist(p: 0.75, scale: 1.5),2.49766383347309326906 ,accuracy: 1E-15)
+        XCTAssertEqual(try! quantileRayleighDist(p: 0.99, scale: 1.5),4.55228138815543905259 ,accuracy: 1E-15)
+        XCTAssertEqual(try! quantileRayleighDist(p: 0.999, scale: 1.5),5.57538328327475767043 ,accuracy: 1E-15)
+        XCTAssert(try! quantileRayleighDist(p: 1, scale: 1.5).isInfinite)
+
     }
     
 //

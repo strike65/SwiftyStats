@@ -62,6 +62,8 @@
 		9F9E6073210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */; };
 		9F9E6074210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */; };
 		9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */; };
+		9FA87188210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */; };
+		9FA87189210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */; };
 		9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
@@ -182,6 +184,7 @@
 		9F9E606F210DD0B10059DF46 /* Integrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
 		9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-vMises-Circular.swift"; sourceTree = "<group>"; };
 		9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAsString.swift; sourceTree = "<group>"; };
+		9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-RayleighDist.swift"; sourceTree = "<group>"; };
 		9FAACB6F2108730000C031F3 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
@@ -284,6 +287,7 @@
 				9F7EFB5C2101F0EF00F0F573 /* ProbDist-Binomial.swift */,
 				9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */,
 				9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */,
+				9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */,
 			);
 			path = ProbDist;
 			sourceTree = "<group>";
@@ -587,6 +591,7 @@
 				9F7EFB2F2101ED2900F0F573 /* ProbDist-ChiSquare.swift in Sources */,
 				9F7EFB512101F02600F0F573 /* ProbDist-Erlang.swift in Sources */,
 				9FEA82731F76CAF5005E4349 /* SSCrosstab.swift in Sources */,
+				9FA87188210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */,
 				9FEA82871F76CAF5005E4349 /* SSUtils.swift in Sources */,
 				9FEA82861F76CAF5005E4349 /* SSTukey.swift in Sources */,
 				9FEA82751F76CAF5005E4349 /* SSDataGroupSorter.swift in Sources */,
@@ -657,6 +662,7 @@
 				9F7EFB432101EF2C00F0F573 /* ProbDist-Logistic.swift in Sources */,
 				9FEA828B1F76CB1D005E4349 /* SSCrosstab.swift in Sources */,
 				9FEA829F1F76CB1D005E4349 /* SSUtils.swift in Sources */,
+				9FA87189210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */,
 				9FEA829E1F76CB1D005E4349 /* SSTukey.swift in Sources */,
 				9F7EFB3D2101EE8B00F0F573 /* ProbDist-Cauchy.swift in Sources */,
 				9F7EFB5B2101F0B300F0F573 /* ProbDist-Triangular.swift in Sources */,
