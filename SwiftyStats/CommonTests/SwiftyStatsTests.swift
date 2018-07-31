@@ -2899,6 +2899,76 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! quantileRayleighDist(p: 0.999, scale: 1.5),5.57538328327475767043 ,accuracy: 1E-15)
         XCTAssert(try! quantileRayleighDist(p: 1, scale: 1.5).isInfinite)
 
+        /*
+         ClearAll["Global`*"];
+         a = -2;
+         b = 1;
+         d = ExtremeValueDistribution[a, b];
+         N[PDF[d, -1], 21]
+         N[PDF[d, 0], 21]
+         N[PDF[d, 1/100], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 11/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try pdfExtremValueDist(x: 1, location: -2, scale: -11))
+        XCTAssertThrowsError(try pdfExtremValueDist(x: 1, location: -2, scale: 0))
+        XCTAssertEqual(try! pdfExtremValueDist(x: -6, location: -2, scale: 1),  1.06048039970427672992e-22 ,accuracy: 1E-30)
+        XCTAssertEqual(try! pdfExtremValueDist(x: -5, location: -2, scale: 1),3.80054250404435771071e-8 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: -0.04, location: -2, scale: 1),0.122351354198388769973 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: -0.11, location: -2, scale: 1),0.129889419617261299978 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: 0, location: -2, scale: 1),0.118204951593143145999 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: 2, location: -2, scale: 1),0.0179832296967136435659 ,accuracy: 1E-14)
+        XCTAssertEqual(try! pdfExtremValueDist(x: 5, location: -2, scale: 1),0.000911050815848220300461 ,accuracy: 1E-14)
+        /*
+         ClearAll["Global`*"];
+         a = -2;
+         b = 1;
+         d = ExtremeValueDistribution[a, b];
+         N[PDF[d, -1], 21]
+         N[PDF[d, 0], 21]
+         N[PDF[d, 1/100], 21]
+         N[PDF[d, 1], 21]
+         N[PDF[d, 11/10], 21]
+         N[PDF[d, 3], 21]
+         N[PDF[d, 10], 21]
+         */
+        XCTAssertThrowsError(try cdfExtremValueDist(x: 1, location: -2, scale: -11))
+        XCTAssertThrowsError(try cdfExtremValueDist(x: 1, location: -2, scale: 0))
+        XCTAssertEqual(try! cdfExtremValueDist(x: -6, location: -2, scale: 1),  1.94233760495640183858e-24 ,accuracy: 1E-30)
+        XCTAssertEqual(try! cdfExtremValueDist(x: -5, location: -2, scale: 1),1.89217869483829263358e-9 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: -0.04, location: -2, scale: 1),0.868612280319186993522 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: -0.11, location: -2, scale: 1),0.859785956213361748121 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: 0, location: -2, scale: 1),0.873423018493116642989 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: 2, location: -2, scale: 1),0.981851073061666482920 ,accuracy: 1E-14)
+        XCTAssertEqual(try! cdfExtremValueDist(x: 5, location: -2, scale: 1),0.999088533672457833191 ,accuracy: 1E-14)
+
+        
+        /*
+         ClearAll["Global`*"];
+         a = -2;
+         b = 1;
+         d = ExtremeValueDistribution[a, b];
+         N[InverseCDF[d, 25/100], 21]
+         N[InverseCDF[d, 5/10], 21]
+         N[InverseCDF[d, 75/100], 21]
+         N[InverseCDF[d, 99/100], 21]
+         N[InverseCDF[d, 999/1000], 21]
+         N[InverseCDF[d, 1], 21]
+         */
+        XCTAssertThrowsError(try quantileExtremValueDist(p: -1,location: -2, scale: 1))
+        XCTAssertThrowsError(try quantileExtremValueDist(p: 2,location: -2, scale: 1))
+        XCTAssert(try! quantileExtremValueDist(p: 0,location: -2, scale: 1) == -Double.infinity)
+        XCTAssertEqual(try! quantileExtremValueDist(p: 0.25,location: -2, scale: 1),-2.32663425997828098240 ,accuracy: 1E-14)
+        XCTAssertEqual(try! quantileExtremValueDist(p: 0.5,location: -2, scale: 1),-1.63348707941833567299 ,accuracy: 1E-14)
+        XCTAssertEqual(try! quantileExtremValueDist(p: 0.75,location: -2, scale: 1),-0.754100676292761801619 ,accuracy: 1E-14)
+        XCTAssertEqual(try! quantileExtremValueDist(p: 0.99,location: -2, scale: 1),2.60014922677657999772 ,accuracy: 1E-14)
+        XCTAssertEqual(try! quantileExtremValueDist(p: 0.999,location: -2, scale: 1),4.90725507052371649992 ,accuracy: 1E-14)
+        XCTAssert(try! quantileExtremValueDist(p: 1,location: -2, scale: 1).isInfinite)
+
     }
     
 //
