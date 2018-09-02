@@ -30,8 +30,8 @@ import os.log
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
 /// - Parameter l: Lambda
 /// - Throws: SSSwiftyStatsError if l <= 0
-public func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParams {
-    if (l <= 0.0) {
+public func paraExponentialDist<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSContProbDistParams<FPT> {
+    if (l <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -42,11 +42,11 @@ public func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParam
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
-    result.mean = 1.0 / l
-    result.variance = 1.0 / (l * l)
-    result.kurtosis = 9.0
-    result.skewness = 2.0
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = 1 / l
+    result.variance = 1 / (l * l)
+    result.kurtosis = 9
+    result.skewness = 2
     return result
 }
 
@@ -54,8 +54,8 @@ public func paraExponentialDist(lambda l: Double!) throws -> SSContProbDistParam
 /// - Parameter x: x
 /// - Parameter l: Lambda
 /// - Throws: SSSwiftyStatsError if l <= 0
-public func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
-    if (l <= 0.0) {
+public func pdfExponentialDist<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
+    if (l <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -66,14 +66,14 @@ public func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if x < 0.0 {
-        return 0.0
+    if x < 0 {
+        return 0
     }
-    else if x == 1.0 {
+    else if x == 1 {
         return l
     }
     else {
-        return l * exp(-l * x)
+        return l * exp1(-l * x)
     }
 }
 
@@ -81,8 +81,8 @@ public func pdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
 /// - Parameter x: x
 /// - Parameter l: Lambda
 /// - Throws: SSSwiftyStatsError if l <= 0
-public func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
-    if (l <= 0.0) {
+public func cdfExponentialDist<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
+    if (l <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -93,11 +93,11 @@ public func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if x <= 0.0 {
-        return 0.0
+    if x <= 0 {
+        return 0
     }
     else {
-        return 1.0 - exp(-l * x)
+        return 1 - exp1(-l * x)
     }
 }
 
@@ -105,8 +105,8 @@ public func cdfExponentialDist(x: Double!, lambda l: Double!) throws -> Double {
 /// - Parameter p: p
 /// - Parameter l: Lambda
 /// - Throws: SSSwiftyStatsError if l <= 0 || p < 0 || p > 1
-public func quantileExponentialDist(p: Double!, lambda l: Double!) throws -> Double {
-    if (l <= 0.0) {
+public func quantileExponentialDist<FPT: SSFloatingPoint & Codable>(p: FPT, lambda l: FPT) throws -> FPT {
+    if (l <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -128,14 +128,14 @@ public func quantileExponentialDist(p: Double!, lambda l: Double!) throws -> Dou
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p == 0.0 {
-        return 0.0
+    if p == 0 {
+        return 0
     }
-    else if p == 1.0 {
-        return Double.infinity
+    else if p == 1 {
+        return FPT.infinity
     }
     else {
-        return -log1p(1.0 - p - 1.0) / l
+        return -log1(1 - p) / l
     }
 }
 

@@ -81,21 +81,21 @@ import Foundation
 /*
  Cehbyshev.swift
 */
-internal func chebyshevEval(x: Double!, array: [Double]!, n: Int!) -> Double {
-    var b0, b1, b2: Double;
+internal func chebyshevEval<FPT: SSFloatingPoint & Codable>(x: FPT, array: [FPT], n: Int) -> FPT {
+    var b0, b1, b2: FPT
     var i: Int = n - 1
     var k: Int = 0
     b0 = array[k]
     k += 1
-    b1 = 0.0;
+    b1 = 0
     
     repeat {
         b2 = b1;
         b1 = b0;
-        b0 = x * b1  -  b2  + array[k];
+        b0 = x * b1  -  b2  + array[k]
         k += 1
         i -= 1
     } while( i > 0);
     
-    return( 0.5 * (b0 - b2) );
+    return( FPT.half * (b0 - b2) )
 }

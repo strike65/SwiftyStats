@@ -1,284 +1,132 @@
-/// sqrt(2/pi)
-public let  SQRT2OPIL : Float80 = 0.797884560802865355879892119868763736952
-/// 2 / pi
-public let  TWOOPIL : Float80 = 0.636619772367581343075535053490057448139
-/// pi / 4
-public let  PIQUARTL : Float80 = 0.785398163397448309615660845819875721049
-/// 3 Pi / 4
-public let  THREEPIQUARTL : Float80 = 2.356194490192344928846982537459627163148
-/// Euler Gamma
-public let  EULERGAMMAL : Float80 = 0.577215664901532860606512090082402431042
-/// sqrt(pi)
-public let  SQRTPIL : Float80 = 1.772453850905516027298167483341145182798
-/// pi
-public let  PILL : Float80 = 3.141592653589793238462643383279502884197
-/// sqrt(2)
-public let  SQRTTWOL : Float80 = 1.414213562373095048801688724209698078570
-/// sqrt(1/(2 * pi))
-public let  SQRT2PIINVL : Float80 = 0.398942280401432677939946059934381868476
-/// sqrt(2*pi)
-public let  SQRT2PIL : Float80 = 2.506628274631000502415765284811045253010
-/// log(sqrt(2*pi))
-public let  LOGSQRT2PIL : Float80 = 0.918938533204672741780329736405617639861
-/// pi /2
-public let  PIHALFL : Float80 = 1.570796326794896619231321691639751442099
-/// sqrt(pi/2)
-public let  SQRTPIHALFL : Float80 = 0.886226925452758013649083741670572591399
-/// log(2)
-public let  LOG2L : Float80 = 0.693147180559945309417232121458176568076
-/// 1/12 (one over twelve)
-public let  OOTWL : Float80 = 0.083333333333333333333333333333333333333
-/// 1/18 (one over eighteen)
-public let  OOEIL : Float80 = 0.055555555555555555555555555555555555556
-/// 1/24 (one over twentyfour)
-public let  OOTWFL : Float80 = 0.041666666666666666666666666666666666667
-/// 2 * pi
-public let  TWOPIL : Float80 = 6.283185307179586476925286766559005768394
-/// pi * pi
-public let  PISQUAREDL : Float80 = 9.869604401089358618834490999876151135314
-/// 1 / (2 pi)
-public let  OO2PIL : Float80 = 0.159154943091895335768883763372514362035
-/// log(pi)
-public let  LOGPIL : Float80 = 1.144729885849400174143427351353058711647
-/// 1/ pi
-public let  OOPIL : Float80 = 0.318309886183790671537767526745028724069
-/// sqrt(3)
-public let  SQRT3L : Float80 = 1.732050807568877293527446341505872366943
-/// 1 / sqrt(pi)
-public let  OOSQRTPIL : Float80 = 0.564189583547756286948079451560772585844
-/// 1 / 3
-public let  OO3L : Float80 = 0.333333333333333333333333333333333333333
-/// 1/ 6
-public let  OO6L : Float80 = 0.166666666666666666666666666666666666667
-/// 2/3
-public let  TWOO3L : Float80 = 0.666666666666666666666666666666666666666
-/// 2^(1/4)
-public let  TWOEXPQUARTL : Float80 = 1.189207115002721066717499970560475915293
-/// sqrt(2/pi)
-public let  SQRT2OPI : Double = 0.797884560802865355879892119868763736952;
-
-
-
-
-/*
-/// Ranking
-/// - Parameter set1: set1
-/// - Parameter set2: set2
-/// - Parameter identifierSet1: identifier for set1
-/// - Parameter identifierSet2: identifier for set2
-/// - Parameter inout ranks: contains the ranks upon return
-/// - Parameter inout groups: contains the grpups upon return
-/// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
-/// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-fileprivate class func rank2Arrays<T, U>(array1: Array<T>!, array2: Array<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable{
-var hasTies: Bool = false
-let set1:SSExamine<T> = SSExamine<T>.init(withArray: array1, name: nil, characterSet: nil)
-let set2:SSExamine<T> = SSExamine<T>.init(withArray: array2, name: nil, characterSet: nil)
-let a = set1.elementsAsArray(sortOrder: .original)
-let b = set2.elementsAsArray(sortOrder: .original)
-var combined: Array<T> = a!
-combined.append(contentsOf: b!)
-var combined_sorted = combined.sorted(by: {$0 < $1})
-var i: Int = 0
-var k: Int = 1
-var sum: Double = 1.0
-while i <= combined_sorted.count - 1 {
-// determine frequencies in set1 and set2
-let freq1 = set1.frequency(combined_sorted[i])
-let freq2 = set2.frequency(combined_sorted[i])
-if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
-hasTies = true
-let freq: Int = freq1 + freq2
-ties.append(Double(freq))
-k = 1
-sum = 0.0
-while k <= freq {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq {
-ranks.append(sum / Double(freq))
-if k <= set1.frequency(combined_sorted[i])  {
-groups.append(identifierSet1)
-}
-else {
-groups.append(identifierSet2)
-}
-k += 1
-}
-i += freq
-}
-else if set1.contains(combined_sorted[i]) {
-if freq1 > 1 {
-ties.append(Double(freq1))
-k = 1
-sum = 0.0
-while k <= freq1 {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq1 {
-ranks.append(sum / Double(freq1))
-groups.append(identifierSet1)
-k += 1
-}
-i += freq1
-}
-else {
-ranks.append(Double(i + 1))
-groups.append(identifierSet1)
-i += 1
-}
-}
-else if set2.contains(combined_sorted[i]) {
-if freq2 > 1 {
-ties.append(Double(freq2))
-k = 1
-sum = 0.0
-while k <= freq2 {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq2 {
-ranks.append(sum / Double(freq2))
-groups.append(identifierSet2)
-k += 1
-}
-i += freq2
-}
-else {
-ranks.append(Double(i + 1))
-groups.append(identifierSet2)
-i += 1
-}
-}
-}
-i = 0
-while i < ranks.count {
-if groups[i] == identifierSet1 {
-sumRanksSet1 = sumRanksSet1 + ranks[i]
-}
-else {
-sumRanksSet2 = sumRanksSet2 + ranks[i]
-}
-i += 1
-}
-return hasTies
-
-}
-
-/// Ranking
-/// - Parameter set1: set1
-/// - Parameter set2: set2
-/// - Parameter identifierSet1: identifier for set1
-/// - Parameter identifierSet2: identifier for set2
-/// - Parameter inout ranks: contains the ranks upon return
-/// - Parameter inout groups: contains the grpups upon return
-/// - Parameter inout sumRanksSet1: contains the sum of ranks for set1 upon return
-/// - Parameter inout sumRanksSet2: contains the sum of ranks for set2 upon return
-fileprivate class func rank2Arrays<T, U>(set1: SSExamine<T>!, set2: SSExamine<T>!, identifierSet1: U!, identifierSet2: U!, ranks: inout Array<Double>, groups: inout Array<U>, sortedItems: inout Array<T>, ties: inout Array<Double>, sumRanksSet1: inout Double, sumRanksSet2: inout Double) -> Bool where T: Comparable, T: Hashable, U: Comparable, U: Hashable {
-var hasTies: Bool = false
-let a = set1.elementsAsArray(sortOrder: .original)!
-let b = set2.elementsAsArray(sortOrder: .original)!
-var combined: Array<T> = a
-combined.append(contentsOf: b)
-var combined_sorted = combined.sorted(by: {$0 < $1})
-var i: Int = 0
-var k: Int = 1
-var sum: Double = 1.0
-while i <= combined_sorted.count - 1 {
-// determine frequencies in set1 and set2
-let freq1 = set1.frequency(combined_sorted[i])
-let freq2 = set2.frequency(combined_sorted[i])
-if set1.contains(combined_sorted[i]) && set2.contains(combined_sorted[i]) {
-hasTies = true
-let freq: Int = freq1 + freq2
-ties.append(Double(freq))
-k = 1
-sum = 0.0
-while k <= freq {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq {
-ranks.append(sum / Double(freq))
-if k <= set1.frequency(combined_sorted[i])  {
-groups.append(identifierSet1)
-sortedItems.append(combined_sorted[i])
-}
-else {
-groups.append(identifierSet2)
-sortedItems.append(combined_sorted[i])
-}
-k += 1
-}
-i += freq
-}
-else if set1.contains(combined_sorted[i]) {
-if freq1 > 1 {
-ties.append(Double(freq1))
-k = 1
-sum = 0.0
-while k <= freq1 {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq1 {
-ranks.append(sum / Double(freq1))
-groups.append(identifierSet1)
-sortedItems.append(combined_sorted[i])
-k += 1
-}
-i += freq1
-}
-else {
-ranks.append(Double(i + 1))
-groups.append(identifierSet1)
-sortedItems.append(combined_sorted[i])
-i += 1
-}
-}
-else if set2.contains(combined_sorted[i]) {
-if freq2 > 1 {
-ties.append(Double(freq2))
-k = 1
-sum = 0.0
-while k <= freq2 {
-sum += Double(i + k)
-k += 1
-}
-k = 1
-while k <= freq2 {
-ranks.append(sum / Double(freq2))
-groups.append(identifierSet2)
-sortedItems.append(combined_sorted[i])
-k += 1
-}
-i += freq2
-}
-else {
-ranks.append(Double(i + 1))
-groups.append(identifierSet2)
-sortedItems.append(combined_sorted[i])
-i += 1
-}
-}
-}
-i = 0
-while i < ranks.count {
-if groups[i] == identifierSet1 {
-sumRanksSet1 = sumRanksSet1 + ranks[i]
-}
-else {
-sumRanksSet2 = sumRanksSet2 + ranks[i]
-}
-i += 1
-}
-return hasTies
-}
+// MARK: NOCCENTRAL T DIST
+PDF
+/* ORIGINAL AUTHOR
+*    Claus Ekström, ekstrom@dina.kvl.dk
+*    July 15, 2003.
+* Swift Version:
+*    Volker Thieme
+*    June 21, 2018
+*
+*    Copyright (C) 2003-2015 The R Foundation
+*
+* DESCRIPTION
+*
+*    From Johnson, Kotz and Balakrishnan (1995) [2nd ed.; formula (31.15), p.516],
+*    the non-central t density is
+*
+*      f(x, df, ncp) =
+*
+*        exp(-.5*ncp^2) * gamma((df+1)/2) / (sqrt(pi*df)* gamma(df/2)) * (df/(df+x^2))^((df+1)/2) *
+*          sum_{j=0}^Inf  gamma((df+j+1)/2)/(factorial(j)* gamma((df+1)/2)) * (x*ncp*sqrt(2)/sqrt(df+x^2))^ j
+*
+*
+*    The functional relationship
+*
+*       f(x, df, ncp) = df/x *
+*                  (F(sqrt((df+2)/df)*x, df+2, ncp) - F(x, df, ncp))
+*
+*    is used to evaluate the density at x != 0 and
+*
+*       f(0, df, ncp) = exp(-.5*ncp^2) /
+*                (sqrt(pi)*sqrt(df)*gamma(df/2))*gamma((df+1)/2)
+*
+*    is used for x=0.
+*
+*    All calculations are done on log-scale to increase stability.
+*
+* FIXME: pnt() is known to be inaccurate in the (very) left tail and for ncp > 38
+*       ==> use a direct log-space summation formula in that case
 */
+
+/* R Studio */
+//    if df <= 0 {
+//        #if os(macOS) || os(iOS)
+//        if #available(macOS 10.12, iOS 10, *) {
+//            os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+//        }
+//        #endif
+//        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+//    }
+//    if x.isNaN || df.isNaN || lambda.isNaN {
+//        return FPT.nan
+//    }
+//    if lambda.isZero {
+//        do {
+//            return try pdfStudentTDist(t: x, degreesOfFreedom: df)
+//        }
+//        catch {
+//            throw error
+//        }
+//    }
+//    if x.isInfinite {
+//        return 0
+//    }
+//
+//    /* R STUDIO */
+//    if df >= makeFP(1E8) || df.isInfinite {
+//        do {
+//            return try pdfNormalDist(x: x, mean: lambda, standardDeviation: 1)
+//        }
+//        catch {
+//            throw error
+//        }
+//    }
+//    var u: FPT = 0
+//    if abs(x) > (df * FPT.ulpOfOne).squareRoot() {
+//        do {
+//            let p1: Float80 = try cdfStudentTDist(t: makeFP(x) * sqrt((makeFP(df) + 2) / makeFP(df)), degreesOfFreedom: makeFP(df) + 2, nonCentralityPara: makeFP(lambda))
+//            let p2: Float80 = try cdfStudentTDist(t: makeFP(x), degreesOfFreedom: makeFP(df), nonCentralityPara: makeFP(lambda))
+//            let diff: Float80 = abs(p1 - p2)
+//            let u1: Float80 = log1(makeFP(df)) - log1(abs(makeFP(x))) + log1(diff)
+//            u = makeFP(u1)
+//        }
+//        catch {
+//            throw error
+//        }
+//    }
+//    else {
+//        let u1: FPT = lgamma1((df + 1) / 2)
+//        let u2: FPT = lgamma1(df / 2)
+//        let lambdaSq: FPT = lambda * lambda
+//        let u3: FPT = FPT.half * (log1(df) + lambdaSq)
+//        u =  u1 - u2 - ( FPT.lnsqrtpi + u3)
+//    }
+//    return (rlog ? u : exp1(u))
+
+/// https://www.boost.org/doc/libs/1_54_0/libs/math/doc/html/math_toolkit/dist_ref/dists/nc_t_dist.html
+/* BOOOST
+let ex1: FPT =  pow1(df, df / 2) * tgamma1(df + 1) * exp1(-pow1(lambda, 2) / 2)
+let ex2: FPT = pow1(2, df) * pow1(df + pow1(x, 2), df / 2)
+let ex21: FPT = ex2 * tgamma1(df / 2)
+let F1: FPT = ex1 / ex21
+
+let F2: FPT = FPT.sqrt2 * lambda * x
+
+let a1: FPT = df / 2 + 1
+let b1: FPT = makeFP(1.5)
+let hx11: FPT = pow1(lambda, 2) * pow1(x, 2)
+let hx12: FPT = 2 * (df * pow1(x, 2))
+let hx1: FPT = hx11 / hx12
+
+let ex3: FPT = log1(hypergeometric1F1(a: a1, b: b1, x: hx1))
+
+
+
+let ex41: FPT = log1(df + pow1(x, 2))
+let ex42: FPT = lgamma1((df + 1) / 2)
+let ex4: FPT = exp1(ex41 + ex42)
+
+let S1: FPT = ex3 / ex4
+
+let a2: FPT = (df + 1) / 2
+let b2: FPT = FPT.half
+let hx2: FPT = hx1
+let ex5 = hypergeometric1F1(a: a2, b: b2, x: hx2)
+let ex6 = sqrt(df + pow1(x, 2)) * tgamma1(df / 2 + 1)
+
+let S2 = ex5 / ex6
+
+let result: FPT = F1 * (F2 * S1 + S2)
+return result
+*/
+

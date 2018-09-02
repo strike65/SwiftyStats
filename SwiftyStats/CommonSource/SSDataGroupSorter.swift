@@ -50,7 +50,7 @@ import os.log
 /// `sortedArrays().sortedGroups` would be: `[B,A,B,B,A,A]`
 ///
 /// `sortedArrays().sortedData` would then be: `[0,1,2,3,4,6]`
-public class SSDataGroupSorter<T> where T: Hashable, T: Comparable {
+public class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable {
     private var g: Array<Int>
     private var o: Array<T>
     

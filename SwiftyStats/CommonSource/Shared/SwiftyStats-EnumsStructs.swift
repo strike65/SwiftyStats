@@ -28,13 +28,13 @@ import Foundation
 
 
 /// Confidence interval struct
-public struct SSConfIntv: CustomStringConvertible, Codable {
+public struct SSConfIntv<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Lower bound of the CI
-    public var lowerBound: Double?
+    public var lowerBound: FPT?
     /// Upper bound of the CI
-    public var upperBound: Double?
+    public var upperBound: FPT?
     /// Range of the CI
-    public var intervalWidth: Double?
+    public var intervalWidth: FPT?
     public var description: String {
         var descr = String()
         if let lb = self.lowerBound, let ub = self.upperBound, let w = self.intervalWidth {
@@ -50,15 +50,15 @@ public struct SSConfIntv: CustomStringConvertible, Codable {
 
 
 /// Quartile struct
-public struct SSQuartile: CustomStringConvertible, Codable {
+public struct SSQuartile<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// 25% Quartile
-    public var q25: Double
+    public var q25: FPT
     /// 50% Quartile
-    public var q50: Double
+    public var q50: FPT
     /// 75% Quartile
-    public var q75: Double
+    public var q75: FPT
     
-    init(Q25: Double, Q50: Double, Q75: Double) {
+    init(Q25: FPT, Q50: FPT, Q75: FPT) {
         q25 = Q25
         q50 = Q50
         q75 = Q75
@@ -80,17 +80,17 @@ public struct SSQuartile: CustomStringConvertible, Codable {
 }
 
 /// Struct containing descriptive stats
-public struct SSDescriptiveStats: CustomStringConvertible, Codable {
+public struct SSDescriptiveStats<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// arithmetic mean
-    public var mean: Double
+    public var mean: FPT
     /// Variance
-    public var variance: Double
+    public var variance: FPT
     /// Sample size
-    public var sampleSize: Double
+    public var sampleSize: FPT
     /// Standard deviation
-    public var standardDeviation: Double
+    public var standardDeviation: FPT
     
-    init(mean: Double, variance: Double, sampleSize: Double, standardDev: Double) {
+    init(mean: FPT, variance: FPT, sampleSize: FPT, standardDev: FPT) {
         self.mean = mean
         self.variance = variance
         standardDeviation = standardDev
@@ -112,27 +112,27 @@ public struct SSDescriptiveStats: CustomStringConvertible, Codable {
 }
 
 /// Parameters of a continuous probability distribution
-public struct SSContProbDistParams: CustomStringConvertible, Codable {
+public struct SSContProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Kurtosis
-    public var kurtosis: Double
+    public var kurtosis: FPT
     /// Mean
-    public var mean: Double
+    public var mean: FPT
     /// Skewness
-    public var skewness: Double
+    public var skewness: FPT
     /// Variance
-    public var variance: Double
+    public var variance: FPT
     
-    init(mean: Double, variance: Double, kurtosis: Double, skewness: Double) {
+    init(mean: FPT, variance: FPT, kurtosis: FPT, skewness: FPT) {
         self.mean = mean
         self.variance = variance
         self.skewness = skewness
         self.kurtosis = kurtosis
     }
     init() {
-        self.mean = Double.nan
-        self.variance = Double.nan
-        self.skewness = Double.nan
-        self.kurtosis = Double.nan
+        self.mean = FPT.nan
+        self.variance = FPT.nan
+        self.skewness = FPT.nan
+        self.kurtosis = FPT.nan
     }
     public var description: String {
         var descr = String()
@@ -145,23 +145,23 @@ public struct SSContProbDistParams: CustomStringConvertible, Codable {
 }
 
 
-public struct SSGrubbsTestResult: CustomStringConvertible, Codable {
+public struct SSGrubbsTestResult<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// ciritcal value
-    public var criticalValue: Double?
+    public var criticalValue: FPT?
     /// largest value
-    public var largest: Double?
+    public var largest: T?
     /// smallest value
-    public var smallest: Double?
+    public var smallest: T?
     /// sample size
     public var sampleSize: Int?
     /// max difference
-    public var maxDiff: Double?
+    public var maxDiff: FPT?
     /// arithmetic mean
-    public var mean: Double?
+    public var mean: FPT?
     /// Grubbs G
-    public var G: Double?
+    public var G: FPT?
     /// sd
-    public var stdDev: Double?
+    public var stdDev: FPT?
     /// true iff G > ciriticalValue
     public var hasOutliers: Bool?
     /// Returns a description
@@ -187,27 +187,27 @@ public struct SSGrubbsTestResult: CustomStringConvertible, Codable {
     
     
 }
-public struct SSESDTestResult: CustomStringConvertible, Codable  {
+public struct SSESDTestResult<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
     /// sd
-    public var stdDeviations: Array<Double>?
+    public var stdDeviations: Array<FPT>?
     /// number of items removed during procedure
-    public var itemsRemoved: Array<Double>?
+    public var itemsRemoved: Array<T>?
     /// test statistic
-    public var testStatistics: Array<Double>?
+    public var testStatistics: Array<FPT>?
     /// array of lamddas
-    public var lambdas: Array<Double>?
+    public var lambdas: Array<FPT>?
     /// count of outliers found
     public var countOfOutliers: Int?
     /// array containing outliers found
-    public var outliers: Array<Double>?
+    public var outliers: Array<T>?
     /// alpha
-    public var alpha: Double?
+    public var alpha: FPT?
     /// max number of outliers to search for
     public var maxOutliers: Int?
     /// test type
     public var testType: SSESDTestType?
     /// array of the means
-    public var means: Array<Double>?
+    public var means: Array<FPT>?
     /// Returns a description
     public var description: String {
         get {
@@ -232,35 +232,35 @@ public struct SSESDTestResult: CustomStringConvertible, Codable  {
 
 
 /// Results of the KS one sample test. The fields actually used depend on the target distribution.
-public struct SSKSTestResult: CustomStringConvertible, Codable  {
+public struct SSKSTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
     /// emprical mean
-    public var estimatedMean: Double?
+    public var estimatedMean: FPT?
     /// empirical sd
-    public var estimatedSd: Double?
+    public var estimatedSd: FPT?
     /// empirical variance
-    public var estimatedVar: Double?
+    public var estimatedVar: FPT?
     /// empirical lower bound
-    public var estimatedLowerBound: Double?
+    public var estimatedLowerBound: FPT?
     /// empirical upper bound
-    public var estimatedUpperBound: Double?
+    public var estimatedUpperBound: FPT?
     /// empirical degrees of freedom
-    public var estimatedDegreesOfFreedom: Double?
+    public var estimatedDegreesOfFreedom: FPT?
     /// empirical shape parameter
-    public var estimatedShapeParam: Double?
+    public var estimatedShapeParam: FPT?
     /// empirical scale parameter
-    public var estimatedScaleParam: Double?
+    public var estimatedScaleParam: FPT?
     /// target distribution
     public var targetDistribution: SSGoFTarget?
     /// p value
-    public var pValue: Double?
+    public var pValue: FPT?
     /// max absolute difference
-    public var maxAbsDifference: Double?
+    public var maxAbsDifference: FPT?
     /// max absolute positive difference
-    public var maxPosDifference: Double?
+    public var maxPosDifference: FPT?
     /// max absolute negative difference
-    public var maxNegDifference: Double?
+    public var maxNegDifference: FPT?
     /// z value
-    public var zStatistics: Double?
+    public var zStatistics: FPT?
     /// sample size
     public var sampleSize: Int?
     /// a string containing additional info (for certain distributions)
@@ -295,21 +295,21 @@ public struct SSKSTestResult: CustomStringConvertible, Codable  {
 
 
 /// Results of the Anderson Darling test
-public struct SSADTestResult: CustomStringConvertible, Codable  {
+public struct SSADTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
     /// p value (= (1 - alpha)-quantile of testStatistic
-    public var pValue: Double?
+    public var pValue: FPT?
     /// Anderson Darling statistics
-    public var AD: Double?
+    public var AD: FPT?
     /// AD*
-    public var ADStar: Double?
+    public var ADStar: FPT?
     /// sample size
     public var sampleSize: Int?
     /// standard deviation
-    public var stdDev: Double?
+    public var stdDev: FPT?
     /// variance
-    public var variance: Double?
+    public var variance: FPT?
     /// mean
-    public var mean: Double?
+    public var mean: FPT?
     /// true iff pValue >= alpha
     public var isNormal: Bool?
     
@@ -336,21 +336,21 @@ public struct SSADTestResult: CustomStringConvertible, Codable  {
 }
 
 /// Result of tests for equality of variances (Bartlett, Levene, Brown-Forsythe)
-public struct SSVarianceEqualityTestResult: CustomStringConvertible, Codable  {
+public struct SSVarianceEqualityTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
     /// degrees of freedom
-    public var df: Double?
+    public var df: FPT?
     /// critical value for alpha = 0.1
-    public var cv90Pct: Double?
+    public var cv90Pct: FPT?
     /// critical value for alpha = 0.05
-    public var cv95Pct: Double?
+    public var cv95Pct: FPT?
     /// critical value for alpha = 0.01
-    public var cv99Pct: Double?
+    public var cv99Pct: FPT?
     /// critical value for alpha as set by the call
-    public var cvAlpha: Double?
+    public var cvAlpha: FPT?
     /// p value (= (1 - alpha)-quantile of testStatistic
-    public var pValue: Double?
+    public var pValue: FPT?
     /// test statistic value
-    public var testStatistic: Double?
+    public var testStatistic: FPT?
     /// set to true iff pValue >= alpha
     public var equality: Bool?
     /// Test type
@@ -377,43 +377,43 @@ public struct SSVarianceEqualityTestResult: CustomStringConvertible, Codable  {
 }
 
 /// Results of the two sample t-Test
-public struct SS2SampleTTestResult: CustomStringConvertible, Codable  {
+public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
     /// one sided p value for equal variances
-    public var p1EQVAR: Double?
+    public var p1EQVAR: FPT?
     /// one sided p value for unequal variances
-    public var p1UEQVAR: Double?
+    public var p1UEQVAR: FPT?
     /// two sided p value for equal variances
-    public var p2EQVAR: Double?
+    public var p2EQVAR: FPT?
     /// two sided p value for unequal variances
-    public var p2UEQVAR: Double?
+    public var p2UEQVAR: FPT?
     /// mean of sample 1
-    public var mean1: Double?
+    public var mean1: FPT?
     /// mean of sample 2
-    public var mean2: Double?
+    public var mean2: FPT?
     /// n of sample 1
-    public var sampleSize1: Double?
+    public var sampleSize1: FPT?
     /// n of sample 2
-    public var sampleSize2: Double?
+    public var sampleSize2: FPT?
     /// sd of sample 1
-    public var stdDev1: Double?
+    public var stdDev1: FPT?
     /// sd of sample 1
-    public var stdDev2: Double?
+    public var stdDev2: FPT?
     /// pooled sd
-    public var pooledStdDev: Double?
+    public var pooledStdDev: FPT?
     /// pooled variance
-    public var pooledVariance: Double?
+    public var pooledVariance: FPT?
     /// mean1 - mean2
-    public var differenceInMeans: Double?
+    public var differenceInMeans: FPT?
     /// t Value assuming equal variances
-    public var tEQVAR: Double?
+    public var tEQVAR: FPT?
     /// t Value assuming unequal variances
-    public var tUEQVAR: Double?
+    public var tUEQVAR: FPT?
     /// p Value of the Levene test
-    public var LeveneP: Double?
+    public var LeveneP: FPT?
     /// degrees of freedom assuming equal variances
-    public var dfEQVAR: Double?
+    public var dfEQVAR: FPT?
     /// degrees of freedom assuming unequal variances (Welch)
-    public var dfUEQVAR: Double?
+    public var dfUEQVAR: FPT?
     /// Returns `True`, if var1 is statistically equal for var2
     public var variancesAreEqual: Bool? = false
     /// mean1 >= mean2
@@ -425,21 +425,21 @@ public struct SS2SampleTTestResult: CustomStringConvertible, Codable  {
     /// mean1 != mean2
     public var mean1UEQmean2: Bool? = false
     /// critical value assuming equal variances
-    public var CVEQVAR: Double?
+    public var CVEQVAR: FPT?
     /// critical value assuming unequal variances
-    public var CVUEQVAR: Double?
+    public var CVUEQVAR: FPT?
     /// effect size assuming equal variances
-    public var rEQVAR: Double?
+    public var rEQVAR: FPT?
     /// effect size assuming unequal variances
-    public var rUEQVAR: Double?
+    public var rUEQVAR: FPT?
     /// t value according to Welch
-    public var tWelch: Double?
+    public var tWelch: FPT?
     /// degrees of freedom according to Welch
-    public var dfWelch: Double?
+    public var dfWelch: FPT?
     /// two sided p value according to Welch
-    public var p2Welch: Double?
+    public var p2Welch: FPT?
     /// one sided p value according to Welch
-    public var p1Welch: Double?
+    public var p1Welch: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -473,35 +473,35 @@ public struct SS2SampleTTestResult: CustomStringConvertible, Codable  {
 }
 
 /// Struct holding the results of the one sample t test
-public struct SSOneSampleTTestResult: CustomStringConvertible,Codable  {
+public struct SSOneSampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible,Codable  {
     /// one sided p value
-    public var p1Value: Double?
+    public var p1Value: FPT?
     /// one sided p value
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// t Value
-    public var tStat: Double?
+    public var tStat: FPT?
     /// critical value for alpha = 0.1
-    public var cv90Pct: Double?
+    public var cv90Pct: FPT?
     /// critical value for alpha = 0.05
-    public var cv95Pct: Double?
+    public var cv95Pct: FPT?
     /// critical value for alpha = 0.01
-    public var cv99Pct: Double?
+    public var cv99Pct: FPT?
     /// critical value for alpha as set by the call
-    public var cvAlpha: Double?
+    public var cvAlpha: FPT?
     /// mean
-    public var mean: Double?
+    public var mean: FPT?
     /// reference mean
-    public var mean0: Double?
+    public var mean0: FPT?
     /// mean - mean0
-    public var difference: Double?
+    public var difference: FPT?
     /// n of sample
-    public var sampleSize: Double?
+    public var sampleSize: FPT?
     /// sd
-    public var stdDev: Double?
+    public var stdDev: FPT?
     /// standard error
-    public var stdErr: Double?
+    public var stdErr: FPT?
     /// degrees of freedom
-    public var df: Double?
+    public var df: FPT?
     /// mean1 >= mean0
     public var meanGTEtestValue: Bool? = false
     /// mean <= mean0
@@ -535,31 +535,31 @@ public struct SSOneSampleTTestResult: CustomStringConvertible,Codable  {
 }
 
 /// Encapsulates the results of a matched pairs t test
-public struct SSMatchedPairsTTestResult: CustomStringConvertible, Codable {
+public struct SSMatchedPairsTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Cov
-    public var covariance: Double?
+    public var covariance: FPT?
     /// standard error of the difference
-    public var stdEDiff: Double?
+    public var stdEDiff: FPT?
     /// correlatiopn
-    public var correlation: Double?
+    public var correlation: FPT?
     /// p value of correlation
-    public var pValueCorr: Double?
+    public var pValueCorr: FPT?
     /// effect size
-    public var effectSizeR: Double?
+    public var effectSizeR: FPT?
     /// upper bound of the 95%-confidence interval
-    public var ci95upper: Double?
+    public var ci95upper: FPT?
     /// lower bound of the 95%-confidence interval
-    public var ci95lower: Double?
+    public var ci95lower: FPT?
     /// sd of the differences
-    public var stdDevDiff: Double?
+    public var stdDevDiff: FPT?
     /// sample size
-    public var sampleSize: Double?
+    public var sampleSize: FPT?
     /// p value for two sided test
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// degrees of freedom
-    public var df: Double?
+    public var df: FPT?
     /// t statistics
-    public var tStat: Double?
+    public var tStat: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -586,19 +586,19 @@ public struct SSMatchedPairsTTestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the chi^2 variance test
-public struct SSChiSquareVarianceTestResult: CustomStringConvertible, Codable {
+public struct SSChiSquareVarianceTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// degrees of freedom
-    public var df: Double?
+    public var df: FPT?
     /// variance ratio
-    public var ratio: Double?
+    public var ratio: FPT?
     /// chi^2
-    public var testStatisticValue: Double?
+    public var testStatisticValue: FPT?
     /// one sided p value
-    public var p1Value: Double?
+    public var p1Value: FPT?
     /// two sided p value
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// sample size
-    public var sampleSize: Double?
+    public var sampleSize: FPT?
     /// true iff sample variance == s0
     public var sigmaUEQs0: Bool?
     /// true iff sample variance <= s0
@@ -606,7 +606,7 @@ public struct SSChiSquareVarianceTestResult: CustomStringConvertible, Codable {
     /// true iff sample variance >= s0
     public var sigmaGTEs0: Bool?
     /// sample standard deviation
-    public var sd: Double?
+    public var sd: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -628,36 +628,36 @@ public struct SSChiSquareVarianceTestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the multiple means tes
-public struct SSOneWayANOVATestResult: CustomStringConvertible, Codable {
+public struct SSOneWayANOVATestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// two sided p value
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// F ratio
-    public var FStatistic: Double?
+    public var FStatistic: FPT?
     /// p value of the Bartlett test
-    public var pBartlett: Double?
+    public var pBartlett: FPT?
     /// Alpha
-    public var alpha: Double?
+    public var alpha: FPT?
     public var meansEQUAL: Bool?
     /// critical value at alpha
-    public var cv: Double?
+    public var cv: FPT?
     /// p value of the Levene test
-    public var pLevene: Double?
+    public var pLevene: FPT?
     /// total sum of square
-    public var SSTotal: Double?
+    public var SSTotal: FPT?
     /// residual sum of squares (within groups)
-    public var SSError: Double?
+    public var SSError: FPT?
     /// treatment sum of squares
-    public var SSTreatment: Double?
+    public var SSTreatment: FPT?
     /// error mean sum of squares
-    public var MSError: Double?
+    public var MSError: FPT?
     /// treatment mean sum of squares
-    public var MSTreatment: Double?
+    public var MSTreatment: FPT?
     /// error degrees of freedom
-    public var dfError: Double?
+    public var dfError: FPT?
     /// treatment degrees of freedom
-    public var dfTreatment: Double?
+    public var dfTreatment: FPT?
     /// total degrees of freedom
-    public var dfTotal: Double?
+    public var dfTotal: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -685,25 +685,25 @@ public struct SSOneWayANOVATestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the F test for equal variances
-public struct SSFTestResult: CustomStringConvertible, Codable {
+public struct SSFTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// size of sample 1
-    public var sampleSize1: Double?
+    public var sampleSize1: FPT?
     /// size of sample 2
-    public var sampleSize2: Double?
+    public var sampleSize2: FPT?
     /// denominator degrees of freedom
-    public var dfDenominator: Double?
+    public var dfDenominator: FPT?
     /// numerator degrees of freedom
-    public var dfNumerator: Double?
+    public var dfNumerator: FPT?
     /// variance of sample 1
-    public var variance1: Double?
+    public var variance1: FPT?
     /// variance of sample 2
-    public var variance2: Double?
+    public var variance2: FPT?
     /// F ratio
-    public var FRatio: Double?
+    public var FRatio: FPT?
     /// one sided p value
-    public var p1Value: Double?
+    public var p1Value: FPT?
     /// two sided p value
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// indicates if variances are equal
     public var FRatioEQ1: Bool?
     /// indicates if var1 <= var2
@@ -711,11 +711,11 @@ public struct SSFTestResult: CustomStringConvertible, Codable {
     /// indicates if var1 >= var2
     public var FRatioGTE1: Bool?
     /// confidence intervall for var1 == var2
-    public var ciRatioEQ1: SSConfIntv?
+    public var ciRatioEQ1: SSConfIntv<FPT>?
     /// confidence intervall for var1 <= var2
-    public var ciRatioLTE1: SSConfIntv?
+    public var ciRatioLTE1: SSConfIntv<FPT>?
     /// confidence intervall for var1 >= var2
-    public var ciRatioGTE1: SSConfIntv?
+    public var ciRatioGTE1: SSConfIntv<FPT>?
     /// Returns a description
     public var description: String {
         get {
@@ -742,17 +742,17 @@ public struct SSFTestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of Box Ljung Autocorrelation
-public struct SSBoxLjungResult: CustomStringConvertible, Codable {
-    /// coefficients as Dictionary<lag: String, coeff: Double>
-    public var coefficients: Array<Double>?
-    /// Bartlett standard error as Dictionary<lag: String, se: Double>
-    public var seBartlett: Array<Double>?
-    /// standard error for white noise as Dictionary<lag: String, se: Double>
-    public var seWN: Array<Double>?
-    /// test statistics as Dictionary<lag: String, stat: Double>
-    public var testStatistic: Array<Double>?
-    /// pavalues as  Dictionary<lag: String, pValue: Double>
-    public var pValues: Array<Double>?
+public struct SSBoxLjungResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
+    /// coefficients as Dictionary<lag: String, coeff: FPT>
+    public var coefficients: Array<FPT>?
+    /// Bartlett standard error as Dictionary<lag: String, se: FPT>
+    public var seBartlett: Array<FPT>?
+    /// standard error for white noise as Dictionary<lag: String, se: FPT>
+    public var seWN: Array<FPT>?
+    /// test statistics as Dictionary<lag: String, stat: FPT>
+    public var testStatistic: Array<FPT>?
+    /// pavalues as  Dictionary<lag: String, pValue: FPT>
+    public var pValues: Array<FPT>?
     /// Returns a description
     public var description: String {
         get {
@@ -773,25 +773,25 @@ public struct SSBoxLjungResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the runs test
-public struct SSRunsTestResult: CustomStringConvertible, Codable {
+public struct SSRunsTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Number of items >= cutting point
-    public var nGTEcp: Double?
+    public var nGTEcp: FPT?
     /// Number of items < cutting point
-    public var nLTcp: Double?
+    public var nLTcp: FPT?
     /// Number of runs
-    public var nRuns: Double?
+    public var nRuns: FPT?
     /// z value
-    public var zStat: Double?
+    public var zStat: FPT?
     /// critical value
-    public var criticalValue: Double?
+    public var criticalValue: FPT?
     /// p value
-    public var pValueExact: Double?
+    public var pValueExact: FPT?
     /// p value asymptotic
-    public var pValueAsymp: Double?
+    public var pValueAsymp: FPT?
     // cutting point used
-    public var cp: Double?
+    public var cp: FPT?
     /// Array of differences
-    public var diffs: Array<Double>?
+    public var diffs: Array<FPT>?
     /// Randomness?
     public var randomness: Bool?
     /// Returns a description
@@ -817,35 +817,35 @@ public struct SSRunsTestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the Mann-Whitney U test
-public struct SSMannWhitneyUTestResult: CustomStringConvertible, Codable {
+public struct SSMannWhitneyUTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// sum of ranks in set 1
-    public var sumRanks1: Double?
+    public var sumRanks1: FPT?
     /// sum of ranks in set 2
-    public var sumRanks2: Double?
+    public var sumRanks2: FPT?
     /// mean of ranks in set 1
-    public var meanRank1: Double?
+    public var meanRank1: FPT?
     /// mean of ranks in set 2
-    public var meanRank2: Double?
+    public var meanRank2: FPT?
     /// sum of tied ranks
-    public var sumTiedRanks: Double?
+    public var sumTiedRanks: FPT?
     /// number of ties
     public var nTies: Int?
     /// U
-    public var UMannWhitney: Double?
+    public var UMannWhitney: FPT?
     /// Wilcoxon W
-    public var WilcoxonW: Double?
+    public var WilcoxonW: FPT?
     /// Z
-    public var zStat: Double?
+    public var zStat: FPT?
     /// two sided approximated p value
-    public var p2Approx: Double?
+    public var p2Approx: FPT?
     /// two sided exact p value
-    public var p2Exact: Double?
+    public var p2Exact: FPT?
     /// one sided approximated p value
-    public var p1Approx: Double?
+    public var p1Approx: FPT?
     /// one sided exact p value
-    public var p1Exact: Double?
+    public var p1Exact: FPT?
     /// effect size
-    public var effectSize: Double?
+    public var effectSize: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -875,11 +875,11 @@ public struct SSMannWhitneyUTestResult: CustomStringConvertible, Codable {
 
 
 /// Holds the results of the Wilcoxon test for matched pairs
-public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible, Codable {
+public struct SSWilcoxonMatchedPairsTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// two sided p value
-    public var p2Value: Double?
+    public var p2Value: FPT?
     /// sample size
-    public var sampleSize: Double?
+    public var sampleSize: FPT?
     /// number of ranks > 0
     public var nPosRanks: Int?
     /// number of ranks < 0
@@ -889,17 +889,17 @@ public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible, Codable
     /// number of zero valued differences
     public var nZeroDiff: Int?
     /// sum of negative ranks
-    public var sumNegRanks: Double?
+    public var sumNegRanks: FPT?
     /// sum of positive ranks
-    public var sumPosRanks: Double?
+    public var sumPosRanks: FPT?
     /// mean of negative ranks
-    public var meanPosRanks: Double?
+    public var meanPosRanks: FPT?
     /// mean of positive ranks
-    public var meanNegRanks: Double?
+    public var meanNegRanks: FPT?
     /// z statistic
-    public var zStat: Double?
+    public var zStat: FPT?
     /// Cohen's d
-    public var dCohen: Double?
+    public var dCohen: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -926,11 +926,11 @@ public struct SSWilcoxonMatchedPairsTestResult: CustomStringConvertible, Codable
     
 }
 /// Sign test results
-public struct SSSignTestRestult: CustomStringConvertible, Codable {
+public struct SSSignTestRestult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// exact p value
-    public var pValueExact: Double?
+    public var pValueExact: FPT?
     /// asymptotic p value
-    public var pValueApprox: Double?
+    public var pValueApprox: FPT?
     /// number of differences > 0
     public var nPosDiff: Int?
     /// number of differences < 0
@@ -940,7 +940,7 @@ public struct SSSignTestRestult: CustomStringConvertible, Codable {
     /// sample size
     public var total: Int?
     /// z value
-    public var zStat: Double?
+    public var zStat: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -963,7 +963,7 @@ public struct SSSignTestRestult: CustomStringConvertible, Codable {
 }
 
 /// Binomial test results
-public struct SSBinomialTestResult<T>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable {
+public struct SSBinomialTestResult<T, FPT: SSFloatingPoint>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable, FPT: Codable {
     /// number of trials
     public var nTrials: Int?
     /// number of successes
@@ -971,19 +971,19 @@ public struct SSBinomialTestResult<T>: CustomStringConvertible, Codable where T:
     /// number of failures
     public var nFailure: Int?
     /// one sided p value (exact)
-    public var pValueExact: Double?
+    public var pValueExact: FPT?
     /// probability for success
-    public var probSuccess: Double?
+    public var probSuccess: FPT?
     /// probability for failure
-    public var probFailure: Double?
+    public var probFailure: FPT?
     /// test probability
-    public var probTest: Double?
+    public var probTest: FPT?
     /// success id
     public var successCode: T?
     /// 1 - alpha confidence interval (Jeffreys)
-    public var confIntJeffreys: SSConfIntv?
+    public var confIntJeffreys: SSConfIntv<FPT>?
     /// 1 - alpha confidence interval (Clopper/Pearson)
-    public var confIntClopperPearson: SSConfIntv?
+    public var confIntClopperPearson: SSConfIntv<FPT>?
     /// Returns a description
     public var description: String {
         get {
@@ -1008,17 +1008,17 @@ public struct SSBinomialTestResult<T>: CustomStringConvertible, Codable where T:
 }
 
 /// Results of the KS-2-Sample test
-public struct SSKSTwoSampleTestResult: CustomStringConvertible, Codable {
+public struct SSKSTwoSampleTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// max pos diff
-    var dMaxPos: Double?
+    var dMaxPos: FPT?
     /// max neg diff
-    var dMaxNeg: Double?
+    var dMaxNeg: FPT?
     /// max abs diff
-    var dMaxAbs: Double?
+    var dMaxAbs: FPT?
     /// z value
-    var zStatistic: Double?
+    var zStatistic: FPT?
     /// p valie
-    var p2Value: Double?
+    var p2Value: FPT?
     /// size of sample 1
     var sampleSize1: Int?
     /// size of sample 2
@@ -1045,21 +1045,21 @@ public struct SSKSTwoSampleTestResult: CustomStringConvertible, Codable {
 }
 
 /// Holds the results of the two sample runs test
-public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible, Codable {
+public struct SSWaldWolfowitzTwoSampleTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Number of runs
     public var nRuns: Int?
     /// z value
-    public var zStat: Double?
+    public var zStat: FPT?
     // critical value
-    //    public var criticalValue: Double?
+    //    public var criticalValue: FPT?
     /// p value
-    public var pValueExact: Double?
+    public var pValueExact: FPT?
     /// p value asymptotic
-    public var pValueAsymp: Double?
+    public var pValueAsymp: FPT?
     /// mean
-    public var mean: Double?
+    public var mean: FPT?
     /// variance
-    public var variance: Double?
+    public var variance: FPT?
      /// number of intergroup ties
     public var nTiesIntergroup: Int?
     /// number of inner group ties
@@ -1092,13 +1092,13 @@ public struct SSWaldWolfowitzTwoSampleTestResult: CustomStringConvertible, Codab
     
 }
 /// The results of the H test
-public struct SSKruskalWallisHTestResult: CustomStringConvertible, Codable {
+public struct SSKruskalWallisHTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Chi
-    public var Chi2: Double?
+    public var Chi2: FPT?
     /// Chi square corrected for ties
-    public var Chi2corrected: Double?
+    public var Chi2corrected: FPT?
     /// one sided p value
-    public var pValue: Double?
+    public var pValue: FPT?
     /// number of Groups
     public var nGroups: Int?
     /// Degrees of Freedom
@@ -1106,15 +1106,15 @@ public struct SSKruskalWallisHTestResult: CustomStringConvertible, Codable {
     /// number of observations
     public var nObservations: Int?
     /// array of mean ranks per group
-    public var meanRanks: Array<Double>?
+    public var meanRanks: Array<FPT>?
     /// array of rank sums per group
-    public var sumRanks: Array<Double>?
+    public var sumRanks: Array<FPT>?
     /// critical value at alpha
-    public var cv: Double?
+    public var cv: FPT?
     /// Number of ties
     public var nTies: Int?
     /// alpha
-    public var alpha: Double?
+    public var alpha: FPT?
     /// Returns a description
     public var description: String {
         get {
@@ -1140,15 +1140,15 @@ public struct SSKruskalWallisHTestResult: CustomStringConvertible, Codable {
 }
 
 /// Statistics needed to create a boxplot
-public struct SSBoxWhisker<T>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable {
+public struct SSBoxWhisker<T, FPT: SSFloatingPoint>: CustomStringConvertible, Codable where T: Comparable, T: Hashable, T: Codable, FPT: Codable {
     /// Median
-    public var median: Double?
+    public var median: FPT?
     /// Lower "hinge"
-    public var q25: Double?
+    public var q25: FPT?
     /// Upper "hinge"
-    public var q75: Double?
+    public var q75: FPT?
     /// Interquartile range
-    public var iqr: Double?
+    public var iqr: FPT?
     /// Lowest "normal" value >= (q25 - 1.5 * iqr)
     public var lWhiskerExtreme: T?
     /// Largest "normal" value <= (q75 + 1.5 * iqr)
@@ -1158,9 +1158,9 @@ public struct SSBoxWhisker<T>: CustomStringConvertible, Codable where T: Compara
     /// Array containing all extreme values with (value < (q25 - 3.0 * iqr)) || (value > (q75 + 3.0 * iqr))
     public var outliers: Array<T>?
     /// Upper notch
-    public var uNotch: Double?
+    public var uNotch: FPT?
     /// Lower notch
-    public var lNotch: Double?
+    public var lNotch: FPT?
     
     /// Returns a description
     public var description: String {
@@ -1600,9 +1600,20 @@ public enum SSPostHocTestType: Int, Codable, CustomStringConvertible {
 
 }
 
-/// A tuple containing the results of one out of multiple comparisons.
-public typealias SSPostHocTestResult = (row: String, meanDiff: Double, testStat: Double, pValue: Double, testType: SSPostHocTestType)
+public enum SSIncompleteGammaFunction: Int, Codable, CustomStringConvertible {
+    case lower, upper
+    public var description: String {
+        switch self {
+        case .lower:
+            return "lower incomplete gamma function"
+        case .upper:
+            return "upper incomplete gamma function"
+        }
+    }
+}
 
+/// A tuple containing the results of one out of multiple comparisons.
+public typealias SSPostHocTestResult<FPT: SSFloatingPoint & Codable> = (row: String, meanDiff: FPT, testStat: FPT, pValue: FPT, testType: SSPostHocTestType)
 
 
 

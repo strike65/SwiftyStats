@@ -32,9 +32,9 @@ import os.log
 /// - Parameter m: mean
 /// - Parameter c: direction
 /// - Throws: SSSwiftyStatsError if c <= 0
-public func paraVonMisesDist(mean m: Double!, concentration c: Double!) throws -> SSContProbDistParams {
-    var result = SSContProbDistParams()
-    if c <= 0.0 {
+public func paraVonMisesDist<FPT: SSFloatingPoint & Codable>(mean m: FPT, concentration c: FPT) throws -> SSContProbDistParams<FPT> {
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    if c <= 0 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -46,9 +46,9 @@ public func paraVonMisesDist(mean m: Double!, concentration c: Double!) throws -
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     result.mean = m
-    result.variance = 1.0 - besselI1(x: c) / besselI0(x: c)
-    result.skewness = Double.nan
-    result.kurtosis = Double.nan
+    result.variance = 1 - besselI1(x: c) / besselI0(x: c)
+    result.skewness = FPT.nan
+    result.kurtosis = FPT.nan
     return result
 }
 
@@ -75,9 +75,9 @@ public func pdfVonMisesDist(x: Double!, mean m: Double!, concentration c: Double
     var _res: Double
     if xx >= 0 && xx <= 2.0 * Double.pi {
         if ((fabs(c) <= Double.leastNonzeroMagnitude || fabs(c) <= Double.ulpOfOne)) {
-            return OO2PI
+            return Double.oopi
         }
-        _res = exp(c * cos(mm - xx)) / (TWOPI * besselI0(x: c))
+        _res = exp(c * cos(mm - xx)) / (Double.twopi * besselI0(x: c))
     }
     else {
         _res = 0.0
@@ -268,7 +268,7 @@ public func quantileVonMisesDist(p: Double!, mean m: Double!, concentration c: D
      */
     let eps: Double = 2.0 * Double.ulpOfOne
     var mVal, MaxM, MinM, _test: Double
-    MaxM = TWOPI
+    MaxM = Double.twopi
     MinM = 0
     if(p < 0) {
         return(0.0)

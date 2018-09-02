@@ -27,28 +27,28 @@ import Foundation
 /// An abstract class used to evaluate continued fractions. This class must be subclassed.
 /// The n<sup>th</sup> coefficient is computed using the methods a_N:N point:x and b_N:N point:x<br/>
 /// <img src="../img/cf.png" alt="">
-internal class SSContFrac: NSObject {
+internal class SSContFrac<T: SSFloatingPoint>: NSObject {
 
     /// max error
-    public var eps:Double = 1E-12
+    public var eps:T = T.ulpOfOne
     /// initializes a new instance
     override public init() {
         super.init()
-        self.eps = 1E-12
+        self.eps = T.ulpOfOne
     }
     
     /// The n<sup>th</sup> a coefficient at x. If a is a function of x, x is passed as well.
     /// - Parameter n: n
     /// - Parameter x: x
-    public func a_N(n: Int!, point x: Double?) -> Double {
-        return Double.nan
+    public func a_N(n: Int, point x: T) -> T {
+        return T.nan
     }
     
     /// The n<sup>th</sup> b coefficient at x. If a is a function of x, x is passed as well.
     /// - Parameter n: n
     /// - Parameter x: x
-    public func b_N(n: Int!, point x: Double?) -> Double {
-        return Double.nan
+    public func b_N(n: Int, point x: T) -> T {
+        return T.nan
     }
     
     /// Evaluates the continued fraction at point x. The evaluation will be stopped, when max iteration count is reached or one of the convergents is NAN.
@@ -59,48 +59,48 @@ internal class SSContFrac: NSObject {
     /// - Parameter converged:      TRUE if the result is valid
     /// - Parameter iterations:     On return it contains the number of iterations needed.
     /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
-    public func compute(x: Double!, eps: Double!, maxIter: Int!, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> Double {
+    public func compute(x: T, eps: T = T.ulpOfOne, maxIter: Int, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> T {
         var n: Int = 1
-        var hPrev: Double
-        let tiny: Double = 1E-50
+        var hPrev: T
+        let tiny: T = makeFP(1E-50)
         hPrev = self.a_N(n:0, point:x)
         if (hPrev == 0) {
             hPrev = tiny
         }
-        var dPrev: Double = 0
-        var cPrev: Double = hPrev
-        var HN: Double = hPrev
-        var aN: Double
-        var bN: Double
-        var DN: Double
-        var CN: Double
-        var Delta: Double
-        var DeltaN: Double
+        var dPrev: T = 0
+        var cPrev: T = hPrev
+        var HN: T = hPrev
+        var aN: T
+        var bN: T
+        var DN: T
+        var CN: T
+        var Delta: T
+        var DeltaN: T
         while (n < maxIter) {
             aN = self.a_N(n: n, point: x)
             bN = self.b_N(n: n, point: x)
             DN = aN + bN * dPrev;
-            Delta = fabs(DN);
+            Delta = abs(DN);
             if (Delta <= eps) {
                 DN = tiny;
             }
             CN = aN + bN / cPrev
-            Delta = fabs(CN)
+            Delta = abs(CN)
             if (CN <= eps) {
                 CN = tiny
             }
-            DN = 1.0 / DN
+            DN = 1 / DN
             DeltaN = DN * CN
             HN = hPrev * DeltaN
             if (HN.isInfinite) {
                 converged.pointee = false;
-                return Double.nan;
+                return T.nan;
             }
             if (HN.isInfinite) {
                 converged.pointee = false;
-                return Double.nan;
+                return T.nan;
             }
-            if (fabs(DeltaN - 1.0) < eps) {
+            if (abs(DeltaN - makeFP(1.0)) < eps) {
                 converged.pointee = true;
                 iterations.pointee = n;
                 return HN;
@@ -112,7 +112,7 @@ internal class SSContFrac: NSObject {
         }
         if (n >= maxIter) {
             converged.pointee = false;
-            return Double.nan;
+            return T.nan;
         }
         converged.pointee = true;
         iterations.pointee = n
@@ -121,35 +121,43 @@ internal class SSContFrac: NSObject {
 }
 
 /// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i) I_x(a,b)
-internal class SSBetaRegularized: SSContFrac {
+internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
     
     /// Parameter a. Must be set by the caller
-    public var a: Double = Double.nan
+    public var a: T = T.nan
     /// Parameter b. Must be set by the caller
-    public var b: Double = Double.nan
+    public var b: T = T.nan
     
+
     /// Initializes a new instance
     override public init() {
         super.init()
-        self.a = Double.nan
-        self.b = Double.nan
+        self.a = T.nan
+        self.b = T.nan
     }
     /// Returns the n_th a. Will always be  one in this case
-    override public func a_N(n: Int!, point x: Double?) -> Double {
-        return 1.0
+    override public func a_N(n: Int, point x: T) -> T {
+        return makeFP(1.0)
     }
     
     /// Returns the nt_th b used by cf
-    override public func b_N(n: Int!, point x: Double!) -> Double {
-        var res: Double = Double.nan
-        var k: Double
+    override public func b_N(n: Int, point x: T) -> T {
+        var res: T = T.nan
+        var k: T
         if n % 2 == 0 {
-            k = Double(n) / 2.0
-            res = ( k * ( self.b - k ) * x ) / ( ( self.a + ( 2.0 * k ) - 1 ) * ( self.a + ( 2.0 * k ) ) )
+            k = makeFP(n) / 2
+            let expr1: T = self.b - k
+            let expr2: T = k * expr1 * x
+            let expr3: T = 2 * k
+            let expr4: T = self.a + expr3 - 1
+            res = expr2 / ( expr4 * ( self.a + expr3 ) )
         }
         else {
-            k = ( Double(n - 1)) / 2.0
-            res = ( -1.0 ) * ( ( ( self.a + k ) * ( self.a + self.b + k ) * x ) / ( ( self.a + ( 2.0 * k ) ) * ( self.a + ( 2.0 * k ) + 1.0 ) ) )
+            k = makeFP(n - 1) / makeFP(2)
+            let expr1: T = ( (self.a + k) * (self.a + self.b + k) ) * x
+            let expr2: T = self.a + (2 * k)
+            let expr3: T = expr2 + 1
+            res = ( -1 ) * (expr1 / ( expr2 * expr3 ) )
         }
         return res
     }
@@ -157,22 +165,22 @@ internal class SSBetaRegularized: SSContFrac {
 }
 
 /// The regularized Gamma function Q(a,z) (http://mathworld.wolfram.com/RegularizedGammaFunction.htm) function as cf
-internal class SSGammaQ: SSContFrac {
+internal class SSGammaQ<T: SSFloatingPoint>: SSContFrac<T> {
     
    /// Parameter a.Must be set by the caller
-    public var a: Double = Double.nan
+    public var a: T = T.nan
     /// Initializes a new instance
     override public init() {
         super.init()
-        self.a = Double.nan
+        self.a = T.nan
     }
     /// Returns the n_th a
-    override public func a_N(n: Int!, point x: Double!) -> Double {
-        return Double(n + n) + 1.0 - self.a + x
+    override public func a_N(n: Int, point x: T) -> T {
+        return makeFP(n + n) + 1 - self.a + x
     }
     
     /// Returns the n_th b
-    override public func b_N(n: Int!, point x: Double?) -> Double {
-        return Double(n) * self.a - Double(n * n)
+    override public func b_N(n: Int, point x: T) -> T {
+        return makeFP(n) * self.a - makeFP(n * n)
     }
 }

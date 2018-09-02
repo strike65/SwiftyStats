@@ -47,9 +47,9 @@ import os.log
  ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
  
  */
-public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable {
+public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable, FPT: Codable {
     
-    public typealias Examine = SSExamine<SSElement>
+//    public typealias Examine = SSExamine<SSElement, Double>
     
     // coding keys
     private enum CodingKeys: String, CodingKey {
@@ -73,7 +73,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// Required func to conform to Codable protocol
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let d = try container.decodeIfPresent(Array<SSExamine<SSElement>>.self, forKey: .data) {
+        if let d = try container.decodeIfPresent(Array<SSExamine<SSElement, FPT>>.self, forKey: .data) {
             self.data = d
         }
         if let t = try container.decodeIfPresent(Array<String>.self, forKey: .tags) {
@@ -158,7 +158,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// Initializes a new dataframe from an archive saved by archiveTo(filePath path:overwrite:).
     /// - Parameter path: The full qualified filename.
     /// - Throws: SSSwiftyStatError.fileNotReadable
-    public class func unarchiveFrom(filePath path: String!) throws -> SSDataFrame<SSElement>? {
+    public class func unarchiveFrom(filePath path: String!) throws -> SSDataFrame<SSElement, FPT>? {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
@@ -170,7 +170,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         do {
             let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: fullFilename))
             let jsonDecoder = JSONDecoder()
-            let result = try jsonDecoder.decode(SSDataFrame<SSElement>.self, from: data)
+            let result = try jsonDecoder.decode(SSDataFrame<SSElement, FPT>.self, from: data)
             return result
         }
         catch {
@@ -183,14 +183,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     #endif
     
     
-    private var data:Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
+    private var data:Array<SSExamine<SSElement, FPT>> = Array<SSExamine<SSElement, FPT>>()
     private var tags: Array<String> = Array<String>()
     private var cNames: Array<String> = Array<String>()
     private var rows: Int = 0
     private var cols: Int = 0
     
-    /// Returns the data
-    public var examines: Array<SSExamine<SSElement>> {
+    /// Array containing all SSExamine objects
+    public var examines: Array<SSExamine<SSElement, FPT>> {
         get {
             return data
         }
@@ -203,10 +203,10 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
         }
     }
     
-    /// Returns true if the receiver is equal to object.
+    /// Returns true if the receiver is equal to `object`.
     public override func isEqual(_ object: Any?) -> Bool {
         var result: Bool = true
-        if let df: SSDataFrame<SSElement> = object as? SSDataFrame<SSElement> {
+        if let df: SSDataFrame<SSElement, FPT> = object as? SSDataFrame<SSElement, FPT> {
             if self.columns == df.columns && self.rows == df.rows {
                 for k in 0..<self.columns {
                     result = result && self[k].isEqual(df[k])
@@ -246,9 +246,9 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// Initializes a new instance and returns that instance in a fully initialized state
     /// - Parameter examineArray: An Array of SSEXamine objects
     /// - Throws: SSSwiftyStatsError
-    init(examineArray: Array<SSExamine<SSElement>>!) throws {
+    init(examineArray: Array<SSExamine<SSElement, FPT>>!) throws {
         let tempSampleSize = examineArray.first!.sampleSize
-        data = Array<SSExamine<SSElement>>.init()
+        data = Array<SSExamine<SSElement, FPT>>.init()
         tags = Array<String>()
         cNames = Array<String>()
         var i: Int = 0
@@ -304,7 +304,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     override public init() {
         cNames = Array<String>()
         tags = Array<String>()
-        data = Array<SSExamine<SSElement>>()
+        data = Array<SSExamine<SSElement, FPT>>()
         rows = 0
         cols = 0
         super.init()
@@ -314,7 +314,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// - Parameter examine: The SSExamine object
     /// - Parameter name: Name of column
     /// - Throws: SSSwiftyStatsError examine.sampleSize != self.rows
-    public func append(_ examine: SSExamine<SSElement>, name: String?) throws {
+    public func append(_ examine: SSExamine<SSElement, FPT>, name: String?) throws {
         if examine.sampleSize != self.rows {
             #if os(macOS) || os(iOS)
             
@@ -353,7 +353,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// Removes a column
     /// - Parameter name: Name of column
     /// - Returns: the removed column oe nil
-    public func remove(name: String!) -> SSExamine<SSElement>? {
+    public func remove(name: String!) -> SSExamine<SSElement, FPT>? {
         if cols > 0 {
             if let i = cNames.index(of: name) {
                 cNames.remove(at: i)
@@ -405,13 +405,13 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     }
     
     /// Accesses the column at `at`
-    public subscript(at: Int) -> SSExamine<SSElement> {
+    public subscript(at: Int) -> SSExamine<SSElement, FPT> {
         assert(isValidColumnIndex(at), "Index out of range")
         return data[at]
     }
     
     /// Accesses the column named `name`
-    public subscript(name: String!) -> SSExamine<SSElement> {
+    public subscript(name: String) -> SSExamine<SSElement, FPT> {
         if let i = cNames.index(of: name) {
             return data[i]
         }
@@ -434,14 +434,14 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     //        rows = aDecoder.decodeInteger(forKey: "rows")
     //        cols = aDecoder.decodeInteger(forKey: "cols")
     //        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
-    //        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement>>
+    //        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement, Double>>
     //        tags = aDecoder.decodeObject(forKey: "tags") as! Array<String>
     //    }
     
     // NSCopying / NSMutableCopying
     public func copy(with zone: NSZone? = nil) -> Any {
         do {
-            let res = try SSDataFrame<SSElement>.init(examineArray: self.data)
+            let res = try SSDataFrame<SSElement, FPT>.init(examineArray: self.data)
             res.tags = self.tags
             res.cNames = self.cNames
             return res
@@ -560,7 +560,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement> {
+    public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         do {
             var importedString = fromString
             
@@ -613,9 +613,9 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                     cnames.append(curString)
                 }
             }
-            var examineArray: Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
+            var examineArray: Array<SSExamine<SSElement, FPT>> = Array<SSExamine<SSElement, FPT>>()
             for k in 0..<columns.count {
-                examineArray.append(SSExamine<SSElement>.init(withArray: columns[k], name: nil, characterSet: nil))
+                examineArray.append(SSExamine<SSElement, FPT>.init(withArray: columns[k], name: nil, characterSet: nil))
             }
             if cn {
                 k = 0
@@ -624,10 +624,10 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                     k += 1
                 }
             }
-            return try SSDataFrame<SSElement>.init(examineArray: examineArray)
+            return try SSDataFrame<SSElement, FPT>.init(examineArray: examineArray)
         }
         catch {
-            return SSDataFrame<SSElement>()
+            return SSDataFrame<SSElement, FPT>()
         }
     }
     
@@ -638,7 +638,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
     /// - Parameter stringEncoding: The encoding to use.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func dataFrame(fromFile path: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, stringEncoding: String.Encoding! = String.Encoding.utf8, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement> {
+    public class func dataFrame(fromFile path: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, stringEncoding: String.Encoding! = String.Encoding.utf8, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
@@ -703,9 +703,9 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                     cnames.append(curString)
                 }
             }
-            var examineArray: Array<SSExamine<SSElement>> = Array<SSExamine<SSElement>>()
+            var examineArray: Array<SSExamine<SSElement, FPT>> = Array<SSExamine<SSElement, FPT>>()
             for k in 0..<columns.count {
-                examineArray.append(SSExamine<SSElement>.init(withArray: columns[k], name: nil, characterSet: nil))
+                examineArray.append(SSExamine<SSElement, FPT>.init(withArray: columns[k], name: nil, characterSet: nil))
             }
             if cn {
                 k = 0
@@ -714,7 +714,7 @@ public class SSDataFrame<SSElement>: NSObject, NSCopying, Codable, NSMutableCopy
                     k += 1
                 }
             }
-            return try SSDataFrame<SSElement>.init(examineArray: examineArray)
+            return try SSDataFrame<SSElement, FPT>.init(examineArray: examineArray)
         }
         catch {
             throw error

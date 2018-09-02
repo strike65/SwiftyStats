@@ -33,8 +33,8 @@ import os.log
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-public func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> SSContProbDistParams {
-    var result = SSContProbDistParams()
+public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> SSContProbDistParams<FPT> {
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     if df1 <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -57,19 +57,23 @@ public func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!)
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (df2 > 2.0) {
+    if (df2 > 2) {
         result.mean = df2 / (df2 - 2)
     }
     else {
-        result.mean = Double.nan
+        result.mean = FPT.nan
     }
-    if (df2 > 4.0) {
-        result.variance = (2 * pow(df2, 2.0) * (df1 + df2 - 2.0)) / (df1 * pow(df2 - 2.0,2.0) * (df2 - 4))
+    if (df2 > 4) {
+        let e1: FPT = (df1 + df2 - 2)
+        let e2: FPT = (df2 - 4)
+        let e3: FPT = df1 * pow1(df2 - 2, 2)
+        let e4: FPT = 2 * pow1(df2, 2)
+        result.variance = (e4 * e1) / (e3 * e2)
     }
     else {
-        result.variance = Double.nan
+        result.variance = FPT.nan
     }
-    if (df2 > 6.0) {
+    if (df2 > 6) {
         let d1 = (2 * df1 + df2 - 2)
         let d2 = (df2 - 6)
         let s1 = (8 * (df2 - 4))
@@ -77,24 +81,24 @@ public func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!)
         result.skewness = (d1 / d2) * sqrt(s1 / s2)
     }
     else {
-        result.skewness = Double.nan
+        result.skewness = FPT.nan
     }
-    if (df2 > 8.0) {
-        let s1 = pow(df2 - 2,2.0)
+    if (df2 > 8) {
+        let s1 = pow1(df2 - 2,2)
         let s2 = df2 - 4
-        let s3 = df1 + df2 - 2.0
-        let s4 = 5.0 * df2 - 22
+        let s3 = df1 + df2 - 2
+        let s4 = 5 * df2 - 22
         let s5 = df2 - 6
         let s6 = df2 - 8
         let s7 = df1 + df2 - 2
         let ss1 = (s1 * (s2) + df1 * (s3) * (s4))
         let ss2 = df1 * (s5) * (s6) * (s7)
-        result.kurtosis = 3.0 + (12 * ss1) / (ss2)
+        result.kurtosis = 3 + (12 * ss1) / (ss2)
         //            result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
         //                                      s1            s2                 s3                   s4                        s5          s6            s7
     }
     else {
-        result.kurtosis = Double.nan
+        result.kurtosis = FPT.nan
     }
     return result
 }
@@ -104,7 +108,7 @@ public func paraFRatioDist(numeratorDF df1: Double!, denominatorDF df2: Double!)
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-public func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
+public func pdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
     if df1 <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -127,36 +131,36 @@ public func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result: Double
-    var f1: Double
-    var f2: Double
-    var f3: Double
-    var f4: Double
-    var f5: Double
-    var f6: Double
-    var f7: Double
-    var f8: Double
-    var f9: Double
-    var lg1: Double
-    var lg2: Double
-    var lg3: Double
-    if f >= 0.0 {
-        f1 = (df1 + df2) / 2.0
-        f2 = df1 / 2.0
-        f3 = df2 / 2.0
-        lg1 = lgamma(f1)
-        lg2 = lgamma(f2)
-        lg3 = lgamma(f3)
-        f4 = (df1 / 2.0) * log(df1 / df2)
-        f5 = (df1 / 2.0 - 1.0) * log(f)
-        f6 = ((df1 + df2)/2.0) * log(1.0 + df1 * f / df2)
+    var result: FPT
+    var f1: FPT
+    var f2: FPT
+    var f3: FPT
+    var f4: FPT
+    var f5: FPT
+    var f6: FPT
+    var f7: FPT
+    var f8: FPT
+    var f9: FPT
+    var lg1: FPT
+    var lg2: FPT
+    var lg3: FPT
+    if f >= 0 {
+        f1 = (df1 + df2) / 2
+        f2 = df1 / 2
+        f3 = df2 / 2
+        lg1 = lgamma1(f1)
+        lg2 = lgamma1(f2)
+        lg3 = lgamma1(f3)
+        f4 = (df1 / 2) * log1(df1 / df2)
+        f5 = (df1 / 2 - 1) * log1(f)
+        f6 = ((df1 + df2) / 2) * log1(1 + df1 * f / df2)
         f7 = lg1 - (lg2 + lg3) + f4
         f8 = f5 - f6
         f9 = f7 + f8
-        result = exp(f9)
+        result = exp1(f9)
     }
     else {
-        result = 0.0
+        result = 0
     }
     return result
 }
@@ -166,9 +170,9 @@ public func pdfFRatioDist(f: Double!, numeratorDF df1: Double!, denominatorDF df
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-public func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
-    if f <= 0.0 {
-        return 0.0
+public func cdfFRatio<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
+    if f <= 0 {
+        return 0
     }
     if df1 <= 0 {
         #if os(macOS) || os(iOS)
@@ -192,7 +196,7 @@ public func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: D
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2.0, b: df2 / 2.0)
+    let result = betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2, b: df2 / 2)
     return result
 }
 
@@ -201,7 +205,7 @@ public func cdfFRatio(f: Double!, numeratorDF df1: Double!, denominatorDF df2: D
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0 and/or p < 0 and/or p > 1
-public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorDF df2: Double!) throws -> Double {
+public func quantileFRatioDist<FPT: SSFloatingPoint & Codable>(p: FPT,numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
     if df1 <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -224,7 +228,7 @@ public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorD
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0.0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -235,22 +239,24 @@ public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorD
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let eps: Double = 1E-15
-    if fabs( p - 1.0 ) <= eps  {
-        return Double.infinity
+    let eps: FPT = FPT.ulpOfOne
+    if abs( p - 1 ) <= eps  {
+        return FPT.infinity
     }
-    if fabs(p) <= eps {
-        return 0.0
+    if abs(p) <= eps {
+        return 0
     }
-    var fVal: Double
-    var maxF: Double
-    var minF: Double
-    maxF = 9999.0
-    minF = 0.0
-    fVal = 1.0 / p
+    var fVal: FPT
+    var maxF: FPT
+    var minF: FPT
+    maxF = 9999
+    minF = 0
+    fVal = 1 / p
     var it: Int = 0
-    var temp_p: Double
-    while((maxF - minF) > 1.0E-12)
+    var temp_p: FPT
+    let lower: FPT = makeFP(1E-12)
+    let half: FPT = FPT.half
+    while((maxF - minF) > lower)
     {
         if it == 1000 {
             break
@@ -259,7 +265,7 @@ public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorD
             temp_p = try cdfFRatio(f: fVal, numeratorDF: df1, denominatorDF: df2)
         }
         catch {
-            return Double.nan
+            return FPT.nan
         }
         if temp_p > p {
             maxF = fVal
@@ -267,7 +273,7 @@ public func quantileFRatioDist(p: Double!,numeratorDF df1: Double!, denominatorD
         else {
             minF = fVal
         }
-        fVal = (maxF + minF) * 0.5
+        fVal = (maxF + minF) * half
         it = it + 1
     }
     return fVal

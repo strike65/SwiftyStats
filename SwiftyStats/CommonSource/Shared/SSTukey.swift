@@ -207,14 +207,14 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
         #if (arch(arm) || arch(arm64))
         a = Double(0.5 * (bub + blb))
         #else
-        a = Double(Float80(0.5) * (bub + blb))
+        a = Double(0.5 * (bub + blb))
         #endif
         /* legendre quadrature with order = nleg */
         
         #if (arch(arm) || arch(arm64))
         b = Double(0.5 * (bub - blb))
         #else
-        b = Double(Float80(0.5) * (bub - blb))
+        b = Double(0.5 * (bub - blb))
         #endif
         jj = 1
         while jj <= nleg {
@@ -258,9 +258,9 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
             jj += 1
         }
         #if arch(arm) || arch(arm64)
-        elsum *= (((2.0 * b) * cc) * SQRT2PIINV)
+        elsum *= (((2.0 * b) * cc) * Double.sqrt2piinv)
         #else
-        elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80(SQRT2PIINV))
+        elsum *= (((Float80(2.0) * Float80(b)) * Float80(cc)) * Float80.sqrt2piinv)
         #endif
         einsum += elsum
         blb = bub
@@ -344,7 +344,7 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
 ///
 /// if degrees of freedom large, approximate integral
 /// with range distribution.
-public func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
+internal func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
     /*  function ptukey() [was qprob() ]:
      
      q = value of studentized range
@@ -482,7 +482,7 @@ public func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double
     }
     f2 = df * 0.5
     /* lgammafn(u) = log(gamma(u)) */
-    f2lf = ((f2 * log(df)) - (df * M_LN2)) - lgamma(f2)
+    f2lf = ((f2 * log(df)) - (df * Double.ln2)) - lgamma(f2)
     f21 = f2 - 1.0
     
     /* integral is divided into unit, half-unit, quarter-unit, or */
@@ -633,7 +633,7 @@ fileprivate func qinv(p: Double, c: Double, v: Double) -> Double {
 /// qtukey <- function(p, nmeans, df, nranges=1, lower.tail = TRUE, log.p = FALSE)
 ///
 //  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
-public func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
+internal func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
     let eps = 0.0001
     let maxiter = 50
     

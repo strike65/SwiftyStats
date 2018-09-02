@@ -27,6 +27,7 @@ import Foundation
 /// Defines a protocol to conform by SSExamine subclasses.
 public protocol SSExamineContainer {
     associatedtype ExamineElement
+    associatedtype Frequency: SSFloatingPoint
     /// The sample size
     var sampleSize: Int { get }
     /// The "length" of the container. I.e. the number of unique items
@@ -38,17 +39,17 @@ public protocol SSExamineContainer {
     /// Frequency of element
     mutating func frequency(_ element: ExamineElement) -> Int
     /// Relative frequency of element
-    mutating func rFrequency(_ element: ExamineElement) -> Double
+    mutating func rFrequency(_ element: ExamineElement) -> Frequency
     /// Appends an element
-    mutating func append(_ element: ExamineElement!)
+    mutating func append(_ element: ExamineElement)
     /// Appends an element <count> times
-    mutating func append(repeating count: Int!, element: ExamineElement!)
+    mutating func append(repeating count: Int, element: ExamineElement)
     /// Appends items from an array
-    mutating func append(contentOf array: Array<ExamineElement>!)
+    mutating func append(contentOf array: Array<ExamineElement>)
     /// Appends characters from a string. Throws, if Item is not of type string
-    mutating func append(text: String!, characterSet: CharacterSet?) throws
+    mutating func append(text: String, characterSet: CharacterSet?) throws
     /// Removes the element
-    mutating func remove(_ element: ExamineElement!, allOccurences: Bool!)
+    mutating func remove(_ element: ExamineElement, allOccurences: Bool)
     /// Remove all items
     mutating func removeAll()
 }

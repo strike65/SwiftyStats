@@ -30,7 +30,7 @@ import os.log
 
 /// Struct provides a matrix-like crosstable. Elements are accessible by c[row, column].
 /// - Precondition: Rows and columns must be named. Row- <R> and column- <C> names are defined es generics. The content of one cell <N> is generic too.
-public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable {
+public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable, FPT: Codable {
     /// Number of rows
     public var rowCount: Int {
         get {
@@ -361,7 +361,7 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
     }
     
     /// Accesses the element at [rowName][columnName]
-    subscript(rowName: R!, columnName: C!) -> N {
+    subscript(rowName: R, columnName: C) -> N {
         get {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
             if let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) {
@@ -696,15 +696,16 @@ public struct SSCrosstab<N,R,C>: Codable where N: Comparable,N: Codable, N: Hash
 extension SSCrosstab {
     
     /// Returns the row sums as an array with self.rowCount values
-    public var rowSums: Array<Double>? {
+    public var rowSums: Array<FPT>? {
         get {
             if self.isNumeric {
-                var sum: Double = 0.0
-                var temp = Array<Double>()
+                var sum: FPT = 0
+                var temp = Array<FPT>()
                 for r in 0..<self.rowCount {
-                    sum = 0.0
+                    sum = 0
                     for c in 0..<self.columnCount {
-                        if let temp1 = castValueToDouble(self[r, c]) {
+                        let temp1: FPT = makeFP(self[r, c])
+                        if !temp1.isNaN {
                             sum += temp1
                         }
                         else {
@@ -722,15 +723,16 @@ extension SSCrosstab {
     }
     
     /// Returns the column sums as an array with self.columnCount values
-    public var columnSums: Array<Double>? {
+    public var columnSums: Array<FPT>? {
         get {
             if self.isNumeric {
-                var sum: Double = 0.0
-                var temp = Array<Double>()
+                var sum: FPT = 0
+                var temp = Array<FPT>()
                 for c in 0..<self.columnCount {
-                    sum = 0.0
+                    sum = 0
                     for r in 0..<self.rowCount {
-                        if let temp1 = castValueToDouble(self[r, c]) {
+                        let temp1: FPT = makeFP(self[r, c])
+                        if !temp1.isNaN {
                             sum += temp1
                         }
                         else {
@@ -748,54 +750,54 @@ extension SSCrosstab {
     }
     
     /// Returns the sum of a row
-    public func rowSum(row: Int) -> Double {
+    public func rowSum(row: Int) -> FPT {
         assert(row < self.rowCount && row >= 0, "Row-Index out of range")
         if let rs = self.rowSums {
             return rs[row]
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Sum of row named rowName
-    public func rowSum(rowName: R) -> Double {
+    public func rowSum(rowName: R) -> FPT {
         if let rn = self.rowNames {
             if let i = rn.index(of: rowName) {
                 return self.rowSum(row: i)
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// The sum of a column
-    public func columnSum(column: Int) -> Double {
+    public func columnSum(column: Int) -> FPT {
         assert(isValidColumnIndex(column: column), "Column-Index out of range")
         if let cs = self.columnSums {
             return cs[column]
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Sum of column named columnName
-    public func columnSum(columnName: C) -> Double {
+    public func columnSum(columnName: C) -> FPT {
         if let rn = self.columnNames {
             if let i = rn.index(of: columnName) {
                 return self.columnSum(column: i)
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
@@ -844,72 +846,73 @@ extension SSCrosstab {
     
     
     /// Returns the total
-    public var total: Double {
+    public var total: FPT {
         get {
             return self.rowTotal()
         }
     }
     
     /// Returns the sum of all rows
-    public func rowTotal() -> Double {
+    public func rowTotal() -> FPT {
         if let rs = self.rowSums {
-            var t: Double = 0.0
+            var t: FPT = 0
             for s in rs {
                 t += s
             }
             return t
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the sum of all columns
-    public func colummTotal() -> Double {
+    public func colummTotal() -> FPT {
         if let cs = self.columnSums {
-            var t: Double = 0.0
+            var t: FPT = 0
             for s in cs {
                 t += s
             }
             return t
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the largest column total
-    public var largestRowTotal: Double {
+    public var largestRowTotal: FPT {
         get {
             assert(self.rowCount > 0, "Missing data")
             if let r = self.rowSums?.sorted(by: {$0 > $1}) {
                 return r.first!
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the largest column total
-    public var largestColumTotal: Double {
+    public var largestColumTotal: FPT {
         get {
             assert(self.columnCount > 0, "Missing data")
             if let c = self.columnSums?.sorted(by: {$0 > $1}) {
                 return c.first!
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the largest cell count for column
-    public func largestCellCount(atColumn: Int) -> Double {
+    public func largestCellCount(atColumn: Int) -> FPT {
         if self.isNumeric {
             assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
             let column = try! self.column(at: atColumn, sorted: true)
-            if let temp1 = castValueToDouble(column.last) {
+            let temp1: FPT = makeFP(column.last)
+            if !temp1.isNaN {
                 return temp1
             }
             else {
@@ -917,17 +920,18 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     
     /// Returns the largest cell count for row
-    public func largestCellCount(atRow: Int) -> Double {
+    public func largestCellCount(atRow: Int) -> FPT {
         if self.isNumeric {
             assert(isValidRowIndex(row: atRow), "Row-Index out of range")
             let row = try! self.row(at: atRow, sorted: true)
-            if let temp1 = castValueToDouble(row.last) {
+            let temp1: FPT = makeFP(row.last)
+            if !temp1.isNaN {
                 return temp1
             }
             else {
@@ -935,16 +939,17 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the relative total frequency of a cell at [row, column]
-    public func relativeTotalFrequency(row: Int, column: Int) -> Double {
+    public func relativeTotalFrequency(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
-            if let temp = castValueToDouble(self[row, column]) {
+            let temp: FPT = makeFP(self[row, column])
+            if !temp.isNaN {
                 return temp / self.total
             }
             else {
@@ -952,34 +957,31 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     
     /// Returns the relative frequency of [rowName, columnName]
-    public func relativeTotalFrequency(rowName: R, columnName: C) throws -> Double {
+    public func relativeTotalFrequency(rowName: R, columnName: C) throws -> FPT {
         assert(isValidRowName(name: rowName), "Row-Name unknown")
         assert(isValidColumnName(name: columnName), "Column-Name unknown")
         if self.isNumeric {
-            if let temp = castValueToDouble(self[rowName, columnName]) {
-                return temp / self.total
-            }
-            else {
-                fatalError("internal error")
-            }
+            let temp: FPT = makeFP(self[rowName, columnName])
+            return temp / self.total
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the relative row frequency of cell[row, column]
-    public func relativeRowFrequency(row: Int, column: Int) -> Double {
+    public func relativeRowFrequency(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
-            if let temp = castValueToDouble(self[row, column]) {
+            let temp: FPT = makeFP(self[row, column])
+            if !temp.isNaN {
                 return temp / self.rowSums![row]
             }
             else {
@@ -987,16 +989,17 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the relative column frequency of cell[row, column]
-    public func relativeColumnFrequency(row: Int, column: Int) -> Double {
+    public func relativeColumnFrequency(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
-            if let temp = castValueToDouble(self[row, column]) {
+            let temp: FPT = makeFP(self[row, column])
+            if  !temp.isNaN {
                 return temp / self.columnSums![column]
             }
             else {
@@ -1004,50 +1007,50 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the relative margin row frequency of [row]
-    public func relativeRowMarginFrequency(row: Int) -> Double {
+    public func relativeRowMarginFrequency(row: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
-        var temp: Double = 0.0
+        var temp: FPT = 0
         if self.isNumeric {
             temp = self.rowSums![row]
             return temp / self.total
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the relative margin row frequency of [row]
-    public func relativeColumnMarginFrequency(column: Int) -> Double {
+    public func relativeColumnMarginFrequency(column: Int) -> FPT {
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: Double = 0.0
+        var temp: FPT = 0
         if self.isNumeric {
             temp = self.columnSums![column]
             return temp / self.total
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the expected frequency for cell[row, column]
-    public func expectedFrequency(row: Int, column: Int) -> Double {
+    public func expectedFrequency(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
             return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the expected frequency for cell[rowName, columnName]
-    public func expectedFrequency(rowName: R, columnName: C) -> Double {
+    public func expectedFrequency(rowName: R, columnName: C) -> FPT {
         assert(isValidRowName(name: rowName), "Row-index out of range")
         assert(isValidColumnName(name: columnName), "Column-index out of range")
         if self.isNumeric {
@@ -1056,16 +1059,17 @@ extension SSCrosstab {
             return (self.rowSum(row: r) * self.columnSum(column: c)) / self.total
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the residual for cell[row, column]
-    public func residual(row: Int, column: Int) -> Double {
+    public func residual(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         if self.isNumeric {
-            if let temp = castValueToDouble(self[row, column]) {
+            let temp: FPT = makeFP(self[row, column])
+            if  !temp.isNaN {
                 return temp - self.expectedFrequency(row: row, column: column)
             }
             else {
@@ -1073,72 +1077,73 @@ extension SSCrosstab {
             }
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the standardized residual for cell[row, column]
-    public func standardizedResidual(row: Int, column: Int) -> Double {
+    public func standardizedResidual(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        return self.residual(row: row, column: column) / sqrt(expectedFrequency(row: row, column: column))
+        return self.residual(row: row, column: column) / expectedFrequency(row: row, column: column).squareRoot()
     }
     
     /// Returns the adjusted residual for cell[row, column]
-    public func adjustedResidual(row: Int, column: Int) -> Double {
+    public func adjustedResidual(row: Int, column: Int) -> FPT {
         assert(isValidRowIndex(row: row), "Row-index out of range")
         assert(isValidColumnIndex(column: column), "Column-index out of range")
-        let rowSum = self.rowSum(row: row)
-        let columnSum = self.columnSum(column: column)
-        return self.residual(row: row, column: column) / sqrt((expectedFrequency(row: row, column: column)) * (1.0 - rowSum / self.total) * (1.0 - columnSum / self.total))
+        let rowSum: FPT = self.rowSum(row: row)
+        let columnSum: FPT = self.columnSum(column: column)
+        return self.residual(row: row, column: column) / ((expectedFrequency(row: row, column: column)) * (1 - rowSum / self.total) * (1 - columnSum / self.total)).squareRoot()
     }
     
     /// Degrees of freedom
-    public var degreesOfFreedom: Double {
+    public var degreesOfFreedom: FPT {
         get {
-            let df = Double(self.rowCount - 1) * Double(self.columnCount - 1)
-            if df >= 0.0 {
+            let df: FPT = makeFP((self.rowCount - 1) * (self.columnCount - 1))
+            if df >= 0 {
                 return df
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns Pearson's Chi-Square
     /// - Precondition: Measurements must be at least nominally scaled
-    public var chiSquare: Double {
+    public var chiSquare: FPT {
         get {
             if self.isNumeric {
-                var sum: Double = 0.0
+                var sum: FPT = 0
                 for r in 0..<self.rowCount {
                     for c in 0..<self.columnCount {
-                        sum += pow(self.residual(row: r, column: c), 2.0) / self.expectedFrequency(row: r, column: c)
+                        sum += pow1(self.residual(row: r, column: c), 2) / self.expectedFrequency(row: r, column: c)
                     }
                 }
                 return sum
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the Chi-Square Likelihood Ratio
     /// - Precondition: at least nominally scaled measurements
-    public var chiSquareLikelihoodRatio: Double {
+    public var chiSquareLikelihoodRatio: FPT {
         get {
-            var sum: Double = 0.0
+            var sum: FPT = 0
             if self.isNumeric {
                 for r in 0..<self.rowCount {
                     for c in 0..<self.columnCount {
-                        if let temp = castValueToDouble(self[r, c]) {
+                        let temp: FPT = makeFP(self[r, c])
+                        if !temp.isNaN {
                             if temp != 0 {
-                                sum += temp * log(temp / self.expectedFrequency(row: r, column: c))
+                                sum += temp * log1(temp / self.expectedFrequency(row: r, column: c))
                             }
                             else {
-                                sum = 0.0
+                                sum = 0
                             }
                         }
                         else {
@@ -1146,28 +1151,32 @@ extension SSCrosstab {
                         }
                     }
                 }
-                return 2.0 * sum
+                return 2 * sum
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the Yates continuity corrected Chi-Square for a 2 x 2 table
     /// - Precondition: at least nominally scaled measurements
-    public var chiSquareYates: Double {
+    public var chiSquareYates: FPT {
         get {
             if self.is2x2Table {
-                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
-                    let temp = fabs(n11 * n22 - n12 * n21)
+                let n11: FPT = makeFP(self[0,0])
+                let n12: FPT = makeFP(self[0,1])
+                let n21: FPT = makeFP(self[1,0])
+                let n22: FPT = makeFP(self[1,1])
+                if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
+                    let temp = abs(n11 * n22 - n12 * n21)
                     let t = self.total
-                    if temp <= (0.5 * t) {
-                        return 0.0
+                    if temp <= (makeFP(0.5 ) * t) {
+                        return 0
                     }
                     else {
                         let den = self.rowSum(row: 0) * self.rowSum(row: 1) * self.columnSum(column: 0) * self.columnSum(column: 1)
-                        return t * pow(temp - 0.5 * t, 2.0) / den
+                        return t * pow1(temp - makeFP(0.5 ) * t, 2) / den
                     }
                 }
                 else {
@@ -1175,26 +1184,29 @@ extension SSCrosstab {
                 }
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the covariance
     /// - Precondition: at least interval-scaled measurements
-    public var covariance: Double {
+    public var covariance: FPT {
         get {
             if self.rowLevelOfMeasurement == .nominal || self.columnLevelOfMeasurement == .nominal {
-                return Double.nan
+                return FPT.nan
             }
             else {
-                var sum1: Double = 0.0
+                var sum1: FPT = 0
                 if self.isNumeric {
                     for r in 0..<self.rowCount {
-                        if let X = castValueToDouble(self.rowNames![r]) {
+                        let X:FPT = makeFP(self.rowNames![r])
+                        if !X.isNaN {
                             for c in 0..<self.columnCount {
-                                if let Y = castValueToDouble(self.columnNames![c]) {
-                                    if let frc = castValueToDouble(self[r, c]) {
+                                let Y: FPT = makeFP(self.columnNames![c])
+                                if !Y.isNaN {
+                                    let frc: FPT = makeFP(self[r, c])
+                                    if !frc.isNaN {
                                         sum1 += X * Y * frc
                                     }
                                     else {
@@ -1210,18 +1222,20 @@ extension SSCrosstab {
                             fatalError("internal error")
                         }
                     }
-                    var sum2: Double = 0.0
+                    var sum2: FPT = 0
                     for r in 0..<self.rowCount {
-                        if let X = castValueToDouble(self.rowNames![r]) {
+                        let X: FPT = makeFP(self.rowNames![r])
+                        if !X.isNaN {
                             sum2 += X * self.rowSum(row: r)
                         }
                         else {
                             fatalError("internal error")
                         }
                     }
-                    var sum3: Double = 0.0
+                    var sum3: FPT = 0
                     for c in 0..<self.columnCount {
-                        if let Y = castValueToDouble(self.columnNames![c]) {
+                        let Y: FPT = makeFP(self.columnNames![c])
+                        if !Y.isNaN {
                             sum3 += Y * self.columnSum(column: c)
                         }
                         else {
@@ -1231,7 +1245,7 @@ extension SSCrosstab {
                     return sum1 - (sum2 * sum3) / self.total
                 }
                 else {
-                    return Double.nan
+                    return FPT.nan
                 }
             }
         }
@@ -1239,15 +1253,16 @@ extension SSCrosstab {
     
     /// Returns the product moment correlation r (Pearson's r)
     /// - Precondition: At least interval-scaled measurements
-    public var pearsonR: Double {
+    public var pearsonR: FPT {
         get {
             if self.isNumeric && self.rowLevelOfMeasurement != .nominal && self.rowLevelOfMeasurement != .ordinal && self.columnLevelOfMeasurement != .nominal && self.columnLevelOfMeasurement != .ordinal {
-                var sum1: Double = 0.0
-                var sum2: Double = 0.0
-                var SX: Double
-                var SY: Double
+                var sum1: FPT = 0
+                var sum2: FPT = 0
+                var SX: FPT
+                var SY: FPT
                 for r in 0..<self.rowCount {
-                    if let X = castValueToDouble(self.rowNames![r]) {
+                    let X: FPT = makeFP(self.rowNames![r])
+                    if !X.isNaN {
                         sum1 += X * X * self.rowSum(row: r)
                         sum2 += X * self.rowSum(row: r)
                     }
@@ -1255,11 +1270,12 @@ extension SSCrosstab {
                         fatalError("internal error")
                     }
                 }
-                SX = sum1 - pow(sum2, 2.0) / self.total
-                sum1 = 0.0
-                sum2 = 0.0
+                SX = sum1 - pow1(sum2, 2) / self.total
+                sum1 = 0
+                sum2 = 0
                 for c in 0..<self.columnCount {
-                    if let Y = castValueToDouble(self.columnNames![c]) {
+                    let Y: FPT = makeFP(self.columnNames![c])
+                    if !Y.isNaN {
                         sum1 += Y * Y * self.columnSum(column: c)
                         sum2 += Y * self.columnSum(column: c)
                     }
@@ -1267,90 +1283,94 @@ extension SSCrosstab {
                         fatalError("internal error")
                     }
                 }
-                SY = sum1 - pow(sum2, 2.0) / self.total
-                return self.covariance / sqrt(SX * SY)
+                SY = sum1 - pow1(sum2, 2) / self.total
+                return self.covariance / (SX * SY).squareRoot()
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
     
     /// Returns the Mantel-Haenszel Chi-Square
-    public var chiSquareMH: Double {
+    public var chiSquareMH: FPT {
         get {
-            return (self.total - 1.0) * pow(self.pearsonR, 2.0)
+            return (self.total - 1) * pow1(self.pearsonR, 2)
         }
     }
     
     /// Returns Phi
-    public var phi: Double {
+    public var phi: FPT {
         get {
-            return sqrt(self.chiSquare / self.total)
+            return (self.chiSquare / self.total).squareRoot()
         }
     }
     
     /// Returns the coefficient of contingency
-    public var ccont: Double {
+    public var ccont: FPT {
         get {
             let chi = self.chiSquare
-            return sqrt(chi / (chi + self.total))
+            return (chi / (chi + self.total)).squareRoot()
         }
     }
     
     /// Returns the coefficient of contingency
-    public var coefficientOfContingency: Double {
+    public var coefficientOfContingency: FPT {
         get {
             return self.ccont
         }
     }
     
     /// Returns Cramer's V
-    public var cramerV: Double {
+    public var cramerV: FPT {
         get {
-            let q = Double(min(self.rowCount, self.columnCount))
+            let q: FPT = makeFP(min(self.rowCount, self.columnCount))
             let chi = self.chiSquare
-            return sqrt(chi / (self.total * (q - 1.0)))
+            return (chi / (self.total * (q - 1))).squareRoot()
         }
     }
     
     /// Returns "Column|Row -Lambda"
-    public var lambda_C_R: Double {
+    public var lambda_C_R: FPT {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let cm = self.largestColumTotal
-            var sum: Double = 0.0
+            var sum: FPT = 0
             for r in 0..<self.rowCount {
                 sum += self.largestCellCount(atRow: r)
             }
             return (sum - cm) / (self.total - cm)
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     /// Returns the "Row|Column"-Lambda
-    public var lambda_R_C: Double {
+    public var lambda_R_C: FPT {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let rm = self.largestRowTotal
-            var sum: Double = 0.0
+            var sum: FPT = 0
             for c in 0..<self.columnCount {
                 sum += self.largestCellCount(atColumn: c)
             }
             return (sum - rm) / (self.total - rm)
         }
         else {
-            return Double.nan
+            return FPT.nan
         }
     }
     
     
     /// Returns the Odds Ratio
     /// - Preconditions: Only applicable to a 2x2 table
-    public var r0: Double {
+    public var r0: FPT {
         get {
             if self.is2x2Table {
-                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
+                let n11: FPT = makeFP(self[0,0])
+                let n12: FPT = makeFP(self[0,1])
+                let n21: FPT = makeFP(self[1,0])
+                let n22: FPT = makeFP(self[1,1])
+                if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
                     return (n11 * n22) / (n12 * n21)
                 }
                 else {
@@ -1358,7 +1378,7 @@ extension SSCrosstab {
                 }
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
@@ -1366,10 +1386,14 @@ extension SSCrosstab {
     
     /// Returns the relative risk in a cohort study for column 1
     /// - Preconditions: Only applicable to a 2x2 table
-    public var r1: Double {
+    public var r1: FPT {
         get {
             if self.is2x2Table {
-                if let n11 = castValueToDouble(self[0,0]), let n12 = castValueToDouble(self[0,1]), let n21 = castValueToDouble(self[1,0]), let n22 = castValueToDouble(self[1,1]) {
+                let n11: FPT = makeFP(self[0,0])
+                let n12: FPT = makeFP(self[0,1])
+                let n21: FPT = makeFP(self[1,0])
+                let n22: FPT = makeFP(self[1,1])
+                if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
                     return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
                 }
                 else {
@@ -1377,7 +1401,7 @@ extension SSCrosstab {
                 }
             }
             else {
-                return Double.nan
+                return FPT.nan
             }
         }
     }
@@ -1391,7 +1415,7 @@ extension SSCrosstab {
     //                var sum2 = 0.0
     //                for r in 0..<self.rowCount {
     //                    for c in 0..<self.columnCount {
-    //                        if let fij = castValueToDouble(self[r,c]) {
+    //                        if let fij = castValueToFloatingPoint(self[r,c]) {
     //                            sum1 += pow(fij, 2.0) / self.rowSum(row: r)
     //                            sum2 += pow(self.columnSum(column: c), 2.0)
     //                        }

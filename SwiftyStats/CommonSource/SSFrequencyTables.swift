@@ -27,7 +27,7 @@ import Foundation
 
 /// One "row" of the frequency table
 /// Containe: absolute Freq, relative Freq, Percent
-public struct SSFrequencyTableItem<SSElement> where SSElement: Hashable, SSElement: Comparable {
+public struct SSFrequencyTableItem<SSElement, FPT> where SSElement: Hashable, SSElement: Comparable, FPT: SSFloatingPoint {
     private var privateItem: SSElement!
     
     /// The item
@@ -37,7 +37,7 @@ public struct SSFrequencyTableItem<SSElement> where SSElement: Hashable, SSEleme
         }
     }
     /// Relative frequency
-    public var relativeFrequency: Double = 0.0
+    public var relativeFrequency: FPT = 0
     
     /// Frequency
     public var frequency: Int = 0
@@ -46,7 +46,7 @@ public struct SSFrequencyTableItem<SSElement> where SSElement: Hashable, SSEleme
     /// - Parameter item: An item of type SSElement
     /// - Parameter rf: Relative frequency of item
     /// - Parameter af: Frequency of item
-    init(withItem item: SSElement!, relativeFrequency rf: Double!, frequency af: Int!) {
+    init(withItem item: SSElement!, relativeFrequency rf: FPT, frequency af: Int) {
         self.privateItem = item
         self.relativeFrequency = rf
         self.frequency = af
@@ -62,9 +62,9 @@ public struct SSFrequencyTableItem<SSElement> where SSElement: Hashable, SSEleme
 
 /// One "row" of the cumulative frequency table
 /// Containe: cumulative Freq, cumulative relative Freq
-public struct SSCumulativeFrequencyTableItem<SSElement> where SSElement: Hashable, SSElement: Comparable {
+public struct SSCumulativeFrequencyTableItem<SSElement, FPT> where SSElement: Hashable, SSElement: Comparable, FPT: SSFloatingPoint {
     private var privateItem: SSElement!
-    private var privateCumRel: Double!
+    private var privateCumRel: FPT!
     private var privateCumAbs: Int!
     
     /// Item
@@ -87,7 +87,7 @@ public struct SSCumulativeFrequencyTableItem<SSElement> where SSElement: Hashabl
     }
     
     /// Cumulative relative frequency
-    public var cumulativeRelativeFrequency: Double {
+    public var cumulativeRelativeFrequency: FPT {
         get {
             return privateCumRel
         }
@@ -100,14 +100,9 @@ public struct SSCumulativeFrequencyTableItem<SSElement> where SSElement: Hashabl
     /// - Parameter item: An item of type SSElement
     /// - Parameter cumRel: Relative frequency of item
     /// - Parameter cumFreq: Frequency of item
-    init(withItem item: SSElement!, cumulativeRelativeFrequency cumRel: Double!, cumulativefrequency cumFreq: Int!) {
+    init(withItem item: SSElement!, cumulativeRelativeFrequency cumRel: FPT, cumulativefrequency cumFreq: Int) {
         self.privateItem = item
         self.privateCumAbs = cumFreq
         self.privateCumRel = cumRel
     }
-    
-    
-    
-    
-    
 }

@@ -32,8 +32,8 @@ import os.log
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
-    if (b <= 0.0) {
+public func paraLaplaceDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -44,11 +44,11 @@ public func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContPro
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     result.mean = mean
-    result.variance = 2.0 * pow(b, 2.0)
-    result.kurtosis = 6.0
-    result.skewness = 0.0
+    result.variance = 2 * pow1(b, 2)
+    result.kurtosis = 6
+    result.skewness = 0
     return result
 }
 
@@ -58,8 +58,8 @@ public func paraLaplaceDist(mean: Double!, scale b: Double!) throws -> SSContPro
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func pdfLaplaceDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -70,7 +70,7 @@ public func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = 1.0 / (2.0 * b) * exp(-fabs(x - mean) / b)
+    let result = 1 / (2 * b) * exp1(-abs(x - mean) / b)
     return result
 }
 
@@ -79,8 +79,8 @@ public func pdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func cdfLaplaceDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -91,8 +91,10 @@ public func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let xm = x - mean
-    let result = 0.5 * (1.0 + xm.sgn * (1.0 - exp(-fabs(xm) / b)))
+    let xm: FPT = x - mean
+    let expr1: FPT = (1 - exp1(-abs(xm) / b))
+    let half: FPT = makeFP(1.0 / 2.0 )
+    let result: FPT = half * (1 + sign(xm) * expr1)
     return result
 }
 
@@ -101,8 +103,8 @@ public func cdfLaplaceDist(x: Double!, mean: Double!, scale b: Double!) throws -
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-public func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func quantileLaplaceDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -113,7 +115,7 @@ public func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0.0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -124,18 +126,18 @@ public func quantileLaplaceDist(p: Double!, mean: Double!, scale b: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result: Double
+    let result: FPT
     if p.isZero {
-        return -Double.infinity
+        return -FPT.infinity
     }
-    else if fabs(p - 1.0) < 1E-15 {
-        return Double.infinity
+    else if abs(p - 1) < FPT.ulpOfOne {
+        return FPT.infinity
     }
-    else if (p <= 0.5) {
-        result = mean + b * log1p(2.0 * p - 1.0)
+    else if (p <= makeFP(0.5 )) {
+        result = mean + b * log1p1(2 * p - 1)
     }
     else {
-        result = mean - b * log1p(2.0 * (1.0 - p) - 1.0)
+        result = mean - b * log1p1(2 * (1 - p) - 1)
     }
     return result
 }

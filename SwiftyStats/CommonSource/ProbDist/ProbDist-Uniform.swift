@@ -32,7 +32,7 @@ import os.log
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+public func paraUniformDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -44,11 +44,11 @@ public func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
-    result.mean = (a + b) / 2.0
-    result.variance = 1.0 / 12.0 * (b - a) * (b - a)
-    result.kurtosis = 1.8
-    result.skewness = 0.0
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = (a + b) / 2
+    result.variance = 1 / 12 * (b - a) * (b - a)
+    result.kurtosis = makeFP(1.8)
+    result.skewness = 0
     return result
 }
 
@@ -57,7 +57,7 @@ public func paraUniformDist(lowerBound a: Double!, upperBound b: Double!) throws
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func pdfUniformDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -70,10 +70,10 @@ public func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Doub
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x < a || x > b {
-        return 0.0
+        return 0
     }
     else {
-        return 1.0 / (b - a)
+        return 1 / (b - a)
     }
 }
 
@@ -82,7 +82,7 @@ public func pdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Doub
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func cdfUniformDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -95,10 +95,10 @@ public func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Doub
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x < a {
-        return 0.0
+        return 0
     }
     else if x > b {
-        return 1.0
+        return 1
     }
     else {
         return (x - a) / (b - a)
@@ -110,7 +110,7 @@ public func cdfUniformDist(x: Double!, lowerBound a: Double!, upperBound b: Doub
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func quantileUniformDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func quantileUniformDist<FPT: SSFloatingPoint & Codable>(p: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         

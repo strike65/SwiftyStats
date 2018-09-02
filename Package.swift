@@ -1,4 +1,4 @@
-// swift-tools-version:4.1
+// swift-tools-version:4.2
 //
 //  Created by VT on 16.07.18.
 //  Copyright © 2018 Volker Thieme. All rights reserved.
@@ -54,4 +54,4 @@ let package = Package(
     swiftLanguageVersions: [4]
 )
 
-let version = Version("0.8.14")
+let version = Version("0.9.0")

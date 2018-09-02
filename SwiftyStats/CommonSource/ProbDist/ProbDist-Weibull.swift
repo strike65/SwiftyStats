@@ -33,8 +33,8 @@ import os.log
 /// - Parameter b: Scale parameter
 /// - Parameter c: Shape parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraWeibullDist(location loc: Double!, scale: Double!, shape: Double!) throws -> SSContProbDistParams {
-    if (scale <= 0.0) {
+public func paraWeibullDist<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSContProbDistParams<FPT> {
+    if (scale <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -45,7 +45,7 @@ public func paraWeibullDist(location loc: Double!, scale: Double!, shape: Double
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (shape <= 0.0) {
+    if (shape <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -56,22 +56,22 @@ public func paraWeibullDist(location loc: Double!, scale: Double!, shape: Double
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
-    result.mean = loc + scale * (1.0 + (1.0 / shape)).gammaValue
-    result.variance = pow(scale, 2.0) * ((1 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0))
-    var a:Double = -3.0 * pow((1 + shape.inverse).gammaValue, 4.0)
-    var b:Double = 6.0 * pow((1 + shape.inverse).gammaValue, 2.0) * (1.0 + 2.0 / shape).gammaValue
-    var c: Double = -4.0 * (1.0 + shape.inverse).gammaValue * (1.0 + 3.0 / shape).gammaValue
-    var d: Double = (1.0 + 4.0 / shape).gammaValue
-    let e: Double = (1.0 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0)
-    result.kurtosis = (a + b + c + d) / pow(e, 2.0)
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = loc + scale * tgamma1(1 + (1 / shape))
+    result.variance = pow1(scale, 2) * (tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2))
+    var a:FPT = -3 * pow1(tgamma1(1 + 1 / shape), 4)
+    var b:FPT = 6 * pow1(tgamma1(1 + 1 / shape), 2) * tgamma1(1 + 2 / shape)
+    var c: FPT = -4 * tgamma1(1 + 1 / shape) * tgamma1(1 + 3 / shape)
+    var d: FPT = tgamma1(1 + 4 / shape)
+    let e: FPT = tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2)
+    result.kurtosis = (a + b + c + d) / pow1(e, 2)
     
-    a = 2.0 * pow((1.0 + shape.inverse).gammaValue, 3.0)
-    b = -3.0 * (1.0 + shape.inverse).gammaValue * (1.0 + 2.0 / shape).gammaValue
-    c = (1.0 + 3.0 / shape).gammaValue
-    d = (1.0 + 2.0 / shape).gammaValue - pow((1.0 + shape.inverse).gammaValue, 2.0)
+    a = 2 * pow1(tgamma1(1 + 1 / shape), 3)
+    b = -3 * tgamma1(1 + 1 / shape) * tgamma1(1 + 2 / shape)
+    c = tgamma1(1 + 3 / shape)
+    d = tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2)
     
-    result.skewness = (a + b + c) / pow(d, 1.5)
+    result.skewness = (a + b + c) / pow1(d, makeFP(1.5))
     return result
 }
 
@@ -81,8 +81,8 @@ public func paraWeibullDist(location loc: Double!, scale: Double!, shape: Double
 /// - Parameter b: Scale parameter
 /// - Parameter c: Shape parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func pdfWeibullDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT, shape c: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -93,7 +93,7 @@ public func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (c <= 0.0) {
+    if (c <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -105,9 +105,9 @@ public func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x < a {
-        return 0.0
+        return 0
     }
-    let result = c / b * pow((x - a) / b, c - 1.0) * exp(-pow((x - a) / b, c))
+    let result = c / b * pow1((x - a) / b, c - 1) * exp1(-pow1((x - a) / b, c))
     return result
 }
 
@@ -117,8 +117,8 @@ public func pdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
 /// - Parameter b: Scale parameter
 /// - Parameter c: Shape parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func cdfWeibullDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT, shape c: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -129,7 +129,7 @@ public func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (c <= 0.0) {
+    if (c <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -141,9 +141,9 @@ public func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x < a {
-        return 0.0
+        return 0
     }
-    let result = 1.0 - exp(-pow((x - a) / b, c))
+    let result = 1 - exp1(-pow1((x - a) / b, c))
     return result
 }
 
@@ -153,8 +153,8 @@ public func cdfWeibullDist(x: Double!, location a: Double!, scale b: Double!, sh
 /// - Parameter b: Scale parameter
 /// - Parameter c: Shape parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
-public func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double!, shape c: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func quantileWeibullDist<FPT: SSFloatingPoint & Codable>(p: FPT, location a: FPT, scale b: FPT, shape c: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -165,7 +165,7 @@ public func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (c <= 0.0) {
+    if (c <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -187,13 +187,13 @@ public func quantileWeibullDist(p: Double!, location a: Double!, scale b: Double
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p == 0.0 {
+    if p == 0 {
         return a
     }
-    if p == 1.0 {
-        return Double.infinity
+    if p == 1 {
+        return FPT.infinity
     }
-    let result = a + b * pow(-log1p((1.0 - p) - 1.0), 1.0 / c)
+    let result = a + b * pow1(-log1p1((1 - p) - 1), 1 / c)
     return result
 }
 

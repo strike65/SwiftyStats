@@ -33,15 +33,15 @@ import os.log
 /// - Parameter n: number of trials
 /// - Parameter p0: probability fpr success
 /// - Parameter tail: .lower, .upper
-public func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tail: SSCDFTail) -> Double {
-    var i = 0
-    var lowerSum: Double = 0.0
-    var upperSum: Double = 0.0
+public func cdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) -> FPT {
+    var i: Int = 0
+    var lowerSum: FPT = 0
+    var upperSum: FPT = 0
     while i <= k {
-        lowerSum += binomial2(Double(n), Double(i)) * pow(p0, Double(i)) * pow(1.0 - p0, Double(n - i))
+        lowerSum += binomial2(makeFP(n), makeFP(i)) * pow1(p0, makeFP(i)) * pow1(1 - p0, makeFP(n - i))
         i += 1
     }
-    upperSum = 1.0 - lowerSum
+    upperSum = 1 - lowerSum
     switch tail {
     case .lower:
         return lowerSum
@@ -55,8 +55,8 @@ public func cdfBinomialDistribution(k: Int, n: Int, probability p0: Double!, tai
 /// - Parameter k: number of successes
 /// - Parameter n: number of trials
 /// - Parameter p0: probability fpr success
-public func pdfBinomialDistribution(k: Int, n: Int, probability p0: Double!) -> Double {
-    var result: Double
-    result = binomial2(Double(n), Double(k)) * pow(p0, Double(k)) * pow(1.0 - p0, Double(n - k))
+public func pdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) -> FPT {
+    var result: FPT
+    result = binomial2(makeFP(n), makeFP(k)) * pow1(p0, makeFP(k)) * pow1(1 - p0, makeFP(n - k))
     return result
 }

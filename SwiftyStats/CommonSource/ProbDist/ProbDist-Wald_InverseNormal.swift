@@ -32,8 +32,8 @@ import os.log
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraWaldDist(mean a: Double!, lambda b: Double) throws -> SSContProbDistParams {
-    if (a <= 0.0) {
+public func paraWaldDist<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSContProbDistParams<FPT> {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -44,7 +44,7 @@ public func paraWaldDist(mean a: Double!, lambda b: Double) throws -> SSContProb
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -55,12 +55,12 @@ public func paraWaldDist(mean a: Double!, lambda b: Double) throws -> SSContProb
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var reault = SSContProbDistParams()
-    reault.mean = a
-    reault.variance = (a * a * a) / b
-    reault.kurtosis = 3.0 + 15.0 * a / b
-    reault.skewness = 3.0 * sqrt(a / b)
-    return reault
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = a
+    result.variance = (a * a * a) / b
+    result.kurtosis = 3 + 15 * a / b
+    result.skewness = 3 * sqrt(a / b)
+    return result
 }
 
 /// Returns the pdf of the Wald (inverse normal) distribution.
@@ -68,8 +68,8 @@ public func paraWaldDist(mean a: Double!, lambda b: Double) throws -> SSContProb
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func pdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func pdfWaldDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean a: FPT, lambda b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -80,7 +80,7 @@ public func pdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -91,11 +91,15 @@ public func pdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if x <= 0.0 {
-        return 0.0
+    if x <= 0 {
+        return 0
     }
     else {
-        return sqrt(b / ( 2.0 * Double.pi * x * x * x)) * exp(b / a - b / (x + x) - (b * x) / (2.0 * a * a))
+        let expr1: FPT = 2 * FPT.pi * x * x * x
+        let expr2: FPT = (b * x) / (2 * a * a)
+        let expr3: FPT = b / (x + x)
+        let expr4: FPT = b / a
+        return sqrt(b / expr1) * exp1(expr4 - expr3 - expr2 )
     }
 }
 
@@ -104,8 +108,8 @@ public func pdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func cdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func cdfWaldDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean a: FPT, lambda b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -116,7 +120,7 @@ public func cdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -127,9 +131,9 @@ public func cdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let n1 = cdfStandardNormalDist(u: sqrt(b / x) * (x / a - 1.0))
-    let n2 = cdfStandardNormalDist(u: -sqrt(b / x) * (x / a + 1.0))
-    let result = n1 + exp(2.0 * b / a) * n2
+    let n1: FPT = cdfStandardNormalDist(u: sqrt(b / x) * (x / a - 1))
+    let n2: FPT = cdfStandardNormalDist(u: -sqrt(b / x) * (x / a + 1))
+    let result: FPT = n1 + exp1(2 * b / a) * n2
     return result
 }
 
@@ -138,8 +142,8 @@ public func cdfWaldDist(x: Double!, mean a: Double!, lambda b: Double) throws ->
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
-public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func quantileWaldDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean a: FPT, lambda b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -150,7 +154,7 @@ public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) thro
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -173,26 +177,26 @@ public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) thro
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     
-    if fabs(p - 1.0) <= 1e-12 {
-        return Double.infinity
+    if abs(p - 1) <= FPT.ulpOfOne {
+        return FPT.infinity
     }
-    if (fabs(p) <= 1e-12) {
-        return 0.0
+    if (abs(p) <= FPT.leastNormalMagnitude) {
+        return 0
     }
-    var wVal: Double
-    var MaxW: Double
-    var MinW: Double
+    var wVal: FPT
+    var MaxW: FPT
+    var MinW: FPT
     MaxW = 99999
-    MinW = 0.0
+    MinW = 0
     wVal = p * a * b
-    var pVal: Double
+    var pVal: FPT
     var i: Int = 0
-    while (MaxW - MinW) > 1.0E-16 {
+    while (MaxW - MinW) > makeFP(1.0E-16) {
         do {
             pVal = try cdfWaldDist(x: wVal, mean: a, lambda: b)
         }
         catch {
-            return Double.nan
+            return FPT.nan
         }
         if pVal > p {
             MaxW = wVal
@@ -200,7 +204,7 @@ public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) thro
         else {
             MinW = wVal
         }
-        wVal = (MaxW + MinW) * 0.5
+        wVal = (MaxW + MinW) * makeFP(0.5 )
         i = i + 1
         if  i >= 500 {
             break
@@ -213,8 +217,8 @@ public func quantileWaldDist(p: Double!, mean a: Double!, lambda b: Double) thro
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraInverseNormalDist(mean a: Double!, lamdba b: Double) throws -> SSContProbDistParams {
-    if (a <= 0.0) {
+public func paraInverseNormalDist<FPT: SSFloatingPoint & Codable>(mean a: FPT, lamdba b: FPT) throws -> SSContProbDistParams<FPT> {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -225,7 +229,7 @@ public func paraInverseNormalDist(mean a: Double!, lamdba b: Double) throws -> S
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -244,8 +248,8 @@ public func paraInverseNormalDist(mean a: Double!, lamdba b: Double) throws -> S
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func pdfInverseNormalDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -256,7 +260,7 @@ public func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -275,8 +279,8 @@ public func pdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func cdfInverseNormalDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -287,7 +291,7 @@ public func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -306,8 +310,8 @@ public func cdfInverseNormalDist(x: Double!, mean a: Double!, scale b: Double) t
 /// - Parameter a: mean
 /// - Parameter b: Scale
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
-public func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Double) throws -> Double {
-    if (a <= 0.0) {
+public func quantileInverseNormalDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -318,7 +322,7 @@ public func quantileInverseNormalDist(p: Double!, mean a: Double!, scale b: Doub
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {

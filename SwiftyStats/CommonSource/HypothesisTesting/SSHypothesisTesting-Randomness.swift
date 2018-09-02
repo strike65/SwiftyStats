@@ -50,7 +50,7 @@ extension SSHypothesisTesting {
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func runsTest(array: Array<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
+    public class func runsTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -63,7 +63,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.runsTest(data: SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint, alternative: alternative)
+            return try SSHypothesisTesting.runsTest(data: SSExamine<FPT, FPT>.init(withArray: array, name: nil,  characterSet: nil), alpha: alpha, useCuttingPoint: useCP, userDefinedCuttingPoint: cuttingPoint, alternative: alternative)
         }
         catch {
             throw error
@@ -91,7 +91,7 @@ extension SSHypothesisTesting {
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func runsTest(data: SSExamine<Double>!, alpha: Double!, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: Double?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult {
+    public class func runsTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>!, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -103,13 +103,13 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var diff = Array<Double>()
+        var diff = Array<FPT>()
         let elements = data.elementsAsArray(sortOrder: .raw)!
-        var dtemp: Double = 0.0
-        var n2: Double = 0.0
-        var n1: Double = 0.0
+        var dtemp: FPT = 0
+        var n2: FPT = 0
+        var n1: FPT = 0
         var r: Int = 1
-        var cp: Double = 0.0
+        var cp: FPT = 0
         //        var isPrevPos: Bool
         switch useCP {
         case .mean:
@@ -147,11 +147,11 @@ extension SSHypothesisTesting {
                 RR += 1
             }
             i += 1
-            if dtemp >= 0.0 {
-                n2 += 1.0
+            if dtemp >= 0 {
+                n2 += 1
             }
             else {
-                n1 += 1.0
+                n1 += 1
             }
         }
         /* keep this for historical reasons ;-)
@@ -165,15 +165,18 @@ extension SSHypothesisTesting {
          */
         r = RR
         dtemp = n1 + n2
-        let sigma = sqrt((2.0 * n2 * n1 * (2.0 * n2 * n1 - n1 - n2)) / ((dtemp * dtemp * (n2 + n1 - 1.0))))
-        let mean = (2.0 * n2 * n1) / dtemp + 1.0
-        var z: Double = 0.0
-        dtemp = Double(r) - mean
-        let pExact: Double = Double.nan
-        var pAsymp: Double = 0.0
-        var cv: Double
+        let ex1: FPT = 2 * n2 * n1 - n1 - n2
+        let ex2: FPT = 2 * n2 * n1
+        let ex3: FPT = (n2 + n1 - 1)
+        let sigma: FPT = sqrt((ex2 * ex1) / ((dtemp * dtemp * ex3)))
+        let mean: FPT = (2 * n2 * n1) / dtemp + 1
+        var z: FPT = 0
+        dtemp = makeFP(r) - mean
+        let pExact: FPT = FPT.nan
+        var pAsymp: FPT = 0
+        var cv: FPT
         do {
-            cv = try quantileStandardNormalDist(p: 1 - alpha / 2.0)
+            cv = try quantileStandardNormalDist(p: 1 - alpha / 2)
         }
         catch {
             throw error
@@ -186,12 +189,12 @@ extension SSHypothesisTesting {
         //        }
         switch alternative {
         case .twoSided:
-            pAsymp = 2.0 * min(cdfStandardNormalDist(u: z), 1.0 - cdfStandardNormalDist(u: z))
+            pAsymp = 2 * min(cdfStandardNormalDist(u: z), 1 - cdfStandardNormalDist(u: z))
 //            pAsymp = 2.0 * cdfStandardNormalDist(u: z)
         case .less:
             pAsymp = cdfStandardNormalDist(u: z)
         case .greater:
-            pAsymp = 1.0 - cdfStandardNormalDist(u: z)
+            pAsymp = 1 - cdfStandardNormalDist(u: z)
         }
         //        if pAsymp > 0.5 {
         //            pAsymp = (1.0 - pAsymp) * 2.0
@@ -223,17 +226,17 @@ extension SSHypothesisTesting {
         //                pExact = sum / binomial2((n1 + n2), n1)
         //            }
         //        }
-        var result = SSRunsTestResult()
+        var result: SSRunsTestResult<FPT> = SSRunsTestResult<FPT>()
         result.nGTEcp = n2
         result.nLTcp = n1
-        result.nRuns = Double(r)
+        result.nRuns = Double(r) as? FPT
         result.zStat = z
         result.pValueExact = pExact
         result.pValueAsymp = pAsymp
         result.cp = cp
         result.diffs = diff
         result.criticalValue = cv
-        result.randomness = fabs(z) <= cv
+        result.randomness = abs(z) <= cv
         return result
     }
     

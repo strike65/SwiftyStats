@@ -30,8 +30,8 @@ import os.log
 /// Returns the Logit for a given p
 /// - Parameter p: p
 /// - Throws: SSSwiftyStatsError if p <= 0 || p >= 1
-public func logit(p: Double!) throws -> Double {
-    if p <= 0.0 || p >= 1.0 {
+public func logit<FPT: SSFloatingPoint & Codable>(p: FPT) throws -> FPT {
+    if p <= 0 || p >= 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -42,14 +42,14 @@ public func logit(p: Double!) throws -> Double {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return log1p(p / (1.0 - p))
+    return log1p1(p / (1 - p))
 }
 
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Logistic distribution.
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContProbDistParams {
+public func paraLogisticDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -61,11 +61,11 @@ public func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContPr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     result.mean = mean
-    result.variance = pow(b, 2.0) * pow(Double.pi, 2.0) / 3.0
-    result.kurtosis = 4.2
-    result.skewness = 0.0
+    result.variance = pow1(b, 2) * pow1(FPT.pi, 2) / 3
+    result.kurtosis = 4.2 as! FPT
+    result.skewness = 0
     return result
 }
 
@@ -74,7 +74,7 @@ public func paraLogisticDist(mean: Double!, scale b: Double!) throws -> SSContPr
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+public func pdfLogisticDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -86,7 +86,9 @@ public func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = exp(-(x - mean) / b) / (b * pow(1.0 + exp(-(x - mean) / b), 2.0))
+    let expr1: FPT = exp1(-(x - mean) / b)
+    let expr2: FPT = exp1(-(x - mean) / b)
+    let result: FPT = expr1 / (b * pow1(1 + expr2, 2))
     return result
 }
 
@@ -95,7 +97,7 @@ public func pdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws 
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws -> Double {
+public func cdfLogisticDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -107,7 +109,7 @@ public func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = 0.5 * (1.0 + tanh(0.5 * (x - mean) / b))
+    let result: FPT = makeFP(0.5 ) * (1 + tanh1(FPT.half * (x - mean) / b))
     return result
 }
 
@@ -116,7 +118,7 @@ public func cdfLogisticDist(x: Double!, mean: Double!, scale b: Double!) throws 
 /// - Parameter mean: mean
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-public func quantileLogisticDist(p: Double!, mean: Double!, scale b: Double!) throws -> Double {
+public func quantileLogisticDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -139,15 +141,15 @@ public func quantileLogisticDist(p: Double!, mean: Double!, scale b: Double!) th
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result: Double
+    let result: FPT
     if p.isZero {
-        return -Double.infinity
+        return -FPT.infinity
     }
-    else if p == 1.0 {
-        return Double.infinity
+    else if abs(1 - p) < FPT.ulpOfOne {
+        return FPT.infinity
     }
     else {
-        result = mean - b * log(-1.0 + 1.0 / p)
+        result = mean - b * log1(-1 + 1 / p)
         return result
     }
 }

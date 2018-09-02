@@ -32,19 +32,21 @@ import os.log
 // Definition of statistics
 extension SSExamine {
     
-    private var isArithmetic: Bool {
+    internal var isArithmetic: Bool {
         get {
             return (!self.isEmpty && self.isNumeric)
         }
     }
     
     /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
-    public var squareTotal: Double? {
+    public var squareTotal: FPT  {
         if isArithmetic {
-            var s: Double = 0.0
+            var s: FPT = 0
+            var temp: FPT
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
-                    s = s + pow(temp ,2.0) * Double(freq)
+                temp = makeFP(item)
+                if !temp.isNaN {
+                    s = s + pow1(temp , 2) * makeFP(freq)
                 }
                 else {
                     assert(false, "internal error")
@@ -53,18 +55,20 @@ extension SSExamine {
             return s
         }
         else {
-            return nil
+            return FPT.nan
         }
     }
     
     /// Sum of all elements raised to power p
     /// - Parameter p: Power
-    public func poweredTotal(power p: Double) -> Double? {
+    public func poweredTotal(power p: FPT) -> FPT? {
         if isArithmetic {
-            var s: Double = 0.0
+            var s: FPT = 0
+            var temp: FPT
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
-                    s = s + pow(temp, p) * Double(freq)
+                temp = makeFP(item)
+                if !temp.isNaN {
+                    s = s + pow1(temp, p) * makeFP(freq)
                 }
                 else {
                     assert(false, "internal error")
@@ -78,12 +82,14 @@ extension SSExamine {
     }
     
     /// Total of all elements. Returns Double.nan iff data are non-numeric.
-    public var total: Double? {
+    public var total: FPT? {
         if isArithmetic {
-            var s: Double = 0.0
+            var s: FPT = 0
+            var temp: FPT
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
-                    s = s + temp * Double(freq)
+                temp = makeFP(item)
+                if !temp.isNaN {
+                    s = s + temp * makeFP(freq)
                 }
                 else {
                     assert(false, "internal error")
@@ -96,17 +102,19 @@ extension SSExamine {
         }
     }
     
-    /// Returns the sum of all inversed elements
-    public var inverseTotal: Double? {
+    /// Returns the sum of all inverted elements
+    public var inverseTotal: FPT? {
         if isArithmetic {
-            var s = 0.0
+            var s: FPT = 0
+            var temp: FPT
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
+                temp = makeFP(item)
+                if !temp.isNaN {
                     if !temp.isZero {
-                        s = s + (1.0 / temp) * Double(freq)
+                        s = s + (1 / temp) * makeFP(freq)
                     }
                     else {
-                        return Double.infinity
+                        return FPT.infinity
                     }
                 }
                 else {
@@ -120,12 +128,55 @@ extension SSExamine {
         }
     }
     
+    /// Returns the total of squares about the mean. If a user defined `value` is supplied, that value will be used.
+    /// - Parameter value: value
+    ///
+    /// ### Note ###
+    /// If `value` is nil, `self.arithmeticMean` will be used.
+    public func tss(value: FPT? = nil) -> FPT? {
+        if isArithmetic && self.sampleSize >= 2 {
+            var diff: FPT = 0
+            var sum: FPT = 0
+            var temp: FPT
+            if let m = value {
+                for (item, freq) in self.elements {
+                    temp = makeFP(item)
+                    if !temp.isNaN {
+                        diff = temp - m
+                        sum = sum + diff * diff * makeFP(freq)
+                    }
+                    else {
+                        assert(false, "internal error")
+                    }
+                }
+                return sum
+            }
+            else {
+                let m = self.arithmeticMean!
+                for (item, freq) in self.elements {
+                    temp = makeFP(item)
+                    if !temp.isNaN {
+                        diff = temp - m
+                        sum = sum + diff * diff * makeFP(freq)
+                    }
+                    else {
+                        assert(false, "internal error")
+                    }
+                }
+                return sum
+            }
+        }
+        else {
+            return nil
+        }
+    }
+
     // MARK: Location
     
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
-    public var arithmeticMean: Double? {
+    public var arithmeticMean: FPT? {
         if isArithmetic {
-            return self.total! / Double(sampleSize)
+            return self.total! / makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -155,13 +206,13 @@ extension SSExamine {
         }
     }
     
-    /// The most common value. Same as mode. Can contain more than one item. Can be nil for empty tables.
+    /// An arrayof the most common item(s). Same as mode. nil for empty tables.
     public var commonest: Array<SSElement>? {
         return mode
     }
     
     
-    /// The scarcest element. Can be nil for empty tables.
+    /// An array containing scarcest element(s). nil for empty tables.
     public var scarcest: Array<SSElement>? {
         if !isEmpty {
             var result: Array<SSElement> = Array<SSElement>()
@@ -175,7 +226,7 @@ extension SSExamine {
                     break
                 }
             }
-            return result
+            return result.sorted(by: <)
         }
         else {
             return nil
@@ -183,9 +234,9 @@ extension SSExamine {
     }
     
     /// Returns the q-quantile.
-    /// Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric.
-    public func quantile(q: Double) throws -> Double? {
-        if q.isZero || q < 0.0 || q >= 1.0 {
+    /// - Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric and/or if 0 < q >=1
+    public func quantile(q: FPT) throws -> FPT? {
+        if q.isZero || q < 0 || q >= 1 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -207,17 +258,19 @@ extension SSExamine {
             
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var result: Double = 0.0
+        var result: FPT = 0
         if !isEmpty && self.sampleSize >= 2 {
-            let k = Double(self.sampleSize) * q
+            let k: FPT = makeFP(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
             var temp3: SSElement
-            if k.truncatingRemainder(dividingBy: 1).isZero {
-                temp3 = a[a.startIndex.advanced(by: Int(k - 1))]
-                if let temp1 = castValueToDouble(temp3) {
-                    temp3 = a[a.startIndex.advanced(by: Int(k))]
-                    if let temp2 = castValueToDouble(temp3) {
-                        result = (temp1 + temp2) / 2.0
+            if isInteger(k) {
+                temp3 = a[a.startIndex.advanced(by: integerValue(k - 1))]
+                let temp1: FPT = makeFP(temp3)
+                if !temp1.isNaN {
+                    temp3 = a[a.startIndex.advanced(by: integerValue(k))]
+                    let temp2: FPT = makeFP(temp3)
+                    if !temp2.isNaN {
+                        result = (temp1 + temp2) / 2
                     }
                     else {
                         assert(false, "internal error")
@@ -228,8 +281,9 @@ extension SSExamine {
                 }
             }
             else {
-                temp3 = a[a.startIndex.advanced(by: Int(ceil(k - 1)))]
-                if let temp1 = castValueToDouble(temp3) {
+                temp3 = a[a.startIndex.advanced(by: integerValue(ceil(k - 1)))]
+                let temp1: FPT = makeFP(temp3)
+                if !temp1.isNaN {
                     result = temp1
                 }
                 else {
@@ -244,14 +298,14 @@ extension SSExamine {
     }
     
     /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
-    public var quartile: SSQuartile? {
+    public var quartile: SSQuartile<FPT>? {
         get {
             if isArithmetic {
-                var res = SSQuartile()
+                var res = SSQuartile<FPT>()
                 do {
-                    res.q25 = try self.quantile(q: 0.25)!
-                    res.q75 = try self.quantile(q: 0.75)!
-                    res.q50 = try self.quantile(q: 0.5)!
+                    res.q25 = try self.quantile(q: makeFP(0.25))!
+                    res.q75 = try self.quantile(q: makeFP(0.75))!
+                    res.q50 = try self.quantile(q: FPT.half)!
                 }
                 catch {
                     return nil
@@ -265,12 +319,12 @@ extension SSExamine {
     }
     
     /// Returns the geometric mean.
-    public var geometricMean: Double? {
+    public var geometricMean: FPT? {
         get {
             if isArithmetic {
-                let a = self.logProduct!
-                let b = Double(self.sampleSize)
-                let c = exp(a / b)
+                let a: FPT = self.logProduct!
+                let b: FPT = makeFP(self.sampleSize)
+                let c: FPT = exp1(a / b)
                 return c
             }
             else {
@@ -280,10 +334,10 @@ extension SSExamine {
     }
     
     /// Harmonic mean. Can be nil for non-numeric data.
-    public var harmonicMean: Double? {
+    public var harmonicMean: FPT? {
         get {
             if isArithmetic {
-                return Double(self.sampleSize) / self.inverseTotal!
+                return makeFP(self.sampleSize) / self.inverseTotal!
             }
             else {
                 return nil
@@ -293,16 +347,16 @@ extension SSExamine {
     
     
     /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
-    public var contraHarmonicMean: Double? {
+    public var contraHarmonicMean: FPT? {
         if isArithmetic {
-            let st = self.squareTotal!
-            let sqM = st / Double(self.sampleSize)
+            let st: FPT = self.squareTotal
+            let sqM: FPT = st / makeFP(self.sampleSize)
             let m = self.arithmeticMean!
             if !m.isZero {
                 return sqM / m
             }
             else {
-                return -Double.infinity
+                return -FPT.infinity
             }
         }
         else {
@@ -313,13 +367,19 @@ extension SSExamine {
     /// Returns the powered mean of order n
     /// - Parameter n: The order of the powered mean
     /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
-    public func poweredMean(order: Double) -> Double? {
-        if order <= 0.0 {
+    public func poweredMean(order: FPT) -> FPT? {
+        if order <= 0 {
             return nil
         }
         if isArithmetic {
-            let sum = self.poweredTotal(power: order)!
-            return pow(sum / Double(self.sampleSize), 1.0 / order)
+            if let sum: FPT = self.poweredTotal(power: order) {
+                let n: FPT = makeFP(self.sampleSize)
+                let result: FPT = pow1(sum / n, 1 / order)
+                return result
+            }
+            else {
+                return nil
+            }
         }
         else {
             return nil
@@ -329,8 +389,8 @@ extension SSExamine {
     /// Returns the trimmed mean of all elements after dropping a fraction of alpha of the smallest and largest elements.
     /// - Parameter alpha: Fraction to drop
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
-    public func trimmedMean(alpha: Double) throws -> Double? {
-        if alpha <= 0.0 || alpha >= 0.5 {
+    public func trimmedMean(alpha: FPT) throws -> FPT? {
+        if alpha <= 0 || alpha >= makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -344,11 +404,12 @@ extension SSExamine {
         if isArithmetic {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
-            let v = floor(Double(l) * alpha)
-            var s = 0.0
-            var k = 0.0
-            for i in Int(v)...l - Int(v) - 1  {
-                if let temp = castValueToDouble(a[i]) {
+            let v: FPT = floor(makeFP(l) * alpha)
+            var s: FPT = 0
+            var k: FPT = 0
+            for i in integerValue(v)...l - integerValue(v) - 1  {
+                let temp: FPT = makeFP(a[i])
+                if !temp.isNaN  {
                     s = s + temp
                     k = k + 1
                 }
@@ -366,8 +427,8 @@ extension SSExamine {
     /// Returns the mean after replacing a given fraction (alpha) at the high and low end with the most extreme remaining values.
     /// - Parameter alpha: Fraction
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
-    public func winsorizedMean(alpha: Double) throws -> Double? {
-        if alpha <= 0.0 || alpha >= 0.5 {
+    public func winsorizedMean(alpha: FPT) throws -> FPT? {
+        if alpha <= 0 || alpha >= makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -381,36 +442,57 @@ extension SSExamine {
         if isArithmetic {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
-            let v = floor(Double(l) * alpha)
-            var s = 0.0
-            for i in Int(v)...l - Int(v) - 1  {
-                if let temp = castValueToDouble(a[i]) {
+            let ll: FPT = makeFP(l)
+            let v: FPT = floor(makeFP(l) * alpha)
+            var s: FPT = 0
+            for i in integerValue(v)...l - integerValue(v) - 1  {
+                let temp: FPT = makeFP(a[i])
+                if !temp.isNaN {
                     s = s + temp
                 }
                 else {
                     assert(false, "internal error")
                 }
             }
-            if let temp = castValueToDouble(a[Int(v)]), let temp1 = castValueToDouble(a[Int(l - Int(v) - 1)]) {
+            let temp: FPT = makeFP(a[integerValue(v)])
+            let temp1: FPT = makeFP(a[integerValue(ll - integerPart(v) - 1)])
+            if !temp.isNaN && !temp1.isNaN {
                 s = s + v * (temp + temp1)
             }
             else {
                 assert(false, "internal error")
             }
-            return s / Double(self.sampleSize)
+            return s / makeFP(self.sampleSize)
         }
         else {
             return nil
         }
     }
     
-    /// The median. Can be nil for non-numeric data.
-    public var median: Double? {
+    
+    /// Returns the Gastwirth estimator (https://www.r-bloggers.com/gastwirths-location-estimator/)
+    public var gastwirth: FPT? {
         get {
-            var res: Double
+            if !self.isArithmetic {
+                return nil
+            }
+            else {
+                let q_13: FPT? = try! self.quantile(q: makeFP(1.0 / 3.0 ))
+                let q_5: FPT? = self.median
+                let q_23: FPT? = try! self.quantile(q: makeFP(2.0 / 3.0 ))
+                return makeFP(0.3 ) * q_13! + makeFP(0.4 ) * q_5! + makeFP(0.3 ) * q_23!
+            }
+        }
+    }
+    
+    
+    /// The median. Can be nil for non-numeric data.
+    public var median: FPT? {
+        get {
+            var res: FPT
             if isArithmetic {
                 do {
-                    res = try self.quantile(q: 0.5)!
+                    res = try self.quantile(q: FPT.half)!
                 }
                 catch {
                     return nil
@@ -426,16 +508,17 @@ extension SSExamine {
     // MARK: Products
     
     /// Product of all elements. Will be Double.nan for non-numeric data.
-    public var product: Double? {
+    public var product: FPT? {
         if isArithmetic {
-            var p: Double = 1.0
+            var p: FPT = 1
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
+                let temp: FPT = makeFP(item)
+                if !temp.isNaN {
                     if temp.isZero {
-                        return 0.0
+                        return 0
                     }
                     else {
-                        p = p * pow(temp, Double(freq))
+                        p = p * pow1(temp, makeFP(freq))
                     }
                 }
                 else {
@@ -450,19 +533,20 @@ extension SSExamine {
     }
     
     /// The log-Product. Will be Double.nan for non-numeric data or if there is at least one item lower than zero. Returns -inf if there is at least one item equals to zero.
-    public var logProduct: Double? {
-        var sp : Double = 0.0
+    public var logProduct: FPT? {
+        var sp : FPT = 0
         if isArithmetic {
             for (item, freq) in self.elements {
-                if let temp = castValueToDouble(item) {
+                let temp: FPT = makeFP(item)
+                if !temp.isNaN {
                     if temp > 0 {
-                        sp = sp + log(temp) * Double(freq)
+                        sp = sp + log1(temp) * makeFP(freq)
                     }
                     else if temp.isZero {
-                        return -Double.infinity
+                        return -FPT.infinity
                     }
                     else {
-                        return Double.nan
+                        return FPT.nan
                     }
                 }
                 else {
@@ -505,11 +589,13 @@ extension SSExamine {
     }
     
     /// The difference between maximum and minimum. Can be nil for empty tables.
-    public var range: Double? {
+    public var range: FPT? {
         get {
             if isArithmetic {
-                if let tempMax = castValueToDouble(self.maximum), let tempMin = castValueToDouble(self.minimum) {
-                    return Double(tempMax - tempMin)
+                let tempMax: FPT = makeFP(self.maximum)
+                let tempMin: FPT = makeFP(self.minimum)
+                if !tempMax.isNaN && !tempMin.isNaN {
+                    return tempMax - tempMin
                 }
                 else {
                     fatalError("internal error")
@@ -523,9 +609,9 @@ extension SSExamine {
     
     
     /// Returns the quartile devation (interquartile range / 2.0)
-    public var quartileDeviation: Double? {
-        if let iqr = self.interquartileRange {
-            return iqr / 2.0
+    public var quartileDeviation: FPT? {
+        if let iqr: FPT = self.interquartileRange {
+            return iqr / 2
         }
         else {
             return nil
@@ -533,7 +619,7 @@ extension SSExamine {
     }
     
     /// Returns the relative quartile distance
-    public var relativeQuartileDistance: Double? {
+    public var relativeQuartileDistance: FPT? {
         if let q: SSQuartile = self.quartile {
             return (q.q75 - q.q25) / q.q50
         }
@@ -543,10 +629,12 @@ extension SSExamine {
     }
     
     /// Returns the mid-range
-    public var midRange: Double? {
+    public var midRange: FPT? {
         if isArithmetic {
-            if let tempMax = castValueToDouble(self.maximum), let tempMin = castValueToDouble(self.minimum) {
-                return (tempMax + tempMin) / 2.0
+            let tempMax: FPT = makeFP(self.maximum)
+            let tempMin: FPT = makeFP(self.minimum)
+            if !tempMax.isNaN && !tempMin.isNaN {
+                return (tempMax + tempMin) / 2
             }
             else {
                 assert(false, "internal error")
@@ -560,11 +648,11 @@ extension SSExamine {
     
     
     /// Returns the interquartile range
-    public var interquartileRange: Double? {
+    public var interquartileRange: FPT? {
         get {
             if isArithmetic {
                 do {
-                    return try interquantileRange(lowerQuantile: 0.25, upperQuantile: 0.75)!
+                    return try interquantileRange(lowerQuantile: makeFP(0.25), upperQuantile: makeFP(0.75))!
                 }
                 catch {
                     return nil
@@ -580,8 +668,8 @@ extension SSExamine {
     /// - Parameter lower: Lower quantile
     /// - Parameter upper: Upper quantile
     /// - Throws: SSSwiftyStatsError.invalidArgument if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 || upper < lower
-    public func interquantileRange(lowerQuantile lower: Double!, upperQuantile upper: Double!) throws -> Double? {
-        if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 {
+    public func interquantileRange(lowerQuantile lower: FPT, upperQuantile upper: FPT) throws -> FPT? {
+        if upper.isZero || upper < 0 || upper >= 1 || lower.isZero || lower < 0 || lower >= 1 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -606,8 +694,8 @@ extension SSExamine {
         if !isNumeric {
             return nil
         }
-        if lower.isEqual(to: upper) {
-            return 0.0
+        if lower == upper {
+            return 0
         }
         do {
             if let q1 = try quantile(q: upper), let q2 = try quantile(q: lower) {
@@ -624,25 +712,26 @@ extension SSExamine {
     
     /// Returns the sample variance.
     /// - Parameter type: Can be .sample and .unbiased
-    public func variance(type: SSVarianceType) -> Double? {
+    public func variance(type: SSVarianceType) -> FPT? {
         switch type {
         case .biased:
             return moment(r: 2, type: .central)
         case .unbiased:
             if isArithmetic && self.sampleSize >= 2 {
                 let m = self.arithmeticMean!
-                var diff = 0.0
-                var sum = 0.0
+                var diff: FPT = 0
+                var sum: FPT = 0
                 for (item, freq) in self.elements {
-                    if let temp = castValueToDouble(item) {
+                    let temp: FPT = makeFP(item)
+                    if !temp.isNaN {
                         diff = temp - m
-                        sum = sum + diff * diff * Double(freq)
+                        sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
                         assert(false, "internal error")
                     }
                 }
-                return sum / Double(self.sampleSize - 1)
+                return sum / makeFP(self.sampleSize - 1)
             }
             else {
                 return nil
@@ -652,20 +741,23 @@ extension SSExamine {
     
     /// Returns the sample standard deviation.
     /// - Parameter type: .biased or .unbiased
-    public func standardDeviation(type: SSStandardDeviationType) -> Double? {
+    public func standardDeviation(type: SSStandardDeviationType) -> FPT? {
         if let v = variance(type: SSVarianceType(rawValue: type.rawValue)!) {
-            return sqrt(v)
+            return v.squareRoot()
         }
         else {
             return nil
         }
     }
     
+    
+    
+    
     /// Returns the standard error of the sample
-    public var standardError: Double? {
+    public var standardError: FPT? {
         if isArithmetic {
             if let sd = self.standardDeviation(type: .unbiased) {
-                return sd / Double(self.sampleSize)
+                return sd / makeFP(self.sampleSize)
             }
             else {
                 return nil
@@ -678,11 +770,11 @@ extension SSExamine {
     
     
     /// Returns the entropy of the sample. Defined only for nominal or ordinal data
-    public var entropy: Double? {
+    public var entropy: FPT? {
         if !isEmpty {
-            var s: Double = 0.0
+            var s: FPT = 0
             for item in self.uniqueElements(sortOrder: .none)! {
-                s += self.rFrequency(item) * log2(self.rFrequency(item))
+                s += self.rFrequency(item) * log21(self.rFrequency(item))
             }
             return -s
         }
@@ -692,9 +784,9 @@ extension SSExamine {
     }
     
     /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
-    public var relativeEntropy: Double? {
+    public var relativeEntropy: FPT? {
         if let e = self.entropy {
-            return e / log2(Double(self.sampleSize))
+            return e / log21(makeFP(self.sampleSize))
         }
         else {
             return nil
@@ -702,13 +794,14 @@ extension SSExamine {
     }
     
     // Returns the Herfindahl index
-    public var herfindahlIndex: Double? {
+    public var herfindahlIndex: FPT? {
         if isArithmetic {
-            var s: Double = 0.0
-            var p: Double = 0.0
+            var s: FPT = 0
+            var p: FPT = 0
             if let tot = self.total {
                 for item in self.elementsAsArray(sortOrder: .raw)! {
-                    if let x = castValueToDouble(item) {
+                    let x: FPT = makeFP(item)
+                    if !x.isNaN {
                         p = x / tot
                         s += p * p
                     }
@@ -733,29 +826,30 @@ extension SSExamine {
     }
     
     /// Returns the Herfindahl measure
-    public var conc: Double? {
+    public var conc: FPT? {
         return self.herfindahlIndex
     }
     
     /// Returns the Gini coefficient
-    public var gini: Double? {
+    public var gini: FPT? {
         if isArithmetic {
             if self.sampleSize < 2 {
                 return nil
             }
             let sorted = self.elementsAsArray(sortOrder: .ascending)!
-            var s: Double = 0.0
-            let N = Double(self.sampleSize)
+            var s: FPT = 0
+            let N: FPT = makeFP(self.sampleSize)
             let m = self.arithmeticMean!
             for i in 1...self.sampleSize {
-                if let x = castValueToDouble(sorted[i - 1]) {
-                    s = s + (2.0 * Double(i) - N - 1.0) * x
+                let x: FPT = makeFP(sorted[i - 1])
+                if !x.isNaN {
+                    s = s + (2 * makeFP(i) - N - 1) * x
                 }
                 else {
                     assert(false, "internal error")
                 }
             }
-            return s / (pow(N, 2.0) * m)
+            return s / (pow1(N, 2) * m)
         }
         else {
             return nil
@@ -763,11 +857,11 @@ extension SSExamine {
     }
     
     /// The normalized Gini measure
-    public var giniNorm: Double? {
+    public var giniNorm: FPT? {
         get {
             if let g = self.gini {
-                let N = Double(self.sampleSize)
-                return g * N / (N - 1.0)
+                let N: FPT = makeFP(self.sampleSize)
+                return g * N / (N - 1)
             }
             else {
                 return nil
@@ -776,13 +870,14 @@ extension SSExamine {
     }
     
     /// The concentration ratio
-    public func CR(_ g: Int!) -> Double? {
+    public func CR(_ g: Int) -> FPT? {
         if isArithmetic {
             if g > 0 && g <= self.sampleSize {
                 let a = self.elementsAsArray(sortOrder: .descending)!
-                var sum: Double = 0.0
+                var sum: FPT = 0
                 for i in 0..<g {
-                    if let x = castValueToDouble(a[i]) {
+                    let x: FPT = makeFP(a[i])
+                    if !x.isNaN {
                         sum = sum + x
                     }
                     else {
@@ -804,27 +899,29 @@ extension SSExamine {
     /// Returns the alpha-confidence interval of the mean when the population variance is known
     /// - Parameter a: Alpha
     /// - Parameter sd: Standard deviation of the population
-    public func normalCI(alpha a: Double!, populationSD sd: Double!) -> SSConfIntv? {
-        if alpha <= 0.0 || alpha >= 1.0 {
+    public func normalCI(alpha a: FPT, populationSD sd: FPT) -> SSConfIntv<FPT>? {
+        if alpha <= 0 || alpha >= 1 {
             return nil
         }
         if isArithmetic {
-            var upper: Double
-            var lower: Double
-            var width: Double
-            var t1: Double
-            var u: Double
+            var upper: FPT
+            var lower: FPT
+            var width: FPT
+            var t1: FPT
+            var u: FPT
             do {
-                let m = self.arithmeticMean
-                u = try quantileStandardNormalDist(p: 1.0 - alpha / 2.0)
-                t1 = sd / sqrt(Double(self.sampleSize))
+                let m = self.arithmeticMean!
+                let pp: FPT = makeFP(alpha)
+                u = try quantileStandardNormalDist(p: 1 - ( pp / 2))
+                let n: FPT = makeFP(self.sampleSize)
+                t1 = sd / n.squareRoot()
                 width = u * t1
-                upper = m! + width
-                lower = m! - width
-                var result = SSConfIntv()
+                upper = m + width
+                lower = m - width
+                var result = SSConfIntv<FPT>()
                 result.lowerBound = lower
                 result.upperBound = upper
-                result.intervalWidth = 2.0 * width
+                result.intervalWidth = 2 * width
                 return result
             }
             catch {
@@ -838,31 +935,32 @@ extension SSExamine {
     
     /// Returns the alpha-confidence interval of the mean when the population variance is unknown
     /// - Parameter a: Alpha
-    public func studentTCI(alpha a: Double!) -> SSConfIntv? {
-        if alpha <= 0.0 || alpha >= 1.0 {
+    public func studentTCI(alpha a: FPT) -> SSConfIntv<FPT>? {
+        if alpha <= 0 || alpha >= 1 {
             return nil
         }
         if isArithmetic {
-            var upper: Double
-            var lower: Double
-            var width: Double
-            var m: Double
-            var u: Double
-            m = arithmeticMean!
+            var upper: FPT
+            var lower: FPT
+            var width: FPT
+            var m: FPT
+            var u: FPT
+            m = self.arithmeticMean!
             if let s = self.standardDeviation(type: .unbiased) {
                 do {
-                    u = try quantileStudentTDist(p: 1.0 - a / 2.0 , degreesOfFreedom: Double(self.sampleSize) - 1.0)
+                    u = try quantileStudentTDist(p: makeFP(1) - a / 2 , degreesOfFreedom: makeFP(self.sampleSize - 1))
                 }
                 catch {
                     return nil
                 }
-                lower = m - u * s / sqrt(Double(self.sampleSize))
-                upper = m + u * s / sqrt(Double(self.sampleSize))
-                width = u * s / sqrt(Double(self.sampleSize))
-                var result = SSConfIntv()
+                let n: FPT = makeFP(self.sampleSize)
+                lower = m - u * s / n.squareRoot()
+                upper = m + u * s / n.squareRoot()
+                width = u * s / n.squareRoot()
+                var result = SSConfIntv<FPT>()
                 result.lowerBound = lower
                 result.upperBound = upper
-                result.intervalWidth = 2.0 * width
+                result.intervalWidth = 2 * width
                 return result
             }
             else {
@@ -875,23 +973,23 @@ extension SSExamine {
     }
     
     /// Returns the 0.95-confidence interval of the mean using Student's T distribution.
-    public var meanCI: SSConfIntv? {
+    public var meanCI: SSConfIntv<FPT>? {
         get {
-            return self.studentTCI(alpha: 0.05)
+            return self.studentTCI(alpha: makeFP(0.05))
         }
     }
     
     /// Returns the coefficient of variation. A shorctut for coefficientOfVariation:
-    public var cv: Double? {
+    public var cv: FPT? {
         return coefficientOfVariation
     }
     
     
     /// Returns the coefficient of variation
-    public var coefficientOfVariation: Double? {
+    public var coefficientOfVariation: FPT? {
         if isArithmetic {
             if let s = self.standardDeviation(type: .unbiased) {
-                return s / arithmeticMean!
+                return s / self.arithmeticMean!
             }
             else {
                 return nil
@@ -903,13 +1001,13 @@ extension SSExamine {
     }
     
     /// Returns the mean absolute difference
-    public var meanDifference: Double? {
+    public var meanDifference: FPT? {
         if isArithmetic {
             if self.sampleSize < 2 {
                 return nil
             }
             if let g = self.gini, let m = self.arithmeticMean {
-                return g * 2.0 * m
+                return g * 2 * m
             }
             else {
                 return nil
@@ -925,64 +1023,67 @@ extension SSExamine {
     /// - Parameter scaleFactor: Used for consistency reasons. If nil, the default value will be used.
     /// ### Note ###
     /// The scale factor is valid for normally distributed data only.
-    public func medianAbsoluteDeviation(center rp: Double!, scaleFactor c: Double?) -> Double? {
+    public func medianAbsoluteDeviation(center rp: FPT, scaleFactor c: FPT?) -> FPT? {
         if !isArithmetic || rp.isNaN {
             return nil
         }
-        var diffArray:Array<Double> = Array<Double>()
+        var diffArray:Array<FPT> = Array<FPT>()
         let values = self.elementsAsArray(sortOrder: .ascending)!
-        let result: Double
+        let result: FPT
         for item in values  {
-            if let t1 = castValueToDouble(item) {
-                diffArray.append(fabs(t1 - rp))
+            let t1: FPT = makeFP(item)
+            if !t1.isNaN {
+                diffArray.append(abs(t1 - rp))
             }else {
                 assert(false, "internal error")
             }
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
-        let k = Double(sortedDifferences.count) * 0.5
-        if k.truncatingRemainder(dividingBy: 1).isZero {
-            result = (sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k - 1))] + sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(k))]) / 2.0
+        let k: FPT = makeFP(sortedDifferences.count) * makeFP(0.5 )
+        if isInteger(k) {
+            result = (sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(k - 1))] + sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(k))]) / 2
         }
         else {
-            result = sortedDifferences[sortedDifferences.startIndex.advanced(by: Int(ceil(k - 1)))]
+            result = sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(ceil(k - 1)))]
         }
-        var cf:Double
+        var cf:FPT
         if c != nil {
             cf = c!
         }
         else {
             // = 1 / quantileStandardNormalDist(0.75)
-            cf = 1.482602218505601860547
+            cf = makeFP(1.482602218505601860547)
         }
         return cf * result
     }
     
     /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
-    public func meanAbsoluteDeviation(center rp: Double!) -> Double? {
+    public func meanAbsoluteDeviation(center rp: FPT) -> FPT? {
         if !isArithmetic || rp.isNaN {
             return nil
         }
-        var sum: Double = 0.0
-        var f1: Double
+        var sum: FPT = 0
+        var f1: FPT
         var c: Int = 0
         for (item, freq) in self.elements {
-            if let t1 = castValueToDouble(item) {
-                f1 = Double(freq)
-                sum = sum + fabs(t1 - rp) * f1
+            let t1: FPT = makeFP(item)
+            if !t1.isNaN {
+                f1 = makeFP(freq)
+                sum = sum + abs(t1 - rp) * f1
                 c = c + freq
             }
             else {
                 assert(false, "internal error")
             }
         }
-        return sum / Double(c)
+        let cc: FPT = makeFP(c)
+        return sum / cc
     }
     
     
     /// Returns the relative mean absolute difference
-    public var meanRelativeDifference: Double? {
+    public var meanRelativeDifference: FPT? {
         if let md = meanDifference {
             return md / arithmeticMean!
         }
@@ -993,19 +1094,20 @@ extension SSExamine {
     
     /// Returns the semi-variance
     /// - Parameter type: SSSemiVariance.lower or SSSemiVariance.upper
-    public func semiVariance(type: SSSemiVariance) -> Double? {
+    public func semiVariance(type: SSSemiVariance) -> FPT? {
         if isArithmetic {
             switch type {
             case .lower:
                 let a = self.elementsAsArray(sortOrder: .ascending)!
-                let m = self.arithmeticMean!
-                var s = 0.0
-                var k: Double = 0
+                let m: FPT = self.arithmeticMean!
+                var s: FPT = 0
+                var k: FPT = 0
                 for itm in a {
-                    if let t = castValueToDouble(itm) {
+                    let t: FPT = makeFP(itm)
+                    if !t.isNaN {
                         if t < m {
-                            s = s + pow(t - m, 2.0)
-                            k = k + 1.0
+                            s = s + pow1(t - m, 2)
+                            k = k + 1
                         }
                         else {
                             break
@@ -1018,14 +1120,15 @@ extension SSExamine {
                 return s / k
             case .upper:
                 let a = self.elementsAsArray(sortOrder: .descending)!
-                let m = self.arithmeticMean!
-                var s = 0.0
-                var k: Double = 0
+                let m: FPT = self.arithmeticMean!
+                var s: FPT = 0
+                var k: FPT = 0
                 for itm in a {
-                    if let t = castValueToDouble(itm) {
+                    let t: FPT = makeFP(itm)
+                    if !t.isNaN {
                         if t > m {
-                            s = s + pow(t - m, 2.0)
-                            k = k + 1.0
+                            s = s + pow1(t - m, 2)
+                            k = k + 1
                         }
                         else {
                             break
@@ -1051,7 +1154,7 @@ extension SSExamine {
     /// If .origin is specified, the r_th moment about the origin will be returned.
     /// If .standardized is specified, the r_th standardized moment will be returned.
     /// - Parameter r: r
-    public func moment(r: Int!, type: SSMomentType) -> Double? {
+    public func moment(r: Int, type: SSMomentType) -> FPT? {
         switch type {
         case .central:
             return centralMoment(r: r)
@@ -1064,21 +1167,23 @@ extension SSExamine {
     
     /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
-    fileprivate func centralMoment(r: Int!) -> Double? {
+    fileprivate func centralMoment(r: Int!) -> FPT? {
         if isArithmetic {
             let m = self.arithmeticMean!
-            var diff = 0.0
-            var sum = 0.0
+            var diff: FPT = 0
+            var sum: FPT = 0
+            let rr: FPT = makeFP(r)
             for (item, freq) in self.elements {
-                if let t = castValueToDouble(item) {
+                let t: FPT = makeFP(item)
+                if !t.isNaN {
                     diff = t - m
-                    sum = sum + pow(diff, Double(r)) * Double(freq)
+                    sum = sum + pow1(diff, rr) * makeFP(freq)
                 }
                 else {
                     assert(false, "internal error")
                 }
             }
-            return sum / Double(self.sampleSize)
+            return sum / makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -1088,18 +1193,20 @@ extension SSExamine {
     
     /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
-    fileprivate func originMoment(r: Int!) -> Double? {
+    fileprivate func originMoment(r: Int!) -> FPT? {
         if isArithmetic {
-            var sum = 0.0
+            var sum: FPT = 0
+            let rr: FPT = makeFP(r)
             for (item, freq) in self.elements {
-                if let t = castValueToDouble(item) {
-                    sum = sum + pow(t, Double(r)) * Double(freq)
+                let t: FPT = makeFP(item)
+                if !t.isNaN {
+                    sum = sum + pow1(t, rr) * makeFP(freq)
                 }
                 else {
                     assert(false, "internal error")
                 }
             }
-            return sum / Double(self.sampleSize)
+            return sum / makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -1107,24 +1214,50 @@ extension SSExamine {
     }
     
     /// Returns then r_th standardized moment.
-    fileprivate func standardizedMoment(r: Int!) -> Double? {
+    fileprivate func standardizedMoment(r: Int!) -> FPT? {
         if isArithmetic {
-            var sum = 0.0
+            var sum: FPT = 0
             let m = self.arithmeticMean!
             let sd = self.standardDeviation(type: .biased)!
+            let rr: FPT = makeFP(r)
             if !sd.isZero {
                 for (item, freq) in self.elements {
-                    if let t = castValueToDouble(item) {
-                        sum = sum + pow( ( t - m ) / sd, Double(r)) * Double(freq)
+                    let t: FPT = makeFP(item)
+                    if !t.isNaN {
+                        sum = sum + pow1( ( t - m ) / sd, rr) * makeFP(freq)
                     }
                     else {
                         assert(false, "internal error")
                     }
                 }
-                return sum / Double(self.sampleSize)
+                return sum / makeFP(self.sampleSize)
             }
             else {
-                return Double.infinity
+                return FPT.infinity
+            }
+        }
+        else {
+            return nil
+        }
+    }
+    
+    // FIXME: AUTOCORR
+    
+    /// Returns the lag-n autocorrelation of the data.
+    /// - Parameter n: Lag (default = 1)
+    public func autocorrelation(n: Int = 1) throws -> Double? {
+        if self.isArithmetic {
+            do {
+                var bl: SSBoxLjungResult = try SSHypothesisTesting.autocorrelation(data: self as! SSExamine<Double, Double>)
+                if let l = bl.coefficients?[n] {
+                    return l
+                }
+                else {
+                    return nil
+                }
+            }
+            catch {
+                throw error
             }
         }
         else {
@@ -1135,11 +1268,11 @@ extension SSExamine {
     // MARK: Empirical distribution parameters
     
     /// Returns the kurtosis excess
-    public var kurtosisExcess: Double? {
+    public var kurtosisExcess: FPT? {
         if isArithmetic {
             let m4 = moment(r: 4, type: .central)!
             let m2 = moment(r: 2, type: .central)!
-            return m4 / pow(m2, 2) - 3.0
+            return m4 / pow1(m2, 2) - 3
         }
         else {
             return nil
@@ -1147,9 +1280,9 @@ extension SSExamine {
     }
     
     /// Returns the kurtosis.
-    public var kurtosis: Double? {
+    public var kurtosis: FPT? {
         if let k = kurtosisExcess {
-            return k + 3.0
+            return k + 3
         }
         else {
             return nil
@@ -1179,10 +1312,10 @@ extension SSExamine {
     
     
     /// Returns the skewness.
-    public var skewness: Double? {
+    public var skewness: FPT? {
         if isArithmetic {
             if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
-                return m3 / pow(s3, 3)
+                return m3 / pow1(s3, 3)
             }
             else {
                 return nil
@@ -1213,7 +1346,7 @@ extension SSExamine {
         }
     }
     
-    
+    // FIXME: GRUBBS
     /// Returns true, if there are outliers.
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func hasOutliers(testType: SSOutlierTest) -> Bool? {
@@ -1221,7 +1354,7 @@ extension SSExamine {
             switch testType {
             case .grubbs:
                 do {
-                    let res = try SSHypothesisTesting.grubbsTest(data:self, alpha: 0.05)
+                    let res: SSGrubbsTestResult<SSElement, FPT> = try SSHypothesisTesting.grubbsTest(data:self, alpha: makeFP(0.05))
                     return res.hasOutliers
                 }
                 catch {
@@ -1231,14 +1364,15 @@ extension SSExamine {
                 var tempArray = Array<Double>()
                 let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
                 for itm in a {
-                    if let t = castValueToDouble(itm) {
+                    let t: Double = makeFP(itm)
+                    if !t.isNaN {
                         tempArray.append(t)
                     }
                     else {
                         assert(false, "internal error")
                     }
                 }
-                if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
+                if let res = try! SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
                     if res.countOfOutliers! > 0 {
                         return true
                     }
@@ -1260,19 +1394,20 @@ extension SSExamine {
     /// - Parameter alpha: Alpha
     /// - Parameter max: Maximum number of outliers to return
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
-    public func outliers(alpha: Double!, max: Int!, testType t: SSESDTestType) -> Array<Double>? {
+    public func outliers(alpha: FPT!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if isArithmetic {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
             for itm in a {
-                if let temp = castValueToDouble(itm) {
+                let temp: Double = makeFP(itm)
+                if !temp.isNaN {
                     tempArray.append(temp)
                 }
                 else {
                     assert(false, "internal error")
                 }
             }
-            if let res = SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: alpha, maxOutliers: max, testType: t) {
+            if let res: SSESDTestResult<SSElement, FPT> = try! SSHypothesisTesting.esdOutlierTest(data: self, alpha: alpha, maxOutliers: max, testType: t) {
                 if res.countOfOutliers! > 0 {
                     return res.outliers
                 }
@@ -1296,8 +1431,8 @@ extension SSExamine {
         }
         else {
             do {
-                if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: .gaussian) {
-                    return r.pValue! > self.alpha
+                if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: .gaussian) {
+                    return r.pValue! > makeFP(self.alpha)
                 }
                 else {
                     return nil
@@ -1311,13 +1446,13 @@ extension SSExamine {
     
     /// Tests, if the sample was drawn from population with a particular distribution function
     // - Parameter target: Distribution to test
-    public func testForDistribution(targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public func testForDistribution(targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if !isArithmetic {
             return nil
         }
         else {
             do {
-                return try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<Double>, targetDistribution: target)
+                return try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: target)
             }
             catch {
                 throw error
@@ -1327,25 +1462,25 @@ extension SSExamine {
     
     /// Returns the statistics needed to create a Box-Whisker Plot
     /// - Returns: A SSBoxWhisker structure
-    public var boxWhisker: SSBoxWhisker<SSElement>? {
+    public var boxWhisker: SSBoxWhisker<SSElement, FPT>? {
         get {
             if isArithmetic {
                 do {
-                    var res = SSBoxWhisker<SSElement>()
+                    var res: SSBoxWhisker<SSElement, FPT> = SSBoxWhisker<SSElement, FPT>()
                     res.median = self.median
-                    res.q25 = try self.quantile(q: 0.25)
-                    res.q75 = try self.quantile(q: 0.75)
+                    res.q25 = try self.quantile(q: makeFP(0.25))
+                    res.q75 = try self.quantile(q: makeFP(0.75))
                     res.iqr = self.interquartileRange
                     let a = self.elementsAsArray(sortOrder: .descending)!
-                    var iqr3h: Double
-                    var iqr3t: Double
-                    var notchCoeff: Double
-                    let N = Double(self.sampleSize)
+                    var iqr3h: FPT
+                    var iqr3t: FPT
+                    var notchCoeff: FPT
+                    let N: FPT = makeFP(self.sampleSize)
                     if res.iqr != nil {
-                        iqr3h = 1.5 * res.iqr!
-                        iqr3t = 2.0 * iqr3h
+                        iqr3h = makeFP(1.5 ) * res.iqr!
+                        iqr3t = makeFP(2.0 ) * iqr3h
                         //                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
-                        notchCoeff = 1.58 * res.iqr! / sqrt(N)
+                        notchCoeff = makeFP(1.58 ) * res.iqr! / sqrt(N)
                     }
                     else {
                         return nil
@@ -1355,7 +1490,8 @@ extension SSExamine {
                     res.extremes = Array<SSElement>()
                     res.outliers = Array<SSElement>()
                     for i in 0..<self.sampleSize {
-                        if let temp = castValueToDouble(a[i]) {
+                        let temp: FPT = makeFP(a[i])
+                        if !temp.isNaN {
                             if temp > res.q75! + iqr3t {
                                 res.outliers?.append(a[i])
                             }
@@ -1369,7 +1505,8 @@ extension SSExamine {
                         }
                     }
                     for i in stride(from: self.sampleSize - 1, through: 0, by: -1) {
-                        if let temp = castValueToDouble(a[i]) {
+                        let temp: FPT = makeFP(a[i])
+                        if !temp.isNaN {
                             if temp < res.q25! - iqr3t {
                                 res.outliers?.append(a[i])
                             }

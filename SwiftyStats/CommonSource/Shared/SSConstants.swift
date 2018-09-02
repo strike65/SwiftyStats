@@ -33,73 +33,144 @@ internal let SSExamineFileExtension = "SSexamine"
 /// The current file version for archiving
 internal let SSStatisticsFileVersionString: String = "1.0.0"
 
-/// Returns 2 / pi
-internal let  TWOOPI : Double = 0.636619772367581343075535053490057448139
-/// Returns pi / 4
-internal let  PIQUART : Double =			0.785398163397448309615660845819875721049
-/// Returns 3 Pi / 4
-internal let  THREEPIQUART : Double = 2.356194490192344928846982537459627163148
-/// Returns Euler's gamma
-internal let  EULERGAMMA : Double = 0.577215664901532860606512090082402431042
-/// Returns sqrt(pi)
-internal let  SQRTPI : Double = 1.772453850905516027298167483341145182798
-#if arch(arm) || arch(arm64)
-/// Returns pi
-internal let  PIL : Double = 3.141592653589793238462643383279502884197
-#else
-/// Returns pi
-internal let  PIL : Float80 = 3.141592653589793238462643383279502884197
-#endif
-/// Returns sqrt(2)
-internal let  SQRTTWO : Double = 1.414213562373095048801688724209698078570
-/// Returns sqrt(1/(2 * pi))
-internal let  SQRT2PIINV : Double = 0.398942280401432677939946059934381868476
-/// Returns sqrt(2 / pi)
-internal let SQRT2DIVPI: Double = 0.797884560802865355879892119868763736952
-#if arch(arm) || arch(arm64)
-internal let SQRT2DIVPIL: Double = 0.7978845608028653558798921198687637369517172623298693153318516593
-#else
-internal let SQRT2DIVPIL: Float80 = 0.7978845608028653558798921198687637369517172623298693153318516593
-#endif
-// Returns ln(sqrt(pi))
-internal let LNSQRTPI: Double = 0.5723649429247000870717136756765293558236474064576557857568115357
-/// Returns sqrt(2*pi)
-internal let  SQRT2PI : Double = 2.506628274631000502415765284811045253010
-/// Returns log(sqrt(2*pi))
-internal let  LOGSQRT2PI : Double = 0.918938533204672741780329736405617639861
-/// Returns pi /2
-internal let  PIHALF : Double = 1.570796326794896619231321691639751442099
-/// Returns sqrt(pi/2)
-internal let  SQRTPIHALF : Double =	0.886226925452758013649083741670572591399
-/// Returns log(2)
-internal let  LOG2 : Double = 0.693147180559945309417232121458176568076
-/// Returns 1/12 (one over twelve)
-internal let  OOTW : Double = 0.083333333333333333333333333333333333333
-/// Returns 1/18 (one over eighteen)
-internal let  OOEI : Double = 0.055555555555555555555555555555555555556
-/// Returns 1/24 (one over twentyfour)
-internal let  OOTWF : Double = 0.041666666666666666666666666666666666667
-/// Returns 2 * pi
-internal let  TWOPI : Double = 6.283185307179586476925286766559005768394
-/// Returns pi * pi
-internal let  PISQUARED : Double = 9.869604401089358618834490999876151135314
-/// Returns 1 / (2 pi)
-internal let  OO2PI : Double = 0.159154943091895335768883763372514362035
-/// Returns log(pi)
-internal let  LOGPI : Double = 1.144729885849400174143427351353058711647
-/// Returns 1/ pi
-internal let  OOPI : Double = 0.318309886183790671537767526745028724069
-/// Returns sqrt(3)
-internal let  SQRT3 : Double = 1.732050807568877293527446341505872366943
-/// Returns 1 / sqrt(pi)
-internal let  OOSQRTPI : Double = 0.564189583547756286948079451560772585844
-/// Returns 1 / 3
-internal let  OO3 : Double =	0.333333333333333333333333333333333333333
-/// Returns 1/ 6
-internal let  OO6 : Double = 0.166666666666666666666666666666666666667
-/// Returns 2/3
-internal let  TWOO3 : Double = 0.666666666666666666666666666666666666666
-/// Returns 2^(1/4)
-internal let  TWOEXPQUART : Double =	1.189207115002721066717499970560475915293
-/// Returns Sqrt(6)
-internal let SQRTSIX : Double =         2.449489742783178098197284074705891391966
+//
+///* Double Constants */
+///// Returns 2 / pi
+//internal let  TWOOPI : Double =             0.636619772367581343075535053490057448139
+///// Returns pi / 4
+//internal let  PIQUART : Double =            0.785398163397448309615660845819875721049
+///// Returns 3 Pi / 4
+//internal let  THREEPIQUART : Double =       2.356194490192344928846982537459627163148
+///// Returns Euler's gamma
+//internal let  EULERGAMMA : Double =         0.577215664901532860606512090082402431042
+///// Returns sqrt(pi)
+//internal let  SQRTPI : Double =             1.772453850905516027298167483341145182798
+///// Returns pi
+//internal let  PIL : Float80 = 3.141592653589793238462643383279502884197
+//#endif
+///// Returns ln(sqrt(2))
+//internal let LNSQRT2: Float80 =  0.346573590279972654708616060729088284038
+///// Returns sqrt(2)
+//internal let  SQRTTWO : Double = 1.414213562373095048801688724209698078570
+///// Returns sqrt(1/(2 * pi))
+//internal let  SQRT2PIINV : Double = 0.398942280401432677939946059934381868476
+///// Returns sqrt(2 / pi)
+//internal let SQRT2DIVPI: Double = 0.797884560802865355879892119868763736952
+//#if arch(arm) || arch(arm64)
+//internal let SQRT2DIVPIL: Double = 0.7978845608028653558798921198687637369517172623298693153318516593
+//#else
+//internal let SQRT2DIVPIL: Float80 = 0.7978845608028653558798921198687637369517172623298693153318516593
+//#endif
+//// Returns ln(sqrt(pi))
+//internal let LNSQRTPI: Double = 0.5723649429247000870717136756765293558236474064576557857568115357
+///// Returns sqrt(2*pi)
+//internal let  SQRT2PI : Double = 2.506628274631000502415765284811045253010
+///// Returns ln(sqrt(2*pi))
+//internal let  LNSQRT2PI : Double = 0.918938533204672741780329736405617639861
+///// Returns pi /2
+//internal let  PIHALF : Double = 1.570796326794896619231321691639751442099
+///// Returns sqrt(pi/2)
+//internal let  SQRTPIHALF : Double =    0.886226925452758013649083741670572591399
+///// Returns log(2)
+//internal let  LOG2 : Double = 0.693147180559945309417232121458176568076
+///// Returns 1/12 (one over twelve)
+//internal let  OOTW : Double = 0.083333333333333333333333333333333333333
+///// Returns 1/18 (one over eighteen)
+//internal let  OOEI : Double = 0.055555555555555555555555555555555555556
+///// Returns 1/24 (one over twentyfour)
+//internal let  OOTWF : Double = 0.041666666666666666666666666666666666667
+///// Returns 2 * pi
+//internal let  TWOPI : Double = 6.283185307179586476925286766559005768394
+///// Returns pi * pi
+//internal let  PISQUARED : Double = 9.869604401089358618834490999876151135314
+///// Returns 1 / (2 pi)
+//internal let  OO2PI : Double = 0.159154943091895335768883763372514362035
+///// Returns log(pi)
+//internal let  LOGPI : Double = 1.144729885849400174143427351353058711647
+///// Returns 1/ pi
+//internal let  OOPI : Double = 0.318309886183790671537767526745028724069
+///// Returns sqrt(3)
+//internal let  SQRT3 : Double = 1.732050807568877293527446341505872366943
+///// Returns 1 / sqrt(pi)
+//internal let  OOSQRTPI : Double = 0.564189583547756286948079451560772585844
+///// Returns 1 / 3
+//internal let  OO3 : Double =    0.333333333333333333333333333333333333333
+///// Returns 1/ 6
+//internal let  OO6 : Double = 0.166666666666666666666666666666666666667
+///// Returns 2/3
+//internal let  TWOO3 : Double = 0.666666666666666666666666666666666666666
+///// Returns 2^(1/4)
+//internal let  TWOEXPQUART : Double =    1.189207115002721066717499970560475915293
+///// Returns Sqrt(6)
+//internal let SQRTSIX : Double =         2.449489742783178098197284074705891391966
+//
+///* Double Constants */
+///// Returns 2 / pi
+//internal let twoopi : Double =             0.636619772367581343075535053490057448139
+///// Returns pi / 4
+//internal let piquart : Double =            0.785398163397448309615660845819875721049
+///// Returns 3 Pi / 4
+//internal let threepiquart : Double =       2.356194490192344928846982537459627163148
+///// Returns Euler's gamma
+//internal let eulergamma : Double =         0.577215664901532860606512090082402431042
+///// Returns sqrt(pi)
+//internal let sqrtpi : Double =             1.772453850905516027298167483341145182798
+///// Returns pi
+//internal let pil : Float80 = 3.141592653589793238462643383279502884197
+//#endif
+///// Returns ln(sqrt(2))
+//internal letlnsqrt2: Float80 =  0.346573590279972654708616060729088284038
+///// Returns sqrt(2)
+//internal let sqrttwo : Double = 1.414213562373095048801688724209698078570
+///// Returns sqrt(1/(2 * pi))
+//internal let sqrt2piinv : Double = 0.398942280401432677939946059934381868476
+///// Returns sqrt(2 / pi)
+//internal letsqrt2divpi: Double = 0.797884560802865355879892119868763736952
+//#if arch(arm) || arch(arm64)
+//internal letsqrt2divpil: Double = 0.7978845608028653558798921198687637369517172623298693153318516593
+//#else
+//internal letsqrt2divpil: Float80 = 0.7978845608028653558798921198687637369517172623298693153318516593
+//#endif
+//// Returns ln(sqrt(pi))
+//internal let lnsqrtpi: Double = 0.5723649429247000870717136756765293558236474064576557857568115357
+///// Returns sqrt(2*pi)
+//internal let sqrt2pi : Double = 2.506628274631000502415765284811045253010
+///// Returns ln(sqrt(2*pi))
+//internal let lnsqrt2pi : Double = 0.918938533204672741780329736405617639861
+///// Returns pi /2
+//internal let pihalf : Double = 1.570796326794896619231321691639751442099
+///// Returns sqrt(pi/2)
+//internal let sqrtpihalf : Double =    0.886226925452758013649083741670572591399
+///// Returns log(2)
+//internal let log2 : Double = 0.693147180559945309417232121458176568076
+///// Returns 1/12 (one over twelve)
+//internal let ootw : Double = 0.083333333333333333333333333333333333333
+///// Returns 1/18 (one over eighteen)
+//internal let ooei : Double = 0.055555555555555555555555555555555555556
+///// Returns 1/24 (one over twentyfour)
+//internal let ootwf : Double = 0.041666666666666666666666666666666666667
+///// Returns 2 * pi
+//internal let twopi : Double = 6.283185307179586476925286766559005768394
+///// Returns pi * pi
+//internal let pisquared : Double = 9.869604401089358618834490999876151135314
+///// Returns 1 / (2 pi)
+//internal let oo2pi : Double = 0.159154943091895335768883763372514362035
+///// Returns log(pi)
+//internal let logpi : Double = 1.144729885849400174143427351353058711647
+///// Returns 1/ pi
+//internal let oopi : Double = 0.318309886183790671537767526745028724069
+///// Returns sqrt(3)
+//internal let sqrt3 : Double = 1.732050807568877293527446341505872366943
+///// Returns 1 / sqrt(pi)
+//internal let oosqrtpi : Double = 0.564189583547756286948079451560772585844
+///// Returns 1 / 3
+//internal let  third : Double =    0.333333333333333333333333333333333333333
+///// Returns 1/ 6
+//internal let  sixth : Double = 0.166666666666666666666666666666666666667
+///// Returns 2/3
+//internal let twoo3 : Double = 0.666666666666666666666666666666666666666
+///// Returns 2^(1/4)
+//internal let twoexpquart : Double =    1.189207115002721066717499970560475915293
+///// Returns Sqrt(6)
+//internal letsqrtsix : Double =         2.449489742783178098197284074705891391966
+//

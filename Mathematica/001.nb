@@ -1,0 +1,177 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      5516,        168]
+NotebookOptionsPosition[      4785,        139]
+NotebookOutlinePosition[      5165,        156]
+CellTagsIndexPosition[      5122,        153]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Delta]", "=", "3"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Nu]", "=", "22"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", 
+   RowBox[{"NoncentralStudentTDistribution", "[", 
+    RowBox[{"\[Nu]", ",", "\[Delta]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", 
+     RowBox[{"-", "10"}]}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", "0"}], "]"}], ",", "21"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", 
+     RowBox[{"25", "/", "10"}]}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", "10"}], "]"}], ",", "21"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.743950562239498*^9, 3.7439505932101593`*^9}, {
+  3.743950642098605*^9, 3.743950643626566*^9}, {3.743951872447892*^9, 
+  3.7439518942325153`*^9}, {3.7439521148754253`*^9, 3.74395211617902*^9}, {
+  3.74395257911054*^9, 3.7439525794611*^9}, {3.743952638277459*^9, 
+  3.743952641709484*^9}}],
+
+Cell[BoxData["8.14079530286125822663132428092480429206443`21.*^-17"], "Output",
+ CellChangeTimes->{3.743952644568717*^9}],
+
+Cell[BoxData["0.0013498980316300945266518148081195615219513898291926603835`21.\
+"], "Output",
+ CellChangeTimes->{3.743952644573819*^9}],
+
+Cell[BoxData["0.3101248667776934118435220438645038412322240088040463600417`21.\
+"], "Output",
+ CellChangeTimes->{3.743952644578537*^9}],
+
+Cell[BoxData["0.9999769944893422410495669555173404324887233085957311588728`21.\
+"], "Output",
+ CellChangeTimes->{3.7439526446538677`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Delta]", "=", "10"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Nu]", "=", "22"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", 
+   RowBox[{"NoncentralStudentTDistribution", "[", 
+    RowBox[{"\[Nu]", ",", "\[Delta]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", 
+     RowBox[{"-", "10"}]}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", "0"}], "]"}], ",", "21"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", "2"}], "]"}], ",", "21"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", 
+     RowBox[{"25", "/", "10"}]}], "]"}], ",", "21"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"N", "[", 
+  RowBox[{
+   RowBox[{"CDF", "[", 
+    RowBox[{"d", ",", "10"}], "]"}], ",", "21"}], "]"}]}], "Input",
+ CellChangeTimes->{
+  3.743952624526496*^9, {3.74395266059219*^9, 3.743952673615054*^9}, 
+   3.743952829408928*^9, {3.743955327987815*^9, 3.743955332818657*^9}, {
+   3.743955757295063*^9, 3.7439557573416777`*^9}}],
+
+Cell[BoxData["4.391724414918307703585258296224671640807942195169676`21.*^-44"]\
+, "Output",
+ CellChangeTimes->{3.7439527096768637`*^9, 3.743952787396055*^9, 
+  3.743952830558378*^9, 3.743955333485838*^9, 3.74395575808644*^9}],
+
+Cell[BoxData["7.61985302416052606597335136742820814883433467624550523`21.*^-\
+24"], "Output",
+ CellChangeTimes->{3.7439527096768637`*^9, 3.743952787396055*^9, 
+  3.743952830558378*^9, 3.743955333485838*^9, 3.743955758091031*^9}],
+
+Cell[BoxData["1.00316897649437185092666457216190941554929212`21.*^-14"], \
+"Output",
+ CellChangeTimes->{3.7439527096768637`*^9, 3.743952787396055*^9, 
+  3.743952830558378*^9, 3.743955333485838*^9, 3.743955758350706*^9}],
+
+Cell[BoxData["1.3028993575245576768744835361188549932603023344`21.*^-12"], \
+"Output",
+ CellChangeTimes->{3.7439527096768637`*^9, 3.743952787396055*^9, 
+  3.743952830558378*^9, 3.743955333485838*^9, 3.743955758353401*^9}],
+
+Cell[BoxData["0.4691242897694522332273617615352567252707603989726926277829`21.\
+"], "Output",
+ CellChangeTimes->{3.7439527096768637`*^9, 3.743952787396055*^9, 
+  3.743952830558378*^9, 3.743955333485838*^9, 3.743955758355743*^9}]
+}, Open  ]]
+},
+WindowSize->{808, 906},
+WindowMargins->{{Automatic, 256}, {Automatic, 86}},
+Magnification->1.25,
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 1218, 33, 162, "Input"],
+Cell[1801, 57, 121, 1, 38, "Output"],
+Cell[1925, 60, 135, 2, 35, "Output"],
+Cell[2063, 64, 135, 2, 35, "Output"],
+Cell[2201, 68, 137, 2, 35, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2375, 75, 1258, 36, 183, "Input"],
+Cell[3636, 113, 225, 3, 38, "Output"],
+Cell[3864, 118, 228, 3, 38, "Output"],
+Cell[4095, 123, 219, 3, 38, "Output"],
+Cell[4317, 128, 221, 3, 38, "Output"],
+Cell[4541, 133, 228, 3, 35, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

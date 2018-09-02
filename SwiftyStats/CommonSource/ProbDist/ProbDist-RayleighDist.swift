@@ -32,8 +32,8 @@ import os.log
 /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func paraRayleighDist(scale s: Double!) throws -> SSContProbDistParams {
-    var result = SSContProbDistParams()
+public func paraRayleighDist<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSContProbDistParams<FPT>  {
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>.init()
     if s <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -45,10 +45,10 @@ public func paraRayleighDist(scale s: Double!) throws -> SSContProbDistParams {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    result.mean = SQRTPIHALF * s
-    result.variance = (2.0 - PIHALF) * s * s
-    result.skewness = ((-3 + Double.pi) * SQRTPIHALF) / pow(2 - PIHALF, 1.5)
-    result.kurtosis = (32 - 3 * PISQUARED) / pow(4 - Double.pi, 2.0)
+    result.mean = FPT.sqrtpihalf * s
+    result.variance = (2 - FPT.pi / 2) * s * s
+    result.skewness = ((-3 + FPT.pi) * FPT.sqrtpihalf) / pow1(2 - FPT.pi / 2, makeFP(3.0 / 2.0 ))
+    result.kurtosis = (32 - 3 * FPT.pisquared) / pow1(4 - FPT.pi, 2)
     return result
 }
 
@@ -57,7 +57,7 @@ public func paraRayleighDist(scale s: Double!) throws -> SSContProbDistParams {
 /// - Parameter chi: Chi
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func pdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
+public func pdfRayleighDist<FPT: SSFloatingPoint & Codable>(x: FPT, scale s: FPT) throws -> FPT {
     if s <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -69,9 +69,9 @@ public func pdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result: Double = 0.0
-    if x > 0.0 {
-        result = (x * exp(-(x * x) / (2.0 * s * s))) / (s * s)
+    var result: FPT = 0
+    if x > 0 {
+        result = (x * exp1(-(x * x) / (2 * s * s))) / (s * s)
     }
     return result
 }
@@ -80,7 +80,7 @@ public func pdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
 /// - Parameter chi: Chi
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func cdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
+public func cdfRayleighDist<FPT: SSFloatingPoint & Codable>(x: FPT, scale s: FPT) throws -> FPT  {
     if s <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -92,9 +92,9 @@ public func cdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result: Double = 0.0
-    if x > 0.0 {
-        result = 1.0 - exp(-(x * x) / (2.0 * s * s))
+    var result: FPT = 0
+    if x > 0 {
+        result = 1 - exp1(-(x * x) / (2 * s * s))
     }
     return result
 }
@@ -104,7 +104,7 @@ public func cdfRayleighDist(x: Double!, scale s: Double!) throws -> Double {
 /// - Parameter p: p
 /// - Parameter df: Degrees of freedom
 /// - Throws: SSSwiftyStatsError if df <= 0
-public func quantileRayleighDist(p: Double!, scale s: Double!) throws -> Double {
+public func quantileRayleighDist<FPT: SSFloatingPoint & Codable>(p: FPT, scale s: FPT) throws -> FPT {
     if s <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -116,7 +116,7 @@ public func quantileRayleighDist(p: Double!, scale s: Double!) throws -> Double 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0.0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -127,11 +127,11 @@ public func quantileRayleighDist(p: Double!, scale s: Double!) throws -> Double 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < Double.leastNonzeroMagnitude {
-        return 0.0
+    if p < FPT.leastNonzeroMagnitude {
+        return 0
     }
-    if (1.0 - p) < Double.leastNonzeroMagnitude {
-        return Double.infinity
+    if (1 - p) < FPT.leastNonzeroMagnitude {
+        return FPT.infinity
     }
-    return s * sqrt(-log(pow(1.0 - p, 2.0)))
+    return s * (-log1(pow1(1 - p, 2))).squareRoot()
 }

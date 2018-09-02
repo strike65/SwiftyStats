@@ -33,7 +33,7 @@ import os.log
 /// - Parameter b: Upper bound
 /// - Parameter c: Mode
 /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> SSContProbDistParams {
+public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> SSContProbDistParams<FPT> {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -67,34 +67,34 @@ public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mod
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
-    result.mean = (a + b + c) / 3.0
-    result.kurtosis = 2.4
-    let a2 = a * a
-    let a3 = a2 * a
-    let b2 = b * b
-    let b3 = b2 * b
-    let c2 = c * c
-    let c3 = c2 * c
-    let ab = a * b
-    let ac = a * c
-    let bc = b * c
-    result.variance = 1.0 / 18.0 * ( a2 - ab + b2 - ac - bc + c2 )
-    //        result.variance = 1.0 / 18.0 * (a * a - a * b + b * b - a * c - b * c + c * c)
-    let s1 = 2.0 * a3
-    let s2 = 3.0 * a2 * b
-    let s3 = 3.0 * a * b2
-    let s4 = 2.0 * b3
-    let s5 = 3.0 * a3 * c
-    let s6 = 12.0 * ab * c
-    let s7 = 3.0 * b2 * c
-    let s8 = 3.0 * a * c2
-    let s9 = 3.0 * b * c2
-    let s10 = 2.0 * c3
-    let s11 = a2 - ab + b2 - ac - bc + c2
-    let ss1 = (s1 - s2 - s3 + s4 - s5 + s6 - s7 - s8 - s9 + s10)
-    result.skewness = (SQRTTWO * ss1) / (5.0 * pow(s11, 1.5))
-    //        result.var skewness:Double = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = (a + b + c) / 3
+    result.kurtosis = makeFP(2.4)
+    let a2: FPT = a * a
+    let ab: FPT = a * b
+    let b2: FPT = b * b
+    let ac: FPT = a * c
+    let bc: FPT = b * c
+    let c2: FPT = c * c
+    let a3: FPT = a2 * a
+    let b3: FPT = b2 * b
+    let c3: FPT = c2 * c
+    result.variance = (a2 - ab + b2 - ac - bc + c2) / 18
+    let s1: FPT = 2 * a3
+    let s2: FPT = 3 * a2 * b
+    let s3: FPT = 3 * a * b2
+    let s4: FPT = 2 * b3
+    let s5: FPT = 3 * a3 * c
+    let s6: FPT = 12 * ab * c
+    let s7: FPT = 3 * b2 * c
+    let s8: FPT = 3 * a * c2
+    let s9: FPT = 3 * b * c2
+    let s10: FPT = 2 * c3
+    let s11: FPT = a2 - ab + b2 - ac - bc + c2
+    let s12: FPT = s1 - s2 - s3 + s4 - s5
+    let ss1: FPT = s12 + s6 - s7 - s8 - s9 + s10
+    result.skewness = (FPT.sqrt2 * ss1) / (5 * pow1(s11, makeFP(1.5)))
+    //        result.var skewness:FPT = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
     return result
 }
 
@@ -104,7 +104,7 @@ public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!, mod
 /// - Parameter b: Upper bound
 /// - Parameter c: Mode
 /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+public func pdfTriangularDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -139,15 +139,15 @@ public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if ((x < a) || (x > b)) {
-        return 0.0
+        return 0
     }
     else if ((x == a) || ((x > a) && (x <= c))) {
-        let s1 = (2.0 * ( x - a))
+        let s1 = (2 * ( x - a))
         let s2 = (a - b - c)
         return s1 / (a * s2 + b * c)
     }
     else {
-        let s1 = (2.0 * (b - x))
+        let s1 = (2 * (b - x))
         let s2 = (-a + b - c)
         return s1 / (b * s2 + a * c)
     }
@@ -159,7 +159,7 @@ public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
 /// - Parameter b: Upper bound
 /// - Parameter c: Mode
 /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+public func cdfTriangularDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -194,16 +194,16 @@ public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if (x < a) {
-        return 0.0
+        return 0
     }
     else if (x > b) {
-        return 1.0
+        return 1
     }
     else if ((x > a) || (x == a)) && ((x < c) || (x == c)) {
-        return pow(x - a, 2.0) / ((b - a) * (c - a))
+        return pow1(x - a, 2) / ((b - a) * (c - a))
     }
     else {
-        return 1.0 - pow(b - x, 2.0) / ((b - a) * (b - c))
+        return 1 - pow1(b - x, 2) / ((b - a) * (b - c))
     }
 }
 
@@ -213,7 +213,7 @@ public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
 /// - Parameter b: Upper bound
 /// - Parameter c: Mode
 /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b || p < 0 || p > 0
-public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!, mode c: Double!) throws -> Double {
+public func quantileTriangularDist<FPT: SSFloatingPoint & Codable>(p: FPT, lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -258,7 +258,7 @@ public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p == 0.0 {
+    if p == 0 {
         return a
     }
     let t1 = (-a + c) / (-a + b)
@@ -271,7 +271,7 @@ public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound
     else {
         let s1 = (-a + b)
         let s2 = (b - c)
-        let s3 = (1.0 - p)
+        let s3 = (1 - p)
         return b - sqrt(s1 * s2 * s3)
     }
 }
@@ -282,7 +282,7 @@ public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) throws -> SSContProbDistParams {
+public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -294,11 +294,11 @@ public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
-    result.mean = (a + b) / 2.0
-    result.variance = 1.0 / 24.0 * (b - a) * (b - a)
-    result.kurtosis = 2.4
-    result.skewness = 0.0
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = (a + b) / 2
+    result.variance = 1 / 24 * (b - a) * (b - a)
+    result.kurtosis = makeFP(2.4)
+    result.skewness = 0
     return result
 }
 
@@ -307,7 +307,7 @@ public func paraTriangularDist(lowerBound a: Double!, upperBound b: Double!) thr
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func pdfTriangularDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -319,7 +319,7 @@ public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+    return try! pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
 }
 
 /// Returns the cdf of the Triangular distribution.
@@ -327,7 +327,7 @@ public func pdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b
-public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func cdfTriangularDist<FPT: SSFloatingPoint & Codable>(x: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -339,7 +339,7 @@ public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+    return try! cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
 }
 
 /// Returns the quantile of the Triangular distribution.
@@ -347,7 +347,7 @@ public func cdfTriangularDist(x: Double!, lowerBound a: Double!, upperBound b: D
 /// - Parameter a: Lower bound
 /// - Parameter b: Upper bound
 /// - Throws: SSSwiftyStatsError if a >= b || p < 0 || p > 0
-public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound b: Double!) throws -> Double {
+public func quantileTriangularDist<FPT: SSFloatingPoint & Codable>(p: FPT, lowerBound a: FPT, upperBound b: FPT) throws -> FPT {
     if (a >= b) {
         #if os(macOS) || os(iOS)
         
@@ -370,6 +370,6 @@ public func quantileTriangularDist(p: Double!, lowerBound a: Double!, upperBound
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    return try! quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2.0)
+    return try! quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2)
 }
 

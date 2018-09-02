@@ -32,19 +32,19 @@ import os.log
 
 extension SSHypothesisTesting {
     /************************************************************************************************/
-    // MARK: GoF test
+    // MARK: NPAR tests
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
-    /// Calls ksGoFTest(data: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
+    /// Calls ksGoFTest(data: Array<Double>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func kolmogorovSmirnovGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
             do {
-                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<FPT, FPT>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
@@ -70,10 +70,10 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array<Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func ksGoFTest(array: Array<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
             do {
-                return try ksGoFTest(data: SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
+                return try ksGoFTest(data: SSExamine<FPT, FPT>.init(withArray: array, name: nil, characterSet: nil), targetDistribution: target)
             }
             catch {
                 throw error
@@ -97,11 +97,11 @@ extension SSHypothesisTesting {
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
-    /// Calls ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
-    /// - Parameter data: SSExamine<Double>!
+    /// Calls ksGoFTest(data: SSExamine<Double, Double>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
+    /// - Parameter data: SSExamine<Double, Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func kolmogorovSmirnovGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         do {
             return try ksGoFTest(data: data, targetDistribution: target)
         }
@@ -112,10 +112,10 @@ extension SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: SSExamine<Double>!
+    /// - Parameter data: SSExamine<Double, Double>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func ksGoFTest(data: SSExamine<Double>!, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult? {
+    public class func ksGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         // error handling
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -129,26 +129,26 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let sortedData = data.uniqueElements(sortOrder: .ascending)!
-        var dD: Double = 0.0
-        var dz: Double
-        var dtestCDF: Double = 0.0
-        var dtemp1: Double = 0.0
-        var dmax1n: Double = 0.0
-        var dmax2n: Double = 0.0
-        var dmax1p: Double = 0.0
-        var dmax2p: Double = 0.0
-        var dmaxn: Double = 0.0
-        var dmaxp: Double = 0.0
-        var dest1: Double = 0.0
-        var dest2: Double = 0.0
-        var dest3: Double = 0.0
+        var dD: FPT = 0
+        var dz: FPT
+        var dtestCDF: FPT = 0
+        var dtemp1: FPT = 0
+        var dmax1n: FPT = 0
+        var dmax2n: FPT = 0
+        var dmax1p: FPT = 0
+        var dmax2p: FPT = 0
+        var dmaxn: FPT = 0
+        var dmaxp: FPT = 0
+        var dest1: FPT = 0
+        var dest2: FPT = 0
+        var dest3: FPT = 0
         var ii: Int = 0
         var ik: Int = 0
         var bok: Bool = false
         var bok1 = true
-        var nt: Double
-        var ecdf: Dictionary<Double, Double> = Dictionary<Double,Double>()
-        var lds: Double = 0.0
+        var nt: FPT
+        var ecdf: Dictionary<FPT, FPT> = Dictionary<FPT,FPT>()
+        var lds: FPT = 0
         switch target {
         case .gaussian:
             dest1 = data.arithmeticMean!
@@ -156,12 +156,12 @@ extension SSHypothesisTesting {
                 dest2 = test
             }
         case .exponential:
-            dest3 = 0.0
+            dest3 = 0
             ik = 0
             for value in sortedData {
                 if value <= 0 {
                     ik = ik + data.frequency(value)
-                    dest3 = Double(ik) * value
+                    dest3 = makeFP(ik) * value
                 }
             }
             for value in sortedData {
@@ -169,29 +169,29 @@ extension SSHypothesisTesting {
                     lds = 0
                 }
                 else {
-                    lds = lds + Double(data.frequency(value)) / (Double(data.sampleSize) - Double(ik))
+                    lds = lds + makeFP(data.frequency(value)) / makeFP(data.sampleSize - ik)
                 }
                 ecdf[value] = lds
             }
-            if lds == 0.0 || ik > (data.sampleSize - 2) {
+            if lds == 0 || ik > (data.sampleSize - 2) {
                 bok1 = false
             }
             if let tot = data.total {
-                dest1 = (Double(data.sampleSize) - Double(ik)) / (tot - dest3)
+                dest1 = makeFP(data.sampleSize - ik) / (tot - dest3)
             }
             else {
-                dest1 = Double.nan
+                dest1 = FPT.nan
             }
         case .uniform:
             dest1 = data.minimum!
             dest2 = data.maximum!
             ik = 0
         case .studentT:
-            dest1 = Double(data.sampleSize)
+            dest1 = makeFP(data.sampleSize)
             ik = 0
         case .laplace:
             dest1 = data.median!
-            dest2 = data.medianAbsoluteDeviation(center: dest1, scaleFactor: 1.0)!
+            dest2 = data.medianAbsoluteDeviation(center: dest1, scaleFactor: 1)!
             ik = 0
         case .none:
             return nil
@@ -276,12 +276,12 @@ extension SSHypothesisTesting {
             }
             ii = ii + 1
         }
-        dmaxn = (fabs(dmax1n) > fabs(dmax2n)) ? dmax1n : dmax2n
+        dmaxn = (abs(dmax1n) > abs(dmax2n)) ? dmax1n : dmax2n
         dmaxp = (dmax1p > dmax2p) ? dmax1p : dmax2p
-        dD = (fabs(dmaxn) > fabs(dmaxp)) ? fabs(dmaxn) : fabs(dmaxp)
-        dz = sqrt(Double(data.sampleSize - ik)) * dD
-        let dp: Double = 1.0 - KScdf(n: data.sampleSize, x: dD)
-        var result = SSKSTestResult()
+        dD = (abs(dmaxn) > abs(dmaxp)) ? abs(dmaxn) : abs(dmaxp)
+        dz = sqrt(makeFP(data.sampleSize - ik)) * dD
+        let dp: FPT = 1 - KScdf(n: data.sampleSize, x: dD)
+        var result = SSKSTestResult<FPT>()
         switch target {
         case .gaussian:
             result.targetDistribution = .gaussian
@@ -298,7 +298,7 @@ extension SSHypothesisTesting {
         case .exponential:
             result.targetDistribution = .exponential
             if bok1 {
-                result.estimatedMean = 1.0 / dest1
+                result.estimatedMean = 1 / dest1
             }
             if ik > 0 {
                 result.infoString = "\(ik) elements skipped. User result with care!"
@@ -435,7 +435,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Data as SSExamine object
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func adNormalityTest(data: SSExamine<Double>!, alpha: Double!) throws -> SSADTestResult? {
+    public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         if !data.isEmpty {
             do {
                 return try adNormalityTest(array: data.elementsAsArray(sortOrder: .raw)!, alpha: alpha)
@@ -463,14 +463,14 @@ extension SSHypothesisTesting {
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError if data.count < 2
-    public class func adNormalityTest(array: Array<Double>!, alpha: Double!) throws -> SSADTestResult? {
-        var ad: Double = 0.0
-        var a2: Double
-        var estMean: Double
-        var estSd: Double
+    public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
+        var ad: FPT = 0
+        var a2: FPT
+        var estMean: FPT
+        var estSd: FPT
         var n: Int
-        var tempArray: Array<Double>
-        var pValue: Double
+        var tempArray: Array<FPT>
+        var pValue: FPT
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -482,9 +482,9 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let _data: SSExamine<Double>
+        let _data: SSExamine<FPT, FPT>
         do {
-            _data = try SSExamine<Double>.init(withObject: array, levelOfMeasurement: .interval, name: nil, characterSet: nil)
+            _data = try SSExamine<FPT, FPT>.init(withObject: array, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         }
         catch {
             #if os(macOS) || os(iOS)
@@ -500,31 +500,39 @@ extension SSHypothesisTesting {
         estMean = _data.arithmeticMean!
         estSd = _data.standardDeviation(type: .unbiased)!
         n = _data.sampleSize
-        tempArray = _data.elementsAsArray(sortOrder: .ascending)! as Array<Double>
+        tempArray = _data.elementsAsArray(sortOrder: .ascending)! as Array<FPT>
         var i = 0
-        var val: Double
-        var val1: Double
+        var val: FPT
+        var val1: FPT
         while i < n {
             val = tempArray[i]
             tempArray[i] = (val - estMean) / estSd
             i += 1
         }
         i = 0
-        var k: Double
+        var k: FPT
+        let NN: FPT = makeFP(n)
+        let half: FPT = FPT.half
+        var ex1, ex2, ex3, ex4, ex5: FPT
         while i < n {
             val = tempArray[i]
             val1 = tempArray[n - i - 1]
-            k = Double(i)
-            ad += (((2.0 * (k + 1) - 1.0) / Double(n)) * (log(0.5 * (1.0 + erf(val / SQRTTWO))) + log(1.0 - 0.5 * (1.0 + erf(val1 / SQRTTWO)))))
+            k = makeFP(i)
+            ex1 = ((2 * (k + 1) - 1) / NN)
+            ex2 = (1 + erf1(val / FPT.sqrt2))
+            ex3 = (1 + erf1(val1 / FPT.sqrt2))
+            ex4 = log1(1 - half * ex3)
+            ex5 = log1(half * ex2)
+            ad += (ex1 * (ex5 + ex4))
             i += 1
         }
-        a2 = -1.0 * Double(n) - ad
+        a2 = -1 * NN - ad
         ad = a2
         if n > 8 {
-            a2 = a2 * (1.0 + 0.75 / Double(n) + 2.25 / (Double(n) * Double(n)))
+            a2 = a2 * (1 + makeFP(0.75) / NN + makeFP(2.25) / (NN * NN))
         }
-        pValue = 1.0 - PRIV_AD_Prob(n, a2)
-        var result: SSADTestResult = SSADTestResult()
+        pValue = makeFP(1 - PRIV_AD_Prob(n, makeFP(a2)))
+        var result: SSADTestResult<FPT> = SSADTestResult<FPT>()
         result.pValue = pValue
         result.AD = ad
         result.ADStar = a2
@@ -535,8 +543,9 @@ extension SSHypothesisTesting {
         result.isNormal = (pValue >= alpha)
         return result
     }
+
     /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
-    fileprivate class func cdfMannWhitney(U: Double!, m: Int!, n: Int!) throws -> Double {
+    fileprivate class func cdfMannWhitney<FPT: SSFloatingPoint & Codable>(U: FPT, m: Int!, n: Int!) throws -> FPT {
         // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
         if m <= 0 || n <= 0 {
             #if os(macOS) || os(iOS)
@@ -549,11 +558,11 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if U > (Double(m) * Double(n)) {
-            return Double.nan
+        if U > (makeFP(m) * makeFP(n)) {
+            return FPT.nan
         }
-        var freq: Array<Double> = Array<Double>.init(repeating: 0.0, count: m * n * 2)
-        var work: Array<Double> = Array<Double>.init(repeating: 0.0, count: m * n * 2)
+        var freq: Array<FPT> = Array<FPT>.init(repeating: makeFP(0), count: m * n * 2)
+        var work: Array<FPT> = Array<FPT>.init(repeating: makeFP(0), count: m * n * 2)
         var minmn: Int
         var maxmmn: Int
         var mn1: Int
@@ -563,10 +572,10 @@ extension SSHypothesisTesting {
         var l: Int
         var k: Int
         var j: Int
-        var sum: Double
-        let one = 1.0
-        let zero = 0.0
-        minmn = minimum(m, n)
+        var sum: FPT
+        let one: FPT = 1
+        let zero: FPT = 0
+        minmn = min(m, n)
         if minmn < 1 {
             #if os(macOS) || os(iOS)
             
@@ -579,7 +588,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         mn1 = m * n + 1
-        maxmmn = maximum(m, n)
+        maxmmn = max(m, n)
         n1 = maxmmn + 1
         i = 1
         while i <= n1 {
@@ -616,7 +625,7 @@ extension SSHypothesisTesting {
                 i += 1
             }
         }
-        sum = 0.0
+        sum = 0
         i = 1
         while i <= mn1 {
             sum = sum + freq[i - 1]
@@ -628,15 +637,15 @@ extension SSHypothesisTesting {
             freq[i - 1] = freq[i - 1] / sum
             i += 1
         }
-        return freq[Int(floor(U))]
+        return freq[integerValue(floor(U))]
     }
     
     /// Returns the sum of i for i = start...end
-    fileprivate class func sumUp(start: Int!, end: Int!) -> Double {
-        var sum = Double(start)
+    fileprivate class func sumUp<FPT: SSFloatingPoint & Codable>(start: Int!, end: Int!) -> FPT {
+        var sum: FPT = makeFP(start)
         var i: Int = start
         while i < end {
-            sum += Double(i)
+            sum += makeFP(i)
             i += 1
         }
         return sum
@@ -648,7 +657,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1 as Array<T>
     /// - Parameter set2: Observations of group2 as Array<T>
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func mannWhitneyUTest<T>(set1: Array<T>!, set2: Array<T>!)  throws -> SSMannWhitneyUTestResult where T: Comparable, T: Hashable, T: Codable {
+    public class func mannWhitneyUTest<T, FPT>(set1: Array<T>, set2: Array<T>)  throws -> SSMannWhitneyUTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -672,7 +681,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try mannWhitneyUTest(set1: SSExamine<T>.init(withArray: set1, name: nil, characterSet: nil) , set2: SSExamine<T>.init(withArray: set2, name: nil, characterSet: nil))
+            return try mannWhitneyUTest(set1: SSExamine<T, FPT>.init(withArray: set1, name: nil, characterSet: nil) , set2: SSExamine<T, FPT>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -685,7 +694,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func mannWhitneyUTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!)  throws -> SSMannWhitneyUTestResult {
+    public class func mannWhitneyUTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>)  throws -> SSMannWhitneyUTestResult<FPT>  where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -709,25 +718,25 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups:Array<Int> = Array<Int>()
-        var ties: Array<Double> = Array<Double>()
-        var sumRanksSet1: Double = 0.0
-        var sumRanksSet2: Double = 0.0
+        var ties: Array<FPT> = Array<FPT>()
+        var sumRanksSet1: FPT = 0
+        var sumRanksSet2: FPT = 0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
         var tempData = set1.elementsAsArray(sortOrder: .raw)!
         tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .raw)!)
         let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
-        let sorted = sorter.sortedArrays()
-        let rr = rank.init(data: sorted.sortedData, groups: sorted.sortedGroups)
+        let sorted: (Array<Int>, Array<T>) = sorter.sortedArrays()
+        let rr: Rank<T, FPT> = Rank.init(data: sorted.1, groups: sorted.0)
         ties = rr.ties!
         sumRanksSet1 = rr.sumOfRanks[0]
         sumRanksSet2 = rr.sumOfRanks[1]
-        let U1 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set1.sampleSize) * (Double(set1.sampleSize) + 1)) / 2.0 - sumRanksSet1
-        let U2 = (Double(set1.sampleSize) * Double(set2.sampleSize)) + (Double(set2.sampleSize) * (Double(set2.sampleSize) + 1)) / 2.0 - sumRanksSet2
-        let nm = Double(set1.sampleSize) * Double(set2.sampleSize)
-        let n1 = Double(set1.sampleSize)
-        let n2 = Double(set2.sampleSize)
-        if (U1 + U2) != nm {
+        let n1: FPT = makeFP(set1.sampleSize)
+        let n2: FPT = makeFP(set2.sampleSize)
+        let mn = n1 * n2
+        let U1 = mn + (n1 * (n1 + 1)) / 2 - sumRanksSet1
+        let U2 = mn + (n2 * (n2 + 1)) / 2 - sumRanksSet2
+        if (U1 + U2) != mn {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -739,63 +748,63 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
         let S = n1 + n2
-        var z: Double = 0.0
-        var pasymp1: Double = 0.0
-        var pasymp2: Double = 0.0
-        var pexact1: Double = 0.0
-        var pexact2: Double = 0.0
+        var z: FPT = 0
+        var pasymp1: FPT = 0
+        var pasymp2: FPT = 0
+        var pexact1: FPT = 0
+        var pexact2: FPT = 0
         
-        z = Double.nan
-        var temp1: Double = 0.0
-        var denom: Double = 0.0
-        var num: Double = 0.0
+        z = FPT.nan
+        var temp1: FPT = 0
+        var denom: FPT = 0
+        var num: FPT = 0
         var i: Int = 0
-        let U: Double
-        if U1 > (n1 * n2) / 2.0 {
-            U = nm - U1
+        let U: FPT
+        if U1 > (n1 * n2) / 2 {
+            U = mn - U1
         }
         else {
             U = U1
         }
         if ties.count > 0 {
             while i < ties.count {
-                temp1 += (ties[i] / 12.0)
+                temp1 += (ties[i] / 12)
                 i += 1
             }
-            denom = sqrt((nm / (S * (S - 1.0))) * ((pow(S, 3.0) - S) / 12.0 - temp1))
-            num = fabs(U - nm / 2.0)
+            denom = sqrt((mn / (S * (S - 1))) * ((pow1(S, 3) - S) / 12 - temp1))
+            num = abs(U - mn / 2)
             z = num / denom
-            pasymp1 = min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
-            pasymp2 = pasymp1 * 2.0
-            pexact1 = Double.nan
-            pexact2 = Double.nan
+            pasymp1 = min(1 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
+            pasymp2 = pasymp1 * 2
+            pexact1 = FPT.nan
+            pexact2 = FPT.nan
         }
         else {
-            z = fabs(U - nm / 2.0) / sqrt((nm * (n1 + n2 + 1)) / 12.0)
-            if (n1 * n2) <= 400 && ((n1 * n2) + minimum(n1, n2)) <= 220 {
+            z = abs(U - mn / 2) / sqrt((mn * (n1 + n2 + 1)) / 12)
+            if (n1 * n2) <= 400 && ((n1 * n2) + min(n1, n2)) <= 220 {
                 do {
-                    if U <= (n1 * n2 + 1) / 2.0 {
+                    if U <= (n1 * n2 + 1) / 2 {
                         pexact1 = try cdfMannWhitney(U: U, m: set1.sampleSize, n: set2.sampleSize)
                     }
                     else {
                         pexact1 = try cdfMannWhitney(U: U, m: set1.sampleSize, n: set2.sampleSize)
-                        pexact1 = 1.0 - pexact1
+                        pexact1 = 1 - pexact1
                     }
-                    pexact2 = 2.0 * pexact1
+                    pexact2 = 2 * pexact1
                 }
                 catch {
                     throw error
                 }
             }
             else {
-                pexact1 = Double.nan
-                pexact2 = Double.nan
+                pexact1 = FPT.nan
+                pexact2 = FPT.nan
             }
-            pasymp1 = min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
-            pasymp2 = 2.0 * pasymp1
+            pasymp1 = min(1 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
+            pasymp2 = 2 * pasymp1
         }
         let W = sumRanksSet2
-        var result = SSMannWhitneyUTestResult()
+        var result: SSMannWhitneyUTestResult<FPT> = SSMannWhitneyUTestResult<FPT>()
         result.sumRanks1 = sumRanksSet1
         result.sumRanks2 = sumRanksSet2
         result.meanRank1 = sumRanksSet1 / n1
@@ -815,7 +824,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1 as Array<Double>
     /// - Parameter set2: Observations 2 as Array<Double>
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
-    public class func wilcoxonMatchedPairs(set1: Array<Double>!, set2: Array<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
+    public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -850,7 +859,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.wilcoxonMatchedPairs(set1: SSExamine<Double>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, name: nil, characterSet: nil))
+            return try SSHypothesisTesting.wilcoxonMatchedPairs(set1: SSExamine<FPT, FPT>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<FPT, FPT>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -862,7 +871,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
-    public class func wilcoxonMatchedPairs(set1: SSExamine<Double>!, set2: SSExamine<Double>!) throws -> SSWilcoxonMatchedPairsTestResult {
+    public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -900,44 +909,44 @@ extension SSHypothesisTesting {
         //        var np: Int = 0
         //        var nn: Int = 0
         var nties: Int = 0
-        var temp: Double = 0.0
-        var diff:Array<Double> = Array<Double>()
-        let a1: Array<Double> = set1.elementsAsArray(sortOrder: .raw)!
-        let a2: Array<Double> = set2.elementsAsArray(sortOrder: .raw)!
+        var temp: FPT = 0
+        var diff:Array<FPT> = Array<FPT>()
+        let a1: Array<FPT> = set1.elementsAsArray(sortOrder: .raw)!
+        let a2: Array<FPT> = set2.elementsAsArray(sortOrder: .raw)!
         let N = set1.sampleSize
         i = 0
         while i < N {
             temp = a2[i] - a1[i]
-            if temp != 0.0 {
+            if temp != 0 {
                 diff.append(temp)
             }
             i += 1
         }
-        var sorted = diff.sorted(by: {fabs($0) < fabs($1) } )
-        var signs: Array<Double> = Array<Double>()
-        var absDiffSorted:Array<Double> = Array<Double>()
+        var sorted = diff.sorted(by: {abs($0) < abs($1) } )
+        var signs: Array<FPT> = Array<FPT>()
+        var absDiffSorted:Array<FPT> = Array<FPT>()
         i = 0
         while i < sorted.count {
-            signs.append(sorted[i] > 0.0 ? 1.0 : -1.0)
-            absDiffSorted.append(fabs(sorted[i]))
+            signs.append(sorted[i] > 0 ? 1 : -1)
+            absDiffSorted.append(abs(sorted[i]))
             i += 1
         }
-        var ranks: Array<Double>
-        var ties: Array<Double>
-        let ranking = rank.init(data: absDiffSorted, groups: nil)
+        var ranks: Array<FPT>
+        var ties: Array<FPT>
+        let ranking: Rank<FPT, FPT> = Rank.init(data: absDiffSorted, groups: nil)
         ranks = ranking.ranks
         ties = ranking.ties!
         nties = ranking.numberOfTies
         let n = absDiffSorted.count
         var nposranks: Int = 0
         var nnegranks: Int = 0
-        var sumposranks: Double = 0.0
-        var sumnegranks: Double = 0.0
-        var meanposranks: Double
-        var meannegranks: Double
+        var sumposranks: FPT = 0
+        var sumnegranks: FPT = 0
+        var meanposranks: FPT
+        var meannegranks: FPT
         i = 0
         while i < n {
-            if signs[i] == 1.0 {
+            if signs[i] == 1 {
                 nposranks += 1
                 sumposranks += ranks[i]
             }
@@ -947,7 +956,7 @@ extension SSHypothesisTesting {
             }
             i += 1
         }
-        if sumnegranks + sumposranks != (Double(n) * (Double(n) + 1.0)) / 2.0 {
+        if sumnegranks + sumposranks != (makeFP(n) * (makeFP(n) + 1)) / 2 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -958,18 +967,19 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
-        meannegranks = nnegranks > 0 ? sumnegranks / Double(nnegranks) : 0.0
-        meanposranks = nposranks > 0 ? sumposranks / Double(nposranks) : 0.0
-        var z: Double
-        var ts: Double = 0.0
+        meannegranks = nnegranks > 0 ? sumnegranks / (makeFP(nnegranks)) : 0
+        meanposranks = nposranks > 0 ? sumposranks / (makeFP(nposranks)) : 0
+        var z: FPT
+        var ts: FPT = 0
         i = 0
         while i < ties.count {
-            ts += ties[i] / 48.0
+            ts += ties[i] / 48
             i += 1
         }
-        let z0 = fabs(min(sumnegranks, sumposranks)) - Double(n) * (Double(n) + 1.0) / 4.0
-        let sigma = sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        let correct: Double = 0.5 * z0.sgn
+        let z0: FPT = abs(min(sumnegranks, sumposranks)) - (makeFP(n)) * ((makeFP(n)) + 1) / 4
+        let n1n21n1: FPT = (makeFP(n)) * ((makeFP(n)) + 1) * (2 * (makeFP(n)) + 1)
+        let sigma: FPT = sqrt(n1n21n1 / 24 - ts)
+        let correct: FPT = FPT.half * sign(z0)
 //        if z0 < 0.0 {
 //            correct = -0.5
 //        }
@@ -978,12 +988,12 @@ extension SSHypothesisTesting {
 //        }
         z = (z0 - correct) / sigma
 //        z = (fabs(max(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        let pp = cdfStandardNormalDist(u: z)
-        let p = 1.0 - cdfStandardNormalDist(u: z)
-        let cohenD = fabs(z) / sqrt(2.0 * Double(N))
-        var result = SSWilcoxonMatchedPairsTestResult()
-        result.p2Value = 2.0 * min(pp, p)
-        result.sampleSize = Double(N)
+        let pp: FPT = cdfStandardNormalDist(u: z)
+        let p: FPT = 1 - cdfStandardNormalDist(u: z)
+        let cohenD: FPT = abs(z) / sqrt(2 * makeFP(N))
+        var result = SSWilcoxonMatchedPairsTestResult<FPT>()
+        result.p2Value = 2 * min(pp, p)
+        result.sampleSize = makeFP(N)
         result.nPosRanks = nposranks
         result.nNegRanks = nnegranks
         result.nTies = nties
@@ -1002,7 +1012,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
-    public class func signTest(set1: Array<Double>, set2: Array<Double>) throws -> SSSignTestRestult {
+    public class func signTest<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -1037,7 +1047,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try signTest(set1: SSExamine<Double>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<Double>.init(withArray: set2, name: nil, characterSet: nil))
+            return try signTest(set1: SSExamine<FPT, FPT>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<FPT, FPT>.init(withArray: set2, name: nil, characterSet: nil))
         }
         catch {
             throw error
@@ -1048,7 +1058,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
-    public class func signTest(set1: SSExamine<Double>, set2: SSExamine<Double>) throws -> SSSignTestRestult {
+    public class func signTest<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -1087,14 +1097,14 @@ extension SSHypothesisTesting {
         var np: Int = 0
         var nn: Int = 0
         var nties: Int = 0
-        var temp: Double = 0.0
+        var temp: FPT = 0
         var i: Int = 0
         while i < a1.count {
             temp = a2[i] - a1[i]
-            if temp > 0.0 {
+            if temp > 0 {
                 np += 1
             }
-            else if temp < 0.0 {
+            else if temp < 0 {
                 nn += 1
             }
             else {
@@ -1102,23 +1112,33 @@ extension SSHypothesisTesting {
             }
             i += 1
         }
-        var pexact: Double = 0.0
-        var z: Double
+        var pexact1: FPT = 0
+        var pexact2: FPT = 0
+        var z: FPT
         let nnpnp = nn + np
+        let nnpnpf: FPT = makeFP(nnpnp)
         let r = min(np,nn)
-        temp = Double(max(nn, np))
+        temp = makeFP(max(nn, np))
         if nnpnp <= 1000 {
-            i = 0
-            while i <= r {
-                pexact += binomial2(Double(nnpnp), Double(i)) * pow(0.5, Double(nnpnp))
-                i += 1
+            if nnpnp == 0 {
+                pexact1 = FPT.half
+            }
+            else {
+                i = 0
+                while i <= r {
+                    pexact1 += binomial2(nnpnpf, makeFP(i)) * pow1(FPT.half, nnpnpf)
+                    if i == r - 1 {
+                        pexact2 = 1 - pexact1
+                    }
+                    i += 1
+                }
             }
         }
-        z = (temp - 0.5 * Double(nnpnp) - 0.5)
-        z = -1.0 * z / (0.5 * sqrt(Double(nnpnp)))
+        z = temp - FPT.half * nnpnpf - FPT.half
+        z = -z / (FPT.half * sqrt(nnpnpf))
         let pasymp = cdfStandardNormalDist(u: z)
-        var result = SSSignTestRestult()
-        result.pValueExact = pexact
+        var result = SSSignTestRestult<FPT>()
+        result.pValueExact = min(pexact1, pexact2)
         result.pValueApprox = pasymp
         result.nPosDiff = np
         result.nNegDiff = nn
@@ -1138,13 +1158,13 @@ extension SSHypothesisTesting {
     /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
-    public class func binomialTest(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: Double!, alpha: Double!, alternative: SSAlternativeHypotheses) -> Double {
+    public class func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) -> FPT {
         if p0.isNaN {
-            return Double.nan
+            return FPT.nan
         }
-        var pV: Double = 0.0
-        var pV1: Double = 0.0
-        let q = 1.0 - p0
+        var pV: FPT = 0
+        var pV1: FPT = 0
+        let q = 1 - p0
         var i: Int
         switch alternative {
         case .less:
@@ -1154,15 +1174,15 @@ extension SSHypothesisTesting {
         case .twoSided:
             // algorithm adapted fropm R function binom.test
             var c1: Int = 0
-            let d = pdfBinomialDistribution(k: success, n: trials, probability: p0)
-            let m = Double(trials) * p0
-            if success == Int(ceil(m)) {
-                pV = 1.0
+            let d: FPT = pdfBinomialDistribution(k: success, n: trials, probability: p0)
+            let m: FPT = makeFP(trials) * p0
+            if success == integerValue(ceil(m)) {
+                pV = 1
             }
-            else if success < Int(ceil(m)) {
-                i = Int(ceil(m))
+            else if success < integerValue(ceil(m)) {
+                i = integerValue(ceil(m))
                 for j in i...trials {
-                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * makeFP(1 + 1E-7)) {
                         c1 = j - 1
                         break
                     }
@@ -1173,8 +1193,8 @@ extension SSHypothesisTesting {
             }
             else {
                 i = 0
-                for j in 0...Int(floor(m)) {
-                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * (1.0 + 1E-7)) {
+                for j in 0...integerValue(floor(m)) {
+                    if pdfBinomialDistribution(k: j, n: trials, probability: p0) <= (d * makeFP(1 + 1E-7)) {
                         c1 = j + 1
                     }
                 }
@@ -1187,10 +1207,10 @@ extension SSHypothesisTesting {
     }
     
     
-    fileprivate class func lowerBoundCIBinomial(success: Double!, trials: Double!, alpha: Double) throws -> Double {
-        var res: Double
+    fileprivate class func lowerBoundCIBinomial<FPT: SSFloatingPoint & Codable>(success: FPT, trials: FPT, alpha: FPT) throws -> FPT {
+        var res: FPT
         if success == 0 {
-            res = 0.0
+            res = 0
         }
         else {
             do {
@@ -1204,14 +1224,14 @@ extension SSHypothesisTesting {
         return res
     }
     
-    fileprivate class func upperBoundCIBinomial(success: Double!, trials: Double!, alpha: Double) throws -> Double {
-        var res: Double
+    fileprivate class func upperBoundCIBinomial<FPT: SSFloatingPoint & Codable>(success: FPT, trials: FPT, alpha: FPT) throws -> FPT {
+        var res: FPT
         if success == trials {
-            res = 1.0
+            res = 1
         }
         else {
             do {
-                res = try quantileBetaDist(p: 1.0 - alpha, shapeA: success + 1, shapeB: trials - success)
+                res = try quantileBetaDist(p: 1 - alpha, shapeA: success + 1, shapeB: trials - success)
                 //                res = try quantileBetaDist(p: 1.0 - alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
@@ -1233,7 +1253,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
-    public class func binomialTest<T>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T> where T: Comparable, T: Hashable, T: Codable {
+    public class func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
             
@@ -1256,7 +1276,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<T>.init(withArray: data, name: nil, characterSet: characterSet)
+        let examine = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: characterSet)
         if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
             #if os(macOS) || os(iOS)
             
@@ -1289,7 +1309,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
-    public class func binomialTest<T>(data: SSExamine<T>, testProbability p0: Double!, successCodedAs successID: T,alpha: Double!,  alternative: SSAlternativeHypotheses) throws ->SSBinomialTestResult<T>  {
+    public class func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
             
@@ -1323,62 +1343,62 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let success: Double = Double(data.frequency(successID))
-        let failure: Double = Double(data.sampleSize) - success
-        let n = success + failure
+        let success: FPT = makeFP(data.frequency(successID))
+        let failure: FPT = (makeFP(data.sampleSize)) - success
+        let n: FPT = success + failure
         let probSuccess = success / n
-        var cintJeffreys = SSConfIntv()
-        var cintClopperPearson = SSConfIntv()
-        var fQ: Double
+        var cintJeffreys: SSConfIntv<FPT> = SSConfIntv<FPT>()
+        var cintClopperPearson: SSConfIntv<FPT> = SSConfIntv<FPT>()
+        var fQ: FPT
         switch alternative {
         case .less:
             do {
-                cintJeffreys.lowerBound = 0.0
+                cintJeffreys.lowerBound = 0
                 cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha)
-                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
-                cintClopperPearson.lowerBound = 0.0
-                fQ = try quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
-                cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
-                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
+                cintJeffreys.intervalWidth = abs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                cintClopperPearson.lowerBound = 0
+                fQ = try quantileFRatioDist(p: makeFP(1.0 ) - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
+                cintClopperPearson.upperBound = makeFP(1.0 ) / (makeFP(1.0 ) + ((n - success) / ((success + makeFP(1.0 )) * fQ)))
+                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
         case .greater:
             do {
-                cintJeffreys.upperBound = 1.0
+                cintJeffreys.upperBound = 1
                 cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
-                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
-                fQ = try quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
-                cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
-                cintClopperPearson.upperBound = 1.0
-                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
+                cintJeffreys.intervalWidth = abs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
+                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                cintClopperPearson.upperBound = 1
+                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
         case .twoSided:
             do {
-                cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
-                cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2.0)
-                cintJeffreys.intervalWidth = fabs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
-                fQ = try quantileFRatioDist(p: 1.0 - alpha / 2.0, numeratorDF: 2 * (success + 1.0), denominatorDF: 2 * (n - success))
-                cintClopperPearson.upperBound = 1.0 / (1.0 + ((n - success) / ((success + 1.0) * fQ)))
-                fQ = try quantileFRatioDist(p: alpha / 2.0, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1.0))
-                cintClopperPearson.lowerBound = 1.0 / (1.0 + ((n - success + 1) / (success * fQ)))
-                cintClopperPearson.intervalWidth = fabs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
+                cintJeffreys.upperBound = try upperBoundCIBinomial(success: success, trials: n, alpha: alpha / 2)
+                cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha / 2)
+                cintJeffreys.intervalWidth = abs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
+                fQ = try quantileFRatioDist(p: 1 - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
+                cintClopperPearson.upperBound = 1 / (1 + ((n - success) / ((success + 1) * fQ)))
+                fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
+                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
             }
         }
-        var result = SSBinomialTestResult<T>()
+        var result: SSBinomialTestResult<T, FPT> = SSBinomialTestResult<T, FPT>()
         result.confIntJeffreys = cintJeffreys
         result.confIntClopperPearson = cintClopperPearson
-        result.nTrials = Int(n)
-        result.nSuccess = Int(success)
-        result.nFailure = Int(failure)
-        result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: Int(success), numberOfTrials: Int(n), probability: p0,alpha: alpha,  alternative: alternative)
+        result.nTrials = integerValue(n)
+        result.nSuccess = integerValue(success)
+        result.nFailure = integerValue(failure)
+        result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: integerValue(success), numberOfTrials: integerValue(n), probability: p0,alpha: alpha,  alternative: alternative)
         result.probFailure = failure / n
         result.probSuccess = probSuccess
         result.probTest = p0
@@ -1397,7 +1417,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: A Array object containg data for set 1
     /// - Parameter set2: A Array object containg data for set 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: Array<T>, set2: Array<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult where T: Comparable, T: Hashable, T: Codable {
+    public class func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: Array<T>, set2: Array<T>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -1421,7 +1441,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: SSExamine<T>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<T>.init(withArray: set2, name: nil, characterSet: nil), alpha: alpha)
+            return try SSHypothesisTesting.kolmogorovSmirnovTwoSampleTest(set1: SSExamine<T, FPT>.init(withArray: set1, name: nil, characterSet: nil), set2: SSExamine<T, FPT>.init(withArray: set2, name: nil, characterSet: nil), alpha: alpha)
         }
         catch {
             throw error
@@ -1439,7 +1459,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: A SSExamine object containg data for set 1
     /// - Parameter set2: A SSExamine object containg data for set 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func kolmogorovSmirnovTwoSampleTest<T>(set1: SSExamine<T>, set2: SSExamine<T>, alpha: Double!) throws -> SSKSTwoSampleTestResult {
+    public class func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -1464,15 +1484,15 @@ extension SSHypothesisTesting {
         }
         var a1 = set1.elementsAsArray(sortOrder: .ascending)!
         a1.append(contentsOf: set2.elementsAsArray(sortOrder: .ascending)!)
-        let n1 = Double(set1.sampleSize)
-        let n2 = Double(set2.sampleSize)
-        var dcdf: Double
-        var maxNeg: Double = 0.0
-        var maxPos: Double = 0.0
+        let n1: FPT = makeFP(set1.sampleSize)
+        let n2: FPT = makeFP(set2.sampleSize)
+        var dcdf: FPT
+        var maxNeg: FPT = 0
+        var maxPos: FPT = 0
         if n1 > n2 {
             for element in a1 {
                 dcdf = set1.eCDF(element) - set2.eCDF(element)
-                if dcdf < 0.0 {
+                if dcdf < 0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }
                 else {
@@ -1483,7 +1503,7 @@ extension SSHypothesisTesting {
         else {
             for element in a1 {
                 dcdf = set2.eCDF(element) - set1.eCDF(element)
-                if dcdf < 0.0 {
+                if dcdf < 0 {
                     maxNeg = dcdf < maxNeg ? dcdf : maxNeg
                 }
                 else {
@@ -1491,29 +1511,29 @@ extension SSHypothesisTesting {
                 }
             }
         }
-        let maxD: Double
-        maxD = fabs(maxNeg) > fabs(maxPos) ? fabs(maxNeg) : fabs(maxPos)
-        var z: Double = 0.0
-        var p: Double = 0.0
-        var q: Double = 0.0
+        let maxD: FPT
+        maxD = abs(maxNeg) > abs(maxPos) ? abs(maxNeg) : abs(maxPos)
+        var z: FPT = 0
+        var p: FPT = 0
+        var q: FPT = 0
         if !maxD.isNaN {
             z = maxD * sqrt(n1 * n2 / (n1 + n2))
-            if ((z >= 0) && (z < 0.27)) {
-                p = 1.0
+            if ((z >= 0) && (z < makeFP(0.27 ))) {
+                p = 1
             }
-            else if ((z >= 0.27) && (z < 1.0)) {
-                q = exp(-1.233701 * pow(z, -2.0))
-                p = 1.0 - ((2.506628 * (q + pow(q, 9.0) + pow(q, 25.0))) / z)
+            else if ((z >= makeFP(0.27 )) && (z < 1)) {
+                q = exp1(makeFP(-1.233701 ) * pow1(z, -2))
+                p = 1 - ((makeFP(2.506628 ) * (q + pow1(q, 9) + pow1(q, 25))) / z)
             }
-            else if ((z >= 1.0) && (z < 3.1)) {
-                q = exp(-2.0 * pow(z, 2.0))
-                p = 2.0 * (q - pow(q, 4.0) + pow(q, 9.0) - pow(q, 16.0))
+            else if ((z >= 1) && (z < makeFP(3.1 ))) {
+                q = exp1(-2 * pow1(z, 2))
+                p = 2 * (q - pow1(q, 4) + pow1(q, 9) - pow1(q, 16))
             }
-            else if (z >= 3.1) {
-                p = 0.0
+            else if (z >= makeFP(3.1 )) {
+                p = 0
             }
         }
-        var result = SSKSTwoSampleTestResult()
+        var result: SSKSTwoSampleTestResult<FPT> = SSKSTwoSampleTestResult<FPT>()
         result.dMaxAbs = maxD
         result.dMaxNeg = maxNeg
         result.dMaxPos = maxPos
@@ -1529,7 +1549,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations in group 1
     /// - Parameter set2: Observations in group 2
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
-    public class func waldWolfowitzTwoSampleTest<T>(set1: SSExamine<T>!, set2: SSExamine<T>!) throws -> SSWaldWolfowitzTwoSampleTestResult {
+    public class func waldWolfowitzTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>) throws -> SSWaldWolfowitzTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -1600,51 +1620,61 @@ extension SSHypothesisTesting {
             i += 1
         }
         R += 1
-        var n1: Double = 0.0
-        var n2: Double = 0.0
+        var n1: FPT = 0
+        var n2: FPT = 0
         for g in groups {
             if g == 1 {
-                n1 += 1.0
+                n1 += 1
             }
             else if g == 2 {
-                n2 += 1.0
+                n2 += 1
             }
         }
-        var dtemp = n1 + n2
-        var pAsymp = Double.nan
-        var pExact = Double.nan
-        let sigma = sqrt(2.0 * n1 * n2 * (2.0 * n1 * n2 - n1 - n2) / ((n1 + n2) * (n1 + n2) * (n1 + n2 - 1.0)))
-        let mean = (2.0 * n1 * n2) / dtemp + 1.0
-        var z = 0.0
-        var sum = 0.0
-        dtemp = Double(R) - mean
+        var dtemp: FPT = n1 + n2
+        var pAsymp: FPT = FPT.nan
+        var pExact: FPT = FPT.nan
+        var ex1, ex2, ex3, ex4: FPT
+        ex1 = 2 * n1 * n2
+        ex2 = (2 * n1 * n2 - n1 - n2)
+        ex3 = (n1 + n2) * (n1 + n2)
+        ex4 = (n1 + n2 - 1)
+        let sigma: FPT = sqrt((ex1 * ex2) / (ex3 * ex4))
+        let mean: FPT = (2 * n1 * n2) / dtemp + 1
+        var z: FPT = 0
+        var sum: FPT = 0
+        dtemp = (makeFP(R)) - mean
         z = dtemp / sigma
-        pAsymp = 2.0 * min(1.0 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
+        pAsymp = 2 * min(1 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
+        var RR: FPT
         if n1 + n2 <= 30 {
             if !isOdd(Double(R)) {
                 var r = 2
-                var RR: Double
                 while r <= R {
-                    RR = Double(r)
-                    sum += binomial2(n1 - 1.0, (RR / 2.0) - 1.0) * binomial2(n2 - 1.0,(RR / 2.0) - 1.0);
+                    RR = makeFP(r)
+                    ex1 = binomial2(n1 - 1, (RR / 2) - 1)
+                    ex2 = binomial2(n2 - 1,(RR / 2) - 1)
+                    sum +=  ex1 * ex2
                     r += 1
                 }
-                pExact = 2.0 * sum / binomial2(n1 + n2, n1)
+                pExact = 2 * sum / binomial2(n1 + n2, n1)
             }
             else {
                 var r = 2
-                var RR: Double
                 while r <= R {
-                    RR = Double(r)
-                    sum += (binomial2(n1 - 1.0,(RR - 1.0) / 2.0) * binomial2(n2 - 1.0, (RR - 3.0) / 2.0) + binomial2(n1 - 1.0, (RR - 3.0) / 2.0) * binomial2(n2 - 1.0,(RR - 1.0) / 2.0))
+                    RR = makeFP(r)
+                    ex1 = binomial2(n1 - 1,(RR - 1) / 2)
+                    ex2 = binomial2(n2 - 1, (RR - 3) / 2)
+                    ex3 = binomial2(n1 - 1, (RR - 3) / 2)
+                    ex4 = binomial2(n2 - 1,(RR - 1) / 2)
+                    sum += (ex1 * ex2 + ex3 * ex4)
                     r += 1
                 }
                 pExact = sum / binomial2(n1 + n2, n1)
             }
         }
-        var result = SSWaldWolfowitzTwoSampleTestResult()
+        var result: SSWaldWolfowitzTwoSampleTestResult<FPT> = SSWaldWolfowitzTwoSampleTestResult<FPT>()
         result.zStat = z
-        result.pValueExact = (1.0 - pExact) / 2.0
+        result.pValueExact = (1 - pExact) / 2
         result.pValueAsymp = pAsymp
         result.mean = mean
         result.variance = sigma
@@ -1658,30 +1688,30 @@ extension SSHypothesisTesting {
     /// Ranks the data
     /// ### Note ###
     /// Groups must be coded as an integer value starting at 1. The arrays sumOfRanks, meanRanks and sampleSizes contains [numberOfGroups] values. For group 1 the associated value has index 0!
-    private struct rank<T> where T: Comparable, T: Hashable, T: Codable {
+    private struct Rank<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         /// The ranks
-        public var ranks:Array<Double>!
+        public var ranks:Array<FPT>
         /// An Array containing "sample size" times a group identifier
         public var groups:Array<Int>?
         /// An array containing at grou
-        public var sumOfRanks:Array<Double>!
+        public var sumOfRanks:Array<FPT>
         /// An array containg all ties precomputed (pow(t, 3) - t)
-        public var ties:Array<Double>?
+        public var ties:Array<FPT>?
         /// The count of ties
         public var numberOfTies: Int!
         /// Mean ranks
-        public var meanRanks:Array<Double>!
+        public var meanRanks:Array<FPT>!
         /// Count of groups
         public var numberOfGroups:Int!
         /// Size of sample per group
-        public var sampleSizes:Array<Double>!
+        public var sampleSizes:Array<FPT>!
         
-        private var data:Array<T>!
+        private var data:Array<T>
         
-        init(data array: Array<T>!,groups g: Array<Int>?) {
-            ranks = Array<Double>()
-            ties = Array<Double>()
-            sumOfRanks = Array<Double>()
+        init(data array: Array<T>, groups g: Array<Int>?) {
+            ranks = Array<FPT>()
+            ties = Array<FPT>()
+            sumOfRanks = Array<FPT>()
             if let gg = g {
                 groups = gg
             }
@@ -1690,8 +1720,8 @@ extension SSHypothesisTesting {
             }
             numberOfTies = 0
             data = array
-            var temp = Array<Double>()
-            var temp1 = Array<Double>()
+            var temp = Array<FPT>()
+            var temp1 = Array<FPT>()
             var temp3 = 0
             rank(data: data, ranks: &temp, ties: &temp1, numberOfTies: &temp3)
             ranks = temp
@@ -1700,14 +1730,14 @@ extension SSHypothesisTesting {
             if groups != nil {
                 let uniqueGroups = Set<Int>.init(groups!)
                 numberOfGroups = uniqueGroups.count
-                meanRanks = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
-                sumOfRanks = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
-                sampleSizes = Array<Double>.init(repeating: 0.0, count: uniqueGroups.count)
+                meanRanks = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
+                sumOfRanks = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
+                sampleSizes = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
                 for i in uniqueGroups {
                     for k in 0..<groups!.count {
                         if i == groups![k] {
                             sumOfRanks[i - 1] += ranks[k]
-                            sampleSizes[i - 1] += 1.0
+                            sampleSizes[i - 1] += 1
                         }
                     }
                 }
@@ -1717,12 +1747,12 @@ extension SSHypothesisTesting {
             }
             else {
                 numberOfGroups = 1
-                meanRanks = Array<Double>.init(repeating: 0.0, count: 1)
-                sumOfRanks = Array<Double>.init(repeating: 0.0, count: 1)
-                sampleSizes = Array<Double>.init(repeating: 0.0, count: 1)
+                meanRanks = Array<FPT>.init(repeating: makeFP(0.0), count: 1)
+                sumOfRanks = Array<FPT>.init(repeating: makeFP(0.0), count: 1)
+                sampleSizes = Array<FPT>.init(repeating: makeFP(0.0), count: 1)
                 for i in 0..<ranks.count {
                     sumOfRanks[0] += ranks[i]
-                    sampleSizes[0] += 1.0
+                    sampleSizes[0] += 1
                 }
                 meanRanks[0] = sumOfRanks[0] / sampleSizes[0]
             }
@@ -1733,17 +1763,17 @@ extension SSHypothesisTesting {
         /// - Parameter inout ranks: Upon return contains the ranks
         /// - Parameter inout ties: Upon return contains the correction terms for ties
         /// - Parameter inout numberOfTies: Upon return contains number of ties
-        private func rank<T>(data: Array<T>, ranks: inout Array<Double>, ties: inout Array<Double>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable {
+        private func rank<T, FPT>(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
             var pos: Int
-            let examine: SSExamine<T> = SSExamine<T>.init(withArray: data, name: nil, characterSet: nil)
+            let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
             var ptemp: Int
             var freq: Int
-            var sum = 0.0
+            var sum: FPT = 0
             numberOfTies = 0
             pos = 0
             while pos < examine.sampleSize {
                 ptemp = pos + 1
-                sum = Double(ptemp)
+                sum = makeFP(ptemp)
                 freq = examine.frequency(data[pos])
                 if freq == 1 {
                     ranks.append(sum)
@@ -1751,13 +1781,13 @@ extension SSHypothesisTesting {
                 }
                 else {
                     numberOfTies += 1
-                    ties.append(pow(Double(freq), 3.0) - Double(freq))
-                    sum = 0.0
+                    ties.append(pow1(makeFP(freq), 3) - makeFP(freq))
+                    sum = 0
                     for i in 0...(freq - 1) {
-                        sum += Double(ptemp + i)
+                        sum += makeFP(ptemp + i)
                     }
                     for _ in 1...freq {
-                        ranks.append(sum / Double(freq))
+                        ranks.append(sum / (makeFP(freq)))
                     }
                     pos = ptemp + freq - 1
                 }
@@ -1767,7 +1797,7 @@ extension SSHypothesisTesting {
         
     }
     
-    public class func kruskalWallisHTest<T>(data: Array<SSExamine<T>>, alpha: Double!) throws -> SSKruskalWallisHTestResult  {
+    public class func kruskalWallisHTest<T, FPT>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSKruskalWallisHTestResult<FPT> where T: Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -1782,7 +1812,7 @@ extension SSHypothesisTesting {
         var groups = Array<Int>()
         var a1 = Array<T>()
         var k = 1
-        var N: Double = 0.0
+        var N: FPT = 0
         for examine in data {
             if examine.sampleSize < 2 {
                 #if os(macOS) || os(iOS)
@@ -1797,17 +1827,18 @@ extension SSHypothesisTesting {
             }
             groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
             k += 1
-            N += Double(examine.sampleSize)
+            N += makeFP(examine.sampleSize)
             a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
         }
         let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
         let sorted = sorter.sortedArrays()
-        let ranking = rank(data: sorted.sortedData, groups: sorted.sortedGroups)
-        var sumRanks: Double = 0.0
+        let ranking: Rank<T, FPT> = Rank<T, FPT>.init(data: sorted.sortedData, groups: sorted.sortedGroups)
+//        let ranking = Rank(data: sorted.sortedData, groups: sorted.sortedGroups)
+        var sumRanks: FPT = 0
         for rank in ranking.sumOfRanks {
             sumRanks += rank
         }
-        if sumRanks != N * (N + 1) / 2.0 {
+        if sumRanks != N * (N + 1) / 2 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -1818,42 +1849,45 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
-        var sum = 0.0
+        var sum: FPT = 0
         for i in 0..<ranking.numberOfGroups {
-            sum += pow(ranking.sumOfRanks[i], 2.0) / ranking.sampleSizes[i]
+            sum += pow1(ranking.sumOfRanks[i], 2) / ranking.sampleSizes[i]
         }
-        let H = 12.0 / (N * (N + 1)) * sum - 3 * (N + 1.0)
-        let df = Double(ranking.numberOfGroups) - 1.0
-        var ts: Double = 0.0
+        var ex1, ex2: FPT
+        ex1 = (N * (N + 1))
+        ex2 = 3 * (N + 1)
+        let H: FPT = 12 / ex1 * sum - ex2
+        let df: FPT = (makeFP(ranking.numberOfGroups)) - 1
+        var ts: FPT = 0
         for tie in ranking.ties! {
             ts += tie
         }
-        ts = 1.0 - (ts / (pow(N, 3.0) - N))
-        let Hc: Double
-        if ts != 0.0 {
+        ts = 1 - (ts / (pow1(N, 3) - N))
+        let Hc: FPT
+        if ts != 0 {
             Hc = H / ts
         }
         else {
-            Hc = Double.nan
+            Hc = FPT.nan
         }
-        var p: Double
-        let cv: Double
+        var p: FPT
+        let cv: FPT
         do {
             p = try cdfChiSquareDist(chi: H, degreesOfFreedom: df)
-            cv = try quantileChiSquareDist(p: 1.0 - alpha, degreesOfFreedom: df)
+            cv = try quantileChiSquareDist(p: 1 - alpha, degreesOfFreedom: df)
         }
         catch {
             throw error
         }
-        p = 1.0 - p
-        var result = SSKruskalWallisHTestResult()
+        p = 1 - p
+        var result: SSKruskalWallisHTestResult<FPT> = SSKruskalWallisHTestResult<FPT>()
         result.nTies = ranking.numberOfTies
         result.Chi2 = H
         result.Chi2corrected = Hc
         result.pValue = p
         result.nGroups = ranking.numberOfGroups
-        result.df = Int(df)
-        result.nObservations = Int(N)
+        result.df = integerValue(df)
+        result.nObservations = integerValue(N)
         result.meanRanks = ranking.meanRanks
         result.sumRanks = ranking.sumOfRanks
         result.alpha = alpha

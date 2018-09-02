@@ -7,9 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13CD20211B71D100153FC3 /* CodableFloat80.swift */; };
+		9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
+		9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
 		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
+		9F2C46E62116131D0073D7C7 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2C46E52116131D0073D7C7 /* SSMath-GenericFP.swift */; };
+		9F2C46E72116131D0073D7C7 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2C46E52116131D0073D7C7 /* SSMath-GenericFP.swift */; };
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
+		9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
+		9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
+		9F5FFE4A212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
+		9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
 		9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
@@ -64,8 +73,8 @@
 		9FA5D0B420FCC73D009DD5CB /* DataAsString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */; };
 		9FA87188210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */; };
 		9FA87189210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */; };
-		9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
-		9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* Double-Extension.swift */; };
+		9FAACB702108730000C031F3 /* FP-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* FP-Extension.swift */; };
+		9FAACB712108730000C031F3 /* FP-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* FP-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
 		9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
@@ -155,10 +164,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F13CD20211B71D100153FC3 /* CodableFloat80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFloat80.swift; sourceTree = "<group>"; };
+		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
+		9F2C46E52116131D0073D7C7 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-NoncentralT.swift"; sourceTree = "<group>"; };
+		9F5FFE48212D738C00047213 /* SSSHermiteH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSHermiteH.swift; sourceTree = "<group>"; };
 		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
 		9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-StudentT.swift"; sourceTree = "<group>"; };
 		9F7EFB2E2101ED2900F0F573 /* ProbDist-ChiSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ChiSquare.swift"; sourceTree = "<group>"; };
@@ -185,9 +199,10 @@
 		9F9E606C210DC2900059DF46 /* Polyeval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyeval.swift; sourceTree = "<group>"; };
 		9F9E606F210DD0B10059DF46 /* Integrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Integrator.swift; sourceTree = "<group>"; };
 		9F9E6072210DD3790059DF46 /* ProbDist-vMises-Circular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-vMises-Circular.swift"; sourceTree = "<group>"; };
+		9FA278D92118C05500CCCA26 /* OldExpCoeff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldExpCoeff.swift; sourceTree = "<group>"; };
 		9FA5D0B320FCC73D009DD5CB /* DataAsString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAsString.swift; sourceTree = "<group>"; };
 		9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-RayleighDist.swift"; sourceTree = "<group>"; };
-		9FAACB6F2108730000C031F3 /* Double-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double-Extension.swift"; sourceTree = "<group>"; };
+		9FAACB6F2108730000C031F3 /* FP-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FP-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
 		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
@@ -292,6 +307,7 @@
 				9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */,
 				9FA87187210FA47D00C4A0FF /* ProbDist-RayleighDist.swift */,
 				9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */,
+				9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */,
 			);
 			path = ProbDist;
 			sourceTree = "<group>";
@@ -313,11 +329,15 @@
 				9FEA82581F76C9F6005E4349 /* SSTukey.swift */,
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
 				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
-				9FAACB6F2108730000C031F3 /* Double-Extension.swift */,
+				9FAACB6F2108730000C031F3 /* FP-Extension.swift */,
 				9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */,
 				9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */,
 				9F9E606C210DC2900059DF46 /* Polyeval.swift */,
 				9F9E606F210DD0B10059DF46 /* Integrator.swift */,
+				9F2C46E52116131D0073D7C7 /* SSMath-GenericFP.swift */,
+				9FA278D92118C05500CCCA26 /* OldExpCoeff.swift */,
+				9F13CD20211B71D100153FC3 /* CodableFloat80.swift */,
+				9F5FFE48212D738C00047213 /* SSSHermiteH.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -402,6 +422,7 @@
 				9FEA82471F76C9F6005E4349 /* SSDataGroupSorter.swift */,
 				9FEA82481F76C9F6005E4349 /* SSExamine-FileManagement.swift */,
 				9FEA82491F76C9F6005E4349 /* SSExamine-Stats.swift */,
+				9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */,
 				9FEA824A1F76C9F6005E4349 /* SSExamine.swift */,
 				9FEA824B1F76C9F6005E4349 /* SSFrequencyTables.swift */,
 				9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */,
@@ -595,6 +616,7 @@
 				9FEA82761F76CAF5005E4349 /* SSExamine-FileManagement.swift in Sources */,
 				9F7EFB2F2101ED2900F0F573 /* ProbDist-ChiSquare.swift in Sources */,
 				9F7EFB512101F02600F0F573 /* ProbDist-Erlang.swift in Sources */,
+				9F2C46E62116131D0073D7C7 /* SSMath-GenericFP.swift in Sources */,
 				9FEA82731F76CAF5005E4349 /* SSCrosstab.swift in Sources */,
 				9FA87188210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */,
 				9FEA82871F76CAF5005E4349 /* SSUtils.swift in Sources */,
@@ -602,6 +624,7 @@
 				9FEA82751F76CAF5005E4349 /* SSDataGroupSorter.swift in Sources */,
 				9F7EFB2D2101ECAF00F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9FEA82831F76CAF5005E4349 /* SSSimard-KSProb.swift in Sources */,
+				9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */,
 				9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */,
 				9F7EFB392101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82851F76CAF5005E4349 /* SSSwiftyStatsError.swift in Sources */,
@@ -609,15 +632,18 @@
 				9F7EFB5D2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
 				9FEA827B1F76CAF5005E4349 /* SSHypothesisTesting-NPAR.swift in Sources */,
 				9FEA827C1F76CAF5005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
+				9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */,
 				9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */,
 				9FEA82721F76CAF5005E4349 /* SSContFrac.swift in Sources */,
 				9F9E6070210DD0B10059DF46 /* Integrator.swift in Sources */,
-				9FAACB702108730000C031F3 /* Double-Extension.swift in Sources */,
+				9FAACB702108730000C031F3 /* FP-Extension.swift in Sources */,
 				9FEA827D1F76CAF5005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
+				9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */,
 				9F7EFB4B2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
 				9F7EFB4E2101EFFF00F0F573 /* ProbDist-Gamma.swift in Sources */,
 				9FEA82771F76CAF5005E4349 /* SSExamine-Stats.swift in Sources */,
+				9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
 				9FEA827A1F76CAF5005E4349 /* SSHypothesisTesting-Autocorrelation.swift in Sources */,
 				9F7EFB482101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,
 				9FEA82741F76CAF5005E4349 /* SSDataFrame.swift in Sources */,
@@ -667,11 +693,13 @@
 				9F7EFB2B2101E6BF00F0F573 /* ProbDist-Gaussian.swift in Sources */,
 				9F7EFB432101EF2C00F0F573 /* ProbDist-Logistic.swift in Sources */,
 				9FEA828B1F76CB1D005E4349 /* SSCrosstab.swift in Sources */,
+				9F2C46E72116131D0073D7C7 /* SSMath-GenericFP.swift in Sources */,
 				9FEA829F1F76CB1D005E4349 /* SSUtils.swift in Sources */,
 				9FA87189210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */,
 				9FEA829E1F76CB1D005E4349 /* SSTukey.swift in Sources */,
 				9F7EFB3D2101EE8B00F0F573 /* ProbDist-Cauchy.swift in Sources */,
 				9F7EFB5B2101F0B300F0F573 /* ProbDist-Triangular.swift in Sources */,
+				9F5FFE4A212D738C00047213 /* SSSHermiteH.swift in Sources */,
 				9FEA828D1F76CB1D005E4349 /* SSDataGroupSorter.swift in Sources */,
 				9F7EFB4F2101EFFF00F0F573 /* ProbDist-Gamma.swift in Sources */,
 				9FEA829B1F76CB1D005E4349 /* SSSimard-KSProb.swift in Sources */,
@@ -687,9 +715,10 @@
 				9F9E6071210DD0B10059DF46 /* Integrator.swift in Sources */,
 				9FEA82941F76CB1D005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9F7EFB492101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,
-				9FAACB712108730000C031F3 /* Double-Extension.swift in Sources */,
+				9FAACB712108730000C031F3 /* FP-Extension.swift in Sources */,
 				9FEA82981F76CB1D005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB552101F06300F0F573 /* ProbDist-Weibull.swift in Sources */,
+				9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
 				9FEA828A1F76CB1D005E4349 /* SSContFrac.swift in Sources */,
 				9FEA82951F76CB1D005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
 				9FEA828F1F76CB1D005E4349 /* SSExamine-Stats.swift in Sources */,
@@ -710,6 +739,7 @@
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9F7EFB5E2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
+				9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */,
 				9FEA82901F76CB1D005E4349 /* SSExamine.swift in Sources */,
 				9F9E606E210DC2900059DF46 /* Polyeval.swift in Sources */,
 			);
@@ -788,6 +818,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -842,6 +873,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -868,7 +900,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -892,7 +924,7 @@
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -952,7 +984,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -982,7 +1014,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

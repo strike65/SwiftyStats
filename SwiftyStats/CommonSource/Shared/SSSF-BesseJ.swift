@@ -20,7 +20,7 @@
  
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 /*                            j0.c
  *
@@ -117,115 +117,393 @@
 
 import Foundation
 
-fileprivate let PP: [Double] = [
-    7.96936729297347051624E-4,
-    8.28352392107440799803E-2,
-    1.23953371646414299388E0,
-    5.44725003058768775090E0,
-    8.74716500199817011941E0,
-    5.30324038235394892183E0,
-    9.99999999999999997821E-1
-]
-fileprivate let PQ: [Double] = [
-    9.24408810558863637013E-4,
-    8.56288474354474431428E-2,
-    1.25352743901058953537E0,
-    5.47097740330417105182E0,
-    8.76190883237069594232E0,
-    5.30605288235394617618E0,
-    1.00000000000000000218E0
-]
-fileprivate let QP: [Double] = [
-    -1.13663838898469149931E-2,
-    -1.28252718670509318512E0,
-    -1.95539544257735972385E1,
-    -9.32060152123768231369E1,
-    -1.77681167980488050595E2,
-    -1.47077505154951170175E2,
-    -5.14105326766599330220E1,
-    -6.05014350600728481186E0
-]
-fileprivate let QQ: [Double] = [
-    /*  1.00000000000000000000E0,*/
-    6.43178256118178023184E1,
-    8.56430025976980587198E2,
-    3.88240183605401609683E3,
-    7.24046774195652478189E3,
-    5.93072701187316984827E3,
-    2.06209331660327847417E3,
-    2.42005740240291393179E2
-]
-
-fileprivate let YP: [Double] = [
-    1.55924367855235737965E4,
-    -1.46639295903971606143E7,
-    5.43526477051876500413E9,
-    -9.82136065717911466409E11,
-    8.75906394395366999549E13,
-    -3.46628303384729719441E15,
-    4.42733268572569800351E16,
-    -1.84950800436986690637E16
-]
-fileprivate let YQ: [Double] = [
-    /* 1.00000000000000000000E0,*/
-    1.04128353664259848412E3,
-    6.26107330137134956842E5,
-    2.68919633393814121987E8,
-    8.64002487103935000337E10,
-    2.02979612750105546709E13,
-    3.17157752842975028269E15,
-    2.50596256172653059228E17
-]
-
-fileprivate let DR1: Double = 5.783185962946784521175995758455807035071
-fileprivate let DR2: Double  = 30.47126234366208639907816317502275584842
-
-fileprivate let RP: [Double] = [
-    -4.79443220978201773821E9,
-    1.95617491946556577543E12,
-    -2.49248344360967716204E14,
-    9.70862251047306323952E15
-]
-fileprivate let RQ: [Double] = [
-    /* 1.00000000000000000000E0,*/
-    4.99563147152651017219E2,
-    1.73785401676374683123E5,
-    4.84409658339962045305E7,
-    1.11855537045356834862E10,
-    2.11277520115489217587E12,
-    3.10518229857422583814E14,
-    3.18121955943204943306E16,
-    1.71086294081043136091E18
-]
+fileprivate func coeff<FPT: SSFloatingPoint & Codable>(_ name: String) -> [FPT] {
+    let PPFloat: Array<Float> = [
+        7.96936729297347051624E-4,
+        8.28352392107440799803E-2,
+        1.23953371646414299388E0,
+        5.44725003058768775090E0,
+        8.74716500199817011941E0,
+        5.30324038235394892183E0,
+        9.99999999999999997821E-1
+    ]
+    let PQFloat: Array<Float> = [
+        9.24408810558863637013E-4,
+        8.56288474354474431428E-2,
+        1.25352743901058953537E0,
+        5.47097740330417105182E0,
+        8.76190883237069594232E0,
+        5.30605288235394617618E0,
+        1.00000000000000000218E0
+    ]
+    let QPFloat: Array<Float> = [
+        -1.13663838898469149931E-2,
+        -1.28252718670509318512E0,
+        -1.95539544257735972385E1,
+        -9.32060152123768231369E1,
+        -1.77681167980488050595E2,
+        -1.47077505154951170175E2,
+        -5.14105326766599330220E1,
+        -6.05014350600728481186E0
+    ]
+    let QQFloat: Array<Float> = [
+        /*  1.00000000000000000000E0,*/
+        6.43178256118178023184E1,
+        8.56430025976980587198E2,
+        3.88240183605401609683E3,
+        7.24046774195652478189E3,
+        5.93072701187316984827E3,
+        2.06209331660327847417E3,
+        2.42005740240291393179E2
+    ]
+    
+    let YPFloat: Array<Float> = [
+        1.55924367855235737965E4,
+        -1.46639295903971606143E7,
+        5.43526477051876500413E9,
+        -9.82136065717911466409E11,
+        8.75906394395366999549E13,
+        -3.46628303384729719441E15,
+        4.42733268572569800351E16,
+        -1.84950800436986690637E16
+    ]
+    let YQFloat: Array<Float> = [
+        /* 1.00000000000000000000E0,*/
+        1.04128353664259848412E3,
+        6.26107330137134956842E5,
+        2.68919633393814121987E8,
+        8.64002487103935000337E10,
+        2.02979612750105546709E13,
+        3.17157752842975028269E15,
+        2.50596256172653059228E17
+    ]
+    
+    
+    let RPFloat: Array<Float> = [
+        -4.79443220978201773821E9,
+        1.95617491946556577543E12,
+        -2.49248344360967716204E14,
+        9.70862251047306323952E15
+    ]
+    let RQFloat: Array<Float> = [
+        /* 1.00000000000000000000E0,*/
+        4.99563147152651017219E2,
+        1.73785401676374683123E5,
+        4.84409658339962045305E7,
+        1.11855537045356834862E10,
+        2.11277520115489217587E12,
+        3.10518229857422583814E14,
+        3.18121955943204943306E16,
+        1.71086294081043136091E18
+    ]
+    let PPDouble: Array<Double> = [
+        7.96936729297347051624E-4,
+        8.28352392107440799803E-2,
+        1.23953371646414299388E0,
+        5.44725003058768775090E0,
+        8.74716500199817011941E0,
+        5.30324038235394892183E0,
+        9.99999999999999997821E-1
+    ]
+    let PQDouble: Array<Double> = [
+        9.24408810558863637013E-4,
+        8.56288474354474431428E-2,
+        1.25352743901058953537E0,
+        5.47097740330417105182E0,
+        8.76190883237069594232E0,
+        5.30605288235394617618E0,
+        1.00000000000000000218E0
+    ]
+    let QPDouble: Array<Double> = [
+        -1.13663838898469149931E-2,
+        -1.28252718670509318512E0,
+        -1.95539544257735972385E1,
+        -9.32060152123768231369E1,
+        -1.77681167980488050595E2,
+        -1.47077505154951170175E2,
+        -5.14105326766599330220E1,
+        -6.05014350600728481186E0
+    ]
+    let QQDouble: Array<Double> = [
+        /*  1.00000000000000000000E0,*/
+        6.43178256118178023184E1,
+        8.56430025976980587198E2,
+        3.88240183605401609683E3,
+        7.24046774195652478189E3,
+        5.93072701187316984827E3,
+        2.06209331660327847417E3,
+        2.42005740240291393179E2
+    ]
+    
+    let YPDouble: Array<Double> = [
+        1.55924367855235737965E4,
+        -1.46639295903971606143E7,
+        5.43526477051876500413E9,
+        -9.82136065717911466409E11,
+        8.75906394395366999549E13,
+        -3.46628303384729719441E15,
+        4.42733268572569800351E16,
+        -1.84950800436986690637E16
+    ]
+    let YQDouble: Array<Double> = [
+        /* 1.00000000000000000000E0,*/
+        1.04128353664259848412E3,
+        6.26107330137134956842E5,
+        2.68919633393814121987E8,
+        8.64002487103935000337E10,
+        2.02979612750105546709E13,
+        3.17157752842975028269E15,
+        2.50596256172653059228E17
+    ]
+    
+    
+    let RPDouble: Array<Double> = [
+        -4.79443220978201773821E9,
+        1.95617491946556577543E12,
+        -2.49248344360967716204E14,
+        9.70862251047306323952E15
+    ]
+    let RQDouble: Array<Double> = [
+        /* 1.00000000000000000000E0,*/
+        4.99563147152651017219E2,
+        1.73785401676374683123E5,
+        4.84409658339962045305E7,
+        1.11855537045356834862E10,
+        2.11277520115489217587E12,
+        3.10518229857422583814E14,
+        3.18121955943204943306E16,
+        1.71086294081043136091E18
+    ]
+    #if arch(i386) || arch(x86_64)
+    let PPFloat80: Array<Float80> = [
+        7.96936729297347051624E-4,
+        8.28352392107440799803E-2,
+        1.23953371646414299388E0,
+        5.44725003058768775090E0,
+        8.74716500199817011941E0,
+        5.30324038235394892183E0,
+        9.99999999999999997821E-1
+    ]
+    let PQFloat80: Array<Float80> = [
+        9.24408810558863637013E-4,
+        8.56288474354474431428E-2,
+        1.25352743901058953537E0,
+        5.47097740330417105182E0,
+        8.76190883237069594232E0,
+        5.30605288235394617618E0,
+        1.00000000000000000218E0
+    ]
+    let QPFloat80: Array<Float80> = [
+        -1.13663838898469149931E-2,
+        -1.28252718670509318512E0,
+        -1.95539544257735972385E1,
+        -9.32060152123768231369E1,
+        -1.77681167980488050595E2,
+        -1.47077505154951170175E2,
+        -5.14105326766599330220E1,
+        -6.05014350600728481186E0
+    ]
+    let QQFloat80: Array<Float80> = [
+        /*  1.00000000000000000000E0,*/
+        6.43178256118178023184E1,
+        8.56430025976980587198E2,
+        3.88240183605401609683E3,
+        7.24046774195652478189E3,
+        5.93072701187316984827E3,
+        2.06209331660327847417E3,
+        2.42005740240291393179E2
+    ]
+    
+    let YPFloat80: Array<Float80> = [
+        1.55924367855235737965E4,
+        -1.46639295903971606143E7,
+        5.43526477051876500413E9,
+        -9.82136065717911466409E11,
+        8.75906394395366999549E13,
+        -3.46628303384729719441E15,
+        4.42733268572569800351E16,
+        -1.84950800436986690637E16
+    ]
+    let YQFloat80: Array<Float80> = [
+        /* 1.00000000000000000000E0,*/
+        1.04128353664259848412E3,
+        6.26107330137134956842E5,
+        2.68919633393814121987E8,
+        8.64002487103935000337E10,
+        2.02979612750105546709E13,
+        3.17157752842975028269E15,
+        2.50596256172653059228E17
+    ]
+    
+    
+    let RPFloat80: Array<Float80> = [
+        -4.79443220978201773821E9,
+        1.95617491946556577543E12,
+        -2.49248344360967716204E14,
+        9.70862251047306323952E15
+    ]
+    let RQFloat80: Array<Float80> = [
+        /* 1.00000000000000000000E0,*/
+        4.99563147152651017219E2,
+        1.73785401676374683123E5,
+        4.84409658339962045305E7,
+        1.11855537045356834862E10,
+        2.11277520115489217587E12,
+        3.10518229857422583814E14,
+        3.18121955943204943306E16,
+        1.71086294081043136091E18
+    ]
+    #endif
+    switch FPT.self {
+    case is Float.Type:
+        if name == "PP" {
+            return PPFloat as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQFloat as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQFloat as! Array<FPT>
+        }
+        else if name == "QP" {
+            return QPFloat as! Array<FPT>
+        }
+        else if name == "QQ" {
+            return QQFloat as! Array<FPT>
+        }
+        else if name == "YP" {
+            return YPFloat as! Array<FPT>
+        }
+        else if name == "YQ" {
+            return YQFloat as! Array<FPT>
+        }
+        else if name == "RP" {
+            return RPFloat as! Array<FPT>
+        }
+        else if name == "RQ" {
+            return RQFloat as! Array<FPT>
+        }
+    case is Double.Type:
+        if name == "PP" {
+            return PPDouble as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQDouble as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQDouble as! Array<FPT>
+        }
+        else if name == "QP" {
+            return QPDouble as! Array<FPT>
+        }
+        else if name == "QQ" {
+            return QQDouble as! Array<FPT>
+        }
+        else if name == "YP" {
+            return YPDouble as! Array<FPT>
+        }
+        else if name == "YQ" {
+            return YQDouble as! Array<FPT>
+        }
+        else if name == "RP" {
+            return RPDouble as! Array<FPT>
+        }
+        else if name == "RQ" {
+            return RQDouble as! Array<FPT>
+        }
+        #if arch(i386) || arch(x86_64)
+    case is Float80.Type:
+        if name == "PP" {
+            return PPFloat80 as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQFloat80 as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQFloat80 as! Array<FPT>
+        }
+        else if name == "QP" {
+            return QPFloat80 as! Array<FPT>
+        }
+        else if name == "QQ" {
+            return QQFloat80 as! Array<FPT>
+        }
+        else if name == "YP" {
+            return YPFloat80 as! Array<FPT>
+        }
+        else if name == "YQ" {
+            return YQFloat80 as! Array<FPT>
+        }
+        else if name == "RP" {
+            return RPFloat80 as! Array<FPT>
+        }
+        else if name == "RQ" {
+            return RQFloat80 as! Array<FPT>
+        }
+        #endif
+    default:
+        if name == "PP" {
+            return PPDouble as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQDouble as! Array<FPT>
+        }
+        else if name == "PQ" {
+            return PQDouble as! Array<FPT>
+        }
+        else if name == "QP" {
+            return QPDouble as! Array<FPT>
+        }
+        else if name == "QQ" {
+            return QQDouble as! Array<FPT>
+        }
+        else if name == "YP" {
+            return YPDouble as! Array<FPT>
+        }
+        else if name == "YQ" {
+            return YQDouble as! Array<FPT>
+        }
+        else if name == "RP" {
+            return RPDouble as! Array<FPT>
+        }
+        else if name == "RQ" {
+            return RQDouble as! Array<FPT>
+        }
+    }
+    return Array<Double>() as! Array<FPT>
+}
 
 /// Returns the Bessel function of order zero J0(x)
 /// - Parameter x: Argument
-internal func besselJ0(x: Double!) -> Double {
-    var w, z, p, q, xn: Double
-    var xx: Double = x
+internal func besselJ0<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
+    let DR1: FPT = makeFP(5.7831859629467845211759957584558070350719)
+    let DR2: FPT  = makeFP(30.47126234366208639907816317502275584842)
+    
+    var w, z, p, q, xn: FPT
+    var xx: FPT = x
     if( x < 0 ) {
         xx = -x
     }
     
-    if( xx <= 5.0 ) {
+    if( xx <= 5) {
         z = xx * xx;
-        if( xx < 1.0e-5 ) {
-            return( 1.0 - z / 4.0 )
+        if( xx < makeFP(1.0e-5) ) {
+            return( 1 - z / 4 )
         }
         
         p = (z - DR1) * (z - DR2)
         
-        p = p * polyeval(x: z,coef: RP,n: 3) / poly1eval(x: z, coef:RQ, n: 8 )
+        p = p * polyeval(x: z,coef: coeff("RP"),n: 3) / poly1eval(x: z, coef: coeff("RQ"), n: 8 )
         return p
     }
     
-    w = 5.0 / xx;
-    q = 25.0 / ( xx * xx )
-    p = polyeval(x: q, coef: PP, n: 6) / polyeval(x: q, coef: PQ, n: 6 )
-    q = polyeval(x: q, coef: QP, n: 7) / poly1eval( x: q, coef: QQ, n: 7 )
-    xn = xx - PIQUART
-    p = p * cos(xn) - w * q * sin(xn);
-    return ( p * SQRT2DIVPI / sqrt(xx) )
+    w = 5 / xx;
+    q = 25 / ( xx * xx )
+    p = polyeval(x: q, coef: coeff("PP"), n: 6) / polyeval(x: q, coef: coeff("PQ"), n: 6 )
+    q = polyeval(x: q, coef: coeff("QP"), n: 7) / poly1eval(x: q, coef: coeff("QQ"), n: 7 )
+    xn = xx - FPT.piquart
+    p = p * cos1(xn) - w * q * sin1(xn);
+    return ( p * FPT.sqrt2Opi / sqrt(xx) )
 }
 
 /*                            y0() 2    */
@@ -245,11 +523,12 @@ import os.log
 
 /// Returns the Bessel function of second kind of order zero Y0(x)
 /// - Parameter x: Argument
-internal func besselY(x: Double!) -> Double {
-    var w, z, p, q, xn: Double
+internal func besselY<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
     
-    if( x <= 5.0 ) {
-        if( x <= 0.0 )
+    var w, z, p, q, xn: FPT
+    
+    if( x <= 5 ) {
+        if( x <= 0 )
         {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
@@ -257,20 +536,20 @@ internal func besselY(x: Double!) -> Double {
             }
             #endif
             printError("BesselY: not defined in that domain")
-            return -Double.infinity
+            return -FPT.infinity
         }
-        z = x * x;
-        w = polyeval(x: z, coef: YP, n: 7) / poly1eval( x: z, coef: YQ, n: 7 )
-        w += TWOOPI * log(x) * besselJ0(x: x)
+        z = x * x
+        w = polyeval(x: z, coef: coeff("YP"), n: 7) / poly1eval( x: z, coef: coeff("YQ"), n: 7 )
+        w += FPT.twopi * log1(x) * besselJ0(x: x)
         return w
     }
     
-    w = 5.0 / x
-    z = 25.0 / (x * x)
-    p = polyeval(x: z, coef: PP,n: 6) / polyeval(x: z,coef: PQ, n: 6 )
-    q = polyeval(x: z,coef: QP,n: 7)/poly1eval(x: z, coef: QQ, n: 7 )
-    xn = x - PIQUART
-    p = p * sin(xn) + w * q * cos(xn);
-    return( p * SQRT2DIVPI / sqrt(x) );
+    w = 5 / x
+    z = 25 / (x * x)
+    p = polyeval(x: z, coef: coeff("PP"), n: 6) / polyeval(x: z,coef: coeff("PQ"), n: 6 )
+    q = polyeval(x: z,coef: coeff("QP"),n: 7)/poly1eval(x: z, coef: coeff("QQ"), n: 7 )
+    xn = x - FPT.piquart
+    p = p * sin1(xn) + w * q * cos1(xn)
+    return( p * FPT.sqrt2Opi / sqrt(x) )
 }
 

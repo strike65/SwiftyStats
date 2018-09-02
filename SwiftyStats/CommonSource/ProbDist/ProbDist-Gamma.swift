@@ -32,8 +32,8 @@ import os.log
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContProbDistParams {
-    if (a <= 0.0) {
+public func paraGammaDist<FPT: SSFloatingPoint & Codable>(shape a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -44,7 +44,7 @@ public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContPr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -55,11 +55,11 @@ public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContPr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result = SSContProbDistParams()
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     result.mean = a * b
     result.variance = a * b * b
-    result.kurtosis = 3.0 + 6.0 / a
-    result.skewness = 2.0 / sqrt(a)
+    result.kurtosis = 3 + 6 / a
+    result.skewness = 2 / sqrt(a)
     return result
 }
 
@@ -69,8 +69,8 @@ public func paraGammaDist(shape a: Double!, scale b: Double!) throws -> SSContPr
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
-    if (a <= 0.0) {
+public func pdfGammaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shape a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -81,7 +81,7 @@ public func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -92,15 +92,15 @@ public func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if x <= 0.0 {
-        return 0.0
+    if x <= 0 {
+        return 0
     }
     else {
-        let a1 = -a * log(b)
-        let a2 = -x / b
-        let a3 = -1.0 + a
-        let a4 = a1 + a2 + a3 * log(x) - lgamma(a)
-        let result = exp(a4)
+        let a1: FPT = -a * log1(b)
+        let a2: FPT = -x / b
+        let a3: FPT = -1 + a
+        let a4: FPT = a1 + a2 + a3 * log1(x) - lgamma1(a)
+        let result = exp1(a4)
         return result
         //            return exp(-a * log(b) + (-x / b) + (-1.0 + a) * log(x) - lgamma(a))
     }
@@ -111,8 +111,8 @@ public func pdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-public func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws -> Double {
-    if (a <= 0.0) {
+public func cdfGammaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shape a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -123,7 +123,7 @@ public func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -134,8 +134,8 @@ public func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if x < 0.0 {
-        return 0.0
+    if x < 0 {
+        return 0
     }
     var cv: Bool = false
     let result = gammaNormalizedP(x: x / b, a: a, converged: &cv)
@@ -160,8 +160,8 @@ public func cdfGammaDist(x: Double!, shape a: Double!, scale b: Double!) throws 
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
-public func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) throws -> Double {
-    if (a <= 0.0) {
+public func quantileGammaDist<FPT: SSFloatingPoint & Codable>(p: FPT, shape a: FPT, scale b: FPT) throws -> FPT {
+    if (a <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -172,7 +172,7 @@ public func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) th
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if (b <= 0.0) {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -194,21 +194,21 @@ public func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) th
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p == 0.0 {
-        return 0.0
+    if p == 0 {
+        return 0
     }
-    if p == 1.0 {
-        return Double.infinity
+    if p == 1 {
+        return FPT.infinity
     }
-    var gVal: Double = 0.0
-    var maxG: Double = 0.0
-    var minG: Double = 0.0
-    maxG = a * b + 4000.0
-    minG = 0.0
+    var gVal: FPT = 0
+    var maxG: FPT = 0
+    var minG: FPT = 0
+    maxG = a * b + 4000
+    minG = 0
     gVal = a * b
-    var test: Double
+    var test: FPT
     var i = 1
-    while((maxG - minG) > 1.0E-14) {
+    while((maxG - minG) > makeFP(1.0E-14)) {
         test = try! cdfGammaDist(x: gVal, shape: a, scale: b)
         if test > p {
             maxG = gVal
@@ -216,16 +216,16 @@ public func quantileGammaDist(p: Double!, shape a: Double!, scale b: Double!) th
         else {
             minG = gVal
         }
-        gVal = (maxG + minG) * 0.5
+        gVal = (maxG + minG) * makeFP(0.5 )
         i = i + 1
         if i >= 7500 {
             break
         }
     }
     if((a * b) > 10000) {
-        let t1: Double = gVal * 1E07
-        let ri: UInt64 = UInt64(t1)
-        let rd: Double = Double(ri) / 1E07
+        let t1: FPT = gVal * makeFP(1E07)
+        let ri: FPT = floor(t1)
+        let rd: FPT = ri / makeFP(1E07)
         return rd
     }
     else {

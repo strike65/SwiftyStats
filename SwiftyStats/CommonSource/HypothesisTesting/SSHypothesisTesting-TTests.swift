@@ -31,7 +31,7 @@ public class SSHypothesisTesting {
     
     
     /************************************************************************************************/
-    // MARK: t-Tests
+    // MARK: Equality of means
     
     
     /// Performs the two sample t test
@@ -39,7 +39,7 @@ public class SSHypothesisTesting {
     /// - Parameter sample2: Data2 as Array<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
-    public class func twoSampleTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
+    public class func twoSampleTTest<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SS2SampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -62,8 +62,20 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sample1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
-        let sample2 = SSExamine<Double>.init(withArray: data2, name: nil, characterSet: nil)
+        if !isNumber(data1.first) || !isNumber(data2.first) {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("T Test is defined for numerical data only", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+
+        let sample1 = SSExamine<T, FPT>.init(withArray: data1, name: nil, characterSet: nil)
+        let sample2 = SSExamine<T, FPT>.init(withArray: data2, name: nil, characterSet: nil)
         do {
             return try twoSampleTTest(sample1: sample1, sample2: sample2, alpha: alpha)
         }
@@ -73,11 +85,11 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the two sample t test
-    /// - Parameter sample1: Data1 as SSExamine<Double>
-    /// - Parameter sample2: Data2 as SSExamine<Double>
+    /// - Parameter sample1: Data1 as SSExamine<Double, Double>
+    /// - Parameter sample2: Data2 as SSExamine<Double, Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
-    public class func twoSampleTTest(sample1: SSExamine<Double>!, sample2: SSExamine<Double>, alpha: Double!) throws -> SS2SampleTTestResult {
+    public class func twoSampleTTest<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>!, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SS2SampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -100,51 +112,66 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var cdfLeveneMedian: Double = 0.0
-        var cdfTValueEqualVariances: Double = 0.0
-        var cdfTValueUnequalVariances: Double = 0.0
-        var dfEqualVariances: Double = 0.0
-        var dfUnequalVariances: Double = 0.0
-        var differenceInMeans: Double = 0.0
-        var mean1: Double = 0.0
-        var mean2: Double = 0.0
-        var criticalValueEqualVariances: Double = 0.0
-        var criticalValueUnequalVariances: Double = 0.0
-        var pooledStdDev: Double = 0.0
-        var pooledVariance: Double = 0.0
-        var stdDev1: Double = 0.0
-        var stdDev2: Double = 0.0
-        var tValueEqualVariances: Double = 0.0
-        var tValueUnequalVariances: Double = 0.0
+        if !sample1.isNumeric || !sample2.isNumeric {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("T Test is defined for numerical data only", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        
+        var cdfLeveneMedian: FPT = 0
+        var cdfTValueEqualVariances: FPT = 0
+        var cdfTValueUnequalVariances: FPT = 0
+        var dfEqualVariances: FPT = 0
+        var dfUnequalVariances: FPT = 0
+        var differenceInMeans: FPT = 0
+        var mean1: FPT = 0
+        var mean2: FPT = 0
+        var criticalValueEqualVariances: FPT = 0
+        var criticalValueUnequalVariances: FPT = 0
+        var pooledStdDev: FPT = 0
+        var pooledVariance: FPT = 0
+        var stdDev1: FPT = 0
+        var stdDev2: FPT = 0
+        var tValueEqualVariances: FPT = 0
+        var tValueUnequalVariances: FPT = 0
         var variancesAreEqualMedian: Bool = false
-        var twoTailedEV: Double = 0.0
-        var twoTailedUEV: Double = 0.0
-        var oneTailedEV: Double = 0.0
-        var oneTailedUEV: Double = 0.0
-        var var1: Double = 0.0
-        var var2: Double = 0.0
-        let n1 = Double(sample1.sampleSize)
-        let n2 = Double(sample2.sampleSize)
+        var twoTailedEV: FPT = 0
+        var twoTailedUEV: FPT = 0
+        var oneTailedEV: FPT = 0
+        var oneTailedUEV: FPT = 0
+        var var1: FPT = 0
+        var var2: FPT = 0
+        let n1: FPT = makeFP(sample1.sampleSize)
+        let n2: FPT = makeFP(sample2.sampleSize)
         var1 = sample1.variance(type: .unbiased)!
         var2 = sample2.variance(type: .unbiased)!
         mean1 = sample1.arithmeticMean!
         mean2 = sample2.arithmeticMean!
-        let k = (var1 / n1) / ((var1 / n1) + (var2 / n2))
-        dfUnequalVariances = ceil( 1.0 / ( ( (k * k) / (n1 - 1.0) ) + ( (1.0 - ( k + k) + k * k) / (n2 - 1.0) ) ) )
-        dfEqualVariances = n1 + n2 - 2.0
+        let k: FPT = (var1 / n1) / ((var1 / n1) + (var2 / n2))
+        var ex1: FPT = pow1(k, 2) / (n1 - 1)
+        var ex2: FPT = (1 - ( k + k) + k * k)
+        var ex3: FPT = (n2 - 1)
+        dfUnequalVariances = ceil( 1 / ( ex1 + ( ex2 / ex3 ) ) )
+        dfEqualVariances = n1 + n2 - 2
         stdDev1 = sample1.standardDeviation(type: .unbiased)!
         stdDev2 = sample2.standardDeviation(type: .unbiased)!
-        pooledVariance = ((n1 - 1.0) * var1 + (n2 - 1.0) * var2) / dfEqualVariances
+        pooledVariance = ((n1 - 1) * var1 + (n2 - 1) * var2) / dfEqualVariances
         pooledStdDev = sqrt(pooledVariance)
         differenceInMeans = mean1 - mean2
-        tValueEqualVariances = differenceInMeans / (pooledStdDev * sqrt(1.0 / n1 + 1.0 / n2))
+        tValueEqualVariances = differenceInMeans / (pooledStdDev * sqrt(1 / n1 + 1 / n2))
         tValueUnequalVariances = differenceInMeans / sqrt(var1 / n1 + var2 / n2)
         do {
             cdfTValueEqualVariances = try cdfStudentTDist(t: tValueEqualVariances, degreesOfFreedom: dfEqualVariances)
             cdfTValueUnequalVariances = try cdfStudentTDist(t: tValueUnequalVariances, degreesOfFreedom: dfUnequalVariances)
-            criticalValueEqualVariances = try quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfEqualVariances)
-            criticalValueUnequalVariances = try quantileStudentTDist(p: 1.0 - alpha, degreesOfFreedom: dfUnequalVariances)
-            let lArray:Array<SSExamine<Double>> = [sample1, sample2]
+            criticalValueEqualVariances = try quantileStudentTDist(p: 1 - alpha, degreesOfFreedom: dfEqualVariances)
+            criticalValueUnequalVariances = try quantileStudentTDist(p: 1 - alpha, degreesOfFreedom: dfUnequalVariances)
+            let lArray:Array<SSExamine<T, FPT>> = [sample1, sample2]
             if let leveneResult: SSVarianceEqualityTestResult = try leveneTest(data: lArray, testType: .median, alpha: alpha) {
                 cdfLeveneMedian = leveneResult.pValue!
                 variancesAreEqualMedian = leveneResult.equality!
@@ -160,43 +187,46 @@ public class SSHypothesisTesting {
                 
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
-            if cdfTValueEqualVariances > 0.5 {
-                twoTailedEV = (1.0 - cdfTValueEqualVariances) * 2.0
-                oneTailedEV = 1.0 - cdfTValueEqualVariances
+            if cdfTValueEqualVariances > FPT.half {
+                twoTailedEV = (1 - cdfTValueEqualVariances) * 2
+                oneTailedEV = 1 - cdfTValueEqualVariances
             }
             else {
-                twoTailedEV = cdfTValueEqualVariances * 2.0
+                twoTailedEV = cdfTValueEqualVariances * 2
                 oneTailedEV = cdfTValueEqualVariances
             }
-            if cdfTValueEqualVariances > 0.5 {
-                twoTailedUEV = (1.0 - cdfTValueUnequalVariances) * 2.0
-                oneTailedUEV = 1.0 - cdfTValueUnequalVariances
+            if cdfTValueEqualVariances > FPT.half {
+                twoTailedUEV = (1 - cdfTValueUnequalVariances) * 2
+                oneTailedUEV = 1 - cdfTValueUnequalVariances
             }
             else {
-                twoTailedUEV = cdfTValueUnequalVariances * 2.0
+                twoTailedUEV = cdfTValueUnequalVariances * 2
                 oneTailedUEV = cdfTValueUnequalVariances
             }
             let effectSize_EV = sqrt((tValueEqualVariances * tValueEqualVariances) / ((tValueEqualVariances * tValueEqualVariances) + dfEqualVariances))
             let effectSize_UEV = sqrt((tValueUnequalVariances * tValueUnequalVariances) / ((tValueUnequalVariances * tValueUnequalVariances) + dfUnequalVariances))
             // Welch
-            let var1OverN1 = var1 / n1
-            let var2OverN2 = var2 / n2
-            let sumVar = var1OverN1 + var2OverN2
-            let denomnatorWelchDF = (var1 * var1 ) / ( n1 * n1 * (n1 - 1.0)) + ( var2 * var2 ) / ( n2 * n2 * (n2 - 1.0))
-            let welchT = (mean1 - mean2) / sqrt(var1OverN1 + var2OverN2 )
-            let welchDF = (sumVar * sumVar) / denomnatorWelchDF
-            let cdfWelch = try cdfStudentTDist(t: welchT, degreesOfFreedom: welchDF)
-            var twoSidedWelch: Double
-            var oneTailedWelch: Double
-            if cdfWelch > 0.5 {
-                twoSidedWelch = (1.0 - cdfWelch) * 2.0
-                oneTailedWelch = 1.0 - cdfWelch
+            let var1OverN1: FPT = var1 / n1
+            let var2OverN2: FPT = var2 / n2
+            let sumVar: FPT = var1OverN1 + var2OverN2
+            ex1 = ( n1 * n1 * (n1 - 1))
+            ex2 = pow1(var1, 2)
+            ex3 = ( n2 * n2 * (n2 - 1))
+            let denomnatorWelchDF: FPT = ex2 / ex1 + ex2 / ex3
+            let welchT: FPT = (mean1 - mean2) / sqrt(var1OverN1 + var2OverN2 )
+            let welchDF: FPT = (sumVar * sumVar) / denomnatorWelchDF
+            let cdfWelch: FPT = try cdfStudentTDist(t: welchT, degreesOfFreedom: welchDF)
+            var twoSidedWelch: FPT
+            var oneTailedWelch: FPT
+            if cdfWelch > FPT.half {
+                twoSidedWelch = (1 - cdfWelch) * 2
+                oneTailedWelch = 1 - cdfWelch
             }
             else {
-                twoSidedWelch = cdfWelch * 2.0
+                twoSidedWelch = cdfWelch * 2
                 oneTailedWelch = cdfWelch
             }
-            var result: SS2SampleTTestResult = SS2SampleTTestResult()
+            var result: SS2SampleTTestResult<FPT> = SS2SampleTTestResult<FPT>()
             result.p2EQVAR = twoTailedEV
             result.p2UEQVAR = twoTailedUEV
             result.p1UEQVAR = oneTailedUEV
@@ -215,10 +245,10 @@ public class SSHypothesisTesting {
             result.LeveneP = cdfLeveneMedian
             result.dfEQVAR = dfEqualVariances
             result.dfUEQVAR = dfUnequalVariances
-            result.mean1GTEmean2 = variancesAreEqualMedian ? ((cdfTValueEqualVariances > (1.0 - alpha)) ? true : false) : ((cdfTValueUnequalVariances > (1.0 - alpha)) ?  true : false)
+            result.mean1GTEmean2 = variancesAreEqualMedian ? ((cdfTValueEqualVariances > (1 - alpha)) ? true : false) : ((cdfTValueUnequalVariances > (1 - alpha)) ?  true : false)
             result.mean1LTEmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances < alpha) ? true : false) : ((cdfTValueUnequalVariances < alpha) ? true : false)
-            result.mean1EQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances >= alpha && cdfTValueEqualVariances <= (1.0 - alpha)) ? true : false) : ((cdfTValueUnequalVariances >= alpha && cdfTValueUnequalVariances <= (1.0 - alpha)) ? true : false)
-            result.mean1UEQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances < alpha || cdfTValueEqualVariances > (1.0 - alpha)) ? true : false ) : ((cdfTValueUnequalVariances < alpha || cdfTValueUnequalVariances > (1.0 - alpha)) ? true : false)
+            result.mean1EQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances >= alpha && cdfTValueEqualVariances <= (1 - alpha)) ? true : false) : ((cdfTValueUnequalVariances >= alpha && cdfTValueUnequalVariances <= (1 - alpha)) ? true : false)
+            result.mean1UEQmean2 = (variancesAreEqualMedian) ? ((cdfTValueEqualVariances < alpha || cdfTValueEqualVariances > (1 - alpha)) ? true : false ) : ((cdfTValueUnequalVariances < alpha || cdfTValueUnequalVariances > (1 - alpha)) ? true : false)
             result.CVEQVAR = criticalValueEqualVariances
             result.CVUEQVAR = criticalValueUnequalVariances
             result.rUEQVAR = effectSize_UEV
@@ -236,11 +266,11 @@ public class SSHypothesisTesting {
     
     
     /// Performs the one sample t test
-    /// - Parameter sample: Data as SSExamine<Double>
+    /// - Parameter sample: Data as SSExamine<Double, Double>
     /// - Parameter mean: Reference mean
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
-    public class func oneSampleTTest(sample: SSExamine<Double>, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
+    public class func oneSampleTTest<T, FPT: SSFloatingPoint & Codable>(sample: SSExamine<T, FPT>, mean: FPT, alpha: FPT) throws -> SSOneSampleTTestResult<FPT>  where T: Hashable & Comparable & Codable {
         if sample.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -252,40 +282,51 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var testStatisticValue: Double = 0.0
-        var pValue: Double = 0.0
-        let N = Double(sample.sampleSize)
-        let diffmean = sample.arithmeticMean! - mean
-        let twoTailed: Double
-        let oneTailed: Double
+        if !sample.isNumeric {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("T Test is defined for numerical data only", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        var testStatisticValue: FPT = 0
+        var pValue: FPT = 0
+        let N: FPT = makeFP(sample.sampleSize)
+        let diffmean: FPT = sample.arithmeticMean! - mean
+        let twoTailed: FPT
+        let oneTailed: FPT
         do {
             testStatisticValue = diffmean / (sample.standardDeviation(type: .unbiased)! / sqrt(N))
-            pValue = try cdfStudentTDist(t: testStatisticValue, degreesOfFreedom: N - 1.0)
-            if pValue > 0.5 {
-                twoTailed = (1.0 - pValue) * 2.0
-                oneTailed = 1.0 - pValue
+            pValue = try cdfStudentTDist(t: testStatisticValue, degreesOfFreedom: N - 1)
+            if pValue > FPT.half {
+                twoTailed = (1 - pValue) * 2
+                oneTailed = 1 - pValue
             }
             else {
-                twoTailed = pValue * 2.0
+                twoTailed = pValue * 2
                 oneTailed = pValue
             }
-            var result = SSOneSampleTTestResult()
+            var result: SSOneSampleTTestResult<FPT> = SSOneSampleTTestResult<FPT>()
             result.p1Value = oneTailed
             result.p2Value = twoTailed
             result.tStat = testStatisticValue
-            result.cv90Pct = try quantileStudentTDist(p: 1 - 0.05, degreesOfFreedom: N - 1.0)
-            result.cv95Pct = try quantileStudentTDist(p: 1 - 0.025, degreesOfFreedom: N - 1.0)
-            result.cv99Pct = try quantileStudentTDist(p: 1 - 0.005, degreesOfFreedom: N - 1.0)
+            result.cv90Pct = try quantileStudentTDist(p: makeFP(1 - 0.05), degreesOfFreedom: N - 1)
+            result.cv95Pct = try quantileStudentTDist(p: makeFP(1 - 0.025), degreesOfFreedom: N - 1)
+            result.cv99Pct = try quantileStudentTDist(p: makeFP(1 - 0.005), degreesOfFreedom: N - 1)
             result.mean = sample.arithmeticMean!
             result.sampleSize = N
             result.mean0 = mean
             result.difference = diffmean
             result.stdDev = sample.standardDeviation(type: .unbiased)!
             result.stdErr = sample.standardError!
-            result.df = N - 1.0
-            result.meanEQtestValue = ((pValue < (alpha / 2.0)) || (pValue > (1.0 - (alpha / 2.0)))) ? false : true
+            result.df = N - 1
+            result.meanEQtestValue = ((pValue < (alpha / 2)) || (pValue > (1 - (alpha / 2)))) ? false : true
             result.meanLTEtestValue = (pValue < alpha) ? true : false
-            result.meanGTEtestValue = (pValue > (1.0 - alpha)) ? true : false
+            result.meanGTEtestValue = (pValue > (1 - alpha)) ? true : false
             return result
         }
         catch {
@@ -298,7 +339,7 @@ public class SSHypothesisTesting {
     /// - Parameter mean: Reference mean
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
-    public class func oneSampleTTEst(data: Array<Double>!, mean: Double!, alpha: Double!) throws -> SSOneSampleTTestResult {
+    public class func oneSampleTTEst<T, FPT: SSFloatingPoint & Codable>(data: Array<T>, mean: FPT, alpha: FPT) throws -> SSOneSampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -310,7 +351,7 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sample:SSExamine<Double> = SSExamine<Double>.init(withArray: data, name: nil, characterSet: nil)
+        let sample:SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
         do {
             return try oneSampleTTest(sample: sample, mean: mean, alpha: alpha)
         }
@@ -320,11 +361,11 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the t test for matched pairs
-    /// - Parameter set1: data of set1 as SSExamine<Double>
-    /// - Parameter set2: data of set2 as SSExamine<Double>
+    /// - Parameter set1: data of set1 as SSExamine<Double, Double>
+    /// - Parameter set2: data of set2 as SSExamine<Double, Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
-    public class func matchedPairsTTest(set1: SSExamine<Double>!, set2: SSExamine<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
+    public class func matchedPairsTTest<T, FPT: SSFloatingPoint & Codable>(set1: SSExamine<T, FPT>!, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSMatchedPairsTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if set1.sampleSize < 2 || set2.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -347,42 +388,60 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let m1 = set1.arithmeticMean!
-        let m2 = set2.arithmeticMean!
-        let s1 = set1.variance(type: .unbiased)!
-        let s2 = set2.variance(type: .unbiased)!
-        let diffMeans = m1 - m2
-        let a1 = set1.elementsAsArray(sortOrder: .raw)!
-        let a2 = set2.elementsAsArray(sortOrder: .raw)!
-        var sum: Double = 0.0
+        if !set1.isNumeric || !set2.isNumeric {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("T Test is defined for numerical data only", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+        }
+        let m1: FPT = set1.arithmeticMean!
+        let m2: FPT = set2.arithmeticMean!
+        let s1: FPT = set1.variance(type: .unbiased)!
+        let s2: FPT = set2.variance(type: .unbiased)!
+        let diffMeans: FPT = m1 - m2
+        let a1: [T] = set1.elementsAsArray(sortOrder: .raw)!
+        let a2: [T] = set2.elementsAsArray(sortOrder: .raw)!
+        var sum: FPT = 0
         let n: Int = set1.sampleSize
         var i: Int = 0
         let pSum = m1 * m2
         while i < n {
-            sum += a1[i] * a2[i] - pSum
+            sum += makeFP(a1[i]) * makeFP(a2[i]) - pSum
             i += 1
         }
-        let df = Double(n) - 1.0
-        let cov = sum / df
-        let sed = sqrt((s1 + s2 - 2.0 * cov) / (df + 1.0))
-        let sdDiff = sqrt(s1 + s2 - 2.0 * cov)
-        let t = diffMeans / sed
+        let df: FPT = makeFP(n) - 1
+        let cov: FPT = sum / df
+        let sed: FPT = sqrt((s1 + s2 - 2 * cov) / (df + 1))
+        let sdDiff: FPT = sqrt(s1 + s2 - 2 * cov)
+        var t: FPT = diffMeans / sed
+        var ex1, ex2, ex3: FPT
+        if t.isNaN {
+            t = 0
+        }
         let corr = cov / (sqrt(s1) * sqrt(s2))
         do {
-            let pCorr = try (2.0 * (1.0 - cdfStudentTDist(t: corr * sqrt(df - 1.0) / (1.0 - corr * corr), degreesOfFreedom: df - 1.0)))
-            let lowerCIDiff =  try (diffMeans - quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
-            let upperCIDiff =  try (diffMeans + quantileStudentTDist(p: 0.975, degreesOfFreedom: df) * sed)
-            var pTwoTailed = try cdfStudentTDist(t: t, degreesOfFreedom: df)
-            if pTwoTailed > 0.5 {
-                pTwoTailed = 1.0 - pTwoTailed
+            ex1 = sqrt(df - 1)
+            ex2 = (1 - corr * corr)
+            ex3 = ex1 / ex2
+            let pCorr: FPT = try (2 * (1 - cdfStudentTDist(t: corr * ex3 , degreesOfFreedom: df - 1)))
+            let lowerCIDiff: FPT =  try (diffMeans - quantileStudentTDist(p: makeFP(0.975), degreesOfFreedom: df) * sed)
+            let upperCIDiff: FPT =  try (diffMeans + quantileStudentTDist(p: makeFP(0.975), degreesOfFreedom: df) * sed)
+            var pTwoTailed: FPT = try cdfStudentTDist(t: t, degreesOfFreedom: df)
+            if pTwoTailed > FPT.half {
+                pTwoTailed = 1 - pTwoTailed
             }
-            pTwoTailed *= 2.0
+            pTwoTailed *= 2
             if sed.isZero {
-                pTwoTailed = 1.0
+                pTwoTailed = 1
             }
             let effectSize = sqrt((t * t) / ((t * t) + df))
-            var result = SSMatchedPairsTTestResult()
-            result.sampleSize = Double(n)
+            var result: SSMatchedPairsTTestResult<FPT> = SSMatchedPairsTTestResult<FPT>()
+            result.sampleSize = makeFP(n)
             result.covariance = cov
             result.stdEDiff = sed
             result.stdDevDiff = sdDiff
@@ -406,7 +465,7 @@ public class SSHypothesisTesting {
     /// - Parameter set2: data of set2 as Array<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data1.count < 2 || data2.count < 2 || data1.count != data2.count
-    public class func matchedPairsTTest(data1: Array<Double>!, data2: Array<Double>, alpha: Double!) throws -> SSMatchedPairsTTestResult {
+    public class func matchedPairsTTest<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSMatchedPairsTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 || data2.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -429,8 +488,8 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let set1 = SSExamine<Double>.init(withArray: data1, name: nil, characterSet: nil)
-        let set2 = SSExamine<Double>.init(withArray: data2, name: nil, characterSet: nil)
+        let set1 = SSExamine<T, FPT>.init(withArray: data1, name: nil, characterSet: nil)
+        let set2 = SSExamine<T, FPT>.init(withArray: data2, name: nil, characterSet: nil)
         do {
             return try matchedPairsTTest(set1: set1, set2: set2, alpha: alpha)
         }
@@ -444,7 +503,7 @@ public class SSHypothesisTesting {
     /// - Parameter data: data as Array<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
-    public class func oneWayANOVA(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
+    public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(data: Array<Array<T>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -465,10 +524,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as SSExamine<Double>
+    /// - Parameter data: data as SSExamine<Double, Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
-    public class func oneWayANOVA(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
+    public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>?  where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -488,7 +547,7 @@ public class SSHypothesisTesting {
         }
     }
     
-    public class func oneWayANOVA(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
+    public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -501,7 +560,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            var exArray = Array<SSExamine<Double>>()
+            var exArray = Array<SSExamine<T, FPT>>()
             for ex in dataFrame.examines {
                 exArray.append(ex)
             }
@@ -512,7 +571,7 @@ public class SSHypothesisTesting {
         }
     }
     
-    public class func multipleMeansTest(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> SSOneWayANOVATestResult? {
+    public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -525,7 +584,7 @@ public class SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            var exArray = Array<SSExamine<Double>>()
+            var exArray = Array<SSExamine<T, FPT>>()
             for ex in dataFrame.examines {
                 exArray.append(ex)
             }
@@ -540,7 +599,7 @@ public class SSHypothesisTesting {
     /// - Parameter data: data as Array<Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
-    public class func multipleMeansTest(data: Array<Array<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
+    public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(data: Array<Array<T>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -552,9 +611,9 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var examines: Array<SSExamine<Double>> = Array<SSExamine<Double>>()
+        var examines: Array<SSExamine<T, FPT>> = Array<SSExamine<T, FPT>>()
         for array in data {
-            examines.append(SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil))
+            examines.append(SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil))
         }
         do {
             return try SSHypothesisTesting.multipleMeansTest(data: examines, alpha: alpha)
@@ -565,10 +624,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as SSExamine<Double>
+    /// - Parameter data: data as SSExamine<Double, Double>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
-    public class func multipleMeansTest(data: Array<SSExamine<Double>>!, alpha: Double!) throws -> SSOneWayANOVATestResult? {
+    public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -580,27 +639,40 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var overallMean: Double
-        var sum: Double = 0.0
+        for table: SSExamine<T, FPT> in data {
+            if !table.isNumeric {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("ANOVA is defined for numerical data only", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
+        }
+        var overallMean: FPT
+        var sum: FPT = 0
         // total number of observations
         var N: Int = 0
         // p value of Bartlett test
-        var pBartlett: Double
+        var pBartlett: FPT
         // p value of Levene test
-        var pLevene: Double
+        var pLevene: FPT
         // explained sum of squares
-        var SST = 0.0
+        var SST: FPT = 0
         // residual sum of squares
-        var SSE = 0.0
+        var SSE: FPT = 0
         // test statistic
-        var F: Double
-        var pValue: Double
-        var cdfValue: Double
-        var cutoffAlpha: Double
+        var F: FPT
+        var pValue: FPT
+        var cdfValue: FPT
+        var cutoffAlpha: FPT
         var meansEqual: Bool
-        let groups: Double = Double(data.count)
+        let groups: FPT = makeFP(data.count)
         do {
-            if let bartlettTest = try SSHypothesisTesting.bartlettTest(data: data, alpha: alpha), let leveneTest = try SSHypothesisTesting.leveneTest(data: data, testType: .median, alpha: alpha) {
+            if let bartlettTest: SSVarianceEqualityTestResult<FPT> = try SSHypothesisTesting.bartlettTest(data: data, alpha: alpha), let leveneTest = try SSHypothesisTesting.leveneTest(data: data, testType: .median, alpha: alpha) {
                 pBartlett = bartlettTest.pValue!
                 pLevene = leveneTest.pValue!
             }
@@ -627,28 +699,28 @@ public class SSHypothesisTesting {
                 sum += tot
             }
             else {
-                sum = Double.nan
+                sum = FPT.nan
             }
             N += examine.sampleSize
         }
-        overallMean = sum / Double(N)
+        overallMean = sum / makeFP(N)
         for examine in data {
-            SST += pow(examine.arithmeticMean! - overallMean, 2.0) * Double(examine.sampleSize)
-            SSE += (Double(examine.sampleSize) - 1.0) * examine.variance(type: .unbiased)!
+            SST += pow1(examine.arithmeticMean! - overallMean, 2) * makeFP(examine.sampleSize)
+            SSE += makeFP(examine.sampleSize - 1) * examine.variance(type: .unbiased)!
         }
-        let MSE = SSE / (Double(N) - groups)
-        let MST = SST / (groups - 1.0)
+        let MSE: FPT = SSE / (makeFP(N) - groups)
+        let MST: FPT = SST / (groups - 1)
         F = MST / MSE
         do {
-            cdfValue = try cdfFRatio(f: F, numeratorDF: groups - 1.0 , denominatorDF: Double(N) - groups)
-            cutoffAlpha = try quantileFRatioDist(p: 1.0 - alpha, numeratorDF: groups - 1.0, denominatorDF: Double(N) - groups)
+            cdfValue = try cdfFRatio(f: F, numeratorDF: groups - 1 , denominatorDF: makeFP(N) - groups)
+            cutoffAlpha = try quantileFRatioDist(p: 1 - alpha, numeratorDF: groups - 1, denominatorDF: makeFP(N) - groups)
         }
         catch {
             throw error
         }
-        pValue = 1.0 - cdfValue
+        pValue = 1 - cdfValue
         meansEqual = F <= cutoffAlpha
-        var result = SSOneWayANOVATestResult()
+        var result: SSOneWayANOVATestResult<FPT> = SSOneWayANOVATestResult<FPT>()
         result.p2Value = pValue
         result.FStatistic = F
         result.alpha = alpha
@@ -656,9 +728,9 @@ public class SSHypothesisTesting {
         result.cv = cutoffAlpha
         result.pBartlett = pBartlett
         result.pLevene = pLevene
-        result.dfTotal = Double(N) - 1.0
-        result.dfError = Double(N) - groups
-        result.dfTreatment = groups - 1.0
+        result.dfTotal = makeFP(N) - 1
+        result.dfError = makeFP(N) - groups
+        result.dfTreatment = groups - 1
         result.SSError = SSE
         result.SSTreatment = SST
         result.MSError = MSE
@@ -706,7 +778,7 @@ public class SSHypothesisTesting {
     /// - Returns:SSHSDResultRow
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
-    public class func tukeyKramerTest(dataFrame: SSDataFrame<Double>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
+    public class func tukeyKramerTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>? where T: Hashable & Comparable & Codable {
         do {
             if dataFrame.examines.count <= 2 {
                 #if os(macOS) || os(iOS)
@@ -727,12 +799,12 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the Tukey-Kramer test for multiple comparisons
-    /// - Parameter data: data as SSExamine<Double>
+    /// - Parameter data: data as SSExamine<Double, Double>
     /// - Parameter alpha: Alpha
     /// - Returns:SSHSDResultRow
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
-    public class func tukeyKramerTest(data: Array<SSExamine<Double>>, alpha: Double!) throws -> Array<SSPostHocTestResult>? {
+    public class func tukeyKramerTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>?  where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
@@ -744,22 +816,35 @@ public class SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var means = Array<Double>()
+        var means = Array<FPT>()
         for examine in data {
-            means.append(examine.arithmeticMean!)
+            if examine.isNumeric {
+                means.append(examine.arithmeticMean!)
+            }
+            else {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Tukey Kramer is defined for numerical data only", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+            }
         }
-        var Q = Array<Array<Double>>()
-        var differences = Array<Array<Double>>()
-        var temp: Double
-        var sum1: Double = 0.0
-        var sum2: Double = 0.0
+        var Q = Array<Array<FPT>>()
+        var differences = Array<Array<FPT>>()
+        var temp: FPT
+        var sum1: FPT = 0
+        var sum2: FPT = 0
         let k: Int = data.count
-        var n_total: Double = 0.0
+        var n_total: FPT = 0
         // compute means
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            differences.append(Array<Double>())
+            differences.append(Array<FPT>())
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                differences[i].append(Double.nan)
+                differences[i].append(FPT.nan)
                 if j >= i + 1 {
                     temp = means[i] - means[j]
                     differences[i][j] = temp
@@ -768,11 +853,12 @@ public class SSHypothesisTesting {
         }
         // compute pooled variance
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            n_total = n_total + Double(data[i].sampleSize)
-            sum1 = 0.0
+            n_total = n_total + makeFP(data[i].sampleSize)
+            sum1 = 0
             for j in stride(from: 0, through: data[i].sampleSize - 1, by: 1) {
-                if let t = castValueToDouble(data[i][j]) {
-                    sum1 = sum1 + pow(t - means[i], 2.0)
+                if let tempDat: T = data[i][j] {
+                    let t: FPT = makeFP(tempDat)
+                    sum1 = sum1 + pow1(t - means[i], 2)
                 }
                 else {
                     fatalError()
@@ -780,35 +866,37 @@ public class SSHypothesisTesting {
             }
             sum2 = sum2 + sum1
         }
-        let s = sqrt(sum2 / (n_total - Double(data.count)))
-        var n_i: Double
-        var n_j: Double
+        let s: FPT = sqrt(sum2 / (n_total - makeFP(data.count)))
+        var n_i: FPT
+        var n_j: FPT
         // compute test statistics
+        let half: FPT = FPT.half
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            Q.append(Array<Double>())
-            n_i = Double(data[i].sampleSize)
+            Q.append(Array<FPT>())
+            n_i = makeFP(data[i].sampleSize)
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                Q[i].append(Double.nan)
+                Q[i].append(FPT.nan)
                 if j >= i + 1 {
-                    n_j = Double(data[j].sampleSize)
+                    n_j = makeFP(data[j].sampleSize)
                     if n_i == n_j {
-                        Q[i][j] = fabs(differences[i][j]) / ( s * sqrt(1.0 / n_i))
+                        Q[i][j] = abs(differences[i][j]) / ( s * sqrt(1 / n_i))
                     }
                     else {
-                        Q[i][j] = fabs(differences[i][j]) / ( s * sqrt(0.5 * (1.0 / n_i + 1.0 / n_j)))
+                        Q[i][j] = abs(differences[i][j]) / ( s * sqrt(half * (1 / n_i + 1 / n_j)))
                     }
                 }
             }
         }
-        var pValues = Array<Array<Double>>()
+        var pValues = Array<Array<FPT>>()
+        var temp1: Double = 0.0
         for i in stride(from: 0, through: data.count - 1, by: 1) {
-            pValues.append(Array<Double>())
+            pValues.append(Array<FPT>())
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                pValues[i].append(Double.nan)
+                pValues[i].append(FPT.nan)
                 if j >= i + 1 {
-                    temp = Double.nan
+                    temp1 = Double.nan
                     do {
-                        temp = try ptukey(q: Q[i][j], nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .upper, returnLogP: false)
+                        temp1 = try ptukey(q: makeFP(Q[i][j]), nranges: 1, numberOfMeans: Double(data.count), df: makeFP(n_total) - Double(data.count), tail: .upper, returnLogP: false)
                     }
                     catch {
                         #if os(macOS) || os(iOS)
@@ -820,17 +908,17 @@ public class SSHypothesisTesting {
                         #endif
                         
                     }
-                    pValues[i][j] = temp
+                    pValues[i][j] = makeFP(temp1)
                 }
             }
         }
-        var confIntv = Array<Array<SSConfIntv>>()
-        var lb: Double
-        var ub: Double
-        var halfWidth: Double
-        var criticalQ: Double = 0.0
+        var confIntv: Array<Array<SSConfIntv<FPT>>> = Array<Array<SSConfIntv<FPT>>>()
+        var lb: FPT
+        var ub: FPT
+        var halfWidth: FPT
+        var criticalQ: Double = 0
         do {
-            criticalQ = try qtukey(p: 1.0 - alpha, nranges: 1, numberOfMeans: Double(data.count), df: n_total - Double(data.count), tail: .lower, log_p: false)
+            criticalQ = try qtukey(p: 1.0 - makeFP(alpha), nranges: 1, numberOfMeans: Double(data.count), df: makeFP(n_total) - Double(data.count), tail: .lower, log_p: false)
         }
         catch {
             #if os(macOS) || os(iOS)
@@ -845,28 +933,28 @@ public class SSHypothesisTesting {
         }
         for i in stride(from: 0, through: data.count - 1 , by: 1) {
             confIntv.append(Array<SSConfIntv>())
-            n_i = Double(data[i].sampleSize)
+            n_i = makeFP(data[i].sampleSize)
             for j in stride(from: 0, through: data.count - 1, by: 1) {
-                n_j = Double(data[j].sampleSize)
+                n_j = makeFP(data[j].sampleSize)
                 confIntv[i].append(SSConfIntv())
                 if j >= i + 1 {
                     if n_i != n_j {
-                        halfWidth = criticalQ * s * sqrt((1.0 / n_i + 1.0 / n_j) / 2.0)
+                        halfWidth = makeFP(criticalQ) * s * sqrt((1 / n_i + 1 / n_j) / 2)
                     }
                     else {
-                        halfWidth = criticalQ * s * sqrt(1.0 / n_i)
+                        halfWidth = makeFP(criticalQ) * s * sqrt(1 / n_i)
                     }
                     lb = differences[i][j] - halfWidth
                     ub = differences[i][j] + halfWidth
                     confIntv[i][j].lowerBound = lb
                     confIntv[i][j].upperBound = ub
-                    confIntv[i][j].intervalWidth = 2.0 * halfWidth
+                    confIntv[i][j].intervalWidth = 2 * halfWidth
                 }
             }
         }
         
-        var summary: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
-        var tempSummary: SSPostHocTestResult
+        var summary: Array<SSPostHocTestResult<FPT>> = Array<SSPostHocTestResult<FPT>>()
+        var tempSummary: SSPostHocTestResult<FPT>
         for i in stride(from: 0, through: k - 2, by: 1) {
             for j in stride(from: i + 1, through: k - 1, by: 1) {
                 tempSummary = (row: data[i].name! + "-" +  data[j].name!, meanDiff: differences[i][j], testStat: Q[i][j], pValue:  pValues[i][j], testType: .tukeyKramer)
@@ -877,28 +965,28 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the post hoc test according to Scheffé
-    public class func scheffeTest(dataFrame: SSDataFrame<Double>, alpha: Double) throws -> Array<SSPostHocTestResult>? {
+    public class func scheffeTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>?   where T: Hashable & Comparable & Codable {
         do {
-            var tukeyR: Array<SSPostHocTestResult>?
+            var tukeyR: Array<SSPostHocTestResult<FPT>>?
             tukeyR = try SSHypothesisTesting.tukeyKramerTest(dataFrame: dataFrame, alpha: alpha)
             if let tukey = tukeyR {
-                var scheffeResults: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
-                var n_total: Double  = 0.0
-                var k: Double
-                var df_error: Double
-                var tempRes: SSPostHocTestResult
-                k = Double(dataFrame.examines.count)
+                var scheffeResults: Array<SSPostHocTestResult<FPT>> = Array<SSPostHocTestResult<FPT>>()
+                var n_total: FPT  = 0
+                var k: FPT
+                var df_error: FPT
+                var tempRes: SSPostHocTestResult<FPT>
+                k = makeFP(dataFrame.examines.count)
                 for ex in dataFrame.examines {
-                    n_total = n_total + Double(ex.sampleSize)
+                    n_total = n_total + makeFP(ex.sampleSize)
                 }
                 df_error = n_total - k
                 for tk in tukey {
                     tempRes.meanDiff = tk.meanDiff
                     tempRes.row = tk.row
                     tempRes.testType = .scheffe
-                    tempRes.testStat = tk.testStat / SQRTTWO
-                    tempRes.pValue = try cdfFRatio(f: pow(tempRes.testStat, 2.0) / (k - 1.0), numeratorDF: k - 1.0, denominatorDF: df_error)
-                    tempRes.pValue = 1.0 - tempRes.pValue
+                    tempRes.testStat = tk.testStat / FPT.sqrt2
+                    tempRes.pValue = try cdfFRatio(f: pow1(tempRes.testStat, 2) / (k - 1), numeratorDF: k - 1, denominatorDF: df_error)
+                    tempRes.pValue = 1 - tempRes.pValue
                     scheffeResults.append(tempRes)
                 }
                 return scheffeResults
@@ -912,50 +1000,8 @@ public class SSHypothesisTesting {
         }
     }
     
-    public class func bonferroniTest(dataFrame: SSDataFrame<Double>) throws -> Array<SSPostHocTestResult>? {
+    public class func bonferroniTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>) throws -> Array<SSPostHocTestResult<FPT>>? where T: Hashable & Comparable & Codable {
         assert( false, "not implemented yet")
-        if dataFrame.examines.count <= 2 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of samples is expected to be > 2", log: log_stat, type: .error)
-            }
-            
-            #endif
-            
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        do {
-            if let scheffeRes = try SSHypothesisTesting.scheffeTest(dataFrame: dataFrame, alpha: 0.05) {
-                var bonferroniResult: SSPostHocTestResult
-                var resultArray: Array<SSPostHocTestResult> = Array<SSPostHocTestResult>()
-                var n_total: Double = 0.0
-                let k: Double = Double(dataFrame.examines.count)
-                let q = (k * (k - 1.0)) / 2.0
-                var temp: Double
-                for ex in dataFrame.examines {
-                    n_total = n_total + Double(ex.sampleSize)
-                }
-                for s in scheffeRes {
-                    bonferroniResult = s
-                    temp = try cdfStudentTDist(t: pow(bonferroniResult.testStat, 2.0) / (k - 1.0), degreesOfFreedom: n_total - k)
-                    bonferroniResult.pValue = (1.0 - temp) * q
-                    if bonferroniResult.pValue > 1.0 {
-                        bonferroniResult.pValue = 1.0
-                    }
-                    resultArray.append(bonferroniResult)
-                }
-                return resultArray
-            }
-            else {
-                return nil
-            }
-            
-        }
-        catch {
-            throw error
-        }
-        
     }
     
     

@@ -33,8 +33,8 @@ import os.log
 /// - Parameter a: location
 /// - Parameter b: scale
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func paraExtremValueDist(location a: Double!, scale b: Double!) throws -> SSContProbDistParams {
-    var result = SSContProbDistParams()
+public func paraExtremValueDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -46,11 +46,11 @@ public func paraExtremValueDist(location a: Double!, scale b: Double!) throws ->
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let ZETA3: Double = 1.2020569031595942853997381
-    result.mean = a + EULERGAMMA
-    result.variance = (b * b * PISQUARED) / 6.0
-    result.skewness = (12.0 * SQRTSIX * ZETA3) / (PISQUARED * Double(PIL))
-    result.kurtosis = 5.4
+    let ZETA3: FPT = makeFP(1.202056903159594285399738161511449990764986292340498881792271555)
+    result.mean = a + FPT.eulergamma
+    result.variance = (b * b * FPT.pisquared) / 6
+    result.skewness = (12 * FPT.sqrt6 * ZETA3) / (FPT.pisquared * FPT.pi)
+    result.kurtosis = makeFP(5.4)
     return result
 }
 
@@ -60,7 +60,7 @@ public func paraExtremValueDist(location a: Double!, scale b: Double!) throws ->
 /// - Parameter b: scale
 /// - Parameter x: x
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
+public func pdfExtremValueDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -72,8 +72,8 @@ public func pdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result: Double = 0.0
-    result = exp(-(x - a) / b) * exp(-exp(-(x - a) / b)) / b
+    var result: FPT = 0
+    result = exp1(-(x - a) / b) * exp1(-exp1(-(x - a) / b)) / b
     return result
 }
 
@@ -82,7 +82,7 @@ public func pdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!
 /// - Parameter b: scale
 /// - Parameter x: x
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
+public func cdfExtremValueDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -94,8 +94,8 @@ public func cdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result: Double = 0.0
-    result = exp(-exp(-(-a + x) / b ))
+    var result: FPT = 0
+    result = exp1(-exp1(-(-a + x) / b ))
     return result
 }
 
@@ -105,7 +105,7 @@ public func cdfExtremValueDist(x: Double!, location a: Double!, scale b: Double!
 /// - Parameter b: scale
 /// - Parameter p: p
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func quantileExtremValueDist(p: Double!, location a: Double!, scale b: Double!) throws -> Double {
+public func quantileExtremValueDist<FPT: SSFloatingPoint & Codable>(p: FPT, location a: FPT, scale b: FPT) throws -> FPT {
     if b <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -117,7 +117,7 @@ public func quantileExtremValueDist(p: Double!, location a: Double!, scale b: Do
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0.0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -128,13 +128,13 @@ public func quantileExtremValueDist(p: Double!, location a: Double!, scale b: Do
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p <= 0.0 {
-        return -Double.infinity
+    if p <= 0 {
+        return -FPT.infinity
     }
-    else if (p >= 1.0) {
-        return Double.infinity
+    else if (p >= 1) {
+        return FPT.infinity
     }
     else {
-        return a - b * log(-log(p))
+        return a - b * log1(-log1(p))
     }
 }

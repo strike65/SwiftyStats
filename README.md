@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.8.14-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-0.8.15-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
@@ -91,7 +91,7 @@ As there is no Xcode-Project, you have to use the Swift Package Manager. See abo
 
 # How to Use
 ## Accuracy and Precision
-Only the **first four decimal places** should be used. For more information about this topic click [here](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
+Although the internal accuracy is much larger, only the **first four decimal places** should be used. For more information on this click [here](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html). 
 
 ## Descriptive stats
 
@@ -105,7 +105,7 @@ import SwiftyStats
 // example data
 let data: Array<Double> = [3.14,1.21,5.6]
 // because our data are double valued items, the parameter "characterSet" is ignored
-let test = SSExamine<Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+let test = SSExamine<Double, Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
 // prints out the arithmetic mean
 print("\(test.arithmeticMean)")
 // you can use the class to analyze strings too:
@@ -125,7 +125,7 @@ catch {
 }
 ...
 do {
-	newObject: SSExamine<Double> = try SSExamine<Double>.unarchiveFrom(filePath: "~/data/myexamine.ssexamine")
+	newObject: SSExamine<Double, Double> = try SSExamine<Double, Double>.unarchiveFrom(filePath: "~/data/myexamine.ssexamine")
 }
 catch {
     // error handling
@@ -135,18 +135,135 @@ catch {
 ### Obtainable Statistics
 (This list is not exhaustive.)
 
-- sample size
-- length (= number of unique elements)
-- frequencies (absolute, relative, cumulative)
-- empirical cdf
-- means (arithmetic, geometric, harmonic, contraharmonic)
-- empirical dispersion measures (variance, semi variance, standard deviation, standard error)
-- empirical moments (central, about the origin, standardized)
-- mode
-- maximum, minimum
-- quantiles
-- entropy based statistics
-- ...
+INITIALIZERS
+
+    init()
+    init(withObject:levelOfMeasurement:name:characterSet:)
+    init(withArray:name:characterSet:)
+    examine(fromFile:separator:stringEncoding:_:)
+    examine(fromJSONFile:stringEncoding:)
+    exportJSONString(fileName:atomically:overwrite:stringEncoding:)
+    saveTo(fileName:atomically:overwrite:separator:asRow:stringEncoding:)
+    examineWithString(_:name:characterSet:)
+
+Codable protocol
+
+    encode(to:)
+    init(from:)
+
+NSCopying
+
+    copy(with:)
+
+SSExamineContainer Protocol
+
+    contains(_:)
+    rFrequency(_:)
+    frequency(_:)
+    append(_:)
+    append(repeating:element:)
+    append(contentOf:)
+    append(text:characterSet:)
+    remove(_:allOccurences:)
+    removeAll()
+
+File Management
+
+    archiveTo(filePath:overwrite:)
+    unarchiveFrom(filePath:)
+    Sn
+    Qn
+    squareTotal
+    poweredTotal(power:)
+    total
+    inverseTotal
+    tss(value:)
+
+Location
+
+    arithmeticMean
+    mode
+    commonest
+    scarcest
+    quantile(q:)
+    quartile
+    geometricMean
+    harmonicMean
+    contraHarmonicMean
+    poweredMean(order:)
+    trimmedMean(alpha:)
+    winsorizedMean(alpha:)
+    gastwirth
+    median
+
+Products
+
+    product
+    logProduct
+
+Dispersion
+
+    maximum
+    minimum
+    range
+    quartileDeviation
+    relativeQuartileDistance
+    midRange
+    interquartileRange
+    interquantileRange(lowerQuantile:upperQuantile:)
+    variance(type:)
+    standardDeviation(type:)
+    standardError
+    entropy
+    relativeEntropy
+    herfindahlIndex
+    conc
+    gini
+    giniNorm
+    CR(_:)
+    normalCI(alpha:populationSD:)
+    studentTCI(alpha:)
+    meanCI
+    cv
+    coefficientOfVariation
+    meanDifference
+    medianAbsoluteDeviation(center:scaleFactor:)
+    meanAbsoluteDeviation(center:)
+    meanRelativeDifference
+    semiVariance(type:)
+
+Empirical Moments
+
+    moment(r:type:)
+    autocorrelation(n:)
+
+Empirical distribution parameters
+
+    kurtosisExcess
+    kurtosis
+    kurtosisType
+    skewness
+    skewnessType
+    hasOutliers(testType:)
+    outliers(alpha:max:testType:)
+    isGaussian
+    testForDistribution(targetDistribution:)
+    boxWhisker
+
+Elements
+
+    elementsAsString(withDelimiter:asRow:)
+    elementsAsArray(sortOrder:)
+    uniqueElements(sortOrder:)
+
+Frequencies
+
+    frequencyTable(sortOrder:)
+    cumulativeFrequencyTable(format:)
+    eCDF(_:)
+    smallestFrequency
+    largestFrequency 
+
 
 ## SSHypothesisTesting
 The framework implements the following tests so far:
@@ -173,7 +290,7 @@ This library provides some of the more common probability distributions. Functio
 Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".  
 
 >**Note:**  
-Please always check if `NaN` is returned.  
+Please always check if `NaN` or `nil` is returned.  
 
 ###List of supported distributions
 
@@ -192,6 +309,8 @@ Please always check if `NaN` is returned.
 - Exponential Distribution
 - Uniform Distribution
 - Triangular Distribution
+- Rayleigh distribution
+- Extreme value distribution
 
 # LICENSE
 This framework is published under the [GNU GPL 3](http://www.gnu.org/licenses/)

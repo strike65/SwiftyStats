@@ -27,33 +27,95 @@ import Foundation
 
 
 /// Binomial
-internal func binomial2(_ n: Double!, _ k: Double!) -> Double {
-    if k == 0.0 {
-        return 1.0
+internal func binomial2<FPT: SSFloatingPoint>(_ n: FPT, _ k: FPT) -> FPT {
+    var ans: UInt64 = 1
+    var kk: UInt64 = integerValue(k)
+    var nn: UInt64 = integerValue(n)
+    var overflow: Bool = false
+    var ex1: (UInt64, Bool) = (0, false)
+    var ex2: (UInt64, Bool) = (0, false)
+    kk = k > n - k ? nn - kk : kk
+    for j: UInt64 in stride(from: 1, through: kk, by: 1) {
+        if nn % j == 0 {
+            ex1 = nn.dividedReportingOverflow(by: j)
+            if ex1.1 {
+                overflow = true
+                break
+            }
+            ex2 = ans.multipliedReportingOverflow(by: ex1.0)
+            if ex2.1 {
+                overflow = true
+                break
+            }
+            ans = ex2.0
+        }
+        else {
+            if ans % j == 0 {
+                ex1 = ans.dividedReportingOverflow(by: j)
+                if ex1.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex1.0
+                ex2 = ans.multipliedReportingOverflow(by: nn)
+                if ex2.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex2.0
+            }
+            else {
+                ex1 = ans.multipliedReportingOverflow(by: nn)
+                if ex1.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex1.0
+                ex2 = ans.dividedReportingOverflow(by: j)
+                if ex2.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex2.0
+            }
+        }
+        nn = nn - 1
     }
-    let num: Double = lgamma(n + 1.0)
-    let den: Double = lgamma(n - k + 1.0) + lgamma(k + 1.0)
-    let q: Double = num - den
-    return exp(q)
+    if !overflow {
+        return makeFP(ans)
+    }
+    else {
+        let num: FPT = lgamma1(makeFP(n) + 1)
+        let den: FPT = lgamma1(makeFP(n - k + 1)) + lgamma1(makeFP(k + 1))
+        let q: FPT = num - den
+        return exp1(q).rounded(FloatingPointRoundingRule.toNearestOrAwayFromZero)
+    }
+
+//    if k == 0 {
+//        return 1
+//    }
+//    let num: FPT = lgamma1(n + 1)
+//    let den: FPT = lgamma1(n - k + 1) + lgamma1(k + 1)
+//    let q: FPT = num - den
+//    return exp1(q)
 }
 
 
 /// Tests, if a value is integer.
 /// - Paramter value: A double-value.
-internal func isInteger(_ value: Double) -> Bool {
-    return value.truncatingRemainder(dividingBy: 1) == 0
+internal func isInteger<T: SSFloatingPoint>(_ value: T) -> Bool {
+    return value.truncatingRemainder(dividingBy: 1).isZero
 }
 
 /// Tests, if a value is odd.
 /// - Paramter value: A double-value.
-internal func isOdd(_ value: Double) -> Bool {
-    var frac: Double
-    var intp: Double = 0.0
-    frac = modf(value, &intp)
-    if !frac.isZero {
+internal func isOdd<T: SSFloatingPoint>(_ value: T) -> Bool {
+    var modr: (T, T)
+    modr = modf(value)
+    if !modr.1.isZero {
         return false;
     }
-    else if intp.truncatingRemainder(dividingBy: 2) == 0 {
+    else if modr.0.truncatingRemainder(dividingBy: 2).isZero {
         return false
     }
     else {
@@ -61,12 +123,147 @@ internal func isOdd(_ value: Double) -> Bool {
     }
 }
 
+internal func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
+    switch x {
+    case let d as Double:
+        switch I.self {
+        case is Int32.Type:
+            let r = Int32(d)
+            return r as! I
+        case is Int16.Type:
+            let r = Int16(d)
+            return r as! I
+        case is Int64.Type:
+            let r = Int64(d)
+            return r as! I
+        case is Int8.Type:
+            let r = Int8(d)
+            return r as! I
+        case is UInt.Type:
+            let r = UInt(d)
+            return r as! I
+        case is UInt32.Type:
+            let r = UInt32(d)
+            return r as! I
+        case is UInt16.Type:
+            let r = UInt16(d)
+            return r as! I
+        case is UInt8.Type:
+            let r = UInt8(d)
+            return r as! I
+        case is UInt64.Type:
+            let r = UInt64(d)
+            return r as! I
+        default:
+            let r = Int(d)
+            return r as! I
+        }
+    case let d as Float:
+        switch I.self {
+        case is Int32.Type:
+            let r = Int32(d)
+            return r as! I
+        case is Int16.Type:
+            let r = Int16(d)
+            return r as! I
+        case is Int64.Type:
+            let r = Int64(d)
+            return r as! I
+        case is Int8.Type:
+            let r = Int8(d)
+            return r as! I
+        case is UInt.Type:
+            let r = UInt(d)
+            return r as! I
+        case is UInt32.Type:
+            let r = UInt32(d)
+            return r as! I
+        case is UInt16.Type:
+            let r = UInt16(d)
+            return r as! I
+        case is UInt8.Type:
+            let r = UInt8(d)
+            return r as! I
+        case is UInt64.Type:
+            let r = Int64(d)
+            return r as! I
+        default:
+            let r = Int(d)
+            return r as! I
+        }
+        #if arch(x86_64)
+    case let d as Float80:
+        switch I.self {
+        case is Int32.Type:
+            let r = Int32(d)
+            return r as! I
+        case is Int16.Type:
+            let r = Int16(d)
+            return r as! I
+        case is Int64.Type:
+            let r = Int64(d)
+            return r as! I
+        case is Int8.Type:
+            let r = Int8(d)
+            return r as! I
+        case is UInt.Type:
+            let r = UInt(d)
+            return r as! I
+        case is UInt32.Type:
+            let r = UInt32(d)
+            return r as! I
+        case is UInt16.Type:
+            let r = UInt16(d)
+            return r as! I
+        case is UInt8.Type:
+            let r = UInt8(d)
+            return r as! I
+        case is UInt64.Type:
+            let r = Int64(d)
+            return r as! I
+        default:
+            let r = Int(d)
+            return r as! I
+        }
+        #endif
+    default:
+        return 0
+    }
+}
+
+
+/// Returns the integer part of a floating point number
+internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
+    var modr: (T, T)
+    modr = modf(x)
+    return modr.0
+//    switch x {
+//    case let d as Double:
+//        var intPart: Double = 0.0
+//        let _ = modf(d, &intPart)
+//        return intPart as! T
+//    case let f as Float:
+//        var intPart: Float = 0.0
+//        let _ = modff(f, &intPart)
+//        return intPart as! T
+//        #if arch(x86_64)
+//    case let f80 as Float80:
+//        var intPart: Float80 = 0.0
+//        let _ = modfl(f80, &intPart)
+//        return intPart as! T
+//        #endif
+//    default:
+//        return T.nan
+//    }
+}
+
+
 /// Returns the fractional part of a double-value
 /// - Paramter value: A double-value.
-internal func fractionalPart(_ value: Double) -> Double {
-    var intpart: Double = 0.0
-    let result: Double = modf(value, &intpart)
-    return result
+internal func fractionalPart<T: SSFloatingPoint>(_ value: T) -> T {
+    var modr: (T, T)
+    modr = modf(value)
+    return modr.1
 }
 
 /// Tests, if a value is numeric
@@ -90,54 +287,206 @@ internal func isNumber<T>(_ value: T) -> Bool {
     #endif
 }
 
-internal func castValueToDouble<T>(_ value: T) -> Double? {
-    #if arch(i386) || arch(x86_64)
-        if value is Float80 {
-            return Double(value as! Float80)
+internal func makeFP<T, FPT: SSFloatingPoint>(_ value: T) -> FPT {
+    switch value {
+    case let s as String:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(s) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(s) as! FPT
+        case is Double.Type:
+            return Double.init(s) as! FPT
+        default:
+            return FPT.nan
         }
-    #endif
-    if value is Int {
-        return Double(value as! Int)
+    case let f as Float:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init("\(f)") as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init("\(f)") as! FPT
+        case is Double.Type:
+            return Double.init(f) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let f as Double:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init("\(f)") as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init("\(f)") as! FPT
+        case is Double.Type:
+            return Double.init(f) as! FPT
+        default:
+            return FPT.nan
+        }
+        #if arch(i386) || arch(x86_64)
+    case let f as Float80:
+        switch FPT.self {
+        case is Float80.Type:
+            return Float80.init("\(f)") as! FPT
+        case is Float.Type:
+            return Float.init("\(f)") as! FPT
+        case is Double.Type:
+            return Double.init(f) as! FPT
+        default:
+            return FPT.nan
+        }
+        #endif
+    case let i as Int:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as Int8:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as Int16:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as Int32:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as Int64:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as UInt:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as UInt8:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as UInt16:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as UInt32:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    case let i as UInt64:
+        switch FPT.self {
+            #if arch(i386) || arch(x86_64)
+        case is Float80.Type:
+            return Float80.init(i) as! FPT
+            #endif
+        case is Float.Type:
+            return Float.init(i) as! FPT
+        case is Double.Type:
+            return Double.init(i) as! FPT
+        default:
+            return FPT.nan
+        }
+    default:
+        return FPT.nan
     }
-    else if value is Int8 {
-        return Double(value as! Int8)
-    }
-    else if value is Int16 {
-        return Double(value as! Int16)
-    }
-    else if value is Int32 {
-        return Double(value as! Int32)
-    }
-    else if value is Int64 {
-        return Double(value as! Int64)
-    }
-    else if value is UInt {
-        return Double(value as! UInt)
-    }
-    else if value is UInt8 {
-        return Double(value as! UInt8)
-    }
-    else if value is UInt16 {
-        return Double(value as! UInt16)
-    }
-    else if value is UInt32 {
-        return Double(value as! UInt32)
-    }
-    else if value is UInt64 {
-        return Double(value as! UInt64)
-    }
-    else if value is Float {
-        return Double(value as! Float)
-    }
-    else if value is Float32 {
-        return Double(value as! Float32)
-    }
-    else if value is Double {
-        return value as? Double
-    }
-    else {
+}
+
+internal func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>? where T: Numeric & Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
+    if array.isEmpty {
         return nil
     }
+    var temp: FPT
+    var result: Array<FPT> = Array<FPT>()
+    for item in array {
+        temp = makeFP(item)
+        result.append(temp)
+    }
+    return result as Array<FPT>
 }
 
 
@@ -162,35 +511,18 @@ internal func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     }
 }
 
-
-/* The natural logarithm of factorial n! for  0 <= n <= MFACT */
-fileprivate let LnFactorial: Array<Double> = [
-    0, 0, 0.693147180559945309417, 1.79175946922805500081, 3.17805383034794561965, 4.78749174278204599425, 6.57925121201010099506, 8.52516136106541430017, 10.6046029027452502284, 12.8018274800814696112, 15.1044125730755152952, 17.5023078458738858393, 19.9872144956618861495, 22.5521638531234228856, 25.1912211827386815001, 27.8992713838408915661, 30.6718601060806728038, 33.5050734501368888840, 36.3954452080330535762, 39.3398841871994940362, 42.3356164607534850297, 45.3801388984769080262, 48.4711813518352238796, 51.6066755677643735704, 54.7847293981123191901, 58.0036052229805199393, 61.2617017610020019848, 64.5575386270063310590, 67.8897431371815349829, 71.2570389671680090101,  74.6582363488301643855, 78.0922235533153106314,  81.5579594561150371785, 85.0544670175815174140,  88.5808275421976788036, 92.1361756036870924833,  95.7196945421432024850, 99.3306124547874269293,  102.968198614513812699, 106.631760260643459126,  110.320639714757395429, 114.034211781461703233,  117.771881399745071539, 121.533081515438633962,  125.317271149356895125, 129.123933639127214883,  132.952575035616309883, 136.802722637326368470,  140.673923648234259399, 144.565743946344886009,  148.477766951773032068, 152.409592584497357839,  156.360836303078785194, 160.331128216630907028,  164.320112263195181412, 168.327445448427652330,  172.352797139162801564, 176.395848406997351715,  180.456291417543771052, 184.533828861449490502,  188.628173423671591187, 192.739047287844902436,  196.866181672889993991, 201.009316399281526679,  205.168199482641198536, 209.342586752536835646,  213.532241494563261191, 217.736934113954227251,  221.956441819130333950, 226.190548323727593332,  230.439043565776952321, 234.701723442818267743,  238.978389561834323054, 243.268849002982714183,  247.572914096186883937, 251.890402209723194377,  256.221135550009525456, 260.564940971863209305,  264.921649798552801042, 269.291097651019822536,  273.673124285693704149, 278.067573440366142914,  282.474292687630396027, 286.893133295426993951,  291.323950094270307566, 295.766601350760624021,  300.220948647014131754, 304.686856765668715473,  309.164193580146921945, 313.652829949879061783,  318.152639620209326850, 322.663499126726176891,  327.185287703775217201, 331.717887196928473138,  336.261181979198477034, 340.815058870799017869,  345.379407062266854107, 349.954118040770236930,  354.539085519440808849, 359.134205369575398776,  363.739375555563490144, 368.354496072404749595,  372.979468885689020676, 377.614197873918656447,  382.258588773060029111, 386.912549123217552482,  391.575988217329619626, 396.248817051791525799,  400.930948278915745492, 405.622296161144889192,  410.322776526937305421, 415.032306728249639556,  419.750805599544734099, 424.478193418257074668,  429.214391866651570128, 433.959323995014820194,  438.712914186121184840, 443.475088120918940959,  448.245772745384605719, 453.024896238496135104, 457.81238798127818109]
-
-/*------------------------------------------------------------------------*/
-
 /// Returns the logarithm of n!
-internal func logFactorial(_ n: Int) -> Double {
-    /* Returns the natural logarithm of factorial n! */
-    if (n <= 60) {
-        return LnFactorial[n]
-        
-    } else {
-        let x = Double(n + 1)
-        let y = 1.0 / (x * x)
-        var z = ((-(5.95238095238E-4 * y) + 7.936500793651E-4) * y - 2.7777777777778E-3) * y + 8.3333333333333E-2
-        z = ((x - 0.5) * log(x) - x) + 9.1893853320467E-1 + z / x
-        return z
-    }
+internal func logFactorial<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
+        return lgamma1(makeFP(n + 1))
 }
 
 
 /// Returns a SSExamine object of length one and count "count"
 /// - Parameter value: Value
 /// - Parameter count: Number of values
-internal func replicateExamine<T>(value: T!, count: Int!) -> SSExamine<T> where T: Comparable, T: Hashable {
+internal func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, count: Int!) -> SSExamine<T, FPT> where T: Comparable, T: Hashable, FPT: Codable {
     let array = Array<T>.init(repeating: value, count: count)
-    let res = SSExamine<T>.init(withArray: array, name: nil, characterSet: nil)
+    let res = SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil)
     return res
 }
 
@@ -379,8 +711,6 @@ internal func printError(_ message: String!) {
     var outputStream = StandardErrorOutputStream()
     print(message, to: &outputStream)
 }
-
-
 
 
 

@@ -91,39 +91,37 @@ import os.log
 
 /* Swift Version: Copyright Volker Thieme, 2018 */
 
-public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
-    var asum, psum, acanc, pcanc, temp: Double
-    
+
+public func hypergeometric1F1<FPT: SSFloatingPoint & Codable>(a: FPT, b: FPT, x: FPT) -> FPT {
+    var asum, psum, acanc, pcanc, temp: FPT
+    let pcanc_limit1: FPT = makeFP(1e-15)
+    let pcanc_limit2: FPT = makeFP(1e-12)
     
     // special case, M(a,b,x) = 1 if a == 0
     if a.isZero || x.isZero {
-        return 1.0
+        return 1
     }
     
     if (a == 1) && (b == 2) {
-        return (exp(x) - 1.0) / x
+        return (exp1(x) - 1) / x
     }
-
+    
     /* See if a Kummer transformation will help */
     temp = b - a
-    if( fabs(temp) < 0.001 * fabs(a) ) {
-        return( exp(x) * hypergeometric1F1(a: temp, b: b, x: -x )  )
+    if( abs(temp) < (1 / 1000) * abs(a) ) {
+        return( exp1(x) * hypergeometric1F1(a: temp, b: b, x: -x )  )
     }
-    pcanc = 0.0
+    pcanc = 0
     psum = hy1f1p( a: a, b: b, x: x, err: &pcanc )
-    if( pcanc < 1.0e-12 ) {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("Partial loss of precision", log: log_stat, type: .info)
+    if pcanc < pcanc_limit1 {
+        if( pcanc > pcanc_limit2 ) {
+            print("Partial loss of precision")
         }
-        #else
-        printError("Partial loss of precision")
-        #endif
         return psum
     }
-
+    
     /* try asymptotic series */
-    acanc = 0.0
+    acanc = 0
     asum = hy1f1a(a: a, b: b, x: x, err: &acanc )
     
     
@@ -134,14 +132,8 @@ public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
         psum = asum
     }
     
-    if( pcanc > 1.0e-12 ) {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("Partial loss of precision", log: log_stat, type: .info)
-        }
-        #else
-        printError("Partial loss of precision")
-        #endif
+    if( pcanc > pcanc_limit2 ) {
+        print("Partial loss of precision")
     }
     return( psum )
 }
@@ -151,34 +143,26 @@ public func hypergeometric1F1(a: Double!, b: Double!, x: Double!) -> Double {
 
 /* Power series summation for confluent hypergeometric function        */
 
-fileprivate func hy1f1p( a: Double!, b: Double!, x: Double!, err: inout Double ) -> Double {
-    var n, a0, sum, t, u, temp: Double
-    var an, bn, maxt, pcanc: Double
+fileprivate func hy1f1p<FPT: SSFloatingPoint & Codable>( a: FPT, b: FPT, x: FPT, err: inout FPT ) -> FPT {
+    var n, a0, sum, t, u, temp: FPT
+    var an, bn, maxt, pcanc: FPT
     
     
     /* set up for power series summation */
     an = a
     bn = b
-    a0 = 1.0
-    sum = 1.0
-    n = 1.0
-    t = 1.0
-    maxt = 0.0
+    a0 = 1
+    sum = 1
+    n = 1
+    t = 1
+    maxt = 0
     
     
-    while( t > Double.ulpOfOne ) {
+    while( t > FPT.ulpOfOne ) {
         if( bn == 0 )            /* check bn first since if both    */
         {
-            #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("Argument Singularity", log: log_stat, type: .info)
-            }
-            #else
-            if #available(macOS 10.12, iOS 10, *) {
-                printError("Argument Singularity in hypergeometric1F1.")
-            }
-            #endif
-            return Double.infinity
+            print("Argument Singularity in hypergeometric1F1.")
+            return FPT.infinity
         }
         if( an == 0 ) {          /* a singularity        */
             return( sum )
@@ -186,20 +170,20 @@ fileprivate func hy1f1p( a: Double!, b: Double!, x: Double!, err: inout Double )
         if( n > 200 ) {
             break
         }
-
+        
         u = x * ( an / (bn * n) )
         
         /* check for blowup */
-        temp = fabs(u)
-        if( (temp > 1.0 ) && (maxt > (Double.greatestFiniteMagnitude / temp)) ) {
-            pcanc = 1.0    /* estimate 100% error */
+        temp = abs(u)
+        if( (temp > 1 ) && (maxt > (FPT.greatestFiniteMagnitude / temp)) ) {
+            pcanc = 1    /* estimate 100% error */
             err = pcanc
             return sum
         }
         
         a0 *= u
         sum += a0
-        t = fabs(a0)
+        t = abs(a0)
         if( t > maxt ) {
             maxt = t
         }
@@ -210,16 +194,16 @@ fileprivate func hy1f1p( a: Double!, b: Double!, x: Double!, err: inout Double )
          goto blowup
          }
          */
-        an += 1.0
-        bn += 1.0
-        n += 1.0
+        an += 1
+        bn += 1
+        n += 1
     }
     /* estimate error due to roundoff and cancellation */
-    if( sum != 0.0 ) {
-        maxt = maxt / fabs(sum)
+    if( sum != 0 ) {
+        maxt = maxt / abs(sum)
     }
-    maxt = maxt * Double.ulpOfOne     /* this way avoids multiply overflow */
-    pcanc = fabs( Double.ulpOfOne * n  +  maxt )
+    maxt = maxt * FPT.ulpOfOne     /* this way avoids multiply overflow */
+    pcanc = abs( FPT.ulpOfOne * n  +  maxt )
     err = pcanc
     return( sum )
 }
@@ -242,63 +226,63 @@ fileprivate func hy1f1p( a: Double!, b: Double!, x: Double!, err: inout Double )
  *                               |  (a)                        )
  */
 
-fileprivate func hy1f1a( a: Double!, b: Double!, x:Double!, err: inout Double ) -> Double {
-    var h1, h2, t, u, temp, acanc, asum, err1, err2: Double
+fileprivate func hy1f1a<FPT: SSFloatingPoint & Codable>( a: FPT, b: FPT, x:FPT, err: inout FPT ) -> FPT {
+    var h1, h2, t, u, temp, acanc, asum, err1, err2: FPT
     
     if( x == 0 ) {
-        acanc = 1.0
-        asum = Double.greatestFiniteMagnitude
+        acanc = 1
+        asum = FPT.greatestFiniteMagnitude
         err = acanc
         return asum
     }
-    temp = log( fabs(x) )
+    temp = log1( abs(x) )
     t = x + temp * (a-b)
     u = -temp * a
     
     if( b > 0 ) {
-        temp = lgamma(b)
+        temp = lgamma1(b)
         t += temp
         u += temp
     }
-    err1 = 0.0
-    h1 = hyp2f0(a: a, b: a-b+1, x: -1.0/x, type: 1, err: &err1 )
+    err1 = 0
+    h1 = hyp2f0(a: a, b: a - b + 1, x: -1 / x, type: 1, err: &err1 )
     
-    temp = exp(u) / tgamma(b-a)
+    temp = exp1(u) / tgamma1(b-a)
     h1 = h1 * temp
     err1 = err1 * temp
-    err2 = 0.0
-    h2 = hyp2f0(a: b-a, b: 1.0-a, x: 1.0/x, type: 2, err: &err2 )
+    err2 = 0
+    h2 = hyp2f0(a: b - a, b: 1 - a, x: 1 / x, type: 2, err: &err2 )
     
     if( a < 0 ) {
-        temp = exp(t) / tgamma(a)
+        temp = exp1(t) / tgamma1(a)
     }
     else {
-        temp = exp( t - lgamma(a) )
+        temp = exp1( t - lgamma1(a))
     }
     
     h2 = h2 * temp
     err2 = err2 * temp
     
-    if( x < 0.0 ) {
+    if( x < 0 ) {
         asum = h1
     }
     else {
         asum = h2
     }
     
-    acanc = fabs(err1) + fabs(err2)
+    acanc = abs(err1) + abs(err2)
     
     if( b < 0 ) {
-        temp = tgamma(b)
+        temp = tgamma1(b)
         asum = asum * temp
-        acanc = acanc * fabs(temp)
+        acanc = acanc * abs(temp)
     }
     
-    if( asum != 0.0 ) {
-        acanc = acanc / fabs(asum)
+    if( asum != 0 ) {
+        acanc = acanc / abs(asum)
     }
     
-    acanc = acanc * 30.0    /* fudge factor, since error of asymptotic formula
+    acanc = acanc * 30    /* fudge factor, since error of asymptotic formula
      * often seems this much larger than advertised */
     err = acanc
     return( asum )
@@ -306,30 +290,30 @@ fileprivate func hy1f1a( a: Double!, b: Double!, x:Double!, err: inout Double ) 
 
 /*                            hyp2f0()    */
 
-fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout Double ) -> Double {
-    var a0, alast, t, tlast, maxt: Double
-    var n, an, bn, u, sum, temp: Double
+fileprivate func hyp2f0<FPT: SSFloatingPoint & Codable>( a: FPT, b: FPT, x: FPT, type: Int, err: inout FPT ) -> FPT {
+    var a0, alast, t, tlast, maxt: FPT
+    var n, an, bn, u, sum, temp: FPT
     
     an = a
     bn = b
-    a0 = 1.0e0
-    alast = 1.0e0
-    sum = 0.0
-    n = 1.0e0
-    t = 1.0e0
-    tlast = 1.0e9
-    maxt = 0.0
+    a0 = 1
+    alast = 1
+    sum = 0
+    n = 1
+    t = 1
+    tlast = 1000000000
+    maxt = 0
     
     repeat {
         if( an == 0 ) {
             /* estimate error due to roundoff and cancellation */
-            err = fabs( Double.ulpOfOne * (n + maxt) )
+            err = abs( FPT.ulpOfOne * (n + maxt) )
             alast = a0
             sum += alast
             return( sum )
         }
         if( bn == 0 ) {
-            err = fabs( Double.ulpOfOne * (n + maxt) )
+            err = abs( FPT.ulpOfOne * (n + maxt) )
             alast = a0
             sum += alast
             return( sum )
@@ -338,40 +322,38 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
         u = an * (bn * x / n)
         
         /* check for blowup */
-        temp = fabs(u)
-        if( (temp > 1.0 ) && (maxt > (Double.greatestFiniteMagnitude / temp)) ) {
-            err = Double.greatestFiniteMagnitude
-            #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("Total loss of precision", log: log_stat, type: .info)
-            }
-            #else
-            printError("Total loss of precision.")
-            #endif
+        temp = abs(u)
+        if( (temp > 1 ) && (maxt > (FPT.greatestFiniteMagnitude / temp)) ) {
+            err = FPT.greatestFiniteMagnitude
+            print("Total loss of precision.")
             return( sum )
         }
-
+        
         a0 *= u
-        t = fabs(a0)
+        t = abs(a0)
         
         /* terminating condition for asymptotic series */
         if( t > tlast ) {
             /* The following "Converging factors" are supposed to improve accuracy,
              * but do not actually seem to accomplish very much. */
             
-            n -= 1.0
-            let xx = 1.0 / x
+            n -= 1
+            let xx = 1 / x
             
             switch( type ) {    /* "type" given as subroutine argument */
             case 1:
-                let a1 = 0.125 + 0.25 * b
-                let a2 = -0.5 * a + 0.25 * xx
-                let a3 = -0.25 * n
-                alast *= ( 0.5 + ( a1 + a2 + a3 ) / xx )
+                let a1 = makeFP(0.125 ) + makeFP(0.25 ) * b
+                let a2 = makeFP(-0.5 ) * a + makeFP(0.25 ) * xx
+                let a3 = makeFP(-0.25 ) * n
+                alast *= ( makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
                 break
                 
             case 2:
-                alast *= 2.0 / 3.0 - b + 2.0 * a + xx - n
+                let e1: FPT = makeFP(2.0 / 3.0 ) - b
+                let e2: FPT = 2 * a
+                let e3: FPT = xx - n
+                alast = alast + e1 + e2 + e3
+                //                alast *= 2 / 3 - b + 2 * a + xx - n
                 break
                 
             default:
@@ -379,7 +361,7 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
             }
             
             /* estimate error due to roundoff, cancellation, and nonconvergence */
-            err = Double.ulpOfOne * (n + maxt)  +  fabs ( a0 )
+            err = FPT.ulpOfOne * (n + maxt)  + abs( a0 )
             sum += alast
             return( sum )
         }
@@ -392,19 +374,23 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
             /* The following "Converging factors" are supposed to improve accuracy,
              * but do not actually seem to accomplish very much. */
             
-            n -= 1.0
-            let xx = 1.0 / x
+            n -= 1
+            let xx = 1 / x
             
             switch( type ) {    /* "type" given as subroutine argument */
             case 1:
-                let  a1 = 0.125 + 0.25 * b
-                let  a2 = -0.5 * a + 0.25 * xx
-                let  a3 = -0.25 * n
-                alast *= ( 0.5 + ( a1 + a2 + a3 ) / xx )
+                let a1 = makeFP(0.125 ) + makeFP(0.25 ) * b
+                let a2 = makeFP(-0.5 ) * a + makeFP(0.25 ) * xx
+                let a3 = makeFP(-0.25 ) * n
+                alast *= ( makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
                 break
                 
             case 2:
-                alast *= 2.0 / 3.0 - b + 2.0 * a + xx - n
+                let e1: FPT = makeFP(2.0 / 3.0 ) - b
+                let e2: FPT = 2 * a
+                let e3: FPT = xx - n
+                alast = alast + e1 + e2 + e3
+                //                alast *= 2 / 3 - b + 2 * a + xx - n
                 break
                 
             default:
@@ -412,57 +398,57 @@ fileprivate func hyp2f0( a:Double!, b:Double!, x:Double!, type: Int!, err: inout
             }
             
             /* estimate error due to roundoff, cancellation, and nonconvergence */
-            err = Double.ulpOfOne * (n + maxt)  +  fabs ( a0 )
+            err = FPT.ulpOfOne * (n + maxt)  +  abs( a0 )
             sum += alast
             return( sum )
         }
-        an += 1.0e0
-        bn += 1.0e0
-        n += 1.0e0
+        an += 1
+        bn += 1
+        n += 1
         if( t > maxt ) {
             maxt = t
         }
-    } while( t > Double.ulpOfOne )
+    } while( t > FPT.ulpOfOne )
     
     
     /* series converged! */
     
     /* estimate error due to roundoff and cancellation */
-    err = fabs(  Double.ulpOfOne * (n + maxt)  )
+    err = abs(  FPT.ulpOfOne * (n + maxt)  )
     
     alast = a0
     sum += alast
     return( sum )
-//
-//    /* The following "Converging factors" are supposed to improve accuracy,
-//     * but do not actually seem to accomplish very much. */
-//
-//    n -= 1.0
-//    x = 1.0/x
-//
-//    switch( type )    /* "type" given as subroutine argument */
-//    {
-//    case 1:
-//        alast *= ( 0.5 + (0.125 + 0.25*b - 0.5*a + 0.25*x - 0.25*n)/x )
-//        break
-//
-//    case 2:
-//        alast *= 2.0/3.0 - b + 2.0*a + x - n
-//        break
-//
-//    default:
-//        break
-//    }
-//
-//    /* estimate error due to roundoff, cancellation, and nonconvergence */
-//    err = DBL_EPSILON * (n + maxt)  +  fabs ( a0 )
-//
-//
-//    sum += alast
-//    return( sum )
-//
-//    /* series blew up: */
-//    err = HUGE
-//    mtherr( "hyperg", TLOSS )
-//    return( sum )
+    //
+    //    /* The following "Converging factors" are supposed to improve accuracy,
+    //     * but do not actually seem to accomplish very much. */
+    //
+    //    n -= 1.0
+    //    x = 1.0/x
+    //
+    //    switch( type )    /* "type" given as subroutine argument */
+    //    {
+    //    case 1:
+    //        alast *= ( 0.5 + (0.125 + 0.25*b - 0.5*a + 0.25*x - 0.25*n)/x )
+    //        break
+    //
+    //    case 2:
+    //        alast *= 2.0/3.0 - b + 2.0*a + x - n
+    //        break
+    //
+    //    default:
+    //        break
+    //    }
+    //
+    //    /* estimate error due to roundoff, cancellation, and nonconvergence */
+    //    err = DBL_EPSILON * (n + maxt)  +  fabs ( a0 )
+    //
+    //
+    //    sum += alast
+    //    return( sum )
+    //
+    //    /* series blew up: */
+    //    err = HUGE
+    //    mtherr( "hyperg", TLOSS )
+    //    return( sum )
 }

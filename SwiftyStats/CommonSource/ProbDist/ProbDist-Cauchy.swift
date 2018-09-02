@@ -32,8 +32,8 @@ import os.log
 /// - Parameter a: Location parameter a
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func paraCauchyDist(location a: Double!, scale b: Double!) throws -> SSContProbDistParams {
-    if (b <= 0.0) {
+public func paraCauchyDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -52,8 +52,8 @@ public func paraCauchyDist(location a: Double!, scale b: Double!) throws -> SSCo
 /// - Parameter a: Location parameter a
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func pdfCauchyDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -65,9 +65,9 @@ public func pdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) thr
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     let p = (x - a) / b
-    let result = Double.pi * b * (1.0 + (p * p))
+    let result = FPT.pi * b * (1 + (p * p))
 //    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
-    return 1.0 / result
+    return 1 / result
 }
 
 /// Returns the cdf of the Cauchy distribution.
@@ -75,8 +75,8 @@ public func pdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) thr
 /// - Parameter a: Location parameter a
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func cdfCauchyDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -87,7 +87,7 @@ public func cdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result = 0.5 + 1.0 / Double.pi * atan((x - a) / b)
+    let result = makeFP(1.0 / 2.0 ) + 1 / FPT.pi * atan1((x - a) / b)
     return result
 }
 
@@ -96,8 +96,8 @@ public func cdfCauchyDist(x: Double!, location a: Double!, scale b: Double!) thr
 /// - Parameter a: Location parameter a
 /// - Parameter b: Scale parameter b
 /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
-public func quantileCauchyDist(p: Double!, location a: Double!, scale b: Double!) throws -> Double {
-    if (b <= 0.0) {
+public func quantileCauchyDist<FPT: SSFloatingPoint & Codable>(p: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+    if (b <= 0) {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -108,7 +108,7 @@ public func quantileCauchyDist(p: Double!, location a: Double!, scale b: Double!
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0.0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -120,12 +120,12 @@ public func quantileCauchyDist(p: Double!, location a: Double!, scale b: Double!
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if p.isZero {
-        return -Double.infinity
+        return -FPT.infinity
     }
-    if fabs(p - 1.0) < Double.leastNonzeroMagnitude {
-        return Double.infinity
+    if abs(p - 1) < FPT.ulpOfOne {
+        return FPT.infinity
     }
-    let result = a + b * tan((-0.5 + p) * Double.pi)
+    let result = a + b * tan1((-makeFP(1.0 / 2.0 ) + p) * FPT.pi)
     return result
 }
 

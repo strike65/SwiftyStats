@@ -31,11 +31,13 @@ import os.log
 
 
 extension SSHypothesisTesting {
+    // MARK: Autocorrelation
+    
     /// Returns the autocorrelation coefficient for a particular lag
     /// - Parameter data: Array<Double> object
     /// - Parameter lag: Lag
     /// - Throws: SSSwiftyStatsError iff data.count < 2
-    public class func autocorrelationCoefficient(array: Array<Double>!, lag: Int!) throws -> Double {
+    public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, lag: Int) throws -> FPT {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -48,7 +50,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            return try autocorrelationCoefficient(data: SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil), lag: lag)
+            return try autocorrelationCoefficient(data: SSExamine<FPT, FPT>.init(withArray: array, name: nil,  characterSet: nil), lag: lag)
         }
         catch {
             throw error
@@ -57,10 +59,10 @@ extension SSHypothesisTesting {
     
     
     /// Returns the autocorrelation coefficient for a particular lag
-    /// - Parameter data: SSExamine<Double> object
+    /// - Parameter data: SSExamine<Double, Double> object
     /// - Parameter lag: Lag
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelationCoefficient(data: SSExamine<Double>!, lag: Int!) throws -> Double {
+    public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, lag: Int) throws -> FPT {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -72,10 +74,10 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var r: Double
-        var num: Double = 0.0
-        var den: Double = 0.0
-        let mean: Double = data.arithmeticMean!
+        var r: FPT
+        var num: FPT = 0
+        var den: FPT = 0
+        let mean: FPT = data.arithmeticMean!
         var i: Int = 0
         let n = data.sampleSize
         let elements = data.elementsAsArray(sortOrder: .raw)!
@@ -85,7 +87,7 @@ extension SSHypothesisTesting {
         }
         i = 0
         while i < n {
-            den += pow(elements[i] - mean, 2.0)
+            den += pow1(elements[i] - mean, 2)
             i += 1
         }
         r = num / den
@@ -102,7 +104,7 @@ extension SSHypothesisTesting {
     /// ````
     /// - Parameter data: Array<Double>
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelation(array: Array<Double>!) throws -> SSBoxLjungResult {
+    public class func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -114,7 +116,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let examine = SSExamine<Double>.init(withArray: array, name: nil,  characterSet: nil)
+        let examine = SSExamine<FPT, FPT>.init(withArray: array, name: nil,  characterSet: nil)
         do {
             return try autocorrelation(data: examine)
         }
@@ -128,12 +130,12 @@ extension SSHypothesisTesting {
     /// ### Usage ###
     /// ````
     /// let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
-    /// let lewdat = SSExamine<Double>.init(withArray: lew1, characterSet: nil)
+    /// let lewdat = SSExamine<Double, Double>.init(withArray: lew1, characterSet: nil)
     /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
     /// ````
     /// - Parameter data: SSExamine object
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelation(data: SSExamine<Double>!) throws -> SSBoxLjungResult {
+    public class func autocorrelation<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>) throws -> SSBoxLjungResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -145,21 +147,22 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var acr = Array<Double>()
-        var serWhiteNoise = Array<Double>()
-        var serBartlett = Array<Double>()
-        var statBoxLjung = Array<Double>()
-        var sig = Array<Double>()
-        var r: Double
-        var num: Double = 0.0
-        var den: Double = 0.0
-        let mean: Double = data.arithmeticMean!
+        var acr: Array<FPT> = Array<FPT>()
+        var serWhiteNoise: Array<FPT> = Array<FPT>()
+        var serBartlett: Array<FPT> = Array<FPT>()
+        var statBoxLjung: Array<FPT> = Array<FPT>()
+        var sig: Array<FPT> = Array<FPT>()
+        var r: FPT
+        var num: FPT = 0
+        var den: FPT = 0
+        let mean: FPT = data.arithmeticMean!
         var i: Int = 0
         var k: Int = 0
         let n = data.sampleSize
+        let nn: FPT = makeFP(n)
         let elements = data.elementsAsArray(sortOrder: .raw)!
         while i < n {
-            den += pow(elements[i] - mean, 2.0)
+            den += pow1(elements[i] - mean, 2)
             i += 1
         }
         var l = 0
@@ -171,51 +174,55 @@ extension SSHypothesisTesting {
             }
             r = num / den
             acr.append(r)
-            num = 0.0
+            num = 0
             l += 1
         }
-        var sum = 0.0
-        let nr = 1.0 / Double(n)
+        var sum: FPT = 0
+        let nr: FPT = 1 / nn
         k = 0
         while k < acr.count {
             l = 1
             while l < k {
-                sum += pow(acr[l], 2.0)
+                sum += pow1(acr[l], 2)
                 l += 1
             }
-            serBartlett.append(nr * (1.0 + 2.0 * sum))
-            sum = 0.0
+            serBartlett.append(nr * (1 + 2 * sum))
+            sum = 0
             k += 1
         }
-        serBartlett[0] = 0.0
-        serWhiteNoise.append(0.0)
-        statBoxLjung.append(Double.infinity)
-        sig.append(0.0)
-        sum = 0.0
-        let f = Double(n) * (Double(n) * 2.0)
+        serBartlett[0] = 0
+        serWhiteNoise.append(0)
+        statBoxLjung.append(FPT.infinity)
+        sig.append(0)
+        sum = 0
+        let f = nn * (nn * 2)
         k = 1
+        var kk: FPT = 0
+        var ll: FPT = 0
         while k < acr.count {
-            serWhiteNoise.append(sqrt(nr * ((Double(n) - Double(k)) / (Double(n) + 2.0))))
+            kk = makeFP(k)
+            serWhiteNoise.append((nr * ((nn - kk) / (nn + 2))).squareRoot())
             l = 1
             while l <= k {
-                sum += sum + (pow(acr[l], 2.0) / (Double(n) - Double(l)))
+                ll = makeFP(l)
+                sum += sum + (pow1(acr[l], 2) / (nn - ll))
                 l += 1
             }
             statBoxLjung.append(f * sum)
             do {
-                try sig.append(1.0 - cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: Double(k)))
+                try sig.append(1 - cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: kk))
             }
             catch {
                 throw error
             }
-            sum = 0.0
+            sum = 0
             k += 1
         }
-        var coeff: Dictionary<String, Double> = Dictionary<String, Double>()
-        var bartlettStandardError: Dictionary<String, Double> = Dictionary<String, Double>()
-        var pValues: Dictionary<String, Double> = Dictionary<String, Double>()
-        var boxLjungStatistics: Dictionary<String, Double> = Dictionary<String, Double>()
-        var whiteNoiseStandardError: Dictionary<String, Double> = Dictionary<String, Double>()
+        var coeff: Dictionary<String, FPT> = Dictionary<String, FPT>()
+        var bartlettStandardError: Dictionary<String, FPT> = Dictionary<String, FPT>()
+        var pValues: Dictionary<String, FPT> = Dictionary<String, FPT>()
+        var boxLjungStatistics: Dictionary<String, FPT> = Dictionary<String, FPT>()
+        var whiteNoiseStandardError: Dictionary<String, FPT> = Dictionary<String, FPT>()
         i = 0
         while i < acr.count {
             coeff["\(i)"] = acr[i]
@@ -241,7 +248,7 @@ extension SSHypothesisTesting {
             whiteNoiseStandardError["\(i)"] = serWhiteNoise[i]
             i += 1
         }
-        var result = SSBoxLjungResult()
+        var result = SSBoxLjungResult<FPT>()
         result.coefficients = acr
         result.seBartlett = serBartlett
         result.seWN = serWhiteNoise

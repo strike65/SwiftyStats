@@ -33,8 +33,8 @@ import os.log
 /// - Parameter mean: mean
 /// - Parameter variance: variance
 /// - Throws: SSSwiftyStatsError if v <= 0
-public func paraLogNormalDist(mean: Double!, variance v: Double!) throws -> SSContProbDistParams {
-    var result = SSContProbDistParams()
+public func paraLogNormalDist<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSContProbDistParams<FPT> {
+    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     if v <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -46,11 +46,11 @@ public func paraLogNormalDist(mean: Double!, variance v: Double!) throws -> SSCo
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let delta: Double = exp(v)
-    result.mean = exp(mean + v / 2.0)
-    result.variance = exp(2.0 * mean) * delta * (delta - 1.0)
-    result.skewness = (delta + 2.0) * sqrt(delta - 1.0)
-    result.kurtosis = pow(delta, 4.0) + 2.0 * pow(delta, 3.0) + 3.0 * pow(delta, 2.0) - 3.0
+    let delta: FPT = exp1(v)
+    result.mean = exp1(mean + v / 2)
+    result.variance = exp1(2 * mean) * delta * (delta - 1)
+    result.skewness = (delta + 2) * (delta - 1).squareRoot()
+    result.kurtosis = pow1(delta, 4) + 2 * pow1(delta, 3) + 3 * pow1(delta, 2) - 3
     return result
 }
 
@@ -59,7 +59,7 @@ public func paraLogNormalDist(mean: Double!, variance v: Double!) throws -> SSCo
 /// - Parameter mean: mean
 /// - Parameter variance: variance
 /// - Throws: SSSwiftyStatsError if v <= 0
-public func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
+public func pdfLogNormalDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, variance v: FPT) throws -> FPT {
     if v <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -72,10 +72,10 @@ public func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) thr
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x <= 0 {
-        return 0.0
+        return 0
     }
     else {
-        let r = 1.0 / (sqrt(v) * x * sqrt(2.0 * Double.pi)) * exp(-1.0 * pow(log(x) - mean, 2.0) / (2.0 * v))
+        let r = 1 / (sqrt(v) * x * sqrt(2 * FPT.pi)) * exp1(-1 * pow1(log1(x) - mean, 2) / (2 * v))
         return r
     }
 }
@@ -85,7 +85,7 @@ public func pdfLogNormalDist(x: Double!, mean: Double!, variance v: Double!) thr
 /// - Parameter mean: mean
 /// - Parameter variance: variance
 /// - Throws: SSSwiftyStatsError if v <= 0
-public func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws -> Double {
+public func cdfLogNormal<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, variance v: FPT) throws -> FPT {
     if v <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -98,9 +98,9 @@ public func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws 
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x <= 0 {
-        return 0.0
+        return 0
     }
-    let r = cdfStandardNormalDist(u: (log(x) - mean) / sqrt(v))
+    let r = cdfStandardNormalDist(u: (log1(x) - mean) / sqrt(v))
     return r
 }
 
@@ -110,7 +110,7 @@ public func cdfLogNormal(x: Double!, mean: Double!, variance v: Double!) throws 
 /// - Parameter mean: mean
 /// - Parameter variance: variance
 /// - Throws: SSSwiftyStatsError if v <= 0 and/or p < 0 and/or p > 1
-public func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) throws -> Double {
+public func quantileLogNormal<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, variance v: FPT) throws -> FPT {
     if v <= 0 {
         #if os(macOS) || os(iOS)
         
@@ -122,7 +122,7 @@ public func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p < 0 || p > 1.0 {
+    if p < 0 || p > 1 {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
@@ -133,18 +133,18 @@ public func quantileLogNormal(p: Double, mean: Double!, variance v: Double!) thr
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if fabs(p - 1.0) <= 1e-16 {
-        return Double.infinity
+    if abs(p - 1) <= FPT.ulpOfOne {
+        return FPT.infinity
     }
     else if p.isZero {
-        return 0.0
+        return 0
     }
     do {
         let u = try quantileStandardNormalDist(p: p)
-        return exp( mean + u * sqrt(v))
+        return exp1( mean + u * sqrt(v))
     }
     catch {
-        return Double.nan
+        return FPT.nan
     }
 }
 

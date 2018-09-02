@@ -26,13 +26,14 @@ import Foundation
 import os.log
 #endif
 
+// MARK: Outliers
 
 extension SSHypothesisTesting {
     /// Performs the Grubbs outlier test
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    public class func grubbsTest<T>(array: Array<T>!, alpha: Double!) throws -> SSGrubbsTestResult? where T: Comparable, T: Hashable, T: Codable {
+    public class func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if array.count == 3 {
             #if os(macOS) || os(iOS)
             
@@ -44,7 +45,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if alpha <= 0 || alpha >= 1.0 {
+        if alpha <= 0 || alpha >= 1 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -53,7 +54,7 @@ extension SSHypothesisTesting {
             
             #endif
             
-            return nil
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isNumber(array[0]) {
             #if os(macOS) || os(iOS)
@@ -67,7 +68,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            let examine = SSExamine<T>.init(withArray: array, name: nil, characterSet: nil)
+            let examine = SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil)
             return try SSHypothesisTesting.grubbsTest(data: examine, alpha: alpha)
         }
         catch {
@@ -76,13 +77,12 @@ extension SSHypothesisTesting {
     }
     
     /************************************************************************************************/
-    // MARK: Grubbs test
     
     /// Performs the Grubbs outlier test
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    public class func grubbsTest<T>(data: SSExamine<T>!, alpha: Double!) throws -> SSGrubbsTestResult {
+    public class func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if data.sampleSize <= 3 {
             #if os(macOS) || os(iOS)
             
@@ -94,7 +94,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if alpha <= 0 || alpha >= 1.0 {
+        if alpha <= 0 || alpha >= 1 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -116,30 +116,31 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        //        let examine = SSExamine<Double>.init(withArray: data, characterSet: nil)
-        var g: Double
-        var maxDiff = 0.0
+        //        let examine = SSExamine<Double, Double>.init(withArray: data, characterSet: nil)
+        var g: FPT
+        var maxDiff:FPT = 0
         let mean = data.arithmeticMean!
-        let quantile: Double
-        var mi: Double, ma: Double
+        let quantile: FPT
+        var mi: FPT, ma: FPT
         if let s = data.standardDeviation(type: .unbiased) {
-            ma = castValueToDouble(data.maximum!)!
-            mi = castValueToDouble(data.minimum!)!
-            maxDiff = maximum(fabs(ma - mean), fabs(mi - mean))
+            ma = makeFP(data.maximum!)
+            mi = makeFP(data.minimum!)
+            maxDiff = max(abs(ma - mean), abs(mi - mean))
             g = maxDiff / s
             do {
-                quantile = try quantileStudentTDist(p: alpha / (2.0 * Double(data.sampleSize)), degreesOfFreedom: Double(data.sampleSize) - 2.0)
+                let pp: FPT = alpha / (2 * makeFP(data.sampleSize))
+                quantile = try quantileStudentTDist(p: pp, degreesOfFreedom: makeFP(data.sampleSize - 2))
             }
             catch {
                 throw error
             }
-            let t2 = pow(quantile, 2.0)
-            let t = ( Double(data.sampleSize) - 1.0 ) * sqrt(t2 / (Double(data.sampleSize) - 2.0 + t2)) / sqrt(Double(data.sampleSize))
-            var res:SSGrubbsTestResult = SSGrubbsTestResult()
+            let t2 = pow1(quantile, 2)
+            let t: FPT = ( (makeFP(data.sampleSize) - 1)) * sqrt(t2 / (makeFP(data.sampleSize) - 2 + t2)) / sqrt(makeFP(data.sampleSize))
+            var res:SSGrubbsTestResult<T, FPT> = SSGrubbsTestResult<T, FPT>()
             res.sampleSize = data.sampleSize
             res.maxDiff = maxDiff
-            res.largest = castValueToDouble(data.maximum!)
-            res.smallest = castValueToDouble(data.minimum!)
+            res.largest = data.maximum!
+            res.smallest = data.minimum!
             res.criticalValue = t
             res.mean = mean
             res.G = g
@@ -153,25 +154,27 @@ extension SSHypothesisTesting {
     }
     
     /************************************************************************************************/
-    // MARK: ESD test
     
     /// Returns p for run i
-    fileprivate class func rosnerP(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
-        return 1.0 - ( alpha / ( 2.0 * (Double(sampleSize) - Double(i) + 1.0 ) ) )
+    fileprivate class func rosnerP<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int) -> FPT {
+        let n: FPT = makeFP(sampleSize)
+        let ii: FPT = makeFP(i)
+        return 1 - ( alpha / ( 2 * (n - ii + 1) ) )
     }
     
-    fileprivate class func rosnerLambdaRun(alpha: Double!, sampleSize: Int!, run i: Int!) -> Double! {
-        let p = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
-        let df = Double(sampleSize - i) - 1.0
-        let cdfStudentT: Double
+    fileprivate class func rosnerLambdaRun<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int!) -> FPT {
+        let p: FPT = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
+        let df: FPT = makeFP(sampleSize - i - 1)
+        let cdfStudentT: FPT
         do {
             cdfStudentT = try quantileStudentTDist(p: p, degreesOfFreedom: df)
         }
         catch {
-            return Double.nan
+            return FPT.nan
         }
-        let num = Double(sampleSize - i) * cdfStudentT
-        let denom = sqrt((Double(sampleSize - i) - 1.0 + pow(cdfStudentT, 2.0 ) ) * ( df + 2.0 ) )
+        let num: FPT = makeFP(sampleSize - i) * cdfStudentT
+        let ni: FPT = makeFP(sampleSize - i)
+        let denom: FPT = sqrt((ni - 1 + pow1(cdfStudentT, 2 ) ) * ( df + 2 ) )
         return num / denom
     }
     
@@ -182,15 +185,20 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
-    public class func esdOutlierTest(array: Array<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
+    public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(array: Array<T>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if array.count == 0 {
             return nil
         }
         if maxOutliers >= array.count {
             return nil
         }
-        let examine: SSExamine<Double> = SSExamine<Double>.init(withArray: array, name: nil, characterSet: nil)
-        return SSHypothesisTesting.esdOutlierTest(data: examine, alpha: alpha, maxOutliers: maxOutliers, testType: testType)
+        let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil)
+        do {
+            return try SSHypothesisTesting.esdOutlierTest(data: examine, alpha: alpha, maxOutliers: maxOutliers, testType: testType)
+        }
+        catch {
+            throw error
+        }
     }
     
     
@@ -199,9 +207,20 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
-    public class func esdOutlierTest(data: SSExamine<Double>, alpha: Double!, maxOutliers: Int!, testType: SSESDTestType) -> SSESDTestResult? {
+    public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(data: SSExamine<T, FPT>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if data.sampleSize == 0 {
             return nil
+        }
+        if !data.isNumeric {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("expected numerical type", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if maxOutliers >= data.sampleSize {
             return nil
@@ -209,32 +228,32 @@ extension SSHypothesisTesting {
         let examine = data
         var sortedData = examine.elementsAsArray(sortOrder: .ascending)!
         // var dataRed: Array<Double> = Array<Double>()
-        let orgMean: Double = examine.arithmeticMean!
-        let sd: Double = examine.standardDeviation(type: .unbiased)!
-        var maxDiff: Double = 0.0
-        var difference: Double = 0.0
-        var currentMean = orgMean
+        let orgMean: FPT = examine.arithmeticMean!
+        let sd: FPT = examine.standardDeviation(type: .unbiased)!
+        var maxDiff: FPT = 0
+        var difference: FPT = 0
+        var currentMean: FPT = orgMean
         var currentSd = sd
-        var currentTestStat = 0.0
-        var currentLambda: Double
-        var itemToRemove: Double
-        var itemsRemoved: Array<Double> = Array<Double>()
-        var means: Array<Double> = Array<Double>()
-        var stdDevs: Array<Double> = Array<Double>()
-        let currentData: SSExamine<Double> = SSExamine<Double>()
+        var currentTestStat: FPT = 0
+        var currentLambda: FPT
+        var itemToRemove: T
+        var itemsRemoved: Array<T> = Array<T>()
+        var means: Array<FPT> = Array<FPT>()
+        var stdDevs: Array<FPT> = Array<FPT>()
+        let currentData: SSExamine<T, FPT> = SSExamine<T, FPT>()
         var currentIndex: Int = 0
-        var testStats: Array<Double> = Array<Double>()
-        var lambdas: Array<Double> = Array<Double>()
+        var testStats: Array<FPT> = Array<FPT>()
+        var lambdas: Array<FPT> = Array<FPT>()
         currentData.append(contentOf: sortedData)
         var i: Int = 0
         var k: Int = 1
-        var t: Double
+        var t: FPT
         while k <= maxOutliers {
             i = 0
             while i <= (sortedData.count - 1) {
-                t = sortedData[i]
+                t = makeFP(sortedData[i])
                 currentMean = currentData.arithmeticMean!
-                difference = fabs(t - currentMean)
+                difference = abs(t - currentMean)
                 if difference > maxDiff {
                     switch testType {
                     case .bothTails:
@@ -264,15 +283,16 @@ extension SSHypothesisTesting {
             currentData.append(contentOf: sortedData)
             testStats.append(currentTestStat)
             lambdas.append(currentLambda)
+            print("\(currentLambda)")
             itemsRemoved.append(itemToRemove)
             means.append(currentMean)
             stdDevs.append(currentSd)
-            maxDiff = 0.0
-            difference = 0.0
+            maxDiff = 0
+            difference = 0
             k = k + 1
         }
         var countOfOL = 0
-        var outliers: Array<Double> = Array<Double>()
+        var outliers: Array<T> = Array<T>()
         i = maxOutliers
         for i in stride(from: maxOutliers - 1, to: 0, by: -1) {
             if testStats[i] > lambdas[i] {
@@ -285,7 +305,7 @@ extension SSHypothesisTesting {
             outliers.append(itemsRemoved[i])
             i = i + 1
         }
-        var res = SSESDTestResult()
+        var res: SSESDTestResult<T, FPT> = SSESDTestResult<T, FPT>()
         res.alpha = alpha
         res.countOfOutliers = countOfOL
         res.itemsRemoved = itemsRemoved

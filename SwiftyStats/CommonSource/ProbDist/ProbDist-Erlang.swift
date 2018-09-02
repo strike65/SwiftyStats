@@ -32,7 +32,7 @@ import os.log
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0
-public func paraErlangDist(shape k: UInt!, rate lambda: Double!) throws -> SSContProbDistParams {
+public func paraErlangDist<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSContProbDistParams<FPT> {
     if (k == 0) {
         #if os(macOS) || os(iOS)
         
@@ -55,11 +55,11 @@ public func paraErlangDist(shape k: UInt!, rate lambda: Double!) throws -> SSCon
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    var result:SSContProbDistParams = SSContProbDistParams()
-    result.mean = Double(k) / lambda
-    result.variance = Double(k) / pow(lambda, 2.0)
-    result.skewness = 2.0 / sqrt(Double(k))
-    result.kurtosis = 3.0 + 6.0 / Double(k)
+    var result:SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+    result.mean = makeFP(k) / lambda
+    result.variance = makeFP(k) / pow1(lambda, 2)
+    result.skewness = 2 / sqrt(makeFP(k))
+    result.kurtosis = 3 + 6 / makeFP(k)
     return result
 }
 
@@ -69,7 +69,7 @@ public func paraErlangDist(shape k: UInt!, rate lambda: Double!) throws -> SSCon
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0
-public func pdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) throws -> Double {
+public func pdfErlangDist<FPT: SSFloatingPoint & Codable>(x: FPT, shape k: UInt, rate lambda: FPT) throws -> FPT {
     if (k == 0) {
         #if os(macOS) || os(iOS)
         
@@ -93,11 +93,11 @@ public func pdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) thro
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x.isZero || x < 0 {
-        return 0.0
+        return 0
     }
-    let s1:Double = exp(-lambda * x) * pow(lambda, Double(k)) * pow(x, Double(k - 1))
-    let s2:Double = logFactorial(Int(k - 1))
-    return s1 / exp(s2)
+    let s1:FPT = exp1(-lambda * x) * pow1(lambda, makeFP(k)) * pow1(x, makeFP(k - 1))
+    let s2:FPT = logFactorial(Int(k - 1))
+    return s1 / exp1(s2)
 }
 
 /// Returns the cdf of the Erlang distribution.
@@ -105,7 +105,7 @@ public func pdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) thro
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0
-public func cdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) throws -> Double {
+public func cdfErlangDist<FPT: SSFloatingPoint & Codable>(x: FPT, shape k: UInt, rate lambda: FPT) throws -> FPT {
     if (k == 0) {
         #if os(macOS) || os(iOS)
         
@@ -129,11 +129,11 @@ public func cdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) thro
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     if x.isZero || x < 0 {
-        return 0.0
+        return 0
     }
-    var result: Double = 0.0
+    var result: FPT = 0
     var cv: Bool = false
-    result = gammaNormalizedP(x: x * lambda, a: Double(k), converged: &cv)
+    result = gammaNormalizedP(x: x * lambda, a: makeFP(k), converged: &cv)
     if cv {
         return result
     }
@@ -154,7 +154,7 @@ public func cdfErlangDist(x: Double!, shape k: UInt!, rate lambda: Double!) thro
 /// - Parameter a: Shape parameter
 /// - Parameter b: Scale parameter
 /// - Throws: SSSwiftyStatsError if a <= 0 || p < 0 || p > 1
-public func quantileErlangDist(p: Double!, shape k: UInt!, rate lambda: Double!) throws -> Double {
+public func quantileErlangDist<FPT: SSFloatingPoint & Codable>(p: FPT, shape k: UInt!, rate lambda: FPT) throws -> FPT {
     if (k == 0) {
         #if os(macOS) || os(iOS)
         
@@ -188,28 +188,28 @@ public func quantileErlangDist(p: Double!, shape k: UInt!, rate lambda: Double!)
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    if p == 0.0 {
-        return 0.0
+    if p == 0 {
+        return 0
     }
-    if p == 1.0 {
-        return Double.infinity
+    if p == 1 {
+        return FPT.infinity
     }
-    if p == 0.0 {
-        return 0.0
+    if p == 0 {
+        return 0
     }
-    if p == 1.0 {
-        return Double.infinity
+    if p == 1 {
+        return FPT.infinity
     }
-    let a = Double(k)
-    var gVal: Double = 0.0
-    var maxG: Double = 0.0
-    var minG: Double = 0.0
-    maxG = a * lambda + 4000.0
-    minG = 0.0
+    let a = FPT(k)
+    var gVal: FPT = 0
+    var maxG: FPT = 0
+    var minG: FPT = 0
+    maxG = a * lambda + 4000
+    minG = 0
     gVal = a * lambda
-    var test: Double
+    var test: FPT
     var i = 1
-    while((maxG - minG) > 1.0E-14) {
+    while((maxG - minG) > makeFP(1.0E-14)) {
         test = try! cdfErlangDist(x: gVal, shape: k, rate: lambda)
         if test > p {
             maxG = gVal
@@ -217,16 +217,16 @@ public func quantileErlangDist(p: Double!, shape k: UInt!, rate lambda: Double!)
         else {
             minG = gVal
         }
-        gVal = (maxG + minG) * 0.5
+        gVal = (maxG + minG) * makeFP(0.5 )
         i = i + 1
         if i >= 7500 {
             break
         }
     }
     if((a * lambda) > 10000) {
-        let t1: Double = gVal * 1E07
-        let ri: UInt64 = UInt64(t1)
-        let rd: Double = Double(ri) / 1E07
+        let t1: FPT = gVal * makeFP(1E07)
+        let ri: FPT = floor(t1)
+        let rd: FPT = makeFP(ri) / makeFP(1E07)
         return rd
     }
     else {

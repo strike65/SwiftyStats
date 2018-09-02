@@ -129,7 +129,7 @@ extension SSExamine {
     /// Initializes a new table from an archive saved by archiveTo(filePath path:overwrite:).
     /// - Parameter path: The full qualified filename.
     /// - Throws: SSSwiftyStatError.fileNotReadable
-    public class func unarchiveFrom(filePath path: String!) throws -> SSExamine<SSElement>? {
+    public class func unarchiveFrom(filePath path: String!) throws -> SSExamine<SSElement, Double>? {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
@@ -146,7 +146,7 @@ extension SSExamine {
         do {
             let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: fullFilename))
             let jsonDecoder = JSONDecoder()
-            let result = try jsonDecoder.decode(SSExamine<SSElement>.self, from: data)
+            let result = try jsonDecoder.decode(SSExamine<SSElement, Double>.self, from: data)
             return result
         }
         catch {

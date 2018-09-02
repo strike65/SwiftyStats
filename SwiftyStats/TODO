@@ -4,3 +4,10 @@
 - add power analysis
 - test ALL functions/features
 
+
+
+\((\d*\.?\d*\s?[\/\*\-\+]{0,1}\s*\d*\.?\d*\s*[\/\*\-\+]?\s*\d*\.?\d?)\s*as! FPT\) -> makeFP($1)
+
+
+
+

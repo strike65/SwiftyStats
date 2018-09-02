@@ -33,8 +33,8 @@ import os.log
 /// - Parameter lambda: rate
 /// - Parameter tail: .lower, .upper
 /// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
-public func cdfPoissonDist(k: Int!, rate lambda: Double!, tail: SSCDFTail) throws -> Double {
-    if lambda <= 0.0 {
+public func cdfPoissonDist<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT, tail: SSCDFTail) throws -> FPT {
+    if lambda <= 0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
             os_log("lambda is expected to be > 0", log: log_stat, type: .error)
@@ -51,17 +51,17 @@ public func cdfPoissonDist(k: Int!, rate lambda: Double!, tail: SSCDFTail) throw
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     var conv: Bool = false
-    let result: Double = gammaNormalizedQ(x: lambda, a: 1.0 + Double(k), converged: &conv)
+    let result: FPT = gammaNormalizedQ(x: lambda, a: 1 + makeFP(k), converged: &conv)
     if conv {
         switch tail {
             case .lower:
                 return result
             case .upper:
-                return 1.0 - result
+                return 1 - result
         }
     }
     else {
-        return Double.nan
+        return FPT.nan
     }
 }
 
@@ -70,8 +70,8 @@ public func cdfPoissonDist(k: Int!, rate lambda: Double!, tail: SSCDFTail) throw
 /// - Parameter k: number of events
 /// - Parameter lambda: rate
 /// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
-public func pdfPoissonDist(k: Int!, rate lambda: Double!) throws -> Double {
-    if lambda <= 0.0 {
+public func pdfPoissonDist<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT) throws -> FPT {
+    if lambda <= 0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
             os_log("lambda is expected to be > 0", log: log_stat, type: .error)
@@ -87,6 +87,6 @@ public func pdfPoissonDist(k: Int!, rate lambda: Double!) throws -> Double {
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let result: Double = Double(k) * log(lambda) - lambda - logFactorial(k)
-    return exp(result)
+    let result: FPT = makeFP(k) * log1(lambda) - lambda - logFactorial(k)
+    return exp1(result)
 }

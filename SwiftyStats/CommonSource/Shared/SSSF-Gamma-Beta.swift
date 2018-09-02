@@ -45,63 +45,71 @@ import Foundation
 /// <img src="../img/Beta.png" alt="">
 /// - Parameter a: a
 /// - Parameter b: b
-internal func betaFunction(a: Double!, b: Double!) -> Double {
+internal func betaFunction<T: SSFloatingPoint>(a: T, b: T) -> T {
     if b.isZero || a.isZero {
-        return Double.infinity
+        return T.infinity
     }
-    if a == 1.0 {
-        return 1.0 / b
+    if a == 1 {
+        return makeFP(1.0) / b
     }
-    if b == 1.0 {
-        return 1.0 / a
+    if b == 1 {
+        return makeFP(1.0) / a
     }
-    if a < 0.0 {
+    if a < 0 {
         if a == floor(a) {
-            return Double.infinity
+            return T.infinity
         }
     }
-    if b < 0.0 {
+    if b < 0 {
         if b == floor(b) {
-            return Double.infinity
+            return T.infinity
         }
     }
-    var g1: Double = tgamma(a)
-    var g2: Double = tgamma(b)
-    var g3: Double = tgamma(a + b)
+//    #if arch(x86_64)
+//    var g1: Float80 = tgammal(a)
+//    var g2: Float80 = Float80(b).gammaValue
+//    let sum: Float80 = Float80(a + b)
+//    var g3: Float80 = sum.gammaValue
+//    #else
+    var g1 = tgamma1(a)
+    var g2 = tgamma1(b)
+    let sum = a + b
+    var g3 = tgamma1(sum)
+//    #endif
     var sign:Int = 1
     if !(g1.isInfinite || g2.isInfinite || g3.isInfinite) && !(g1.isNaN || g2.isNaN || g2.isNaN) {
         if g3.isZero {
-            return Double.infinity
+            return T.infinity
         }
         else {
             return g1 * g2 / g3
         }
     }
     else {
-        g1 = lgamma(a)
+        g1 = lgamma1(a)
         sign = Int(signgam)
-        g2 = lgamma(b)
+        g2 = lgamma1(b)
         sign = sign * Int(signgam)
-        g3 = lgamma(a + b)
+        g3 = lgamma1(a + b)
         sign = sign * Int(signgam)
-        return Double(sign) * exp(g1 + g2 - g3)
+        return makeFP(sign) * exp1(g1 + g2 - g3)
     }
 }
 
 
 /// Returns the normalized beta function for at x for a and b. Using continued fractions.
 /// <img src="../img/BetaRegularized.png" alt="">
-internal func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
-    var result: Double = Double.nan
-    var _a: Double = Double.nan
-    var _b: Double = Double.nan
-    var _x: Double = Double.nan
+internal func betaNormalized<T: SSFloatingPoint>(x: T, a: T, b: T) -> T {
+    var result: T = T.nan
+    var _a: T = T.nan
+    var _b: T = T.nan
+    var _x: T = T.nan
     if b < 0 {
         if b == floor(b) {
-            return Double.infinity
+            return T.infinity
         }
         else {
-            return 1.0
+            return 1
         }
     }
     _a = a
@@ -109,129 +117,134 @@ internal func betaNormalized(x: Double!, a: Double!, b: Double!) -> Double {
     _x = x
     // compt test value for else if
     if _a.isNaN || _b.isNaN || x.isNaN {
-        return Double.nan
+        return T.nan
     }
     let s1 = (a + 1)
-    let s2 = (2.0 + b + a)
+    let s2 = (2 + b + a)
     let s3 = (b + 1)
-    let s4 = (2 + b + a)
+    let s4 = (1 + b + a)
     //
+    let cf: SSBetaRegularized<T> = SSBetaRegularized<T>.init()
     if (_x < 0) || (_x > 1) {
-        return Double.nan
+        return T.nan
     }
     else if ((x > s1 / s2 && ((1 - x) <= (s3 / s4 ) ) ) ) {
-        result = 1.0 - betaNormalized(x: 1.0 - x, a: b, b: a)
+        result = 1 - betaNormalized(x: 1 - x, a: b, b: a)
     }
     else {
-        let cf = SSBetaRegularized()
         cf.a = _a
         cf.b = _b
         var ok: Bool = false
         var it: Int = 0
-        let cfresult = cf.compute(x: x, eps: 1E-14, maxIter: 3000, converged: &ok, iterations: &it)
+        let cfresult = cf.compute(x: x, eps: T.ulpOfOne, maxIter: 5000, converged: &ok, iterations: &it)
         if !ok {
-            return Double.nan
+            return T.nan
         }
         else {
-            let lb = log(betaFunction(a: a, b: b))
-            result = exp((a * log(x)) + (b * log1p(-x)) - log(a) - lb) * 1.0 / cfresult
+            let lb = log1(betaFunction(a: a, b: b))
+            let expr1:T = (a * log1(x))
+            let expr2:T  = (b * log1p1(-x))
+            result = exp1(expr1 + expr2 - log1(a) - lb) * (1 / cfresult)
         }
     }
     return result
 }
 
-fileprivate func expSum(n: Double!, z: Double) -> Double {
-    var sum: Double = 0
-    var gk: Double
-    var lp: Double
-    var temp: Double
-    for k: Int in 0...Int(n) {
-        lp = Double(k) * log1p(z - 1.0)
-        gk = lgamma(Double(k) + 1.0)
+fileprivate func expSum<T: SSFloatingPoint>(n: T, z: T) -> T {
+    var sum: T = 0
+    var gk: T
+    var lp: T
+    var temp: T
+    for k: Int in 0...(integerValue(n)) {
+        lp = makeFP(k) * log1p1(z - 1)
+        gk = lgamma1(makeFP(k) + 1)
         temp = lp - gk
-        sum = sum + exp(temp)
+        sum = sum + exp1(temp)
     }
     return sum
 }
 
 /// Returns the normalized (regularized) Gammma function P (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
 /// <img src="../img/GammaP.png" alt="">
-internal func gammaNormalizedP(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
-    var result: Double
-    var n: Double
-    var sn: Double
-    var sum: Double
-    if x == 0.0 {
+internal func gammaNormalizedP<T: SSFloatingPoint>(x: T, a: T, converged: UnsafeMutablePointer<Bool>) -> T {
+    var result: T
+    var n: T
+    var sn: T
+    var sum: T
+    if x.isZero {
         converged.pointee = true
-        return 0.0
+        return 0
     }
-    if a == floor(a) && a > 0 {
-        let t = expSum(n: a - 1, z: x)
-        result = 1.0 - exp(-x) * t
-        converged.pointee = true;
-        return result
-    }
-    if x < 0.0 || a <= 0.0 {
-        return Double.nan
+//    if isInteger(a) && a > 0 {
+////    if a == floor(a) && a > 0 {
+//        let t: T = expSum(n: a - 1, z: x)
+////        result = makeFP(1.0) - exp1(-x) * t
+//        result = expm11(-x) * t
+//        converged.pointee = true
+//        return result
+//    }
+    if x < 0 || a <= 0 {
+        return T.nan
     }
     else {
-        n = 0.0
-        sn = 1.0 / a
+        n = 0
+        sn = makeFP(1.0) / a
         sum = sn
-        while fabs(sn / sum) > 1E-16 && n < 2000 && !sum.isInfinite {
-            n = n + 1.0
+        while abs(sn / sum) > T.ulpOfOne && n < 2000 && !sum.isInfinite {
+            n = n + 1
             sn = sn * x / (a + n)
             sum = sum + sn
         }
         if n > 2000 {
             converged.pointee = false
-            return Double.nan
+            return T.nan
         }
         else if sum.isInfinite {
             converged.pointee = true
-            return 1.0
+            return 1
         }
         else {
             converged.pointee = true
-            result = exp(-x + (a * log(x)) - lgamma(a)) * sum
+            result = exp1(-x + (a * log1(x)) - lgamma1(a)) * sum
             return result
         }
     }
 }
 
+
 /// Returns the normalized (regularized) Gammma function Q (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
 /// <img src="../img/GammaQ.png" alt="">
-internal func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutablePointer<Bool>) -> Double {
-    if a > 0 && x == 0.0 {
+internal func gammaNormalizedQ<T: SSFloatingPoint>(x: T, a: T, converged: UnsafeMutablePointer<Bool>) -> T {
+    if a > 0 && x.isZero {
         converged.pointee = true
-        return 1.0
+        return 1
     }
-    var result: Double
+    var result: T
     var conv: Bool = false
     var it: Int = 0
-    if a == 0.0 {
+    if a.isZero {
         converged.pointee = true
-        return 0.0
+        return 0
     }
-    if x < 0.0 || a <= 0.0 {
+    if x < 0 || a <= 0 {
         converged.pointee = false
-        return Double.nan
+        return T.nan
     }
-    else if x == 0.0 {
+    else if x == 0 {
         converged.pointee = true
-        return 1.0
+        return 1
     }
-    else if a == floor(a) && a > 0 {
-        let t = expSum(n: a - 1, z: x)
-        result = exp(-x) * t
-        converged.pointee = true
-        return result
-    }
+//    else if a == floor(a) && a > 0 {
+//        let t = expSum(n: a - 1, z: x)
+//        result = exp1(-x) * t
+//        converged.pointee = true
+//        return result
+//    }
     else if x < (a + 1) {
-        result = 1.0 - gammaNormalizedP(x: x, a: a, converged: &conv)
+        result = 1 - gammaNormalizedP(x: x, a: a, converged: &conv)
         if !conv {
             converged.pointee = false
-            return Double.nan
+            return T.nan
         }
         else {
             converged.pointee = true
@@ -239,26 +252,53 @@ internal func gammaNormalizedQ(x: Double!, a: Double!, converged: UnsafeMutableP
         }
     }
     else {
-        let cf = SSGammaQ()
+        let cf = SSGammaQ<T>()
         cf.a = a
-        let temp: Double = 1.0 / cf.compute(x: x, eps: 1E-12, maxIter: 5000, converged: &conv, iterations: &it)
+        let temp: T = 1 / cf.compute(x: x, eps: T.ulpOfOne, maxIter: 5000, converged: &conv, iterations: &it)
         if !conv {
             converged.pointee = false
-            return Double.nan
+            return T.nan
         }
         else {
             converged.pointee = true
-            return exp(-x + (a * log(x)) - lgamma(a)) * temp
+            return exp1(-x + (a * log1(x)) - lgamma1(a)) * temp
         }
     }
 }
 
-internal func pochhammer(a: Double, b: Double) -> Double {
-    let res: Double = lgamma(a + b) - lgamma(a)
-    return exp(res)
+
+internal func gammaIncomplete<T: SSFloatingPoint>(x: T, a: T, type: SSIncompleteGammaFunction) -> T {
+    var conv: Bool = false
+    var r: T
+    switch type {
+    case .lower:
+        r = gammaNormalizedP(x: x, a: a, converged: &conv)
+        if conv {
+            let temp1: T = r * tgamma1(a)
+            return temp1
+        }
+        else {
+            return T.nan
+        }
+    case .upper:
+        r = gammaNormalizedQ(x: x, a: a, converged: &conv)
+        if conv {
+            return r * tgamma1(a)
+        }
+        else {
+            return T.nan
+        }
+    }
 }
 
-internal func lpochhammer(a: Double, b: Double) -> Double {
-    let res: Double = lgamma(a + b) - lgamma(a)
+
+
+internal func pochhammer<T: SSFloatingPoint>(x: T, n: T) -> T {
+    let res: T = lgamma1(x + n) - lgamma1(x)
+    return exp1(res)
+}
+
+internal func lpochhammer<T: SSFloatingPoint>(x: T, n: T) -> T {
+    let res: T = lgamma1(x + n) - lgamma1(x)
     return res
 }
