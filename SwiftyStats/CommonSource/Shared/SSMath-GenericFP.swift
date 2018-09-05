@@ -195,6 +195,22 @@ internal func sin1<T: SSFloatingPoint>(_ x: T) -> T {
         return T.nan
     }
 }
+
+internal func sinh1<T: SSFloatingPoint>(_ x: T) -> T {
+    switch x {
+    case let d as Double:
+        return sinh(d) as Double as! T
+    case let f as Float:
+        return sinhf(f) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return sinhl(f80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
 internal func cos1<T: SSFloatingPoint>(_ x: T) -> T {
     switch x {
     case let d as Double:

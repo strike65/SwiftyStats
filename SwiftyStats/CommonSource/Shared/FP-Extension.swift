@@ -31,7 +31,7 @@ public protocol SSFloatingPoint: FloatingPoint {
     static var half: Self { get }
     /// 1 / 3
     static var third: Self { get }
-    /// 2 / pi
+    /// 2 / 3
     static var twothirds: Self { get }
 
     /// 2 / pi
@@ -152,13 +152,13 @@ extension Double: SSFloatingPoint {
             return 5.0000000000000000000000000000000000000000e-01
         }
     }
-    // 1 / 2
+    // 1 / 3
     public static var third: Double {
         get {
             return 3.3333333333333333333333333333333333333333e-01
         }
     }
-    // 1 / 2
+    // 2 / 3
     public static var twothirds: Double {
         get {
             return 1.6666666666666666666666666666666666666666
@@ -369,13 +369,13 @@ extension Float: SSFloatingPoint {
             return 5.0000000000000000000000000000000000000000e-01
         }
     }
-    // 1 / 2
+    // 1 / 3
     public static var third: Float {
         get {
             return 3.3333333333333333333333333333333333333333e-01
         }
     }
-    // 1 / 2
+    // 2 / 3
     public static var twothirds: Float {
         get {
             return 1.6666666666666666666666666666666666666666

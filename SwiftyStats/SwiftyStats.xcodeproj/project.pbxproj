@@ -16,6 +16,8 @@
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
+		9F56CEF9213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
+		9F56CEFA213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
 		9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F5FFE4A212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
@@ -172,6 +174,8 @@
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-NoncentralT.swift"; sourceTree = "<group>"; };
+		9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-Incgam-Gil_Temme_.swift"; sourceTree = "<group>"; };
+		9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-MarcumQ.swift"; sourceTree = "<group>"; };
 		9F5FFE48212D738C00047213 /* SSSHermiteH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSHermiteH.swift; sourceTree = "<group>"; };
 		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
 		9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-StudentT.swift"; sourceTree = "<group>"; };
@@ -282,6 +286,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F4733E8214021E30041FD58 /* MarcumQ */ = {
+			isa = PBXGroup;
+			children = (
+				9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */,
+				9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */,
+			);
+			path = MarcumQ;
+			sourceTree = "<group>";
+		};
 		9F7EFB5F2101F16400F0F573 /* ProbDist */ = {
 			isa = PBXGroup;
 			children = (
@@ -315,6 +328,7 @@
 		9F7EFB602101F17900F0F573 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				9F4733E8214021E30041FD58 /* MarcumQ */,
 				9FEA825A1F76C9F6005E4349 /* SwiftyStats-EnumsStructs.swift */,
 				9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */,
 				9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */,
@@ -626,6 +640,7 @@
 				9FEA82831F76CAF5005E4349 /* SSSimard-KSProb.swift in Sources */,
 				9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */,
 				9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */,
+				9F56CEF9213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */,
 				9F7EFB392101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82851F76CAF5005E4349 /* SSSwiftyStatsError.swift in Sources */,
 				9F9E6074210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */,
@@ -721,6 +736,7 @@
 				9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
 				9FEA828A1F76CB1D005E4349 /* SSContFrac.swift in Sources */,
 				9FEA82951F76CB1D005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
+				9F56CEFA213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */,
 				9FEA828F1F76CB1D005E4349 /* SSExamine-Stats.swift in Sources */,
 				9F7EFB4C2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
 				9FEA82921F76CB1D005E4349 /* SSHypothesisTesting-Autocorrelation.swift in Sources */,
