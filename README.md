@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.8.15-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-0.9.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4.2-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
@@ -16,7 +16,8 @@ $> cd <CLONE_DIRECTORY>/SwiftyStats
 $> ./make_docs.sh
 $> open docs/index.html
 ```
-
+# Important changes
+Versions 0.9.x and greater need at least Swift 4.2 installed. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile (see below)
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project:
@@ -25,13 +26,20 @@ $> open docs/index.html
 $> cd <YOUR_PROJECT_FOLDER>
 $> vi Podfile
 ```
-Your Podfile should looks like this one:  
+Your Podfile should looks like:  
 
 ```ruby
 target 'YOURPROJECT' do
   use frameworks!
   pod 'SwiftyStats'  
 end
+```
+If you have to use a Swift version earlier than 4.2, replace the line `pod 'SwiftyStats'` with:
+
+```ruby
+...
+   pod 'SwiftyStats", '~> 0.8.14'
+...
 ```
 Save your edits and execute
 
@@ -45,11 +53,14 @@ Edit your `Package.swift` file:
 
 ```swift
 import PackageDescription
-
+// for Swift 4.2
+let version = "0.9.0"
+// for earlier versions:
+// let version = "0.8.14"
 let package = Package(
 	name: "<YOUR_PACKAGE_NAME>",
 	dependencies: [
-		.package(url: "https://gitlab.com/strike65/SwiftyStats", from: "0.8.10")
+		.package(url: "https://gitlab.com/strike65/SwiftyStats", from: version)
 	]
 )
 ```
@@ -299,6 +310,7 @@ Please always check if `NaN` or `nil` is returned.
 - Student's T Distribution
 - Noncentral Student's T Distribution
 - Chi^2 Distribution
+- Noncentral Chi^2 Distribution
 - Beta Distribution
 - Gamma Distribution
 - Log Normal Distribution

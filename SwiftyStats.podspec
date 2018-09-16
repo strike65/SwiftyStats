@@ -45,6 +45,7 @@ Probability functions
 - Student's T Distribution
 - noncentral T Distribution
 - Chi^2 Distribution
+- noncentral Chi^2 Distribution
 - Beta Distribution
 - Gamma Distribution
 - Log Normal Distribution
