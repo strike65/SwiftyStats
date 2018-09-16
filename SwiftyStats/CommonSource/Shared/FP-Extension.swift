@@ -125,10 +125,6 @@ public protocol SSFloatingPoint: FloatingPoint {
 
 }
 
-
-
-
-
 extension Double: SSFloatingPoint {
 
     // 0

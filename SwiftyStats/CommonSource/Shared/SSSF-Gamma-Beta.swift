@@ -172,8 +172,29 @@ internal func gammaNormalizedP<T: SSFloatingPoint>(x: T, a: T, converged: Unsafe
     var sn: T
     var sum: T
     if x.isZero {
+        if a.isZero {
+            converged.pointee = true
+            return 1
+        }
+        else if a < 0 {
+            converged.pointee = false
+            return T.nan
+        }
+    }
+    if a < 0 && integerPart(a) == a {
+        return 1
+    }
+    if a == T.half && x > 0 {
         converged.pointee = true
-        return 0
+        return 1 - erfc1(sqrt(x))
+    }
+    if a == -T.half && x > 0 {
+        converged.pointee = true
+        return 1 - (erfc1(sqrt(x)) - (exp1(-x) / (T.sqrtpi * sqrt(x))))
+    }
+    if a == 1 {
+        converged.pointee = true
+        return 1 - exp1(-x)
     }
 //    if isInteger(a) && a > 0 {
 ////    if a == floor(a) && a > 0 {
@@ -183,6 +204,7 @@ internal func gammaNormalizedP<T: SSFloatingPoint>(x: T, a: T, converged: Unsafe
 //        converged.pointee = true
 //        return result
 //    }
+    var incg: (p: T, q: T, ierr: Int)
     if x < 0 || a <= 0 {
         return T.nan
     }
@@ -196,12 +218,26 @@ internal func gammaNormalizedP<T: SSFloatingPoint>(x: T, a: T, converged: Unsafe
             sum = sum + sn
         }
         if n > 2000 {
-            converged.pointee = false
-            return T.nan
+            incg = incgam(a: a, x: x)
+            if incg.ierr == 0 {
+                converged.pointee = true
+                return incg.p
+            }
+            else {
+                converged.pointee = false
+                return T.nan
+            }
         }
         else if sum.isInfinite {
-            converged.pointee = true
-            return 1
+            incg = incgam(a: a, x: x)
+            if incg.ierr == 0 {
+                converged.pointee = true
+                return incg.p
+            }
+            else {
+                converged.pointee = false
+                return T.nan
+            }
         }
         else {
             converged.pointee = true
@@ -215,17 +251,43 @@ internal func gammaNormalizedP<T: SSFloatingPoint>(x: T, a: T, converged: Unsafe
 /// Returns the normalized (regularized) Gammma function Q (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
 /// <img src="../img/GammaQ.png" alt="">
 internal func gammaNormalizedQ<T: SSFloatingPoint>(x: T, a: T, converged: UnsafeMutablePointer<Bool>) -> T {
-    if a > 0 && x.isZero {
-        converged.pointee = true
-        return 1
-    }
-    var result: T
-    var conv: Bool = false
-    var it: Int = 0
+//    if a > 0 && x.isZero {
+//        converged.pointee = true
+//        return 1
+//    }
     if a.isZero {
         converged.pointee = true
         return 0
     }
+    if a == T.half && x > 0 {
+        converged.pointee = true
+        return erfc1(sqrt(x))
+    }
+    if x.isZero {
+        if a.isZero {
+            converged.pointee = true
+            return 0
+        }
+        else if a < 0 {
+            converged.pointee = false
+            return T.nan
+        }
+    }
+    if a < 0 && integerPart(a) == a {
+        converged.pointee = true
+        return 0
+    }
+    if a == -T.half && x > 0 {
+        converged.pointee = true
+        return erfc1(sqrt(x)) - (exp1(-x) / (T.sqrtpi * sqrt(x)))
+    }
+    if a == 1 {
+        converged.pointee = true
+        return exp1(-x)
+    }
+    var result: T
+    var conv: Bool = false
+    var it: Int = 0
     if x < 0 || a <= 0 {
         converged.pointee = false
         return T.nan

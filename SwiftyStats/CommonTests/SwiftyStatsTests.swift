@@ -1198,10 +1198,101 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(adRes.pValue!, 0.04, accuracy: 1E-2)
         
     }
+    // This the original test provided by Gil/Segura/Temme
+    func testMarcum() {
+        let mys: Array<Double> = [1.0,3.0,4.0,6.0,8.0,10.0,20.0,22.0,25.0,27.0,30.0,32.0,40.0,50.0,200.0,350.0,570.0,1000.0]
+        let y1: Array<Double> = [0.01,0.1,50.0,10.0,15.0,25.0,30.0,150.0,60.0,205.0,90.0,100.0,120.0,150.0,190.0,320.0,480.0,799.0]
+        let x1: Array<Double> = [0.3,2.0,8.0,25.0,13.0,45.0,47.0,100.0,85.0,120.0,130.0,140.0,30.0,40.0,0.01,100.0,1.0,0.08]
+        let p: Array<Double> = [0.7382308441994e-02,0.2199222796783e-04,0.9999999768807,0.1746869995977e-03,0.1483130042637,0.1748328323235e-03,0.1340769184710e-04,0.9646591215441,0.1783991673043e-04,0.9994542406431,0.1220231636641e-05,0.1757487653307e-05,0.9999894753719,0.9999968347378,0.2431297758708,0.3851423018735e-09,0.2984493152360e-04,0.4191472999694e-11]
+        let q: Array<Double> = [0.9926176915580,0.9999780077720,
+        0.2311934913546e-7,0.9998253130004,
+        0.8516869957363,0.9998251671677,
+        0.9999865923082,0.3534087845586e-01,
+        0.9999821600833,0.5457593568564e-03,
+        0.9999987797684,0.9999982425123,
+        0.1052462813144e-04,0.3165262228904e-05,
+        0.7568702241292,0.9999999996149,
+        0.9999701550685,0.9999999999958]
+        var marcumRes: (p: Double, q: Double, err: Int, underflow: Bool)
+        var err1, err2: Double
+        for i in stride(from: 1, to: 18, by: 1) {
+            marcumRes = marcum(mys[i-1], x1[i-1], y1[i-1])
+            XCTAssertEqual(marcumRes.p, p[i-1], accuracy: 1e-13)
+            XCTAssertEqual(marcumRes.q, q[i-1], accuracy: 1e-13)
+            err1 = abs(1.0 - marcumRes.p / p[i-1])
+            err2 = abs(1.0 - marcumRes.q / q[i-1])
+            print("\(mys[i-1])  \(x1[i-1])   \(y1[i-1])  \(err1)   \(err2)")
+        }
+        var d0: Double = -1
+        var mu,y,x,p0,q0,pm1,qm1,p1,q1,p2,q2, delta: Double
+        var ierr1,ierr2,ierr3,ierr4: Int
+        ierr1 = 0
+        ierr2 = 0
+        ierr3 = 0
+        ierr4 = 0
+        p0 = 0.0
+        q0 = 0.0
+        p1 = 0.0
+        q1 = 0.0
+        p2 = 0.0
+        q2 = 0.0
+        pm1 = 0.0
+        qm1 = 0.0
+        for i in stride(from: 0, through: 10, by: 1.0) {
+            mu = i * 50.0 + 10.0
+            for j in stride(from: 1.0, through: 10.0, by: 1.0) {
+                x = j * 50.18 + 5.0
+                for k in stride(from: 0.0, through: 10.0, by: 1.0) {
+                    y = k * 19.15 + 2.0
+                    marcumRes = marcum(mu, x, y)
+                    p0 = marcumRes.p
+                    q0 = marcumRes.q
+                    ierr1 = marcumRes.err
+                    marcumRes = marcum(mu - 1.0, x, y)
+                    pm1 = marcumRes.p
+                    qm1 = marcumRes.q
+                    ierr2 = marcumRes.err
+                    marcumRes = marcum(mu + 1, x, y)
+                    p1 = marcumRes.p
+                    q1 = marcumRes.q
+                    ierr1 = marcumRes.err
+                    marcumRes = marcum(mu + 2, x, y)
+                    p2 = marcumRes.p
+                    q2 = marcumRes.q
+                    ierr1 = marcumRes.err
+                    if (((ierr1==0) && (ierr2==0)) && ((ierr3==0) && (ierr4==0))) {
+                        if (y > x + mu) {
+                            delta = abs(((x-mu) * q1 + (y + mu) * q0) / (x * q2 + y * qm1) - 1.0)
+                        }
+                        else {
+                            delta = abs(((x - mu) * p1 + (y + mu) * p0) / (x * p2 + y * pm1) - 1.0)
+                        }
+                        if (delta > d0) {
+                            d0 = delta
+                        }
+                    }
+                }
+            }
+        }
+        print("Maximum value of the recurrence check = \(d0)")
+    }
     
-//    func testQuick() {
-//        
-//    }
+    
+    func testQuick() {
+        var Q, P: Float80
+        var conv: Bool = false
+        var incg: (p: Float80, q: Float80, ierr: Int) = incgam(a: Float80(-1), x: Float80(0))
+        Q = gammaNormalizedQ(x: Float80(0), a: Float80(-1), converged: &conv)
+        P = gammaNormalizedP(x: 0, a: -1, converged: &conv)
+//        for a: Double in stride(from: -10.0, to: 11.0, by: 1.0) {
+//            for x: Double in stride(from: -10.0, through: 10.0, by: 1.0) {
+//                incg = incgam(a: a, x: x)
+//                Q = gammaNormalizedQ(x: x, a: a, converged: &conv)
+//                P = gammaNormalizedP(x: x, a: a, converged: &conv)
+//                incg = incgam(a: a, x: x)
+//            }
+//        }
+    }
     
     func testDistributions() {
         var para: SSContProbDistParams<Double>?

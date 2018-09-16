@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
+		9F06A0672149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
+		9F06A0682149B0400029DE0A /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
 		9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13CD20211B71D100153FC3 /* CodableFloat80.swift */; };
 		9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
 		9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
@@ -16,13 +19,12 @@
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
-		9F56CEF9213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
-		9F56CEFA213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
 		9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F5FFE4A212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
 		9F6F0D712102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
 		9F6F0D722102664C006ACA13 /* r_derived_macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6F0D702102664C006ACA13 /* r_derived_macros.swift */; };
+		9F79AC5B214C2DFB00354E1E /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
 		9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
 		9F7EFB2B2101E6BF00F0F573 /* ProbDist-Gaussian.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA82531F76C9F6005E4349 /* ProbDist-Gaussian.swift */; };
 		9F7EFB2D2101ECAF00F0F573 /* ProbDist-StudentT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7EFB2C2101ECAF00F0F573 /* ProbDist-StudentT.swift */; };
@@ -638,9 +640,9 @@
 				9FEA82751F76CAF5005E4349 /* SSDataGroupSorter.swift in Sources */,
 				9F7EFB2D2101ECAF00F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9FEA82831F76CAF5005E4349 /* SSSimard-KSProb.swift in Sources */,
+				9F06A0672149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */,
 				9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */,
-				9F56CEF9213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */,
 				9F7EFB392101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82851F76CAF5005E4349 /* SSSwiftyStatsError.swift in Sources */,
 				9F9E6074210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */,
@@ -678,6 +680,7 @@
 				9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */,
 				9F7EFB422101EF2C00F0F573 /* ProbDist-Logistic.swift in Sources */,
 				9F7EFB572101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
+				9F06A0682149B0400029DE0A /* SSSF-MarcumQ.swift in Sources */,
 				9F7EFB452101EF5800F0F573 /* ProbDist-Pareto.swift in Sources */,
 				9F7EFB542101F06300F0F573 /* ProbDist-Weibull.swift in Sources */,
 				9F9E606D210DC2900059DF46 /* Polyeval.swift in Sources */,
@@ -718,6 +721,7 @@
 				9FEA828D1F76CB1D005E4349 /* SSDataGroupSorter.swift in Sources */,
 				9F7EFB4F2101EFFF00F0F573 /* ProbDist-Gamma.swift in Sources */,
 				9FEA829B1F76CB1D005E4349 /* SSSimard-KSProb.swift in Sources */,
+				9F79AC5B214C2DFB00354E1E /* SSSF-MarcumQ.swift in Sources */,
 				9F7EFB3A2101EE4A00F0F573 /* ProbDist-Beta.swift in Sources */,
 				9FEA82891F76CB1D005E4349 /* SSConstants.swift in Sources */,
 				9F9E6073210DD3790059DF46 /* ProbDist-vMises-Circular.swift in Sources */,
@@ -736,7 +740,6 @@
 				9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
 				9FEA828A1F76CB1D005E4349 /* SSContFrac.swift in Sources */,
 				9FEA82951F76CB1D005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
-				9F56CEFA213D20F50048A427 /* SSSF-MarcumQ.swift in Sources */,
 				9FEA828F1F76CB1D005E4349 /* SSExamine-Stats.swift in Sources */,
 				9F7EFB4C2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
 				9FEA82921F76CB1D005E4349 /* SSHypothesisTesting-Autocorrelation.swift in Sources */,
@@ -753,6 +756,7 @@
 				9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */,
 				9FEA829A1F76CB1D005E4349 /* SSProtocols.swift in Sources */,
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
+				9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9F7EFB5E2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
 				9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */,

@@ -315,14 +315,21 @@ internal func atan21<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
 }
 
 internal func sign<T: SSFloatingPoint>(_ x: T) -> T {
+    var ans: T
     if x.sign == .minus {
-        return -1.0 as! T
+        ans = makeFP(-1)
     }
     else {
-        return 1.0 as! T
+        ans = makeFP(1)
     }
+    return ans
 }
 
+
+internal func sign<T: SignedInteger, FPT: SSFloatingPoint>(_ n: T) -> FPT {
+    let ans: FPT = makeFP(n.signum())
+    return ans
+}
 
 internal func fmin1<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
     switch x {
