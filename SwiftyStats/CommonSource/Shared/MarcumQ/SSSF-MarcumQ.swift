@@ -37,12 +37,6 @@ fileprivate let EPSS = "1.0e-15"
 ///
 /// 0 <= x <= 10000,    0 <= y <= 10000,      0 <= µ <= 10000
 ///
-/// The relation with the Marcum-Functions in Matlab or Mathematica (QM_(µ)(x,y), PM_(µ)(x,y) is:
-/// ### Important ###
-/// Q(µ,x,y) = QM_(µ)(sqrt(2 * x), sqrt(2 * y)) and
-///
-/// P(µ,x,y) = PM_(µ)(sqrt(2 * x), sqrt(2 * y))
-///
 /// - Authors:
 /// The original authors of the algorithms (and the FORTRAN module) are (Gil, Segura, Temme: Algorithm 993: Computation of the Marcum Q-function. Nov. 2013. ACM Trans Math Soft):
 /// Amparo Gil    (U. Cantabria, Santander, Spain)
@@ -100,6 +94,7 @@ public func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, 
     //! asymptotic expansions, and use of three-term homogeneous
     //! recurrence relations.
     //!
+    /// NOT
     //!---------------------------------------------------------------------
     //!     RELATION WITH OTHER STANDARD NOTATION FOR THE
     //!     GENERALIZED MARCUM FUNCTIONS
@@ -131,14 +126,16 @@ public func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, 
     //! ---------------------------------------------------------------
     var p,q,b,w,xi,y0,y1,mulim: T
     var ierr: Int = 0
+    let xx: T = (x * x) / 2
+    let yy: T = (y * y) / 2
     p = T.zero
     q = T.zero
-    if (((x > 10000) || (y > 10000)) || (mu > 10000)) {
+    if (((xx > 10000) || (yy > 10000)) || (mu > 10000)) {
         p = T.zero
         q = T.zero
         ierr = 2
     }
-    if (((x < 0) || (y < 0)) || (mu < 1)) {
+    if (((xx < 0) || (yy < 0)) || (mu < 1)) {
         p = T.zero
         q = T.zero
         ierr = 2
@@ -147,32 +144,32 @@ public func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, 
     if (ierr == 0) {
         mulim = 135
         b = 1
-        w = b * sqrt(4 * x + 2 * mu)
-        xi = 2 * sqrt(x * y)
-        y0 = x + mu - w
-        y1 = x + mu + w
-        if ((y > (x + mu)) && (x < 30)) {
+        w = b * sqrt(4 * xx + 2 * mu)
+        xi = 2 * sqrt(xx * yy)
+        y0 = xx + mu - w
+        y1 = xx + mu + w
+        if ((yy > (xx + mu)) && (xx < 30)) {
             //! Series for Q in terms of ratios of Gamma functions
-            qser(mu,x,y,&p,&q,&ierr)
-        } else if ((y <= (x + mu)) && (x < 30)) {
+            qser(mu,xx,yy,&p,&q,&ierr)
+        } else if ((yy <= (xx + mu)) && (xx < 30)) {
             //! Series for P in terms of ratios of Gamma functions
-            pser(mu,x,y,&p,&q,&ierr)
+            pser(mu,xx,yy,&p,&q,&ierr)
         } else if (((mu * mu) < (2 * xi)) && (xi > 30)) {
             //! Asymptotic expansion for xy large
-            pqasyxy(mu,x,y,&p,&q,&ierr)
-        } else if (((mu >= mulim) && (y0 <= y)) && (y <= y1)) {
+            pqasyxy(mu,xx,yy,&p,&q,&ierr)
+        } else if (((mu >= mulim) && (y0 <= yy)) && (yy <= y1)) {
             //! Asymptotic expansion for mu large
-            pqasymu(mu,x,y,&p,&q,&ierr)
-        } else if (((y <= y1) && (y > (x + mu))) && (mu < mulim)) {
+            pqasymu(mu,xx,yy,&p,&q,&ierr)
+        } else if (((yy <= y1) && (yy > (xx + mu))) && (mu < mulim)) {
             //! Recurrence relation for Q
-            qrec(mu,x,y,&p,&q,&ierr)
-        } else if  (((y >= y0) && (y <= (x + mu))) && (mu < mulim)) {
+            qrec(mu,xx,yy,&p,&q,&ierr)
+        } else if  (((yy >= y0) && (yy <= (xx + mu))) && (mu < mulim)) {
             //! Recurrence relation for P
-            prec(mu,x,y,&p,&q,&ierr)
+            prec(mu,xx,yy,&p,&q,&ierr)
         }
         else {
             //! Integral representation
-            MarcumPQtrap(mu,x,y,&p,&q,&ierr)
+            MarcumPQtrap(mu,xx,yy,&p,&q,&ierr)
         }
     }
     var underflow: Bool = false

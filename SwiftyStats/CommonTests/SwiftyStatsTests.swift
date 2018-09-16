@@ -1216,7 +1216,7 @@ class SwiftyStatsTests: XCTestCase {
         var marcumRes: (p: Double, q: Double, err: Int, underflow: Bool)
         var err1, err2: Double
         for i in stride(from: 1, to: 18, by: 1) {
-            marcumRes = marcum(mys[i-1], x1[i-1], y1[i-1])
+            marcumRes = marcum(mys[i-1], sqrt(2 * x1[i-1]), sqrt(2 * y1[i-1]))
             XCTAssertEqual(marcumRes.p, p[i-1], accuracy: 1e-13)
             XCTAssertEqual(marcumRes.q, q[i-1], accuracy: 1e-13)
             err1 = abs(1.0 - marcumRes.p / p[i-1])
@@ -1244,19 +1244,19 @@ class SwiftyStatsTests: XCTestCase {
                 x = j * 50.18 + 5.0
                 for k in stride(from: 0.0, through: 10.0, by: 1.0) {
                     y = k * 19.15 + 2.0
-                    marcumRes = marcum(mu, x, y)
+                    marcumRes = marcum(mu, sqrt(2 * x), sqrt(2 * y))
                     p0 = marcumRes.p
                     q0 = marcumRes.q
                     ierr1 = marcumRes.err
-                    marcumRes = marcum(mu - 1.0, x, y)
+                    marcumRes = marcum(mu - 1.0, sqrt(2 * x), sqrt(2 * y))
                     pm1 = marcumRes.p
                     qm1 = marcumRes.q
                     ierr2 = marcumRes.err
-                    marcumRes = marcum(mu + 1, x, y)
+                    marcumRes = marcum(mu + 1, sqrt(2 * x), sqrt(2 * y))
                     p1 = marcumRes.p
                     q1 = marcumRes.q
                     ierr1 = marcumRes.err
-                    marcumRes = marcum(mu + 2, x, y)
+                    marcumRes = marcum(mu + 2, sqrt(2 * x), sqrt(2 * y))
                     p2 = marcumRes.p
                     q2 = marcumRes.q
                     ierr1 = marcumRes.err
@@ -1274,16 +1274,17 @@ class SwiftyStatsTests: XCTestCase {
                 }
             }
         }
+        XCTAssert(d0 < 1e-12)
         print("Maximum value of the recurrence check = \(d0)")
     }
     
     
     func testQuick() {
-        var Q, P: Float80
-        var conv: Bool = false
-        var incg: (p: Float80, q: Float80, ierr: Int) = incgam(a: Float80(-1), x: Float80(0))
-        Q = gammaNormalizedQ(x: Float80(0), a: Float80(-1), converged: &conv)
-        P = gammaNormalizedP(x: 0, a: -1, converged: &conv)
+//        var Q, P: Float80
+//        var conv: Bool = false
+//        var incg: (p: Float80, q: Float80, ierr: Int) = incgam(a: Float80(-1), x: Float80(0))
+//        Q = gammaNormalizedQ(x: Float80(0), a: Float80(-1), converged: &conv)
+//        P = gammaNormalizedP(x: 0, a: -1, converged: &conv)
 //        for a: Double in stride(from: -10.0, to: 11.0, by: 1.0) {
 //            for x: Double in stride(from: -10.0, through: 10.0, by: 1.0) {
 //                incg = incgam(a: a, x: x)
@@ -3120,11 +3121,11 @@ class SwiftyStatsTests: XCTestCase {
         */
         XCTAssertThrowsError(try pdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: -1))
         XCTAssertThrowsError(try pdfChiSquareDist(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-12)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-14)
+        XCTAssertEqual(try! pdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-14)
         XCTAssertEqual(try! pdfChiSquareDist(chi: 120, degreesOfFreedom: 10, lambda: 2), 1.86330190212638377398e-18, accuracy: 1E-25)
         /*
          lambda = 2;
@@ -3139,12 +3140,12 @@ class SwiftyStatsTests: XCTestCase {
          */
         XCTAssertThrowsError(try cdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: -1))
         XCTAssertThrowsError(try cdfChiSquareDist(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-12)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-12)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-14)
+        XCTAssertEqual(try! cdfChiSquareDist(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-14)
         /*
          lambda = 2;
          df = 10;
@@ -3159,11 +3160,11 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertThrowsError(try quantileChiSquareDist(p: -1, degreesOfFreedom: 10, lambda: 2))
         XCTAssertThrowsError(try quantileChiSquareDist(p: -1, degreesOfFreedom: 10, lambda: 2))
         XCTAssert(try! quantileChiSquareDist(p: 0, degreesOfFreedom: 10, lambda: 2) == 0)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-12)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-12)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-12)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-12)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-12)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-11)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-11)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-11)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-11)
+        XCTAssertEqual(try! quantileChiSquareDist(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
         XCTAssert(try! quantileChiSquareDist(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
     }
     

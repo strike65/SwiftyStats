@@ -45,7 +45,7 @@ import os.log
 /// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
 /// error (in case of extreme parameters) the number of subintervals can be adjusted.
 /// Swift Version (C) Volker Thieme 2018
-public func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp: FPT, tail: SSCDFTail = .lower, nSubIntervals nSubs: Int = 16) throws -> (cdf: FPT, error: FPT) {
+internal func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp: FPT, tail: SSCDFTail = .lower, nSubIntervals nSubs: Int = 16) throws -> (cdf: FPT, error: FPT) {
     var cdf: FPT = FPT.nan
     var cdfLower: FPT = 0
     var cdfUpper: FPT = 0

@@ -1,16 +1,18 @@
 Version 0.9.0
-- Swift 4.2 support
-- SSFloatingPoint protocol added (Constants)
-- Extension Float80 (Codable)
+- needed: Swift 4.2
+- added: SSFloatingPoint protocol (constants)
+- added: Extension Float80 (Codable)
 - added: Rayleigh distribution
 - added: Extreme Value distribution
 - added: Gastwirth's robust location estimator
 - added: Sn statistiscs according Christophe Croux and Peter Rousseeuw
 - added: tss (Total Sum of Squares about the mean)
 - added: SSExamine.autocorrelation
-- typos corrected
-- generic math functions added
-- SSExamine more generic (stats)
+- added: Marcum Functions (parameters behave like Mathematica MarcumQ)
+- added: generic math functions added
+- updated: noncentral Chi Square Distribution
+- updated: SSExamine more generic (stats)
+- updated: typos
 
 Version 0.8.14
 - added: Poisson distribution

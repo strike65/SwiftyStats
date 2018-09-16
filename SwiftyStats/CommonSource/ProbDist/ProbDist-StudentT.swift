@@ -389,17 +389,24 @@ internal func infSum<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, lambda: FP
  *    M_SQRT_2dPI  = 1/ {gamma(1.5) * sqrt(2)} = sqrt(2 / pi)
  *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
  */
-/// Returns the lower tail cdf of the non-central Student's t-distribution
-/// - Parameter t: t
-/// - Parameter nonCentralityPara: noncentrality parameter
-/// - Parameter df: Degrees of freedom
-/// - Parameter rlog: Return log(cdf)
-/// - Throws: SSSwiftyStatsError if df <= 0
+/// Returns the cdf of the noncentral Student t distribution.
+/// - Parameter x: x
+/// - Parameter df: degrees of freedom
+/// - Parameter ncp: noncentrality parameter
+/// - Parameter tail: tail
+/// - Parameter nSubIntervals: Number of subintervals. Possible values: 32,16,12,10,8,6,4,2. Default is set to 16.
+/// - Returns: The tuple (cdf:, error:)
 ///
 /// ### NOTE ###
-/// This routine is based on a C-version of: Algorithm AS243 Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
-/// For ncp > 37 the accuracy decreases. Use with caution. The same algorithm is used by R.
-/// This algorithm suffers from limited accuracy in the (very) left tail and for ncp > 38.
+/// This functions uses an algorithm supposed by Viktor Witkovsky (witkovsky@savba.sk):
+/// Witkovsky V. (2013). A Note on Computing Extreme Tail</p>
+/// Probabilities of the Noncentral T Distribution with Large</p>
+/// Noncentrality Parameter. Working Paper, Institute of Measurement</p>
+/// Science, Slovak Academy of Sciences, Bratislava.
+///
+/// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
+/// error (in case of extreme parameters) the number of subintervals can be adjusted.
+/// Swift Version (C) Volker Thieme 2018
 public func cdfStudentTDist<T: SSFloatingPoint & Codable>(t: T, degreesOfFreedom df: T, nonCentralityPara lambda: T, rlog: Bool! = false) throws -> T {
 
     var result: (cdf: T, error: T)
