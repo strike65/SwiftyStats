@@ -318,52 +318,6 @@ func reshape<FPT: FloatingPoint>(A: Array<FPT>, aRows: Int, aCols: Int) -> Array
 }
 
 
-fileprivate func matItem<FPT: SSFloatingPoint & Codable>(row: Int, col: Int, of items: Array<FPT>, nCols: Int, nRows: Int, stride: Int) -> FPT {
-    if row > nRows - 1 || col > nCols - 1 {
-        fatalError()
-    }
-    return items[row + col * stride]
-}
-
-fileprivate func matAdd<FPT: SSFloatingPoint & Codable>(a: Array<FPT>, b: Array<FPT>) -> Array<FPT> {
-    if a.count !=  b.count {
-        fatalError()
-    }
-    var c = Array<FPT>.init(repeating: 0, count: a.count)
-    for i in stride(from: 0, to: a.count, by: 1) {
-        c[i] = a[i] + b[i]
-    }
-    return c
-}
-
-fileprivate func matMul<FPT: SSFloatingPoint>(a: Array<FPT>, aCols: Int, aRows: Int, b: Array<FPT>, bCols: Int, bRows: Int) -> Array<FPT> {
-    if aCols != bRows {
-        fatalError()
-    }
-    let n1: Int = aRows
-    let n2: Int = bCols
-    let K: Int = aCols
-    let lda: Int = aCols
-    let ldb: Int = bCols
-    let ldc: Int = bCols
-    var c: Array<FPT> = Array<FPT>.init(repeating: 0, count: aRows * bCols)
-    for k in stride(from: 0, to: K, by: 1) {
-        for i in stride(from: 0, to: n1, by: 1) {
-            for j in stride(from: 0, to: n2, by: 1) {
-                c[ldc * i + j] = a[lda * i + k] * b[ldb * k + j]
-            }
-        }
-    }
-    return c
-}
-
-
-fileprivate func matMulScalar<FPT: SSFloatingPoint & Codable>(A: inout Array<FPT>, alpha: FPT) {
-    for i in stride(from: 0, to: A.count, by: 1) {
-        A[i] = alpha * A[i]
-    }
-}
-
 // for limits double should be good
 // throws an exception, if a singular matrix was detected
 fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, ncp: Double, isLowerGamma: Bool, nf: Int) throws -> (A: FPT, B: FPT, MOD: FPT) {
@@ -469,7 +423,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     return (makeFP(A), makeFP(B), makeFP(MOD))
 }
 
-fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: [FPT], WK: [FPT], WG: [FPT], G: [Int]) {
+fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Array<FPT>, WK: Array<FPT>, WG: Array<FPT>, G: [Int]) {
     let nodes: Array<Double> = [
         -0.99145537112081263920685469752632851664204433837034,
         -0.94910791234275852452618968404785126240077093767062,
@@ -626,12 +580,12 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: [F
     switch FPT.self {
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return (castArrayToFloatingPoint(nodesl)!, castArrayToFloatingPoint(wtl)!, castArrayToFloatingPoint(wt7l)!, g)
+        return (XK: nodesl as Array<Float80> as! Array<FPT>, WK: wtl as Array<Float80> as! Array<FPT>, WG: wt7l as Array<Float80> as! Array<FPT>, G: g)
         #endif
     case is Float.Type:
-        return (castArrayToFloatingPoint(nodesf)!, castArrayToFloatingPoint(wtf)!, castArrayToFloatingPoint(wt7f)!, g)
+        return (nodesf as Array<Float> as! Array<FPT>, wtf as Array<Float> as! Array<FPT>, wt7f as Array<Float> as! Array<FPT>, G: g)
     case is Double.Type:
-        return (castArrayToFloatingPoint(nodes)!, castArrayToFloatingPoint(wt)!, castArrayToFloatingPoint(wt7)!, g)
+        return (nodes as Array<Double> as! Array<FPT>, wt as Array<Double> as! Array<FPT>, wt7 as Array<Double> as! Array<FPT>, G: g)
     default:
         return ([FPT.nan],[FPT.nan],[FPT.nan],[])
     }

@@ -281,6 +281,7 @@ private func integrandChiSquared<FPT: SSFloatingPoint & Codable>(chi: FPT, df: F
 /// - Parameter df: Degrees of freedom
 /// - Parameter lambda: Noncentrality
 /// - Throws: SSSwiftyStatsError if df <= 0
+/// - Note: Uses an algorithm proposed by Gil, Segura and Temme to compute the Marcum function (2014)
 public func cdfChiSquareDist<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
     if df <= 0 {
         #if os(macOS) || os(iOS)

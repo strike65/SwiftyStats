@@ -29,6 +29,8 @@ public protocol SSFloatingPoint: FloatingPoint {
     static var one: Self { get }
     /// 1 / 2
     static var half: Self { get }
+    /// 1 / 4
+    static var fourth: Self { get }
     /// 1 / 3
     static var third: Self { get }
     /// 2 / 3
@@ -37,10 +39,16 @@ public protocol SSFloatingPoint: FloatingPoint {
     /// 2 / pi
     static var twoopi: Self { get }
     /// pi / 4
-    static var piquart:Self { get }
+    static var pifourth :Self { get }
 
+    /// pi / 3
+    static var pithirds: Self { get }
+    
+    /// 2 pi / 3
+    static var twopithird: Self { get }
+    
     /// 3 pi / 4
-    static var threepiquart:Self { get }
+    static var threepifourth :Self { get }
 
     /// Euler's gamma
     static var eulergamma:Self { get }
@@ -48,6 +56,12 @@ public protocol SSFloatingPoint: FloatingPoint {
     /// sqrt(pi)
     static var sqrtpi: Self { get }
 
+    /// 2 sqrt(pi)
+    static var twosqrtpi: Self { get }
+    /// 3 pi / 9
+    static var threepiate: Self { get }
+
+    
     /// ln(sqrt(2))
     static var lnsqrt2: Self { get }
 
@@ -118,26 +132,40 @@ public protocol SSFloatingPoint: FloatingPoint {
     static var twoo3: Self { get }
 
     /// pow(2, 1/4)
-    static var twoexpquart: Self { get }
+    static var twoexpfourth : Self { get }
 
     /// sqrt(6)
     static var sqrt6: Self { get }
 
+    static var maxgamma: Self { get }
+    
 }
 
 extension Double: SSFloatingPoint {
+    public static var threepiate: Double {
+        return 1.1780972450961724644234912687298135815739
+    }
+    
+    public static var twosqrtpi: Double {
+        return 3.5449077018110320545963349666822903655951
+    }
+    
+    public static var twopithird: Double {
+        return 2.0943951023931954923084289221863352561314
+    }
+    
 
     // 0
     public static var zero: Double {
         get {
-            return 0.0000000000000000000000000000000000000000
+            return 0
         }
     }
 
     // 1
     public static var one: Double {
         get {
-            return 1.0000000000000000000000000000000000000000
+            return 1
         }
     }
     
@@ -154,10 +182,17 @@ extension Double: SSFloatingPoint {
             return 3.3333333333333333333333333333333333333333e-01
         }
     }
+    // 1 / 4
+    public static var fourth: Double {
+        get {
+            return 0.2500000000000000000000000000000000000000
+        }
+    }
+
     // 2 / 3
     public static var twothirds: Double {
         get {
-            return 1.6666666666666666666666666666666666666666
+            return 0.6666666666666666666666666666666666666666
         }
     }
 
@@ -167,14 +202,21 @@ extension Double: SSFloatingPoint {
             return 0.6366197723675813430755350534900574481378
         }
     }
+    /// pi / 3
+    public static var pithirds: Double {
+        get {
+            return 1.0471975511965977461542144610931676280657
+        }
+        
+    }
     /// pi / 4
-    public static var piquart: Double {
+    public static var pifourth : Double {
         get {
             return 0.7853981633974483096156608458198757210493
         }
     }
     /// 3 pi / 4
-    public static var threepiquart: Double {
+    public static var threepifourth : Double {
         get {
             return 2.356194490192344928846982537459627163148
         }
@@ -330,7 +372,7 @@ extension Double: SSFloatingPoint {
         }
     }
     /// pow(2, 1/4)
-    public static var twoexpquart: Double {
+    public static var twoexpfourth : Double {
         get {
             return 1.189207115002721066717499970560475915293
         }
@@ -341,21 +383,40 @@ extension Double: SSFloatingPoint {
             return 2.449489742783178098197284074705891391966
         }
     }
+    
+    public static var maxgamma: Double {
+        get {
+            return 171.624376956302
+        }
+    }
 }
 
 extension Float: SSFloatingPoint {
+    public static var threepiate: Float {
+        return 1.1780972450961724644234912687298135815739
+    }
+    
+    public static var twosqrtpi: Float {
+        return 3.5449077018110320545963349666822903655951
+    }
+    
+
+    public static var twopithird: Float {
+        return 2.0943951023931954923084289221863352561314
+    }
+    
     
     // 0
     public static var zero: Float {
         get {
-            return 0.0000000000000000000000000000000000000000
+            return 0
         }
     }
     
     // 1
     public static var one: Float {
         get {
-            return 1.0000000000000000000000000000000000000000
+            return 1
         }
     }
 
@@ -371,10 +432,16 @@ extension Float: SSFloatingPoint {
             return 3.3333333333333333333333333333333333333333e-01
         }
     }
+    // 1 / 4
+    public static var fourth: Float {
+        get {
+            return 0.2500000000000000000000000000000000000000
+        }
+    }
     // 2 / 3
     public static var twothirds: Float {
         get {
-            return 1.6666666666666666666666666666666666666666
+            return 0.6666666666666666666666666666666666666666
         }
     }
 
@@ -384,14 +451,21 @@ extension Float: SSFloatingPoint {
             return 0.6366197723675813430755350534900574481378
         }
     }
+    /// pi / 3
+    public static var pithirds: Float {
+        get {
+            return 1.0471975511965977461542144610931676280657
+        }
+        
+    }
     /// pi / 4
-    public static var piquart: Float {
+    public static var pifourth : Float {
         get {
             return 0.7853981633974483096156608458198757210493
         }
     }
     /// 3 pi / 4
-    public static var threepiquart: Float {
+    public static var threepifourth : Float {
         get {
             return 2.356194490192344928846982537459627163148
         }
@@ -547,7 +621,7 @@ extension Float: SSFloatingPoint {
         }
     }
     /// pow(2, 1/4)
-    public static var twoexpquart: Float {
+    public static var twoexpfourth : Float {
         get {
             return 1.189207115002721066717499970560475915293
         }
@@ -558,10 +632,29 @@ extension Float: SSFloatingPoint {
             return 2.449489742783178098197284074705891391966
         }
     }
+    
+    public static var maxgamma: Float {
+        get {
+            return 35.0400981904
+        }
+    }
 }
 
 #if arch(i386) || arch(x86_64)
 extension Float80: SSFloatingPoint {
+    public static var threepiate: Float80 {
+        return 1.1780972450961724644234912687298135815739
+    }
+    
+    public static var twosqrtpi: Float80 {
+        return 3.5449077018110320545963349666822903655951
+    }
+    
+
+    public static var twopithird: Float80 {
+        return 2.0943951023931954923084289221863352561314
+    }
+    
 
     // 0
     public static var zero: Float80 {
@@ -583,16 +676,22 @@ extension Float80: SSFloatingPoint {
             return 5.0000000000000000000000000000000000000000e-01
         }
     }
-    // 1 / 2
+    // 1 / 3
     public static var third: Float80 {
         get {
             return 3.3333333333333333333333333333333333333333e-01
         }
     }
-    // 1 / 2
+    // 1 / 4
+    public static var fourth: Float80 {
+        get {
+            return 0.2500000000000000000000000000000000000000
+        }
+    }
+    // 2 / 3
     public static var twothirds: Float80 {
         get {
-            return 1.6666666666666666666666666666666666666666
+            return 0.6666666666666666666666666666666666666666
         }
     }
     /// 2 / pi
@@ -601,14 +700,21 @@ extension Float80: SSFloatingPoint {
             return 0.6366197723675813430755350534900574481378
         }
     }
+    /// pi / 3
+    public static var pithirds: Float80 {
+        get {
+            return 1.0471975511965977461542144610931676280657
+        }
+        
+    }
     /// pi / 4
-    public static var piquart: Float80 {
+    public static var pifourth : Float80 {
         get {
             return 0.7853981633974483096156608458198757210493
         }
     }
     /// 3 pi / 4
-    public static var threepiquart: Float80 {
+    public static var threepifourth : Float80 {
         get {
             return 2.356194490192344928846982537459627163148
         }
@@ -764,7 +870,7 @@ extension Float80: SSFloatingPoint {
         }
     }
     /// pow(2, 1/4)
-    public static var twoexpquart: Float80 {
+    public static var twoexpfourth : Float80 {
         get {
             return 1.189207115002721066717499970560475915293
         }
@@ -773,6 +879,11 @@ extension Float80: SSFloatingPoint {
     public static var sqrt6: Float80 {
         get {
             return 2.449489742783178098197284074705891391966
+        }
+    }
+    public static var maxgamma: Float80 {
+        get {
+            return 1755.548342904462916946872752532726735807955265045166015625
         }
     }
 }

@@ -75,14 +75,16 @@ internal func betaFunction<T: SSFloatingPoint>(a: T, b: T) -> T {
     var g2 = tgamma1(b)
     let sum = a + b
     var g3 = tgamma1(sum)
-//    #endif
+    var ans: T = 0
+    //    #endif
     var sign:Int = 1
     if !(g1.isInfinite || g2.isInfinite || g3.isInfinite) && !(g1.isNaN || g2.isNaN || g2.isNaN) {
         if g3.isZero {
             return T.infinity
         }
         else {
-            return g1 * g2 / g3
+            ans = g1 * g2 / g3
+            return ans
         }
     }
     else {
@@ -92,7 +94,8 @@ internal func betaFunction<T: SSFloatingPoint>(a: T, b: T) -> T {
         sign = sign * Int(signgam)
         g3 = lgamma1(a + b)
         sign = sign * Int(signgam)
-        return makeFP(sign) * exp1(g1 + g2 - g3)
+        ans = makeFP(sign) * exp1(g1 + g2 - g3)
+        return ans
     }
 }
 

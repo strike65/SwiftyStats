@@ -2,27 +2,28 @@
 //  Created by VT on 04.08.18.
 //  Copyright © 2018 Volker Thieme. All rights reserved.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-//  
+/*
+ Copyright (c) 2017 Volker Thieme
+ 
+ GNU GPL 3+
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, version 3 of the License.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ */
 
 import Foundation
 import Darwin
+import Accelerate.vecLib
 
 internal func tgamma1<T: SSFloatingPoint>(_ x: T) -> T {
     switch x {
@@ -360,3 +361,150 @@ internal func fmin1<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
         return T.nan
     }
 }
+
+
+// Matrix
+
+internal func matAdd<FPT: SSFloatingPoint & Codable>(a: Array<FPT>, b: Array<FPT>) -> Array<FPT> {
+    if a.count !=  b.count {
+        fatalError()
+    }
+    var c = Array<FPT>.init(repeating: 0, count: a.count)
+    for i in stride(from: 0, to: a.count, by: 1) {
+        c[i] = a[i] + b[i]
+    }
+    return c
+}
+
+// Row first order
+// ROW1 = [Item1, Item2, Item2, Item4 ... ItemN]
+// ROW2 = [Item1, Item2, Item2, Item4 ... ItemN]
+// ROW3 = [Item1, Item2, Item2, Item4 ... ItemN]
+// ROW4 = [Item1, Item2, Item2, Item4 ... ItemN]
+// MATRIX = [ROW1, ROW2, ROW3, ROW4]
+internal func matMulScalar<FPT: SSFloatingPoint & Codable>(A: inout Array<FPT>, alpha: FPT) {
+    for i in stride(from: 0, to: A.count, by: 1) {
+        A[i] = alpha * A[i]
+    }
+}
+
+
+
+enum CgemmError: Error {
+    case unknownOperation
+}
+
+internal func ddgemm<FPT: SSFloatingPoint>(Order: CBLAS_ORDER, TransA: CBLAS_TRANSPOSE, TransB: CBLAS_TRANSPOSE, M: Int, N: Int, K: Int, alpha: FPT, A: Array<FPT>, lda: Int, B: Array<FPT>, ldb: Int, beta: FPT, C: inout Array<FPT>, ldc: Int) throws {
+    if alpha.isZero && beta.isZero {
+        return
+    }
+    var TransG, TransF: CBLAS_TRANSPOSE
+    var n1, n2, ldf, ldg: Int
+    var F, G: Array<FPT>
+    if Order == CblasRowMajor {
+        n1 = M
+        n2 = N
+        F = A
+        ldf = lda
+        TransF = (TransA == CblasConjTrans) ? CblasTrans : TransA
+        G = B
+        ldg = ldb
+        TransG = (TransB == CblasConjTrans) ? CblasTrans : TransB
+    }
+    else {
+        n1 = N
+        n2 = M
+        F = B
+        ldf = ldb
+        TransF = (TransA == CblasConjTrans) ? CblasTrans : TransA
+        G = A
+        ldg = lda
+        TransG = (TransB == CblasConjTrans) ? CblasTrans : TransB
+    }
+    
+    if beta.isZero {
+        for i in stride(from: 0, to: n1, by: 1) {
+            for j in stride(from: 0, to: n2, by: 1) {
+                C[ldc * i + j] = 0
+            }
+        }
+    }
+    else if beta != 1 {
+        for i in stride(from: 0, to: n1, by: 1) {
+            for j in stride(from: 0, to: n2, by: 1) {
+                C[ldc * i + j] *= beta
+            }
+        }
+    }
+    
+    if alpha.isZero {
+        return
+    }
+    
+    if (TransF == CblasNoTrans && TransG == CblasNoTrans) {
+        
+        /* form  C := alpha*A*B + C */
+        for k in stride(from: 0, to: K, by: 1) {
+            for i in stride(from: 0, to: n1, by: 1) {
+                let temp: FPT = alpha * F[ldf * i + k]
+                if (!temp.isZero) {
+                    for j in stride(from: 0, to: n2, by: 1) {
+                        C[ldc * i + j] += temp * G[ldg * k + j]
+                    }
+                }
+            }
+        }
+        
+    } else if (TransF == CblasNoTrans && TransG == CblasTrans) {
+        
+        /* form  C := alpha*A*B' + C */
+        for i in stride(from: 0, to: n1, by: 1) {
+            for j in stride(from: 0, to: n2, by: 1) {
+                var temp: FPT = 0
+                for k in stride(from: 0, to: K, by: 1) {
+                    temp += F[ldf * i + k] * G[ldg * j + k]
+                }
+                C[ldc * i + j] += alpha * temp
+            }
+        }
+        
+    } else if (TransF == CblasTrans && TransG == CblasNoTrans) {
+        
+        for k in stride(from: 0, to: K, by: 1) {
+            for i in stride(from: 0, to: n1, by: 1) {
+                let temp: FPT = alpha * F[ldf * k + i]
+                if (!temp.isZero) {
+                    for j in stride(from: 0, to: n2, by: 1) {
+                        C[ldc * i + j] += temp * G[ldg * k + j]
+                    }
+                }
+            }
+        }
+        
+    } else if (TransF == CblasTrans && TransG == CblasTrans) {
+        
+        for i in stride(from: 0, to: n1, by: 1) {
+            //        for (i = 0; i < n1; i++) {
+            for j in stride(from: 0, to: n2, by: 1) {
+                //            for (j = 0; j < n2; j++) {
+                var temp: FPT = 0
+                for k in stride(from: 0, to: K, by: 1) {
+                    //                for (k = 0; k < K; k++) {
+                    temp += F[ldf * k + i] * G[ldg * j + k]
+                }
+                C[ldc * i + j] += alpha * temp
+            }
+        }
+    } else {
+        throw CgemmError.unknownOperation
+    }
+    
+}
+
+internal func matMul<FPT: SSFloatingPoint>(a: Array<FPT>, aCols: Int, aRows: Int, b: Array<FPT>, bCols: Int, bRows: Int) -> Array<FPT> {
+    var c: Array<FPT> = Array<FPT>.init(repeating: 0, count: aRows * bCols)
+    try! ddgemm(Order: CblasRowMajor, TransA: CblasNoTrans, TransB: CblasNoTrans, M: aRows, N: bCols, K: aCols, alpha: 1, A: a, lda: aCols, B: b, ldb: aCols, beta: 0, C: &c, ldc: bCols)
+    return c
+}
+
+

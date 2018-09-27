@@ -115,7 +115,7 @@ public func pdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, s
     return result
 }
 
-/// Returns the pdf of the Beta distribution
+/// Returns the cdf of the Beta distribution
 /// - Parameter x: x
 /// - Parameter a: Shape parameter a
 /// - Parameter b: Shape parameter b
@@ -238,3 +238,156 @@ public func quantileBetaDist<FPT: SSFloatingPoint & Codable>(p: FPT, shapeA a: F
 }
 
 
+// noncentral
+
+
+/// Returns the cdf of the noncentral Beta distribution
+/// - Parameter x: x
+/// - Parameter a: Shape parameter a
+/// - Parameter b: Shape parameter b
+/// - Parameter lambda: Noncentrality
+/// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
+///
+/// C version by John Burkardt
+/// Swift port by Volker Thieme
+///
+/// - Throws: SSSwiftyStatsError if a and/or b <= 0
+public func cdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, shapeB b: FPT, lambda: FPT) throws -> FPT {
+    if (a <= 0) {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if (b <= 0) {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if lambda.isZero {
+        do {
+            return try cdfBetaDist(x: x, shapeA: a, shapeB: b)
+        }
+        catch {
+            throw error
+        }
+    }
+    if (x <= 0) {
+        return 0
+    }
+    else if (x >= 1) {
+        return 1
+    }
+    else {
+        var e1, e2, e3: FPT
+        var i, beta_log,bi, bj, p_sum, pb_sum, pi, pj, si, sj: FPT
+        let errorMax: FPT = FPT.ulpOfOne * 10
+        i = 0
+        pi = exp1(-lambda * FPT.half)
+        beta_log = lgamma1(a) + lgamma1(b) - lgamma1(a + b)
+        
+        bi = betaNormalized(x: x, a: a, b: b)
+        e1 = a * log1(x)
+        e2 = b * log1(1 - x)
+        e3 = -beta_log - log1(a)
+        si = exp1(e1 + e2 + e3)
+        p_sum = pi
+        pb_sum = pi * bi
+        
+        while (p_sum < (1 - errorMax)) {
+            pj = pi
+            bj = bi
+            sj = si
+            
+            i = i + 1
+            pi = FPT.half * lambda * pj / i
+            bi = bj - sj
+            e1 = ( a + b + i - 1)
+            e2 = sj / (a + i)
+            si = x * e1 * e2
+            
+            p_sum = p_sum + pi
+            pb_sum = pb_sum + pi * bi
+            
+        }
+        return pb_sum
+    }
+}
+
+
+/// Returns the pdf of the noncentral Beta distribution
+/// - Parameter x: x
+/// - Parameter a: Shape parameter a
+/// - Parameter b: Shape parameter b
+/// - Parameter lambda: Noncentrality
+/// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
+///
+/// C version by John Burkardt
+/// Swift port by Volker Thieme
+///
+/// - Throws: SSSwiftyStatsError if a and/or b <= 0
+public func pdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, shapeB b: FPT, lambda: FPT) throws -> FPT {
+    if (a <= 0) {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("shape parameter a is expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if (b <= 0) {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if lambda.isZero {
+        do {
+            return try pdfBetaDist(x: x, shapeA: a, shapeB: b)
+        }
+        catch {
+            throw error
+        }
+    }
+    if (x <= 0) {
+        return 0
+    }
+    else if (x >= 1) {
+        return 1
+    }
+    else {
+        var e1, e2, e3, e4: FPT
+        // use log
+        let betal: FPT = betaFunction(a: a, b: b)
+        if betal.isInfinite {
+            return 0
+        }
+        let l_half: FPT = -lambda * FPT.half
+        e1 = (b - 1) * log1(1 - x)
+        e2 = (a - 1) * log1(x)
+        e3 = exp1(l_half + e1 + e2)
+        e4 = hypergeometric1F1(a: a + b, b: a, x: lambda * x * FPT.half)
+        
+        let ans: FPT = (e3 * e4) / betal
+        return ans
+    }
+}

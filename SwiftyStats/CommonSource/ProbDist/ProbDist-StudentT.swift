@@ -389,6 +389,7 @@ internal func infSum<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, lambda: FP
  *    M_SQRT_2dPI  = 1/ {gamma(1.5) * sqrt(2)} = sqrt(2 / pi)
  *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
  */
+
 /// Returns the cdf of the noncentral Student t distribution.
 /// - Parameter x: x
 /// - Parameter df: degrees of freedom

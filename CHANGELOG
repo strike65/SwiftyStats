@@ -10,6 +10,7 @@ Version 0.9.0
 - added: SSExamine.autocorrelation
 - added: Marcum Functions (parameters behave like Mathematica MarcumQ)
 - added: generic math functions added
+- added: Airy Ai/Ai'/Bi/Bi' (Algorithm 838)
 - updated: noncentral Chi Square Distribution
 - updated: SSExamine more generic (stats)
 - updated: typos

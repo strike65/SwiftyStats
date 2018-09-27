@@ -501,7 +501,7 @@ internal func besselJ0<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
     q = 25 / ( xx * xx )
     p = polyeval(x: q, coef: coeff("PP"), n: 6) / polyeval(x: q, coef: coeff("PQ"), n: 6 )
     q = polyeval(x: q, coef: coeff("QP"), n: 7) / poly1eval(x: q, coef: coeff("QQ"), n: 7 )
-    xn = xx - FPT.piquart
+    xn = xx - FPT.pifourth
     p = p * cos1(xn) - w * q * sin1(xn);
     return ( p * FPT.sqrt2Opi / sqrt(xx) )
 }
@@ -548,7 +548,7 @@ internal func besselY<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
     z = 25 / (x * x)
     p = polyeval(x: z, coef: coeff("PP"), n: 6) / polyeval(x: z,coef: coeff("PQ"), n: 6 )
     q = polyeval(x: z,coef: coeff("QP"),n: 7)/poly1eval(x: z, coef: coeff("QQ"), n: 7 )
-    xn = x - FPT.piquart
+    xn = x - FPT.fourth
     p = p * sin1(xn) + w * q * cos1(xn)
     return( p * FPT.sqrt2Opi / sqrt(x) )
 }

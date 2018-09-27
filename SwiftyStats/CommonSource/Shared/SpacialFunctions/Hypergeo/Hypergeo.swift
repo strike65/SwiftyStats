@@ -128,8 +128,10 @@ public func hypergeometric1F1<FPT: SSFloatingPoint & Codable>(a: FPT, b: FPT, x:
     /* Pick the result with less estimated error */
     
     if( acanc < pcanc ) {
-        pcanc = acanc
-        psum = asum
+        if !acanc.isNaN {
+            pcanc = acanc
+            psum = asum
+        }
     }
     
     if( pcanc > pcanc_limit2 ) {
