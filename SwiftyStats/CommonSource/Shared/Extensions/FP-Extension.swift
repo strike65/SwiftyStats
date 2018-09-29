@@ -20,7 +20,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  */
-
+/// Extends the FloatingPoint Protocol by adding important constants
 public protocol SSFloatingPoint: FloatingPoint {
     /// 0
     static var zero: Self { get }

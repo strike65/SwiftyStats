@@ -1281,10 +1281,10 @@ class SwiftyStatsTests: XCTestCase {
     
     func testQuick() {
         var a: Double = 22
-        var b: Double = 21
-        var l: Double = 2
-        let beta: Double = try! pdfFRatioDist(f: 4, numeratorDF: a, denominatorDF: b, lambda: l)
-        print(beta)
+        var b: Double = 150
+        var l: Double = 6.6
+        let f = h2f2(a1: 33.0, a2: 22.0, b1: 31.0, b2: 3.0, z: 4.0)
+        print(f)
      }
     
     func testDistributions() {
@@ -1618,13 +1618,13 @@ class SwiftyStatsTests: XCTestCase {
          > pf(q = 3,df1 = 3,df2 = 22)
          [1] 0.9475565
         */
-        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: 33, numeratorDF: 3, denominatorDF: 22), 1, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatio(f: 3, numeratorDF: 3, denominatorDF: 22), 0.9475565, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 33, numeratorDF: 3, denominatorDF: 22), 1, accuracy: 1E-7)
+        XCTAssertEqual(try! cdfFRatioDist(f: 3, numeratorDF: 3, denominatorDF: 22), 0.9475565, accuracy: 1E-7)
         /*
          R code
          > df(x = 2,df1 = 2,df2 = 3)

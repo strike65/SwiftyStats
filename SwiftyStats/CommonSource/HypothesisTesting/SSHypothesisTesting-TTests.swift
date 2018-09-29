@@ -712,7 +712,7 @@ public class SSHypothesisTesting {
         let MST: FPT = SST / (groups - 1)
         F = MST / MSE
         do {
-            cdfValue = try cdfFRatio(f: F, numeratorDF: groups - 1 , denominatorDF: makeFP(N) - groups)
+            cdfValue = try cdfFRatioDist(f: F, numeratorDF: groups - 1 , denominatorDF: makeFP(N) - groups)
             cutoffAlpha = try quantileFRatioDist(p: 1 - alpha, numeratorDF: groups - 1, denominatorDF: makeFP(N) - groups)
         }
         catch {
@@ -985,7 +985,7 @@ public class SSHypothesisTesting {
                     tempRes.row = tk.row
                     tempRes.testType = .scheffe
                     tempRes.testStat = tk.testStat / FPT.sqrt2
-                    tempRes.pValue = try cdfFRatio(f: pow1(tempRes.testStat, 2) / (k - 1), numeratorDF: k - 1, denominatorDF: df_error)
+                    tempRes.pValue = try cdfFRatioDist(f: pow1(tempRes.testStat, 2) / (k - 1), numeratorDF: k - 1, denominatorDF: df_error)
                     tempRes.pValue = 1 - tempRes.pValue
                     scheffeResults.append(tempRes)
                 }

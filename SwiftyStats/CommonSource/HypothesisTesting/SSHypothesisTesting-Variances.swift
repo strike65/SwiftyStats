@@ -366,7 +366,7 @@ extension SSHypothesisTesting {
                 i += 1
             }
             _testStatisticValue = ((_N - _k) * _s1) / ((_k - 1) * _s2)
-            _cdfFRatio = try cdfFRatio(f: _testStatisticValue, numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cdfFRatio = try cdfFRatioDist(f: _testStatisticValue, numeratorDF: _k - 1, denominatorDF: _N - _k)
             _cutoffAlpha = try quantileFRatioDist(p: 1 - alpha, numeratorDF: _k - 1, denominatorDF: _N - _k)
             _cutoff90Percent = try quantileFRatioDist(p: makeFP(0.9), numeratorDF: _k - 1, denominatorDF: _N - _k)
             _cutoff95Percent = try quantileFRatioDist(p: makeFP(0.95), numeratorDF: _k - 1, denominatorDF: _N - _k)
@@ -596,7 +596,7 @@ extension SSHypothesisTesting {
         let df2: FPT = makeFP(sample2.sampleSize - 1)
         let cdfTestStat: FPT
         do {
-            cdfTestStat = try cdfFRatio(f: testStat, numeratorDF: df1, denominatorDF: df2)
+            cdfTestStat = try cdfFRatioDist(f: testStat, numeratorDF: df1, denominatorDF: df2)
         }
         catch {
             throw error

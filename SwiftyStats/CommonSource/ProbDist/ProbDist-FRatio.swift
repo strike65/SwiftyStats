@@ -170,7 +170,7 @@ public func pdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-public func cdfFRatio<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
+public func cdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
     if f <= 0 {
         return 0
     }
@@ -262,7 +262,7 @@ public func quantileFRatioDist<FPT: SSFloatingPoint & Codable>(p: FPT,numeratorD
             break
         }
         do {
-            temp_p = try cdfFRatio(f: fVal, numeratorDF: df1, denominatorDF: df2)
+            temp_p = try cdfFRatioDist(f: fVal, numeratorDF: df1, denominatorDF: df2)
         }
         catch {
             return FPT.nan
@@ -413,6 +413,7 @@ public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT,
 /// - Parameter f: f-value
 /// - Parameter df1: numerator degrees of freedom
 /// - Parameter df2: denominator degrees of freedom
+/// - Parameter lambda: Noncentrality
 /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
 public func pdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> FPT {
     if df1 <= 0 {
@@ -448,11 +449,63 @@ public func pdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df
     let y: FPT = f * df1 / df2
     let beta: FPT
     do {
-        beta = try cdfBetaDist(x: y / (1 + y), shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
+        beta = try pdfBetaDist(x: y / (1 + y), shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
     }
     catch {
         throw error
     }
     let ans: FPT = (df1 / df2) / ((1 + y) * (1 + y)) * beta
+    return ans
+}
+
+/// Returns the cdf of the noncentral F-ratio distribution. (http://mathworld.wolfram.com/F-Distribution.html)
+/// - Parameter f: f-value
+/// - Parameter df1: numerator degrees of freedom
+/// - Parameter df2: denominator degrees of freedom
+/// - Parameter lambda: Noncentrality
+/// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
+public func cdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> FPT {
+    if f <= 0 {
+        return 0
+    }
+    if df1 <= 0 {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("numerator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if df2 <= 0 {
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("denominator degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+        }
+        
+        #endif
+        
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    if lambda == 0 {
+        do {
+            return try cdfFRatioDist(f: f, numeratorDF: df1, denominatorDF: df2)
+        }
+        catch {
+            throw error
+        }
+    }
+    let y: FPT = f * df1 / (df2 + df1 * f)
+    var ans: FPT = FPT.nan
+    do {
+        let ncbeta: FPT = try cdfBetaDist(x: y, shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
+        ans = ncbeta
+    }
+    catch {
+        throw error
+    }
     return ans
 }
