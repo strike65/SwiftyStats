@@ -1002,6 +1002,7 @@ public class SSHypothesisTesting {
     
     public class func bonferroniTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>) throws -> Array<SSPostHocTestResult<FPT>>? where T: Hashable & Comparable & Codable {
         assert( false, "not implemented yet")
+        return nil
     }
     
     
