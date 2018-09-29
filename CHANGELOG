@@ -12,6 +12,8 @@ Version 0.9.0
 - added: generic math functions added
 - added: Noncentral Chi Square Distribution
 - added: Noncentral Beta Distribution
+- added: Rayleigh distribution
+- added: Extreme value distribution
 - added: Airy Ai/Ai'/Bi/Bi' (Algorithm 838)
 - updated: noncentral Chi Square Distribution
 - updated: SSExamine more generic (stats)

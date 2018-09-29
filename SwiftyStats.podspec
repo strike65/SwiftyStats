@@ -56,6 +56,8 @@ Probability functions
 - Exponential Distribution
 - Uniform Distribution
 - Triangular Distribution
+- Rayleigh distribution
+- Extreme value distribution
 			  DESC
 	s.homepage 	= 'https://gitlab.com/strike65/SwiftyStats.git'
 	s.license 	= { :type => 'GPL 3', :file => 'LICENSE' }
