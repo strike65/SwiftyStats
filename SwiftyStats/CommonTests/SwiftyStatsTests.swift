@@ -1280,11 +1280,11 @@ class SwiftyStatsTests: XCTestCase {
     
     
     func testQuick() {
-        var a: Double = 22
-        var b: Double = 150
-        var l: Double = 6.6
-        let f = h2f2(a1: 33.0, a2: 22.0, b1: 31.0, b2: 3.0, z: 4.0)
-        print(f)
+//        var a: Double = 22
+//        var b: Double = 150
+//        var l: Double = 6.6
+//        let f = h2f2(a1: 33.0, a2: 22.0, b1: 31.0, b2: 3.0, z: 4.0)
+//        print(f)
      }
     
     func testDistributions() {
