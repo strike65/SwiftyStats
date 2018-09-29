@@ -38,7 +38,7 @@ If you have to use a Swift version earlier than 4.2, replace the line `pod 'Swif
 
 ```ruby
 ...
-   pod 'SwiftyStats", '~> 0.8.14'
+   pod 'SwiftyStats", '0.8.14'
 ...
 ```
 Save your edits and execute
