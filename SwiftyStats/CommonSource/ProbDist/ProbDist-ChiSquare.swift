@@ -386,7 +386,7 @@ public func quantileChiSquareDist<FPT: SSFloatingPoint & Codable>(p: FPT, degree
     if (1 - p) < FPT.leastNonzeroMagnitude {
         return FPT.infinity
     }
-    let eps = (1.0E-12 as! FPT)
+    let eps: FPT = makeFP(1.0E-12)
     var minChi: FPT = 0
     var maxChi: FPT = 10000
     var result: FPT = 0

@@ -64,7 +64,7 @@ public func paraLogisticDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b:
     var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     result.mean = mean
     result.variance = pow1(b, 2) * pow1(FPT.pi, 2) / 3
-    result.kurtosis = 4.2 as! FPT
+    result.kurtosis = makeFP(4.2)
     result.skewness = 0
     return result
 }

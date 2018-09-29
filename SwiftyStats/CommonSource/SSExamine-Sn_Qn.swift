@@ -230,34 +230,34 @@ extension SSExamine {
             }
             else {
                 if let sn0 = self.sn0() {
-                    var cn = 1.0 as! FPT
-                    let scale = 1.1926 as! FPT
+                    var cn: FPT = 1
+                    let scale: FPT = makeFP(1.1926)
                     /* determine correction factor for finite sample bias */
-                    let n = self.sampleSize
+                    let n: Int = self.sampleSize
                     if (n <= 9) {
                         if (n == 2) {
-                            cn = 0.743 as! FPT
+                            cn = makeFP(0.743)
                         }
                         else if (n == 3) {
-                            cn = 1.851 as! FPT
+                            cn = makeFP(1.851)
                         }
                         else if (n == 4) {
-                            cn = 0.954 as! FPT
+                            cn = makeFP(0.954)
                         }
                         else if (n == 5) {
-                            cn = 1.351 as! FPT
+                            cn = makeFP(1.351)
                         }
                         else if (n == 6) {
-                            cn = 0.993 as! FPT
+                            cn = makeFP(0.993)
                         }
                         else if (n == 7) {
-                            cn = 1.198 as! FPT
+                            cn = makeFP(1.198)
                         }
                         else if (n == 8) {
-                            cn = 1.005 as! FPT
+                            cn = makeFP(1.005)
                         }
                         else if (n == 9) {
-                            cn = 1.131 as! FPT
+                            cn = makeFP(1.131)
                         }
                     }
                     else if (n % 2 == 1) /* n odd, >= 11 */
@@ -457,37 +457,37 @@ extension SSExamine {
                  * comes from the 'robustbase' R package */
                 if (n <= 12) {
                     if (n == 2) {
-                        dn = 0.399356 as! FPT
+                        dn = makeFP(0.399356)
                     }
                     else if (n == 3) {
-                        dn = 0.99365 as! FPT
+                        dn = makeFP(0.99365)
                     }
                     else if (n == 4) {
-                        dn = 0.51321 as! FPT
+                        dn = makeFP(0.51321)
                     }
                     else if (n == 5) {
-                        dn = 0.84401 as! FPT
+                        dn = makeFP(0.84401)
                     }
                     else if (n == 6) {
-                        dn = 0.61220 as! FPT
+                        dn = makeFP(0.61220)
                     }
                     else if (n == 7) {
-                        dn = 0.85877 as! FPT
+                        dn = makeFP(0.85877)
                     }
                     else if (n == 8) {
-                        dn = 0.66993 as! FPT
+                        dn = makeFP(0.66993)
                     }
                     else if (n == 9) {
-                        dn = 0.87344 as! FPT
+                        dn = makeFP(0.87344)
                     }
                     else if (n == 10) {
-                        dn = 0.72014 as! FPT
+                        dn = makeFP(0.72014)
                     }
                     else if (n == 11) {
-                        dn = 0.88906 as! FPT
+                        dn = makeFP(0.88906)
                     }
                     else if (n == 12) {
-                        dn = 0.75743 as! FPT
+                        dn = makeFP(0.75743)
                     }
                 }
                 else {
