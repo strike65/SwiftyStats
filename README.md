@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.9.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4.2-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-1.0.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4.2-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 Important changes
 =================
 Versions 1.x.x and newer will need to compile using at least Swift 4.2. This update contains a lot of new features. That is, your code have to be updated. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile and use Version 0.8.15 (see below.)
