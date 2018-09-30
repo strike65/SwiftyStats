@@ -1,4 +1,8 @@
 ![Version](https://img.shields.io/badge/version-0.9.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4.2-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+Important changes
+=================
+Versions 1.x.x and newer will need to compile using at least Swift 4.2. This update contains a lot of new features. That is, your code have to be updated. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile and use Version 0.8.15 (see below.)
+
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
@@ -16,8 +20,6 @@ $> cd <CLONE_DIRECTORY>/SwiftyStats
 $> ./make_docs.sh
 $> open docs/index.html
 ```
-# Important changes
-Versions 0.9.x and greater need at least Swift 4.2 installed. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile (see below)
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project:
