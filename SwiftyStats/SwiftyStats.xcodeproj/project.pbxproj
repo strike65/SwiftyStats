@@ -14,8 +14,6 @@
 		9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
 		9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
 		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
-		9F2DC9FC215E80D600033520 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2DC9FB215E80D600033520 /* SSMath-GenericFP.swift */; };
-		9F2DC9FD215E80D600033520 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2DC9FB215E80D600033520 /* SSMath-GenericFP.swift */; };
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
@@ -84,6 +82,8 @@
 		9FAACB702108730000C031F3 /* FP-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* FP-Extension.swift */; };
 		9FAACB712108730000C031F3 /* FP-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAACB6F2108730000C031F3 /* FP-Extension.swift */; };
 		9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */; };
+		9FC1C9772160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */; };
+		9FC1C9782160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */; };
 		9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FCB77EC21103884002B6738 /* ProbDist-ExtremValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */; };
@@ -185,7 +185,6 @@
 		9F13CD20211B71D100153FC3 /* CodableFloat80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFloat80.swift; sourceTree = "<group>"; };
 		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
-		9F2DC9FB215E80D600033520 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SSMath-GenericFP.swift"; path = "../../../../../MyPlayground.playground/Sources/SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -226,6 +225,8 @@
 		9FAACB6F2108730000C031F3 /* FP-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FP-Extension.swift"; sourceTree = "<group>"; };
 		9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension-Hash.swift"; sourceTree = "<group>"; };
 		9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftyStats.podspec; path = ../SwiftyStats.podspec; sourceTree = "<group>"; };
+		9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HypergeometricPFQ.swift; sourceTree = "<group>"; };
+		9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
 		9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ExtremValue.swift"; sourceTree = "<group>"; };
 		9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chebyshev.swift; sourceTree = "<group>"; };
@@ -235,7 +236,7 @@
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
 		9FEA82431F76C9F6005E4349 /* SSConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSConstants.swift; sourceTree = "<group>"; };
-		9FEA82441F76C9F6005E4349 /* SSContFrac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSContFrac.swift; sourceTree = "<group>"; };
+		9FEA82441F76C9F6005E4349 /* SSContFrac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SSContFrac.swift; path = ContFrac/SSContFrac.swift; sourceTree = "<group>"; };
 		9FEA82451F76C9F6005E4349 /* SSCrosstab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSCrosstab.swift; sourceTree = "<group>"; };
 		9FEA82461F76C9F6005E4349 /* SSDataFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSDataFrame.swift; sourceTree = "<group>"; };
 		9FEA82471F76C9F6005E4349 /* SSDataGroupSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSDataGroupSorter.swift; sourceTree = "<group>"; };
@@ -444,6 +445,7 @@
 				9FE86ECE215D1A9D00DD5349 /* HermiteH */,
 				9FE86ECD215D1A4E00DD5349 /* Hypergeo */,
 				9FE86EC5215D198900DD5349 /* ContFrac */,
+				9FEA82441F76C9F6005E4349 /* SSContFrac.swift */,
 				9FE86EC4215D196400DD5349 /* Bessel */,
 				9FE86EC3215D195400DD5349 /* Gamma_Beta */,
 				9F4733E8214021E30041FD58 /* MarcumQ */,
@@ -477,7 +479,6 @@
 		9FE86EC5215D198900DD5349 /* ContFrac */ = {
 			isa = PBXGroup;
 			children = (
-				9FEA82441F76C9F6005E4349 /* SSContFrac.swift */,
 			);
 			path = ContFrac;
 			sourceTree = "<group>";
@@ -498,6 +499,7 @@
 			children = (
 				9F0B3D9621503ACC00C4F920 /* Pearson.swift */,
 				9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */,
+				9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */,
 			);
 			path = Hypergeo;
 			sourceTree = "<group>";
@@ -534,7 +536,7 @@
 			isa = PBXGroup;
 			children = (
 				9FEA82591F76C9F6005E4349 /* SSUtils.swift */,
-				9F2DC9FB215E80D600033520 /* SSMath-GenericFP.swift */,
+				9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */,
 				9F9E606F210DD0B10059DF46 /* Integrator.swift */,
 			);
 			path = Math;
@@ -745,6 +747,7 @@
 				9F7EFB312101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
 				9FEA82761F76CAF5005E4349 /* SSExamine-FileManagement.swift in Sources */,
 				9F7EFB2F2101ED2900F0F573 /* ProbDist-ChiSquare.swift in Sources */,
+				9FC1C9772160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */,
 				9F7EFB512101F02600F0F573 /* ProbDist-Erlang.swift in Sources */,
 				9FEA82731F76CAF5005E4349 /* SSCrosstab.swift in Sources */,
 				9FA87188210FA47D00C4A0FF /* ProbDist-RayleighDist.swift in Sources */,
@@ -796,7 +799,6 @@
 				9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */,
 				9FC118D420867ECC008860C7 /* String-Extension-Hash.swift in Sources */,
 				9F7EFB422101EF2C00F0F573 /* ProbDist-Logistic.swift in Sources */,
-				9F2DC9FC215E80D600033520 /* SSMath-GenericFP.swift in Sources */,
 				9F429DBB2150F28800C27B6B /* Airy.swift in Sources */,
 				9F7EFB572101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
 				9F06A0682149B0400029DE0A /* SSSF-MarcumQ.swift in Sources */,
@@ -881,7 +883,7 @@
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9FF596BE2150E6C600DE7E75 /* besselJy.swift in Sources */,
-				9F2DC9FD215E80D600033520 /* SSMath-GenericFP.swift in Sources */,
+				9FC1C9782160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */,
 				9F429DBC2150F28800C27B6B /* Airy.swift in Sources */,
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9F7EFB5E2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,

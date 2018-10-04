@@ -1,3 +1,7 @@
+Version 1.0.1
+- fixed: BesselI1
+
+
 Version 1.0.0
 - needed: Swift 4.2
 - added: SSFloatingPoint protocol (constants)

@@ -100,6 +100,21 @@ internal func log21<T: SSFloatingPoint>(_ x: T) -> T {
     }
 }
 
+internal func log101<T: SSFloatingPoint>(_ x: T) -> T {
+    switch x {
+    case let d as Double:
+        return log10(d) as Double as! T
+    case let f as Float:
+        return log10f(f) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return log10l(f80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
 
 
 internal func log1p1<T: SSFloatingPoint>(_ x: T) -> T {
@@ -505,6 +520,79 @@ internal func matMul<FPT: SSFloatingPoint>(a: Array<FPT>, aCols: Int, aRows: Int
     var c: Array<FPT> = Array<FPT>.init(repeating: 0, count: aRows * bCols)
     try! ddgemm(Order: CblasRowMajor, TransA: CblasNoTrans, TransB: CblasNoTrans, M: aRows, N: bCols, K: aCols, alpha: 1, A: a, lda: aCols, B: b, ldb: aCols, beta: 0, C: &c, ldc: bCols)
     return c
+}
+
+
+/// Binomial
+internal func binomial2<FPT: SSFloatingPoint>(_ n: FPT, _ k: FPT) -> FPT {
+    var ans: UInt64 = 1
+    var kk: UInt64 = integerValue(k)
+    var nn: UInt64 = integerValue(n)
+    var overflow: Bool = false
+    var ex1: (UInt64, Bool) = (0, false)
+    var ex2: (UInt64, Bool) = (0, false)
+    kk = k > n - k ? nn - kk : kk
+    for j: UInt64 in stride(from: 1, through: kk, by: 1) {
+        if nn % j == 0 {
+            ex1 = nn.dividedReportingOverflow(by: j)
+            if ex1.1 {
+                overflow = true
+                break
+            }
+            ex2 = ans.multipliedReportingOverflow(by: ex1.0)
+            if ex2.1 {
+                overflow = true
+                break
+            }
+            ans = ex2.0
+        }
+        else {
+            if ans % j == 0 {
+                ex1 = ans.dividedReportingOverflow(by: j)
+                if ex1.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex1.0
+                ex2 = ans.multipliedReportingOverflow(by: nn)
+                if ex2.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex2.0
+            }
+            else {
+                ex1 = ans.multipliedReportingOverflow(by: nn)
+                if ex1.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex1.0
+                ex2 = ans.dividedReportingOverflow(by: j)
+                if ex2.1 {
+                    overflow = true
+                    break
+                }
+                ans = ex2.0
+            }
+        }
+        nn = nn - 1
+    }
+    if !overflow {
+        return makeFP(ans)
+    }
+    else {
+        let num: FPT = lgamma1(makeFP(n) + 1)
+        let den: FPT = lgamma1(makeFP(n - k + 1)) + lgamma1(makeFP(k + 1))
+        let q: FPT = num - den
+        return exp1(q).rounded(FloatingPointRoundingRule.toNearestOrAwayFromZero)
+
+    }
+}
+
+    /// Returns the logarithm of n!
+internal func logFactorial<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
+        return lgamma1(makeFP(n + 1))
 }
 
 
