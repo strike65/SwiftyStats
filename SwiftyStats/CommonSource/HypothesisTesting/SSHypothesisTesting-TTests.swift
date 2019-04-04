@@ -203,8 +203,8 @@ public class SSHypothesisTesting {
                 twoTailedUEV = cdfTValueUnequalVariances * 2
                 oneTailedUEV = cdfTValueUnequalVariances
             }
-            let effectSize_EV = sqrt((tValueEqualVariances * tValueEqualVariances) / ((tValueEqualVariances * tValueEqualVariances) + dfEqualVariances))
-            let effectSize_UEV = sqrt((tValueUnequalVariances * tValueUnequalVariances) / ((tValueUnequalVariances * tValueUnequalVariances) + dfUnequalVariances))
+            let effectSize_EV:FPT = sqrt((tValueEqualVariances * tValueEqualVariances) / ((tValueEqualVariances * tValueEqualVariances) + dfEqualVariances))
+            let effectSize_UEV:FPT = sqrt((tValueUnequalVariances * tValueUnequalVariances) / ((tValueUnequalVariances * tValueUnequalVariances) + dfUnequalVariances))
             // Welch
             let var1OverN1: FPT = var1 / n1
             let var2OverN2: FPT = var2 / n2
@@ -439,7 +439,7 @@ public class SSHypothesisTesting {
             if sed.isZero {
                 pTwoTailed = 1
             }
-            let effectSize = sqrt((t * t) / ((t * t) + df))
+            let effectSize:FPT = sqrt((t * t) / ((t * t) + df))
             var result: SSMatchedPairsTTestResult<FPT> = SSMatchedPairsTTestResult<FPT>()
             result.sampleSize = makeFP(n)
             result.covariance = cov

@@ -71,7 +71,7 @@ import Foundation
  */
 
 
-internal func polyeval<FPT: SSFloatingPoint & Codable>( x: FPT, coef: [FPT], n: Int ) -> FPT {
+internal func polyeval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int ) -> FPT {
     var ans: FPT
     var i: Int
     
@@ -95,7 +95,7 @@ internal func polyeval<FPT: SSFloatingPoint & Codable>( x: FPT, coef: [FPT], n: 
  * Otherwise same as polevl.
  */
 
-internal func poly1eval<FPT: SSFloatingPoint & Codable>( x: FPT, coef: [FPT], n: Int! ) -> FPT {
+internal func poly1eval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int! ) -> FPT {
     var ans: FPT
     var i: Int
     

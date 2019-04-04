@@ -644,8 +644,14 @@ extension SSHypothesisTesting {
     fileprivate class func sumUp<FPT: SSFloatingPoint & Codable>(start: Int!, end: Int!) -> FPT {
         var sum: FPT = makeFP(start)
         var i: Int = start
+        var comp: FPT = 0
+        var oldsum: FPT = 0
         while i < end {
-            sum += makeFP(i)
+            oldsum = sum
+            comp = comp + makeFP(i)
+            sum = comp + oldsum
+            comp = (oldsum - sum) + comp
+//            sum += makeFP(i)
             i += 1
         }
         return sum
@@ -780,7 +786,10 @@ extension SSHypothesisTesting {
             pexact2 = FPT.nan
         }
         else {
-            z = abs(U - mn / 2) / sqrt((mn * (n1 + n2 + 1)) / 12)
+            let e1: FPT = abs(U - mn / 2)
+            let e2: FPT = (n1 + n2 + 1)
+            let e3: FPT = (mn * e2) / 12
+            z = e1 / sqrt(e3)
             if (n1 * n2) <= 400 && ((n1 * n2) + min(n1, n2)) <= 220 {
                 do {
                     if U <= (n1 * n2 + 1) / 2 {

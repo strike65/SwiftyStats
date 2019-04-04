@@ -92,6 +92,9 @@ public protocol SSFloatingPoint: FloatingPoint {
     /// ln(2)
     static var ln2: Self { get }
 
+    /// ln(10)
+    static var ln10: Self { get }
+
     /// 1 / 12
     static var oo12: Self { get }
 
@@ -291,6 +294,12 @@ extension Double: SSFloatingPoint {
     public static var ln2: Double {
         get {
             return 0.6931471805599453094172321214581765680755
+        }
+    }
+    /// ln(10)
+    public static var ln10: Double {
+        get {
+            return 2.3025850929940456840179914546843642076011
         }
     }
     /// 1 / 12
@@ -542,6 +551,12 @@ extension Float: SSFloatingPoint {
             return 0.6931471805599453094172321214581765680755
         }
     }
+    /// ln(10)
+    public static var ln10: Float {
+        get {
+            return 2.3025850929940456840179914546843642076011
+        }
+    }
     /// 1 / 12
     public static var oo12: Float {
         get {
@@ -789,6 +804,12 @@ extension Float80: SSFloatingPoint {
     public static var ln2: Float80 {
         get {
             return 0.6931471805599453094172321214581765680755
+        }
+    }
+    /// ln(10)
+    public static var ln10: Float80 {
+        get {
+            return 2.3025850929940456840179914546843642076011
         }
     }
     /// 1 / 12

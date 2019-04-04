@@ -75,7 +75,10 @@ public func pdfLogNormalDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, 
         return 0
     }
     else {
-        let r = 1 / (sqrt(v) * x * sqrt(2 * FPT.pi)) * exp1(-1 * pow1(log1(x) - mean, 2) / (2 * v))
+        let e1: FPT = sqrt(v) * x
+        let e2: FPT = e1 * sqrt(2 * FPT.pi)
+        let e3: FPT = pow1(log1(x) - mean, 2)
+        let r:FPT = 1 / e2 * exp1(-1 * e3 / (2 * v))
         return r
     }
 }

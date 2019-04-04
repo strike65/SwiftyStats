@@ -25,6 +25,23 @@ import Foundation
 import Darwin
 import Accelerate.vecLib
 
+
+internal func hypot1<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
+    switch x {
+    case let d as Double:
+        return hypot(d, y as! Double) as Double as! T
+    case let f as Float:
+        return hypotf(f, y as! Float) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return hypotl(f80, y as! Float80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
+
 internal func tgamma1<T: SSFloatingPoint>(_ x: T) -> T {
     switch x {
     case let d as Double:
@@ -200,12 +217,27 @@ internal func sign1<T: SSFloatingPoint>(_ x: T) -> T {
 internal func sin1<T: SSFloatingPoint>(_ x: T) -> T {
     switch x {
     case let d as Double:
-        return sin(d) as Double as! T
+        if isInteger(d / Double.pi) {
+            return T.zero
+        }
+        else {
+            return sin(d) as Double as! T
+        }
     case let f as Float:
-        return sinf(f) as Float as! T
+        if isInteger(f / Float.pi) {
+            return T.zero
+        }
+        else {
+            return sinf(f) as Float as! T
+        }
         #if arch(x86_64)
     case let f80 as Float80:
-        return sinl(f80) as Float80 as! T
+        if isInteger(f80 / Float80.pi) {
+            return T.zero
+        }
+        else {
+            return sinl(f80) as Float80 as! T
+        }
         #endif
     default:
         return T.nan
@@ -221,6 +253,22 @@ internal func sinh1<T: SSFloatingPoint>(_ x: T) -> T {
         #if arch(x86_64)
     case let f80 as Float80:
         return sinhl(f80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
+
+internal func cosh1<T: SSFloatingPoint>(_ x: T) -> T {
+    switch x {
+    case let d as Double:
+        return cosh(d) as Double as! T
+    case let f as Float:
+        return coshf(f) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return coshl(f80) as Float80 as! T
         #endif
     default:
         return T.nan
@@ -284,6 +332,38 @@ internal func cot1<T: SSFloatingPoint>(_ x: T) -> T {
         return T.nan
     }
 }
+
+internal func acos1<T: SSFloatingPoint>(_ x: T) -> T {
+    switch x {
+    case let d as Double:
+        return acos(d) as Double as! T
+    case let f as Float:
+        return acosf(f) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return acosl(f80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
+
+internal func asin1<T: SSFloatingPoint>(_ x: T) -> T {
+    switch x {
+    case let d as Double:
+        return asin(d) as Double as! T
+    case let f as Float:
+        return asinf(f) as Float as! T
+        #if arch(x86_64)
+    case let f80 as Float80:
+        return asinl(f80) as Float80 as! T
+        #endif
+    default:
+        return T.nan
+    }
+}
+
 
 internal func atan1<T: SSFloatingPoint>(_ x: T) -> T {
     switch x {
@@ -591,7 +671,7 @@ internal func binomial2<FPT: SSFloatingPoint>(_ n: FPT, _ k: FPT) -> FPT {
 }
 
     /// Returns the logarithm of n!
-internal func logFactorial<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
+internal func logFactorial<FPT: SSFloatingPoint>(_ n: Int) -> FPT {
         return lgamma1(makeFP(n + 1))
 }
 

@@ -178,16 +178,23 @@ extension SSHypothesisTesting {
             l += 1
         }
         var sum: FPT = 0
+        var comp: FPT = 0
+        var oldsum: FPT = 0
         let nr: FPT = 1 / nn
         k = 0
         while k < acr.count {
             l = 1
             while l < k {
-                sum += pow1(acr[l], 2)
+                oldsum = sum
+                comp = comp + pow1(acr[l], 2)
+                sum = comp + oldsum
+                comp = (oldsum - sum) + comp
                 l += 1
             }
             serBartlett.append(nr * (1 + 2 * sum))
             sum = 0
+            comp = 0
+            oldsum = 0
             k += 1
         }
         serBartlett[0] = 0
@@ -195,6 +202,8 @@ extension SSHypothesisTesting {
         statBoxLjung.append(FPT.infinity)
         sig.append(0)
         sum = 0
+        comp = 0
+        oldsum = 0
         let f = nn * (nn * 2)
         k = 1
         var kk: FPT = 0
@@ -205,7 +214,11 @@ extension SSHypothesisTesting {
             l = 1
             while l <= k {
                 ll = makeFP(l)
-                sum += sum + (pow1(acr[l], 2) / (nn - ll))
+                oldsum = sum
+                comp = comp + (pow1(acr[l], 2) / (nn - ll))
+                sum = comp + oldsum
+                comp = (oldsum - sum) + comp
+//                sum += sum + (pow1(acr[l], 2) / (nn - ll))
                 l += 1
             }
             statBoxLjung.append(f * sum)
@@ -216,6 +229,8 @@ extension SSHypothesisTesting {
                 throw error
             }
             sum = 0
+            comp = 0
+            oldsum = 0
             k += 1
         }
         var coeff: Dictionary<String, FPT> = Dictionary<String, FPT>()

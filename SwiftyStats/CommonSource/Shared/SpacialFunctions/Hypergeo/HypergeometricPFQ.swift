@@ -21,11 +21,6 @@ import Foundation
 import Accelerate
 // naive implementation
 
-struct Complex<T: SSFloatingPoint> {
-    var re: T = 0
-    var im: T = 0
-}
-
 public func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T) -> T {
     var sum1, s: T
     let tol: T = T.ulpOfOne
@@ -137,7 +132,648 @@ public func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T)
  %     ****************************************************************
  
  */
-func bits<T: SSFloatingPoint>() -> T {
+
+
+public func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
+    var sigfig: Int
+    switch z.re {
+    case let _ as Double:
+        sigfig = 15
+    case let _ as Float:
+        sigfig = 7
+        #if arch(x86_64)
+    case let _ as Float80:
+        sigfig = 19
+        #endif
+    default:
+        sigfig = 15
+    }
+    var ans: Complex<T>
+    var zz: Complex<T> = z
+    var ip: Int = a.count
+    var iq: Int = b.count
+    let aa: Array<Complex<T>> = a
+    let bb: Array<Complex<T>> = b
+    var i: Int = 0
+    do {
+        try ans = hyper(a: aa, b: bb, ip: aa.count, iq: bb.count, z: &zz, lnpfq: log ? 1 : 0, ix: 777, nsigfig: &sigfig)
+        if !ans.isNan {
+            return ans
+        }
+    }
+    catch {
+        throw error
+    }
+    return ans
+}
+
+
+
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                   FUNCTION HYPER                             *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Function that sums the Gauss series.          *
+ %     *                                                              *
+ %     *  Subprograms called: ARMULT, ARYDIV, BITS, CMPADD, CMPMUL,   *
+ %     *                      IPREMAX.                                *
+ %     *                                                              *
+ %     ****************************************************************
+ */
+fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, ip: Int, iq: Int, z: inout Complex<T>, lnpfq: Int, ix: Int, nsigfig: inout Int) throws -> Complex<T> {
+    let length: Int = 777
+    var cr: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ci: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ar: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ai: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ar2: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ai2: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var cr2: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var ci2: Array<T> = Array<T>.init(repeating: 0, count: 10)
+    var sumr: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var sumi: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var denomr: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var denomi: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var qr1: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var qi1: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk1: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk2: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk3: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk4: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk5: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var wk6: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var qr2: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var qi2: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var foo1: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var foo2: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var numr: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var numi: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var bar1: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var bar2: Array<T> = Array<T>.init(repeating: 0, count: length + 2)
+    var accy, cnt, bitss, creal, dum1, dum2, expon, mx1, mx2, ri10, rr10, sigfig, rmax, x, xi, xi2, xl, xr, xr2, log2: T
+    var cdum1, cdum2, final, oldtemp, temp, temp1, ans: Complex<T>
+    var goon1, i1, ibit,icount,ii10,ir10,ixcnt,l,lmax,nmach,rexp: Int
+    var e1, e2, e3: T
+    accy = 0
+    cnt = 0
+    creal = 0
+    dum1 = 0
+    dum2 = 0
+    expon = 0
+    mx1 = 0
+    mx2 = 0
+    ri10 = 0
+    rr10 = 0
+    sigfig = 0
+    rmax = 0
+    x = 0
+    xi = 0
+    xi2 = 0
+    xl = 0
+    xr = 0
+    xr2 = 0
+    cdum1 = Complex<T>(0)
+    cdum2 = Complex<T>(0)
+    final = Complex<T>(T.nan, T.nan)
+    oldtemp = Complex<T>(0)
+    temp = Complex<T>(0)
+    temp1 = Complex<T>(0)
+    goon1 = 0
+    i1 = 0
+    ibit = 0
+    icount = 0
+    ii10 = 0
+    ir10 = 0
+    ixcnt = 0
+    l = 0
+    lmax = 0
+    nmach = 0
+    rexp = 0
+    bitss = bits()
+    log2 = log101(2)
+    ibit = integerValue(bitss)
+    let intibito2: T = makeFP(ibit) / 2
+    let intibito4: T = makeFP(ibit) / 4
+    let iintibito2: Int = integerValue(intibito2)
+    let iintibito4: Int = integerValue(intibito4)
+    let intibito2f: T = makeFP(iintibito2)
+    let intibito4f: T = makeFP(iintibito4)
+    rmax = pow1(2, intibito2f)
+    sigfig = pow1(2, intibito4f)
+    for I1: Int in stride(from: 1, to: ip, by: 1) {
+        i1 = I1
+        ar2[i1 - 1] = (a[i1 - 1] &** sigfig).re
+        ar[i1 - 1] = fix(ar2[i1 - 1])
+        ar2[i1 - 1] = round((ar2[i1 - 1] - ar[i1 - 1]) * rmax)
+        ai2[i1 - 1] = (a[i1 - 1] &** sigfig).im
+        ai[i1 - 1] = fix(ai2[i1 - 1])
+        ai2[i1 - 1] = round((ai2[i1 - 1] - ai[i1 - 1] * rmax))
+    }
+    for I1: Int in stride(from: 1, to: ip, by: 1) {
+        cr2[I1 - 1] = (b[I1 - 1] &** sigfig).re
+        cr[I1 - 1] = fix(cr2[i1 - 1])
+        cr2[I1 - 1] = round((cr2[I1 - 1] - cr[I1 - 1]) * rmax)
+        ci2[I1 - 1] = (b[I1 - 1] &** sigfig).im
+        ci[I1 - 1] = fix(ci2[i1 - 1])
+        ci2[I1 - 1] = round((ci2[I1 - 1] - ci[I1 - 1] * rmax))
+    }
+    xr2 = z.re * sigfig
+    xr = fix(xr2)
+    xr2 = round( (xr2 - xr) * rmax)
+    xi2 = z.im * sigfig
+    xi = fix(xi2)
+    xi2 = round((xi2 - xi) * rmax)
+    /*
+     %
+     %     WARN THE USER THAT THE INPUT VALUE WAS SO CLOSE TO ZERO THAT IT
+     %     WAS SET EQUAL TO ZERO.
+     %
+    */
+    for i1 in stride(from: 1, to: ip, by: 1) {
+        if (!a[i1 - 1].re.isZero && ar[i1 - 1].isZero && ar2[i1 - 1].isZero) {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Real part was set to zero (input vector a - at least one element was too close to zero)", log: log_stat, type: .error)
+            }
+            #else
+            print("Real part was set to zero (input vector a - at least one element was too close to zero)")
+            #endif
+        }
+        if (!a[i1 - 1].isZero && ai[i1 - 1].isZero && ai2[i1 - 1].isZero) {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Imaginary part was set to zero (input vector a - at least one element was too close to zero)", log: log_stat, type: .error)
+            }
+            #else
+            print("Imaginary part was set to zero (input vector a - at least one element was too close to zero)")
+            #endif
+        }
+    }
+    for i1 in stride(from: 1, to: iq, by: 1) {
+        if (!b[i1 - 1].re.isZero && cr[i1 - 1].isZero && cr2[i1 - 1].isZero) {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Real part was set to zero (input vector b - at least one element was too close to zero)", log: log_stat, type: .error)
+            }
+            #else
+            print("Real part was set to zero (input vector b - at least one element was too close to zero)")
+            #endif
+        }
+        if (!b[i1 - 1].isZero && ci[i1 - 1].isZero && ci2[i1 - 1].isZero) {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Imaginary part was set to zero (input vector b - at least one element was too close to zero)", log: log_stat, type: .error)
+            }
+            #else
+            print("Imaginary part was set to zero (input vector b - at least one element was too close to zero)")
+            #endif
+        }
+    }
+    if !z.re.isZero && xr.isZero && xr2.isZero {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Real part was set to zero (input z - at least one element was too close to zero)", log: log_stat, type: .error)
+        }
+        #else
+        print("Real part was set to zero (input z - at least one element was too close to zero)")
+        #endif
+        z = Complex<T>.init(re: 0, im: z.im)
+    }
+    if !z.im.isZero && xi.isZero && xi2.isZero {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Imaginary part was set to zero (input z - at least one element was too close to zero)", log: log_stat, type: .error)
+        }
+        #else
+        print("Imaginary part was set to zero (input z - at least one element was too close to zero)")
+        #endif
+        z = Complex<T>.init(re: z.re, im: 0)
+    }
+    /*
+     %
+     %
+     %     SCREENING OF NUMERATOR ARGUMENTS FOR NEGATIVE INTEGERS OR ZERO.
+     %     ICOUNT WILL FORCE THE SERIES TO TERMINATE CORRECTLY.
+     %
+    */
+    nmach = ifix(log101(pow1(2, fix(bitss))))
+    icount = -1
+    for i1 in 1...ip {
+        if ar2[i1 - 1].isZero && ar[i1 - 1].isZero && ai2[i1 - 1].isZero && ai[i1 - 1].isZero {
+            ans = Complex<T>.init(re: T.one, im: 0)
+            return ans
+        }
+        if ai[i1 - 1].isZero && ai2[i1 - 1].isZero && a[i1 - 1].re < 0 {
+            if abs(a[i1 - 1].re - round(a[i1 - 1].re)) < pow1(10, -makeFP(nmach)) {
+                if (icount != -1) {
+                    icount = ifix(min(makeFP(icount), -round(a[i1 - 1].re)))
+                }
+                else {
+                    icount = -ifix(round(a[i1 - 1].re))
+                }
+            }
+        }
+    }
+    /*
+     %
+     %     SCREENING OF DENOMINATOR ARGUMENTS FOR ZEROES OR NEGATIVE INTEGERS
+     %     .
+     %
+     */
+    for i1 in 1...iq {
+        if ((cr[i1 - 1].isZero) && (cr2[i1 - 1].isZero) && (ci[i1 - 1].isZero) && (ci2[i1 - 1].isZero)) {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Abort - denominator argument was equal to zero", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if ((ci[i1 - 1].isZero) && (ci2[i1 - 1].isZero) && (b[i1 - 1].re < 0)) {
+            if ((abs(b[i1 - 1].re) - round(b[i1 - 1].re) < pow1(10, makeFP(-nmach))) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Abort - denominator argument was equal to zero", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+        }
+    }
+    nmach = ifix(log101(pow1(2, makeFP(ibit))))
+    nsigfig = min(nsigfig, nmach)
+    accy = pow1(10, makeFP(-nsigfig))
+    do {
+        l = try ipremax(a: a, b: b, ip: ip, iq: iq, z: z)
+    }
+    catch {
+        throw error
+    }
+    if (l != 1) {
+        /*
+         %
+         %     First, estimate the exponent of the maximum term in the pFq series
+         %     .
+         %*/
+        expon = 0
+        xl = makeFP(l)
+        for i in 1...ip {
+            expon = expon + factor(a[i - 1] &++ xl &-- 1).re - factor(a[i - 1] &-- 1).re
+        }
+        for i in 1...iq {
+            expon = expon - factor(b[i - 1] &++ xl &-- 1).re + factor(b[i - 1] &-- 1).re
+        }
+        expon = (expon + xl) * log(z).re - factor(Complex<T>.init(re: xl, im: T.zero)).re
+        lmax = ifix(log101(exp1(1)) * expon)
+        l = lmax
+        /*
+         %
+         %     Now, estimate the exponent of where the pFq series will terminate.
+         %
+         %
+        */
+        temp1 = Complex<T>.init(re: 1, im: 0)
+        creal = 1
+        for i1 in 1...ip {
+            temp1 = temp1 &** Complex<T>(ar[i1 - 1],ai[i1 - 1]) &% sigfig
+        }
+        for i1 in 1...iq {
+            temp1 = temp1 &% (Complex<T>(cr[i1 - 1],ci[i1 - 1]) &% sigfig)
+            creal = creal * cr[i1 - 1]
+        }
+        temp1 = temp1 &** Complex<T>(xr,xi)
+        /*
+         %
+         %     Triple it to make sure.
+         %
+         */
+        l = 3 * l
+        /*
+         %
+         %     Divide the number of significant figures necessary by the number
+         %     of
+         %     digits available per array position.
+         %
+         %
+        */
+        e1 = makeFP(l)
+        e2 = makeFP(nsigfig)
+        e3 = makeFP(nmach)
+        l = ifix(2 * e1 + e2 / e3) + 2
+    }
+    /*
+     %
+     %     Make sure there are at least 5 array positions used.
+     %
+    */
+    l = max(l, 5)
+    l = max(l, ix)
+    if l < 0 || l > length {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Abort - error in fn hyper: l must be < 777", log: log_stat, type: .error)
+        }
+        #endif
+        throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+    }
+    if nsigfig > nmach {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Warning--the number of significant figures requested is greate than machine precision. Result is not as accurate as requested.", log: log_stat, type: .error)
+        }
+        #else
+        print("Warning--the number of significant figures requested is greate than machine precision. Result is not as accurate as requested.")
+        #endif
+    }
+    sumr[-1 + aOffset] = 1
+    sumi[-1 + aOffset] = 1
+    numr[-1 + aOffset] = 1
+    numi[-1 + aOffset] = 1
+    denomr[-1 + aOffset] = 1
+    denomi[-1 + aOffset] = 1
+    for i in 0...l + 1 {
+        sumr[i + aOffset] = 0
+        sumi[i + aOffset] = 0
+        numr[i + aOffset] = 0
+        numi[i + aOffset] = 0
+        denomr[i + aOffset] = 0
+        denomi[i + aOffset] = 0
+    }
+    sumr[1 + aOffset] = 1
+    numr[1 + aOffset] = 1
+    denomr[1 + aOffset] = 1
+    cnt = sigfig
+    temp = Complex<T>(0,0)
+    oldtemp = temp
+    ixcnt = 0
+    e1 = makeFP(ibit)
+    e2 = makeFP(2)
+    rexp = ifix(e1 / e2)
+    x = makeFP(rexp) * (sumr[l + 1 + aOffset] - 2)
+    rr10 = x * log2
+    ir10  = ifix(rr10)
+    rr10 = rr10 - makeFP(ir10)
+    x = makeFP(rexp) * (sumi[l + 1 + aOffset] - 2)
+    ri10 = x * log2
+    ii10 = ifix(ri10)
+    ri10 = ri10 - makeFP(ii10)
+    dum1 = (abs(sumr[1 + aOffset] * rmax * rmax + sumr[2 + aOffset] * rmax + sumr[3 + aOffset]) * sign(sumr[-1 + aOffset]))
+    dum2 = (abs(sumi[1 + aOffset] * rmax * rmax + sumi[2 + aOffset] * rmax + sumi[3 + aOffset]) * sign(sumi[-1 + aOffset]))
+    dum1 = dum1 * pow1(10, rr10)
+    dum2 = dum2 * pow1(10, ri10)
+    cdum1 = Complex<T>(dum1,dum2)
+    x = makeFP(rexp) * (denomr[l + 1 + aOffset] - 2)
+    rr10 = x * log2
+    ir10 = ifix(rr10)
+    rr10 = rr10 - makeFP(ir10)
+    x = makeFP(rexp) * (denomi[l + 1 + aOffset] - 2)
+    ri10 = x * log2
+    ii10 = ifix(ri10)
+    ri10 = ri10 - makeFP(ii10)
+    dum1 = (abs(denomr[1 + aOffset] * rmax * rmax + denomr[2 + aOffset] * rmax + denomr[3 + aOffset]) * sign(denomr[-1 + aOffset]))
+    dum2 = (abs(denomi[1 + aOffset] * rmax * rmax + denomi[2 + aOffset] * rmax + denomi[3 + aOffset]) * sign(denomi[-1 + aOffset]))
+    dum1 = dum1 * pow1(10, rr10)
+    dum2 = dum2 * pow1(10, ri10)
+    cdum2 = Complex<T>(dum1, dum2)
+    temp = cdum1 &% cdum2
+    goon1 = 1
+    while goon1 == 1 {
+        goon1 = 0
+        if (ip < 0) {
+            if (sumr[1 + aOffset] < T.half) {
+                mx1 = sumi[l + 1 + aOffset]
+            }
+            else if (sumi[1 + aOffset] < T.half) {
+                mx1 = sumr[l + 1 + aOffset]
+            }
+            else {
+                mx1 = max(sumr[l + 1 + aOffset],sumi[l + 1 + aOffset])
+            }
+            if (numr[1 + aOffset] < T.half) {
+                mx2 = numi[l + 1 + aOffset]
+            }
+            else if (numi[1 + aOffset] < T.half) {
+                mx2 = numr[l + 1 + aOffset]
+            }
+            else {
+                mx2 = max(numr[l + 1 + aOffset],numi[l + 1 + aOffset])
+            }
+            if (mx1 - mx2 > 2) {
+                if (creal >= 0) {
+                    //%        write (6,*) ' cdabs(temp1/cnt)=',cdabs(temp1/cnt)
+                    //%
+                    if ((temp1 &% cnt).abs <= 1) {
+                        do {
+                            try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &final, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
+                        }
+                        catch {
+                            throw error
+                        }
+                        //arydiv(sumr,sumi,denomr,denomi,final,l,lnpfq,rmax,ibit)
+                        ans = final
+                        return ans
+                    }
+                }
+            }
+        }
+        else {
+            do {
+                try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &temp, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
+            }
+            catch {
+                throw error
+            }
+//            %
+//            %      First, estimate the exponent of the maximum term in the pFq
+//            %      series.
+//            %
+            expon = 0
+            xl = makeFP(ixcnt)
+            for i in 1...ip {
+                expon = expon + factor(a[i - 1] &++ xl &-- 1).re - factor(a[i - 1] &-- T.one).re
+            }
+            for i in 1...iq {
+                expon = expon - factor(b[i - 1] &++ xl &-- 1).re + factor(b[i - 1] &-- T.one).re
+            }
+            expon = expon + xl * log(z).re - factor(Complex<T>(xl,0)).re
+            lmax = ifix(log101(exp1(T.one)) * expon)
+            if ((oldtemp &-- temp).abs < (temp &** accy).abs) {
+                do {
+                    try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &final, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
+                }
+                catch {
+                    throw error
+                }
+                ans = final
+                return ans
+            }
+            temp = oldtemp
+        }
+        if ixcnt != icount {
+            ixcnt = ixcnt + 1
+            for i1 in 1...iq {
+//                %
+//                %      TAKE THE CURRENT SUM AND MULTIPLY BY THE DENOMINATOR OF THE NEXT
+//                %
+//                %      TERM, FOR BOTH THE MOST SIGNIFICANT HALF (CR,CI) AND THE LEAST
+//                %
+//                %      SIGNIFICANT HALF (CR2,CI2).
+//                %
+//                %
+                cmpmul(ar: &sumr, ai: &sumi, br: cr[i1 - 1], bi: ci[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                cmpmul(ar: &sumr, ai: &sumi, br: cr2[i1 - 1], bi: ci2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
+                qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
+//                    %
+//                    %      STORE THIS TEMPORARILY IN THE SUM ARRAYS.
+//                    %
+//                    %
+                cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &sumr, ci: &sumi, wk1: &wk1, l: l, rmax: rmax)
+            }
+//            %
+//            %     MULTIPLY BY THE FACTORIAL TERM.
+//            %
+            foo1 = sumr
+            foo2 = sumr
+            armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
+            sumr = foo2
+            foo1 = sumi
+            foo2 = sumi
+            armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
+            sumi = foo2
+//            %
+//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+//            %
+            for i1 in 1...ip-iq {
+                foo1 = sumr
+                foo2 = sumr
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                sumr = foo2
+                foo1 = sumi
+                foo2 = sumi
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                sumi = foo2
+            }
+            for i1 in 1...iq {
+//            %
+//            %      UPDATE THE DENOMINATOR.
+//            %
+//            %
+                cmpmul(ar: &denomr, ai: &denomi, br: cr[i1 - 1], bi: ci[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                cmpmul(ar: &denomr, ai: &denomi, br: cr2[i1 - 1], bi: ci2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
+                qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
+                cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &denomr, ci: &denomi, wk1: &wk1, l: l, rmax: rmax)
+            }
+//            %
+//            %
+//            %     MULTIPLY BY THE FACTORIAL TERM.
+//            %
+            foo1 = denomr
+            foo2 = denomr
+            armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
+            denomr = foo2
+            foo2 = denomi
+            foo1 = denomi
+            armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
+            denomi = foo2
+//            %
+//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+//            %
+            for i1 in 1...ip-iq {
+                foo1 = denomr
+                foo2 = denomr
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                denomr = foo2
+                foo1 = denomi
+                foo2 = denomi
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                denomi = foo2
+            }
+//           %
+//           %     FORM THE NEXT NUMERATOR TERM BY MULTIPLYING THE CURRENT
+//           %     NUMERATOR TERM (AN ARRAY) WITH THE A ARGUMENT (A SCALAR).
+//           %
+            for i1 in 1...ip {
+                cmpmul(ar: &numr, ai: &numi, br: ar[i1 - 1], bi: ai[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                cmpmul(ar: &numr, ai: &numi, br: ar2[i1 - 1], bi: ai2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+                qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
+                qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
+                cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &numr, ci: &numi, wk1: &wk1, l: l, rmax: rmax)
+            }
+//            %
+//            %     FINISH THE NEW NUMERATOR TERM BY MULTIPLYING BY THE Z ARGUMENT.
+//            %
+            cmpmul(ar: &numr, ai: &numi, br: xr, bi: xi, cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+            cmpmul(ar: &numr, ai: &numi, br: xr2, bi: xi2, cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
+            qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
+            qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
+            cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &numr, ci: &numi, wk1: &wk1, l: l, rmax: rmax)
+//            %
+//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+//            %
+            for i1 in 1...iq-ip {
+                foo1 = numr
+                foo2 = numr
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                numr = foo2
+                foo1 = numi
+                foo2 = numi
+                armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
+                numi = foo2
+            }
+//            %
+//            %     FINALLY, ADD THE NEW NUMERATOR TERM WITH THE CURRENT RUNNING
+//            %     SUM OF THE NUMERATOR AND STORE THE NEW RUNNING SUM IN SUMR, SUMI.
+//            %
+            foo1 = sumr
+            foo2 = sumr
+            bar1 = sumi
+            bar2 = sumi
+            cmpadd(ar: &foo1, ai: &bar1, br: &numr, bi: &numi, cr: &foo2, ci: &bar2, wk1: &wk1, l: l, rmax: rmax)
+            sumi = bar2
+            sumr = foo2
+//            %
+//            %     BECAUSE SIGFIG REPRESENTS "ONE" ON THE NEW SCALE, ADD SIGFIG
+//            %     TO THE CURRENT COUNT AND, CONSEQUENTLY, TO THE IP ARGUMENTS
+//            %     IN THE NUMERATOR AND THE IQ ARGUMENTS IN THE DENOMINATOR.
+//            %
+            cnt = cnt + sigfig
+            for i1 in 1...ip {
+                ar[i1 - 1] = ar[i1 - 1] + sigfig
+            }
+            for i1 in 1...iq {
+                cr[i1 - 1] = cr[i1 - 1] + sigfig
+            }
+            goon1 = 1
+        }
+    }
+    do {
+        try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &final, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
+        ans = final
+    }
+    catch {
+        throw error
+    }
+    return final
+}
+
+fileprivate func fix<T: SSFloatingPoint>(_ x: T) -> T {
+    let i: Int = integerValue(x)
+    let f: T = makeFP(i)
+    return f
+}
+
+fileprivate func ifix<T: SSFloatingPoint>(_ x: T) -> Int {
+    let i: Int = integerValue(x)
+    return i
+}
+
+
+fileprivate func bits<T: SSFloatingPoint>() -> T {
     var bit, bit2: T
     var count: T
     bit = 1
@@ -155,7 +791,7 @@ func bits<T: SSFloatingPoint>() -> T {
 }
 
 // FORTRAN ARRAYS START WITH -1
-let aOffset = 1
+fileprivate let aOffset = 1
 
 
 /*
@@ -175,11 +811,11 @@ let aOffset = 1
  %     *                                                              *
  %     ****************************************************************
 */
-func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
+fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
     let one: T = T.one
     let zero: T = T.zero
     let half: T = T.half
-    var ediff, I, J,i: Int
+    var ediff, I,i: Int
     var goon300: Int = 1
     var goon190: Int = 1
     I = 0
@@ -486,7 +1122,7 @@ func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Ar
  %     *                                                              *
  %     ****************************************************************
 */
-func arsub<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, wk1: inout Array<T>, wk2: inout Array<T>, l: Int, rmax: T) {
+fileprivate func arsub<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, wk1: inout Array<T>, wk2: inout Array<T>, l: Int, rmax: T) {
     let one: T = T.one
     for i in -1...l + 1 {
         wk2[i + aOffset] = b[i + aOffset]
@@ -512,7 +1148,7 @@ func arsub<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Ar
  %     ****************************************************************
 
 */
-func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
+fileprivate func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
     let eps: T = T.ulpOfOne
     let one: T = T.one
     let half: T = T.half
@@ -579,28 +1215,28 @@ func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Array<T>, z: i
  %     *                                                              *
  %     ****************************************************************
 */
-func cmpadd<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inout Array<T>, bi: inout Array<T>, cr: inout Array<T>, ci: inout Array<T>, wk1: inout Array<T>, l: Int, rmax: T) {
+fileprivate func cmpadd<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inout Array<T>, bi: inout Array<T>, cr: inout Array<T>, ci: inout Array<T>, wk1: inout Array<T>, l: Int, rmax: T) {
     aradd(a: &ar, b: &br, c: &cr, z: &wk1, l: l, rmax: rmax)
     aradd(a: &ai, b: &bi, c: &ci, z: &wk1, l: l, rmax: rmax)
 }
 
 /*
- %     ****************************************************************
- %     *                                                              *
- %     *                 SUBROUTINE CMPADD                            *
- %     *                                                              *
- %     *                                                              *
- %     *  Description : Takes two arrays representing one real and    *
- %     *    one imaginary part, and adds two arrays representing      *
- %     *    another complex number and returns two array holding the  *
- %     *    complex sum.                                              *
- %     *              (CR,CI) = (AR+BR, AI+BI)                        *
- %     *                                                              *
- %     *  Subprograms called: ARADD                                   *
- %     *                                                              *
- %     ****************************************************************
+ !     ****************************************************************
+ !     *                                                              *
+ !     *                 SUBROUTINE CMPSUB                            *
+ !     *                                                              *
+ !     *                                                              *
+ !     *  Description : Takes two arrays representing one real and    *
+ !     *    one imaginary part, and subtracts two arrays representing *
+ !     *    another complex number and returns two array holding the  *
+ !     *    complex sum.                                              *
+ !     *              (CR,CI) = (AR+BR, AI+BI)                        *
+ !     *                                                              *
+ !     *  Subprograms called: ARADD                                   *
+ !     *                                                              *
+ !     ****************************************************************
  */
-func cmpsub<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inout Array<T>, bi: inout Array<T>, cr: inout Array<T>, ci: inout Array<T>, wk1: inout Array<T>, wk2: inout Array<T>, l: Int, rmax: T) {
+fileprivate func cmpsub<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inout Array<T>, bi: inout Array<T>, cr: inout Array<T>, ci: inout Array<T>, wk1: inout Array<T>, wk2: inout Array<T>, l: Int, rmax: T) {
     arsub(a: &ar, b: &br, c: &cr, wk1: &wk1, wk2: &wk2, l: l, rmax: rmax)
     arsub(a: &ai, b: &bi, c: &ci, wk1: &wk1, wk2: &wk2, l: l, rmax: rmax)
 }
@@ -620,7 +1256,7 @@ func cmpsub<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inou
  %     *                                                              *
  %     ****************************************************************
 */
-func cmpmul<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: T,bi: T,cr: inout Array<T>,ci: inout Array<T>,wk1: inout Array<T>,wk2: inout Array<T>,cr2: inout Array<T>,d1: inout Array<T>,d2: inout Array<T>,wk6: inout Array<T>,l: Int,rmax: T) {
+fileprivate func cmpmul<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: T,bi: T,cr: inout Array<T>,ci: inout Array<T>,wk1: inout Array<T>,wk2: inout Array<T>,cr2: inout Array<T>,d1: inout Array<T>,d2: inout Array<T>,wk6: inout Array<T>,l: Int,rmax: T) {
     armult(a: &ar, b: br, c: &d1, z: &wk6, l: l, rmax: rmax)
     armult(a: &ai, b: bi, c: &d2, z: &wk6, l: l, rmax: rmax)
     arsub(a: &d1, b: &d2, c: &cr2, wk1: &wk1, wk2: &wk2, l: l, rmax: rmax)
@@ -648,13 +1284,14 @@ func cmpmul<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: T,bi: 
  %     *                                                              *
  %     ****************************************************************
 */
-func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: inout Array<T>,bi: inout Array<T>,c: Complex<T>,l: Int,lnpfq: Int,rmax: T,ibit: Int) {
-    let one: T = T.one
-    let zero: T = T.zero
-    let half: T = T.half
-    var cdum: Complex<T> = Complex<T>.init()
+fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: inout Array<T>,bi: inout Array<T>,c: inout Complex<T>,l: Int,lnpfq: Int,rmax: T,ibit: Int) throws {
+    var cdum: Complex<T> = Complex<T>.init(re: 0, im: 0)
+    var c: Complex<T> = Complex<T>.init(re: 0, im: 0)
     var  dum1 , dum2 , e1 , e2 ,e3 , n1 , n2 , n3 , phi , ri10 , rr10 , tenmax , x ,x1 , x2: T
-    var ii10 , ir10 , itnmax , rexp: Int
+    var ii10 , ir10, rexp: Int
+    var be: Array<Array<T>>
+    var ae: Array<Array<T>> /* = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2) */
+    var ce: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
     rexp = ibit / 2
     x = makeFP(rexp) * (ai[l + aOffset + 1] - 2)
     rr10 = x * log1(2) / log101(10)
@@ -666,8 +1303,618 @@ func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: inout 
     ri10 = ri10 - makeFP(ii10)
     dum1 = (abs(ar[1 + aOffset] * rmax * rmax + ar[2 + aOffset] * rmax + ar[3 + aOffset]) * sign(ar[-1 + aOffset]))
     dum2 = (abs(ai[1 + aOffset] * rmax * rmax + ai[2 + aOffset] * rmax + ai[3 + aOffset]) * sign(ai[-1 + aOffset]))
-    dum1 = dum1 * pow1(rr10, 10)
-    dum2 = dum2 * pow1(ri10, 10)
+    dum1 = dum1 * pow1(10, rr10)
+    dum2 = dum2 * pow1(10, ri10)
     cdum.re = dum1
     cdum.im = dum2
+    ae = conv12(cn: cdum)
+    ae[0][1] = ae[0][1] + makeFP(ir10)
+    ae[1][1] = ae[1][1] + makeFP(ii10)
+    x = makeFP(rexp) * (br[l + 1 + aOffset] - 2)
+    rr10 = x * log101(2) / log101(10)
+    ir10 = integerValue(rr10)
+    rr10 = rr10 - makeFP(ir10)
+    x = makeFP(rexp) * (bi[l + 1 + aOffset] - 2)
+    ri10 = x * log101(2) / log101(10)
+    ii10 = integerValue(ri10)
+    ri10 = ri10 - makeFP(ii10)
+    dum1 = (abs(br[1 + aOffset] * rmax * rmax + br[2 + aOffset] * rmax + br[3 + aOffset]) * sign(br[-1 + aOffset]))
+    dum2 = (abs(bi[1 + aOffset] * rmax * rmax + bi[2 + aOffset] * rmax + bi[3 + aOffset]) * sign(bi[-1 + aOffset]))
+    dum1 = dum1 * pow1(10, rr10)
+    dum2 = dum2 * pow1(10, ri10)
+    be = conv12(cn: cdum)
+    be[0][1] = be[0][1] + makeFP(ir10)
+    be[1][1] = be[1][1] + makeFP(ii10)
+    ecpdiv(&ae, &be, &ce)
+    tenmax = makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
+    if lnpfq == 0 {
+        do {
+            c = try conv21(cae: ce)
+        }
+        catch {
+            throw error
+        }
+    }
+    else {
+        n1 = 0
+        e1 = 0
+        n2 = 0
+        e2 = 0
+        n3 = 0
+        e3 = 0
+        emult(ce[0][0], ce[0][1], ce[0][0], ce[0][1], &n1, &e1)
+        emult(ce[1][0], ce[1][1], ce[1][0], ce[1][1], &n2, &e2)
+        eadd(n1, e1, n2, e2, &n3, &e3)
+        n1 = ce[0][0]
+        e1 = ce[0][1] - ce[1][1]
+        x2 = ce[1][0]
+        if e1 > tenmax {
+            x1 = tenmax
+        }
+        else if (e1 < -tenmax) {
+            x1 = 0
+        }
+        else {
+            x1 = n1 * pow1(10, e1)
+        }
+        if !x2.isZero {
+            phi = atan21(x2, x1)
+        }
+        else {
+            phi = T.zero
+        }
+        c = Complex<T>.init(re: 0, im: 0)
+        c.re = T.half * (log1(n3) + e3 * T.ln10)
+        c.im = phi
+    }
+}
+
+
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE CONV12                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Converts a number from complex notation to a  *
+ %     *    form of a 2x2 real array.                                 *
+ %     *                                                              *
+ %     *  Subprograms called: none                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func conv12<T: SSFloatingPoint>(cn: Complex<T>) -> Array<Array<T>> {
+    var cae: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
+    cae[0][0] = cn.re
+    cae[0][1] = T.zero
+    while true {
+        if abs(cae[0][0]) < 10 {
+            while true {
+                if ((abs(cae[0][0]) >= T.one) || (cae[0][0].isZero)) {
+                    cae[1][0] = cn.im
+                    cae[1][1] = T.zero
+                    while true {
+                        if (abs(cae[1][0]) < 10) {
+                            while ((abs(cae[1][0]) < T.one) && !cae[1][0].isZero) {
+                                cae[1][0] = cae[1][0] * 10
+                                cae[1][1] = cae[1][1] - T.one
+                            }
+                            break;
+                        }
+                        else {
+                            cae[1][0] = cae[1][0] / 10
+                            cae[1][1] = cae[1][1] + T.one
+                        }
+                    }
+                    break;
+                }
+                else {
+                    cae[0][0] = cae[0][0] * 10
+                    cae[0][1] = cae[0][1] - T.one
+                }
+            }
+            break;
+        }
+        else {
+            cae[0][0] = cae[0][0] / 10
+            cae[0][1] = cae[0][1] + T.one
+        }
+    }
+    return cae
+}
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE CONV21                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Converts a number represented in a 2x2 real   *
+ %     *    array to the form of a complex number.                    *
+ %     *                                                              *
+ %     *  Subprograms called: none                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func conv21<T: SSFloatingPoint>(cae: Array<Array<T>>) throws -> Complex<T> {
+    var cn: Complex<T> = Complex<T>.init(re: 0, im: 0)
+    cn.re = 0
+    cn.im = 0
+    let tenmax:T = makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
+    if cae[0][1] > tenmax || cae[1][1] > tenmax {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("value of exponent required for summation: pFq", log: log_stat, type: .error)
+        }
+        
+        #endif
+        throw SSSwiftyStatsError.init(type: .maxExponentExceeded, file: #file, line: #line, function: #function)
+    }
+    else if cae[1][1] < -tenmax {
+        cn.re = cae[0][0] * pow1(10, cae[0][1])
+        cn.im = 0
+    }
+    else {
+        cn.re = cae[0][0] * pow1(10, cae[0][1])
+        cn.im = cae[1][0] * pow1(10, cae[1][1])
+    }
+    return cn
+}
+
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE ECPDIV                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Divides two numbers and returns the solution. *
+ %     *    All numbers are represented by a 2x2 array.               *
+ %     *                                                              *
+ %     *  Subprograms called: EADD, ECPMUL, EDIV, EMULT               *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func ecpdiv<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: inout Array<Array<T>>, _ c: inout Array<Array<T>>) {
+    var b2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
+    var c2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
+    var e1: T = 0
+    var e2: T = 0
+    var e3: T = 0
+    var n1: T = 0
+    var n2:T = 0
+    var n3: T = 0
+    b2[0][0] = b[0][0]
+    b2[0][1] = b[0][1]
+    b2[1][0] = -T.one * b[1][0]
+    b2[1][1] = b[1][1]
+    ecpmul(&a, &b2, &c2)
+    emult(b[0][0], b[0][1], b[0][0], b[0][1], &n1, &e1)
+    emult(b[1][0], b[1][1], b[1][0], b[1][1], &n2, &e2)
+    eadd(n1, e1, n2, e2, &n3, &e3)
+    ediv(c2[0][0], c2[0][1], n3, e3, &n1, &e1)
+    ediv(c2[1][0], c2[1][1], n3, e3, &n2, &e2)
+    c[0][0] = n1
+    c[0][1] = e1
+    c[1][0] = n2
+    c[1][1] = e2
+
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE EMULT                             *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Takes one base and exponent and multiplies it *
+ %     *    by another numbers base and exponent to give the product  *
+ %     *    in the form of base and exponent.                         *
+ %     *                                                              *
+ %     *  Subprograms called: none                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func emult<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
+    nf = n1 * n2
+    ef = e1 + e2
+    if abs(nf) >= 10 {
+        nf = nf / 10
+        ef = ef + T.one
+    }
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE EDIV                              *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : returns the solution in the form of base and  *
+ %     *    exponent of the division of two exponential numbers.      *
+ %     *                                                              *
+ %     *  Subprograms called: none                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func ediv<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
+    nf = n1 / n2
+    ef = e1 - e2
+    if abs(nf) < T.one && !nf.isZero {
+        nf = nf * 10
+        ef = ef - T.one
+    }
+}
+
+
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE ECPMUL                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Multiplies two numbers which are each         *
+ %     *    represented in the form of a two by two array and returns *
+ %     *    the solution in the same form.                            *
+ %     *                                                              *
+ %     *  Subprograms called: EMULT, ESUB, EADD                       *
+ %     *                                                              *
+ %     ****************************************************************
+
+*/
+fileprivate func ecpmul<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: inout Array<Array<T>>, _ c: inout Array<Array<T>>) {
+    var c2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
+    var e1: T = 0
+    var e2: T = 0
+    var n1: T = 0
+    var n2:T = 0
+    var n3: T = 0
+    var e3: T = 0
+    emult(a[0][0], a[0][1], b[0][0], b[0][1], &n1, &e1)
+    emult(a[1][0], a[1][1], b[1][0], b[1][1], &n2, &e2)
+    esub(n1, e1, n2, e2, &n3, &e3)
+    c2[0][0] = n3
+    c2[0][1] = e3
+    emult(a[0][0], a[0][1], b[1][0], b[1][1], &n1, &e1)
+    emult(a[1][0], a[1][1], b[0][0], b[0][0], &n2, &e2)
+    eadd(n1, e1, n2, e2, &n3, &e3)
+    c[1][0] = n3
+    c[1][1] = e3
+    c[0][0] = c2[0][0]
+    c[0][1] = c2[0][1]
+
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE ESUB                              *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Returns the solution to the subtraction of    *
+ %     *    two numbers in the form of base and exponent.             *
+ %     *                                                              *
+ %     *  Subprograms called: EADD                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func esub<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
+    let dummy: T = -T.one * n2
+    eadd(n1, e1, dummy, e2, &nf, &ef)
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                 SUBROUTINE EADD                              *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Returns the sum of two numbers in the form    *
+ %     *    of a base and an exponent.                                *
+ %     *                                                              *
+ %     *  Subprograms called: none                                    *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func eadd<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
+    let ediff: T = e1 - e2
+    if (ediff > 36) {
+        nf = n1
+        ef = e1
+    }
+    else if (ediff < -36) {
+        nf = n2
+        ef = e2
+    }
+    else {
+        nf = n1 * pow1(makeFP(10), ediff) + n2
+        ef = e2
+        while true {
+            if (abs(nf) < 10) {
+                while ((abs(nf) < T.one) && (!nf.isZero)) {
+                    nf = nf * 10
+                    ef = ef - T.one
+                }
+                break;
+            }
+            else {
+                nf = nf / 10
+                ef = ef + T.one
+            }
+        }
+    }
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                   FUNCTION IPREMAX                           *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Predicts the maximum term in the pFq series   *
+ %     *    via a simple scanning of arguments.                       *
+ %     *                                                              *
+ %     *  Subprograms called: none.                                   *
+ %     *                                                              *
+ %     ****************************************************************
+*/
+fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, ip: Int, iq: Int, z: Complex<T>) throws -> Int {
+    var expon, xl, xmax, xterm: T
+    expon = 0
+    xl = 0
+    xmax = 0
+    xterm = 0
+    var ans: Int = 0
+    for j in stride(from: 1, through: 100000, by: 1) {
+        expon = T.zero
+        xl = makeFP(j)
+        for i in stride(from: 1, through: ip, by: 1) {
+            expon = expon + (factor(a[i - 1] &++ xl &-- T.one)).re - factor(a[i - 1] &-- T.one).re
+        }
+        for i in stride(from: 1, to: iq, by: 1) {
+            expon = expon - factor(b[i - 1] &++ xl &-- T.one).re + factor(b[i] &-- T.one).re
+        }
+        expon = expon + xl * log(z).re - factor(Complex<T>(xl)).re
+        xmax = log101(exp1(T.one)) * expon
+        if ((xmax < xterm) && (j > 2)) {
+            ans = j
+            break
+        }
+        xterm = max(xmax, xterm)
+    }
+    if ans == 0 {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("Max exponent not found", log: log_stat, type: .error)
+        }
+        #endif
+        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+    }
+    else {
+        return ans
+    }
+}
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                   FUNCTION FACTOR                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : This function is the log of the factorial.    *
+ %     *                                                              *
+ %     *  Subprograms called: none.                                   *
+ %     *                                                              *
+ %     ****************************************************************
+ %
+*/
+fileprivate func factor<T: SSFloatingPoint>(_ z: Complex<T>) -> Complex<T> {
+    var pi: T = 0
+    var f: Complex<T>
+    if (((z.re == T.one) && (z.im.isZero)) || z.abs.isZero) {
+        f = Complex<T>.init(re: T.zero, im: T.zero)
+        return f
+    }
+    else {
+        pi = T.pi
+        var e1: T
+        var e3, e4: Complex<T>
+        e1 = (T.half * log1(2 * pi))
+        e3 = (z &++ T.half)
+        e4 = (1 &% (12 &** z))
+        f =  e1 &++ e3 &** log(z) &-- z &++ e4;
+        e3 = (1 &% (30 &** z &** z))
+        e4 = (2 &% (7 &** z &** z))
+        f = f &** (1 &-- e3 &** (1 &-- e4))
+        return f
+    }
+}
+
+
+/*
+ %     ****************************************************************
+ %     *                                                              *
+ %     *                   FUNCTION CGAMMA                            *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Description : Calculates the complex gamma function.  Based *
+ %     *     on a program written by F.A. Parpia published in Computer*
+ %     *     Physics Communications as the `GRASP2' program (public   *
+ %     *     domain).                                                 *
+ %     *                                                              *
+ %     *                                                              *
+ %     *  Subprograms called: none.                                   *
+ %     *                                                              *
+ %     *****************************************************************/
+fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throws -> Complex<T> {
+    var argi: T = 0
+    var argr: T = 0
+    var argui: T = 0
+    var argui2: T = 0
+    var argum: T = 0
+    var argur: T = 0
+    var argur2: T = 0
+    var clngi: T = 0
+    var clngr: T = 0
+    var diff: T = 0
+    var dnum: T = 0
+    var expmax: T = 0
+    var fac: T = 0
+    var facneg: T = 0
+    var hlntpi: T = 0
+    var obasq: T = 0
+    var obasqi: T = 0
+    var obasqr: T = 0
+    var ovlfac: T = 0
+    var ovlfi: T = 0
+    var ovlfr: T = 0
+    var pi: T = 0
+    var precis: T = 0
+    var tenmax: T = 0
+    var tenth: T = 0
+    var termi: T = 0
+    var termr: T = 0
+    var twoi: T = 0
+    var zfaci: T = 0
+    var zfacr: T = 0
+    var first : Bool = true
+    var negarg : Bool = true
+    var fn: Array<T> = [1,-1, 1,-1, 5, -691, 7, -3617, 43867, -174611, 854513, -236364091, 8553103, -23749461029, 8615841276005, -7709321041217, 2577687858367, -26315271553053477373,2929993913841559,-261082718496449122051, 1520097643918070802691,27833269579301024235023]
+    var fd: Array<T> = [6,30,42,30,66,2730,6,510,789,330,138,2730, 6, 870,14322,510,6,1919190,6,13530,1806,960]
+    var ans: Complex<T> = Complex<T>.init(re: 0, im: 0)
+    hlntpi = makeFP(1)
+    tenth = makeFP(0.1)
+    argr = arg.re
+    argi = arg.im
+    if first {
+        pi = 4 * atan1(T.one)
+    }
+    tenmax = makeFP(T.greatestFiniteMagnitude.exponent - 1) * T.ln2 / T.ln10
+    dnum = pow1(tenth, tenmax)
+    expmax = -log1(dnum)
+    precis = T.one
+    precis = precis / 2
+    dnum = precis + T.one
+    while dnum > T.one {
+        precis = precis / 2
+        dnum = precis + T.one
+    }
+    precis = pow1(2, precis)
+    hlntpi = T.half * log1(2 * pi)
+    for i in stride(from: 1, through: fd.count, by: 1) {
+//    for i=1 : 7;
+        fn[i] = fn[i - 1] / fd[i - 1]
+        twoi = 2 * makeFP(i)
+        fn[i - 1] = fn[i - 1] / (twoi * (twoi - T.one))
+    }
+    first = false
+    
+    if argi.isZero {
+        if argr <= 0 {
+            diff = abs(round(argr) - argr)
+            if diff <= 2 * precis {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Argument to close to a pols, mo imaginary part", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .singularity, file: #file, line: #line, function: #function)
+            }
+            else {
+                if lnpfq == 1 {
+                    ans.re = lgamma1(argr)
+                }
+                else {
+                    ans.re = tgamma1(argr)
+                }
+                argum = pi / (-argr * sin1(pi * argr))
+                if (argum < 0) {
+                    argum = -argum
+                    clngi = pi
+                }
+                else {
+                    clngi = 0
+                }
+                facneg = log1(argum)
+                argur = -argr
+                negarg = true
+            }
+        }
+        else {
+            clngi = 0
+            argur = argr
+            negarg = false
+        }
+        ovlfac = T.one
+        while argur < 10 {
+            ovlfac = ovlfac * argur;
+            argur = argur + T.one
+        }
+        clngr = (argur - T.half) * log1(argur) - argur + hlntpi
+        fac = argur
+        obasq = T.one / (argur * argur)
+        for i in stride(from: 1, through: fn.count, by: 1) {
+            fac = fac * obasq
+            clngr = clngr + fn[i - 1] * fac
+        }
+        
+        clngr = clngr - log1(ovlfac)
+        if negarg {
+            clngr = facneg - clngr
+        }
+    }
+    else {
+        argur = argr
+        argui = argi
+        argui2 = argui * argui
+        ovlfr = T.one
+        ovlfi = T.zero
+        argum = sqrt(argur * argur + argui2)
+        while (argum < 10) {
+            termr = ovlfr * argur - ovlfi * argui
+            termi = ovlfr * argui + ovlfi * argur
+            ovlfr = termr
+            ovlfi = termi
+            argur = argur + T.one
+            argum = sqrt(argur * argur + argui2)
+        }
+        argur2 = argur * argur
+        termr = T.half * log1(argur2 + argui2)
+        termi = atan21(argui, argur)
+        clngr = (argur - T.half) * termr - argui * termi - argur + hlntpi
+        clngi = (argur - T.half) * termi + argui * termr - argui
+        fac = pow1(argur2 + argui2, -2)
+        obasqr = (argur2 - argui2) * fac
+        obasqi = -2 * argur * argui * fac
+        zfacr = argur
+        zfaci = argui
+        for i in stride(from: 1, through: fn.count, by: 1) {
+            termr = zfacr * obasqr - zfaci * obasqi
+            termi = zfacr * obasqi + zfaci * obasqr
+            fac = fn[i - 1]
+            clngr = clngr + termr * fac
+            clngi = clngi + termi * fac
+            zfacr = termr
+            zfaci = termi
+        }
+        clngr = clngr - T.half * log1(ovlfr * ovlfr + ovlfi * ovlfi)
+        clngi = clngi - atan21(ovlfi, ovlfr)
+        if lnpfq == 1 {
+            ans.re = clngr
+            ans.im = clngi
+            return ans
+        }
+        else {
+            if ((clngr <= expmax) && (clngr >= -expmax)) {
+                fac = exp1(clngr)
+            }
+            else {
+                ans = Complex<T>.nan
+            }
+            ans.re = fac * cos1(clngi)
+            ans.im = fac * sin1(clngi)
+        }
+    }
+    return ans
 }
