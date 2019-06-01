@@ -1,3 +1,7 @@
+Version 1.0.2
+- added support for Swift 5
+- some face lifting
+
 Version 1.0.1
 - fixed: BesselI1
 

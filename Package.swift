@@ -51,7 +51,7 @@ let package = Package(
             dependencies: ["SwiftyStats"],
             path: "./SwiftyStats/CommonTests")
     ],
-    swiftLanguageVersions: [4]
+    swiftLanguageVersions: [4,5]
 )
 
-let version = Version("1.0.1")
+let version = Version("1.0.2")

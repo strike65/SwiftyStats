@@ -73,7 +73,10 @@ public func pdfExtremValueDist<FPT: SSFloatingPoint & Codable>(x: FPT, location 
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     var result: FPT = 0
-    result = exp1(-(x - a) / b) * exp1(-exp1(-(x - a) / b)) / b
+    let e1: FPT = x - a
+    let e2: FPT = e1 / b
+    result = exp1(-e2) * exp1(-exp1(-e2)) / b
+//    result = exp1(-(x - a) / b) * exp1(-exp1(-(x - a) / b)) / b
     return result
 }
 

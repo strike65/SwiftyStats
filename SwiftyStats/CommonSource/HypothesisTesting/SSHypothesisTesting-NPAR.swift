@@ -777,7 +777,10 @@ extension SSHypothesisTesting {
                 temp1 += (ties[i] / 12)
                 i += 1
             }
-            denom = sqrt((mn / (S * (S - 1))) * ((pow1(S, 3) - S) / 12 - temp1))
+            let ex1: FPT = (mn / (S * (S - 1)))
+            let ex2: FPT = (pow1(S, 3) - S) / 12
+            denom = sqrt(ex1 * (ex2 - temp1))
+//            denom = sqrt((mn / (S * (S - 1))) * ((pow1(S, 3) - S) / 12 - temp1))
             num = abs(U - mn / 2)
             z = num / denom
             pasymp1 = min(1 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
@@ -1375,11 +1378,15 @@ extension SSHypothesisTesting {
             }
         case .greater:
             do {
-                cintJeffreys.upperBound = 1
+                cintJeffreys.upperBound = FPT.one
                 cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
                 cintJeffreys.intervalWidth = abs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
                 fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                let ex1: FPT = (n - success + FPT.one)
+                let ex2: FPT = success * fQ
+                let ex3: FPT = FPT.one + (ex1 / ex2)
+                cintClopperPearson.lowerBound = FPT.one / ex3
+//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.upperBound = 1
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
@@ -1394,7 +1401,11 @@ extension SSHypothesisTesting {
                 fQ = try quantileFRatioDist(p: 1 - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
                 cintClopperPearson.upperBound = 1 / (1 + ((n - success) / ((success + 1) * fQ)))
                 fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                let ex1: FPT = (n - success + FPT.one)
+                let ex2: FPT = success * fQ
+                let ex3: FPT = FPT.one + (ex1 / ex2)
+                cintClopperPearson.lowerBound = FPT.one / ex3
+//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {

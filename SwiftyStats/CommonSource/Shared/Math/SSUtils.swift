@@ -617,8 +617,8 @@ internal func scanString(string: String?) -> String? {
     return string
 }
 
-class StandardErrorOutputStream: TextOutputStream {
-    func write(_ string: String) {
+struct StandardErrorOutputStream: TextOutputStream {
+    mutating func write(_ string: String) {
         let stdErr = FileHandle.standardError
         if let data = string.data(using: .utf8) {
             stdErr.write(data)
@@ -629,7 +629,7 @@ class StandardErrorOutputStream: TextOutputStream {
     }
 }
 
-internal func printError(_ message: String!) {
+internal func printError(_ message: String) {
     var outputStream = StandardErrorOutputStream()
     print(message, to: &outputStream)
 }

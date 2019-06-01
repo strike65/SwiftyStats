@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name 		= 'SwiftyStats'
-	s.version 	= '1.0.1'
+	s.version 	= '1.0.2'
 	s.summary 	= 'Descriptive Statistics, Probability Functions (PDF, CDF, iCDF), parametric and nonparametric tests'
 	s.description 	= <<-DESC
 Includes (list is not exhaustive):

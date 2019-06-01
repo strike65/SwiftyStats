@@ -882,7 +882,10 @@ public class SSHypothesisTesting {
                         Q[i][j] = abs(differences[i][j]) / ( s * sqrt(1 / n_i))
                     }
                     else {
-                        Q[i][j] = abs(differences[i][j]) / ( s * sqrt(half * (1 / n_i + 1 / n_j)))
+                        let e1: FPT = FPT.one / n_i
+                        let e2: FPT = FPT.one / n_j
+                        let e3: FPT = e1 / e2
+                        Q[i][j] = abs(differences[i][j]) / ( s * sqrt(half * e3))
                     }
                 }
             }
@@ -939,7 +942,10 @@ public class SSHypothesisTesting {
                 confIntv[i].append(SSConfIntv())
                 if j >= i + 1 {
                     if n_i != n_j {
-                        halfWidth = makeFP(criticalQ) * s * sqrt((1 / n_i + 1 / n_j) / 2)
+                        let e1: FPT = FPT.one / n_i
+                        let e2: FPT = FPT.one / n_j
+                        let e3: FPT = e1 / e2
+                        halfWidth = makeFP(criticalQ) * s * sqrt(e3 / makeFP(2))
                     }
                     else {
                         halfWidth = makeFP(criticalQ) * s * sqrt(1 / n_i)

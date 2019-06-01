@@ -58,10 +58,14 @@ public func paraWeibullDist<FPT: SSFloatingPoint & Codable>(location loc: FPT, s
     }
     var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
     result.mean = loc + scale * tgamma1(1 + (1 / shape))
-    result.variance = pow1(scale, 2) * (tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2))
-    var a:FPT = -3 * pow1(tgamma1(1 + 1 / shape), 4)
-    var b:FPT = 6 * pow1(tgamma1(1 + 1 / shape), 2) * tgamma1(1 + 2 / shape)
-    var c: FPT = -4 * tgamma1(1 + 1 / shape) * tgamma1(1 + 3 / shape)
+    var a: FPT = tgamma1(FPT.one + 2 / shape)
+    var b: FPT = tgamma1(FPT.one + FPT.one / shape)
+    var c: FPT = pow1(b, 2)
+    result.variance = pow1(scale, 2) * (a - pow1(b, 2))
+//    result.variance = pow1(scale, 2) * (tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2))
+    a = -3 * pow1(tgamma1(1 + 1 / shape), 4)
+    b = 6 * pow1(tgamma1(1 + 1 / shape), 2) * tgamma1(1 + 2 / shape)
+    c = -4 * tgamma1(1 + 1 / shape) * tgamma1(1 + 3 / shape)
     var d: FPT = tgamma1(1 + 4 / shape)
     let e: FPT = tgamma1(1 + 2 / shape) - pow1(tgamma1(1 + 1 / shape), 2)
     result.kurtosis = (a + b + c + d) / pow1(e, 2)
@@ -107,7 +111,12 @@ public func pdfWeibullDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: F
     if x < a {
         return 0
     }
-    let result = c / b * pow1((x - a) / b, c - 1) * exp1(-pow1((x - a) / b, c))
+    let ex1: FPT = (x - a) / b
+    let ex2: FPT = pow1(ex1, c - FPT.one)
+    let ex3: FPT = FPT.minusOne * pow1(ex1, c)
+    let ex4: FPT = c / b
+    let result = ex4 * ex2 * exp1(ex3)
+//    let result = c / b * pow1((x - a) / b, c - 1) * exp1(-pow1((x - a) / b, c))
     return result
 }
 

@@ -4178,11 +4178,16 @@ fileprivate func pqasyxy<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout
         n = 0
         n0 = 100
         bn[0] = 1
+        var ex1, ex2, ex3: T
         while ((abs(bn[n]) > delta) && (n < n0)) {
             n = n + 1
             tnm1 = makeFP(2 * n - 1)
             an = (mu2 - tnm1 * tnm1) * an / (8 * makeFP(n) * xi)
-            bn[n] = an * (rhom - makeFP(n) * rhop) / (rho * (nu + makeFP(2 * n)))
+            ex1 = rhom - makeFP(n) * rhop
+            ex2 = nu + makeFP(2 * n)
+            ex3 = rho * ex2
+            bn[n] = an * ex1 / (ex3)
+//            bn[n] = an * (rhom - makeFP(n) * rhop) / (rho * (nu + makeFP(2 * n)))
         }
         n0 = n
         nrec = integerValue(sigmaxi) + 1

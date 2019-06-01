@@ -278,10 +278,10 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                 tags.append("NA")
             }
             if let n = a.name {
-                if let _ = cNames.index(of: n) {
+                if let _ = cNames.firstIndex(of: n) {
                     var k: Int = 1
                     var tempSampleString = n + "_" + String(format: "%02d", arguments: [k as CVarArg])
-                    while (cNames.index(of: tempSampleString) != nil) {
+                    while (cNames.firstIndex(of: tempSampleString) != nil) {
                         k += 1
                         tempSampleString = n + "_" + String(format: "%02d", arguments: [k as CVarArg])
                     }
@@ -355,7 +355,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     /// - Returns: the removed column oe nil
     public func remove(name: String!) -> SSExamine<SSElement, FPT>? {
         if cols > 0 {
-            if let i = cNames.index(of: name) {
+            if let i = cNames.firstIndex(of: name) {
                 cNames.remove(at: i)
                 tags.remove(at: i)
                 cols -= 1
@@ -381,7 +381,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     }
     
     private func indexOf(columnName: String!) -> Int? {
-        if let i = cNames.index(of: columnName) {
+        if let i = cNames.firstIndex(of: columnName) {
             return i
         }
         else {
@@ -412,7 +412,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     
     /// Accesses the column named `name`
     public subscript(name: String) -> SSExamine<SSElement, FPT> {
-        if let i = cNames.index(of: name) {
+        if let i = cNames.firstIndex(of: name) {
             return data[i]
         }
         else {

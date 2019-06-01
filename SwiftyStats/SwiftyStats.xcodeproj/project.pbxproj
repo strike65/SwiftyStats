@@ -176,19 +176,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9F334BCE201360AC003DA035 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
-			remoteInfo = SwiftyStatsMobile;
-		};
 		9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9F82D3A21F1E8F19001BFC9D;
 			remoteInfo = SwiftyStats;
+		};
+		9FE407F122A27CD900B95557 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
+			remoteInfo = SwiftyStatsMobile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -628,7 +628,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9F334BCF201360AC003DA035 /* PBXTargetDependency */,
+				9FE407F222A27CD900B95557 /* PBXTargetDependency */,
 			);
 			name = SwiftyStats;
 			productName = SwiftyStats;
@@ -703,6 +703,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 9F82D3991F1E8F19001BFC9D;
@@ -930,15 +931,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9F334BCF201360AC003DA035 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
-			targetProxy = 9F334BCE201360AC003DA035 /* PBXContainerItemProxy */;
-		};
 		9F82D3AF1F1E8F19001BFC9D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9F82D3A21F1E8F19001BFC9D /* SwiftyStats */;
 			targetProxy = 9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */;
+		};
+		9FE407F222A27CD900B95557 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
+			targetProxy = 9FE407F122A27CD900B95557 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1077,12 +1078,13 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1102,11 +1104,12 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1160,7 +1163,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
 				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1190,7 +1193,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
 				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";

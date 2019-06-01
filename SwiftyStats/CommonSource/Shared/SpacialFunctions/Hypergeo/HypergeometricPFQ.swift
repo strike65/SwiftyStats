@@ -137,12 +137,12 @@ public func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T)
 public func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
     var sigfig: Int
     switch z.re {
-    case let _ as Double:
+    case is Double:
         sigfig = 15
-    case let _ as Float:
+    case is Float:
         sigfig = 7
         #if arch(x86_64)
-    case let _ as Float80:
+    case is Float80:
         sigfig = 19
         #endif
     default:
@@ -150,11 +150,11 @@ public func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array
     }
     var ans: Complex<T>
     var zz: Complex<T> = z
-    var ip: Int = a.count
-    var iq: Int = b.count
+//    var ip: Int = a.count
+//    var iq: Int = b.count
     let aa: Array<Complex<T>> = a
     let bb: Array<Complex<T>> = b
-    var i: Int = 0
+//    var i: Int = 0
     do {
         try ans = hyper(a: aa, b: bb, ip: aa.count, iq: bb.count, z: &zz, lnpfq: log ? 1 : 0, ix: 777, nsigfig: &sigfig)
         if !ans.isNan {
@@ -647,7 +647,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
 //            %
 //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
 //            %
-            for i1 in 1...ip-iq {
+            for _ in 1...ip-iq {
                 foo1 = sumr
                 foo2 = sumr
                 armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
@@ -683,7 +683,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
 //            %
 //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
 //            %
-            for i1 in 1...ip-iq {
+            for _ in 1...ip-iq {
                 foo1 = denomr
                 foo2 = denomr
                 armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
@@ -715,7 +715,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
 //            %
 //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
 //            %
-            for i1 in 1...iq-ip {
+            for _ in 1...iq-ip {
                 foo1 = numr
                 foo2 = numr
                 armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)

@@ -25,6 +25,9 @@ public protocol SSFloatingPoint: FloatingPoint {
     /// 0
     static var zero: Self { get }
     
+    /// -1
+    static var minusOne: Self { get }
+    
     /// 1
     static var one: Self { get }
     /// 1 / 2
@@ -164,7 +167,13 @@ extension Double: SSFloatingPoint {
             return 0
         }
     }
-
+    // -1
+    public static var minusOne: Double {
+        get {
+            return -1
+        }
+    }
+    
     // 1
     public static var one: Double {
         get {
@@ -422,6 +431,13 @@ extension Float: SSFloatingPoint {
         }
     }
     
+    // -1
+    public static var minusOne: Float {
+        get {
+            return -1
+        }
+    }
+
     // 1
     public static var one: Float {
         get {
@@ -677,7 +693,13 @@ extension Float80: SSFloatingPoint {
             return 0.0000000000000000000000000000000000000000
         }
     }
-    
+    // -1
+    public static var minusOne: Float80 {
+        get {
+            return -1
+        }
+    }
+
     // 1
     public static var one: Float80 {
         get {
