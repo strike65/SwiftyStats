@@ -449,7 +449,7 @@ func lgamma1<T: SSComplexFloatElement>(z: Complex<T>) -> Complex<T> {
     var approx: Complex<Float80>
     let coeff: Array<Float80> = gammaCoeff()
     var zz: Complex<Float80>
-    var isNegRe: Bool = false
+//    var isNegRe: Bool = false
     var sum: Complex<Float80>
     var temp: Complex<Float80>
     // Kahan sum
@@ -465,7 +465,7 @@ func lgamma1<T: SSComplexFloatElement>(z: Complex<T>) -> Complex<T> {
         }
         if zl.re < Float80.zero {
             zz = &---zl;
-            isNegRe = true
+//            isNegRe = true
         }
         else {
             // z >= 0 --> use system lgammma
