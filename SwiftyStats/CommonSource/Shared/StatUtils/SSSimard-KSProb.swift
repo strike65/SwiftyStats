@@ -321,8 +321,12 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex2 = 2 * z4 - 5 * z2
         ex3 = 1 - 2 * z2
         ex4 = ti * ti * ti * ti  /* use pow1(ti, 4) ? */
-        term = ex1 + PI2 * ex2 * ti * ti +
-            PI4 * ex3 * ex4
+        ex5 = ti * ti
+        ex6 = PI2 * ex2
+        let ex7: FPT = ex1 + ex6 * ex5
+        let ex8: FPT = PI4 * ex3 * ex4
+        term = ex7 + ex8
+//        term = ex1 + PI2 * ex2 * ti * ti + PI4 * ex3 * ex4
         term *= exp1(-ti * ti * w)
         tom += term
         j = j + 1
@@ -364,7 +368,11 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     j = 1
     while (j <= JMAX && abs (term) > EPS * abs(tom)) {
         ti = makeFP(j * j)
-        term = (3 * PI2 * ti * z2 - PI4 * ti * ti) * exp1(-ti * w)
+        ex1 = 3 * PI2 * ti * z2
+        ex2 = PI4 * ti * ti
+        ex3 = -ti * w
+        term = (ex1 - ex2) * exp1(ex3)
+//        term = (3 * PI2 * ti * z2 - PI4 * ti * ti) * exp1(-ti * w)
         tom += term
         j = j + 1
     }

@@ -322,7 +322,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// - Throws: An error of type SSSwiftyStatsError
     public func rowNamed(_ rowName: R, sorted: Bool! = false) throws -> Array<N>? {
         if self.rnames != nil {
-            if let i = self.rnames!.index(of: rowName) {
+            if let i = self.rnames!.firstIndex(of: rowName) {
                 do {
                     return try self.row(at: i, sorted: sorted)
                 }
@@ -343,7 +343,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// - Throws: An error of type SSSwiftyStatsError
     public func columnNamed(_ columnName: C, sorted: Bool = false) throws -> Array<N>? {
         if self.cnames != nil {
-            if let i = self.cnames!.index(of: columnName) {
+            if let i = self.cnames!.firstIndex(of: columnName) {
                 do {
                     return try self.column(at: i, sorted: sorted)
                 }
@@ -364,7 +364,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     subscript(rowName: R, columnName: C) -> N {
         get {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            if let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) {
+            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
                 return self.counts[r][c]
             }
             else {
@@ -373,7 +373,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         }
         set {
             assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            if let r = self.rnames!.index(of: rowName), let c = self.cnames!.index(of: columnName) {
+            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
                 self.counts[r][c] = newValue
             }
             else {
@@ -763,7 +763,7 @@ extension SSCrosstab {
     /// Sum of row named rowName
     public func rowSum(rowName: R) -> FPT {
         if let rn = self.rowNames {
-            if let i = rn.index(of: rowName) {
+            if let i = rn.firstIndex(of: rowName) {
                 return self.rowSum(row: i)
             }
             else {
@@ -789,7 +789,7 @@ extension SSCrosstab {
     /// Sum of column named columnName
     public func columnSum(columnName: C) -> FPT {
         if let rn = self.columnNames {
-            if let i = rn.index(of: columnName) {
+            if let i = rn.firstIndex(of: columnName) {
                 return self.columnSum(column: i)
             }
             else {
@@ -826,7 +826,7 @@ extension SSCrosstab {
     /// Returns the index of the column with name columnName or nil if there is no column with that name.
     public func indexOfColumn(columnName: C) -> Int? {
         if let cn = self.columnNames {
-            return cn.index(of: columnName)
+            return cn.firstIndex(of: columnName)
         }
         else {
             return nil
@@ -837,7 +837,7 @@ extension SSCrosstab {
     /// Returns the index of the row with name rowName or nil if there is no row with that name.
     public func indexOfRow(rowName: R) -> Int? {
         if let rn = self.rowNames {
-            return rn.index(of: rowName)
+            return rn.firstIndex(of: rowName)
         }
         else {
             return nil
@@ -1094,7 +1094,17 @@ extension SSCrosstab {
         assert(isValidColumnIndex(column: column), "Column-index out of range")
         let rowSum: FPT = self.rowSum(row: row)
         let columnSum: FPT = self.columnSum(column: column)
-        return self.residual(row: row, column: column) / ((expectedFrequency(row: row, column: column)) * (1 - rowSum / self.total) * (1 - columnSum / self.total)).squareRoot()
+        let e1: FPT = self.residual(row: row, column: column)
+        let e2: FPT = expectedFrequency(row: row, column: column)
+        let e3: FPT = e2 * (FPT.one - rowSum / self.total)
+        let e4: FPT = e3 * sqrt(FPT.one - columnSum / self.total)
+        let e5 = e1 / e4
+        return e5
+//        return self.residual(row: row, column: column)
+//            / (
+//                (expectedFrequency(row: row, column: column))
+//                    * (FPT.one - rowSum / self.total)
+//                    * (FPT.one - columnSum / self.total)).squareRoot()
     }
     
     /// Degrees of freedom

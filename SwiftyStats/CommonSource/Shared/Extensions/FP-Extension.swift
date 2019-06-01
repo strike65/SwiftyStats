@@ -25,6 +25,9 @@ public protocol SSFloatingPoint: FloatingPoint {
     /// 0
     static var zero: Self { get }
     
+    /// -1
+    static var minusOne: Self { get }
+    
     /// 1
     static var one: Self { get }
     /// 1 / 2
@@ -91,6 +94,9 @@ public protocol SSFloatingPoint: FloatingPoint {
 
     /// ln(2)
     static var ln2: Self { get }
+
+    /// ln(10)
+    static var ln10: Self { get }
 
     /// 1 / 12
     static var oo12: Self { get }
@@ -161,7 +167,13 @@ extension Double: SSFloatingPoint {
             return 0
         }
     }
-
+    // -1
+    public static var minusOne: Double {
+        get {
+            return -1
+        }
+    }
+    
     // 1
     public static var one: Double {
         get {
@@ -293,6 +305,12 @@ extension Double: SSFloatingPoint {
             return 0.6931471805599453094172321214581765680755
         }
     }
+    /// ln(10)
+    public static var ln10: Double {
+        get {
+            return 2.3025850929940456840179914546843642076011
+        }
+    }
     /// 1 / 12
     public static var oo12: Double {
         get {
@@ -413,6 +431,13 @@ extension Float: SSFloatingPoint {
         }
     }
     
+    // -1
+    public static var minusOne: Float {
+        get {
+            return -1
+        }
+    }
+
     // 1
     public static var one: Float {
         get {
@@ -542,6 +567,12 @@ extension Float: SSFloatingPoint {
             return 0.6931471805599453094172321214581765680755
         }
     }
+    /// ln(10)
+    public static var ln10: Float {
+        get {
+            return 2.3025850929940456840179914546843642076011
+        }
+    }
     /// 1 / 12
     public static var oo12: Float {
         get {
@@ -662,7 +693,13 @@ extension Float80: SSFloatingPoint {
             return 0.0000000000000000000000000000000000000000
         }
     }
-    
+    // -1
+    public static var minusOne: Float80 {
+        get {
+            return -1
+        }
+    }
+
     // 1
     public static var one: Float80 {
         get {
@@ -789,6 +826,12 @@ extension Float80: SSFloatingPoint {
     public static var ln2: Float80 {
         get {
             return 0.6931471805599453094172321214581765680755
+        }
+    }
+    /// ln(10)
+    public static var ln10: Float80 {
+        get {
+            return 2.3025850929940456840179914546843642076011
         }
     }
     /// 1 / 12

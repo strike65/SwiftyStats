@@ -24,23 +24,23 @@
 import Foundation
 
 // see : https://people.maths.ox.ac.uk/porterm/research/pearson_final.pdf
-public func taylora<T: SSFloatingPoint>(_ a: T, _ b: T, _ x: T, _ tol: T) -> (h: T, mIter: Bool) {
-    var a1: Array<T> = Array<T>.init()
-    var sum: T = 1
-    a1.append(1)
-    var e1, e2, e3, e4, e5: T
-    var jf: T
+public func h1f1taylora<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
+    var a1: Array<Complex<T>> = Array<Complex<T>>.init()
+    var sum: Complex<T> = Complex<T>.init(re: 1, im: 0)
+    a1.append(Complex<T>.init(re: 1, im: 0))
+    var e1, e2, e3, e4, e5: Complex<T>
+    var jf: Complex<T>
     var maxIter: Bool = false
     for j in stride(from: 1, through: 500, by: 1) {
-        jf = makeFP(j)
-        e1 = (a + jf - 1)
-        e2 = (b + jf - 1)
-        e3 = e1 / e2
-        e4 = x / jf * a1[j - 1]
-        e5 = e3 * e4
+        jf = Complex<T>.init(re: makeFP(j), im: 0)
+        e1 = (a &++ jf &-- 1)
+        e2 = (b &++ jf &-- 1)
+        e3 = e1 &% e2
+        e4 = x &% jf &** a1[j - 1]
+        e5 = e3 &** e4
         a1.append(e5)
-        sum = sum + a1[j]
-        if (abs(a1[j - 1]) / abs(sum) < tol && (abs(a1[j]) / abs(sum) < tol)) {
+        sum = sum &++ a1[j]
+        if ((a1[j - 1].abs / sum.abs) < tol && (a1[j].abs / sum.abs < tol)) {
             break
         }
         if j == 500 {
@@ -50,25 +50,25 @@ public func taylora<T: SSFloatingPoint>(_ a: T, _ b: T, _ x: T, _ tol: T) -> (h:
     return (h: sum, mIter: maxIter)
 }
 
-public func taylorb<T: SSFloatingPoint>(_ a: T, _ b: T, _ x: T, _ tol: T) -> (h: T, mIter: Bool) {
-    var r: Array<T> = Array<T>.init()
-    r.append(a / b)
-    r.append((a + 1) / 2 / (b + 1))
-    var A: Array<T> = Array<T>.init()
-    A.append(1 + x * r[0])
-    A.append(A[0] + pow1(x,2) * a / b * r[1])
-    var jf: T
-    var e1, e2, e3: T
+public func h1f1taylorb<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
+    var r: Array<Complex<T>> = Array<Complex<T>>.init()
+    r.append(a &% b)
+    r.append((a &++ 1) &% 2 &% (b &++ 1))
+    var A: Array<Complex<T>> = Array<Complex<T>>.init()
+    A.append(1 &++ x &** r[0])
+    A.append(A[0] &++ pow(x, 2) &** a &% b &** r[1])
+    var jf: Complex<T>
+    var e1, e2, e3: Complex<T>
     var maxIter: Bool = false
     for j in stride(from: 3, through: 500, by: 1) {
-        jf = makeFP(j)
-        e1 = (a + jf - 1) / jf
-        e2 = (b + jf - 1)
-        e3 = e1 / e2
+        jf = Complex<T>.init(re: makeFP(j), im: 0)
+        e1 = (a &++ jf &-- 1) &% jf
+        e2 = (b &++ jf &-- 1)
+        e3 = e1 &% e2
         r.append(e3)
-        e1 = A[j - 2] + (A[j - 2] - A[j - 3]) * r[j - 2] * x
+        e1 = A[j - 2] &++ (A[j - 2] &-- A[j - 3]) &** r[j - 2] &** x
         A.append(e1)
-        if (abs(A[j - 1] - A[j - 2]) / abs(A[j-2]) < tol) && (abs(A[j - 2] - A[j - 2]) / abs(A[j - 3]) < tol) {
+        if (((A[j - 1] &-- A[j - 2]).abs / A[j - 2].abs) < tol) && ((A[j - 2] &-- A[j - 3]).abs / A[j - 3].abs < tol) {
             break
         }
         if j == 500 {
@@ -78,3 +78,36 @@ public func taylorb<T: SSFloatingPoint>(_ a: T, _ b: T, _ x: T, _ tol: T) -> (h:
     return (h: A.last!, mIter: maxIter)
 }
 
+public func h1f1singleFraction<T: SSComplexFloatElement>(a: Complex<T>, b: Complex<T>, z: Complex<T>, tol: T) -> (h: Complex<T>, maxiter: Bool) {
+    var A1: Array<Complex<T>> = Array<Complex<T>>.init()
+    var B1: Array<Complex<T>> = Array<Complex<T>>.init()
+    var C1: Array<Complex<T>> = Array<Complex<T>>.init()
+    var D1: Array<Complex<T>> = Array<Complex<T>>.init()
+    var maxiter: Bool = false
+    A1.append(Complex<T>.zero)
+    A1.append(b)
+    B1.append(Complex<T>.init(re: 1, im: 0))
+    B1.append(a &** z)
+    C1.append(Complex<T>.init(re: 1, im: 0))
+    C1.append(b)
+    D1.append(Complex<T>.init(re: 1, im: 0))
+    D1.append((b &++ a &** z) &% b)
+    var jf: Complex<T>
+    for j in stride(from: 3, through: 500, by: 1) {
+        jf = Complex<T>.init(re: makeFP(j), im: 0)
+        A1[j - 1] = (A1[j - 2] &++ B1[j - 2]) &** (jf &-- 1) &** (b &++ jf &-- 2)
+        B1[j - 1] = B1[j - 2] &** (a &++ jf &-- 2) &** z
+        C1[j - 1] = C1[j - 2] &** (jf &-- 1) &** (b &++ jf &-- 2)
+        if A1[j - 1].isInfinite || B1[j - 1].isInfinite || C1[j - 1].isInfinite {
+            break
+        }
+        D1[j - 1] = (A1[j - 1] &++ B1[j - 1] &% C1[j - 1])
+        if (((D1[j - 1] &-- D1[j - 2]).abs / D1[j - 2].abs) < tol) && (((D1[j - 2] &-- D1[j - 3]).abs / D1[j - 3].abs) < tol) {
+            break
+        }
+        if j == 500 {
+            maxiter = true
+        }
+    }
+    return (h: D1.last!, maxiter: maxiter)
+}

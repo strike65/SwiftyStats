@@ -71,7 +71,13 @@ public func pdfRayleighDist<FPT: SSFloatingPoint & Codable>(x: FPT, scale s: FPT
     }
     var result: FPT = 0
     if x > 0 {
-        result = (x * exp1(-(x * x) / (2 * s * s))) / (s * s)
+        let sSquare: FPT = s * s
+        let xSquare: FPT = x * x
+        let ex1: FPT = FPT.minusOne * xSquare / (2 * sSquare)
+        let ex2: FPT = x * exp1(ex1)
+        let ex3: FPT = ex2 / sSquare
+        result = ex3
+//        result = (x * exp1(-(x * x) / (2 * s * s))) / (s * s)
     }
     return result
 }

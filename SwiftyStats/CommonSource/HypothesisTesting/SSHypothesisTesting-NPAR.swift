@@ -644,8 +644,14 @@ extension SSHypothesisTesting {
     fileprivate class func sumUp<FPT: SSFloatingPoint & Codable>(start: Int!, end: Int!) -> FPT {
         var sum: FPT = makeFP(start)
         var i: Int = start
+        var comp: FPT = 0
+        var oldsum: FPT = 0
         while i < end {
-            sum += makeFP(i)
+            oldsum = sum
+            comp = comp + makeFP(i)
+            sum = comp + oldsum
+            comp = (oldsum - sum) + comp
+//            sum += makeFP(i)
             i += 1
         }
         return sum
@@ -771,7 +777,10 @@ extension SSHypothesisTesting {
                 temp1 += (ties[i] / 12)
                 i += 1
             }
-            denom = sqrt((mn / (S * (S - 1))) * ((pow1(S, 3) - S) / 12 - temp1))
+            let ex1: FPT = (mn / (S * (S - 1)))
+            let ex2: FPT = (pow1(S, 3) - S) / 12
+            denom = sqrt(ex1 * (ex2 - temp1))
+//            denom = sqrt((mn / (S * (S - 1))) * ((pow1(S, 3) - S) / 12 - temp1))
             num = abs(U - mn / 2)
             z = num / denom
             pasymp1 = min(1 - cdfStandardNormalDist(u: z), cdfStandardNormalDist(u: z))
@@ -780,7 +789,10 @@ extension SSHypothesisTesting {
             pexact2 = FPT.nan
         }
         else {
-            z = abs(U - mn / 2) / sqrt((mn * (n1 + n2 + 1)) / 12)
+            let e1: FPT = abs(U - mn / 2)
+            let e2: FPT = (n1 + n2 + 1)
+            let e3: FPT = (mn * e2) / 12
+            z = e1 / sqrt(e3)
             if (n1 * n2) <= 400 && ((n1 * n2) + min(n1, n2)) <= 220 {
                 do {
                     if U <= (n1 * n2 + 1) / 2 {
@@ -1366,11 +1378,15 @@ extension SSHypothesisTesting {
             }
         case .greater:
             do {
-                cintJeffreys.upperBound = 1
+                cintJeffreys.upperBound = FPT.one
                 cintJeffreys.lowerBound = try lowerBoundCIBinomial(success: success, trials: n, alpha: alpha)
                 cintJeffreys.intervalWidth = abs(cintJeffreys.upperBound! - cintJeffreys.lowerBound!)
                 fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                let ex1: FPT = (n - success + FPT.one)
+                let ex2: FPT = success * fQ
+                let ex3: FPT = FPT.one + (ex1 / ex2)
+                cintClopperPearson.lowerBound = FPT.one / ex3
+//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.upperBound = 1
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
@@ -1385,7 +1401,11 @@ extension SSHypothesisTesting {
                 fQ = try quantileFRatioDist(p: 1 - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
                 cintClopperPearson.upperBound = 1 / (1 + ((n - success) / ((success + 1) * fQ)))
                 fQ = try quantileFRatioDist(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
+                let ex1: FPT = (n - success + FPT.one)
+                let ex2: FPT = success * fQ
+                let ex3: FPT = FPT.one + (ex1 / ex2)
+                cintClopperPearson.lowerBound = FPT.one / ex3
+//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {

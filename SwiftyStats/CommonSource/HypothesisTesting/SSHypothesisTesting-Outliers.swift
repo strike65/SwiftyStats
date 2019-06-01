@@ -135,7 +135,10 @@ extension SSHypothesisTesting {
                 throw error
             }
             let t2 = pow1(quantile, 2)
-            let t: FPT = ( (makeFP(data.sampleSize) - 1)) * sqrt(t2 / (makeFP(data.sampleSize) - 2 + t2)) / sqrt(makeFP(data.sampleSize))
+            let e1: FPT = makeFP(data.sampleSize) - 1
+            let e2: FPT = (makeFP(data.sampleSize) - 2 + t2)
+            let e3: FPT = sqrt(makeFP(data.sampleSize))
+            let t: FPT = e1 * sqrt(t2 / e2) / e3
             var res:SSGrubbsTestResult<T, FPT> = SSGrubbsTestResult<T, FPT>()
             res.sampleSize = data.sampleSize
             res.maxDiff = maxDiff

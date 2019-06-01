@@ -77,6 +77,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         case internalError
         /// singularity
         case singularity
+        /// number to big (hypergeometricPFQ)
+        case maxExponentExceeded
     }
 
     /// A string describing the error
@@ -124,6 +126,8 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
             return "Fatal internal error :" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
         case .singularity:
             return "Argument singularity :" + self.file + " Line: \(self.line) in function: " + self.function + ". Function will return INF."
+        case .maxExponentExceeded:
+            return "Value of exponent required for summation (pFq):" + self.file + " Line: \(self.line) in function: " + self.function + ". Hints: (1) try using lnpfq = 1 or (2) use Float80."
 
         }
     }

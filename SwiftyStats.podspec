@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name 		= 'SwiftyStats'
-	s.version 	= '1.0.0'
+	s.version 	= '1.0.2'
 	s.summary 	= 'Descriptive Statistics, Probability Functions (PDF, CDF, iCDF), parametric and nonparametric tests'
 	s.description 	= <<-DESC
 Includes (list is not exhaustive):
@@ -63,7 +63,7 @@ Probability functions
 	s.license 	= { :type => 'GPL 3', :file => 'LICENSE' }
 	s.author 	= { 'Volker Thieme' => 'vtping@me.com' }
 	s.source 	= { :git => 'https://gitlab.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
-	s.swift_version = '4.2'
+	s.swift_version = '5'
 	s.ios.deployment_target = '10.0'
 	s.osx.deployment_target = '10.12'
   s.source_files 	= 'SwiftyStats/CommonSource/**/*.swift'

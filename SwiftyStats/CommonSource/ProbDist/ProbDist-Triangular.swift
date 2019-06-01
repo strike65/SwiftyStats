@@ -263,9 +263,9 @@ public func quantileTriangularDist<FPT: SSFloatingPoint & Codable>(p: FPT, lower
     }
     let t1 = (-a + c) / (-a + b)
     if p <= t1 {
-        let s1 = (-a + b)
-        let s2 = (-a + c)
-        let s3 = sqrt(s1 * s2 * p)
+        let s1:FPT = (-a + b)
+        let s2:FPT = (-a + c)
+        let s3:FPT = sqrt(s1 * s2 * p)
         return a + s3
     }
     else {

@@ -1,11 +1,13 @@
-![Version](https://img.shields.io/badge/version-1.0.0-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_4.2-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-1.0.2-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_5-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 Important changes
 =================
-Versions 1.x.x and newer will need to compile using at least Swift 4.2. This update contains a lot of new features. That is, your code have to be updated. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile and use Version 0.8.15 (see below.)
+Versions 1.x.x and newer will need to compile using at least Swift 4.2. This version also compiles when using Swift 5.
+
+This update contains a lot of new features. That is, your code have to be updated. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile and use Version 0.8.15 (see below.)
 
 SwiftyStats
 ===========
-SwiftyStats is a generic statistical framework completely written in Swift 4. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
+SwiftyStats is a generic statistical framework completely written in Swift. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
 >Due to some external limitations (earning money) the code will be updated rather sporadically.
 
 # Documentation
@@ -20,6 +22,7 @@ $> cd <CLONE_DIRECTORY>/SwiftyStats
 $> ./make_docs.sh
 $> open docs/index.html
 ```
+
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project:
@@ -55,8 +58,8 @@ Edit your `Package.swift` file:
 
 ```swift
 import PackageDescription
-// for Swift 4.2
-let version = "0.9.0"
+// for Swift 4.2 or 5
+let version = "1.0.2"
 // for earlier versions:
 // let version = "0.8.14"
 let package = Package(
@@ -104,10 +107,11 @@ As there is no Xcode-Project, you have to use the Swift Package Manager. See abo
 
 # How to Use
 ## Accuracy and Precision
-Although the internal accuracy is much larger, only the **first four decimal places** should be used. For more information on this click [here](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html). 
+Although the internal accuracy is much larger, only the **first four decimal places** should be used. For more information on this click [here](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
+
+> It is recommended to use this library with at least double accuracy.
 
 ## Descriptive stats
-
 The central class of the framework is `SSExamine`
 `SSExamine` objects encapsulate your data and delivers various statistics. To initialize a new instance follow the steps below.
 

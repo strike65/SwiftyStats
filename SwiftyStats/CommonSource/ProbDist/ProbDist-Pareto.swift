@@ -84,9 +84,9 @@ public func paraParetoDist<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape
         result.kurtosis = FPT.nan
     }
     if b > 3 {
-        let s1 = sqrt((-2 + b) / b)
-        let s2 = (1 + b)
-        let s3 = (b - 3)
+        let s1: FPT = sqrt((-2 + b) / b)
+        let s2: FPT = (1 + b)
+        let s3: FPT = (b - 3)
         result.skewness = (2 * s1 * s2) / s3
     }
     else {

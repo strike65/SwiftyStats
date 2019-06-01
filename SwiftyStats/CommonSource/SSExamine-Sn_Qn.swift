@@ -495,7 +495,11 @@ extension SSExamine {
                         dn = makeFP(1.60188 ) + (makeFP(-2.1284 ) - makeFP(5.172 ) / nn) / nn
                     }
                     else {            /* n even */
-                        dn = makeFP(3.67561 ) + (makeFP(1.9654 ) + (makeFP(6.987 ) - makeFP(77.0 ) / nn) / nn) / nn
+                        let ex1: FPT = makeFP(77.0) / nn
+                        let ex2: FPT = makeFP(6.987) - ex1
+                        let ex3: FPT = makeFP(1.9654) + ex2 / nn
+                        dn = makeFP(3.67561 ) + ex3 / nn
+//                        dn = makeFP(3.67561 ) + (makeFP(1.9654 ) + (makeFP(6.987 ) - makeFP(77.0 ) / nn) / nn) / nn
                     }
                 
                     dn = 1 / (dn / nn + 1)

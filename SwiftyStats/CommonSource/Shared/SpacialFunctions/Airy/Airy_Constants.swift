@@ -115,7 +115,7 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         var eta, ifl: T
         var M, i: Int
         var basep: Int
-        var e1, e2: T
+        var e1, e2, e3, e4: T
         switch T.self {
         case is Double.Type:
             M = 53
@@ -135,13 +135,17 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         n_asymp = integerValue(makeFP(M) * log1(makeFP(basep)) + T.half)
         ucoef = Array<T>.init(repeating: 0, count: n_asymp)
         vcoef = Array<T>.init(repeating: 0, count: n_asymp)
-        ucoef[0] = makeFP("0.06944444444444444444444444444444444444444444444444444444444444444")
-        vcoef[0] = makeFP("-0.09722222222222222222222222222222222222222222222222222222222222222")
+        ucoef[0] = makeFP(5.0) / makeFP(14.4)
+        vcoef[0] = T.minusOne * makeFP(7.0) / makeFP(72.0)
+//        ucoef[0] = makeFP("0.06944444444444444444444444444444444444444444444444444444444444444")
+//        vcoef[0] = makeFP("-0.09722222222222222222222222222222222222222222222222222222222222222")
         for i in stride(from: 0, through: n_asymp - 2, by: 1) {
             ifl = makeFP(i + 1)
-            e1 = (6 * ifl + 5) * (6 * ifl + 1) * ucoef[i]
-            e2 = ((ifl + 1) * 72)
-            ucoef[i + 1] = e1 / e2
+            e1 = 6 * ifl + 5
+            e2 = 6 * ifl + 1
+            e3 = e1 * e2 * ucoef[i]
+            e4 = ((ifl + 1) * 72)
+            ucoef[i + 1] = e3 / e4
             e1 = -(6 * ifl + 7) * ucoef[i + 1]
             e2 = (6 * ifl + 5)
             vcoef[i + 1] = e1 / e2
@@ -191,7 +195,10 @@ internal struct AiryVariables<T: SSFloatingPoint> {
             m = (i - 3).remainderReportingOverflow(dividingBy: 3).partialValue
             l = (i - 2).remainderReportingOverflow(dividingBy: 3).partialValue
             ifl = makeFP(i)
-            lambda[k] = (r_min * lambda[l] + fstpsz * lambda[m]) / (ifl * (ifl - 1)) * pow1(fstpsz, 2)
+            e1 = r_min * lambda[l] + fstpsz * lambda[m]
+            e2 = ifl * (ifl - T.one)
+            lambda[k] = e1 / e2 * pow1(fstpsz, 2)
+//            lambda[k] = (r_min * lambda[l] + fstpsz * lambda[m]) / (ifl * (ifl - 1)) * pow1(fstpsz, 2)
             if (ifl * lambda[k]) < (T.half * eta) {
                 break
             }

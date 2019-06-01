@@ -117,7 +117,7 @@
 
 import Foundation
 
-fileprivate func coeff<FPT: SSFloatingPoint & Codable>(_ name: String) -> [FPT] {
+fileprivate func coeff<FPT: SSFloatingPoint >(_ name: String) -> [FPT] {
     let PPFloat: Array<Float> = [
         7.96936729297347051624E-4,
         8.28352392107440799803E-2,
@@ -475,7 +475,7 @@ fileprivate func coeff<FPT: SSFloatingPoint & Codable>(_ name: String) -> [FPT] 
 
 /// Returns the Bessel function of order zero J0(x)
 /// - Parameter x: Argument
-internal func besselJ0<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
+internal func besselJ0<FPT: SSFloatingPoint >(x: FPT) -> FPT {
     let DR1: FPT = makeFP(5.7831859629467845211759957584558070350719)
     let DR2: FPT  = makeFP(30.47126234366208639907816317502275584842)
     
@@ -523,7 +523,7 @@ import os.log
 
 /// Returns the Bessel function of second kind of order zero Y0(x)
 /// - Parameter x: Argument
-internal func besselY<FPT: SSFloatingPoint & Codable>(x: FPT) -> FPT {
+internal func besselY<FPT: SSFloatingPoint >(x: FPT) -> FPT {
     
     var w, z, p, q, xn: FPT
     

@@ -27,79 +27,6 @@ import Foundation
 
 
 
-/// Binomial
-internal func binomial2<FPT: SSFloatingPoint>(_ n: FPT, _ k: FPT) -> FPT {
-    var ans: UInt64 = 1
-    var kk: UInt64 = integerValue(k)
-    var nn: UInt64 = integerValue(n)
-    var overflow: Bool = false
-    var ex1: (UInt64, Bool) = (0, false)
-    var ex2: (UInt64, Bool) = (0, false)
-    kk = k > n - k ? nn - kk : kk
-    for j: UInt64 in stride(from: 1, through: kk, by: 1) {
-        if nn % j == 0 {
-            ex1 = nn.dividedReportingOverflow(by: j)
-            if ex1.1 {
-                overflow = true
-                break
-            }
-            ex2 = ans.multipliedReportingOverflow(by: ex1.0)
-            if ex2.1 {
-                overflow = true
-                break
-            }
-            ans = ex2.0
-        }
-        else {
-            if ans % j == 0 {
-                ex1 = ans.dividedReportingOverflow(by: j)
-                if ex1.1 {
-                    overflow = true
-                    break
-                }
-                ans = ex1.0
-                ex2 = ans.multipliedReportingOverflow(by: nn)
-                if ex2.1 {
-                    overflow = true
-                    break
-                }
-                ans = ex2.0
-            }
-            else {
-                ex1 = ans.multipliedReportingOverflow(by: nn)
-                if ex1.1 {
-                    overflow = true
-                    break
-                }
-                ans = ex1.0
-                ex2 = ans.dividedReportingOverflow(by: j)
-                if ex2.1 {
-                    overflow = true
-                    break
-                }
-                ans = ex2.0
-            }
-        }
-        nn = nn - 1
-    }
-    if !overflow {
-        return makeFP(ans)
-    }
-    else {
-        let num: FPT = lgamma1(makeFP(n) + 1)
-        let den: FPT = lgamma1(makeFP(n - k + 1)) + lgamma1(makeFP(k + 1))
-        let q: FPT = num - den
-        return exp1(q).rounded(FloatingPointRoundingRule.toNearestOrAwayFromZero)
-    }
-
-//    if k == 0 {
-//        return 1
-//    }
-//    let num: FPT = lgamma1(n + 1)
-//    let den: FPT = lgamma1(n - k + 1) + lgamma1(k + 1)
-//    let q: FPT = num - den
-//    return exp1(q)
-}
 
 
 /// Tests, if a value is integer.
@@ -512,12 +439,6 @@ internal func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
     }
 }
 
-/// Returns the logarithm of n!
-internal func logFactorial<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
-        return lgamma1(makeFP(n + 1))
-}
-
-
 /// Returns a SSExamine object of length one and count "count"
 /// - Parameter value: Value
 /// - Parameter count: Number of values
@@ -696,8 +617,8 @@ internal func scanString(string: String?) -> String? {
     return string
 }
 
-class StandardErrorOutputStream: TextOutputStream {
-    func write(_ string: String) {
+struct StandardErrorOutputStream: TextOutputStream {
+    mutating func write(_ string: String) {
         let stdErr = FileHandle.standardError
         if let data = string.data(using: .utf8) {
             stdErr.write(data)
@@ -708,7 +629,7 @@ class StandardErrorOutputStream: TextOutputStream {
     }
 }
 
-internal func printError(_ message: String!) {
+internal func printError(_ message: String) {
     var outputStream = StandardErrorOutputStream()
     print(message, to: &outputStream)
 }

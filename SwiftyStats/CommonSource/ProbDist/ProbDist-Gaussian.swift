@@ -116,7 +116,12 @@ public func pdfNormalDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean m: FPT, s
         
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
-    let pdf: FPT = 1 / (sd * FPT.sqrt2pi) * exp1(-1 * pow1(x - m, 2) / (2 * sd * sd))
+    let e1: FPT = FPT.one / (sd * FPT.sqrt2pi)
+    let e2: FPT = FPT.minusOne * pow1(x - m, 2)
+    let e3: FPT = 2 * pow1(sd, 2)
+    let e4: FPT = exp1(e2 / e3)
+    let pdf: FPT = e1 * e4
+//    let pdf: FPT = 1 / (sd * FPT.sqrt2pi) * exp1(-1 * pow1(x - m, 2) / (2 * sd * sd))
     return pdf
 }
 

@@ -1,0 +1,36 @@
+> restart; with(LinearAlgebra); with(ArrayTools); with(PolynomialTools); with(ListTools);
+> g__gsl := 6.024680040776729583740234375; g__Pugh := 22618910*(1/100000); n__gsl := 13; n__Pugh := 22; n := n__gsl; g := g__gsl; Digits := 96; number := -33-33*I;
+> Z := proc (i) options operator, arrow; piecewise(i = 1, 1, 1/(number+i-1)) end proc;
+> ZZ := Vector(n, Z(i));
+> B := proc (i, j) options operator, arrow; piecewise(i = 1, 1, 1 < i and i <= j, (-1)^(j-i)*binomial(i-3+j, j-i), 0) end proc;
+> BB := Matrix(n, B);
+> C := proc (i, j) options operator, arrow; piecewise(i = 1 and 1 = j, 1/2, i < j, 0, (-1)^(i-j)*(sum(binomial(2*i-2, 2*k)*binomial(k, k+j-i), k = 0 .. i-1))) end proc;
+> CC := Matrix(n, C);
+> DB := proc (i, j) options operator, arrow; piecewise(i <> j, 0, i = 1 and 1 = j, 1, i = j and j = 2, -1, 2*DB(i-1, j-1)*(2*i-3)/(i-2)) end proc;
+> DD := Matrix(n, DB);
+> FLanczos := proc (i) options operator, arrow; sqrt(2)*factorial(i-3/2)*(i-1/2+g)^(-i+1/2)*exp(i-1/2+g)/Pi end proc;
+> f := Vector(n, FLanczos);
+> cc := DD . BB . CC . f;
+> CodeGeneration[Java](evalf[96](cc));
+> lanczosGamma := proc (z1, coeff) local zz, zh, zgh, zp, summe, i, app; if z1 = 0 then return discont end if; if z1 = 1 or z1 = 2 then return 1 end if; if type(z1, integer) and z1 < 0 then return discont end if; if Re(z1) < 0 then zz := -z1 else zz := z1 end if; zz := zz-1; zh := zz+1/2; zgh := zh+g; zp := zgh^((1/2)*zh); summe := 0; for i from n-1 by -1 to 1 do summe := summe+coeff[i+1]/(zz+i) end do; app := sqrt(2*Pi)*(coeff[1]+summe)*zp*exp(-zgh)*zp; if Re(z1) < 0 then app := -Pi/(z1*app*sin(z1*Pi)) end if; return app end proc;
+> significantDecimals := proc (base, p) options operator, arrow; p*log(base)/log(10) end proc;
+> Digits := round(significantDecimals(2, 63));
+> relErr := proc (x, x__0) options operator, arrow; (x-x__0)/x__0 end proc;
+> plot([Re(evalf(relErr(('lanczosGamma')(x+17*I, gammaC), GAMMA(x+17*I))))/2^(-52)], x = 0 .. 171, discont = false, gridlines = true, color = "DodgerBlue", labels = ["x", "&Re;(&Delta;)/eps"], axes = boxed, title = "Lanczos Approximation (g=6.024680040776729583740234375, n=13)", style = point);
+> plot([Im(relErr(('lanczosGamma')(x+32*I, gammaC), GAMMA(x+32*I)))/2^(-52)], x = 0 .. 171, gridlines = true, color = "IndianRed", labels = ["x", "&Im;(&Delta;)/eps"], axes = boxed, title = "Imaginary Relative Error of Lanczos Approximation (g=5, n=30) for z=x+I", style = point);
+> plot([relErr(abs(('lanczosGamma')(x+32*I, gammaC)), abs(GAMMA(x+32*I)))/2^(-52)], x = 0 .. 171, gridlines = true, color = "IndianRed", labels = ["x", "&Im;(&Delta;)/eps"], axes = boxed, title = "Relative Error of abs(&Gamma;(z) - Lanczos Approximation (g=5, n=30) for z=x+I", style = point);
+> with(plots); complexplot(relErr(('lanczosGamma')(x+32*I, gammaC), GAMMA(x+32*I))/2^(-52), x = 0 .. 171, gridlines = true, color = "Firebrick", labels = ["&Re;", "&Im;"], axes = boxed, style = point, symbol = circle, title = "relative error in units of ulp, z=x+I, 0<=x<=171");
+> Digits := 19;
+> plot3d(Re(relErr(('lanczosGamma')(x+I*y, gammaC), GAMMA(x+I*y))/2^(-52)), x = 0 .. 150, y = 0 .. 150, labels = ["x", "y", "&Re;(&varepsilon;)"]);
+> plot3d(Im(relErr(('lanczosGamma')(x+I*y, gammaC), GAMMA(x+I*y))/2^(-52)), x = 0 .. 150, y = 0 .. 150, labels = ["x", "y", "&Im;(&varepsilon;)"]);
+> plot3d(Im(relErr(('lanczosGamma')(x+I*y, gammaC), GAMMA(x+I*y))), x = 0 .. 150, y = 0 .. 150, labels = ["x", "y", "&Im;(&varepsilon;)"]);
+> plot3d(Re(relErr(('lanczosGamma')(x+I*y, gammaC), GAMMA(x+I*y))), x = 0 .. 150, y = 0 .. 150, labels = ["x", "y", "&Re;(&varepsilon;)"]);
+> Digits;
+> 
+;
+> 
+;
+> 
+;
+> 
+;
