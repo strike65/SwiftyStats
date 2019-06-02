@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.0.2-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_5-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
+![Version](https://img.shields.io/badge/version-1.0.3-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_5-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
 Important changes
 =================
 Versions 1.x.x and newer will need to compile using at least Swift 4.2. This version also compiles when using Swift 5.
