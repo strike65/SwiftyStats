@@ -1,8 +1,8 @@
 //
 //  Created by VT on 20.07.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -264,7 +264,7 @@ public func quantileVonMisesDist(p: Double!, mean m: Double!, concentration c: D
     /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
      * coded in C by Gary Perlman
      * coded in Basic by Michaek Zito 2003
-     * coded in C# by Volker Thieme 2005
+     * coded in C# by strike65 2005
      */
     let eps: Double = 2.0 * Double.ulpOfOne
     var mVal, MaxM, MinM, _test: Double

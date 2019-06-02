@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.2</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2018 Volker Thieme. All rights reserved.</string>
+	<string>Copyright © 2018-2019 strike65 (https://gitlab.com/strike65/SwiftyStats) All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>

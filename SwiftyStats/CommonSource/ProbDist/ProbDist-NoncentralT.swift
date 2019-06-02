@@ -1,8 +1,8 @@
 //
 //  Created by VT on 23.08.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -44,7 +44,7 @@ import os.log
 ///
 /// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
 /// error (in case of extreme parameters) the number of subintervals can be adjusted.
-/// Swift Version (C) Volker Thieme 2018
+/// Swift Version (C) strike65 2018
 internal func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp: FPT, tail: SSCDFTail = .lower, nSubIntervals nSubs: Int = 16) throws -> (cdf: FPT, error: FPT) {
     var cdf: FPT = FPT.nan
     var cdfLower: FPT = 0

@@ -2,10 +2,10 @@
 //  SSSimard-KSProb.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 03.07.17.
+//  Created by strike65 on 03.07.17.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -23,7 +23,7 @@
  
  */
 
-//  Swift version created by Volker Thieme on 23.07.17.
+//  Swift version created by strike65 on 23.07.17.
 //  Original copyright see below
 //
 
@@ -32,7 +32,7 @@ import Foundation
 //  Simard.c
 //  VTStatistics
 //
-//  Created by Volker Thieme on 20/10/15.
+//  Created by strike65 on 20/10/15.
 //
 //
 

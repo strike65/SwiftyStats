@@ -333,5 +333,5 @@ Please always check if `NaN` or `nil` is returned.
 # LICENSE
 This framework is published under the [GNU GPL 3](http://www.gnu.org/licenses/)
 
-Copyright 2017,2018 Volker Thieme
+Copyright 2017,2018 strike65
 

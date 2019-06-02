@@ -2,12 +2,12 @@
 //  SSExamine-Stats.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 03.07.17.
+//  Created by strike65 on 03.07.17.
 //
 /*
  
  This a Swift version of the gsl version (see below)
- Copyright (c) 2018 Volker Thieme
+ Copyright (c) 2018 strike65
  
  GNU GPL 3+
  

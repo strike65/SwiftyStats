@@ -2,10 +2,10 @@
 //  SSTukey.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 03.07.17.
+//  Created by strike65 on 03.07.17.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -26,7 +26,7 @@
  *  Mathlib : A C Library of Special Functions
  *  Copyright (C) 1998       Ross Ihaka
  *  Copyright (C) 2000--2007 The R Core Team
- *  Copyright (C( 1017 Volker Thieme (Swift port)
+ *  Copyright (C( 1017 strike65 (Swift port)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,9 +1,9 @@
 //
 //  Created by VT on 03.09.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -45,7 +45,7 @@ fileprivate let EPSS = "1.0e-15"
 ///
 /// Nico M. Temme (CWI, Amsterdam, The Netherlands)
 ///
-/// Copyright Swift 4.2 Version: Volker Thieme, 2018
+/// Copyright Swift 4.2 Version: strike65, 2018
 ///
 /// - Note:
 /// The present code uses different methods of computation

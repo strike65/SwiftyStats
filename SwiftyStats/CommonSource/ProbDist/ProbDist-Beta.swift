@@ -1,8 +1,8 @@
 //
 //  Created by VT on 20.07.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -249,7 +249,7 @@ public func quantileBetaDist<FPT: SSFloatingPoint & Codable>(p: FPT, shapeA a: F
 /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
 ///
 /// C version by John Burkardt
-/// Swift port by Volker Thieme
+/// Swift port by strike65
 ///
 /// - Throws: SSSwiftyStatsError if a and/or b <= 0
 public func cdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, shapeB b: FPT, lambda: FPT) throws -> FPT {
@@ -334,7 +334,7 @@ public func cdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, s
 /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
 ///
 /// C version by John Burkardt
-/// Swift port by Volker Thieme
+/// Swift port by strike65
 ///
 /// - Throws: SSSwiftyStatsError if a and/or b <= 0
 public func pdfBetaDist<FPT: SSFloatingPoint & Codable>(x: FPT, shapeA a: FPT, shapeB b: FPT, lambda: FPT) throws -> FPT {

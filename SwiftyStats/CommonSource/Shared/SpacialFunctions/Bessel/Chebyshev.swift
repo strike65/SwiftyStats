@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2018 Volker Thieme
+ Copyright (c) 2018 strike65
  
  GNU GPL 3+
  
@@ -75,7 +75,7 @@ import Foundation
 /*
  with kind permission
  Copyright 1985, 1987 by Stephen L. Moshier
- Copyright 2018 Volker Thieme
+ Copyright 2018 strike65
 */
 
 /*
