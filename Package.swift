@@ -1,9 +1,5 @@
-// swift-tools-version:4.2
-//
-//  Created by VT on 16.07.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  

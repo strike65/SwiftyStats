@@ -1,8 +1,8 @@
 //
 //  Created by VT on 20.07.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -154,7 +154,7 @@ public func quantileStudentTDist<FPT: SSFloatingPoint & Codable>(p: FPT, degrees
     /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
      * coded in C by Gary Perlman
      * coded in Basic by Michaek Zito 2003
-     * coded in C# by Volker Thieme 2005
+     * coded in C# by strike65 2005
      */
 //    let eps: Double = 1E-15
     let half: FPT = FPT.half
@@ -407,7 +407,7 @@ internal func infSum<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, lambda: FP
 ///
 /// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
 /// error (in case of extreme parameters) the number of subintervals can be adjusted.
-/// Swift Version (C) Volker Thieme 2018
+/// Swift Version (C) strike65 2018
 public func cdfStudentTDist<T: SSFloatingPoint & Codable>(t: T, degreesOfFreedom df: T, nonCentralityPara lambda: T, rlog: Bool! = false) throws -> T {
 
     var result: (cdf: T, error: T)

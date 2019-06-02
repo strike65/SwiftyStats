@@ -2,10 +2,10 @@
 //  SwiftyStatsTests.swift
 //  SwiftyStatsTests
 //
-//  Created by Volker Thieme on 17.07.17.
+//  Created by strike65 on 17.07.17.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  

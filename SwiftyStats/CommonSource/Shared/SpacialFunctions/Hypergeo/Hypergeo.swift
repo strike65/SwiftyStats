@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -89,7 +89,7 @@ import os.log
  Copyright 1984, 1987, 1988, 2000 by Stephen L. Moshier
  */
 
-/* Swift Version: Copyright Volker Thieme, 2018 */
+/* Swift Version: Copyright strike65, 2018 */
 
 
 public func hypergeometric1F1<FPT: SSFloatingPoint & Codable>(a: FPT, b: FPT, x: FPT) -> FPT {

@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2018 Volker Thieme
+ Copyright (c) 2018 strike65
  
  GNU GPL 3+
  

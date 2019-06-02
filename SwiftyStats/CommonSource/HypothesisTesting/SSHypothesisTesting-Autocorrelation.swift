@@ -2,12 +2,9 @@
 //  SSHypothesisTesting-Autocorrelation.swift
 //  SwiftyStats
 //
-//
-//  Created by Volker Thieme on 19.08.17.
-//
 
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  

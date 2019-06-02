@@ -2,10 +2,10 @@
 //  SSSwiftyStats-EnumsStructs.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 01.07.17.
+//  Created by strike65 on 01.07.17.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  

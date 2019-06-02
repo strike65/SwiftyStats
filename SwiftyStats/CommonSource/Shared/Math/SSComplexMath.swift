@@ -1,6 +1,6 @@
 //
 //  Created by VT on 12.10.18.
-//  Copyright © 2018 Volker Thieme. All rights reserved.
+//  Copyright © 2018 strike65. All rights reserved.
 /*
  GNU GPL 3+
 

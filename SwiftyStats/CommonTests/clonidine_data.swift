@@ -2,7 +2,7 @@
 //  clonidine_data.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 18.08.17.
+//  Created by strike65 on 18.08.17.
 //
 
 import Foundation

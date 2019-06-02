@@ -2,10 +2,10 @@
 //  SSExamine.swift
 //  SwiftyStats
 //
-//  Created by Volker Thieme on 01.07.17.
+//  Created by strike65 on 01.07.17.
 //
 /*
- Copyright (c) 2017 Volker Thieme
+ Copyright (2017-2019) strike65
  
  GNU GPL 3+
  
@@ -28,61 +28,79 @@ import Foundation
 import os.log
 #endif
 
-
-/// SSExamine
-/// This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that data must conform to the protocols `Hashable`, `Comparable` and `Codable`.
-/// The available statistics depend on whether the data are numeric or non-numeric. When unavailable statistics are requested, FPT.nan or nil will be returned. Some methods throws an error in such circumstances.
-///
-/// ### Note ###
-/// `SSElement` = The type of data
-///
-/// `FPT` = The type of emitted statistics. Must conform to SSFloatingPoint
+/** SSExamine
+    This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that data must conform to the protocols `Hashable`, `Comparable` and `Codable`. The available statistics depend on whether the data are numeric or non-numeric. When unavailable statistics are requested, FPT.nan or nil will be returned. Some methods throw an error in such circumstances.
+ - Author: strike65
+ 
+ - returns:
+    A new instance of the SSExamine class
+ - Important
+    - `SSElement` = generic type
+    - `FPT` = The type of emitted statistics. Must conform to SSFloatingPoint
+ */
 public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable & Comparable & Codable, FPT: SSFloatingPoint, FPT: Codable {
     
     
     // MARK: OPEN/PUBLIC VARS
     
-    /// An object representing the content of the SSExamine instance (experimental)
-    /// A placeholder to specify the type of stored data.
+    /**
+        An object representing the content of the SSExamine instance (experimental).
+        A placeholder to specify the type of stored data.
+     */
     public var rootObject: Any?
     
-    /// User defined tag
+    /**
+     User defined tag
+    */
     public var tag: String?
     
-    /// Human readable description
+    /**
+     Human readable description
+     */
     public var descriptionString: String?
     
-    /// Name of the table
+    /*
+    Name of the table
+     */
     public var name: String?
     
-    /// Significance level to use, default: 0.05
+    /**
+    Significance level to use, default: 0.05
+     */
     public var alpha: Double! = 0.05
     
-    /// Indicates if there are changes
+    /** Indicates if there are changes
+    */
     public var hasChanges: Bool! = false
     
-    /// Defines the level of measurement
+    /* Defines the level of measurement
+     */
     public var levelOfMeasurement: SSLevelOfMeasurement! = .interval
     
-    /// If true, the instance contains numerical data
+    /* If true, the instance contains numerical data
+    */
     public var isNumeric: Bool! = true
     
-    /// Returns the count of unique SSElements
+    /** Returns the count of unique SSElements
+     */
     public var length: Int {
         return items.count
     }
     
-    /// Returns true, if count == 0
+    /** Returns true, if count == 0
+    */
     public var isEmpty: Bool {
         return count == 0
     }
     
-    /// The total number of observations (= sum of all absolute frequencies)
+    /* The total number of observations (= sum of all absolute frequencies)
+    */
     public var sampleSize: Int {
         return count
     }
     
-    /// Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
+    /* Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
+    */
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, FPT> {
         //        updateCumulativeFrequencies()
         return cumRelFrequencies
