@@ -50,7 +50,7 @@ import os.log
 /// `sortedArrays().sortedGroups` would be: `[B,A,B,B,A,A]`
 ///
 /// `sortedArrays().sortedData` would then be: `[0,1,2,3,4,6]`
-public class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable {
+internal class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable {
     private var g: Array<Int>
     private var o: Array<T>
     
@@ -85,7 +85,7 @@ public class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable {
         self.g = groups
     }
     
-    fileprivate func quickSort(_ lo: Int, _ hi: Int, ref: SSDataGroupSorter ) {
+    private func quickSort(_ lo: Int, _ hi: Int, ref: SSDataGroupSorter ) {
         var i: Int = lo
         var j: Int = hi
         let x:T = ref.o[(lo + hi) / 2]
@@ -119,7 +119,7 @@ public class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable {
     }
     
     /// Returns the sorted groups and data as a tuple
-    public func sortedArrays() -> (sortedGroups: Array<Int>, sortedData: Array<T>) {
+    func sortedArrays() -> (sortedGroups: Array<Int>, sortedData: Array<T>) {
         quickSort(0, self.o.count - 1, ref: self)
         return (self.g, self.o)
     }

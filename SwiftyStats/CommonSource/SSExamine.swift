@@ -519,7 +519,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         isNumeric = true
     }
     
-    //    // MARK: Codable protocol
+    // MARK: Codable protocol
     private enum CodingKeys: String, CodingKey {
         case tag = "TAG"
         case name

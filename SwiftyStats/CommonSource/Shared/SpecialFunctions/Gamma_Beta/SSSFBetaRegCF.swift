@@ -24,24 +24,24 @@ import Foundation
 internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
     
     /// Parameter a. Must be set by the caller
-    public var a: T = T.nan
+    var a: T = T.nan
     /// Parameter b. Must be set by the caller
-    public var b: T = T.nan
+    var b: T = T.nan
     
     
     /// Initializes a new instance
-    override public init() {
+    override init() {
         super.init()
         self.a = T.nan
         self.b = T.nan
     }
     /// Returns the n_th a. Will always be  one in this case
-    override public func a_N(n: Int, point x: T) -> T {
+    override func a_N(n: Int, point x: T) -> T {
         return makeFP(1.0)
     }
     
     /// Returns the nt_th b used by cf
-    override public func b_N(n: Int, point x: T) -> T {
+    override func b_N(n: Int, point x: T) -> T {
         var res: T = T.nan
         var k: T
         if n % 2 == 0 {

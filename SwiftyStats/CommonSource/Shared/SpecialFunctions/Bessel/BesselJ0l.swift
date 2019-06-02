@@ -552,15 +552,7 @@ fileprivate func ak<T: SSFloatingPoint>(k: T, v: T) -> T {
 }
 
 
-
-
-
-
-
-
-
-
-public func besselJ0l<T: SSFloatingPoint>(x: T) -> T {
+internal func besselJ0l<T: SSFloatingPoint>(x: T) -> T {
     var xx: T
     var ans: T = 0
     var num: Array<T>

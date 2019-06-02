@@ -16,6 +16,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+// MARK: Airy Functions
+
 /// Returns the real AiryAi and AiryAi'
 /// - Parameter x: x
 /// - Note:
@@ -36,7 +38,7 @@
 /// -- min. abs. Error: 0.0, max. abs. Error: 7.327471962526033e-13
 ///
 /// -- min. rel. Error: 0.0, max. rel. Error: 3.0119944005469907e-10
-public func airyAi<T:SSFloatingPoint>(x: T) -> (ai: T, dai: T, error: Int) {
+internal func airyAi<T:SSFloatingPoint>(x: T) -> (ai: T, dai: T, error: Int) {
     var ans: (ai: T, dai: T, error: Int)
     let airy: Airy<T> = Airy<T>.init()
     ans = airy.airy_air(x: x)
@@ -63,7 +65,7 @@ public func airyAi<T:SSFloatingPoint>(x: T) -> (ai: T, dai: T, error: Int) {
 /// -- min. abs. Error: 0.0, max. abs. Error: 8.637326964766601e-13
 ///
 /// -- min. rel. Error: 0.0, max. rel. Error: 2.658098530832e-11
-public func airyBi<T:SSFloatingPoint>(x: T) -> (bi: T, dbi: T, error: Int) {
+internal func airyBi<T:SSFloatingPoint>(x: T) -> (bi: T, dbi: T, error: Int) {
     var ans: (bi: T, dbi: T, error: Int)
     let airy: Airy<T> = Airy<T>.init()
     ans = airy.airy_bir(x: x)

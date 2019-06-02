@@ -50,7 +50,7 @@ extension SSHypothesisTesting {
         }
         var array: Array<Array<T>> = Array<Array<T>>()
         for examine in data {
-            if examine.isArithmetic {
+            if examine.isNotEmptyAndNumeric {
                 array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
@@ -112,7 +112,7 @@ extension SSHypothesisTesting {
         }
         for a in array {
             _data.append(SSExamine<T, FPT>.init(withArray: a, name: nil, characterSet: nil))
-            if !_data.last!.isArithmetic {
+            if !_data.last!.isNotEmptyAndNumeric {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
@@ -198,7 +198,7 @@ extension SSHypothesisTesting {
         }
         var array: Array<Array<T>> = Array<Array<T>>()
         for examine in data {
-            if examine.isArithmetic {
+            if examine.isNotEmptyAndNumeric {
                 array.append(examine.elementsAsArray(sortOrder: .raw)!)
             }
             else {
@@ -259,7 +259,7 @@ extension SSHypothesisTesting {
         for a in array {
             if array.count >= 2 {
                 _data.append(SSExamine<T, FPT>.init(withArray: a, name: nil, characterSet: nil))
-                if !_data.last!.isArithmetic {
+                if !_data.last!.isNotEmptyAndNumeric {
                     #if os(macOS) || os(iOS)
                     if #available(macOS 10.12, iOS 10, *) {
                         if _data.last!.isEmpty {
@@ -449,7 +449,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !sample.isArithmetic {
+        if !sample.isNotEmptyAndNumeric {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
                os_log("Data are expected to be numeric", log: log_stat, type: .error)
@@ -564,7 +564,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !sample1.isArithmetic || !sample2.isArithmetic {
+        if !sample1.isNotEmptyAndNumeric || !sample2.isNotEmptyAndNumeric {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
                 os_log("Data are expected to be numeric", log: log_stat, type: .error)

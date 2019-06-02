@@ -25,19 +25,19 @@ import Foundation
 internal class SSGammaQ<T: SSFloatingPoint>: SSContFrac<T> {
     
     /// Parameter a.Must be set by the caller
-    public var a: T = T.nan
+    var a: T = T.nan
     /// Initializes a new instance
-    override public init() {
+    override init() {
         super.init()
         self.a = T.nan
     }
     /// Returns the n_th a
-    override public func a_N(n: Int, point x: T) -> T {
+    override func a_N(n: Int, point x: T) -> T {
         return makeFP(n + n) + 1 - self.a + x
     }
     
     /// Returns the n_th b
-    override public func b_N(n: Int, point x: T) -> T {
+    override func b_N(n: Int, point x: T) -> T {
         return makeFP(n) * self.a - makeFP(n * n)
     }
 }

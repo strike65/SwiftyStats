@@ -163,26 +163,8 @@ internal func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
 /// Returns the integer part of a floating point number
 internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
     var modr: (T, T)
-    modr = modf(x)
+    modr = Darwin.modf(x)
     return modr.0
-//    switch x {
-//    case let d as Double:
-//        var intPart: Double = 0.0
-//        let _ = modf(d, &intPart)
-//        return intPart as! T
-//    case let f as Float:
-//        var intPart: Float = 0.0
-//        let _ = modff(f, &intPart)
-//        return intPart as! T
-//        #if arch(x86_64)
-//    case let f80 as Float80:
-//        var intPart: Float80 = 0.0
-//        let _ = modfl(f80, &intPart)
-//        return intPart as! T
-//        #endif
-//    default:
-//        return T.nan
-//    }
 }
 
 
@@ -190,7 +172,7 @@ internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
 /// - Paramter value: A double-value.
 internal func fractionalPart<T: SSFloatingPoint>(_ value: T) -> T {
     var modr: (T, T)
-    modr = modf(value)
+    modr = Darwin.modf(value)
     return modr.1
 }
 
@@ -448,10 +430,7 @@ internal func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, cou
     return res
 }
 
-
-/*************************************************************
- scanning functions
-*************************************************************/
+// MARK: Scanning Functions
 
 internal func scanDouble(string: String?) -> Double? {
     guard string != nil else {
@@ -616,6 +595,8 @@ internal func scanString(string: String?) -> String? {
     }
     return string
 }
+
+// MARK: Logging
 
 struct StandardErrorOutputStream: TextOutputStream {
     mutating func write(_ string: String) {

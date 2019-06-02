@@ -33,7 +33,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         iregion = 0
     }
     
-    public func airy_bir(x: T) -> (bi: T, dbi: T, error: Int) {
+    internal func airy_bir(x: T) -> (bi: T, dbi: T, error: Int) {
         var nn: Int
         var Pxi, Qxi, Rxi, Sxi, bi0s, bi1s, a, b: T
         var bi, dbi: T
@@ -120,7 +120,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         return (bi: bi, dbi: dbi, error: err)
     }
     
-    public func airy_air(x: T) -> (ai: T, dai: T, error: Int) {
+    internal func airy_air(x: T) -> (ai: T, dai: T, error: Int) {
         var nn: Int
         var Pxi, Qxi, Rxi, Sxi, ai0s, ai1s, a, b, xi0: T
         var ai, dai: T

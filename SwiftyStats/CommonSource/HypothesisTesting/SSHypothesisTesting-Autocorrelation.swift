@@ -30,10 +30,12 @@ import os.log
 extension SSHypothesisTesting {
     // MARK: Autocorrelation
     
-    /// Returns the autocorrelation coefficient for a particular lag
-    /// - Parameter data: Array<Double> object
-    /// - Parameter lag: Lag
-    /// - Throws: SSSwiftyStatsError iff data.count < 2
+    /** Returns the autocorrelation coefficient for a particular lag
+     - parameters:
+        - data: Array<Double> object
+        - lag: Lag
+    - Throws: SSSwiftyStatsError iff data.count < 2
+    */
     public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, lag: Int) throws -> FPT {
         if array.count < 2 {
             #if os(macOS) || os(iOS)

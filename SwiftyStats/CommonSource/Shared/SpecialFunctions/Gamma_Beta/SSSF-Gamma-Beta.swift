@@ -38,6 +38,8 @@
 
  */
 
+// MARK: Beta and Gamma function
+
 import Foundation
 
 /// Returns the beta function
