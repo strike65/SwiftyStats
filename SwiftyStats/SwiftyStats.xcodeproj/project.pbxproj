@@ -16,6 +16,8 @@
 		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
+		9F2F23AE22A989FF0014CC4C /* Array-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */; };
+		9F2F23AF22A989FF0014CC4C /* Array-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */; };
 		9F3008BC217DBAAC00E0BB7D /* Pearson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0B3D9621503ACC00C4F920 /* Pearson.swift */; };
 		9F3008BD217DBAAF00E0BB7D /* Pearson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F0B3D9621503ACC00C4F920 /* Pearson.swift */; };
 		9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
@@ -176,19 +178,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9F2F23AB22A953C10014CC4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
+			remoteInfo = SwiftyStatsMobile;
+		};
 		9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9F82D3A21F1E8F19001BFC9D;
 			remoteInfo = SwiftyStats;
-		};
-		9FE407F122A27CD900B95557 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
-			remoteInfo = SwiftyStatsMobile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -198,6 +200,7 @@
 		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
+		9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array-Extension.swift"; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-NoncentralT.swift"; sourceTree = "<group>"; };
@@ -546,6 +549,7 @@
 				9F13CD20211B71D100153FC3 /* CodableFloat80.swift */,
 				9FC118D320867ECC008860C7 /* String-Extension-Hash.swift */,
 				9FAACB6F2108730000C031F3 /* FP-Extension.swift */,
+				9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -628,7 +632,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9FE407F222A27CD900B95557 /* PBXTargetDependency */,
+				9F2F23AC22A953C10014CC4C /* PBXTargetDependency */,
 			);
 			name = SwiftyStats;
 			productName = SwiftyStats;
@@ -678,7 +682,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = VTSoftware;
 				TargetAttributes = {
 					9F82D3A21F1E8F19001BFC9D = {
@@ -690,22 +694,24 @@
 					9F82D3AB1F1E8F19001BFC9D = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 8K3X84P22H;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					9FEA82371F76C95F005E4349 = {
 						CreatedOnToolsVersion = 9.0;
 						DevelopmentTeam = 8K3X84P22H;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 9F82D39D1F1E8F19001BFC9D /* Build configuration list for PBXProject "SwiftyStats" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = 9F82D3991F1E8F19001BFC9D;
 			productRefGroup = 9F82D3A41F1E8F19001BFC9D /* Products */;
@@ -822,6 +828,7 @@
 				9F9E6068210DB0230059DF46 /* SSSF-BesselJ.swift in Sources */,
 				9FDEEFA9210D097200AC6FB7 /* Chebyshev.swift in Sources */,
 				9FEA82821F76CAF5005E4349 /* SSProtocols.swift in Sources */,
+				9F2F23AE22A989FF0014CC4C /* Array-Extension.swift in Sources */,
 				9FEA827E1F76CAF5005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
 				9FEA82781F76CAF5005E4349 /* SSExamine.swift in Sources */,
 				9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */,
@@ -914,6 +921,7 @@
 				9FE86ED1215D1B3100DD5349 /* CodableFloat80.swift in Sources */,
 				9F7EFB462101EF5800F0F573 /* ProbDist-Pareto.swift in Sources */,
 				9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */,
+				9F2F23AF22A989FF0014CC4C /* Array-Extension.swift in Sources */,
 				9FEA829A1F76CB1D005E4349 /* SSProtocols.swift in Sources */,
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
@@ -932,15 +940,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9F2F23AC22A953C10014CC4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
+			targetProxy = 9F2F23AB22A953C10014CC4C /* PBXContainerItemProxy */;
+		};
 		9F82D3AF1F1E8F19001BFC9D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9F82D3A21F1E8F19001BFC9D /* SwiftyStats */;
 			targetProxy = 9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */;
-		};
-		9FE407F222A27CD900B95557 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
-			targetProxy = 9FE407F122A27CD900B95557 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -949,6 +957,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1012,6 +1021,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1067,7 +1077,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1092,7 +1102,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1125,7 +1135,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStatsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1142,7 +1152,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.strike65.SwiftyStatsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1171,7 +1181,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1200,7 +1210,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

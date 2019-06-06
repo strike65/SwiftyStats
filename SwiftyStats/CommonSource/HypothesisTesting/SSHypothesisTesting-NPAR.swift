@@ -1703,15 +1703,17 @@ extension SSHypothesisTesting {
         result.sampleSize2 = set2.sampleSize
         return result
     }
-    /// Ranks the data
-    /// ### Note ###
-    /// Groups must be coded as an integer value starting at 1. The arrays sumOfRanks, meanRanks and sampleSizes contains [numberOfGroups] values. For group 1 the associated value has index 0!
+    
+    /** Ranks the data
+    Groups must be identified by integers, starting with 1. The fields (as arrays) `sumOfRanks`, `meanRanks` and `sampleSizes` contain the corresponding value for each group.
+    - Important: Remember that naming groups with integers starting at 1 does not change the fact that the index of the first entry in an array is 0.
+ */
     private struct Rank<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         /// The ranks
         public var ranks:Array<FPT>
-        /// An Array containing "sample size" times a group identifier
+        /// An Array containing "sample size"-times a group identifier
         public var groups:Array<Int>?
-        /// An array containing at grou
+        /// An array containing the sum of all ranks for each group
         public var sumOfRanks:Array<FPT>
         /// An array containg all ties precomputed (pow(t, 3) - t)
         public var ties:Array<FPT>?
@@ -1746,22 +1748,36 @@ extension SSHypothesisTesting {
             ties = temp1
             numberOfTies = temp3
             if groups != nil {
-                let uniqueGroups = Set<Int>.init(groups!)
+                let uniqueGroups = Set<Int>.init(groups!).sorted(by: <)
                 numberOfGroups = uniqueGroups.count
                 meanRanks = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
                 sumOfRanks = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
                 sampleSizes = Array<FPT>.init(repeating: makeFP(0.0), count: uniqueGroups.count)
-                for i in uniqueGroups {
-                    for k in 0..<groups!.count {
-                        if i == groups![k] {
-                            sumOfRanks[i - 1] += ranks[k]
-                            sampleSizes[i - 1] += 1
+                var k: Int
+                for group in uniqueGroups {
+                    k = 0
+                    for currentGroup in groups! {
+                        if currentGroup == group {
+                            sumOfRanks[group - 1] = sumOfRanks[group - 1] + ranks[k]
+                            sampleSizes[group - 1] = sampleSizes[group - 1] + 1
                         }
+                        k = k + 1
                     }
                 }
-                for i in uniqueGroups {
-                    meanRanks[i - 1] = sumOfRanks[i - 1] / sampleSizes[i - 1]
+                for group in uniqueGroups {
+                    meanRanks[group - 1] = sumOfRanks[group - 1] / sampleSizes[group - 1]
                 }
+//                for i in uniqueGroups {
+//                    for k in 0..<groups!.count {
+//                        if i == groups![k] {
+//                            sumOfRanks[i - 1] += ranks[k]
+//                            sampleSizes[i - 1] += 1
+//                        }
+//                    }
+//                }
+//                for i in uniqueGroups {
+//                    meanRanks[i - 1] = sumOfRanks[i - 1] / sampleSizes[i - 1]
+//                }
             }
             else {
                 numberOfGroups = 1
@@ -1777,10 +1793,10 @@ extension SSHypothesisTesting {
             
         }
         /// A more general ranking routine
-        /// - Paramater data: Array with data to rank
+        /// - Parameter data: Array containing data to rank
         /// - Parameter inout ranks: Upon return contains the ranks
         /// - Parameter inout ties: Upon return contains the correction terms for ties
-        /// - Parameter inout numberOfTies: Upon return contains number of ties
+        /// - Parameter inout numberOfTies: Upon return this parameter contains the number of ties
         private func rank<T, FPT>(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
             var pos: Int
             let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
@@ -1829,7 +1845,9 @@ extension SSHypothesisTesting {
         }
         var groups = Array<Int>()
         var a1 = Array<T>()
+        // group identifier
         var k = 1
+        // total number of mesurements
         var N: FPT = 0
         for examine in data {
             if examine.sampleSize < 2 {
@@ -1848,6 +1866,7 @@ extension SSHypothesisTesting {
             N += makeFP(examine.sampleSize)
             a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
         }
+        // sort the data with respect to groups
         let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
         let sorted = sorter.sortedArrays()
         let ranking: Rank<T, FPT> = Rank<T, FPT>.init(data: sorted.sortedData, groups: sorted.sortedGroups)

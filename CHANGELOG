@@ -2,6 +2,8 @@ Version 1.0.4
 - update access levels
 - advanced(by:) removed when accessing arrays
 - update tests
+- update doc
+- add Array extension: indices(where:)
 
 Version 1.0.3
 - added support for Swift 5

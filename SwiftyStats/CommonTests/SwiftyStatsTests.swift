@@ -294,6 +294,7 @@ class SwiftyStatsTests: XCTestCase {
         let intDataTestString = "18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28"
         
         XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
+        print(examineInt.elementsAsString(withDelimiter: ",", asRow: false)!)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .raw)! == intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
@@ -6390,9 +6391,15 @@ class SwiftyStatsTests: XCTestCase {
     }
 
     func testFP() {
-        var z: Complex<Double> = Complex<Double>.init(re: -5.0 / 2.0, im: 0)
-        print(z.arg)
-        print((lgamma1(z: z)))
-        print(lgamma1(-22.0/3.0))
+        let A = [12.1, 14.8, 15.3, 11.4,10.8]
+        let B = [18.3, 49.6, 10.1, 35.6, 26.2, 8.9]
+        let C = [12.7, 25.1, 47.0, 16.3, 30.4]
+        let D = [7.3, 1.9, 5.8, 10.1, 9.4]
+        let exa: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: A, name: "A", characterSet: nil)
+        let exb: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: B, name: "B", characterSet: nil)
+        let exc: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: C, name: "C", characterSet: nil)
+        let exd: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: D, name: "D", characterSet: nil)
+        let ExArray = [exa, exb, exc, exd]
+        var c: SSKruskalWallisHTestResult = try! SSHypothesisTesting.kruskalWallisHTest(data: ExArray, alpha: 0.05)
     }
 }
