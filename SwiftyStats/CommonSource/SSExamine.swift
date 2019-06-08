@@ -29,15 +29,12 @@ import os.log
 #endif
 
 /** SSExamine
- This class contains all the data that you want to evaluate. SSExamine expects data that corresponds to the `Hashable`, `Comparable` and `Codable` protocols. Which statistics are available depends on the type of data. For nominal data, for example, an average will not be meaningful and will therefore not be calculated. If a certain statistical measure is not available, the result will be `nil`. It is therefore important that you check all results for this. Some functions also react with an error message.
+ This class contains all the data that you want to evaluate. SSExamine expects data that corresponds to the `Hashable`, `Comparable` and `Codable` protocols. Which statistics are available depends on the type of data. For nominal data, for example, an average will not be meaningful and will therefore not be calculated. If a certain statistical measure is not available, the result will be `nil`. It is therefore important that you check all results for this.
  
  SSExamine was primarily developed with Objective-C and had in particular the requirement to create frequency tables for the entered data and to update these tables whenever data was added or removed. Internally, the data is therefore stored in a kind of frequency table. If, for example, the element "A" occurs 100 times in the data set to be evaluated, the element is not stored 100 times, but only once. At the same time, a reference to the frequency of this element is saved.
 
  If elements are added to an SSExamine instance, the order of "arrival" is also registered. This makes it possible to reconstruct the "original data" from an SSExamine instance.
- 
- - returns:
-    A new instance.
- - Important
+ - Important:
     - `SSElement` = The Type of data to be processed.
     - `FPT` = The type of emitted statistics. Must conform to SSFloatingPoint
  */

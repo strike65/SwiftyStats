@@ -904,7 +904,7 @@ class SwiftyStatsTests: XCTestCase {
         var htest: SSKruskalWallisHTestResult<Double>
         htest = try! SSHypothesisTesting.kruskalWallisHTest(data: array, alpha: 0.05)
         XCTAssertEqual(htest.pValue!, 0.009, accuracy: 1E-3)
-        XCTAssertEqual(htest.Chi2!, 11.53, accuracy: 1E-2)
+        XCTAssertEqual(htest.H_value!, 11.53, accuracy: 1E-2)
     }
     
     
@@ -6391,10 +6391,14 @@ class SwiftyStatsTests: XCTestCase {
     }
 
     func testFP() {
-        let A = [12.1, 14.8, 15.3, 11.4,10.8]
-        let B = [18.3, 49.6, 10.1, 35.6, 26.2, 8.9]
-        let C = [12.7, 25.1, 47.0, 16.3, 30.4]
-        let D = [7.3, 1.9, 5.8, 10.1, 9.4]
+//        let A = [12.1, 14.8, 15.3, 11.4,10.8]
+//        let B = [18.3, 49.6, 10.1, 35.6, 26.2, 8.9]
+//        let C = [12.7, 25.1, 47.0, 16.3, 30.4]
+//        let D = [7.3, 1.9, 5.8, 10.1, 9.4]
+        let A = [12.1, 14.8, 15.3, 11.4,47.0]
+        let B = [18.3, 12.1, 47,0, 35.6, 26.2, 8.9]
+        let C = [12.7, 15.3, 47.0, 16.3, 30.4]
+        let D = [7.3, 1.9, 5.8, 15.3, 14.8]
         let exa: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: A, name: "A", characterSet: nil)
         let exb: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: B, name: "B", characterSet: nil)
         let exc: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: C, name: "C", characterSet: nil)

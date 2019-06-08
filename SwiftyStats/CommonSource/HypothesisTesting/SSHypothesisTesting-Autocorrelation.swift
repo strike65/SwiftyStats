@@ -30,12 +30,13 @@ import os.log
 extension SSHypothesisTesting {
     // MARK: Autocorrelation
     
-    /** Returns the autocorrelation coefficient for a particular lag
-     - parameters:
-        - data: Array<Double> object
-        - lag: Lag
-    - Throws: SSSwiftyStatsError iff data.count < 2
-    */
+    /// Autocorrelation coefficient
+    ///
+    /// - Parameters:
+    ///   - array: Data
+    ///   - lag: Lag
+    /// - Returns: The autocorrelation coefficient for Lag `lag`
+    /// - Throws: Throws SSSwiftyStatsError.invalidArgument if `array.count` < 2
     public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, lag: Int) throws -> FPT {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
@@ -58,8 +59,9 @@ extension SSHypothesisTesting {
     
     
     /// Returns the autocorrelation coefficient for a particular lag
-    /// - Parameter data: SSExamine<Double, Double> object
+    /// - Parameter data: SSExamine object
     /// - Parameter lag: Lag
+    /// - Returns: Autocorrelation coefficient for Lag `lag`
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, lag: Int) throws -> FPT {
         if data.sampleSize < 2 {
@@ -94,7 +96,7 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs a Box-Ljung test for autocorrelation for all possible lags
+    /// Performs the Box-Ljung test for autocorrelation for all possible lags
     ///
     /// ### Usage ###
     /// ````
@@ -102,6 +104,7 @@ extension SSHypothesisTesting {
     /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
     /// ````
     /// - Parameter data: Array<Double>
+    /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {
         if array.count < 2 {
@@ -133,6 +136,7 @@ extension SSHypothesisTesting {
     /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
     /// ````
     /// - Parameter data: SSExamine object
+    /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
     public class func autocorrelation<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>) throws -> SSBoxLjungResult<FPT> {
         if data.sampleSize < 2 {
@@ -207,14 +211,20 @@ extension SSHypothesisTesting {
         k = 1
         var kk: FPT = 0
         var ll: FPT = 0
+        var ex1, ex2, ex3: FPT
+        
         while k < acr.count {
             kk = makeFP(k)
-            serWhiteNoise.append((nr * ((nn - kk) / (nn + 2))).squareRoot())
+            ex1 = nn - kk
+            ex2 = ex1 / (nn + 2)
+            ex3 = nr * ex2
+            serWhiteNoise.append(ex3.squareRoot())
             l = 1
             while l <= k {
                 ll = makeFP(l)
+                ex1 = nn - ll
                 oldsum = sum
-                comp = comp + (pow1(acr[l], 2) / (nn - ll))
+                comp = comp + (pow1(acr[l], 2) / ex1)
                 sum = comp + oldsum
                 comp = (oldsum - sum) + comp
 //                sum += sum + (pow1(acr[l], 2) / (nn - ll))

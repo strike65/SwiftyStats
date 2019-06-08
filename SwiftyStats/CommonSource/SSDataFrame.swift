@@ -29,22 +29,21 @@ import os.log
 #endif
 
 
-// Defines a structure holding multiple SSExamine objects:
-// Each column contains an SSExamine object.
-/*
- Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:
- 
- With N = sampleSize:
- 
- <          COL[0]      COL[1]     ...  COL[columns - 1] >
- tags       tags[0]     tags[1]    ...  tags[columns - 1]
- cnames     cnames[0    cnames[1]  ...  cnames[columns - 1]
- ROW0       data[0][0]  data[0][1] ...  data[0][columns - 1]
- ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
- ...        ..........  .......... ...  ....................
- ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
- 
- */
+/// Defines a structure holding multiple SSExamine objects:
+/// Each column contains an SSExamine object.
+///
+/// Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:
+///
+/// With N = sampleSize:
+/// ````
+/// <          COL[0]      COL[1]     ...  COL[columns - 1] >
+/// tags       tags[0]     tags[1]    ...  tags[columns - 1]
+/// cnames     cnames[0    cnames[1]  ...  cnames[columns - 1]
+/// ROW0       data[0][0]  data[0][1] ...  data[0][columns - 1]
+/// ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
+/// ...        ..........  .......... ...  ....................
+/// ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
+/// ````
 public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable, FPT: Codable {
     
 //    public typealias Examine = SSExamine<SSElement, Double>
@@ -92,8 +91,8 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
 //    @available(macOS 10.12, iOS 10, *)
     /// Saves the dataframe to filePath using JSONEncoder
     /// - Parameter path: The full qualified filename.
-    /// - Parameter overwrite: If yes an existing file will be overwritten.
-    /// - Throws: SSSwiftyStatsError.posixError (file can'r be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
+    /// - Parameter overwrite: If true, file will be overwritten.
+    /// - Throws: SSSwiftyStatsError.posixError (file can't be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
     public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
@@ -194,7 +193,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         }
     }
     
-    /// Number of rwos per column (= sample size)
+    /// Number of rows per column (= sample size)
     public var sampleSize: Int {
         get {
             return rows
@@ -219,7 +218,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             return false
         }
     }
-    /// NUmber of samples (Same as `columns`)
+    /// Number of samples (Same as `columns`)
     public var countOfSamples: Int {
         get {
             return cols
@@ -402,7 +401,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         return res
     }
     
-    /// Accesses the column at `at`
+    /// Accesses the column at a given index
     public subscript(at: Int) -> SSExamine<SSElement, FPT> {
         assert(isValidColumnIndex(at), "Index out of range")
         return data[at]
@@ -437,6 +436,11 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     //    }
     
     // NSCopying / NSMutableCopying
+    /// Returns a new instance that’s a copy of the receiver.
+    ///
+    /// The returned object is implicitly retained by the sender, who is responsible for releasing it. The copy returned is immutable if the consideration “immutable vs. mutable” applies to the receiving object; otherwise the exact nature of the copy is determined by the class.
+    /// - Parameters:
+    ///     - zone: This parameter is ignored. Memory zones are no longer used by Objective-C.
     public func copy(with zone: NSZone? = nil) -> Any {
         do {
             let res = try SSDataFrame<SSElement, FPT>.init(examineArray: self.data)
@@ -448,15 +452,26 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             fatalError("Copy failed")
         }
     }
-    
+
+    /// Returns a new instance that’s a mutable copy of the receiver.
+    ///
+    /// The returned object is implicitly retained by the sender, who is responsible for releasing it. The copy returned is immutable if the consideration “immutable vs. mutable” applies to the receiving object; otherwise the exact nature of the copy is determined by the class. In fact, that functions does the same as `copy(with:)`
+    /// - Parameters:
+    ///     - zone: This parameter is ignored. Memory zones are no longer used by Objective-C.
     public func mutableCopy(with zone: NSZone? = nil) -> Any {
         return self.copy(with: zone)
     }
-    
+
+    /// Returns the object returned by `mutableCopy(with:)` where the `zone` is nil.
+    ///
+    /// This is a convenience method for classes that adopt the NSMutableCopying protocol. An exception is raised if there is no implementation for `mutableCopy(with:)`.
     public override func mutableCopy() -> Any {
         return self.copy(with: nil)
     }
     
+    /// Returns the object returned by `copy(with:) where the `zone` is nil.
+    ///
+    /// This is a convenience method for classes that adopt the NSCopying protocol. An exception is raised if there is no implementation for copy(with:). NSObject does not itself support the NSCopying protocol. Subclasses must support the protocol and implement the copy(with:) method. A subclass version of the copy(with:) method should send the message to super first, to incorporate its implementation, unless the subclass descends directly from NSObject.
     public override func copy() -> Any {
         return copy(with: nil)
     }
@@ -558,6 +573,18 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
+    ///
+    /// The following example creates a DataFrame object with 4 columns:
+    /// ````
+    /// let dataString = "Group 1,Group 2,Group 3,Group 4\n6.9,8.3,8.0,5.8\n5.4,6.8,10.5,3.8\n5.8,7.8,8.1,6.1\n4.6,9.2,6.9,5.6\n4.0,6.5,9.3,6.2"
+    /// var df: SSDataFrame<Double, Double>
+    /// do {
+    ///     df = try SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
+    /// }
+    /// catch {
+    ///     ...
+    /// }
+    /// ````
     public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         do {
             var importedString = fromString

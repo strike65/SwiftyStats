@@ -24,20 +24,21 @@
 import Foundation
 
 extension Array {
-    /**
-     Returns an array of indexes for which the condition is true.
-     ````
-     let A = [1,2,3,2,1,3]
-     var indices = A.indices(where: { $0 == 1 })
-     // [0, 4]
-     indices = A.indices(where: { $0 == 3 })
-     // [2, 5]
-     indices = A.indices(where: {(x: Int) -> Bool in
-        return x == 1
-     })
-     // [0, 4]
-     ````
- */
+    /// Returns an array of indexes for which the condition is true.
+    ///
+    ///     ````
+    ///     let A = [1,2,3,2,1,3]
+    ///     var indices = A.indices(where: { $0 == 1 })
+    ///     // [0, 4]
+    ///     indices = A.indices(where: { $0 == 3 })
+    ///     // [2, 5]
+    ///     indices = A.indices(where: {(x: Int) -> Bool in
+    ///        return x == 1
+    ///     })
+    ///     // [0, 4]
+    ///     ````
+    /// - Parameter condition: condition
+    /// - Returns: Array containing indices
     public func indices(where condition: (Element) -> Bool) -> [Index] {
         var result: [Index] = []
         if self.isEmpty {

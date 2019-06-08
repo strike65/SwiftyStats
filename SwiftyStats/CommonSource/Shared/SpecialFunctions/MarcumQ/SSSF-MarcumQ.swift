@@ -195,10 +195,9 @@ internal func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T
     return (p: p, q: q, err: ierr, underflow: underflow)
 }
 
-//!-----------------------------------------------------------
-//!   Evaluation of the cf for the ratio Ipnu(z)/Ipnu-1(z)
-//!   We use Lentz-Thompson algorithm.
-//!-----------------------------------------------------------
+/** Evaluation of the cf for the ratio Ipnu(z)/Ipnu-1(z)
+   We use Lentz-Thompson algorithm.
+*/
 fileprivate func fc<T: SSFloatingPoint>(_ pnu: T, _ z: T) -> T {
     var fc,b,a,c0,d0,delta: T
     var m: Int

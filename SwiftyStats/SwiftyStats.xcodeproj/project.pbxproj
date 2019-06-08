@@ -178,19 +178,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9F2F23AB22A953C10014CC4C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
-			remoteInfo = SwiftyStatsMobile;
-		};
 		9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9F82D3A21F1E8F19001BFC9D;
 			remoteInfo = SwiftyStats;
+		};
+		9F9EED5322AAF7000086E304 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9F82D39A1F1E8F19001BFC9D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FEA82371F76C95F005E4349;
+			remoteInfo = SwiftyStatsMobile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -632,7 +632,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				9F2F23AC22A953C10014CC4C /* PBXTargetDependency */,
+				9F9EED5422AAF7000086E304 /* PBXTargetDependency */,
 			);
 			name = SwiftyStats;
 			productName = SwiftyStats;
@@ -940,15 +940,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9F2F23AC22A953C10014CC4C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
-			targetProxy = 9F2F23AB22A953C10014CC4C /* PBXContainerItemProxy */;
-		};
 		9F82D3AF1F1E8F19001BFC9D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9F82D3A21F1E8F19001BFC9D /* SwiftyStats */;
 			targetProxy = 9F82D3AE1F1E8F19001BFC9D /* PBXContainerItemProxy */;
+		};
+		9F9EED5422AAF7000086E304 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */;
+			targetProxy = 9F9EED5322AAF7000086E304 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1089,6 +1089,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1114,6 +1115,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStats";
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1176,6 +1178,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
 				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1205,6 +1208,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.SwiftyStatsMobile";
 				PRODUCT_NAME = SwiftyStatsMobile;
 				PROVISIONING_PROFILE_SPECIFIER = "";

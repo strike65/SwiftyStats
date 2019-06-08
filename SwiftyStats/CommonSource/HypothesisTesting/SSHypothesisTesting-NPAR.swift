@@ -35,9 +35,10 @@ extension SSHypothesisTesting {
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
-    /// Calls ksGoFTest(data: Array<Double>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
-    /// - Parameter data: Array<Double>
+    /// Calls ksGoFTest(data: Array<FloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
+    /// - Parameter data: Array<FloatingPoint>
     /// - Parameter target: Distribution to test for
+    /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
@@ -65,8 +66,9 @@ extension SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: Array<Double>
+    /// - Parameter data: Array<FloatingPoint>
     /// - Parameter target: Distribution to test for
+    /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
@@ -98,6 +100,7 @@ extension SSHypothesisTesting {
     /// Calls ksGoFTest(data: SSExamine<Double, Double>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter data: SSExamine<Double, Double>
     /// - Parameter target: Distribution to test for
+    /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         do {
@@ -428,10 +431,11 @@ extension SSHypothesisTesting {
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
     
-    /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// Performs the Anderson Darling test for normality.
     /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
     /// - Parameter data: Data as SSExamine object
     /// - Parameter alpha: Alpha
+    /// - Returns: SSADTestResult struct.
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         if !data.isEmpty {
@@ -456,10 +460,11 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs the Anderson Darling test for normality. Returns a SSADTestResult struct.
+    /// Performs the Anderson Darling test for normality.
     /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
+    /// - Returns: SSADTestResult struct.
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         var ad: FPT = 0
@@ -660,6 +665,7 @@ extension SSHypothesisTesting {
     /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
     /// - Parameter set1: Observations of group1 as Array<T>
     /// - Parameter set2: Observations of group2 as Array<T>
+    /// - Returns: SSMannWhitneyUTestResult struct.
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T, FPT>(set1: Array<T>, set2: Array<T>)  throws -> SSMannWhitneyUTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.count <= 2 {
@@ -697,6 +703,7 @@ extension SSHypothesisTesting {
     /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
+    /// - Returns: SSMannWhitneyUTestResult struct.
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>)  throws -> SSMannWhitneyUTestResult<FPT>  where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.sampleSize <= 2 {
@@ -722,7 +729,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups:Array<Int> = Array<Int>()
-        var ties: Array<FPT> = Array<FPT>()
+//        var ties: Array<FPT>
         var sumRanksSet1: FPT = 0
         var sumRanksSet2: FPT = 0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
@@ -732,7 +739,18 @@ extension SSHypothesisTesting {
         let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
         let sorted: (Array<Int>, Array<T>) = sorter.sortedArrays()
         let rr: Rank<T, FPT> = Rank.init(data: sorted.1, groups: sorted.0)
-        ties = rr.ties!
+        guard let ties: Array<FPT> = rr.ties else {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("internal error", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+        }
+//        ties = rr.ties!
         sumRanksSet1 = rr.sumOfRanks[0]
         sumRanksSet2 = rr.sumOfRanks[1]
         let n1: FPT = makeFP(set1.sampleSize)
@@ -831,8 +849,9 @@ extension SSHypothesisTesting {
     }
     
     /// Performs the Wilcoxon signed ranks test for matched pairs
-    /// - Parameter set1: Observations 1 as Array<Double>
-    /// - Parameter set2: Observations 2 as Array<Double>
+    /// - Parameter set1: Observations 1 as Array<FloatingPoint>
+    /// - Parameter set2: Observations 2 as Array<FloatingPoint>
+    /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.count <= 2 {
@@ -880,6 +899,7 @@ extension SSHypothesisTesting {
     /// Performs the Wilcoxon signed ranks test for matched pairs with continuity correction (no exact p values!)
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
+    /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.sampleSize <= 2 {
@@ -942,10 +962,21 @@ extension SSHypothesisTesting {
             i += 1
         }
         var ranks: Array<FPT>
-        var ties: Array<FPT>
+//        var ties: Array<FPT>
         let ranking: Rank<FPT, FPT> = Rank.init(data: absDiffSorted, groups: nil)
         ranks = ranking.ranks
-        ties = ranking.ties!
+        guard let ties: Array<FPT> = ranking.ties else {
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("internal error", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+        }
+//        ties = ranking.ties!
         nties = ranking.numberOfTies
         let n = absDiffSorted.count
         var nposranks: Int = 0
@@ -1021,6 +1052,7 @@ extension SSHypothesisTesting {
     /// Performs the sign test
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
+    /// - Returns: SSSignTestRestult struct
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func signTest<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.count <= 2 {
@@ -1067,6 +1099,7 @@ extension SSHypothesisTesting {
     /// Performs the sign test
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
+    /// - Returns: SSSignTestRestult struct
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func signTest<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.sampleSize <= 2 {
@@ -1167,6 +1200,7 @@ extension SSHypothesisTesting {
     ///
     /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
+    /// - Returns: p value
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
     public class func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) -> FPT {
         if p0.isNaN {
@@ -1725,6 +1759,8 @@ extension SSHypothesisTesting {
         public var numberOfGroups:Int!
         /// Size of sample per group
         public var sampleSizes:Array<FPT>!
+        /// The set containing ties consecutive tie-count
+        public var tiesDictionary: Dictionary<Int, Int>
         
         private var data:Array<T>
         
@@ -1742,6 +1778,7 @@ extension SSHypothesisTesting {
             data = array
             var temp = Array<FPT>()
             var temp1 = Array<FPT>()
+            tiesDictionary = Dictionary<Int, Int>()
             var temp3 = 0
             rank(data: data, ranks: &temp, ties: &temp1, numberOfTies: &temp3)
             ranks = temp
@@ -1767,17 +1804,6 @@ extension SSHypothesisTesting {
                 for group in uniqueGroups {
                     meanRanks[group - 1] = sumOfRanks[group - 1] / sampleSizes[group - 1]
                 }
-//                for i in uniqueGroups {
-//                    for k in 0..<groups!.count {
-//                        if i == groups![k] {
-//                            sumOfRanks[i - 1] += ranks[k]
-//                            sampleSizes[i - 1] += 1
-//                        }
-//                    }
-//                }
-//                for i in uniqueGroups {
-//                    meanRanks[i - 1] = sumOfRanks[i - 1] / sampleSizes[i - 1]
-//                }
             }
             else {
                 numberOfGroups = 1
@@ -1831,6 +1857,13 @@ extension SSHypothesisTesting {
         
     }
     
+    /// Runs the Kruskal-Wallis H test. This test is a generalization of the Mann-Whitney U-test. The test checks whether all samples passed come from the same population. The H-test is distribution-independent and, like the U-test, uses the ranks of the data.
+    ///
+    /// - Parameters:
+    ///   - data: An Array of SSExamine objects
+    ///   - alpha: Level of significance
+    /// - Returns: A SSKruskalWallisHTestResult struct
+    /// - Throws: An `SSSwiftyStatsError.invalidArgument` is thrown if less than two SSExamine objects are passed or an SSExamine object has less than two elements.
     public class func kruskalWallisHTest<T, FPT>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSKruskalWallisHTestResult<FPT> where T: Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
@@ -1870,11 +1903,8 @@ extension SSHypothesisTesting {
         let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
         let sorted = sorter.sortedArrays()
         let ranking: Rank<T, FPT> = Rank<T, FPT>.init(data: sorted.sortedData, groups: sorted.sortedGroups)
-//        let ranking = Rank(data: sorted.sortedData, groups: sorted.sortedGroups)
         var sumRanks: FPT = 0
-        for rank in ranking.sumOfRanks {
-            sumRanks += rank
-        }
+        sumRanks = ranking.sumOfRanks.reduce(FPT.zero, +)
         if sumRanks != N * (N + 1) / 2 {
             #if os(macOS) || os(iOS)
             
@@ -1890,14 +1920,17 @@ extension SSHypothesisTesting {
         for i in 0..<ranking.numberOfGroups {
             sum += pow1(ranking.sumOfRanks[i], 2) / ranking.sampleSizes[i]
         }
-        var ex1, ex2: FPT
-        ex1 = (N * (N + 1))
+        var ex1, ex2, ex3: FPT
+        ex1 = N * (N + 1)
         ex2 = 3 * (N + 1)
-        let H: FPT = 12 / ex1 * sum - ex2
+        ex3 = makeFP(12) / ex1
+        let H: FPT = ex3 * sum - ex2
         let df: FPT = (makeFP(ranking.numberOfGroups)) - 1
-        var ts: FPT = 0
-        for tie in ranking.ties! {
-            ts += tie
+        var ts: FPT = FPT.zero
+        if let t = ranking.ties {
+            ts = t.reduce(FPT.zero) { (result, e) -> FPT in
+                return result + e
+            }
         }
         ts = 1 - (ts / (pow1(N, 3) - N))
         let Hc: FPT
@@ -1919,8 +1952,8 @@ extension SSHypothesisTesting {
         p = 1 - p
         var result: SSKruskalWallisHTestResult<FPT> = SSKruskalWallisHTestResult<FPT>()
         result.nTies = ranking.numberOfTies
-        result.Chi2 = H
-        result.Chi2corrected = Hc
+        result.H_value = H
+        result.H_value_corrected = Hc
         result.pValue = p
         result.nGroups = ranking.numberOfGroups
         result.df = integerValue(df)
