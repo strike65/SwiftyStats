@@ -388,27 +388,35 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     
     /// Returns the row at a given index
     public func row(at index: Int) -> Array<SSElement> {
-        assert(isValidRowIndex(index), "Index out of range")
-        var res = Array<SSElement>()
-        for c in self.data {
-            if let e = c[index] {
-                res.append(e)
+        if isValidRowIndex(index) {
+            var res = Array<SSElement>()
+            for c in self.data {
+                if let e = c[index] {
+                    res.append(e)
+                }
+                else {
+                    fatalError("Index out of range")
+                }
             }
-            else {
-                fatalError("Index out of range")
-            }
+            return res
         }
-        return res
+        else {
+            fatalError("Row-Index out of row.")
+        }
     }
     
     /// Accesses the column at a given index
-    public subscript(at: Int) -> SSExamine<SSElement, FPT> {
-        assert(isValidColumnIndex(at), "Index out of range")
-        return data[at]
+    public subscript(_ idx: Int) -> SSExamine<SSElement, FPT> {
+        if isValidColumnIndex(idx) {
+            return data[idx]
+        }
+        else {
+            fatalError("Index out of range")
+        }
     }
     
     /// Accesses the column named `name`
-    public subscript(name: String) -> SSExamine<SSElement, FPT> {
+    public subscript(_ name: String) -> SSExamine<SSElement, FPT> {
         if let i = cNames.firstIndex(of: name) {
             return data[i]
         }

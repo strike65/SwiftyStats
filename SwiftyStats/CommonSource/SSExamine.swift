@@ -884,13 +884,17 @@ extension SSExamine {
     
     /// Returns the indexed element
     subscript(_ index: Int) -> SSElement? {
-        assert(isValidIndex(index: index), "Index out of range")
-        if !self.isEmpty {
-            let a = self.elementsAsArray(sortOrder: .raw)!
-            return a[index]
+        if isValidIndex(index: index) {
+            if !self.isEmpty {
+                let a = self.elementsAsArray(sortOrder: .raw)!
+                return a[index]
+            }
+            else {
+                return nil
+            }
         }
         else {
-            return nil
+            fatalError("Index out of range")
         }
     }
     

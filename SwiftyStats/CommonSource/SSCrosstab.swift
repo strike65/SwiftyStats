@@ -251,9 +251,11 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         }
     }
     
+    // MARK: Validity checking
+    
     /// Returns `true` if name is a valid row-name
     func isValidRowName(name: R) -> Bool {
-        if let _ = indexOfRow(rowName: name) {
+        if let _ = firstIndexOfRow(rowName: name) {
             return true
         }
         else {
@@ -263,7 +265,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     
     /// Returns  `true`  if name is a valid column-name
     func isValidColumnName(name: C) -> Bool {
-        if let _ = indexOfColumn(columnName: name) {
+        if let _ = firstIndexOfColumn(columnName: name) {
             return true
         }
         else {
@@ -289,8 +291,8 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// Returns the row at rowIndex
     /// - Throws: An error of type SSSwiftyStatsError
     public func row(at idx: Int, sorted: Bool! = false) throws -> Array<N> {
-        if !(idx >= 0 && idx < self.rr) {
-            throw SSSwiftyStatsError.init(type: .rowIndexOutOfRange, file: #file, line: #line, function: #function)
+        if !isValidRowIndex(row: idx) {
+            fatalError("Index out of range.")
         }
         if sorted {
             return self.counts[idx].sorted(by: { $0 < $1 })
@@ -303,8 +305,8 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// Returns the column at columnIndex
     /// - Throws: An error of type SSSwiftyStatsError
     public func column(at idx: Int, sorted: Bool! = false) throws -> Array<N> {
-        if !(idx >= 0 && idx < self.cc) {
-            throw SSSwiftyStatsError.init(type: .columnIndexOutOfRange, file: #file, line: #line, function: #function)
+        if !isValidColumnIndex(column: idx) {
+            fatalError("Index out of range.")
         }
         var temp = Array<N>()
         for r in 0..<self.rr {
@@ -321,7 +323,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// Returns the row with name rowName or nil
     /// - Throws: An error of type SSSwiftyStatsError
     public func rowNamed(_ rowName: R, sorted: Bool! = false) throws -> Array<N>? {
-        if self.rnames != nil {
+        if isValidRowName(name: rowName) {
             if let i = self.rnames!.firstIndex(of: rowName) {
                 do {
                     return try self.row(at: i, sorted: sorted)
@@ -335,14 +337,22 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             }
         }
         else {
-            return nil
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Unknown Row Name", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
     }
     
     /// Returns the column with name columnName or nil
     /// - Throws: An error of type SSSwiftyStatsError
     public func columnNamed(_ columnName: C, sorted: Bool = false) throws -> Array<N>? {
-        if self.cnames != nil {
+        if isValidColumnName(name: columnName) {
             if let i = self.cnames!.firstIndex(of: columnName) {
                 do {
                     return try self.column(at: i, sorted: sorted)
@@ -356,43 +366,85 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             }
         }
         else {
-            return nil
+            #if os(macOS) || os(iOS)
+            
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("Unknown Column Name", log: log_stat, type: .error)
+            }
+            
+            #endif
+            
+            throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
     }
     
     /// Accesses the element at [rowName][columnName]
-    subscript(rowName: R, columnName: C) -> N {
+    subscript(_ rowName: R, _ columnName: C) -> N {
         get {
-            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
-                return self.counts[r][c]
+            if isValidRowName(name: rowName) && isValidColumnName(name: columnName) {
+                if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
+                    return self.counts[r][c]
+                }
+                else {
+                    fatalError("Index out of range.")
+                }
             }
             else {
-                fatalError("Index out of range")
+                fatalError("Index out of range.")
             }
+//            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
+//            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
+//                return self.counts[r][c]
+//            }
+//            else {
+//                fatalError("Index out of range")
+//            }
         }
         set {
-            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
-                self.counts[r][c] = newValue
+            if isValidRowName(name: rowName) && isValidColumnName(name: columnName) {
+                if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
+                    self.counts[r][c] = newValue
+                }
+                else {
+                    fatalError("Index out of range.")
+                }
             }
             else {
-                fatalError("Index out of range")
+                fatalError("Index out of range.")
             }
+//            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
+//            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
+//                self.counts[r][c] = newValue
+//            }
+//            else {
+//                fatalError("Index out of range")
+//            }
         }
     }
     
     /// Accesses the element at [row][column]
-    subscript(row: Int, column: Int) -> N {
+    subscript(_ row: Int, _ column: Int) -> N {
         get {
-            assert(isValidRowIndex(row: row), "Row-Index out of range")
-            assert(isValidColumnIndex(column: column), "Column-Index out of range")
-            return self.counts[row][column]
+            if isValidRowIndex(row: row) && isValidColumnIndex(column: column) {
+                return self.counts[row][column]
+            }
+            else {
+                fatalError("Index out of range.")
+            }
+//            assert(isValidRowIndex(row: row), "Row-Index out of range")
+//            assert(isValidColumnIndex(column: column), "Column-Index out of range")
+//            return self.counts[row][column]
         }
         set {
-            assert(isValidRowIndex(row: row), "Row-Index out of range")
-            assert(isValidColumnIndex(column: column), "Column-Index out of range")
-            self.counts[row][column] = newValue
+            if isValidRowIndex(row: row) && isValidColumnIndex(column: column) {
+                self.counts[row][column] = newValue
+            }
+            else {
+                fatalError("Index out of range.")
+            }
+//            assert(isValidRowIndex(row: row), "Row-Index out of range")
+//            assert(isValidColumnIndex(column: column), "Column-Index out of range")
+//            self.counts[row][column] = newValue
         }
     }
     
@@ -454,7 +506,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// Removes the row with name
     /// - Throws: An error of type SSSwiftyStatsError
     public mutating func removeRow(rowName name: R) throws -> Array<N> {
-        if let i = self.indexOfRow(rowName: name) {
+        if let i = self.firstIndexOfRow(rowName: name) {
             return self.removeRow(at: i)
         }
         else {
@@ -465,7 +517,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     /// Removes the column with name
     /// - Throws: An error of type SSSwiftyStatsError
     public mutating func removeColumn(columnName name: C) throws -> Array<N> {
-        if let i = self.indexOfColumn(columnName: name) {
+        if let i = self.firstIndexOfColumn(columnName: name) {
             return self.removeColumn(at: i)
         }
         else {
@@ -475,180 +527,353 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     
     /// Remove row at `index`
     public mutating func removeRow(at index: Int) -> Array<N> {
-        assert(index >= 0 && index < self.rr, "Row-Index out of range")
-        let removed = self.counts.remove(at: index)
-        self.rr -= 1
-        if self.rnames != nil {
-            self.rnames!.remove(at: index)
+        let removed: Array<N>
+        if isValidRowIndex(row: index) {
+            removed = self.counts.remove(at: index)
+            self.rr -= 1
+            if self.rnames != nil {
+                self.rnames!.remove(at: index)
+            }
+            return removed
         }
-        return removed
+        else {
+            fatalError("Index out of range.")
+        }
+//        assert(index >= 0 && index < self.rr, "Row-Index out of range")
+//        let removed = self.counts.remove(at: index)
+//        self.rr -= 1
+//        if self.rnames != nil {
+//            self.rnames!.remove(at: index)
+//        }
     }
     
     /// Remove column at `index`
     public mutating func removeColumn(at idx: Int) -> Array<N> {
-        assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
-        var temp: Array<N> = Array<N>()
-        for i in 0..<self.counts.count {
-            temp.append(self.counts[i].remove(at: idx))
+        if isValidColumnIndex(column: idx) {
+            var temp: Array<N> = Array<N>()
+            for i in 0..<self.counts.count {
+                temp.append(self.counts[i].remove(at: idx))
+            }
+            if self.cnames != nil {
+                self.cnames!.remove(at: idx)
+            }
+            self.cc -= 1
+            return temp
         }
-        if self.cnames != nil {
-            self.cnames!.remove(at: idx)
+        else {
+            fatalError("Index out of range.")
         }
-        self.cc -= 1
-        return temp
+//        assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
+//        var temp: Array<N> = Array<N>()
+//        for i in 0..<self.counts.count {
+//            temp.append(self.counts[i].remove(at: idx))
+//        }
+//        if self.cnames != nil {
+//            self.cnames!.remove(at: idx)
+//        }
+//        self.cc -= 1
+//        return temp
     }
     
     /// Sets a row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func setRow(at: Int, newRow: Array<N>) throws {
-        assert(isValidRowIndex(row: at), "Row-Index out of range")
-        if newRow.count != self.columnCount {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("New row has the wrong length", log: log_stat, type: .error)
+    public mutating func setRow(at idx: Int, newRow: Array<N>) throws {
+        if isValidRowIndex(row: idx) {
+            if newRow.count != self.columnCount {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New row: wrong length", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
             }
-            
-            #endif
-            
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            for c in 0..<self.columnCount {
+                self[idx, c] = newRow[c]
+            }
         }
-        for c in 0..<self.columnCount {
-            self[at, c] = newRow[c]
+        else {
+            fatalError("Index out of range.")
         }
+//        assert(isValidRowIndex(row: idx), "Row-Index out of range")
+//        if newRow.count != self.columnCount {
+//            #if os(macOS) || os(iOS)
+//
+//            if #available(macOS 10.12, iOS 10, *) {
+//                os_log("New row: wrong length", log: log_stat, type: .error)
+//            }
+//
+//            #endif
+//
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        for c in 0..<self.columnCount {
+//            self[idx, c] = newRow[c]
+//        }
     }
     
     /// Sets a row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
     public mutating func setRow(name: R, newRow: Array<N>) throws {
-        assert(isValidRowName(name: name), "Row-Index out of range")
-        if newRow.count != self.columnCount {
+        if isValidRowName(name: name) {
+            if newRow.count != self.columnCount {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New row: wrong length", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            }
+            let i = firstIndexOfRow(rowName: name)!
+            for c in 0..<self.columnCount {
+                self[i, c] = newRow[c]
+            }
+        }
+        else {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("New row has the wrong length", log: log_stat, type: .error)
+                os_log("Unknown row name", log: log_stat, type: .error)
             }
             
             #endif
             
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
-        let i = indexOfRow(rowName: name)!
-        for c in 0..<self.columnCount {
-            self[i, c] = newRow[c]
-        }
+//        assert(isValidRowName(name: name), "Row-Index out of range")
+//        if newRow.count != self.columnCount {
+//            #if os(macOS) || os(iOS)
+//
+//            if #available(macOS 10.12, iOS 10, *) {
+//                os_log("New row: wrong length", log: log_stat, type: .error)
+//            }
+//
+//            #endif
+//
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        let i = firstIndexOfRow(rowName: name)!
+//        for c in 0..<self.columnCount {
+//            self[i, c] = newRow[c]
+//        }
     }
     
     /// Sets a column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
     public mutating func setColumn(name: C, newColumn: Array<N>) throws {
-        assert(isValidColumnName(name: name), "Column-Index out of range")
-        if newColumn.count != self.rowCount {
+        if isValidColumnName(name: name) {
+            if newColumn.count != self.rowCount {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New column: wrong length", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            }
+            let i = firstIndexOfColumn(columnName: name)!
+            for r in 0..<self.rowCount {
+                self[r, i] = newColumn[r]
+            }
+        }
+        else {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("New column has the wrong length", log: log_stat, type: .error)
+                os_log("Unknown row name", log: log_stat, type: .error)
             }
             
             #endif
             
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
-        let i = indexOfColumn(columnName: name)!
-        for r in 0..<self.rowCount {
-            self[r, i] = newColumn[r]
-        }
+//        assert(isValidColumnName(name: name), "Column-Index out of range")
+//        if newColumn.count != self.rowCount {
+//            #if os(macOS) || os(iOS)
+//
+//            if #available(macOS 10.12, iOS 10, *) {
+//                os_log("New column: wrong length", log: log_stat, type: .error)
+//            }
+//
+//            #endif
+//
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        let i = firstIndexOfColumn(columnName: name)!
+//        for r in 0..<self.rowCount {
+//            self[r, i] = newColumn[r]
+//        }
     }
     
     /// Sets a column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func setColumn(at: Int, newColumn: Array<N>) throws {
-        assert(isValidColumnIndex(column: at), "Column-Index out of range")
-        if newColumn.count != self.rowCount {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("New column has the wrong length", log: log_stat, type: .error)
+    public mutating func setColumn(at idx: Int, newColumn: Array<N>) throws {
+        if isValidColumnIndex(column: idx) {
+            if newColumn.count != self.rowCount {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New column: wrong length", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
             }
-            
-            #endif
-            
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+            for r in 0..<self.rowCount {
+                self[r, idx] = newColumn[r]
+            }
         }
-        for r in 0..<self.rowCount {
-            self[r, at] = newColumn[r]
+        else {
+            fatalError("Index out of range")
         }
+//        assert(isValidColumnIndex(column: idx), "Column-Index out of range")
+//        if newColumn.count != self.rowCount {
+//            #if os(macOS) || os(iOS)
+//
+//            if #available(macOS 10.12, iOS 10, *) {
+//                os_log("New column: wrong length", log: log_stat, type: .error)
+//            }
+//
+//            #endif
+//
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        for r in 0..<self.rowCount {
+//            self[r, at] = newColumn[r]
+//        }
     }
     
     /// Inserts a row at index at
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func insertRow(newRow: Array<N>, at: Int, name: R?) throws {
-        assert(at >= 0 && at < self.rr, "Row-Index out of range")
-        if !(newRow.count == self.cc) {
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-        }
-        self.counts.insert(newRow, at: at)
-        self.rr += 1
-        if name != nil {
-            if self.rnames != nil {
-                self.rnames!.insert(name!, at: at)
+    public mutating func insertRow(newRow: Array<N>, at idx: Int, name: R?) throws {
+        if isValidRowIndex(row: idx) {
+            if !(newRow.count == self.cc) {
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
             }
-            //            else {
-            //                self.rnames = Array<String>.init(repeating: "(NA)", count: self.rows - 1)
-            //                self.rnames!.insert(name!, at: at)
-            //            }
+            self.counts.insert(newRow, at: idx)
+            self.rr += 1
+            if name != nil {
+                if self.rnames != nil {
+                    self.rnames!.insert(name!, at: idx)
+                }
+            }
         }
+//        assert(at >= 0 && at < self.rr, "Row-Index out of range")
+//        if !(newRow.count == self.cc) {
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        self.counts.insert(newRow, at: at)
+//        self.rr += 1
+//        if name != nil {
+//            if self.rnames != nil {
+//                self.rnames!.insert(name!, at: at)
+//            }
+//            //            else {
+//            //                self.rnames = Array<String>.init(repeating: "(NA)", count: self.rows - 1)
+//            //                self.rnames!.insert(name!, at: at)
+//            //            }
+//        }
     }
     
     /// Inserts a column at index at
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func insertColumn(newColumn: Array<N>, at: Int, name: C?) throws {
-        assert(at >= 0 && at < self.cc, "Column-Index out of range")
-        if !(newColumn.count == self.rr) {
-            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-        }
-        var i = 0
-        for v in newColumn {
-            self.counts[i].insert(v, at: at)
-            i += 1
-        }
-        self.cc += 1
-        if name != nil {
-            if self.cnames != nil {
-                self.cnames!.insert(name!, at: at)
+    public mutating func insertColumn(newColumn: Array<N>, at idx: Int, name: C?) throws {
+        if isValidColumnIndex(column: idx) {
+            if !(newColumn.count == self.rr) {
+                throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
             }
-            //            else {
-            //                self.cnames = Array<String>.init(repeating: "(NA)", count: self.columns - 1)
-            //                self.cnames!.insert(name!, at: at)
-            //            }
+            var i = 0
+            for v in newColumn {
+                self.counts[i].insert(v, at: idx)
+                i += 1
+            }
+            self.cc += 1
+            if name != nil {
+                if self.cnames != nil {
+                    self.cnames!.insert(name!, at: idx)
+                }
+            }
         }
+        else {
+            fatalError("Index out of range.")
+        }
+//        assert(at >= 0 && at < self.cc, "Column-Index out of range")
+//        if !(newColumn.count == self.rr) {
+//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
+//        }
+//        var i = 0
+//        for v in newColumn {
+//            self.counts[i].insert(v, at: at)
+//            i += 1
+//        }
+//        self.cc += 1
+//        if name != nil {
+//            if self.cnames != nil {
+//                self.cnames!.insert(name!, at: at)
+//            }
+//            else {
+//                self.cnames = Array<String>.init(repeating: "(NA)", count: self.columns - 1)
+//                self.cnames!.insert(name!, at: at)
+//            }
     }
     
     /// Replaces the row at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func replaceRow(newRow: Array<N>, at: Int, name: R?) throws {
-        assert(self.isValidRowIndex(row: at), "Row-Index out of range")
-        do {
-            try self.insertRow(newRow: newRow, at: at, name: name)
+    public mutating func replaceRow(newRow: Array<N>, at idx: Int, name: R?) throws {
+        if isValidRowIndex(row: idx) {
+            do {
+                try self.insertRow(newRow: newRow, at: idx, name: name)
+            }
+            catch {
+                throw error
+            }
+            let _ = self.removeRow(at: idx + 1)
         }
-        catch {
-            throw error
+        else {
+            fatalError("Index out of range.")
         }
-        let _ = self.removeRow(at: at + 1)
+//        assert(self.isValidRowIndex(row: at), "Row-Index out of range")
+//        do {
+//            try self.insertRow(newRow: newRow, at: at, name: name)
+//        }
+//        catch {
+//            throw error
+//        }
+//        let _ = self.removeRow(at: at + 1)
     }
     
     
     /// Replaces the column at a given index
     /// - Throws: An error of type SSSwiftyStatsError
-    public mutating func replaceColumn(newColumn: Array<N>, at: Int, name: C?) throws {
-        assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
-        do {
-            try self.insertColumn(newColumn: newColumn, at: at, name: name)
+    public mutating func replaceColumn(newColumn: Array<N>, at idx: Int, name: C?) throws {
+        if isValidColumnIndex(column: idx) {
+            do {
+                try self.insertColumn(newColumn: newColumn, at: idx, name: name)
+            }
+            catch {
+                throw error
+            }
+            let _ = self.removeColumn(at: idx + 1)
         }
-        catch {
-            throw error
+        else {
+            fatalError("Index out of range.")
         }
-        let _ = self.removeColumn(at: at + 1)
+//        assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
+//        do {
+//            try self.insertColumn(newColumn: newColumn, at: at, name: name)
+//        }
+//        catch {
+//            throw error
+//        }
+//        let _ = self.removeColumn(at: at + 1)
     }
     
     
@@ -709,7 +934,7 @@ extension SSCrosstab {
                             sum += temp1
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                     temp.append(sum)
@@ -736,7 +961,7 @@ extension SSCrosstab {
                             sum += temp1
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                     temp.append(sum)
@@ -751,19 +976,30 @@ extension SSCrosstab {
     
     /// Returns the sum of a row
     public func rowSum(row: Int) -> FPT {
-        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
-        if let rs = self.rowSums {
-            return rs[row]
+        if isValidRowIndex(row: row) {
+            if let rs = self.rowSums {
+                return rs[row]
+            }
+            else {
+                return FPT.nan
+            }
         }
         else {
-            return FPT.nan
+            fatalError("Index out of range.")
         }
+//        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
+//        if let rs = self.rowSums {
+//            return rs[row]
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Sum of row named rowName
     public func rowSum(rowName: R) -> FPT {
-        if let rn = self.rowNames {
-            if let i = rn.firstIndex(of: rowName) {
+        if isValidRowName(name: rowName) {
+            if let i = self.rnames!.firstIndex(of: rowName) {
                 return self.rowSum(row: i)
             }
             else {
@@ -771,25 +1007,47 @@ extension SSCrosstab {
             }
         }
         else {
-            return FPT.nan
+            fatalError("Index out of range.")
         }
+//        if let rn = self.rowNames {
+//            if let i = rn.firstIndex(of: rowName) {
+//                return self.rowSum(row: i)
+//            }
+//            else {
+//                return FPT.nan
+//            }
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// The sum of a column
     public func columnSum(column: Int) -> FPT {
-        assert(isValidColumnIndex(column: column), "Column-Index out of range")
-        if let cs = self.columnSums {
-            return cs[column]
+        if isValidColumnIndex(column: column) {
+            if let cs = self.columnSums {
+                return cs[column]
+            }
+            else {
+                return FPT.nan
+            }
         }
         else {
-            return FPT.nan
+            fatalError("Index out of range.")
         }
+//        assert(isValidColumnIndex(column: column), "Column-Index out of range")
+//        if let cs = self.columnSums {
+//            return cs[column]
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Sum of column named columnName
-    public func columnSum(columnName: C) -> FPT {
-        if let rn = self.columnNames {
-            if let i = rn.firstIndex(of: columnName) {
+    public func columnSum(columnName: C) throws -> FPT {
+        if isValidColumnName(name: columnName) {
+            if let i = self.cnames!.firstIndex(of: columnName) {
                 return self.columnSum(column: i)
             }
             else {
@@ -797,34 +1055,72 @@ extension SSCrosstab {
             }
         }
         else {
-            return FPT.nan
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("New column: wrong length", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
+//        if let rn = self.columnNames {
+//            if let i = rn.firstIndex(of: columnName) {
+//                return self.columnSum(column: i)
+//            }
+//            else {
+//                return FPT.nan
+//            }
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the name of the column or nil if there is no name
     public func nameOfColumn(column: Int) -> C? {
-        assert(column < self.columnCount && column >= 0, "Column-Index out of range")
-        if let cn = self.columnNames {
-            return cn[column]
+        if isValidColumnIndex(column: column) {
+            if let cn = self.columnNames {
+                return cn[column]
+            }
+            else {
+                return nil
+            }
         }
         else {
-            return nil
+            fatalError("Index out of range.")
         }
+//        assert(column < self.columnCount && column >= 0, "Column-Index out of range")
+//        if let cn = self.columnNames {
+//            return cn[column]
+//        }
+//        else {
+//            return nil
+//        }
     }
     
     /// Returns the name of the row or nil if there is no name
     public func nameOfRow(row: Int) -> R? {
-        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
-        if let rn = self.rowNames {
-            return rn[row]
+        if isValidRowIndex(row: row) {
+            if let rn = self.rowNames {
+                return rn[row]
+            }
+            else {
+                return nil
+            }
         }
         else {
-            return nil
+            fatalError("Index out of range.")
         }
+//        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
+//        if let rn = self.rowNames {
+//            return rn[row]
+//        }
+//        else {
+//            return nil
+//        }
     }
     
     /// Returns the index of the column with name columnName or nil if there is no column with that name.
-    public func indexOfColumn(columnName: C) -> Int? {
+    public func firstIndexOfColumn(columnName: C) -> Int? {
         if let cn = self.columnNames {
             return cn.firstIndex(of: columnName)
         }
@@ -835,7 +1131,7 @@ extension SSCrosstab {
     
     
     /// Returns the index of the row with name rowName or nil if there is no row with that name.
-    public func indexOfRow(rowName: R) -> Int? {
+    public func firstIndexOfRow(rowName: R) -> Int? {
         if let rn = self.rowNames {
             return rn.firstIndex(of: rowName)
         }
@@ -880,10 +1176,14 @@ extension SSCrosstab {
         }
     }
     
-    /// Returns the largest column total
-    public var largestRowTotal: FPT {
-        get {
-            assert(self.rowCount > 0, "Missing data")
+    
+    
+    /// Returns the largets column total
+    ///
+    /// - Returns: FPT Type or FPT.nan
+    /// - Throws: SSSwiftyStatsError.missingData if there are no data
+    public func largestRowTotal() throws -> FPT {
+        if self.rowCount > 0 {
             if let r = self.rowSums?.sorted(by: {$0 > $1}) {
                 return r.first!
             }
@@ -891,12 +1191,44 @@ extension SSCrosstab {
                 return FPT.nan
             }
         }
+        else {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("New column: wrong length", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
+        }
+
     }
+    /// Returns the largest column total
+//    public var largestRowTotal: throws FPT {
+//        get {
+//            if self.rowCount > 0 {
+//
+//            }
+//            else {
+//                #if os(macOS) || os(iOS)
+//                if #available(macOS 10.12, iOS 10, *) {
+//                    os_log("New column: wrong length", log: log_stat, type: .error)
+//                }
+//                #endif
+//                throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
+//
+//            }
+//            assert(self.rowCount > 0, "Missing data")
+//            if let r = self.rowSums?.sorted(by: {$0 > $1}) {
+//                return r.first!
+//            }
+//            else {
+//                return FPT.nan
+//            }
+//        }
+//    }
     
     /// Returns the largest column total
-    public var largestColumTotal: FPT {
-        get {
-            assert(self.columnCount > 0, "Missing data")
+    func largestColumTotal() throws -> FPT {
+        if self.rowCount > 0 {
             if let c = self.columnSums?.sorted(by: {$0 > $1}) {
                 return c.first!
             }
@@ -904,20 +1236,49 @@ extension SSCrosstab {
                 return FPT.nan
             }
         }
+        else {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("New column: wrong length", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
+        }
+//
+//        assert(self.columnCount > 0, "Missing data")
+//        if let c = self.columnSums?.sorted(by: {$0 > $1}) {
+//            return c.first!
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the largest cell count for column
     public func largestCellCount(atColumn: Int) -> FPT {
         if self.isNumeric {
-            assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
-            let column = try! self.column(at: atColumn, sorted: true)
-            let temp1: FPT = makeFP(column.last)
-            if !temp1.isNaN {
-                return temp1
+            if isValidColumnIndex(column: atColumn) {
+                let column = try! self.column(at: atColumn, sorted: true)
+                let temp1: FPT = makeFP(column.last)
+                if !temp1.isNaN {
+                    return temp1
+                }
+                else {
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Index out of range.")
             }
+//            assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
+//            let column = try! self.column(at: atColumn, sorted: true)
+//            let temp1: FPT = makeFP(column.last)
+//            if !temp1.isNaN {
+//                return temp1
+//            }
+//            else {
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//            }
         }
         else {
             return FPT.nan
@@ -928,15 +1289,29 @@ extension SSCrosstab {
     /// Returns the largest cell count for row
     public func largestCellCount(atRow: Int) -> FPT {
         if self.isNumeric {
-            assert(isValidRowIndex(row: atRow), "Row-Index out of range")
-            let row = try! self.row(at: atRow, sorted: true)
-            let temp1: FPT = makeFP(row.last)
-            if !temp1.isNaN {
-                return temp1
+            if isValidRowIndex(row: atRow) {
+                let row = try! self.row(at: atRow, sorted: true)
+                let temp1: FPT = makeFP(row.last)
+                if !temp1.isNaN {
+                    return temp1
+                }
+                else {
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Index out of range.")
             }
+//        if self.isNumeric {
+//            assert(isValidRowIndex(row: atRow), "Row-Index out of range")
+//            let row = try! self.row(at: atRow, sorted: true)
+//            let temp1: FPT = makeFP(row.last)
+//            if !temp1.isNaN {
+//                return temp1
+//            }
+//            else {
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//            }
         }
         else {
             return FPT.nan
@@ -945,161 +1320,340 @@ extension SSCrosstab {
     
     /// Returns the relative total frequency of a cell at [row, column]
     public func relativeTotalFrequency(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            let temp: FPT = makeFP(self[row, column])
-            if !temp.isNaN {
-                return temp / self.total
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                if self.isNumeric {
+                    let temp: FPT = makeFP(self[row, column])
+                    if !temp.isNaN {
+                        return temp / self.total
+                    }
+                    else {
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    }
+                }
+                else {
+                    return FPT.nan
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Column-index out of range")
             }
         }
         else {
-            return FPT.nan
+            fatalError("Row index out of range.")
         }
+//        assert(isValidRowIndex(row: row), "Row-index out of range")
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        if self.isNumeric {
+//            let temp: FPT = makeFP(self[row, column])
+//            if !temp.isNaN {
+//                return temp / self.total
+//            }
+//            else {
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//            }
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     
     /// Returns the relative frequency of [rowName, columnName]
     public func relativeTotalFrequency(rowName: R, columnName: C) throws -> FPT {
-        assert(isValidRowName(name: rowName), "Row-Name unknown")
-        assert(isValidColumnName(name: columnName), "Column-Name unknown")
-        if self.isNumeric {
-            let temp: FPT = makeFP(self[rowName, columnName])
-            return temp / self.total
+        if isValidRowName(name: rowName) {
+            if isValidColumnName(name: columnName) {
+                if self.isNumeric {
+                    let temp: FPT = makeFP(self[rowName, columnName])
+                    return temp / self.total
+                }
+                else {
+                    return FPT.nan
+                }
+            }
+            else {
+
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New column: wrong length", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
+            }
         }
         else {
-            return FPT.nan
+
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("New column: wrong length", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
+//        assert(isValidRowName(name: rowName), "Row-Name unknown")
+//        assert(isValidColumnName(name: columnName), "Column-Name unknown")
+//        if self.isNumeric {
+//            let temp: FPT = makeFP(self[rowName, columnName])
+//            return temp / self.total
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the relative row frequency of cell[row, column]
     public func relativeRowFrequency(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            let temp: FPT = makeFP(self[row, column])
-            if !temp.isNaN {
-                return temp / self.rowSums![row]
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                if self.isNumeric {
+                    let temp: FPT = makeFP(self[row, column])
+                    if !temp.isNaN {
+                        return temp / self.rowSums![row]
+                    }
+                    else {
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    }
+                }
+                else {
+                    return FPT.nan
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Column-index out of range")
             }
         }
         else {
-            return FPT.nan
+            fatalError("Row-index out of range")
         }
     }
     
     /// Returns the relative column frequency of cell[row, column]
     public func relativeColumnFrequency(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            let temp: FPT = makeFP(self[row, column])
-            if  !temp.isNaN {
-                return temp / self.columnSums![column]
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                if self.isNumeric {
+                    let temp: FPT = makeFP(self[row, column])
+                    if  !temp.isNaN {
+                        return temp / self.columnSums![column]
+                    }
+                    else {
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    }
+                }
+                else {
+                    return FPT.nan
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Column-index out of range")
             }
         }
         else {
-            return FPT.nan
+            fatalError("Row-index out of range")
         }
     }
     
     /// Returns the relative margin row frequency of [row]
     public func relativeRowMarginFrequency(row: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        var temp: FPT = 0
-        if self.isNumeric {
-            temp = self.rowSums![row]
-            return temp / self.total
+        if isValidRowIndex(row: row) {
+            var temp: FPT = 0
+            if self.isNumeric {
+                temp = self.rowSums![row]
+                return temp / self.total
+            }
+            else {
+                return FPT.nan
+            }
         }
         else {
-            return FPT.nan
+            fatalError("Row-index out of range")
         }
     }
     
     /// Returns the relative margin row frequency of [row]
     public func relativeColumnMarginFrequency(column: Int) -> FPT {
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        var temp: FPT = 0
-        if self.isNumeric {
-            temp = self.columnSums![column]
-            return temp / self.total
+        if isValidColumnIndex(column: column) {
+            var temp: FPT = 0
+            if self.isNumeric {
+                temp = self.columnSums![column]
+                return temp / self.total
+            }
+            else {
+                return FPT.nan
+            }
         }
         else {
-            return FPT.nan
+            fatalError("Column-index out of range")
         }
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        var temp: FPT = 0
+//        if self.isNumeric {
+//            temp = self.columnSums![column]
+//            return temp / self.total
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the expected frequency for cell[row, column]
     public func expectedFrequency(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                if self.isNumeric {
+                    return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
+                }
+                else {
+                    return FPT.nan
+                }
+            }
+            else {
+                fatalError("Column-index out of range")
+            }
         }
         else {
-            return FPT.nan
+            fatalError("Row-index out of range")
         }
+//        assert(isValidRowIndex(row: row), "Row-index out of range")
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        if self.isNumeric {
+//            return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the expected frequency for cell[rowName, columnName]
-    public func expectedFrequency(rowName: R, columnName: C) -> FPT {
-        assert(isValidRowName(name: rowName), "Row-index out of range")
-        assert(isValidColumnName(name: columnName), "Column-index out of range")
-        if self.isNumeric {
-            let r = self.indexOfRow(rowName: rowName)!
-            let c = self.indexOfColumn(columnName: columnName)!
-            return (self.rowSum(row: r) * self.columnSum(column: c)) / self.total
+    public func expectedFrequency(rowName: R, columnName: C) throws -> FPT {
+        if isValidRowName(name: rowName) {
+            if isValidColumnName(name: columnName) {
+                if self.isNumeric {
+                    let r = self.firstIndexOfRow(rowName: rowName)!
+                    let c = self.firstIndexOfColumn(columnName: columnName)!
+                    return (self.rowSum(row: r) * self.columnSum(column: c)) / self.total
+                }
+                else {
+                    return FPT.nan
+                }
+            }
+            else {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("New column: wrong length", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
+            }
         }
         else {
-            return FPT.nan
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 10, *) {
+                os_log("New column: wrong length", log: log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
+//        assert(isValidRowName(name: rowName), "Row-index out of range")
+//        assert(isValidColumnName(name: columnName), "Column-index out of range")
+//        if self.isNumeric {
+//            let r = self.firstIndexOfRow(rowName: rowName)!
+//            let c = self.firstIndexOfColumn(columnName: columnName)!
+//            return (self.rowSum(row: r) * self.columnSum(column: c)) / self.total
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the residual for cell[row, column]
     public func residual(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        if self.isNumeric {
-            let temp: FPT = makeFP(self[row, column])
-            if  !temp.isNaN {
-                return temp - self.expectedFrequency(row: row, column: column)
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                if self.isNumeric {
+                    let temp: FPT = makeFP(self[row, column])
+                    if  !temp.isNaN {
+                        return temp - self.expectedFrequency(row: row, column: column)
+                    }
+                    else {
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    }
+                }
+                else {
+                    return FPT.nan
+                }
             }
             else {
-                fatalError("internal error")
+                fatalError("Column-index out of range")
             }
         }
         else {
-            return FPT.nan
+            fatalError("Row-index out of range")
         }
+//        assert(isValidRowIndex(row: row), "Row-index out of range")
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        if self.isNumeric {
+//            let temp: FPT = makeFP(self[row, column])
+//            if  !temp.isNaN {
+//                return temp - self.expectedFrequency(row: row, column: column)
+//            }
+//            else {
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//            }
+//        }
+//        else {
+//            return FPT.nan
+//        }
     }
     
     /// Returns the standardized residual for cell[row, column]
     public func standardizedResidual(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        return self.residual(row: row, column: column) / expectedFrequency(row: row, column: column).squareRoot()
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                return self.residual(row: row, column: column) / expectedFrequency(row: row, column: column).squareRoot()
+            }
+            else {
+                fatalError("Column-index out of range")
+            }
+        }
+        else {
+            fatalError("Row-index out of range")
+        }
+//        assert(isValidRowIndex(row: row), "Row-index out of range")
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        return self.residual(row: row, column: column) / expectedFrequency(row: row, column: column).squareRoot()
     }
     
     /// Returns the adjusted residual for cell[row, column]
     public func adjustedResidual(row: Int, column: Int) -> FPT {
-        assert(isValidRowIndex(row: row), "Row-index out of range")
-        assert(isValidColumnIndex(column: column), "Column-index out of range")
-        let rowSum: FPT = self.rowSum(row: row)
-        let columnSum: FPT = self.columnSum(column: column)
-        let e1: FPT = self.residual(row: row, column: column)
-        let e2: FPT = expectedFrequency(row: row, column: column)
-        let e3: FPT = e2 * (FPT.one - rowSum / self.total)
-        let e4: FPT = e3 * sqrt(FPT.one - columnSum / self.total)
-        let e5 = e1 / e4
-        return e5
+        if isValidRowIndex(row: row) {
+            if isValidColumnIndex(column: column) {
+                let rowSum: FPT = self.rowSum(row: row)
+                let columnSum: FPT = self.columnSum(column: column)
+                let e1: FPT = self.residual(row: row, column: column)
+                let e2: FPT = expectedFrequency(row: row, column: column)
+                let e3: FPT = e2 * (FPT.one - rowSum / self.total)
+                let e4: FPT = e3 * sqrt(FPT.one - columnSum / self.total)
+                let e5 = e1 / e4
+                return e5
+            }
+            else {
+                fatalError("Column-index out of range")
+            }
+        }
+        else {
+            fatalError("Row-index out of range")
+        }
+//        assert(isValidRowIndex(row: row), "Row-index out of range")
+//        assert(isValidColumnIndex(column: column), "Column-index out of range")
+//        let rowSum: FPT = self.rowSum(row: row)
+//        let columnSum: FPT = self.columnSum(column: column)
+//        let e1: FPT = self.residual(row: row, column: column)
+//        let e2: FPT = expectedFrequency(row: row, column: column)
+//        let e3: FPT = e2 * (FPT.one - rowSum / self.total)
+//        let e4: FPT = e3 * sqrt(FPT.one - columnSum / self.total)
+//        let e5 = e1 / e4
+//        return e5
 //        return self.residual(row: row, column: column)
 //            / (
 //                (expectedFrequency(row: row, column: column))
@@ -1157,7 +1711,7 @@ extension SSCrosstab {
                             }
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                 }
@@ -1190,7 +1744,7 @@ extension SSCrosstab {
                     }
                 }
                 else {
-                    fatalError("internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             else {
@@ -1220,16 +1774,16 @@ extension SSCrosstab {
                                         sum1 += X * Y * frc
                                     }
                                     else {
-                                        fatalError("internal error")
+                                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                                     }
                                 }
                                 else {
-                                    fatalError("internal error")
+                                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                                 }
                             }
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                     var sum2: FPT = 0
@@ -1239,7 +1793,7 @@ extension SSCrosstab {
                             sum2 += X * self.rowSum(row: r)
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                     var sum3: FPT = 0
@@ -1249,7 +1803,7 @@ extension SSCrosstab {
                             sum3 += Y * self.columnSum(column: c)
                         }
                         else {
-                            fatalError("internal error")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                         }
                     }
                     return sum1 - (sum2 * sum3) / self.total
@@ -1277,7 +1831,7 @@ extension SSCrosstab {
                         sum2 += X * self.rowSum(row: r)
                     }
                     else {
-                        fatalError("internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 SX = sum1 - pow1(sum2, 2) / self.total
@@ -1290,7 +1844,7 @@ extension SSCrosstab {
                         sum2 += Y * self.columnSum(column: c)
                     }
                     else {
-                        fatalError("internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 SY = sum1 - pow1(sum2, 2) / self.total
@@ -1341,9 +1895,15 @@ extension SSCrosstab {
     }
     
     /// Returns "Column|Row -Lambda"
-    public var lambda_C_R: FPT {
+    public func lambda_C_R() throws -> FPT {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
-            let cm = self.largestColumTotal
+            let cm: FPT
+            do {
+                cm = try self.largestColumTotal()
+            }
+            catch {
+                throw error
+            }
             var sum: FPT = 0
             for r in 0..<self.rowCount {
                 sum += self.largestCellCount(atRow: r)
@@ -1356,9 +1916,15 @@ extension SSCrosstab {
     }
     
     /// Returns the "Row|Column"-Lambda
-    public var lambda_R_C: FPT {
+    public func lambda_R_C() throws -> FPT {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
-            let rm = self.largestRowTotal
+            let rm: FPT
+            do {
+                rm = try self.largestColumTotal()
+            }
+            catch {
+                throw error
+            }
             var sum: FPT = 0
             for c in 0..<self.columnCount {
                 sum += self.largestCellCount(atColumn: c)
@@ -1384,7 +1950,7 @@ extension SSCrosstab {
                     return (n11 * n22) / (n12 * n21)
                 }
                 else {
-                    fatalError("internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             else {
@@ -1395,7 +1961,7 @@ extension SSCrosstab {
     
     
     /// Returns the relative risk in a cohort study for column 1
-    /// - Preconditions: Only applicable to a 2x2 table
+    /// - Precondition: Only applicable to a 2x2 table
     public var r1: FPT {
         get {
             if self.is2x2Table {
@@ -1407,7 +1973,7 @@ extension SSCrosstab {
                     return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
                 }
                 else {
-                    fatalError("internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             else {
@@ -1430,7 +1996,7 @@ extension SSCrosstab {
     //                            sum2 += pow(self.columnSum(column: c), 2.0)
     //                        }
     //                        else {
-    //                            fatalError("internal error")
+    //                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
     //                        }
     //                    }
     //                }
