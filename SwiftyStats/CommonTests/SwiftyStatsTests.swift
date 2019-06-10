@@ -103,7 +103,7 @@ class SwiftyStatsTests: XCTestCase {
 
  // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
         #if os(macOS) || os(iOS)
-        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
+//        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
         let df1: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
         #else
         let df: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
@@ -568,7 +568,6 @@ class SwiftyStatsTests: XCTestCase {
         do {
             #if os(macOS) || os(iOS)
             let _ = try df.exportCSV(path: resPath + "test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf16, atomically: true)
-            print(resPath)
             #else
             let _ = try df.exportCSV(path: "test.csv", separator: ",", useQuotes: false, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
             #endif
@@ -1281,8 +1280,8 @@ class SwiftyStatsTests: XCTestCase {
     
 
     func testQuick() {
-        var z: Complex<Double> = Complex<Double>(-3.0,4.0)
-        var g: Complex<Double> = tgamma1(z: z)
+//        let z: Complex<Double> = Complex<Double>(-3.0,4.0)
+//        let g: Complex<Double> = tgamma1(z: z)
 //        var a: Array<Complex<Double>> = Array<Complex<Double>>.init()
 //        var b: Array<Complex<Double>> = Array<Complex<Double>>.init()
 //        a.append(Complex<Double>.init(re: 3, im: 0))
@@ -4822,7 +4821,7 @@ class SwiftyStatsTests: XCTestCase {
                              -1.516632544637038856892698484205140697209489198360632468091780019e-816,
                              -1.294632359221882342806132124680183720759073120562588301752791277e-819]
         var ans: (ai: Double, dai: Double, error: Int)
-        var i: Int = 0
+        let i: Int = 0
         ans = airyAi(x: 0)
         var re, ae: Double
         var maxRe: Double = 0.0
@@ -6322,16 +6321,16 @@ class SwiftyStatsTests: XCTestCase {
 
     func testGamma1() {
         var ans: Float80
-        var i: Int = 0
-        var reR, reI, aeR, aeI: Float80
+        let i: Int = 0
+        var reR, aeR: Float80
         var maxReR: Float80 = 0.0
         var maxAeR: Float80 = 0.0
         var minReR: Float80 = 1.0
         var minAeR: Float80 = 1.0
-        var maxReI: Float80 = 0.0
-        var maxAeI: Float80 = 0.0
-        var minReI: Float80 = 1.0
-        var minAeI: Float80 = 1.0
+        let maxReI: Float80 = 0.0
+        let maxAeI: Float80 = 0.0
+        let minReI: Float80 = 1.0
+        let minAeI: Float80 = 1.0
         for x: Float80 in stride(from: 1, through: 150, by: 0.5) {
             ans = tgamma1(x)
             if ans.isFinite && gamma150[i].isFinite {
@@ -6361,9 +6360,9 @@ class SwiftyStatsTests: XCTestCase {
 
     func pochhammer<T: SSComplexFloatElement>(a: Complex<T>, n: Int) -> Complex<T> {
         var y: Complex<T> = a;
-        var c: Complex<T> = Complex<T>.zero
+//        var c: Complex<T> = Complex<T>.zero
 //        var y: Complex<T>
-        var t: Complex<T>
+//        var t: Complex<T>
         if n == 0 {
             return Complex<T>.init(re: 1, im: 0)
         }
@@ -6376,9 +6375,9 @@ class SwiftyStatsTests: XCTestCase {
     }
     func lpochhammer<T: SSComplexFloatElement>(a: Complex<T>, n: Int) -> Complex<T> {
         var y: Complex<T> = log(a);
-        var c: Complex<T> = Complex<T>.zero
+//        var c: Complex<T> = Complex<T>.zero
         //        var y: Complex<T>
-        var t: Complex<T>
+//        var t: Complex<T>
         if n == 0 {
             return Complex<T>.init(re: 1, im: 0)
         }
@@ -6391,19 +6390,11 @@ class SwiftyStatsTests: XCTestCase {
     }
 
     func testFP() {
-//        let A = [12.1, 14.8, 15.3, 11.4,10.8]
-//        let B = [18.3, 49.6, 10.1, 35.6, 26.2, 8.9]
-//        let C = [12.7, 25.1, 47.0, 16.3, 30.4]
-//        let D = [7.3, 1.9, 5.8, 10.1, 9.4]
-        let A = [12.1, 14.8, 15.3, 11.4,47.0]
-        let B = [18.3, 12.1, 47,0, 35.6, 26.2, 8.9]
-        let C = [12.7, 15.3, 47.0, 16.3, 30.4]
-        let D = [7.3, 1.9, 5.8, 15.3, 14.8]
-        let exa: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: A, name: "A", characterSet: nil)
-        let exb: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: B, name: "B", characterSet: nil)
-        let exc: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: C, name: "C", characterSet: nil)
-        let exd: SSExamine<Double,Double> = SSExamine<Double,Double>.init(withArray: D, name: "D", characterSet: nil)
-        let ExArray = [exa, exb, exc, exd]
-        var c: SSKruskalWallisHTestResult = try! SSHypothesisTesting.kruskalWallisHTest(data: ExArray, alpha: 0.05)
+//        let examine1: SSExamine<Double, Double> = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+//        let test: Bool = try! examine1.saveTo(fileName: "/Users/volker/Desktop/testdaten.csv", overwrite: true, encloseElementsBy: "\"")
+//        let examine2: SSExamine<Double, Double> = try! SSExamine<Double, Double>.examine(fromFile: "/Users/volker/Desktop/testdaten.csv", separator: ",", elementsEnclosedBy: "\"", scanDouble )!
+//        let dArray: Array<Double> = examine2.elementsAsArray(sortOrder: .raw)!
+//        let f80Array: Array<Float80> = castArrayToFloatingPoint(dArray)!
+//        print(examine1)
     }
 }

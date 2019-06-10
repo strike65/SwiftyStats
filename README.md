@@ -13,7 +13,9 @@ Important changes
 
 Version 1.0.0 or newer requires at least Swift 4.2 or later. If you cannot use Swift 4.2 or later, you will need to customize the Podfile (see below). 
 
-> Due to the heavy use of generics, the first build takes a long time. The same problem occurs if the contents of the `DerivedData` folder have been deleted. 
+> Due to the heavy use of generics, the first build takes a long time. The same problem occurs if the contents of the `DerivedData` folder have been deleted.
+>
+>**Therefore the target "SwiftyStatsMobile" is not included in the list "Target Dependencies" of the target "SwiftyStats"**
 
 # Documentation
 A jazzy-generated reference can be found here: [SwiftyStats Doc](http://www.vpedia.net/swiftystats).

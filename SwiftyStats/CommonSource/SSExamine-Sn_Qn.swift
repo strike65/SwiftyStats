@@ -446,7 +446,7 @@ extension SSExamine {
                 return nil
             }
             if let Qn0 = qn0() {
-                let scale = 2.21914 as! FPT /* asymptotic consistency for sigma^2 */
+                let scale: FPT = makeFP(2.21914) // as! FPT /* asymptotic consistency for sigma^2 */
                 let n = self.sampleSize
                 let nn: FPT = makeFP(self.sampleSize)
                 // Qn0 = (double) FUNCTION(gsl_stats,Qn0_from_sorted_data)(sorted_data, stride, n, work, work_int);

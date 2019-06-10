@@ -172,6 +172,24 @@ extension SSExamine {
     }
 
     // MARK: Location
+
+    // MARK: TODO --> recursive mean/sd??
+    
+    internal func updateDescriptives(withElement x: FPT) {
+        if self.isNotEmptyAndNumeric {
+            var currMean: FPT = FPT.zero
+            if let m = aMean {
+                currMean = m
+            }
+            else {
+                currMean = FPT.zero
+            }
+            let n = makeFP(self.sampleSize) + FPT.one
+            let newMean = currMean + (x - currMean) / n
+            aMean = newMean
+        }
+    }
+    
     
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
     public var arithmeticMean: FPT? {
@@ -182,7 +200,7 @@ extension SSExamine {
             return nil
         }
     }
-    
+
     /// The mode. Can contain more than one item. Can be nil for empty tables.
     public var mode: Array<SSElement>? {
         get {

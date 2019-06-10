@@ -81,7 +81,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     */
     public var isNumeric: Bool! = true
     
-    /** Returns the count of unique SSElements
+    /** Returns the number of unique SSElements
      */
     public var length: Int {
         return items.count
@@ -166,6 +166,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     private var cumRelFrequencies: Dictionary<SSElement, FPT> = [:]
     private var allItemsAscending: Array<SSElement> = []
     
+    internal var aMean: FPT? = nil
+    
     // sum over all absolute frequencies (= sampleSize)
     private var count: Int = 0
     
@@ -175,6 +177,17 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     public override init() {
         super.init()
         initializeSSExamine()
+    }
+    
+    
+    private func createName(name: String?) {
+        if let n = name {
+            self.name = n
+        }
+        else {
+            self.tag = UUID.init().uuidString
+            self.name = self.tag
+        }
     }
     
     /// Initializes a SSExamine instance using a string or an array<SSElement>
@@ -197,14 +210,14 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             throw SSSwiftyStatsError(type: .missingData, file: #file, line: #line, function: #function)
         }
         super.init()
-        if let n = name {
-            self.name = n
-            //            self.tag = n
-        }
-        //        else {
-        //            self.tag = UUID.init().uuidString
-        //            self.name = self.tag
-        //        }
+        createName(name: name)
+//        if let n = name {
+//            self.name = n
+//        }
+//        else {
+//            self.tag = UUID.init().uuidString
+//            self.name = self.tag
+//        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
@@ -220,31 +233,26 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     public init(withArray array: Array<SSElement>, name: String?, characterSet: CharacterSet?) {
         super.init()
-        if let n = name {
-            self.name = n
-            //            self.tag = n
-        }
-        //        else {
-        //            self.name = UUID.init().uuidString
-        //            self.tag = self.name
-        //        }
+        createName(name: name)
         self.initializeWithArray(array)
     }
     
     
-    /// Loads the content of a file interpreting the elements separated by `separator` as values using the specified encoding.
+    /// Loads the content of a file interpreting the elements separated by `separator` as values using the specified encoding. Data are assumed to be numeric.
     ///
     /// The property `name`will be set to filename.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
-    /// - Parameter stringEncoding: The encoding to use.
-    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func examine(fromFile path: String, separator: String, stringEncoding: String.Encoding, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
+    /// - Parameter stringEncoding: The encoding to use. Default: .utf8
+    /// - Parameter elementsEnclosedBy: A string that encloses each element.
+    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed.
+    /// - Important: It is assumed that the elements are numeric.
+    public class func examine(fromFile path: String, separator: String, elementsEnclosedBy: String? = nil, stringEncoding: String.Encoding = String.Encoding.utf8, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
-        #if DEBUG
-        print(fullFilename)
-        #endif
+//        #if DEBUG
+//        print(fullFilename)
+//        #endif
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
@@ -263,7 +271,16 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             let importedString = try String.init(contentsOfFile: fullFilename, encoding: stringEncoding)
             if importedString.contains(separator) {
                 if importedString.count > 0 {
-                    let separatedStrings: Array<String> = importedString.components(separatedBy: separator)
+                    let temporaryStrings: Array<String> = importedString.components(separatedBy: separator)
+                    let separatedStrings: Array<String>
+                    if let e = elementsEnclosedBy {
+                        separatedStrings = temporaryStrings.map( {
+                            $0.replacingOccurrences(of: e, with: "")
+                        } )
+                    }
+                    else {
+                        separatedStrings = temporaryStrings
+                    }
                     for string in separatedStrings {
                         if string.count > 0 {
                             if let value = parser(string) {
@@ -387,15 +404,16 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    
+    /// TODO: enclose elements in ""
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
     /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
+    /// - Parameter encloseElementsBy: Defaulf = nil
     /// - Throws: SSSwiftyStatsError if the file could not be written
-    public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
+    public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", encloseElementsBy: String? = nil, asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         var result = true
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath
@@ -428,7 +446,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                 }
             }
         }
-        if let s = elementsAsString(withDelimiter: separator, asRow: asRow) {
+        if let s = elementsAsString(withDelimiter: separator, asRow: asRow, encloseElementsBy: encloseElementsBy) {
             do {
                 try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
             }
@@ -527,6 +545,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         alpha = 0.05
         hasChanges = false
         isNumeric = true
+        aMean = nil
     }
     
     // MARK: Codable protocol
@@ -602,10 +621,12 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             cumRelFrequencies.removeAll()
             for key in temp {
                 if i == 0 {
-                    cumRelFrequencies[key] = relFrequencies[key]
+                    cumRelFrequencies[key] = rFrequency(key)
+//                    cumRelFrequencies[key] = relFrequencies[key]
                 }
                 else {
-                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + relFrequencies[key]!
+                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + rFrequency(key)
+//                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + relFrequencies[key]!
                 }
                 i = i + 1
             }
@@ -619,7 +640,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter item: Item to search
     public func contains(_ element: SSElement) -> Bool {
         if !isEmpty {
-            let test = items.contains(where: { (key: SSElement, value: Int) in
+            let test = items.contains(where: { (key: SSElement, value: Int) -> Bool in
                 if key == element {
                     return true
                 }
@@ -638,12 +659,19 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// Returns the relative Frequency of item
     /// - Parameter element: Item
     public func rFrequency(_ element: SSElement) -> FPT {
-        if contains(element) {
-            return makeFP(self.elements[element]!) / makeFP(self.sampleSize)
+        //
+        if let rf = self.elements[element] {
+            return makeFP(rf) / makeFP(self.sampleSize)
         }
         else {
             return 0
         }
+//        if contains(element) {
+//            return makeFP(self.elements[element]!) / makeFP(self.sampleSize)
+//        }
+//        else {
+//            return 0
+//        }
     }
     
     /// Returns the absolute frequency of item
@@ -674,24 +702,18 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             currentFrequency = items[element]! + 1
             items[element] = currentFrequency
             count = count + 1
-            // update relative frequencies
-            for (itm, freq) in items {
-//                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
-                relFrequencies[itm] = makeFP(freq) / makeFP(self.sampleSize)
-            }
             sequence[element]!.append(count)
         }
         else {
             items[element] = 1
             count = count + 1
-            for (itm, freq) in items {
-//                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
-                relFrequencies[itm] = makeFP(freq) / makeFP(self.sampleSize)
-            }
             tempPos = Array()
             tempPos.append(count)
             sequence[element] = tempPos
         }
+//        if self.isNotEmptyAndNumeric {
+//            updateDescriptives(withElement: makeFP(element))
+//        }
         updateCumulativeFrequencies()
     }
     
@@ -814,7 +836,8 @@ extension SSExamine {
     /// Returns all elements as one string. Elements are delimited by del.
     /// - Parameter del: The delimiter. Can be nil or empty.
     /// - Parameter asRow: If true, the parameter `del` will be omitted. The Name of the instance will ve used as header for the row
-    public func elementsAsString(withDelimiter del: String?, asRow: Bool = true) -> String? {
+    /// - Parameter encloseElementsBy: Default: nil.
+    public func elementsAsString(withDelimiter del: String?, asRow: Bool = true, encloseElementsBy: String? = nil) -> String? {
         let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
         var res: String = String()
         if !asRow {
@@ -823,19 +846,24 @@ extension SSExamine {
             }
         }
         for item in a {
-            res = res + "\(item)"
+            if let e = encloseElementsBy {
+                res = res + e + "\(item)" + e
+            }
+            else {
+                res = res + "\(item)"
+            }
             if asRow {
-                if let _ = del {
-                    res = res + del!
+                if let d = del {
+                    res = res + d
                 }
             }
             else {
                 res = res + "\n"
             }
         }
-        if let _ = del {
-            if del!.count > 0 {
-                for _ in 1...del!.count {
+        if let d = del {
+            if d.count > 0 {
+                for _ in 1...d.count {
                     res = String(res.dropLast())
                 }
             }
@@ -848,7 +876,7 @@ extension SSExamine {
         }
     }
     
-    /// Returns true, if index is valif
+    /// Returns true, if index is valid
     private func isValidIndex(index: Int) -> Bool {
         return index >= 0 && index < self.sampleSize
     }

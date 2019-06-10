@@ -454,19 +454,19 @@ internal func scanDouble(string: String?) -> Double? {
     }
 }
 
-internal func scanDecimal(string: String?) -> Decimal? {
-    guard string != nil else {
-        return nil
-    }
-    var res: Decimal = 0.0
-    let s = Scanner.init(string: string!)
-    if s.scanDecimal(&res) {
-        return res
-    }
-    else {
-        return nil
-    }
-}
+//internal func scanDecimal(string: String?) -> Decimal? {
+//    guard string != nil else {
+//        return nil
+//    }
+//    var res: Decimal = 0.0
+//    let s = Scanner.init(string: string!)
+//    if s.scanDecimal(&res) {
+//        return res
+//    }
+//    else {
+//        return nil
+//    }
+//}
 
 internal func scanFloat(string: String?) -> Float? {
     guard string != nil else {
