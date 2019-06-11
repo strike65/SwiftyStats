@@ -1,9 +1,21 @@
 ![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.0.4-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) 
 
+To see the documentation, click [**here**](https://strike65.github.io/SwiftyStats).
+===
+
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
 >Due to some external limitations (earning money) the code will be updated rather sporadically.
+
+
+## Probability Distributions
+This library provides some of the more common probability distributions. Functions are prefixed by `pdf`, `cdf`, `quantile` for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively. The prefix `para` denotes functions returning a `SSContProbDistParams` struct (fields: `mean`, `variance`, `skewness`, `kurtosis`).  
+Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".  
+
+>**Note:**  
+Please always check if `NaN` or `nil` is returned.  
+
 
 The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems. 
 
@@ -72,7 +84,7 @@ let version = "1.0.4"
 let package = Package(
 	name: "<YOUR_PACKAGE_NAME>",
 	dependencies: [
-		.package(url: "https://gitlab.com/strike65/SwiftyStats", from: version)
+		.package(url: "https://github.com/strike65/SwiftyStats", from: version)
 	]
 )
 ```
@@ -158,52 +170,10 @@ catch {
 ### Obtainable Statistics
 (This list is not exhaustive.)
 
-INITIALIZERS
+### Obtainable Statistics
+(This list is not exhaustive.)
 
-    init()
-    init(withObject:levelOfMeasurement:name:characterSet:)
-    init(withArray:name:characterSet:)
-    examine(fromFile:separator:stringEncoding:_:)
-    examine(fromJSONFile:stringEncoding:)
-    exportJSONString(fileName:atomically:overwrite:stringEncoding:)
-    saveTo(fileName:atomically:overwrite:separator:asRow:stringEncoding:)
-    examineWithString(_:name:characterSet:)
-
-Codable protocol
-
-    encode(to:)
-    init(from:)
-
-NSCopying
-
-    copy(with:)
-
-SSExamineContainer Protocol
-
-    contains(_:)
-    rFrequency(_:)
-    frequency(_:)
-    append(_:)
-    append(repeating:element:)
-    append(contentOf:)
-    append(text:characterSet:)
-    remove(_:allOccurences:)
-    removeAll()
-
-File Management
-
-    archiveTo(filePath:overwrite:)
-    unarchiveFrom(filePath:)
-    Sn
-    Qn
-    squareTotal
-    poweredTotal(power:)
-    total
-    inverseTotal
-    tss(value:)
-
-Location
-
+#### SSExamine
     arithmeticMean
     mode
     commonest
@@ -218,14 +188,8 @@ Location
     winsorizedMean(alpha:)
     gastwirth
     median
-
-Products
-
     product
     logProduct
-
-Dispersion
-
     maximum
     minimum
     range
@@ -254,14 +218,8 @@ Dispersion
     meanAbsoluteDeviation(center:)
     meanRelativeDifference
     semiVariance(type:)
-
-Empirical Moments
-
     moment(r:type:)
     autocorrelation(n:)
-
-Empirical distribution parameters
-
     kurtosisExcess
     kurtosis
     kurtosisType
@@ -272,69 +230,358 @@ Empirical distribution parameters
     isGaussian
     testForDistribution(targetDistribution:)
     boxWhisker
-
-Elements
-
-    elementsAsString(withDelimiter:asRow:)
+    elementsAsString(withDelimiter:asRow:encloseElementsBy:)
     elementsAsArray(sortOrder:)
     uniqueElements(sortOrder:)
-
-Frequencies
-
     frequencyTable(sortOrder:)
     cumulativeFrequencyTable(format:)
     eCDF(_:)
     smallestFrequency
     largestFrequency 
 
+#### SSCrossTab
+    rowCount
+    columnCount
+    firstRow
+    lastRow
+    firstColumn
+    lastColumn
+    rowNames
+    columnNames
+    columnLevelOfMeasurement
+    rowLevelOfMeasurement
+    isNumeric
+    encode(to:)
+    init(from:)
+    is2x2Table
+    isEmpty
+    isSquare
+    row(at:sorted:)
+    column(at:sorted:)
+    rowNamed(_:sorted:)
+    columnNamed(_:sorted:)
+    appendRow(_:name:)
+    appendColumn(_:name:)
+    removeRow(rowName:)
+    removeColumn(columnName:)
+    removeRow(at:)
+    removeColumn(at:)
+    setRow(at:newRow:)
+    setRow(name:newRow:)
+    setColumn(name:newColumn:)
+    setColumn(at:newColumn:)
+    insertRow(newRow:at:name:)
+    insertColumn(newColumn:at:name:)
+    replaceRow(newRow:at:name:)
+    replaceColumn(newColumn:at:name:)
+    setRowNames(rowNames:)
+    setColumnNames(columnNames:)
+    description
+    rowSums
+    columnSums
+    rowSum(row:)
+    rowSum(rowName:)
+    columnSum(column:)
+    columnSum(columnName:)
+    nameOfColumn(column:)
+    nameOfRow(row:)
+    firstIndexOfColumn(columnName:)
+    firstIndexOfRow(rowName:)
+    total
+    rowTotal()
+    colummTotal()
+    largestRowTotal()
+    largestCellCount(atColumn:)
+    largestCellCount(atRow:)
+    relativeTotalFrequency(row:column:)
+    relativeTotalFrequency(rowName:columnName:)
+    relativeRowFrequency(row:column:)
+    relativeColumnFrequency(row:column:)
+    relativeRowMarginFrequency(row:)
+    relativeColumnMarginFrequency(column:)
+    expectedFrequency(row:column:)
+    expectedFrequency(rowName:columnName:)
+    residual(row:column:)
+    standardizedResidual(row:column:)
+    adjustedResidual(row:column:)
+    degreesOfFreedom
+    chiSquare
+    chiSquareLikelihoodRatio
+    chiSquareYates
+    covariance
+    pearsonR
+    chiSquareMH
+    phi
+    ccont
+    coefficientOfContingency
+    cramerV
+    lambda_C_R()
+    lambda_R_C()
+    r0
+    r1 
 
-## SSHypothesisTesting
-The framework implements the following tests so far:
+#### Probability Functions
 
-- Kolmogorov Smirnov test (one/two sample))
-- Anderson Darling test
-- Bartlett test
-- Levene test (with variants)
-- Grubbs test
-- ESD test (Rosner test)
-- t test (matched, 2-sample)
-- Mann Whitney U-test
-- Wilcoxon matched pairs test
-- sign test
-- one factor ANOVA
-- Tukey-Kramer post hoc test
-- Scheffé-Test
-- basic analysis of cross-tables
-- ...
+Beta
 
+    paraBetaDist(shapeA:shapeB:)
+    pdfBetaDist(x:shapeA:shapeB:)
+    cdfBetaDist(x:shapeA:shapeB:)
+    quantileBetaDist(p:shapeA:shapeB:)
+    cdfBetaDist(x:shapeA:shapeB:lambda:)
+    pdfBetaDist(x:shapeA:shapeB:lambda:)
 
-## Probability Distributions
-This library provides some of the more common probability distributions. Functions are prefixed by `pdf`, `cdf`, `quantile` for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively. The prefix `para` denotes functions returning a `SSContProbDistParams` struct (fields: `mean`, `variance`, `skewness`, `kurtosis`).  
-Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".  
+binomial
 
->**Note:**  
-Please always check if `NaN` or `nil` is returned.  
+    cdfBinomialDistribution(k:n:probability:tail:)
+    pdfBinomialDistribution(k:n:probability:)
 
-###List of supported distributions
+Cauchy
 
-- Normal Distribution
-- F-Ratio Distribution
-- Student's T Distribution
-- Noncentral Student's T Distribution
-- Chi^2 Distribution
-- Noncentral Chi^2 Distribution
-- Beta Distribution
-- Gamma Distribution
-- Log Normal Distribution
-- Cauchy Distribution
-- Laplace Distribution
-- Pareto Distribution
-- Wald Distribution
-- Exponential Distribution
-- Uniform Distribution
-- Triangular Distribution
-- Rayleigh distribution
-- Extreme value distribution
+    paraCauchyDist(location:scale:)
+    pdfCauchyDist(x:location:scale:)
+    cdfCauchyDist(x:location:scale:)
+    quantileCauchyDist(p:location:scale:)
+
+Central
+
+    paraChiSquareDist(degreesOfFreedom:)
+    pdfChiSquareDist(chi:degreesOfFreedom:)
+    cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)
+    quantileChiSquareDist(p:degreesOfFreedom:)
+
+noncentral
+
+    paraChiSquareDist(degreesOfFreedom:lambda:)
+    pdfChiSquareDist(chi:degreesOfFreedom:lambda:)
+    cdfChiSquareDist(chi:degreesOfFreedom:lambda:)
+    quantileChiSquareDist(p:degreesOfFreedom:lambda:)
+
+Erlang
+
+    paraErlangDist(shape:rate:)
+    pdfErlangDist(x:shape:rate:)
+    cdfErlangDist(x:shape:rate:)
+    quantileErlangDist(p:shape:rate:)
+
+Exponential Dist
+
+    paraExponentialDist(lambda:)
+    pdfExponentialDist(x:lambda:)
+    cdfExponentialDist(x:lambda:)
+    quantileExponentialDist(p:lambda:)
+
+Chi Square
+
+    paraExtremValueDist(location:scale:)
+    pdfExtremValueDist(x:location:scale:)
+    cdfExtremValueDist(x:location:scale:)
+    quantileExtremValueDist(p:location:scale:)
+
+F-RATIO
+
+    paraFRatioDist(numeratorDF:denominatorDF:)
+    pdfFRatioDist(f:numeratorDF:denominatorDF:)
+    cdfFRatioDist(f:numeratorDF:denominatorDF:)
+    quantileFRatioDist(p:numeratorDF:denominatorDF:)
+    paraFRatioDist(numeratorDF:denominatorDF:lambda:)
+    pdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)
+    cdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)
+
+Gamma
+
+    paraGammaDist(shape:scale:)
+    pdfGammaDist(x:shape:scale:)
+    cdfGammaDist(x:shape:scale:)
+    quantileGammaDist(p:shape:scale:)
+
+GAUSSIAN
+
+    paraNormalDistribution(mean:standardDeviation:)
+    cdfNormalDist(x:mean:standardDeviation:)
+    cdfNormalDist(x:mean:variance:)
+    cdfStandardNormalDist(u:)
+    pdfNormalDist(x:mean:standardDeviation:)
+    pdfNormalDist(x:mean:variance:)
+    pdfStandardNormalDist(u:)
+    quantileStandardNormalDist(p:)
+    quantileNormalDist(p:mean:standardDeviation:)
+    quantileNormalDist(p:mean:variance:)
+
+Laplace
+
+    paraLaplaceDist(mean:scale:)
+    pdfLaplaceDist(x:mean:scale:)
+    cdfLaplaceDist(x:mean:scale:)
+    quantileLaplaceDist(p:mean:scale:)
+
+Log Normal
+
+    paraLogNormalDist(mean:variance:)
+    pdfLogNormalDist(x:mean:variance:)
+    cdfLogNormal(x:mean:variance:)
+    quantileLogNormal(p:mean:variance:)
+
+Logistic
+
+    logit(p:)
+    paraLogisticDist(mean:scale:)
+    pdfLogisticDist(x:mean:scale:)
+    cdfLogisticDist(x:mean:scale:)
+    quantileLogisticDist(p:mean:scale:)
+
+Pareto
+
+    paraParetoDist(minimum:shape:)
+    pdfParetoDist(x:minimum:shape:)
+    cdfParetoDist(x:minimum:shape:)
+    quantileParetoDist(p:minimum:shape:)
+
+binomial
+
+    cdfPoissonDist(k:rate:tail:)
+    pdfPoissonDist(k:rate:)
+
+Chi Square
+
+    paraRayleighDist(scale:)
+    pdfRayleighDist(x:scale:)
+    cdfRayleighDist(x:scale:)
+    quantileRayleighDist(p:scale:)
+
+STUDENT's T
+
+    paraStudentTDist(degreesOfFreedom:)
+    pdfStudentTDist(t:degreesOfFreedom:rlog:)
+    cdfStudentTDist(t:degreesOfFreedom:)
+    quantileStudentTDist(p:degreesOfFreedom:)
+
+NON-CENTRAL T-DISTRIBUTION
+
+    paraStudentTDist(degreesOfFreedom:nonCentralityPara:)
+    cdfStudentTDist(t:degreesOfFreedom:nonCentralityPara:rlog:)
+    pdfStudentTDist(x:degreesOfFreedom:nonCentralityPara:rlog:)
+    quantileStudentTDist(p:degreesOfFreedom:nonCentralityPara:rlog:)
+
+TRIANGULAR
+
+    paraTriangularDist(lowerBound:upperBound:mode:)
+    pdfTriangularDist(x:lowerBound:upperBound:mode:)
+    cdfTriangularDist(x:lowerBound:upperBound:mode:)
+    quantileTriangularDist(p:lowerBound:upperBound:mode:)
+
+TRIANGULAR with two params
+
+    paraTriangularDist(lowerBound:upperBound:)
+    pdfTriangularDist(x:lowerBound:upperBound:)
+    cdfTriangularDist(x:lowerBound:upperBound:)
+    quantileTriangularDist(p:lowerBound:upperBound:)
+
+UNIFORM
+
+    paraUniformDist(lowerBound:upperBound:)
+    pdfUniformDist(x:lowerBound:upperBound:)
+    cdfUniformDist(x:lowerBound:upperBound:)
+    quantileUniformDist(p:lowerBound:upperBound:)
+
+Wald / Inverse Normal
+
+    paraWaldDist(mean:lambda:)
+    pdfWaldDist(x:mean:lambda:)
+    cdfWaldDist(x:mean:lambda:)
+    quantileWaldDist(p:mean:lambda:)
+    paraInverseNormalDist(mean:lamdba:)
+    pdfInverseNormalDist(x:mean:scale:)
+    cdfInverseNormalDist(x:mean:scale:)
+    quantileInverseNormalDist(p:mean:scale:)
+
+Weibull
+
+    paraWeibullDist(location:scale:shape:)
+    pdfWeibullDist(x:location:scale:shape:)
+    cdfWeibullDist(x:location:scale:shape:)
+    quantileWeibullDist(p:location:scale:shape:)
+
+CIRCULAR DISTRIBUTION
+
+    paraVonMisesDist(mean:concentration:)
+    pdfVonMisesDist(x:mean:concentration:)
+    cdfVonMisesDist(x:mean:concentration:useExpIntegration:)
+    quantileVonMisesDist(p:mean:concentration:) 
+
+    
+#### SSHypothesisTesting
+
+Equality of means
+
+    twoSampleTTest(data1:data2:alpha:)
+    twoSampleTTest(sample1:sample2:alpha:)
+    oneSampleTTest(sample:mean:alpha:)
+    oneSampleTTEst(data:mean:alpha:)
+    matchedPairsTTest(set1:set2:alpha:)
+    matchedPairsTTest(data1:data2:alpha:)
+    oneWayANOVA(data:alpha:)
+    oneWayANOVA(data:alpha:)
+    oneWayANOVA(dataFrame:alpha:)
+    multipleMeansTest(dataFrame:alpha:)
+    multipleMeansTest(data:alpha:)
+    multipleMeansTest(data:alpha:)
+    tukeyKramerTest(dataFrame:alpha:)
+    tukeyKramerTest(data:alpha:)
+    scheffeTest(dataFrame:alpha:)
+    bonferroniTest(dataFrame:)
+
+Autocorrelation
+
+    autocorrelationCoefficient(array:lag:)
+    autocorrelationCoefficient(data:lag:)
+    autocorrelation(array:)
+    autocorrelation(data:)
+
+NPAR tests
+
+    kolmogorovSmirnovGoFTest(array:targetDistribution:)
+    ksGoFTest(array:targetDistribution:)
+    kolmogorovSmirnovGoFTest(data:targetDistribution:)
+    ksGoFTest(data:targetDistribution:)
+    adNormalityTest(data:alpha:)
+    adNormalityTest(array:alpha:)
+    mannWhitneyUTest(set1:set2:)
+    mannWhitneyUTest(set1:set2:)
+    wilcoxonMatchedPairs(set1:set2:)
+    wilcoxonMatchedPairs(set1:set2:)
+    signTest(set1:set2:)
+    signTest(set1:set2:)
+    binomialTest(numberOfSuccess:numberOfTrials:probability:alpha:alternative:)
+    binomialTest(data:characterSet:testProbability:successCodedAs:alpha:alternative:)
+    binomialTest(data:testProbability:successCodedAs:alpha:alternative:)
+    kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)
+    kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)
+    waldWolfowitzTwoSampleTest(set1:set2:)
+    kruskalWallisHTest(data:alpha:)
+
+Outliers
+
+    grubbsTest(array:alpha:)
+    grubbsTest(data:alpha:)
+    esdOutlierTest(array:alpha:maxOutliers:testType:)
+    esdOutlierTest(data:alpha:maxOutliers:testType:)
+
+Randomness
+
+    runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)
+    runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)
+
+Equality of variances
+
+    bartlettTest(data:alpha:)
+    bartlettTest(array:alpha:)
+    leveneTest(data:testType:alpha:)
+    leveneTest(array:testType:alpha:)
+    chiSquareVarianceTest(array:nominalVariance:alpha:)
+    chiSquareVarianceTest(sample:nominalVariance:alpha:)
+    fTestVarianceEquality(data1:data2:alpha:)
+    fTestVarianceEquality(sample1:sample2:alpha:) 
 
 # LICENSE
 This framework is published under the [GNU GPL 3](http://www.gnu.org/licenses/)

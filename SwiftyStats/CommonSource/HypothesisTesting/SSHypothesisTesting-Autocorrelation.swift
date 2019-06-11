@@ -99,10 +99,10 @@ extension SSHypothesisTesting {
     /// Performs the Box-Ljung test for autocorrelation for all possible lags
     ///
     /// ### Usage ###
-    /// ````
-    /// let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
-    /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
-    /// ````
+    ///
+    ///     let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
+    ///     let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
+    ///
     /// - Parameter data: Array<Double>
     /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
@@ -130,11 +130,11 @@ extension SSHypothesisTesting {
     /// Performs a Box-Ljung test for autocorrelation for all possible lags
     ///
     /// ### Usage ###
-    /// ````
-    /// let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
-    /// let lewdat = SSExamine<Double, Double>.init(withArray: lew1, characterSet: nil)
-    /// let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
-    /// ````
+    ///
+    ///     let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
+    ///     let lewdat = SSExamine<Double, Double>.init(withArray: lew1, characterSet: nil)
+    ///     let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
+    ///
     /// - Parameter data: SSExamine object
     /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2

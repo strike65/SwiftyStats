@@ -34,16 +34,15 @@ extension SSHypothesisTesting {
     /// ### Important Note ###
     /// It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/>
     ///
-    /// ````
-    /// Suppose the original data is a string containing only "H" and "L":
-    /// HLHHLHHLHLLHLHHL
-    /// Setting "H" = 1 and "L" = 3 results in the recoded sequence:
-    /// 1311311313313113
-    /// In this case a cutting point of 2 must be used.
-    /// Setting "H" = 1 and "L" = 2 results in the recoded sequence:
-    /// 1211211212212112
-    /// In this case a cutting point of 1.5 must be used.
-    /// ````
+    ///
+    /// * Suppose the original data is a string containing only "H" and "L": `HLHHLHHLHLLHLHHL`
+    /// * Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+    ///   * `1311311313313113`
+    ///   * In this case a cutting point of 2 must be used.
+    /// * Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+    ///   * `1211211212212112`
+    ///   * In this case a cutting point of 1.5 must be used.
+    ///
     ///
     /// - Parameter data: Array<Double>
     /// - Parameter alpha: Alpha
@@ -75,16 +74,13 @@ extension SSHypothesisTesting {
     /// ### Important Note ###
     /// It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/>
     ///
-    /// ````
-    /// Suppose the original data is a string containing only "H" and "L":
-    /// HLHHLHHLHLLHLHHL
-    /// Setting "H" = 1 and "L" = 3 results in the recoded sequence:
-    /// 1311311313313113
-    /// In this case a cutting point of 2 must be used.
-    /// Setting "H" = 1 and "L" = 2 results in the recoded sequence:
-    /// 1211211212212112
-    /// In this case a cutting point of 1.5 must be used.
-    /// ````
+    /// * Suppose the original data is a string containing only "H" and "L": `HLHHLHHLHLLHLHHL`
+    /// * Setting "H" = 1 and "L" = 3 results in the recoded sequence:
+    ///   * `1311311313313113`
+    ///   * In this case a cutting point of 2 must be used.
+    /// * Setting "H" = 1 and "L" = 2 results in the recoded sequence:
+    ///   * `1211211212212112`
+    ///   * In this case a cutting point of 1.5 must be used.
     ///
     /// - Parameter data: Array<Double>
     /// - Parameter alpha: Alpha

@@ -35,15 +35,15 @@ import os.log
 /// Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:
 ///
 /// With N = sampleSize:
-/// ````
-/// <          COL[0]      COL[1]     ...  COL[columns - 1] >
-/// tags       tags[0]     tags[1]    ...  tags[columns - 1]
-/// cnames     cnames[0    cnames[1]  ...  cnames[columns - 1]
-/// ROW0       data[0][0]  data[0][1] ...  data[0][columns - 1]
-/// ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
-/// ...        ..........  .......... ...  ....................
-/// ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
-/// ````
+///
+///     <          COL[0]      COL[1]     ...  COL[columns - 1] >
+///     tags       tags[0]     tags[1]    ...  tags[columns - 1]
+///     cnames     cnames[0    cnames[1]  ...  cnames[columns - 1]
+///     ROW0       data[0][0]  data[0][1] ...  data[0][columns - 1]
+///     ROW1       data[1][0]  data[1][1] ...  data[1][columns - 1]
+///     ...        ..........  .......... ...  ....................
+///     ROWN       data[N][0]  data[N][1] ...  data[N][columns - 1]
+///
 public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, Codable, NSMutableCopying, SSDataFrameContainer where SSElement: Comparable, SSElement: Hashable, SSElement: Codable, FPT: Codable {
     
 //    public typealias Examine = SSExamine<SSElement, Double>
@@ -583,16 +583,15 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
     ///
     /// The following example creates a DataFrame object with 4 columns:
-    /// ````
-    /// let dataString = "Group 1,Group 2,Group 3,Group 4\n6.9,8.3,8.0,5.8\n5.4,6.8,10.5,3.8\n5.8,7.8,8.1,6.1\n4.6,9.2,6.9,5.6\n4.0,6.5,9.3,6.2"
-    /// var df: SSDataFrame<Double, Double>
-    /// do {
-    ///     df = try SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
-    /// }
-    /// catch {
-    ///     ...
-    /// }
-    /// ````
+    ///
+    ///     let dataString = "Group 1,Group 2,Group 3,Group 4\n6.9,8.3,8.0,5.8\n5.4,6.8,10.5,3.8\n5.8,7.8,8.1,6.1\n4.6,9.2,6.9,5.6\n4.0,6.5,9.3,6.2"
+    ///     var df: SSDataFrame<Double, Double>
+    ///     do {
+    ///         df = try SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
+    ///     }
+    ///     catch {
+    ///         ...
+    ///     }
     public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         do {
             var importedString = fromString

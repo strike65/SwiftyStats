@@ -26,7 +26,7 @@ import Foundation
 extension Array {
     /// Returns an array of indexes for which the condition is true.
     ///
-    ///     ````
+    /// ### Usage ###
     ///     let A = [1,2,3,2,1,3]
     ///     var indices = A.indices(where: { $0 == 1 })
     ///     // [0, 4]
@@ -36,7 +36,7 @@ extension Array {
     ///        return x == 1
     ///     })
     ///     // [0, 4]
-    ///     ````
+    ///
     /// - Parameter condition: condition
     /// - Returns: Array containing indices
     public func indices(where condition: (Element) -> Bool) -> [Index] {
