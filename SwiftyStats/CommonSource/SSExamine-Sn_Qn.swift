@@ -72,7 +72,7 @@ extension SSExamine {
     
     
     fileprivate func sn0() -> FPT? {
-        if !self.isArithmetic {
+        if !self.isNotEmptyAndNumeric {
             return nil
         }
         var medA, medB: FPT
@@ -225,7 +225,7 @@ extension SSExamine {
     /// This Swift version was ported from a C version by Martin Maechler, maechler@R-project.org
     public var Sn: FPT? {
         get {
-            if !self.isArithmetic {
+            if !self.isNotEmptyAndNumeric {
                 return nil
             }
             else {
@@ -276,7 +276,7 @@ extension SSExamine {
     }
 
     fileprivate func qn0() -> FPT? {
-        if !self.isArithmetic {
+        if !self.isNotEmptyAndNumeric {
             return nil
         }
         let n: FPT = makeFP(self.sampleSize)
@@ -442,11 +442,11 @@ extension SSExamine {
     /// Returns the Qn statisticx by Rousseeuw, P.J. and Croux, C. (1993)
     public var Qn: FPT? {
         get {
-            if !self.isArithmetic {
+            if !self.isNotEmptyAndNumeric {
                 return nil
             }
             if let Qn0 = qn0() {
-                let scale = 2.21914 as! FPT /* asymptotic consistency for sigma^2 */
+                let scale: FPT = makeFP(2.21914) // as! FPT /* asymptotic consistency for sigma^2 */
                 let n = self.sampleSize
                 let nn: FPT = makeFP(self.sampleSize)
                 // Qn0 = (double) FUNCTION(gsl_stats,Qn0_from_sorted_data)(sorted_data, stride, n, work, work_int);

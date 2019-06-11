@@ -22,6 +22,9 @@
 import Foundation
 
 fileprivate let EPSS = "1.0e-15"
+
+// MARK: Marcum Functions
+
 /// Computes the Marcum-Functions P(µ,x,y) and Q(µ,x,y)
 /// - Parameter mu: Parameter µ
 /// - Parameter x: Parameter x
@@ -45,7 +48,7 @@ fileprivate let EPSS = "1.0e-15"
 ///
 /// Nico M. Temme (CWI, Amsterdam, The Netherlands)
 ///
-/// Copyright Swift 4.2 Version: strike65, 2018
+/// Copyright Swift Version: strike65, 2018
 ///
 /// - Note:
 /// The present code uses different methods of computation
@@ -58,7 +61,7 @@ fileprivate let EPSS = "1.0e-15"
 /// Due to current compiler restrictions, the function fjkproc16() is divided into small parts.
 /// - TODO:
 /// Adapt the algorithm for long double (Float80) precision.
-public func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, err: Int, underflow: Bool) {
+internal func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, err: Int, underflow: Bool) {
     //! -------------------------------------------------------------
     //! Calculation of the Marcum Q-functions P_mu(x,y) and Q_mu(x,y).
     //!
@@ -192,10 +195,9 @@ public func marcum<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> (p: T, q: T, 
     return (p: p, q: q, err: ierr, underflow: underflow)
 }
 
-//!-----------------------------------------------------------
-//!   Evaluation of the cf for the ratio Ipnu(z)/Ipnu-1(z)
-//!   We use Lentz-Thompson algorithm.
-//!-----------------------------------------------------------
+/** Evaluation of the cf for the ratio Ipnu(z)/Ipnu-1(z)
+   We use Lentz-Thompson algorithm.
+*/
 fileprivate func fc<T: SSFloatingPoint>(_ pnu: T, _ z: T) -> T {
     var fc,b,a,c0,d0,delta: T
     var m: Int
@@ -286,7 +288,7 @@ fileprivate func pol<T: SSFloatingPoint>(_ fjkm: Array<T>, _ d: Int, _ v: T) -> 
     return s
 }
 // Due to current compiler restrictions, the original procedure fjkporc16 has been splitted into multiple parts.
-func fjkproc16_001<T: SSFloatingPoint>(fjk: inout Array<Array<T>>, un: Array<T>, v: T) {
+fileprivate func fjkproc16_001<T: SSFloatingPoint>(fjk: inout Array<Array<T>>, un: Array<T>, v: T) {
     var d, j, k: Int
     var fjkm:Array<T> = Array<T>.init(repeating: 0, count: 33)
     fjkm[0] = T.half

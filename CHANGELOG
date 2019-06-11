@@ -1,4 +1,14 @@
-Version 1.0.2
+Version 1.0.4
+- update access levels
+- advanced(by:) removed when accessing arrays
+- update tests
+- update doc
+- add Array extension: indices(where:)
+- SSExamine.saveTo: parameter encloseElementsBy added
+- Target SwiftyStatsTests: added new Run Script build phase to avoid compliants regarding the signature
+- host the repo at GitHub again
+
+Version 1.0.3
 - added support for Swift 5
 - some face lifting
 

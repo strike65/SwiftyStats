@@ -29,5 +29,6 @@ import os.log
 /// Defines the logging subsystem used by the framework
 @available(iOS 10.0, macOS 10.12, *)
 let log_stat = OSLog(subsystem: "de.swiftystats.SSSwiftyStats", category: "SSSwiftyStats")
+let log_dev = OSLog(subsystem: "de.swiftystats.SSSwiftyStats.bugs", category: "SSSwiftyStats.BUGS")
 #endif
 

@@ -92,7 +92,7 @@ import os.log
 /* Swift Version: Copyright strike65, 2018 */
 
 
-public func hypergeometric1F1<FPT: SSFloatingPoint & Codable>(a: FPT, b: FPT, x: FPT) -> FPT {
+internal func hypergeometric1F1<FPT: SSFloatingPoint & Codable>(a: FPT, b: FPT, x: FPT) -> FPT {
     var asum, psum, acanc, pcanc, temp: FPT
     let pcanc_limit1: FPT = makeFP(1e-15)
     let pcanc_limit2: FPT = makeFP(1e-12)

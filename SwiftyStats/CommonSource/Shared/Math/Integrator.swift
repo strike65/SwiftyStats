@@ -295,15 +295,15 @@ fileprivate func abscissas<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     #endif
     switch FPT.self {
     case is Float.Type:
-        return abscissasF[i] as! FPT
+        return makeFP(abscissasF[i]) // as! FPT
     case is Double.Type:
-        return abscissasD[i] as! FPT
+        return makeFP(abscissasD[i]) // as! FPT
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return abscissasF80[i] as! FPT
+        return makeFP(abscissasF80[i]) // as! FPT
         #endif
     default:
-        return abscissasD[i] as! FPT
+        return makeFP(abscissasD[i]) // as! FPT
     }
 }
 
@@ -370,15 +370,15 @@ fileprivate func weights<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     #endif
     switch FPT.self {
     case is Float.Type:
-        return weightsF[i] as! FPT
+        return makeFP(weightsF[i]) // as! FPT
     case is Double.Type:
-        return weightsD[i] as! FPT
+        return makeFP(weightsD[i]) // as! FPT
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return weightsF80[i] as! FPT
+        return makeFP(weightsF80[i]) // as! FPT
         #endif
     default:
-        return weightsD[i] as! FPT
+        return makeFP(weightsD[i]) // as! FPT
     }
 
 }

@@ -30,7 +30,7 @@ import Foundation
 internal class SSContFrac<T: SSFloatingPoint>: NSObject {
 
     /// max error
-    public var eps:T = T.ulpOfOne
+    var eps:T = T.ulpOfOne
     /// initializes a new instance
     override public init() {
         super.init()
@@ -40,14 +40,14 @@ internal class SSContFrac<T: SSFloatingPoint>: NSObject {
     /// The n<sup>th</sup> a coefficient at x. If a is a function of x, x is passed as well.
     /// - Parameter n: n
     /// - Parameter x: x
-    public func a_N(n: Int, point x: T) -> T {
+    func a_N(n: Int, point x: T) -> T {
         return T.nan
     }
     
     /// The n<sup>th</sup> b coefficient at x. If a is a function of x, x is passed as well.
     /// - Parameter n: n
     /// - Parameter x: x
-    public func b_N(n: Int, point x: T) -> T {
+    func b_N(n: Int, point x: T) -> T {
         return T.nan
     }
     
@@ -59,7 +59,7 @@ internal class SSContFrac<T: SSFloatingPoint>: NSObject {
     /// - Parameter converged:      TRUE if the result is valid
     /// - Parameter iterations:     On return it contains the number of iterations needed.
     /// - Returns: The result of the evaluated cf. If the cf didn't converge, converged is set to false and Double.nan is returned.
-    public func compute(x: T, eps: T = T.ulpOfOne, maxIter: Int, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> T {
+    func compute(x: T, eps: T = T.ulpOfOne, maxIter: Int, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> T {
         var n: Int = 1
         var hPrev: T
         let tiny: T = makeFP(1E-50)

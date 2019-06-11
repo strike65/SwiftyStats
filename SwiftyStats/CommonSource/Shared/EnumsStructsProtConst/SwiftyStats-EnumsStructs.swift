@@ -1094,9 +1094,9 @@ public struct SSWaldWolfowitzTwoSampleTestResult<FPT: SSFloatingPoint & Codable>
 /// The results of the H test
 public struct SSKruskalWallisHTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Chi
-    public var Chi2: FPT?
+    public var H_value: FPT?
     /// Chi square corrected for ties
-    public var Chi2corrected: FPT?
+    public var H_value_corrected: FPT?
     /// one sided p value
     public var pValue: FPT?
     /// number of Groups
@@ -1119,7 +1119,7 @@ public struct SSKruskalWallisHTestResult<FPT: SSFloatingPoint & Codable>: Custom
     public var description: String {
         get {
             var descr = String()
-            if let chi = self.Chi2, let chic = self.Chi2corrected, let p = self.pValue, let ng = self.nGroups, let sdf = self.df, let no = self.nObservations, let mr = self.meanRanks, let sr = self.sumRanks, let scv = self.cv, let a = self.alpha, let nt = self.nTies {
+            if let chi = self.H_value, let chic = self.H_value_corrected, let p = self.pValue, let ng = self.nGroups, let sdf = self.df, let no = self.nObservations, let mr = self.meanRanks, let sr = self.sumRanks, let scv = self.cv, let a = self.alpha, let nt = self.nTies {
                 descr.append("KRUSKAL-WALLIS H TEST\n")
                 descr.append("***************** ***\n")
                 descr.append("p value: \(p)\n")

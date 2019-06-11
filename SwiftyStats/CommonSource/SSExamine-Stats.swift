@@ -32,7 +32,7 @@ import os.log
 // Definition of statistics
 extension SSExamine {
     
-    internal var isArithmetic: Bool {
+    internal var isNotEmptyAndNumeric: Bool {
         get {
             return (!self.isEmpty && self.isNumeric)
         }
@@ -40,7 +40,7 @@ extension SSExamine {
     
     /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
     public var squareTotal: FPT  {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
@@ -49,7 +49,7 @@ extension SSExamine {
                     s = s + pow1(temp , 2) * makeFP(freq)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s
@@ -62,7 +62,7 @@ extension SSExamine {
     /// Sum of all elements raised to power p
     /// - Parameter p: Power
     public func poweredTotal(power p: FPT) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
@@ -71,7 +71,7 @@ extension SSExamine {
                     s = s + pow1(temp, p) * makeFP(freq)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s
@@ -83,7 +83,7 @@ extension SSExamine {
     
     /// Total of all elements. Returns Double.nan iff data are non-numeric.
     public var total: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
@@ -92,7 +92,7 @@ extension SSExamine {
                     s = s + temp * makeFP(freq)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s
@@ -104,7 +104,7 @@ extension SSExamine {
     
     /// Returns the sum of all inverted elements
     public var inverseTotal: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
@@ -118,7 +118,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s
@@ -134,7 +134,7 @@ extension SSExamine {
     /// ### Note ###
     /// If `value` is nil, `self.arithmeticMean` will be used.
     public func tss(value: FPT? = nil) -> FPT? {
-        if isArithmetic && self.sampleSize >= 2 {
+        if isNotEmptyAndNumeric && self.sampleSize >= 2 {
             var diff: FPT = 0
             var sum: FPT = 0
             var temp: FPT
@@ -146,7 +146,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return sum
@@ -160,7 +160,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return sum
@@ -172,17 +172,35 @@ extension SSExamine {
     }
 
     // MARK: Location
+
+    // MARK: TODO --> recursive mean/sd??
+    
+    internal func updateDescriptives(withElement x: FPT) {
+        if self.isNotEmptyAndNumeric {
+            var currMean: FPT = FPT.zero
+            if let m = aMean {
+                currMean = m
+            }
+            else {
+                currMean = FPT.zero
+            }
+            let n = makeFP(self.sampleSize) + FPT.one
+            let newMean = currMean + (x - currMean) / n
+            aMean = newMean
+        }
+    }
+    
     
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
     public var arithmeticMean: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             return self.total! / makeFP(self.sampleSize)
         }
         else {
             return nil
         }
     }
-    
+
     /// The mode. Can contain more than one item. Can be nil for empty tables.
     public var mode: Array<SSElement>? {
         get {
@@ -264,30 +282,30 @@ extension SSExamine {
             var a = self.elementsAsArray(sortOrder: .ascending)!
             var temp3: SSElement
             if isInteger(k) {
-                temp3 = a[a.startIndex.advanced(by: integerValue(k - 1))]
+                temp3 = a[integerValue(k) - 1]
                 let temp1: FPT = makeFP(temp3)
                 if !temp1.isNaN {
-                    temp3 = a[a.startIndex.advanced(by: integerValue(k))]
+                    temp3 = a[integerValue(k)]
                     let temp2: FPT = makeFP(temp3)
                     if !temp2.isNaN {
                         result = (temp1 + temp2) / 2
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             else {
-                temp3 = a[a.startIndex.advanced(by: integerValue(ceil(k - 1)))]
+                temp3 = a[integerValue(ceil(k - FPT.one))]
                 let temp1: FPT = makeFP(temp3)
                 if !temp1.isNaN {
                     result = temp1
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return result
@@ -300,7 +318,7 @@ extension SSExamine {
     /// Returns a SSQuartile struct or nil for empty or non-numeric tables.
     public var quartile: SSQuartile<FPT>? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 var res = SSQuartile<FPT>()
                 do {
                     res.q25 = try self.quantile(q: makeFP(0.25))!
@@ -321,7 +339,7 @@ extension SSExamine {
     /// Returns the geometric mean.
     public var geometricMean: FPT? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 let a: FPT = self.logProduct!
                 let b: FPT = makeFP(self.sampleSize)
                 let c: FPT = exp1(a / b)
@@ -336,7 +354,7 @@ extension SSExamine {
     /// Harmonic mean. Can be nil for non-numeric data.
     public var harmonicMean: FPT? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 return makeFP(self.sampleSize) / self.inverseTotal!
             }
             else {
@@ -348,7 +366,7 @@ extension SSExamine {
     
     /// Returns the contraharmonic mean (== (mean of squared elements) / (arithmetic mean))
     public var contraHarmonicMean: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let st: FPT = self.squareTotal
             let sqM: FPT = st / makeFP(self.sampleSize)
             let m = self.arithmeticMean!
@@ -371,7 +389,7 @@ extension SSExamine {
         if order <= 0 {
             return nil
         }
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if let sum: FPT = self.poweredTotal(power: order) {
                 let n: FPT = makeFP(self.sampleSize)
                 let result: FPT = pow1(sum / n, 1 / order)
@@ -401,7 +419,7 @@ extension SSExamine {
             
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
             let v: FPT = floor(makeFP(l) * alpha)
@@ -414,7 +432,7 @@ extension SSExamine {
                     k = k + 1
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s / k
@@ -439,7 +457,7 @@ extension SSExamine {
             
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
             let ll: FPT = makeFP(l)
@@ -451,7 +469,7 @@ extension SSExamine {
                     s = s + temp
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             let temp: FPT = makeFP(a[integerValue(v)])
@@ -460,7 +478,7 @@ extension SSExamine {
                 s = s + v * (temp + temp1)
             }
             else {
-                assert(false, "internal error")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
             }
             return s / makeFP(self.sampleSize)
         }
@@ -473,7 +491,7 @@ extension SSExamine {
     /// Returns the Gastwirth estimator (https://www.r-bloggers.com/gastwirths-location-estimator/)
     public var gastwirth: FPT? {
         get {
-            if !self.isArithmetic {
+            if !self.isNotEmptyAndNumeric {
                 return nil
             }
             else {
@@ -490,7 +508,7 @@ extension SSExamine {
     public var median: FPT? {
         get {
             var res: FPT
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 do {
                     res = try self.quantile(q: FPT.half)!
                 }
@@ -509,7 +527,7 @@ extension SSExamine {
     
     /// Product of all elements. Will be Double.nan for non-numeric data.
     public var product: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var p: FPT = 1
             for (item, freq) in self.elements {
                 let temp: FPT = makeFP(item)
@@ -522,7 +540,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return p
@@ -535,7 +553,7 @@ extension SSExamine {
     /// The log-Product. Will be Double.nan for non-numeric data or if there is at least one item lower than zero. Returns -inf if there is at least one item equals to zero.
     public var logProduct: FPT? {
         var sp : FPT = 0
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             for (item, freq) in self.elements {
                 let temp: FPT = makeFP(item)
                 if !temp.isNaN {
@@ -550,7 +568,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return sp
@@ -591,14 +609,14 @@ extension SSExamine {
     /// The difference between maximum and minimum. Can be nil for empty tables.
     public var range: FPT? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 let tempMax: FPT = makeFP(self.maximum)
                 let tempMin: FPT = makeFP(self.minimum)
                 if !tempMax.isNaN && !tempMin.isNaN {
                     return tempMax - tempMin
                 }
                 else {
-                    fatalError("internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             else {
@@ -630,15 +648,14 @@ extension SSExamine {
     
     /// Returns the mid-range
     public var midRange: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let tempMax: FPT = makeFP(self.maximum)
             let tempMin: FPT = makeFP(self.minimum)
             if !tempMax.isNaN && !tempMin.isNaN {
                 return (tempMax + tempMin) / 2
             }
             else {
-                assert(false, "internal error")
-                return nil
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
             }
         }
         else {
@@ -650,7 +667,7 @@ extension SSExamine {
     /// Returns the interquartile range
     public var interquartileRange: FPT? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 do {
                     return try interquantileRange(lowerQuantile: makeFP(0.25), upperQuantile: makeFP(0.75))!
                 }
@@ -717,7 +734,7 @@ extension SSExamine {
         case .biased:
             return moment(r: 2, type: .central)
         case .unbiased:
-            if isArithmetic && self.sampleSize >= 2 {
+            if isNotEmptyAndNumeric && self.sampleSize >= 2 {
                 let m = self.arithmeticMean!
                 var diff: FPT = 0
                 var sum: FPT = 0
@@ -728,7 +745,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return sum / makeFP(self.sampleSize - 1)
@@ -755,7 +772,7 @@ extension SSExamine {
     
     /// Returns the standard error of the sample
     public var standardError: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if let sd = self.standardDeviation(type: .unbiased) {
                 return sd / makeFP(self.sampleSize)
             }
@@ -795,7 +812,7 @@ extension SSExamine {
     
     // Returns the Herfindahl index
     public var herfindahlIndex: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var s: FPT = 0
             var p: FPT = 0
             if let tot = self.total {
@@ -832,7 +849,7 @@ extension SSExamine {
     
     /// Returns the Gini coefficient
     public var gini: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if self.sampleSize < 2 {
                 return nil
             }
@@ -846,7 +863,7 @@ extension SSExamine {
                     s = s + (2 * makeFP(i) - N - 1) * x
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return s / (pow1(N, 2) * m)
@@ -871,7 +888,7 @@ extension SSExamine {
     
     /// The concentration ratio
     public func CR(_ g: Int) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if g > 0 && g <= self.sampleSize {
                 let a = self.elementsAsArray(sortOrder: .descending)!
                 var sum: FPT = 0
@@ -881,7 +898,7 @@ extension SSExamine {
                         sum = sum + x
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return sum
@@ -903,7 +920,7 @@ extension SSExamine {
         if alpha <= 0 || alpha >= 1 {
             return nil
         }
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var upper: FPT
             var lower: FPT
             var width: FPT
@@ -939,7 +956,7 @@ extension SSExamine {
         if alpha <= 0 || alpha >= 1 {
             return nil
         }
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var upper: FPT
             var lower: FPT
             var width: FPT
@@ -987,7 +1004,7 @@ extension SSExamine {
     
     /// Returns the coefficient of variation
     public var coefficientOfVariation: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if let s = self.standardDeviation(type: .unbiased) {
                 return s / self.arithmeticMean!
             }
@@ -1002,7 +1019,7 @@ extension SSExamine {
     
     /// Returns the mean absolute difference
     public var meanDifference: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if self.sampleSize < 2 {
                 return nil
             }
@@ -1024,7 +1041,7 @@ extension SSExamine {
     /// ### Note ###
     /// The scale factor is valid for normally distributed data only.
     public func medianAbsoluteDeviation(center rp: FPT, scaleFactor c: FPT?) -> FPT? {
-        if !isArithmetic || rp.isNaN {
+        if !isNotEmptyAndNumeric || rp.isNaN {
             return nil
         }
         var diffArray:Array<FPT> = Array<FPT>()
@@ -1035,16 +1052,16 @@ extension SSExamine {
             if !t1.isNaN {
                 diffArray.append(abs(t1 - rp))
             }else {
-                assert(false, "internal error")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
             }
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
         let k: FPT = makeFP(sortedDifferences.count) * makeFP(0.5 )
         if isInteger(k) {
-            result = (sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(k - 1))] + sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(k))]) / 2
+            result = (sortedDifferences[integerValue(k - 1)] + sortedDifferences[integerValue(k)]) / 2
         }
         else {
-            result = sortedDifferences[sortedDifferences.startIndex.advanced(by: integerValue(ceil(k - 1)))]
+            result = sortedDifferences[integerValue(ceil(k - FPT.one))]
         }
         var cf:FPT
         if c != nil {
@@ -1060,7 +1077,7 @@ extension SSExamine {
     /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     public func meanAbsoluteDeviation(center rp: FPT) -> FPT? {
-        if !isArithmetic || rp.isNaN {
+        if !isNotEmptyAndNumeric || rp.isNaN {
             return nil
         }
         var sum: FPT = 0
@@ -1074,7 +1091,7 @@ extension SSExamine {
                 c = c + freq
             }
             else {
-                assert(false, "internal error")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
             }
         }
         let cc: FPT = makeFP(c)
@@ -1095,7 +1112,7 @@ extension SSExamine {
     /// Returns the semi-variance
     /// - Parameter type: SSSemiVariance.lower or SSSemiVariance.upper
     public func semiVariance(type: SSSemiVariance) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             switch type {
             case .lower:
                 let a = self.elementsAsArray(sortOrder: .ascending)!
@@ -1114,7 +1131,7 @@ extension SSExamine {
                         }
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return s / k
@@ -1135,7 +1152,7 @@ extension SSExamine {
                         }
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return s / k
@@ -1168,7 +1185,7 @@ extension SSExamine {
     /// Returns the r_th central moment of all elements with respect to their mean. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     fileprivate func centralMoment(r: Int!) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let m = self.arithmeticMean!
             var diff: FPT = 0
             var sum: FPT = 0
@@ -1180,7 +1197,7 @@ extension SSExamine {
                     sum = sum + pow1(diff, rr) * makeFP(freq)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return sum / makeFP(self.sampleSize)
@@ -1194,7 +1211,7 @@ extension SSExamine {
     /// Returns the r_th moment about the origin of all elements. Will be Double.nan if isEmpty == true and data are not numerical
     /// - Parameter r: r
     fileprivate func originMoment(r: Int!) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var sum: FPT = 0
             let rr: FPT = makeFP(r)
             for (item, freq) in self.elements {
@@ -1203,7 +1220,7 @@ extension SSExamine {
                     sum = sum + pow1(t, rr) * makeFP(freq)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             return sum / makeFP(self.sampleSize)
@@ -1215,7 +1232,7 @@ extension SSExamine {
     
     /// Returns then r_th standardized moment.
     fileprivate func standardizedMoment(r: Int!) -> FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var sum: FPT = 0
             let m = self.arithmeticMean!
             let sd = self.standardDeviation(type: .biased)!
@@ -1227,7 +1244,7 @@ extension SSExamine {
                         sum = sum + pow1( ( t - m ) / sd, rr) * makeFP(freq)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 return sum / makeFP(self.sampleSize)
@@ -1246,7 +1263,7 @@ extension SSExamine {
     /// Returns the lag-n autocorrelation of the data.
     /// - Parameter n: Lag (default = 1)
     public func autocorrelation(n: Int = 1) throws -> Double? {
-        if self.isArithmetic {
+        if self.isNotEmptyAndNumeric {
             do {
                 var bl: SSBoxLjungResult = try SSHypothesisTesting.autocorrelation(data: self as! SSExamine<Double, Double>)
                 if let l = bl.coefficients?[n] {
@@ -1269,7 +1286,7 @@ extension SSExamine {
     
     /// Returns the kurtosis excess
     public var kurtosisExcess: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             let m4 = moment(r: 4, type: .central)!
             let m2 = moment(r: 2, type: .central)!
             return m4 / pow1(m2, 2) - 3
@@ -1278,6 +1295,7 @@ extension SSExamine {
             return nil
         }
     }
+    
     
     /// Returns the kurtosis.
     public var kurtosis: FPT? {
@@ -1313,7 +1331,7 @@ extension SSExamine {
     
     /// Returns the skewness.
     public var skewness: FPT? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
                 return m3 / pow1(s3, 3)
             }
@@ -1350,7 +1368,7 @@ extension SSExamine {
     /// Returns true, if there are outliers.
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func hasOutliers(testType: SSOutlierTest) -> Bool? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             switch testType {
             case .grubbs:
                 do {
@@ -1369,7 +1387,7 @@ extension SSExamine {
                         tempArray.append(t)
                     }
                     else {
-                        assert(false, "internal error")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                     }
                 }
                 if let res = try! SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
@@ -1395,7 +1413,7 @@ extension SSExamine {
     /// - Parameter max: Maximum number of outliers to return
     /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func outliers(alpha: FPT!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
-        if isArithmetic {
+        if isNotEmptyAndNumeric {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
             for itm in a {
@@ -1404,7 +1422,7 @@ extension SSExamine {
                     tempArray.append(temp)
                 }
                 else {
-                    assert(false, "internal error")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
                 }
             }
             if let res: SSESDTestResult<SSElement, FPT> = try! SSHypothesisTesting.esdOutlierTest(data: self, alpha: alpha, maxOutliers: max, testType: t) {
@@ -1426,7 +1444,7 @@ extension SSExamine {
     
     /// Returns true, if the sammple seems to be drawn from a normally distributed population with mean = mean(sample) and sd = sd(sample)
     public var isGaussian: Bool? {
-        if !isArithmetic {
+        if !isNotEmptyAndNumeric {
             return nil
         }
         else {
@@ -1447,7 +1465,7 @@ extension SSExamine {
     /// Tests, if the sample was drawn from population with a particular distribution function
     // - Parameter target: Distribution to test
     public func testForDistribution(targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
-        if !isArithmetic {
+        if !isNotEmptyAndNumeric {
             return nil
         }
         else {
@@ -1464,7 +1482,7 @@ extension SSExamine {
     /// - Returns: A SSBoxWhisker structure
     public var boxWhisker: SSBoxWhisker<SSElement, FPT>? {
         get {
-            if isArithmetic {
+            if isNotEmptyAndNumeric {
                 do {
                     var res: SSBoxWhisker<SSElement, FPT> = SSBoxWhisker<SSElement, FPT>()
                     res.median = self.median

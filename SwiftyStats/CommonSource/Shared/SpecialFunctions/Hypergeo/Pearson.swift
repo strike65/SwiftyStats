@@ -24,7 +24,7 @@
 import Foundation
 
 // see : https://people.maths.ox.ac.uk/porterm/research/pearson_final.pdf
-public func h1f1taylora<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
+internal func h1f1taylora<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
     var a1: Array<Complex<T>> = Array<Complex<T>>.init()
     var sum: Complex<T> = Complex<T>.init(re: 1, im: 0)
     a1.append(Complex<T>.init(re: 1, im: 0))
@@ -50,7 +50,7 @@ public func h1f1taylora<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<
     return (h: sum, mIter: maxIter)
 }
 
-public func h1f1taylorb<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
+internal func h1f1taylorb<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<T>, _ x: Complex<T>, _ tol: T) -> (h: Complex<T>, mIter: Bool) {
     var r: Array<Complex<T>> = Array<Complex<T>>.init()
     r.append(a &% b)
     r.append((a &++ 1) &% 2 &% (b &++ 1))
@@ -78,7 +78,7 @@ public func h1f1taylorb<T: SSComplexFloatElement>(_ a: Complex<T>, _ b: Complex<
     return (h: A.last!, mIter: maxIter)
 }
 
-public func h1f1singleFraction<T: SSComplexFloatElement>(a: Complex<T>, b: Complex<T>, z: Complex<T>, tol: T) -> (h: Complex<T>, maxiter: Bool) {
+internal func h1f1singleFraction<T: SSComplexFloatElement>(a: Complex<T>, b: Complex<T>, z: Complex<T>, tol: T) -> (h: Complex<T>, maxiter: Bool) {
     var A1: Array<Complex<T>> = Array<Complex<T>>.init()
     var B1: Array<Complex<T>> = Array<Complex<T>>.init()
     var C1: Array<Complex<T>> = Array<Complex<T>>.init()

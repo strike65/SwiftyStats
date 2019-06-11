@@ -50,6 +50,7 @@ import Foundation
 //    }
 //    
 //}
+/// Add Codable protocol conformance to Float80
 extension Float80: Codable {
     private enum CodingKeys: String, CodingKey {
         case string = "stringValue"

@@ -21,7 +21,7 @@ import Foundation
 import Accelerate
 // naive implementation
 
-public func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T) -> T {
+internal func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T) -> T {
     var sum1, s: T
     let tol: T = T.ulpOfOne
     let maxIT: T = 1000
@@ -134,7 +134,7 @@ public func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T)
  */
 
 
-public func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
+internal func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
     var sigfig: Int
     switch z.re {
     case is Double:

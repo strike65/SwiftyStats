@@ -749,7 +749,7 @@ public class SSHypothesisTesting {
     /*
      Structure of the differences array:
      
-     m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
+                    m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
      m(0)           -           d(0,1)      d(0,2)      m(0,3)      ...     d(0,k - 1)
      m(1)           d(1,0)      -           d(1,2)      m(1,3)      ...     d(1,k - 1)
      m(2)           d(2,0)      d(2,1)      -           m(2,3)      ...     d(2,k - 1)
@@ -762,7 +762,7 @@ public class SSHypothesisTesting {
      
      Structure of the T array:
      
-     m(0)        m(1)        m(2)        ...     m(k - 1)
+                    m(0)        m(1)        m(2)        ...     m(k - 1)
      m(0)           -           T(0,1)      T(0,2)      ...     T(0,k - 1)
      m(1)           T(1,0)      -           T(1,2)      ...     T(1,k - 1)
      m(2)           T(2,0)      T(2,1)      -           ...     T(2,k - 1)

@@ -163,26 +163,8 @@ internal func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
 /// Returns the integer part of a floating point number
 internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
     var modr: (T, T)
-    modr = modf(x)
+    modr = Darwin.modf(x)
     return modr.0
-//    switch x {
-//    case let d as Double:
-//        var intPart: Double = 0.0
-//        let _ = modf(d, &intPart)
-//        return intPart as! T
-//    case let f as Float:
-//        var intPart: Float = 0.0
-//        let _ = modff(f, &intPart)
-//        return intPart as! T
-//        #if arch(x86_64)
-//    case let f80 as Float80:
-//        var intPart: Float80 = 0.0
-//        let _ = modfl(f80, &intPart)
-//        return intPart as! T
-//        #endif
-//    default:
-//        return T.nan
-//    }
 }
 
 
@@ -190,7 +172,7 @@ internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
 /// - Paramter value: A double-value.
 internal func fractionalPart<T: SSFloatingPoint>(_ value: T) -> T {
     var modr: (T, T)
-    modr = modf(value)
+    modr = Darwin.modf(value)
     return modr.1
 }
 
@@ -215,192 +197,196 @@ internal func isNumber<T>(_ value: T) -> Bool {
     #endif
 }
 
-internal func makeFP<T, FPT: SSFloatingPoint>(_ value: T) -> FPT {
+/// Tries to convert a numerical representation of value of type `FROM` to a Floating Point Type (`TO`)
+///
+/// - Parameter value: Value
+/// - Returns: The numerical value as a FloatingPoint if possible, TO.nan otherwise.
+internal func makeFP<FROM, TO: SSFloatingPoint>(_ value: FROM) -> TO {
     switch value {
     case let s as String:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(s) as! FPT
+            return Float80.init(s) as! TO
             #endif
         case is Float.Type:
-            return Float.init(s) as! FPT
+            return Float.init(s) as! TO
         case is Double.Type:
-            return Double.init(s) as! FPT
+            return Double.init(s) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let f as Float:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init("\(f)") as! FPT
+            return Float80.init("\(f)") as! TO
             #endif
         case is Float.Type:
-            return Float.init("\(f)") as! FPT
+            return Float.init("\(f)") as! TO
         case is Double.Type:
-            return Double.init(f) as! FPT
+            return Double.init(f) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let f as Double:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init("\(f)") as! FPT
+            return Float80.init("\(f)") as! TO
             #endif
         case is Float.Type:
-            return Float.init("\(f)") as! FPT
+            return Float.init("\(f)") as! TO
         case is Double.Type:
-            return Double.init(f) as! FPT
+            return Double.init(f) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
         #if arch(i386) || arch(x86_64)
     case let f as Float80:
-        switch FPT.self {
+        switch TO.self {
         case is Float80.Type:
-            return Float80.init("\(f)") as! FPT
+            return Float80.init("\(f)") as! TO
         case is Float.Type:
-            return Float.init("\(f)") as! FPT
+            return Float.init("\(f)") as! TO
         case is Double.Type:
-            return Double.init(f) as! FPT
+            return Double.init(f) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
         #endif
     case let i as Int:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as Int8:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as Int16:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as Int32:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as Int64:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as UInt:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as UInt8:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as UInt16:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as UInt32:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     case let i as UInt64:
-        switch FPT.self {
+        switch TO.self {
             #if arch(i386) || arch(x86_64)
         case is Float80.Type:
-            return Float80.init(i) as! FPT
+            return Float80.init(i) as! TO
             #endif
         case is Float.Type:
-            return Float.init(i) as! FPT
+            return Float.init(i) as! TO
         case is Double.Type:
-            return Double.init(i) as! FPT
+            return Double.init(i) as! TO
         default:
-            return FPT.nan
+            return TO.nan
         }
     default:
-        return FPT.nan
+        return TO.nan
     }
 }
 
@@ -408,13 +394,17 @@ internal func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>?
     if array.isEmpty {
         return nil
     }
-    var temp: FPT
-    var result: Array<FPT> = Array<FPT>()
-    for item in array {
-        temp = makeFP(item)
-        result.append(temp)
-    }
-    return result as Array<FPT>
+    let result: Array<FPT> = array.map( {(value: T) in
+        return makeFP(value)
+    })
+    return result
+//    var temp: FPT
+//    var result: Array<FPT> = Array<FPT>()
+//    for item in array {
+//        temp = makeFP(item)
+//        result.append(temp)
+//    }
+//    return result as Array<FPT>
 }
 
 
@@ -448,10 +438,7 @@ internal func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, cou
     return res
 }
 
-
-/*************************************************************
- scanning functions
-*************************************************************/
+// MARK: Scanning Functions
 
 internal func scanDouble(string: String?) -> Double? {
     guard string != nil else {
@@ -467,19 +454,19 @@ internal func scanDouble(string: String?) -> Double? {
     }
 }
 
-internal func scanDecimal(string: String?) -> Decimal? {
-    guard string != nil else {
-        return nil
-    }
-    var res: Decimal = 0.0
-    let s = Scanner.init(string: string!)
-    if s.scanDecimal(&res) {
-        return res
-    }
-    else {
-        return nil
-    }
-}
+//internal func scanDecimal(string: String?) -> Decimal? {
+//    guard string != nil else {
+//        return nil
+//    }
+//    var res: Decimal = 0.0
+//    let s = Scanner.init(string: string!)
+//    if s.scanDecimal(&res) {
+//        return res
+//    }
+//    else {
+//        return nil
+//    }
+//}
 
 internal func scanFloat(string: String?) -> Float? {
     guard string != nil else {
@@ -616,6 +603,8 @@ internal func scanString(string: String?) -> String? {
     }
     return string
 }
+
+// MARK: Logging
 
 struct StandardErrorOutputStream: TextOutputStream {
     mutating func write(_ string: String) {

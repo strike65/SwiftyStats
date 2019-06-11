@@ -20,6 +20,9 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  */
+
+import Foundation
+
 /// Extends the FloatingPoint Protocol by adding important constants
 public protocol SSFloatingPoint: FloatingPoint {
     /// 0

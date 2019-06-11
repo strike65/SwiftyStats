@@ -1,21 +1,27 @@
-![Version](https://img.shields.io/badge/version-1.0.3-orange.svg) ![Language](https://img.shields.io/badge/language-Swift_5-yellow.svg) ![DevelopmentPlatform](https://img.shields.io/badge/Development_Platform-macos-red.svg) ![SupportedOS](https://img.shields.io/badge/Supported_OS-macOS/iOS-blue.svg) ![Build](https://img.shields.io/badge/Build-passed-green.svg)   
-Important changes
-=================
-Versions 1.x.x and newer will need to compile using at least Swift 4.2. This version also compiles when using Swift 5.
-
-This update contains a lot of new features. That is, your code have to be updated. If you cannot use the Swift 4.2 or newer, you have to edit your Podfile and use Version 0.8.15 (see below.)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.0.4-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) 
 
 SwiftyStats
 ===========
 SwiftyStats is a generic statistical framework completely written in Swift. The framework is basically a port from an existing Objective C framework I've written years ago. The framework includes often used statistical routines. This framework is far from being perfect and is "work in progress".
 >Due to some external limitations (earning money) the code will be updated rather sporadically.
 
+The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems. 
+
+Important changes
+=================
+**This update contains a lot of new features. That is, your code have to be updated.**
+
+Version 1.0.0 or newer requires at least Swift 4.2 or later. If you cannot use Swift 4.2 or later, you will need to customize the Podfile (see below). 
+
+> Due to the heavy use of generics, the first build takes a long time. The same problem occurs if the contents of the `DerivedData` folder have been deleted.
+>
+>**Therefore the target "SwiftyStatsMobile" is not included in the list "Target Dependencies" of the target "SwiftyStats"**
+
 # Documentation
 A jazzy-generated reference can be found here: [SwiftyStats Doc](http://www.vpedia.net/swiftystats).
 
 **macOS only**:  
-Locally you can always generate a docset using the `SwiftyStats/make_doc.sh`script.  
->[Jazzy](https://github.com/realm/jazzy) must be present on your system.
+Locally you can always generate a docset using `SwiftyStats/make_doc.sh`script. To do this, [Jazzy](https://github.com/realm/jazzy) must be installed on your system:
 
 ```bash
 $> cd <CLONE_DIRECTORY>/SwiftyStats
@@ -39,27 +45,28 @@ target 'YOURPROJECT' do
   pod 'SwiftyStats'  
 end
 ```
-If you have to use a Swift version earlier than 4.2, replace the line `pod 'SwiftyStats'` with:
+If you have to use a Swift version **earlier** than 4.2, replace the line `pod 'SwiftyStats'` by:
 
 ```ruby
 ...
    pod 'SwiftyStats", '0.8.14'
 ...
 ```
-Save your edits and execute
+Save your changes and run:
 
 ```bash
 $ pod install
 ```
 
 ## Swift Package Manager (recommended for Linux)
+**The Linux package is still under development and is considered to be unstable.**
 
 Edit your `Package.swift` file:
 
 ```swift
 import PackageDescription
 // for Swift 4.2 or 5
-let version = "1.0.2"
+let version = "1.0.4"
 // for earlier versions:
 // let version = "0.8.14"
 let package = Package(
@@ -70,7 +77,7 @@ let package = Package(
 )
 ```
 Then rebuild your project.  
-For more information about the Swift Package Manager cick [here](https://github.com/apple/swift-package-manager/tree/master/Documentation)
+For more information about the Swift Package Manager click [here](https://github.com/apple/swift-package-manager/tree/master/Documentation)
 
 ## Manually
 * Clone:  
@@ -102,7 +109,6 @@ As there is no Xcode-Project, you have to use the Swift Package Manager. See abo
 * `make` or `make debug` builds the module in debug-configuration
 * `make release` builds the module in release-configuration
 * `make test` builds the module and performs some tests
- * numerical results to compare to are generated using Mathematics / R
 * `make clean` resets the build-process
 
 # How to Use

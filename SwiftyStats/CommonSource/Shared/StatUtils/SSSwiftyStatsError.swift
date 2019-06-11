@@ -123,7 +123,7 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         case .errorCreatingObject:
             return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
         case .internalError:
-            return "Fatal internal error :" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
+            return "Fatal internal error:" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
         case .singularity:
             return "Argument singularity :" + self.file + " Line: \(self.line) in function: " + self.function + ". Function will return INF."
         case .maxExponentExceeded:

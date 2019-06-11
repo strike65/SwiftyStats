@@ -29,13 +29,13 @@ import os.log
 #endif
 
 /** SSExamine
-    This class offers the possibility to store, manipulate and analyze data of any type. The only prerequisite is that data must conform to the protocols `Hashable`, `Comparable` and `Codable`. The available statistics depend on whether the data are numeric or non-numeric. When unavailable statistics are requested, FPT.nan or nil will be returned. Some methods throw an error in such circumstances.
- - Author: strike65
+ This class contains all the data that you want to evaluate. SSExamine expects data that corresponds to the `Hashable`, `Comparable` and `Codable` protocols. Which statistics are available depends on the type of data. For nominal data, for example, an average will not be meaningful and will therefore not be calculated. If a certain statistical measure is not available, the result will be `nil`. It is therefore important that you check all results for this.
  
- - returns:
-    A new instance of the SSExamine class
- - Important
-    - `SSElement` = generic type
+ SSExamine was primarily developed with Objective-C and had in particular the requirement to create frequency tables for the entered data and to update these tables whenever data was added or removed. Internally, the data is therefore stored in a kind of frequency table. If, for example, the element "A" occurs 100 times in the data set to be evaluated, the element is not stored 100 times, but only once. At the same time, a reference to the frequency of this element is saved.
+
+ If elements are added to an SSExamine instance, the order of "arrival" is also registered. This makes it possible to reconstruct the "original data" from an SSExamine instance.
+ - Important:
+    - `SSElement` = The Type of data to be processed.
     - `FPT` = The type of emitted statistics. Must conform to SSFloatingPoint
  */
 public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable & Comparable & Codable, FPT: SSFloatingPoint, FPT: Codable {
@@ -59,7 +59,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
      */
     public var descriptionString: String?
     
-    /*
+    /**
     Name of the table
      */
     public var name: String?
@@ -73,39 +73,42 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     */
     public var hasChanges: Bool! = false
     
-    /* Defines the level of measurement
+    /** Defines the level of measurement
      */
     public var levelOfMeasurement: SSLevelOfMeasurement! = .interval
     
-    /* If true, the instance contains numerical data
+    /** If true, the instance contains numerical data
     */
     public var isNumeric: Bool! = true
     
-    /** Returns the count of unique SSElements
+    /** Returns the number of unique SSElements
      */
     public var length: Int {
         return items.count
     }
     
-    /** Returns true, if count == 0
+    /** Returns true, if count == 0, i.e. there are no data
     */
     public var isEmpty: Bool {
         return count == 0
     }
     
-    /* The total number of observations (= sum of all absolute frequencies)
+    /** The total number of observations (= sum of all absolute frequencies)
     */
     public var sampleSize: Int {
         return count
     }
     
-    /* Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
+    /** Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
     */
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, FPT> {
         //        updateCumulativeFrequencies()
         return cumRelFrequencies
     }
     
+    /**
+    Returns a the hash for the instance.
+    */
     public override var hash: Int {
         if !isEmpty {
             if let a = elementsAsArray(sortOrder: .raw) {
@@ -123,8 +126,10 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Two SSExamine objects are supposed to be equal, iff the arrays of all elements in unsorted order are equal.
-    /// - Paramater object: The object to compare to
+    /// Overridden
+    /// Two SSExamine objects are assumed to be equal, iff the arrays of all elements in unsorted order are equal.
+    /// - Parameter object: The object to compare to
+    /// - Important: Properties like "name" or "tag" are not included
     public override func isEqual(_ object: Any?) -> Bool {
         if let o: SSExamine<SSElement, FPT> = object as? SSExamine<SSElement, FPT> {
             if !self.isEmpty && !o.isEmpty {
@@ -142,7 +147,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Returns all unique elements as a Dictionary<element<SSElement>:frequency<Int>>
+    /// Returns all unique elements as a Dictionary \<element\<SSElement\>:frequency\<Int\>\>
     public var elements: Dictionary<SSElement, Int> {
         return items
     }
@@ -161,21 +166,36 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     private var cumRelFrequencies: Dictionary<SSElement, FPT> = [:]
     private var allItemsAscending: Array<SSElement> = []
     
+    internal var aMean: FPT? = nil
+    
     // sum over all absolute frequencies (= sampleSize)
     private var count: Int = 0
     
     // MARK: INITIALIZERS
     
-    /// General initializer.
+    //: General initializer.
     public override init() {
         super.init()
         initializeSSExamine()
     }
     
+    
+    private func createName(name: String?) {
+        if let n = name {
+            self.name = n
+        }
+        else {
+            self.tag = UUID.init().uuidString
+            self.name = self.tag
+        }
+    }
+    
     /// Initializes a SSExamine instance using a string or an array<SSElement>
     /// - Parameter object: The object used
+    /// - Parameter name: The name of the instance.
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
-    /// - Throws: SSSwiftyStatsError.missingData if object is not a string or an array<SSElement>
+    /// - Parameter lom: Level of Measurement
+    /// - Throws: SSSwiftyStatsError.missingData if object is not a string or an Array\<SSElement\>
     public init(withObject object: Any, levelOfMeasurement lom: SSLevelOfMeasurement, name: String?, characterSet: CharacterSet?) throws {
         // allow only arrays an strings as 'object'
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
@@ -190,14 +210,14 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             throw SSSwiftyStatsError(type: .missingData, file: #file, line: #line, function: #function)
         }
         super.init()
-        if let n = name {
-            self.name = n
-            //            self.tag = n
-        }
-        //        else {
-        //            self.tag = UUID.init().uuidString
-        //            self.name = self.tag
-        //        }
+        createName(name: name)
+//        if let n = name {
+//            self.name = n
+//        }
+//        else {
+//            self.tag = UUID.init().uuidString
+//            self.name = self.tag
+//        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
@@ -213,29 +233,26 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     public init(withArray array: Array<SSElement>, name: String?, characterSet: CharacterSet?) {
         super.init()
-        if let n = name {
-            self.name = n
-            //            self.tag = n
-        }
-        //        else {
-        //            self.name = UUID.init().uuidString
-        //            self.tag = self.name
-        //        }
+        createName(name: name)
         self.initializeWithArray(array)
     }
     
     
-    /// Loads the content of a file interpreting the elements separated by `separator` as values using the specified encoding.
+    /// Loads the content of a file interpreting the elements separated by `separator` as values using the specified encoding. Data are assumed to be numeric.
+    ///
+    /// The property `name`will be set to filename.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
     /// - Parameter separator: The separator used in the file
-    /// - Parameter stringEncoding: The encoding to use.
-    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func examine(fromFile path: String, separator: String, stringEncoding: String.Encoding, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
+    /// - Parameter stringEncoding: The encoding to use. Default: .utf8
+    /// - Parameter elementsEnclosedBy: A string that encloses each element.
+    /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed.
+    /// - Important: It is assumed that the elements are numeric.
+    public class func examine(fromFile path: String, separator: String, elementsEnclosedBy: String? = nil, stringEncoding: String.Encoding = String.Encoding.utf8, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
-        #if DEBUG
-        print(fullFilename)
-        #endif
+//        #if DEBUG
+//        print(fullFilename)
+//        #endif
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
@@ -254,7 +271,16 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             let importedString = try String.init(contentsOfFile: fullFilename, encoding: stringEncoding)
             if importedString.contains(separator) {
                 if importedString.count > 0 {
-                    let separatedStrings: Array<String> = importedString.components(separatedBy: separator)
+                    let temporaryStrings: Array<String> = importedString.components(separatedBy: separator)
+                    let separatedStrings: Array<String>
+                    if let e = elementsEnclosedBy {
+                        separatedStrings = temporaryStrings.map( {
+                            $0.replacingOccurrences(of: e, with: "")
+                        } )
+                    }
+                    else {
+                        separatedStrings = temporaryStrings
+                    }
                     for string in separatedStrings {
                         if string.count > 0 {
                             if let value = parser(string) {
@@ -378,15 +404,16 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    
+    /// TODO: enclose elements in ""
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
     /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
+    /// - Parameter encloseElementsBy: Defaulf = nil
     /// - Throws: SSSwiftyStatsError if the file could not be written
-    public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
+    public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", encloseElementsBy: String? = nil, asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         var result = true
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath
@@ -419,7 +446,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                 }
             }
         }
-        if let s = elementsAsString(withDelimiter: separator, asRow: asRow) {
+        if let s = elementsAsString(withDelimiter: separator, asRow: asRow, encloseElementsBy: encloseElementsBy) {
             do {
                 try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
             }
@@ -506,7 +533,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Sets default values
+    /// # Danger!!
+    /// Sets default values, removes all items, reset all statistics.
     fileprivate func initializeSSExamine() {
         sequence.removeAll()
         items.removeAll()
@@ -517,9 +545,12 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         alpha = 0.05
         hasChanges = false
         isNumeric = true
+        aMean = nil
     }
     
-    //    // MARK: Codable protocol
+    // MARK: Codable protocol
+    
+    /// All the coding keys to encode
     private enum CodingKeys: String, CodingKey {
         case tag = "TAG"
         case name
@@ -540,6 +571,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         try container.encodeIfPresent(self.isNumeric, forKey: CodingKeys.isNumeric)
         try container.encodeIfPresent(self.elementsAsArray(sortOrder: .raw), forKey: CodingKeys.data)
     }
+    
     
     
     required public init(from decoder: Decoder) throws {
@@ -589,10 +621,12 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             cumRelFrequencies.removeAll()
             for key in temp {
                 if i == 0 {
-                    cumRelFrequencies[key] = relFrequencies[key]
+                    cumRelFrequencies[key] = rFrequency(key)
+//                    cumRelFrequencies[key] = relFrequencies[key]
                 }
                 else {
-                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + relFrequencies[key]!
+                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + rFrequency(key)
+//                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + relFrequencies[key]!
                 }
                 i = i + 1
             }
@@ -606,7 +640,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter item: Item to search
     public func contains(_ element: SSElement) -> Bool {
         if !isEmpty {
-            let test = items.contains(where: { (key: SSElement, value: Int) in
+            let test = items.contains(where: { (key: SSElement, value: Int) -> Bool in
                 if key == element {
                     return true
                 }
@@ -623,18 +657,25 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     
     /// Returns the relative Frequency of item
-    /// - Parameter item: Item
+    /// - Parameter element: Item
     public func rFrequency(_ element: SSElement) -> FPT {
-        if contains(element) {
-            return makeFP(self.elements[element]!) / makeFP(self.sampleSize)
+        //
+        if let rf = self.elements[element] {
+            return makeFP(rf) / makeFP(self.sampleSize)
         }
         else {
             return 0
         }
+//        if contains(element) {
+//            return makeFP(self.elements[element]!) / makeFP(self.sampleSize)
+//        }
+//        else {
+//            return 0
+//        }
     }
     
     /// Returns the absolute frequency of item
-    /// - Parameter item: Item
+    /// - Parameter element: Item
     public func frequency(_ element: SSElement) -> Int {
         if contains(element) {
             return items[element]!
@@ -645,7 +686,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     /// Appends <item> and updates frequencies
-    /// - Parameter item: Item
+    /// - Parameter element: Item
     public func append(_ element: SSElement) {
         var tempPos: Array<Int>
         let test = items.contains(where: { (key: SSElement, value: Int) in
@@ -661,30 +702,24 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             currentFrequency = items[element]! + 1
             items[element] = currentFrequency
             count = count + 1
-            // update relative frequencies
-            for (itm, freq) in items {
-//                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
-                relFrequencies[itm] = makeFP(freq) / makeFP(self.sampleSize)
-            }
             sequence[element]!.append(count)
         }
         else {
             items[element] = 1
             count = count + 1
-            for (itm, freq) in items {
-//                relFrequencies[itm] = Double(freq) / Double(self.sampleSize)
-                relFrequencies[itm] = makeFP(freq) / makeFP(self.sampleSize)
-            }
             tempPos = Array()
             tempPos.append(count)
             sequence[element] = tempPos
         }
+//        if self.isNotEmptyAndNumeric {
+//            updateDescriptives(withElement: makeFP(element))
+//        }
         updateCumulativeFrequencies()
     }
     
     /// Appends n elements
-    /// - Paramater n: Count of elements to add
-    /// - Parameter item: Item to append
+    /// - Parameter n: Count of elements to append
+    /// - Parameter elements: Item to append
     public func append(repeating n: Int, element: SSElement) {
         for _ in 1...n {
             append(element)
@@ -752,8 +787,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     /// Removes item from the table.
     /// - Parameter item: Item
-    /// - Parameter allOccurences: If false, only the first item found will be removed.
-    public func remove(_ element: SSElement, allOccurences all: Bool) {
+    /// - Parameter allOccurences: If false, only the first item found will be removed. Default: false
+    public func remove(_ element: SSElement, allOccurences all: Bool = false) {
         if !isEmpty {
             if contains(element) {
                 var temp: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
@@ -799,8 +834,10 @@ extension SSExamine {
     // MARK: Elements
     
     /// Returns all elements as one string. Elements are delimited by del.
-    /// Paramater del: The delimiter. Can be nil or empty.
-    public func elementsAsString(withDelimiter del: String?, asRow: Bool = true) -> String? {
+    /// - Parameter del: The delimiter. Can be nil or empty.
+    /// - Parameter asRow: If true, the parameter `del` will be omitted. The Name of the instance will ve used as header for the row
+    /// - Parameter encloseElementsBy: Default: nil.
+    public func elementsAsString(withDelimiter del: String?, asRow: Bool = true, encloseElementsBy: String? = nil) -> String? {
         let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
         var res: String = String()
         if !asRow {
@@ -809,19 +846,24 @@ extension SSExamine {
             }
         }
         for item in a {
-            res = res + "\(item)"
+            if let e = encloseElementsBy {
+                res = res + e + "\(item)" + e
+            }
+            else {
+                res = res + "\(item)"
+            }
             if asRow {
-                if let _ = del {
-                    res = res + del!
+                if let d = del {
+                    res = res + d
                 }
             }
             else {
                 res = res + "\n"
             }
         }
-        if let _ = del {
-            if del!.count > 0 {
-                for _ in 1...del!.count {
+        if let d = del {
+            if d.count > 0 {
+                for _ in 1...d.count {
                     res = String(res.dropLast())
                 }
             }
@@ -834,7 +876,7 @@ extension SSExamine {
         }
     }
     
-    /// Returns true, if index is valif
+    /// Returns true, if index is valid
     private func isValidIndex(index: Int) -> Bool {
         return index >= 0 && index < self.sampleSize
     }
@@ -842,13 +884,17 @@ extension SSExamine {
     
     /// Returns the indexed element
     subscript(_ index: Int) -> SSElement? {
-        assert(isValidIndex(index: index), "Index out of range")
-        if !self.isEmpty {
-            let a = self.elementsAsArray(sortOrder: .raw)!
-            return a[index]
+        if isValidIndex(index: index) {
+            if !self.isEmpty {
+                let a = self.elementsAsArray(sortOrder: .raw)!
+                return a[index]
+            }
+            else {
+                return nil
+            }
         }
         else {
-            return nil
+            fatalError("Index out of range")
         }
     }
     
@@ -891,7 +937,7 @@ extension SSExamine {
     }
     
     /// Returns an array containing all unique elements.
-    /// - Paramater sortOrder: Sorting order
+    /// - Parameter sortOrder: Sorting order
     public func uniqueElements(sortOrder: SSSortUniqeItems) -> Array<SSElement>? {
         var result: Array<SSElement>? = nil
         if !isEmpty {

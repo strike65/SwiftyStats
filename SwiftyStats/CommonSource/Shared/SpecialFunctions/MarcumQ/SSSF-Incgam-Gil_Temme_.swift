@@ -48,7 +48,7 @@ fileprivate func alfa<T: SSFloatingPoint>(_ x: T) -> T {
     return res
 }
 
-internal func gamstar<T: SSFloatingPoint>(_ x: T) -> T {
+fileprivate func gamstar<T: SSFloatingPoint>(_ x: T) -> T {
     //    !  {gamstar(x)=exp(stirling(x)), x>0 or }
     //    !  {gamma(x)/(exp(-x+(x-0.5)*ln(x))/sqrt(2pi)}
     var res: T
@@ -63,7 +63,7 @@ internal func gamstar<T: SSFloatingPoint>(_ x: T) -> T {
 }
 
 
-internal func stirling<T:SSFloatingPoint>(_ x: T) -> T {
+fileprivate func stirling<T:SSFloatingPoint>(_ x: T) -> T {
     //    !{Stirling series, function corresponding with}
     //    !{asymptotic series for log(gamma(x))}
     //    !{that is:  1/(12x)-1/(360x**3)... x>= 3}
@@ -135,7 +135,7 @@ internal func stirling<T:SSFloatingPoint>(_ x: T) -> T {
     return res
 }
 
-internal func exmin1minx<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
+fileprivate func exmin1minx<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
     // !{computes (exp(x)-1-x)/(0.5*x*x) }
     var t, t2, y: T
     var ex1, ex2: T
@@ -155,7 +155,7 @@ internal func exmin1minx<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
     return y
 }
 
-internal func lnec<T: SSFloatingPoint>(_ x: T) -> T {
+fileprivate func lnec<T: SSFloatingPoint>(_ x: T) -> T {
     //IMPLICIT NONE
     var ln1, y0, z, e2, r, s: T
     z = log1p1(x)

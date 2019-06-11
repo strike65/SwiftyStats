@@ -23,7 +23,7 @@
 
 import Foundation
 
-public func hermiteH<T: SSFloatingPoint & Codable>(ny: T, z: T) -> T {
+internal func hermiteH<T: SSFloatingPoint & Codable>(ny: T, z: T) -> T {
     let hyper1: T = hypergeometric1F1(a: -(ny / 2), b: T.half, x: pow1(z, 2))
     let hyper2: T = hypergeometric1F1(a: (1 - ny) / 2, b: makeFP(1.5), x: pow1(z, 2))
     let gamma1: T = tgamma1((1 - ny) / 2)
