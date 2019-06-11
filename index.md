@@ -1,7 +1,11 @@
 ![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.0.4-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
 
+Jump to [SwiftyStats at GitHub](https://github.com/strike65/SwiftyStats)
+===
+
 SwiftyStats
 ===========
+
 SwiftyStats is a framework written entirely in Swift that makes intensive use of generic types. SwiftyStats contains frequently used statistical procedures. 
 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity. Therefore different programming paradigms are used. Among other things, I decided to define probability functions as "free" functions. To avoid naming conflicts, the prefix `SwiftyStats` can be used.
