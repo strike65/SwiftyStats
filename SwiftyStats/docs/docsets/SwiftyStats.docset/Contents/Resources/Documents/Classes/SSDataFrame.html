@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SSDataFrame Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/SSDataFrame" class="dashAnchor"></a>
+
+    <a title="SSDataFrame Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftyStats Docs
+        </a>
+         (89% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftyStats Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      SSDataFrame Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSDataFrame.html">SSDataFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSExamine.html">SSExamine</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSHypothesisTesting.html">SSHypothesisTesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSSwiftyStatsError.html">SSSwiftyStatsError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSSwiftyStatsError/ErrorType.html">– ErrorType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SS1DChiSquareHypothesisType.html">SS1DChiSquareHypothesisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSAlternativeHypotheses.html">SSAlternativeHypotheses</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCDFTail.html">SSCDFTail</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCIType.html">SSCIType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSContingencyTableSortOrder.html">SSContingencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCumulativeFrequencyTableFormat.html">SSCumulativeFrequencyTableFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSDataArraySortOrder.html">SSDataArraySortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSESDTestType.html">SSESDTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSFrequencyTableSortOrder.html">SSFrequencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSGoFTarget.html">SSGoFTarget</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSIncompleteGammaFunction.html">SSIncompleteGammaFunction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSKurtosisType.html">SSKurtosisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSLevelOfMeasurement.html">SSLevelOfMeasurement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSLeveneTestType.html">SSLeveneTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSMomentType.html">SSMomentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSOutlierTest.html">SSOutlierTest</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSPostHocTestType.html">SSPostHocTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSRunsTestCuttingPoint.html">SSRunsTestCuttingPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSemiVariance.html">SSSemiVariance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSkewness.html">SSSkewness</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSortUniqeItems.html">SSSortUniqeItems</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSStandardDeviationType.html">SSStandardDeviationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSVarTestType.html">SSVarTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSVarianceType.html">SSVarianceType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Float.html">Float</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Float80.html">Float80</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfBetaDist1x6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfBetaDist(x:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfBetaDist1x6shapeA0F1B6lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfBetaDist(x:shapeA:shapeB:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23cdfBinomialDistribution1k1n11probability4tailxSi_SixAA9SSCDFTailOtSeRzSERzAA15SSFloatingPointRzlF">cdfBinomialDistribution(k:n:probability:tail:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfCauchyDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfCauchyDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16cdfChiSquareDist3chi16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfChiSquareDist(chi:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16cdfChiSquareDist3chi16degreesOfFreedom4tail4rlogxx_xAA9SSCDFTailOSbtKSeRzSERzAA15SSFloatingPointRzlF">cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfErlangDist1x5shape4ratexx_SuxtKSeRzSERzAA15SSFloatingPointRzlF">cdfErlangDist(x:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18cdfExponentialDist1x6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfExponentialDist(x:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18cdfExtremValueDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfExtremValueDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfFRatioDist1f11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfFRatioDist(f:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfFRatioDist1f11numeratorDF011denominatorG06lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12cdfGammaDist1x5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfGammaDist(x:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20cdfInverseNormalDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfInverseNormalDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfLaplaceDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLaplaceDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12cdfLogNormal1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLogNormal(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfLogisticDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLogisticDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfNormalDist1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfNormalDist(x:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfParetoDist1x7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfParetoDist(x:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfPoissonDist1k4rate4tailxSi_xAA9SSCDFTailOtKSeRzSERzAA15SSFloatingPointRzlF">cdfPoissonDist(k:rate:tail:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfRayleighDist1x5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfRayleighDist(x:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21cdfStandardNormalDist1uxx_tSeRzSERzAA15SSFloatingPointRzlF">cdfStandardNormalDist(u:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfStudentTDist1t16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfStudentTDist(t:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfStudentTDist1t16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">cdfStudentTDist(t:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17cdfTriangularDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfTriangularDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17cdfTriangularDist1x10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfTriangularDist(x:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfUniformDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfUniformDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfVonMisesDist1x4mean13concentration17useExpIntegrationS2dSg_A2GSbtKF">cdfVonMisesDist(x:mean:concentration:useExpIntegration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfWaldDist1x4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfWaldDist(x:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfWeibullDist1x8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfWeibullDist(x:location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats5logit1pxx_tKSeRzSERzAA15SSFloatingPointRzlF">logit(p:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12paraBetaDist6shapeA0F1BAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraBetaDist(shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraCauchyDist8location5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraCauchyDist(location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraChiSquareDist16degreesOfFreedomAA010SSContProbF6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraChiSquareDist(degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraChiSquareDist16degreesOfFreedom6lambdaAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraChiSquareDist(degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraErlangDist5shape4rateAA010SSContProbE6ParamsVyxGSu_xtKSeRzSERzAA15SSFloatingPointRzlF">paraErlangDist(shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19paraExponentialDist6lambdaAA010SSContProbE6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraExponentialDist(lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19paraExtremValueDist8location5scaleAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraExtremValueDist(location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraFRatioDist11numeratorDF011denominatorG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraFRatioDist(numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraFRatioDist11numeratorDF011denominatorG06lambdaAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraFRatioDist(numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13paraGammaDist5shape5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraGammaDist(shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21paraInverseNormalDist4mean6lamdbaAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraInverseNormalDist(mean:lamdba:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraLaplaceDist4mean5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLaplaceDist(mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraLogNormalDist4mean8varianceAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLogNormalDist(mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraLogisticDist4mean5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLogisticDist(mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22paraNormalDistribution4mean17standardDeviationAA20SSContProbDistParamsVyxGSgx_xtSeRzSERzAA15SSFloatingPointRzlF">paraNormalDistribution(mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraParetoDist7minimum5shapeAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraParetoDist(minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraRayleighDist5scaleAA010SSContProbE6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraRayleighDist(scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraStudentTDist16degreesOfFreedomAA20SSContProbDistParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraStudentTDist(degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraStudentTDist16degreesOfFreedom17nonCentralityParaAA20SSContProbDistParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraStudentTDist(degreesOfFreedom:nonCentralityPara:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18paraTriangularDist10lowerBound05upperG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraTriangularDist(lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18paraTriangularDist10lowerBound05upperG04modeAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraTriangularDist(lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraUniformDist10lowerBound05upperG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraUniformDist(lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraVonMisesDist4mean13concentrationAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraVonMisesDist(mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12paraWaldDist4mean6lambdaAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraWaldDist(mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraWeibullDist8location5scale5shapeAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraWeibullDist(location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfBetaDist1x6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfBetaDist(x:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfBetaDist1x6shapeA0F1B6lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfBetaDist(x:shapeA:shapeB:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23pdfBinomialDistribution1k1n11probabilityxSi_SixtSeRzSERzAA15SSFloatingPointRzlF">pdfBinomialDistribution(k:n:probability:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfCauchyDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfCauchyDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfChiSquareDist3chi16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfChiSquareDist(chi:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfChiSquareDist3chi16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfChiSquareDist(chi:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfErlangDist1x5shape4ratexx_SuxtKSeRzSERzAA15SSFloatingPointRzlF">pdfErlangDist(x:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18pdfExponentialDist1x6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfExponentialDist(x:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18pdfExtremValueDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfExtremValueDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfFRatioDist1f11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfFRatioDist(f:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfFRatioDist1f11numeratorDF011denominatorG06lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12pdfGammaDist1x5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfGammaDist(x:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20pdfInverseNormalDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfInverseNormalDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfLaplaceDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLaplaceDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfLogNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLogNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfLogisticDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLogisticDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfNormalDist1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfNormalDist(x:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfParetoDist1x7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfParetoDist(x:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfPoissonDist1k4ratexSi_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfPoissonDist(k:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfRayleighDist1x5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfRayleighDist(x:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21pdfStandardNormalDist1uxxSg_tSeRzSERzAA15SSFloatingPointRzlF">pdfStandardNormalDist(u:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfStudentTDist1t16degreesOfFreedom4rlogxx_xSbSgtKSeRzSERzAA15SSFloatingPointRzlF">pdfStudentTDist(t:degreesOfFreedom:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfStudentTDist1x16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">pdfStudentTDist(x:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17pdfTriangularDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfTriangularDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17pdfTriangularDist1x10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfTriangularDist(x:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfUniformDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfUniformDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfVonMisesDist1x4mean13concentrationS2dSg_A2FtKF">pdfVonMisesDist(x:mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfWaldDist1x4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfWaldDist(x:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfWeibullDist1x8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfWeibullDist(x:location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16quantileBetaDist1p6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileBetaDist(p:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileCauchyDist1p8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileCauchyDist(p:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21quantileChiSquareDist1p16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileChiSquareDist(p:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21quantileChiSquareDist1p16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileChiSquareDist(p:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileErlangDist1p5shape4ratexx_SuSgxtKSeRzSERzAA15SSFloatingPointRzlF">quantileErlangDist(p:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23quantileExponentialDist1p6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileExponentialDist(p:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23quantileExtremValueDist1p8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileExtremValueDist(p:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileFRatioDist1p11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileFRatioDist(p:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17quantileGammaDist1p5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileGammaDist(p:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats25quantileInverseNormalDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileInverseNormalDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileLaplaceDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLaplaceDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17quantileLogNormal1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLogNormal(p:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileLogisticDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLogisticDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileNormalDist1p4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileNormalDist(p:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileNormalDist1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileNormalDist(p:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileParetoDist1p7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileParetoDist(p:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileRayleighDist1p5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileRayleighDist(p:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats26quantileStandardNormalDist1pxx_tKSeRzSERzAA15SSFloatingPointRzlF">quantileStandardNormalDist(p:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileStudentTDist1p16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileStudentTDist(p:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileStudentTDist1p16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">quantileStudentTDist(p:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22quantileTriangularDist1p10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileTriangularDist(p:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22quantileTriangularDist1p10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">quantileTriangularDist(p:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileUniformDist1p10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileUniformDist(p:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileVonMisesDist1p4mean13concentrationS2dSg_A2FtKF">quantileVonMisesDist(p:mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16quantileWaldDist1p4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileWaldDist(p:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileWeibullDist1p8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">quantileWeibullDist(p:location:scale:shape:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSComplexFloat.html">SSComplexFloat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSComplexNumeric.html">SSComplexNumeric</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSDataFrameContainer.html">SSDataFrameContainer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSExamineContainer.html">SSExamineContainer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Complex.html">Complex</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Complex/CodingKeys.html">– CodingKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SS2SampleTTestResult.html">SS2SampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSADTestResult.html">SSADTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBinomialTestResult.html">SSBinomialTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBoxLjungResult.html">SSBoxLjungResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBoxWhisker.html">SSBoxWhisker</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSChiSquareVarianceTestResult.html">SSChiSquareVarianceTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSConfIntv.html">SSConfIntv</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSContProbDistParams.html">SSContProbDistParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSCrosstab.html">SSCrosstab</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSCumulativeFrequencyTableItem.html">SSCumulativeFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSDescriptiveStats.html">SSDescriptiveStats</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSESDTestResult.html">SSESDTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSFTestResult.html">SSFTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSFrequencyTableItem.html">SSFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSGrubbsTestResult.html">SSGrubbsTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKSTestResult.html">SSKSTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKSTwoSampleTestResult.html">SSKSTwoSampleTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKruskalWallisHTestResult.html">SSKruskalWallisHTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSMannWhitneyUTestResult.html">SSMannWhitneyUTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSMatchedPairsTTestResult.html">SSMatchedPairsTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSOneSampleTTestResult.html">SSOneSampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSQuartile.html">SSQuartile</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSRunsTestResult.html">SSRunsTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSSignTestRestult.html">SSSignTestRestult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSWaldWolfowitzTwoSampleTestResult.html">SSWaldWolfowitzTwoSampleTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSWilcoxonMatchedPairsTestResult.html">SSWilcoxonMatchedPairsTestResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats21SSComplexFloatElementa">SSComplexFloatElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats19SSPostHocTestResulta">SSPostHocTestResult</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>SSDataFrame</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt">NSMutableCopying</span><span class="p">,</span> <span class="kt"><a href="../Protocols/SSDataFrameContainer.html">SSDataFrameContainer</a></span> <span class="k">where</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Defines a structure holding multiple SSExamine objects:
+Each column contains an SSExamine object.</p>
+
+<p>Each COL represents a single SSExamine object. The structure of the dataframe is like a two-dimensional table:</p>
+
+<p>With N = sampleSize:</p>
+<pre class="highlight swift"><code><span class="o">&lt;</span>          <span class="kt">COL</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>      <span class="kt">COL</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     <span class="o">...</span>  <span class="kt">COL</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span>
+<span class="n">tags</span>       <span class="n">tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     <span class="n">tags</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    <span class="o">...</span>  <span class="n">tags</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">cnames</span>     <span class="n">cnames</span><span class="p">[</span><span class="mi">0</span>    <span class="n">cnames</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="o">...</span>  <span class="n">cnames</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="kt">ROW0</span>       <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">...</span>  <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="kt">ROW1</span>       <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">...</span>  <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="o">...</span>        <span class="o">..........</span>  <span class="o">..........</span> <span class="o">...</span>  <span class="o">....................</span>
+<span class="kt">ROWN</span>       <span class="n">data</span><span class="p">[</span><span class="kt">N</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data</span><span class="p">[</span><span class="kt">N</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">...</span>  <span class="n">data</span><span class="p">[</span><span class="kt">N</span><span class="p">][</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC6encode2toys7Encoder_p_tKF"></a>
+                    <a name="//apple_ref/swift/Method/encode(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6encode2toys7Encoder_p_tKF">encode(to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Required func to conform to Codable protocol</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">encode</span><span class="p">(</span><span class="n">to</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt">Encoder</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC4fromACyxq_Gs7Decoder_p_tKcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4fromACyxq_Gs7Decoder_p_tKcfc">init(from:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Required func to conform to Codable protocol</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">(</span><span class="n">from</span> <span class="nv">decoder</span><span class="p">:</span> <span class="kt">Decoder</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF"></a>
+                    <a name="//apple_ref/swift/Method/archiveTo(filePath:overwrite:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF">archiveTo(filePath:overwrite:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Saves the dataframe to filePath using JSONEncoder</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.posixError (file can&rsquo;t be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">archiveTo</span><span class="p">(</span><span class="n">filePath</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The full qualified filename.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true, file will be overwritten.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC13unarchiveFrom8filePathACyxq_GSgSSSg_tKFZ"></a>
+                    <a name="//apple_ref/swift/Method/unarchiveFrom(filePath:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC13unarchiveFrom8filePathACyxq_GSgSSSg_tKFZ">unarchiveFrom(filePath:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a new dataframe from an archive saved by archiveTo(filePath path:overwrite:).</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatError.fileNotReadable
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">unarchiveFrom</span><span class="p">(</span><span class="n">filePath</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The full qualified filename.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC8examinesSayAA9SSExamineCyxq_GGvp"></a>
+                    <a name="//apple_ref/swift/Property/examines" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC8examinesSayAA9SSExamineCyxq_GGvp">examines</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Array containing all SSExamine objects</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">examines</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC10sampleSizeSivp"></a>
+                    <a name="//apple_ref/swift/Property/sampleSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC10sampleSizeSivp">sampleSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Number of rows per column (= sample size)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sampleSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC7isEqualySbypSgF"></a>
+                    <a name="//apple_ref/swift/Method/isEqual(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC7isEqualySbypSgF">isEqual(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the receiver is equal to <code>object</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">isEqual</span><span class="p">(</span><span class="n">_</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC14countOfSamplesSivp"></a>
+                    <a name="//apple_ref/swift/Property/countOfSamples" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC14countOfSamplesSivp">countOfSamples</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Number of samples (Same as <code><a href="../Classes/SSDataFrame.html#/s:11SwiftyStats11SSDataFrameC7columnsSivp">columns</a></code>)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">countOfSamples</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC7columnsSivp"></a>
+                    <a name="//apple_ref/swift/Property/columns" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC7columnsSivp">columns</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Number of samples (Same as <code><a href="../Classes/SSDataFrame.html#/s:11SwiftyStats11SSDataFrameC14countOfSamplesSivp">countOfSamples</a></code>)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">columns</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC7isEmptySbvp"></a>
+                    <a name="//apple_ref/swift/Property/isEmpty" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC7isEmptySbvp">isEmpty</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true, if the receiver is empty (i.e. there are no data)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isEmpty</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameCACyxq_Gycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCACyxq_Gycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Required initializer</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC6append_4nameyAA9SSExamineCyxq_G_SSSgtKF"></a>
+                    <a name="//apple_ref/swift/Method/append(_:name:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6append_4nameyAA9SSExamineCyxq_G_SSSgtKF">append(_:name:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Appends a column</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError examine.sampleSize != self.rows
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">append</span><span class="p">(</span><span class="n">_</span> <span class="nv">examine</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>examine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The SSExamine object</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Name of column</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC9removeAllyyF"></a>
+                    <a name="//apple_ref/swift/Method/removeAll()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9removeAllyyF">removeAll()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes all columns</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeAll</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC6remove4nameAA9SSExamineCyxq_GSgSSSg_tF"></a>
+                    <a name="//apple_ref/swift/Method/remove(name:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6remove4nameAA9SSExamineCyxq_GSgSSSg_tF">remove(name:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes a column</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">remove</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Name of column</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the removed column oe nil</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC3row2atSayxGSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/row(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC3row2atSayxGSi_tF">row(at:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the row at a given index</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">row</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSicip"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSicip">subscript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Accesses the column at a given index</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">idx</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSScip"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSScip">subscript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Accesses the column named <code>name</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/SSExamine.html">SSExamine</a></span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/NSCoding%20protocol"></a>
+                <a name="//apple_ref/swift/Section/NSCoding protocol" class="dashAnchor"></a>
+                <a href="#/NSCoding%20protocol">
+                  <h3 class="section-name">NSCoding protocol</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF"></a>
+                    <a name="//apple_ref/swift/Method/copy(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a new instance that’s a copy of the receiver.</p>
+
+<p>The returned object is implicitly retained by the sender, who is responsible for releasing it. The copy returned is immutable if the consideration “immutable vs. mutable” applies to the receiving object; otherwise the exact nature of the copy is determined by the class.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">copy</span><span class="p">(</span><span class="n">with</span> <span class="nv">zone</span><span class="p">:</span> <span class="kt">NSZone</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>zone</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>This parameter is ignored. Memory zones are no longer used by Objective-C.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF"></a>
+                    <a name="//apple_ref/swift/Method/mutableCopy(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF">mutableCopy(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a new instance that’s a mutable copy of the receiver.</p>
+
+<p>The returned object is implicitly retained by the sender, who is responsible for releasing it. The copy returned is immutable if the consideration “immutable vs. mutable” applies to the receiving object; otherwise the exact nature of the copy is determined by the class. In fact, that functions does the same as <code><a href="../Classes/SSDataFrame.html#/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:)</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">mutableCopy</span><span class="p">(</span><span class="n">with</span> <span class="nv">zone</span><span class="p">:</span> <span class="kt">NSZone</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>zone</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>This parameter is ignored. Memory zones are no longer used by Objective-C.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC11mutableCopyypyF"></a>
+                    <a name="//apple_ref/swift/Method/mutableCopy()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC11mutableCopyypyF">mutableCopy()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the object returned by <code><a href="../Classes/SSDataFrame.html#/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF">mutableCopy(with:)</a></code> where the <code>zone</code> is nil.</p>
+
+<p>This is a convenience method for classes that adopt the NSMutableCopying protocol. An exception is raised if there is no implementation for <code><a href="../Classes/SSDataFrame.html#/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF">mutableCopy(with:)</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">mutableCopy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC4copyypyF"></a>
+                    <a name="//apple_ref/swift/Method/copy()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4copyypyF">copy()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the object returned by <code>copy(with:) where the</code>zone` is nil.</p>
+
+<p>This is a convenience method for classes that adopt the NSCopying protocol. An exception is raised if there is no implementation for copy(with:). NSObject does not itself support the NSCopying protocol. Subclasses must support the protocol and implement the copy(with:) method. A subclass version of the copy(with:) method should send the message to super first, to incorporate its implementation, unless the subclass descends directly from NSObject.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">copy</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC9exportCSV4path9separator9useQuotes20firstRowAsColumnName9overwrite14stringEncoding10atomicallySbSSSg_SSS3bSS10FoundationE0R0VSbtKF"></a>
+                    <a name="//apple_ref/swift/Method/exportCSV(path:separator:useQuotes:firstRowAsColumnName:overwrite:stringEncoding:atomically:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9exportCSV4path9separator9useQuotes20firstRowAsColumnName9overwrite14stringEncoding10atomicallySbSSSg_SSS3bSS10FoundationE0R0VSbtKF">exportCSV(path:separator:useQuotes:firstRowAsColumnName:overwrite:stringEncoding:atomically:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Exports the dataframe as csv</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">exportCSV</span><span class="p">(</span><span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">separator</span> <span class="nv">sep</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">","</span><span class="p">,</span> <span class="nv">useQuotes</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">firstRowAsColumnName</span> <span class="nv">cn</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">stringEncoding</span> <span class="nv">enc</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Encoding</span> <span class="o">=</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Encoding</span><span class="o">.</span><span class="n">utf8</span><span class="p">,</span> <span class="nv">atomically</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The full path</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>atomically</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Write atomically</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>firstRowAsColumnName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true, the row name is equal to the exported SSExamine object. If this object hasn&rsquo;t a name, an auto incremented integer is used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>useQuotes</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true all fields will be enclosed by quotation marks</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true an existing file will be overwritten</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>stringEncoding</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Encoding</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>True if the file was successfully written.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC04dataD010fromString9separator21firstRowContainsNames6parserACyxq_GSSSg_AJSbxSgSSXEtKFZ"></a>
+                    <a name="//apple_ref/swift/Method/dataFrame(fromString:separator:firstRowContainsNames:parser:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD010fromString9separator21firstRowContainsNames6parserACyxq_GSSSg_AJSbxSgSSXEtKFZ">dataFrame(fromString:separator:firstRowContainsNames:parser:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a new DataFrame instance.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if the file doesn&rsquo;t exist or can&rsquo;t be accessed
+
+</div>
+
+<p>The following example creates a DataFrame object with 4 columns:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">dataString</span> <span class="o">=</span> <span class="s">"Group 1,Group 2,Group 3,Group 4</span><span class="se">\n</span><span class="s">6.9,8.3,8.0,5.8</span><span class="se">\n</span><span class="s">5.4,6.8,10.5,3.8</span><span class="se">\n</span><span class="s">5.8,7.8,8.1,6.1</span><span class="se">\n</span><span class="s">4.6,9.2,6.9,5.6</span><span class="se">\n</span><span class="s">4.0,6.5,9.3,6.2"</span>
+<span class="k">var</span> <span class="nv">df</span><span class="p">:</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="o">&gt;</span>
+<span class="k">do</span> <span class="p">{</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">SSDataFrame</span><span class="o">.</span><span class="nf">dataFrame</span><span class="p">(</span><span class="nv">fromString</span><span class="p">:</span> <span class="kt">TukeyKramerData_01String</span><span class="p">,</span> <span class="nv">parser</span><span class="p">:</span> <span class="n">scanDouble</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">dataFrame</span><span class="p">(</span><span class="nv">fromString</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">separator</span> <span class="nv">sep</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">","</span><span class="p">,</span> <span class="n">firstRowContainsNames</span> <span class="nv">cn</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">parser</span><span class="p">:</span> <span class="p">(</span><span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SSElement</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromString</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A string of objects (mostly numbers) separated by <code>separator</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>separator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The separator (delimiter) used. Default = <q>,</q></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>firstRowContainsNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Indicates, that the first line contains Column Identifiers.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parser</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function to convert a string to the expected generic type</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats11SSDataFrameC04dataD08fromFile9separator21firstRowContainsNames14stringEncoding_ACyxq_GSSSg_AJSbSS10FoundationE0N0VSgxSgSSXEtKFZ"></a>
+                    <a name="//apple_ref/swift/Method/dataFrame(fromFile:separator:firstRowContainsNames:stringEncoding:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD08fromFile9separator21firstRowContainsNames14stringEncoding_ACyxq_GSSSg_AJSbSS10FoundationE0N0VSgxSgSSXEtKFZ">dataFrame(fromFile:separator:firstRowContainsNames:stringEncoding:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Loads the content of a file using the specified encoding.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if the file doesn&rsquo;t exist or can&rsquo;t be accessed
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">dataFrame</span><span class="p">(</span><span class="n">fromFile</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="n">separator</span> <span class="nv">sep</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">","</span><span class="p">,</span> <span class="n">firstRowContainsNames</span> <span class="nv">cn</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">stringEncoding</span><span class="p">:</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Encoding</span><span class="o">!</span> <span class="o">=</span> <span class="kt">String</span><span class="o">.</span><span class="kt">Encoding</span><span class="o">.</span><span class="n">utf8</span><span class="p">,</span> <span class="n">_</span> <span class="nv">parser</span><span class="p">:</span> <span class="p">(</span><span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">SSElement</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The path to the file (e.g. ~/data/data.dat)</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>separator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The separator used in the file</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>firstRowContainsNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Indicates, that the first line contains Column Identifiers.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>stringEncoding</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encoding to use.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parser</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function to convert a string to the expected generic type</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-11)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

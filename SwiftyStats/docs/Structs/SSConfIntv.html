@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SSConfIntv Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Struct/SSConfIntv" class="dashAnchor"></a>
+
+    <a title="SSConfIntv Structure Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          SwiftyStats Docs
+        </a>
+         (89% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">SwiftyStats Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      SSConfIntv Structure Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSDataFrame.html">SSDataFrame</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSExamine.html">SSExamine</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSHypothesisTesting.html">SSHypothesisTesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSSwiftyStatsError.html">SSSwiftyStatsError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/SSSwiftyStatsError/ErrorType.html">– ErrorType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SS1DChiSquareHypothesisType.html">SS1DChiSquareHypothesisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSAlternativeHypotheses.html">SSAlternativeHypotheses</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCDFTail.html">SSCDFTail</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCIType.html">SSCIType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSContingencyTableSortOrder.html">SSContingencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSCumulativeFrequencyTableFormat.html">SSCumulativeFrequencyTableFormat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSDataArraySortOrder.html">SSDataArraySortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSESDTestType.html">SSESDTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSFrequencyTableSortOrder.html">SSFrequencyTableSortOrder</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSGoFTarget.html">SSGoFTarget</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSIncompleteGammaFunction.html">SSIncompleteGammaFunction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSKurtosisType.html">SSKurtosisType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSLevelOfMeasurement.html">SSLevelOfMeasurement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSLeveneTestType.html">SSLeveneTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSMomentType.html">SSMomentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSOutlierTest.html">SSOutlierTest</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSPostHocTestType.html">SSPostHocTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSRunsTestCuttingPoint.html">SSRunsTestCuttingPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSemiVariance.html">SSSemiVariance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSkewness.html">SSSkewness</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSSortUniqeItems.html">SSSortUniqeItems</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSStandardDeviationType.html">SSStandardDeviationType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSVarTestType.html">SSVarTestType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SSVarianceType.html">SSVarianceType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Float.html">Float</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Float80.html">Float80</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfBetaDist1x6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfBetaDist(x:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfBetaDist1x6shapeA0F1B6lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfBetaDist(x:shapeA:shapeB:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23cdfBinomialDistribution1k1n11probability4tailxSi_SixAA9SSCDFTailOtSeRzSERzAA15SSFloatingPointRzlF">cdfBinomialDistribution(k:n:probability:tail:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfCauchyDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfCauchyDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16cdfChiSquareDist3chi16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfChiSquareDist(chi:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16cdfChiSquareDist3chi16degreesOfFreedom4tail4rlogxx_xAA9SSCDFTailOSbtKSeRzSERzAA15SSFloatingPointRzlF">cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfErlangDist1x5shape4ratexx_SuxtKSeRzSERzAA15SSFloatingPointRzlF">cdfErlangDist(x:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18cdfExponentialDist1x6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfExponentialDist(x:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18cdfExtremValueDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfExtremValueDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfFRatioDist1f11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfFRatioDist(f:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfFRatioDist1f11numeratorDF011denominatorG06lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12cdfGammaDist1x5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfGammaDist(x:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20cdfInverseNormalDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfInverseNormalDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfLaplaceDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLaplaceDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12cdfLogNormal1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLogNormal(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfLogisticDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfLogisticDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfNormalDist1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfNormalDist(x:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13cdfParetoDist1x7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfParetoDist(x:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfPoissonDist1k4rate4tailxSi_xAA9SSCDFTailOtKSeRzSERzAA15SSFloatingPointRzlF">cdfPoissonDist(k:rate:tail:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfRayleighDist1x5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfRayleighDist(x:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21cdfStandardNormalDist1uxx_tSeRzSERzAA15SSFloatingPointRzlF">cdfStandardNormalDist(u:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfStudentTDist1t16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">cdfStudentTDist(t:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfStudentTDist1t16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">cdfStudentTDist(t:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17cdfTriangularDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfTriangularDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17cdfTriangularDist1x10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfTriangularDist(x:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfUniformDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfUniformDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15cdfVonMisesDist1x4mean13concentration17useExpIntegrationS2dSg_A2GSbtKF">cdfVonMisesDist(x:mean:concentration:useExpIntegration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11cdfWaldDist1x4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">cdfWaldDist(x:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14cdfWeibullDist1x8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">cdfWeibullDist(x:location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats5logit1pxx_tKSeRzSERzAA15SSFloatingPointRzlF">logit(p:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12paraBetaDist6shapeA0F1BAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraBetaDist(shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraCauchyDist8location5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraCauchyDist(location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraChiSquareDist16degreesOfFreedomAA010SSContProbF6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraChiSquareDist(degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraChiSquareDist16degreesOfFreedom6lambdaAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraChiSquareDist(degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraErlangDist5shape4rateAA010SSContProbE6ParamsVyxGSu_xtKSeRzSERzAA15SSFloatingPointRzlF">paraErlangDist(shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19paraExponentialDist6lambdaAA010SSContProbE6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraExponentialDist(lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19paraExtremValueDist8location5scaleAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraExtremValueDist(location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraFRatioDist11numeratorDF011denominatorG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraFRatioDist(numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraFRatioDist11numeratorDF011denominatorG06lambdaAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraFRatioDist(numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13paraGammaDist5shape5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraGammaDist(shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21paraInverseNormalDist4mean6lamdbaAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraInverseNormalDist(mean:lamdba:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraLaplaceDist4mean5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLaplaceDist(mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17paraLogNormalDist4mean8varianceAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLogNormalDist(mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraLogisticDist4mean5scaleAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraLogisticDist(mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22paraNormalDistribution4mean17standardDeviationAA20SSContProbDistParamsVyxGSgx_xtSeRzSERzAA15SSFloatingPointRzlF">paraNormalDistribution(mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14paraParetoDist7minimum5shapeAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraParetoDist(minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraRayleighDist5scaleAA010SSContProbE6ParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraRayleighDist(scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraStudentTDist16degreesOfFreedomAA20SSContProbDistParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraStudentTDist(degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraStudentTDist16degreesOfFreedom17nonCentralityParaAA20SSContProbDistParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraStudentTDist(degreesOfFreedom:nonCentralityPara:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18paraTriangularDist10lowerBound05upperG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraTriangularDist(lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18paraTriangularDist10lowerBound05upperG04modeAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraTriangularDist(lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraUniformDist10lowerBound05upperG0AA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraUniformDist(lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16paraVonMisesDist4mean13concentrationAA010SSContProbF6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraVonMisesDist(mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12paraWaldDist4mean6lambdaAA010SSContProbE6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlF">paraWaldDist(mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15paraWeibullDist8location5scale5shapeAA010SSContProbE6ParamsVyxGx_xxtKSeRzSERzAA15SSFloatingPointRzlF">paraWeibullDist(location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfBetaDist1x6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfBetaDist(x:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfBetaDist1x6shapeA0F1B6lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfBetaDist(x:shapeA:shapeB:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23pdfBinomialDistribution1k1n11probabilityxSi_SixtSeRzSERzAA15SSFloatingPointRzlF">pdfBinomialDistribution(k:n:probability:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfCauchyDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfCauchyDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfChiSquareDist3chi16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfChiSquareDist(chi:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfChiSquareDist3chi16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfChiSquareDist(chi:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfErlangDist1x5shape4ratexx_SuxtKSeRzSERzAA15SSFloatingPointRzlF">pdfErlangDist(x:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18pdfExponentialDist1x6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfExponentialDist(x:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18pdfExtremValueDist1x8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfExtremValueDist(x:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfFRatioDist1f11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfFRatioDist(f:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfFRatioDist1f11numeratorDF011denominatorG06lambdaxx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats12pdfGammaDist1x5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfGammaDist(x:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20pdfInverseNormalDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfInverseNormalDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfLaplaceDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLaplaceDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16pdfLogNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLogNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfLogisticDist1x4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfLogisticDist(x:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfNormalDist1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfNormalDist(x:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfNormalDist1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfNormalDist(x:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats13pdfParetoDist1x7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfParetoDist(x:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfPoissonDist1k4ratexSi_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfPoissonDist(k:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfRayleighDist1x5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">pdfRayleighDist(x:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21pdfStandardNormalDist1uxxSg_tSeRzSERzAA15SSFloatingPointRzlF">pdfStandardNormalDist(u:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfStudentTDist1t16degreesOfFreedom4rlogxx_xSbSgtKSeRzSERzAA15SSFloatingPointRzlF">pdfStudentTDist(t:degreesOfFreedom:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfStudentTDist1x16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">pdfStudentTDist(x:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17pdfTriangularDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfTriangularDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17pdfTriangularDist1x10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfTriangularDist(x:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfUniformDist1x10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfUniformDist(x:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats15pdfVonMisesDist1x4mean13concentrationS2dSg_A2FtKF">pdfVonMisesDist(x:mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats11pdfWaldDist1x4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">pdfWaldDist(x:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats14pdfWeibullDist1x8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">pdfWeibullDist(x:location:scale:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16quantileBetaDist1p6shapeA0F1Bxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileBetaDist(p:shapeA:shapeB:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileCauchyDist1p8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileCauchyDist(p:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21quantileChiSquareDist1p16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileChiSquareDist(p:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats21quantileChiSquareDist1p16degreesOfFreedom6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileChiSquareDist(p:degreesOfFreedom:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileErlangDist1p5shape4ratexx_SuSgxtKSeRzSERzAA15SSFloatingPointRzlF">quantileErlangDist(p:shape:rate:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23quantileExponentialDist1p6lambdaxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileExponentialDist(p:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats23quantileExtremValueDist1p8location5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileExtremValueDist(p:location:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileFRatioDist1p11numeratorDF011denominatorG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileFRatioDist(p:numeratorDF:denominatorDF:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17quantileGammaDist1p5shape5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileGammaDist(p:shape:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats25quantileInverseNormalDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileInverseNormalDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileLaplaceDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLaplaceDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats17quantileLogNormal1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLogNormal(p:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileLogisticDist1p4mean5scalexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileLogisticDist(p:mean:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileNormalDist1p4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileNormalDist(p:mean:standardDeviation:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileNormalDist1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileNormalDist(p:mean:variance:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats18quantileParetoDist1p7minimum5shapexx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileParetoDist(p:minimum:shape:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileRayleighDist1p5scalexx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileRayleighDist(p:scale:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats26quantileStandardNormalDist1pxx_tKSeRzSERzAA15SSFloatingPointRzlF">quantileStandardNormalDist(p:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileStudentTDist1p16degreesOfFreedomxx_xtKSeRzSERzAA15SSFloatingPointRzlF">quantileStudentTDist(p:degreesOfFreedom:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileStudentTDist1p16degreesOfFreedom17nonCentralityPara4rlogxx_xxSbSgtKSeRzSERzAA15SSFloatingPointRzlF">quantileStudentTDist(p:degreesOfFreedom:nonCentralityPara:rlog:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22quantileTriangularDist1p10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileTriangularDist(p:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats22quantileTriangularDist1p10lowerBound05upperG04modexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">quantileTriangularDist(p:lowerBound:upperBound:mode:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileUniformDist1p10lowerBound05upperG0xx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileUniformDist(p:lowerBound:upperBound:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats20quantileVonMisesDist1p4mean13concentrationS2dSg_A2FtKF">quantileVonMisesDist(p:mean:concentration:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats16quantileWaldDist1p4mean6lambdaxx_xxtKSeRzSERzAA15SSFloatingPointRzlF">quantileWaldDist(p:mean:lambda:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:11SwiftyStats19quantileWeibullDist1p8location5scale5shapexx_xxxtKSeRzSERzAA15SSFloatingPointRzlF">quantileWeibullDist(p:location:scale:shape:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSComplexFloat.html">SSComplexFloat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSComplexNumeric.html">SSComplexNumeric</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSDataFrameContainer.html">SSDataFrameContainer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSExamineContainer.html">SSExamineContainer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Complex.html">Complex</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Complex/CodingKeys.html">– CodingKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SS2SampleTTestResult.html">SS2SampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSADTestResult.html">SSADTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBinomialTestResult.html">SSBinomialTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBoxLjungResult.html">SSBoxLjungResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSBoxWhisker.html">SSBoxWhisker</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSChiSquareVarianceTestResult.html">SSChiSquareVarianceTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSConfIntv.html">SSConfIntv</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSContProbDistParams.html">SSContProbDistParams</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSCrosstab.html">SSCrosstab</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSCumulativeFrequencyTableItem.html">SSCumulativeFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSDescriptiveStats.html">SSDescriptiveStats</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSESDTestResult.html">SSESDTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSFTestResult.html">SSFTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSFrequencyTableItem.html">SSFrequencyTableItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSGrubbsTestResult.html">SSGrubbsTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKSTestResult.html">SSKSTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKSTwoSampleTestResult.html">SSKSTwoSampleTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSKruskalWallisHTestResult.html">SSKruskalWallisHTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSMannWhitneyUTestResult.html">SSMannWhitneyUTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSMatchedPairsTTestResult.html">SSMatchedPairsTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSOneSampleTTestResult.html">SSOneSampleTTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSQuartile.html">SSQuartile</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSRunsTestResult.html">SSRunsTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSSignTestRestult.html">SSSignTestRestult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSVarianceEqualityTestResult.html">SSVarianceEqualityTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSWaldWolfowitzTwoSampleTestResult.html">SSWaldWolfowitzTwoSampleTestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SSWilcoxonMatchedPairsTestResult.html">SSWilcoxonMatchedPairsTestResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats21SSComplexFloatElementa">SSComplexFloatElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats19SSPostHocTestResulta">SSPostHocTestResult</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>SSConfIntv</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SSConfIntv</span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">Codable</span> <span class="k">where</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Confidence interval struct</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats10SSConfIntvV10lowerBoundxSgvp"></a>
+                    <a name="//apple_ref/swift/Property/lowerBound" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats10SSConfIntvV10lowerBoundxSgvp">lowerBound</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Lower bound of the CI</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lowerBound</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats10SSConfIntvV10upperBoundxSgvp"></a>
+                    <a name="//apple_ref/swift/Property/upperBound" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats10SSConfIntvV10upperBoundxSgvp">upperBound</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Upper bound of the CI</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">upperBound</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftyStats10SSConfIntvV13intervalWidthxSgvp"></a>
+                    <a name="//apple_ref/swift/Property/intervalWidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats10SSConfIntvV13intervalWidthxSgvp">intervalWidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Range of the CI</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">intervalWidth</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:s23CustomStringConvertibleP11descriptionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/s:s23CustomStringConvertibleP11descriptionSSvp">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-11)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
