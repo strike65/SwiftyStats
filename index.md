@@ -18,11 +18,11 @@ Each target must be built individually (i.e. no dependencies are defined)!
 
 SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). This class encapsulates the data to be processed and provides descriptive statistics. In principle, an `SSExamine` instance can contain data of any kind. The available statistical indicators depend of course on the type of data.
 
-The following classes/structures/extensions:
+The following classes/structures/extensions are provided (among others):
 
-* Class [`SSDataFrame`](docs/Classes/SSDataFrame.html): `SSDateFrame` instances encapsulate several samples. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual samples and the rows correspond to the data of the samples.
+* Class [`SSDataFrame`](docs/Classes/SSDataFrame.html): `SSDateFrame` instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
 * Structure [`SSCrossTab`](docs/Structures/SSCrossTab.html): Contains a cross table in the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
-* Array<T>-Estension: Provides the function [indices(where:)](docs/Extensions/Array.html)
+* Array<T>-Extension: Provides the function [indices(where:)](docs/Extensions/Array.html)
 * Float80-/Double-/Float-Extension: Adds heavily used constants.
 * String-Extension: Provides the two hash methods `djb2hash` and `sdbmhash`.
 
