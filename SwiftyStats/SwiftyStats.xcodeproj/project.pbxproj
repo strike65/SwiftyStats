@@ -192,12 +192,12 @@
 		9F13CD20211B71D100153FC3 /* CodableFloat80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFloat80.swift; sourceTree = "<group>"; };
 		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
-		9F2DC9FB215E80D600033520 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array-Extension.swift"; sourceTree = "<group>"; };
 		9F368BE71F20F340004A5193 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		9F368BE81F20F340004A5193 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-NoncentralT.swift"; sourceTree = "<group>"; };
+		9F3F485822B02E20005FAB3A /* index.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = index.md; path = ../index.md; sourceTree = "<group>"; };
 		9F429DBA2150F28800C27B6B /* Airy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airy.swift; sourceTree = "<group>"; };
 		9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-Incgam-Gil_Temme_.swift"; sourceTree = "<group>"; };
 		9F4DF7BD21516C010013792A /* Airy_Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airy_Constants.swift; sourceTree = "<group>"; };
@@ -402,6 +402,7 @@
 			isa = PBXGroup;
 			children = (
 				9F9757DA22AE6471000AC8EF /* make_doc.sh */,
+				9F3F485822B02E20005FAB3A /* index.md */,
 				9F1F70EB2103A0280037DFB5 /* CHANGELOG */,
 				9F8F5C4920FD026C00DC29F4 /* Package.swift */,
 				9FC14C2D20A0EF3C00023BBE /* SwiftyStats.podspec */,
