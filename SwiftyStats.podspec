@@ -59,10 +59,10 @@ Probability functions
 - Rayleigh distribution
 - Extreme value distribution
 			  DESC
-	s.homepage 	= 'https://gitlab.com/strike65/SwiftyStats.git'
+	s.homepage 	= 'https://github.com/strike65/SwiftyStats.git'
 	s.license 	= { :type => 'GPL 3', :file => 'LICENSE' }
 	s.author 	= { 'Volker Thieme' => 'vtping@me.com' }
-	s.source 	= { :git => 'https://gitlab.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
+	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
 	s.swift_version = '5'
 	s.ios.deployment_target = '10.0'
 	s.osx.deployment_target = '10.12'

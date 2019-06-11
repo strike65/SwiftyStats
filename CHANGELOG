@@ -6,6 +6,7 @@ Version 1.0.4
 - add Array extension: indices(where:)
 - SSExamine.saveTo: parameter encloseElementsBy added
 - Target SwiftyStatsTests: added new Run Script build phase to avoid compliants regarding the signature
+- host the repo at GitHub again
 
 Version 1.0.3
 - added support for Swift 5
