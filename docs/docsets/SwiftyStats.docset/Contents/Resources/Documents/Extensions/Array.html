@@ -663,8 +663,8 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Returns an array of indexes for which the condition is true.</p>
-<pre class="highlight swift"><code><span class="err">````</span>
-<span class="k">let</span> <span class="nv">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<h3 id='usage' class='heading'>Usage</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
 <span class="k">var</span> <span class="nv">indices</span> <span class="o">=</span> <span class="kt">A</span><span class="o">.</span><span class="nf">indices</span><span class="p">(</span><span class="nv">where</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">})</span>
 <span class="c1">// [0, 4]</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="kt">A</span><span class="o">.</span><span class="nf">indices</span><span class="p">(</span><span class="nv">where</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">})</span>
@@ -673,7 +673,6 @@
    <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span>
 <span class="p">})</span>
 <span class="c1">// [0, 4]</span>
-<span class="err">````</span>
 </code></pre>
 
                       </div>

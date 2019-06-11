@@ -3522,18 +3522,22 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <h3 id='important-note' class='heading'>Important Note</h3>
 
 <p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
-<pre class="highlight swift"><code><span class="kt">Suppose</span> <span class="n">the</span> <span class="n">original</span> <span class="n">data</span> <span class="k">is</span> <span class="n">a</span> <span class="n">string</span> <span class="n">containing</span> <span class="n">only</span> <span class="s">"H"</span> <span class="n">and</span> <span class="s">"L"</span><span class="p">:</span>
-<span class="kt">HLHHLHHLHLLHLHHL</span>
-<span class="kt">Setting</span> <span class="s">"H"</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">and</span> <span class="s">"L"</span> <span class="o">=</span> <span class="mi">3</span> <span class="n">results</span> <span class="k">in</span> <span class="n">the</span> <span class="n">recoded</span> <span class="nv">sequence</span><span class="p">:</span>
-<span class="mi">1311311313313113</span>
-<span class="kt">In</span> <span class="n">this</span> <span class="k">case</span> <span class="n">a</span> <span class="n">cutting</span> <span class="n">point</span> <span class="n">of</span> <span class="mi">2</span> <span class="n">must</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
-<span class="kt">Setting</span> <span class="s">"H"</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">and</span> <span class="s">"L"</span> <span class="o">=</span> <span class="mi">2</span> <span class="n">results</span> <span class="k">in</span> <span class="n">the</span> <span class="n">recoded</span> <span class="nv">sequence</span><span class="p">:</span>
-<span class="mi">1211211212212112</span>
-<span class="kt">In</span> <span class="n">this</span> <span class="k">case</span> <span class="n">a</span> <span class="n">cutting</span> <span class="n">point</span> <span class="n">of</span> <span class="mf">1.5</span> <span class="n">must</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
-</code></pre>
+<li>Suppose the original data is a string containing only <q>H</q> and <q>L</q>: <code>HLHHLHHLHLLHLHHL</code></li>
+<li>Setting <q>H</q> = 1 and <q>L</q> = 3 results in the recoded sequence:
+
+<ul>
+<li><code>1311311313313113</code></li>
+<li>In this case a cutting point of 2 must be used.</li>
+</ul></li>
+<li><p>Setting <q>H</q> = 1 and <q>L</q> = 2 results in the recoded sequence:</p>
+
+<ul>
+<li><code>1211211212212112</code></li>
+<li>In this case a cutting point of 1.5 must be used.</li>
+</ul></li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.sampleSize &lt; 2
+    <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
 
 </div>
 
@@ -3621,18 +3625,22 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <h3 id='important-note' class='heading'>Important Note</h3>
 
 <p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
-<pre class="highlight swift"><code><span class="kt">Suppose</span> <span class="n">the</span> <span class="n">original</span> <span class="n">data</span> <span class="k">is</span> <span class="n">a</span> <span class="n">string</span> <span class="n">containing</span> <span class="n">only</span> <span class="s">"H"</span> <span class="n">and</span> <span class="s">"L"</span><span class="p">:</span>
-<span class="kt">HLHHLHHLHLLHLHHL</span>
-<span class="kt">Setting</span> <span class="s">"H"</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">and</span> <span class="s">"L"</span> <span class="o">=</span> <span class="mi">3</span> <span class="n">results</span> <span class="k">in</span> <span class="n">the</span> <span class="n">recoded</span> <span class="nv">sequence</span><span class="p">:</span>
-<span class="mi">1311311313313113</span>
-<span class="kt">In</span> <span class="n">this</span> <span class="k">case</span> <span class="n">a</span> <span class="n">cutting</span> <span class="n">point</span> <span class="n">of</span> <span class="mi">2</span> <span class="n">must</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
-<span class="kt">Setting</span> <span class="s">"H"</span> <span class="o">=</span> <span class="mi">1</span> <span class="n">and</span> <span class="s">"L"</span> <span class="o">=</span> <span class="mi">2</span> <span class="n">results</span> <span class="k">in</span> <span class="n">the</span> <span class="n">recoded</span> <span class="nv">sequence</span><span class="p">:</span>
-<span class="mi">1211211212212112</span>
-<span class="kt">In</span> <span class="n">this</span> <span class="k">case</span> <span class="n">a</span> <span class="n">cutting</span> <span class="n">point</span> <span class="n">of</span> <span class="mf">1.5</span> <span class="n">must</span> <span class="n">be</span> <span class="n">used</span><span class="o">.</span>
-</code></pre>
+<li>Suppose the original data is a string containing only <q>H</q> and <q>L</q>: <code>HLHHLHHLHLLHLHHL</code></li>
+<li>Setting <q>H</q> = 1 and <q>L</q> = 3 results in the recoded sequence:
+
+<ul>
+<li><code>1311311313313113</code></li>
+<li>In this case a cutting point of 2 must be used.</li>
+</ul></li>
+<li><p>Setting <q>H</q> = 1 and <q>L</q> = 2 results in the recoded sequence:</p>
+
+<ul>
+<li><code>1211211212212112</code></li>
+<li>In this case a cutting point of 1.5 must be used.</li>
+</ul></li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.sampleSize &lt; 2
+    <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
 
 </div>
 
