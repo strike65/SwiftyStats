@@ -44,21 +44,7 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
-      "line": 550,
-      "symbol": "SSHypothesisTesting.oneWayANOVA(dataFrame:alpha:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
-      "line": 574,
-      "symbol": "SSHypothesisTesting.multipleMeansTest(dataFrame:alpha:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
-      "line": 1009,
+      "line": 1025,
       "symbol": "SSHypothesisTesting.bonferroniTest(dataFrame:)",
       "symbol_kind": "source.lang.swift.decl.function.method.class",
       "warning": "undocumented"
@@ -95,76 +81,6 @@
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSExamine.swift",
       "line": 596,
       "symbol": "SSExamine.copy(with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 29,
-      "symbol": "SSExamineContainer.ExamineElement",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 30,
-      "symbol": "SSExamineContainer.Frequency",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 57,
-      "symbol": "SSDataFrameContainer",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 58,
-      "symbol": "SSDataFrameContainer.Examine",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 59,
-      "symbol": "SSDataFrameContainer.columns",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 60,
-      "symbol": "SSDataFrameContainer.sampleSize",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 61,
-      "symbol": "SSDataFrameContainer.isEmpty",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 62,
-      "symbol": "SSDataFrameContainer.append(_:name:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 63,
-      "symbol": "SSDataFrameContainer.remove(name:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/EnumsStructsProtConst/SSProtocols.swift",
-      "line": 64,
-      "symbol": "SSDataFrameContainer.removeAll()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -416,43 +332,8 @@
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
       "line": null,
-      "symbol": "Complex",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": null,
       "symbol": "SSComplexFloat",
       "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 53,
-      "symbol": "SSComplexNumeric.Element",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 54,
-      "symbol": "SSComplexNumeric.re",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 55,
-      "symbol": "SSComplexNumeric.im",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 56,
-      "symbol": "SSComplexNumeric.init(re:im:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
@@ -604,20 +485,6 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 126,
-      "symbol": "SSComplexFloatElement",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 128,
-      "symbol": "SSComplexFloat",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
       "line": 133,
       "symbol": "SSComplexFloat.init(abs:arg:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
@@ -733,62 +600,6 @@
       "line": 222,
       "symbol": "SSComplexFloat.isZero",
       "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 227,
-      "symbol": "Complex",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 228,
-      "symbol": "Complex.Element",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 241,
-      "symbol": "Complex.re",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 250,
-      "symbol": "Complex.im",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 263,
-      "symbol": "Complex.init(re:im:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 270,
-      "symbol": "Complex.CodingKeys",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 272,
-      "symbol": "Complex.CodingKeys.imag",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 272,
-      "symbol": "Complex.CodingKeys.real",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SSComplexNumeric Protocol Reference</title>
+    <title>SSComplexFloat Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,16 +14,16 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Protocol/SSComplexNumeric" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Extension/SSComplexFloat" class="dashAnchor"></a>
 
-    <a title="SSComplexNumeric Protocol Reference"></a>
+    <a title="SSComplexFloat Extension Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
           SwiftyStats Docs
         </a>
-         (89% documented)
+         (91% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">SwiftyStats Reference</a>
       <img class="carat" src="../img/carat.png" />
-      SSComplexNumeric Protocol Reference
+      SSComplexFloat Extension Reference
     </p>
 
     <div class="content-wrapper">
@@ -155,6 +155,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/Float80.html">Float80</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/SSComplexFloat.html">SSComplexFloat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/SSComplexNumeric.html">SSComplexNumeric</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/String.html">String</a>
@@ -506,18 +512,6 @@
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSComplexFloat.html">SSComplexFloat</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSComplexNumeric.html">SSComplexNumeric</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSDataFrameContainer.html">SSDataFrameContainer</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSExamineContainer.html">SSExamineContainer</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a>
               </li>
             </ul>
@@ -525,12 +519,6 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Complex.html">Complex</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Complex/CodingKeys.html">– CodingKeys</a>
-              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SS2SampleTTestResult.html">SS2SampleTTestResult</a>
               </li>
@@ -621,9 +609,6 @@
             <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats21SSComplexFloatElementa">SSComplexFloatElement</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats19SSPostHocTestResulta">SSPostHocTestResult</a>
               </li>
             </ul>
@@ -634,17 +619,14 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>SSComplexNumeric</h1>
+            <h1>SSComplexFloat</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SSComplexNumeric</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">internal</span> <span class="kd">protocol</span> <span class="kt">SSComplexFloat</span> <span class="p">:</span> <span class="kt">CustomStringConvertible</span><span class="p">,</span> <span class="kt">SSComplexNumeric</span> <span class="k">where</span> <span class="k">Self</span><span class="o">.</span><span class="kt">Element</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                 </div>
               </div>
-            <p>A complex numeric protocol , inspired by <a href="https://github.com/dankogai/swift-complex">https://github.com/dankogai/swift-complex</a>
-Unfortunately by using generic types, the Swift 4.2 compiler has difficulities to typecheck some
-more ore less complex expressions. Therefore, the additive, subtractive, multiplicative operator must be defined in some exotic notation.
-All complex mathematical functions are defined at the top level.</p>
+            <p>Undocumented</p>
 
           </div>
         </section>
@@ -656,9 +638,9 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericP7ElementQa"></a>
-                    <a name="//apple_ref/swift/Alias/Element" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3abs3argx7ElementQz_AGtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(abs:arg:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3abs3argx7ElementQz_AGtcfc">init(abs:arg:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -673,7 +655,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Element</span> <span class="p">:</span> <span class="kt">SignedNumeric</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">abs</span><span class="p">:</span> <span class="kt">Element</span><span class="p">,</span> <span class="nv">arg</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -683,128 +665,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericP2re7ElementQzvp"></a>
-                    <a name="//apple_ref/swift/Property/re" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericP2re7ElementQzvp">re</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">re</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericP2im7ElementQzvp"></a>
-                    <a name="//apple_ref/swift/Property/im" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericP2im7ElementQzvp">im</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">im</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericP2re2imx7ElementQz_AGtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(re:im:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericP2re2imx7ElementQz_AGtcfc">init(re:im:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="n"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP2re7ElementQzvp">re</a></span> <span class="nv">r</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">,</span> <span class="n"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP2im7ElementQzvp">im</a></span> <span class="nv">i</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAEyx7ElementQz_AEtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAEyx7ElementQz_AEtcfc">init(_:_:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">re</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">,</span> <span class="n">_</span> <span class="nv">im</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAEyx7ElementQzcfc"></a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAEyx7ElementQzcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAEyx7ElementQzcfc">init(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAEyx7ElementQzcfc">init(_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -818,7 +682,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">re</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">real</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -828,13 +692,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE1ixvp"></a>
-                    <a name="//apple_ref/swift/Property/i" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE1ixvp">i</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3arg7ElementQzvp"></a>
+                    <a name="//apple_ref/swift/Property/arg" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3arg7ElementQzvp">arg</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -848,7 +709,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">i</span><span class="p">:</span> <span class="k">Self</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">arg</span><span class="p">:</span> <span class="kt">Element</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -858,13 +719,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE4apppopyxxFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;+++(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE4apppopyxxFZ">&amp;+++(_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3abs7ElementQzvp"></a>
+                    <a name="//apple_ref/swift/Property/abs" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3abs7ElementQzvp">abs</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -878,7 +736,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">prefix</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;+++</span> <span class="p">(</span><span class="nv">c</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">abs</span><span class="p">:</span> <span class="kt">Element</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -888,13 +746,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3appoiyxx_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;++(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3appoiyxx_xtFZ">&amp;++(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE4norm7ElementQzvp"></a>
+                    <a name="//apple_ref/swift/Property/norm" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE4norm7ElementQzvp">norm</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -908,7 +763,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;++</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">norm</span><span class="p">:</span> <span class="kt">Element</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -918,13 +773,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3appoiyxx_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;++(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3appoiyxx_7ElementQztFZ">&amp;++(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE2aroiyxx_xtFZ"></a>
+                    <a name="//apple_ref/swift/Method/&amp;%(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE2aroiyxx_xtFZ">&amp;%(_:_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -938,7 +790,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;++</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;%</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
 
                         </div>
                       </div>
@@ -948,13 +800,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3appoiyx7ElementQz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;++(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3appoiyx7ElementQz_xtFZ">&amp;++(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE2aroiyxx_7ElementQztFZ"></a>
+                    <a name="//apple_ref/swift/Method/&amp;%(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE2aroiyxx_7ElementQztFZ">&amp;%(_:_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -968,7 +817,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;++</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;%</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
 
                         </div>
                       </div>
@@ -978,13 +827,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3apeoiyyxz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;+=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3apeoiyyxz_xtFZ">&amp;+=(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE2aroiyx7ElementQz_xtFZ"></a>
+                    <a name="//apple_ref/swift/Method/&amp;%(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE2aroiyx7ElementQz_xtFZ">&amp;%(_:_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -998,7 +844,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;+=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;%</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Element</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
 
                         </div>
                       </div>
@@ -1008,13 +854,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3apeoiyyxz_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;+=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3apeoiyyxz_7ElementQztFZ">&amp;+=(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3areoiyyxz_xtFZ"></a>
+                    <a name="//apple_ref/swift/Method/&amp;%=(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3areoiyyxz_xtFZ">&amp;%=(_:_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1028,7 +871,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;+=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;%=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1038,13 +881,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE4asssopyxxFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;---(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE4asssopyxxFZ">&amp;---(_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3areoiyyxz_7ElementQztFZ"></a>
+                    <a name="//apple_ref/swift/Method/&amp;%=(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3areoiyyxz_7ElementQztFZ">&amp;%=(_:_:)</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1058,7 +898,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">prefix</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;---</span> <span class="p">(</span><span class="nv">c</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;%=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Element</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1068,13 +908,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3assoiyxx_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;--(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3assoiyxx_xtFZ">&amp;--(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE3nanxvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/nan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE3nanxvpZ">nan</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1088,7 +925,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;--</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">nan</span><span class="p">:</span> <span class="k">Self</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1098,13 +935,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3assoiyxx_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;--(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3assoiyxx_7ElementQztFZ">&amp;--(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE5isNanSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isNan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE5isNanSbvp">isNan</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1118,7 +952,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;--</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isNan</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1128,13 +962,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3assoiyx7ElementQz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;--(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3assoiyx7ElementQz_xtFZ">&amp;--(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE8infinityxvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/infinity" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE8infinityxvpZ">infinity</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1148,7 +979,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;--</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">infinity</span><span class="p">:</span> <span class="k">Self</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1158,13 +989,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3aseoiyyxz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;-=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3aseoiyyxz_xtFZ">&amp;-=(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE10isInfiniteSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isInfinite" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE10isInfiniteSbvp">isInfinite</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1178,7 +1006,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;-=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isInfinite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1188,13 +1016,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3aseoiyyxz_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;-=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3aseoiyyxz_7ElementQztFZ">&amp;-=(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE8isFiniteSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFinite" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE8isFiniteSbvp">isFinite</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1208,7 +1033,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;-=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isFinite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1218,13 +1043,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyxx_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;**(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyxx_xtFZ">&amp;**(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE4zeroxvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/zero" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE4zeroxvpZ">zero</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1238,7 +1060,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;**</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">zero</span><span class="p">:</span> <span class="k">Self</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1248,13 +1070,10 @@ All complex mathematical functions are defined at the top level.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyxx_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;**(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyxx_7ElementQztFZ">&amp;**(_:_:)</a>
+                    <a name="/s:11SwiftyStats14SSComplexFloatPAAE6isZeroSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isZero" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats14SSComplexFloatPAAE6isZeroSbvp">isZero</a>
                     </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -1268,127 +1087,7 @@ All complex mathematical functions are defined at the top level.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;**</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyx7ElementQz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;**(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE3ammoiyx7ElementQz_xtFZ">&amp;**(_:_:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;**</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">Self</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE4ammeoiyyxz_xtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;**=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE4ammeoiyyxz_xtFZ">&amp;**=(_:_:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;**=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE4ammeoiyyxz_7ElementQztFZ"></a>
-                    <a name="//apple_ref/swift/Method/&amp;**=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE4ammeoiyyxz_7ElementQztFZ">&amp;**=(_:_:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&amp;**=</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">inout</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt"><a href="../Protocols/SSComplexNumeric.html#/s:11SwiftyStats16SSComplexNumericP7ElementQa">Element</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:11SwiftyStats16SSComplexNumericPAAE4conjxvp"></a>
-                    <a name="//apple_ref/swift/Property/conj" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats16SSComplexNumericPAAE4conjxvp">conj</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">conj</span><span class="p">:</span> <span class="k">Self</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isZero</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1403,7 +1102,7 @@ All complex mathematical functions are defined at the top level.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-11)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-12)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

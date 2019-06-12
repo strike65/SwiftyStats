@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           SwiftyStats Docs
         </a>
-         (89% documented)
+         (91% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -155,6 +155,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/Float80.html">Float80</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/SSComplexFloat.html">SSComplexFloat</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/SSComplexNumeric.html">SSComplexNumeric</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/String.html">String</a>
@@ -506,18 +512,6 @@
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSComplexFloat.html">SSComplexFloat</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSComplexNumeric.html">SSComplexNumeric</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSDataFrameContainer.html">SSDataFrameContainer</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/SSExamineContainer.html">SSExamineContainer</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a>
               </li>
             </ul>
@@ -525,12 +519,6 @@
           <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Complex.html">Complex</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Complex/CodingKeys.html">– CodingKeys</a>
-              </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SS2SampleTTestResult.html">SS2SampleTTestResult</a>
               </li>
@@ -621,9 +609,6 @@
             <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats21SSComplexFloatElementa">SSComplexFloatElement</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:11SwiftyStats19SSPostHocTestResulta">SSPostHocTestResult</a>
               </li>
             </ul>
@@ -673,7 +658,7 @@
                         <p>Performs the two sample t test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
 
 </div>
 
@@ -698,7 +683,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data1 as Array<Double></p>
+                                  <p>Data1 as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -710,7 +695,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data2 as Array<Double></p>
+                                  <p>Data2 as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -748,7 +733,7 @@
                         <p>Performs the two sample t test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff sample1.sampleSize &lt; 2 || sample2.sampleSize &lt; 2
 
 </div>
 
@@ -773,7 +758,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data1 as SSExamine<Double, Double></p>
+                                  <p>Data1 as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -785,7 +770,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data2 as SSExamine<Double, Double></p>
+                                  <p>Data2 as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -823,7 +808,7 @@
                         <p>Performs the one sample t test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff sample.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff sample.sampleSize &lt; 2
 
 </div>
 
@@ -848,7 +833,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as SSExamine<Double, Double></p>
+                                  <p>Data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -898,7 +883,7 @@
                         <p>Performs the one sample t test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff sample.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff sample.sampleSize &lt; 2
 
 </div>
 
@@ -923,7 +908,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as Array<Double></p>
+                                  <p>Data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -973,7 +958,7 @@
                         <p>Performs the t test for matched pairs</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt; 2 || set2.sampleSize &lt; 2 || (set1.sampleSize != set2.sampleSize)
+    SSSwiftyStatsError.invalidArgument iff set1.sampleSize &lt; 2 || set2.sampleSize &lt; 2 || (set1.sampleSize != set2.sampleSize)
 
 </div>
 
@@ -998,7 +983,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data of set1 as SSExamine<Double, Double></p>
+                                  <p>data of set1 as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -1010,7 +995,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data of set2 as SSExamine<Double, Double></p>
+                                  <p>data of set2 as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -1048,7 +1033,7 @@
                         <p>Performs the t test for matched pairs</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data1.count &lt; 2 || data2.count &lt; 2 || data1.count != data2.count
+    SSSwiftyStatsError.invalidArgument iff data1.count &lt; 2 || data2.count &lt; 2 || data1.count != data2.count
 
 </div>
 
@@ -1073,7 +1058,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data of set1 as Array<Double></p>
+                                  <p>data of set1 as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -1085,7 +1070,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data of set2 as Array<Double></p>
+                                  <p>data of set2 as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -1123,7 +1108,7 @@
                         <p>Performs a one way ANOVA (multiple means test)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.count &lt;= 2
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
 </div>
 
@@ -1148,7 +1133,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as Array<Double></p>
+                                  <p>data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -1186,7 +1171,7 @@
                         <p>Performs a one way ANOVA (multiple means test)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.count &lt;= 2
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
 </div>
 
@@ -1211,7 +1196,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as SSExamine<Double, Double></p>
+                                  <p>data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -1246,7 +1231,12 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Performs a one way ANOVA (multiple means test)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -1256,6 +1246,37 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="n">oneWayANOVA</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">dataFrame</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSDataFrame.html">SSDataFrame</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;</span><span class="p">?</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataFrame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as SSDataFrame<Numeric, SSFloatingPoint></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1273,7 +1294,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Performs a one way ANOVA (multiple means test)
+same as oneWayAnova(<em>:,</em>:)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -1283,6 +1310,37 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="n">multipleMeansTest</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">dataFrame</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSDataFrame.html">SSDataFrame</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a></span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;</span><span class="p">?</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataFrame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>data as SSDataFrame<Numeric, SSFloatingPoint></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1300,7 +1358,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Performs a one way ANOVA (multiple means test)</p>
+                        <p>Performs a one way ANOVA (multiple means test)
+same as oneWayAnova(<em>:,</em>:)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError iff data.count &lt;= 2
@@ -1328,7 +1387,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as Array<Double></p>
+                                  <p>data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -1363,7 +1422,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Performs a one way ANOVA (multiple means test)</p>
+                        <p>Performs a one way ANOVA (multiple means test)
+same as oneWayAnova(<em>:,</em>:)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError iff data.count &lt;= 2
@@ -1391,7 +1451,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as SSExamine<Double, Double></p>
+                                  <p>data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -1427,9 +1487,31 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Performs the Tukey-Kramer test for multiple comparisons</p>
+<h3 id='structure-of-the-differences-array' class='heading'>Structure of the differences array:</h3>
+<pre class="highlight swift"><code>              <span class="nf">m</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>        <span class="nf">m</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="nf">m</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="nf">m</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>        <span class="o">...</span>     <span class="nf">m</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre>
+
+<p>m(0)           -           d(0,1)      d(0,2)      m(0,3)      &hellip;     d(0,k - 1)
+   m(1)           d(1,0)      -           d(1,2)      m(1,3)      &hellip;     d(1,k - 1)
+   m(2)           d(2,0)      d(2,1)      -           m(2,3)      &hellip;     d(2,k - 1)
+   m(3)           d(3,0)      d(3,1)      -           -           &hellip;     d(3,k - 1)
+   .              .           .           .           .           &hellip;     d(2,k - 1)
+   .              .           .           .           .           &hellip;     .
+   m(k - 1)       d(k - 1,0)  d(k - 1,1)  d(k - 1,2)  d(k - 1,3)  &hellip;     -</p>
+<h3 id='structure-of-the-t-array' class='heading'>Structure of the T array:</h3>
+<pre class="highlight swift"><code>              <span class="nf">m</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>        <span class="nf">m</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>        <span class="nf">m</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>        <span class="o">...</span>     <span class="nf">m</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre>
+
+<p>m(0)           -           T(0,1)      T(0,2)      &hellip;     T(0,k - 1)
+   m(1)           T(1,0)      -           T(1,2)      &hellip;     T(1,k - 1)
+   m(2)           T(2,0)      T(2,1)      -           &hellip;     T(2,k - 1)
+   .              .           .           .           &hellip;     .
+   .              .           .           .           &hellip;     .
+   .              .           .           .           &hellip;     .
+   m(k - 1)       T(k - 1,0)  T(k - 1,1)  T(k - 1,2)  &hellip;     -</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.count &lt;= 2
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
 </div>
 <div class="aside aside-precondition">
@@ -1459,7 +1541,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as SSDataFrame<Double></p>
+                                  <p>data as SSDataFrame<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -1501,7 +1583,7 @@
                         <p>Performs the Tukey-Kramer test for multiple comparisons</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.count &lt;= 2
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
 </div>
 <div class="aside aside-precondition">
@@ -1531,7 +1613,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>data as SSExamine<Double, Double></p>
+                                  <p>data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -1571,6 +1653,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Performs the post hoc test according to Scheffé</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -1580,6 +1667,41 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="n">scheffeTest</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">dataFrame</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSDataFrame.html">SSDataFrame</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt"><a href="../Typealiases.html#/s:11SwiftyStats19SSPostHocTestResulta">SSPostHocTestResult</a></span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;&gt;</span><span class="p">?</span> <span class="k">where</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">T</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dataFrame</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Data as SSDataFrame</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>alpha</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Alpha</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A SSPostHocTestResult struct</p>
                       </div>
                     </section>
                   </div>
@@ -1831,7 +1953,7 @@
                         <p>Performs a Box-Ljung test for autocorrelation for all possible lags</p>
 <h3 id='usage' class='heading'>Usage</h3>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">lew1</span><span class="p">:</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">213</span><span class="p">,</span><span class="o">-</span><span class="mi">564</span><span class="p">,</span><span class="o">-</span><span class="mi">35</span><span class="p">,</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">141</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="o">-</span><span class="mi">420</span><span class="p">]</span>
-<span class="k">let</span> <span class="nv">lewdat</span> <span class="o">=</span> <span class="kt">SSExamine</span><span class="o">&lt;</span><span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="o">&gt;.</span><span class="nf">init</span><span class="p">(</span><span class="nv">withArray</span><span class="p">:</span> <span class="n">lew1</span><span class="p">,</span> <span class="nv">characterSet</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">lewdat</span> <span class="o">=</span> <span class="kt">SSExamine</span><span class="o">&lt;</span><span class="kt">Numeric</span><span class="p">,</span> <span class="kt">SSFloatingPoint</span><span class="o">&gt;.</span><span class="nf">init</span><span class="p">(</span><span class="nv">withArray</span><span class="p">:</span> <span class="n">lew1</span><span class="p">,</span> <span class="nv">characterSet</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="k">let</span> <span class="nv">result</span><span class="p">:</span> <span class="kt">SSBoxLjungResult</span> <span class="o">=</span> <span class="k">try!</span> <span class="kt">SSHypothesisTesting</span><span class="o">.</span><span class="nf">autocorrelation</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span><span class="n">lewdat</span><span class="p">)</span>
 </code></pre>
 <div class="aside aside-throws">
@@ -1906,7 +2028,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
 <p>Calls ksGoFTest(data: Array<FloatingPoint>, targetDistribution target: SSGoFTarget) throws -&gt; SSKSTestResult?</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -1974,7 +2096,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
 The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -2042,10 +2164,10 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
 The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
 <h3 id='note' class='heading'>Note</h3>
 
-<p>Calls ksGoFTest(data: SSExamine<Double, Double>, targetDistribution target: SSGoFTarget) throws -&gt; SSKSTestResult?</p>
+<p>Calls ksGoFTest(data: SSExamine<Numeric, SSFloatingPoint>, targetDistribution target: SSGoFTarget) throws -&gt; SSKSTestResult?</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -2070,7 +2192,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                               </td>
                               <td>
                                 <div>
-                                  <p>SSExamine<Double, Double></p>
+                                  <p>SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -2113,7 +2235,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
 The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -2138,7 +2260,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                               </td>
                               <td>
                                 <div>
-                                  <p>SSExamine<Double, Double></p>
+                                  <p>SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -2174,10 +2296,10 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Performs the Anderson Darling test for normality.
-Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)</p>
+Adapts an algorithm originally developed by Marsaglia et al.:Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -2245,7 +2367,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2
+    <code>SSSwiftyStatsError.invalidArgument</code> if data.count &lt; 2
 
 </div>
 
@@ -2309,13 +2431,13 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Perform the Mann-Whitney U test for independent samples.</p>
+                        <p>Performs the Mann-Whitney U test for independent samples.</p>
 <h3 id='note' class='heading'>Note</h3>
 
-<p>If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)</p>
+<p>If there are ties, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
 
 </div>
 
@@ -2385,7 +2507,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <p>If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
 
 </div>
 
@@ -2452,7 +2574,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Wilcoxon signed ranks test for matched pairs</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.count &lt;= 2 || set1.count &lt;= 2 || set1.count != set2.count
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.count &lt;= 2 || set1.count &lt;= 2 || set1.count != set2.count
 
 </div>
 
@@ -2519,7 +2641,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Wilcoxon signed ranks test for matched pairs with continuity correction (no exact p values!)</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set1.sampleSize &lt;= 2 || set1.sampleSize != set2.sampleSize
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set1.sampleSize &lt;= 2 || set1.sampleSize != set2.sampleSize
 
 </div>
 
@@ -2586,7 +2708,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the sign test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.count &lt;= 2 || set1.count &lt;= 2 || set1.count != set2.count
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.count &lt;= 2 || set1.count &lt;= 2 || set1.count != set2.count
 
 </div>
 
@@ -2653,7 +2775,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the sign test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set1.sampleSize &lt;= 2 || set1.sampleSize != set2.sampleSize
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set1.sampleSize &lt;= 2 || set1.sampleSize != set2.sampleSize
 
 </div>
 
@@ -2725,7 +2847,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <li><p>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</p></li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    <p>SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2</p>
+    <p><code>SSSwiftyStatsError.invalidArgument</code> iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2</p>
 
 </div>
 
@@ -2797,7 +2919,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <li>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
+    <code>SSSwiftyStatsError.invalidArgument</code> iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
 
 </div>
 
@@ -2889,7 +3011,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <li>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
+    <code>SSSwiftyStatsError.invalidArgument</code> iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
 
 </div>
 
@@ -2983,7 +3105,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <p>H<sub>a2</sub>:(F<sub>1</sub>(x) &lt; F<sub>2</sub>(x))</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
 
 </div>
 
@@ -3053,7 +3175,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <p>H<sub>a2</sub>:(F<sub>1</sub>(x) &lt; F<sub>2</sub>(x))</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
 
 </div>
 
@@ -3116,7 +3238,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the two-sided Wald Wolfowitz test for two samples</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
+    <code>SSSwiftyStatsError.invalidArgument</code> iff set1.sampleSize &lt;= 2 || set2.sampleSize &lt;= 2
 
 </div>
 
@@ -3255,6 +3377,11 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Performs the Grubbs outlier test</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument if sample size &lt;= 3
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -3344,6 +3471,11 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="abstract">
                         <p>Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
 <img src="../img/esd.png" alt=""></p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument if sample size == 0
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -3426,6 +3558,11 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError.invalidArgument if sample size == 0
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -3537,7 +3674,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 </ul></li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
+    <p>SSSwiftyStatsError.invalidArgument iff data.sampleSize &lt; 2</p>
 
 </div>
 
@@ -3640,7 +3777,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 </ul></li>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
+    <p>SSSwiftyStatsError.invalidArgument iff data.sampleSize &lt; 2</p>
 
 </div>
 
@@ -3738,7 +3875,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Bartlett test for two or more samples</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+    SSSwiftyStatsError.invalidArgument if data.count &lt; 2 or no variances are obtainable
 
 </div>
 
@@ -3801,7 +3938,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Bartlett test for two or more samples</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+    SSSwiftyStatsError.invalidArgument if data.count &lt; 2 or no variances are obtainable
 
 </div>
 
@@ -3864,7 +4001,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Levene / Brown-Forsythe test for two or more samples</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+    SSSwiftyStatsError.invalidArgument if data.count &lt; 2 or no variances are obtainable
 
 </div>
 
@@ -3939,7 +4076,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Levene / Brown-Forsythe test for two or more samples</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.count &lt; 2 or no variances are obtainable
+    SSSwiftyStatsError.invalidArgument if data.count &lt; 2 or no variances are obtainable
 
 </div>
 
@@ -4014,7 +4151,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Chi^2 variance equality test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if data.sampleSize &lt; 2 || s0 &lt;= 0
+    SSSwiftyStatsError.invalidArgument if data.sampleSize &lt; 2 || s0 &lt;= 0
 
 </div>
 
@@ -4039,7 +4176,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as Array<Double></p>
+                                  <p>Data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -4089,7 +4226,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the Chi^2 variance equality test</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError if sample.sampleSize &lt; 2 || s0 &lt;= 0
+    SSSwiftyStatsError.invalidArgument if sample.sampleSize &lt; 2 || s0 &lt;= 0
 
 </div>
 
@@ -4114,7 +4251,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as SSExamine<Double, Double></p>
+                                  <p>Data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -4164,7 +4301,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the F ratio test for variance equality</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff data1.sampleSize &lt; 2 || data1.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff data1.sampleSize &lt; 2 || data1.sampleSize &lt; 2
 
 </div>
 
@@ -4189,7 +4326,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as Array<Double></p>
+                                  <p>Data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -4201,7 +4338,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as Array<Double></p>
+                                  <p>Data as Array<Numeric></p>
                                 </div>
                               </td>
                             </tr>
@@ -4239,7 +4376,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                         <p>Performs the F ratio test for variance equality</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
-    SSSwiftyStatsError iff sample1.sampleSize &lt; 2 || sample1.sampleSize &lt; 2
+    SSSwiftyStatsError.invalidArgument iff sample1.sampleSize &lt; 2 || sample1.sampleSize &lt; 2
 
 </div>
 
@@ -4264,7 +4401,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as SSExamine<Double, Double></p>
+                                  <p>Data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -4276,7 +4413,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                               </td>
                               <td>
                                 <div>
-                                  <p>Data as SSExamine<Double, Double></p>
+                                  <p>Data as SSExamine<Numeric, SSFloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
@@ -4306,7 +4443,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-11)</p>
+      <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-12)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

@@ -2,15 +2,17 @@
 
 SwiftyStats
 ===========
+(full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
 SwiftyStats is a framework written entirely in Swift that makes intensive use of generic types. SwiftyStats contains frequently used statistical procedures. 
 
-> It is a framework that is regularly developed and has been created out of passion rather than necessity. Therefore different programming paradigms are used. Among other things, I decided to define probability functions as "free" functions. To avoid naming conflicts, the prefix `SwiftyStats` can be used.
+> It is a framework that is regularly maintained and has been created out of passion rather than necessity. Therefore different programming paradigms are used. Among other things, I decided to define probability functions as "free" functions. To avoid naming conflicts, the prefix `SwiftyStats` can be used.
 
-The attached Xcode project contains three targets:
+The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS/Linux)
 > * SwiftyStatsMobile (for iOS)
 > * SwiftyStatsTests (Testsuite)
+> * SwiftStatsCLTest (a command line demo)
 
 Each target must be built individually (i.e. no dependencies are defined)!
  
