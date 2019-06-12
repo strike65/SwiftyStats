@@ -7,6 +7,7 @@ Version 1.0.4
 - SSExamine.saveTo: parameter encloseElementsBy added
 - Target SwiftyStatsTests: added new Run Script build phase to avoid compliants regarding the signature
 - host the repo at GitHub again
+- complex type is internal
 
 Version 1.0.3
 - added support for Swift 5
