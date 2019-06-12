@@ -25,7 +25,7 @@
 
 import Foundation
 /// Defines a protocol to conform by SSExamine subclasses.
-public protocol SSExamineContainer {
+internal protocol SSExamineContainer {
     associatedtype ExamineElement
     associatedtype Frequency: SSFloatingPoint
     /// The sample size
@@ -54,7 +54,7 @@ public protocol SSExamineContainer {
     mutating func removeAll()
 }
 
-public protocol SSDataFrameContainer {
+internal protocol SSDataFrameContainer {
     associatedtype Examine
     var columns: Int { get }
     var sampleSize: Int { get  }

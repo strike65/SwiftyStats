@@ -78,8 +78,6 @@ import Foundation
 /// hardly matter due to the rapid decay of the integrand.
 ///
 /// All values below were calculated with Mathematica.
-
-
 internal func integrate<FPT: SSFloatingPoint & Codable>(integrand: (FPT, FPT, FPT, FPT, FPT) -> FPT, parameters: Array<FPT>, leftLimit a: FPT, rightLimit b: FPT, maxAbsError targetError: FPT, numberOfEvaluations eval: inout Int, estimatedError estError: inout FPT) -> FPT {
 
     let c: FPT = makeFP(1.0 / 2.0 ) * (b - a)

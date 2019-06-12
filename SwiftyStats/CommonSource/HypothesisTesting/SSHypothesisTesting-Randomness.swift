@@ -48,7 +48,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.sampleSize < 2
     public class func runsTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
@@ -86,7 +86,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.sampleSize < 2
     public class func runsTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>!, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)

@@ -49,7 +49,7 @@ prefix operator &---
 /// Unfortunately by using generic types, the Swift 4.2 compiler has difficulities to typecheck some
 /// more ore less complex expressions. Therefore, the additive, subtractive, multiplicative operator must be defined in some exotic notation.
 /// All complex mathematical functions are defined at the top level.
-public protocol SSComplexNumeric : Hashable {
+internal protocol SSComplexNumeric : Hashable {
     associatedtype Element: SignedNumeric
     var re: Element { get set }
     var im: Element { get set }
@@ -123,9 +123,9 @@ extension SSComplexNumeric {
     }
 }
 
-public typealias SSComplexFloatElement = SSFloatingPoint
+internal typealias SSComplexFloatElement = SSFloatingPoint
 
-public protocol SSComplexFloat : SSComplexNumeric & CustomStringConvertible where Element: SSFloatingPoint {
+internal protocol SSComplexFloat : SSComplexNumeric & CustomStringConvertible where Element: SSFloatingPoint {
 }
 extension SSComplexFloat {
 
@@ -224,20 +224,23 @@ extension SSComplexFloat {
     }
 }
 
-public struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
+/// Provides an Complex type which conforms to SSComplexFloat. Real an Imaginary part comforms to SSFloatingPoint
+internal struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
+    
     public typealias Element = T
 
     private var real: Element
     private var imag: Element
 
     
+    /// Description string (x + y * i)
     public var description: String {
         let sign = imag.sign == .minus ? "-" : "+"
         let a: Element = Swift.abs(imag)
         return "\(real) "+sign+" \(a) i"
     }
     
-
+    /// Real part
     public var re: Element {
         get {
             return real
@@ -246,7 +249,7 @@ public struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
             real = newValue
         }
     }
-    
+    /// Imaginary Part
     public var im: Element {
         get {
             return imag
@@ -256,27 +259,48 @@ public struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
         }
     }
     
+    /// Euqality operator
+    ///
+    /// - Parameter lhs: left hand side
+    /// - Parameter rhs: right hand side
+    /// - Returns: True, lhs.re == rhs.re && lhs.im == rhs.im
     public static func ==(_ lhs: Complex<T>, _ rhs: Complex<T>) -> Bool {
         return lhs.re == rhs.re && rhs.re == rhs.im
     }
-
+    
+    /// Init a new complex number
+    /// - Parameter re: Real part
+    /// - Parameter im: Imaginary part
     public init(re r: T, im i: T) {
         real = r
         imag = i
     }
 }
 
+
 extension Complex : Codable where Element: Codable {
-    public enum CodingKeys : String, CodingKey {
+    /// Defines the coding keys for Codable
+    internal enum CodingKeys : String, CodingKey {
         public typealias RawValue = String
         case real, imag
     }
-    public init(from decoder: Decoder) throws {
+    
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or if the data read is corrupted or otherwise invalid.
+    /// - Parameter decoder: The decoder to read data from.
+    internal init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.real = try values.decode(Element.self, forKey: .real)
         self.imag = try values.decode(Element.self, forKey: .imag)
     }
-    public func encode(to encoder: Encoder) throws {
+    
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, encoder will encode an empty keyed container in its place.
+    /// - Parameter decoder: The decoder to read data from.
+    /// - Throws: This function throws an error if any values are invalid for the given encoder’s format.
+    internal func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.re, forKey: .real)
         try container.encode(self.im, forKey: .imag)

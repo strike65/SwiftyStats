@@ -29,14 +29,14 @@ import Foundation
 
 
 
-/// Tests, if a value is integer.
-/// - Paramter value: A double-value.
+/// Tests, if a value is an integer (i.e. has no decimal places).
+/// - Parameter value: A Floating Point value
 internal func isInteger<T: SSFloatingPoint>(_ value: T) -> Bool {
     return value.truncatingRemainder(dividingBy: 1).isZero
 }
 
 /// Tests, if a value is odd.
-/// - Paramter value: A double-value.
+/// - Parameter value: A Floating Point value
 internal func isOdd<T: SSFloatingPoint>(_ value: T) -> Bool {
     var modr: (T, T)
     modr = modf(value)
@@ -51,6 +51,8 @@ internal func isOdd<T: SSFloatingPoint>(_ value: T) -> Bool {
     }
 }
 
+/// Returns the integer value of x.
+/// - Parameter x: Floating Point value
 internal func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
     switch x {
     case let d as Double:
@@ -161,6 +163,7 @@ internal func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
 
 
 /// Returns the integer part of a floating point number
+/// - Parameter x: Floating Point value
 internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
     var modr: (T, T)
     modr = Darwin.modf(x)
@@ -169,15 +172,15 @@ internal func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
 
 
 /// Returns the fractional part of a double-value
-/// - Paramter value: A double-value.
+/// - Parameter value: Floating Point value
 internal func fractionalPart<T: SSFloatingPoint>(_ value: T) -> T {
     var modr: (T, T)
     modr = Darwin.modf(value)
     return modr.1
 }
 
-/// Tests, if a value is numeric
-/// - Paramter value: A value of type T
+/// Tests, if alue is a numeric value
+/// - Parameter value: A value of type T
 internal func isNumber<T>(_ value: T) -> Bool {
     let valueMirror = Mirror(reflecting: value)
     #if arch(arm) || arch(arm64)
@@ -390,6 +393,7 @@ internal func makeFP<FROM, TO: SSFloatingPoint>(_ value: FROM) -> TO {
     }
 }
 
+/// Casts the members of an Array form one numerical type to a Floating Point
 internal func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>? where T: Numeric & Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
     if array.isEmpty {
         return nil
@@ -410,26 +414,26 @@ internal func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>?
 
 
 /// Returns the maximum of two comparable values
-internal func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
-    if t1 > t2 {
-        return t1
-    }
-    else {
-        return t2
-    }
-}
+//public func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
+//    if t1 > t2 {
+//        return t1
+//    }
+//    else {
+//        return t2
+//    }
+//}
 
-/// Returns the minimum of two comparable values
-internal func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
-    if t1 < t2 {
-        return t1
-    }
-    else {
-        return t2
-    }
-}
+///// Returns the minimum of two comparable values
+//internal func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
+//    if t1 < t2 {
+//        return t1
+//    }
+//    else {
+//        return t2
+//    }
+//}
 
-/// Returns a SSExamine object of length one and count "count"
+/// Returns a SSExamine object of length (i.e. number of unique elements) one and count "count"
 /// - Parameter value: Value
 /// - Parameter count: Number of values
 internal func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, count: Int!) -> SSExamine<T, FPT> where T: Comparable, T: Hashable, FPT: Codable {

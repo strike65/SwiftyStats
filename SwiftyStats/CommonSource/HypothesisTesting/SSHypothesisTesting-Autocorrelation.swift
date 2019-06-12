@@ -132,7 +132,7 @@ extension SSHypothesisTesting {
     /// ### Usage ###
     ///
     ///     let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
-    ///     let lewdat = SSExamine<Double, Double>.init(withArray: lew1, characterSet: nil)
+    ///     let lewdat = SSExamine<Numeric, SSFloatingPoint>.init(withArray: lew1, characterSet: nil)
     ///     let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lewdat)
     ///
     /// - Parameter data: SSExamine object

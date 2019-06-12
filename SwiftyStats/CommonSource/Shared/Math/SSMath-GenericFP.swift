@@ -21,6 +21,11 @@
  
  */
 
+
+/*
+ Internal math functions to support SSFloatingPoint
+*/
+
 import Foundation
 import Darwin
 import Accelerate.vecLib

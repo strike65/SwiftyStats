@@ -628,11 +628,11 @@ fileprivate func qinv(p: Double, c: Double, v: Double) -> Double {
  *  the search is terminated
  */
 
+
 /// In R, the function is called as follows:
-///
 /// qtukey <- function(p, nmeans, df, nranges=1, lower.tail = TRUE, log.p = FALSE)
 ///
-//  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
+///  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
 internal func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
     let eps = 0.0001
     let maxiter = 50

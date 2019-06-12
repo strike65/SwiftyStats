@@ -6389,12 +6389,4 @@ class SwiftyStatsTests: XCTestCase {
         return y
     }
 
-    func testFP() {
-//        let examine1: SSExamine<Double, Double> = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-//        let test: Bool = try! examine1.saveTo(fileName: "/Users/volker/Desktop/testdaten.csv", overwrite: true, encloseElementsBy: "\"")
-//        let examine2: SSExamine<Double, Double> = try! SSExamine<Double, Double>.examine(fromFile: "/Users/volker/Desktop/testdaten.csv", separator: ",", elementsEnclosedBy: "\"", scanDouble )!
-//        let dArray: Array<Double> = examine2.elementsAsArray(sortOrder: .raw)!
-//        let f80Array: Array<Float80> = castArrayToFloatingPoint(dArray)!
-//        print(examine1)
-    }
-}
+ }

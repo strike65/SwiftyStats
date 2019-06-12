@@ -28,8 +28,8 @@
  */
 
 /// The extension for archives
-internal let SSExamineFileExtension = "SSexamine"
+internal let SSExamineFileExtension = "SSExamine"
 
 /// The current file version for archiving
-internal let SSStatisticsFileVersionString: String = "1.0.0"
+internal let SSStatisticsFileVersionString: String = "1.0.4"
 

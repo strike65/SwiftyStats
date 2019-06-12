@@ -39,7 +39,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array<FloatingPoint>
     /// - Parameter target: Distribution to test for
     /// - Returns: SSKSTestResul struct
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: ``SSSwiftyStatsError.invalidArgument`` if data.count < 2
     public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
             do {
@@ -69,7 +69,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array<FloatingPoint>
     /// - Parameter target: Distribution to test for
     /// - Returns: SSKSTestResul struct
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: ``SSSwiftyStatsError.invalidArgument`` if data.count < 2
     public class func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
             do {
@@ -97,11 +97,11 @@ extension SSHypothesisTesting {
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
-    /// Calls ksGoFTest(data: SSExamine<Double, Double>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
-    /// - Parameter data: SSExamine<Double, Double>
+    /// Calls ksGoFTest(data: SSExamine<Numeric, SSFloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
+    /// - Parameter data: SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter target: Distribution to test for
     /// - Returns: SSKSTestResul struct
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: ``SSSwiftyStatsError.invalidArgument`` if data.count < 2
     public class func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         do {
             return try ksGoFTest(data: data, targetDistribution: target)
@@ -113,9 +113,9 @@ extension SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: SSExamine<Double, Double>
+    /// - Parameter data: SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter target: Distribution to test for
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: ``SSSwiftyStatsError.invalidArgument`` if data.count < 2
     public class func ksGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         // error handling
         if data.sampleSize < 2 {
@@ -432,11 +432,11 @@ extension SSHypothesisTesting {
     }
     
     /// Performs the Anderson Darling test for normality.
-    /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
+    /// Adapts an algorithm originally developed by Marsaglia et al.:Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004
     /// - Parameter data: Data as SSExamine object
     /// - Parameter alpha: Alpha
     /// - Returns: SSADTestResult struct.
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: ``SSSwiftyStatsError.invalidArgument`` if data.count < 2
     public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         if !data.isEmpty {
             do {
@@ -465,7 +465,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Data
     /// - Parameter alpha: Alpha
     /// - Returns: SSADTestResult struct.
-    /// - Throws: SSSwiftyStatsError if data.count < 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if data.count < 2
     public class func adNormalityTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         var ad: FPT = 0
         var a2: FPT
@@ -660,13 +660,13 @@ extension SSHypothesisTesting {
         return sum
     }
     
-    /// Perform the Mann-Whitney U test for independent samples.
+    /// Performs the Mann-Whitney U test for independent samples.
     /// ### Note ###
-    /// If there are ties between the sets, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
+    /// If there are ties, only an asymptotic p-value is returned. Exact p-values are computed using the Algorithm by Dineen and Blakesley (1973)
     /// - Parameter set1: Observations of group1 as Array<T>
     /// - Parameter set2: Observations of group2 as Array<T>
     /// - Returns: SSMannWhitneyUTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T, FPT>(set1: Array<T>, set2: Array<T>)  throws -> SSMannWhitneyUTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -704,7 +704,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
     /// - Returns: SSMannWhitneyUTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func mannWhitneyUTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>)  throws -> SSMannWhitneyUTestResult<FPT>  where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -852,7 +852,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1 as Array<FloatingPoint>
     /// - Parameter set2: Observations 2 as Array<FloatingPoint>
     /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -900,7 +900,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1053,7 +1053,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSSignTestRestult struct
-    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public class func signTest<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -1100,7 +1100,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSSignTestRestult struct
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public class func signTest<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1201,7 +1201,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
     /// - Returns: p value
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
     public class func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) -> FPT {
         if p0.isNaN {
             return FPT.nan
@@ -1296,7 +1296,7 @@ extension SSHypothesisTesting {
     /// - Parameter p0: Probability
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public class func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1352,7 +1352,7 @@ extension SSHypothesisTesting {
     /// - Parameter p0: Probability
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public class func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1468,7 +1468,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A Array object containg data for set 1
     /// - Parameter set2: A Array object containg data for set 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: Array<T>, set2: Array<T>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -1510,7 +1510,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A SSExamine object containg data for set 1
     /// - Parameter set2: A SSExamine object containg data for set 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1600,7 +1600,7 @@ extension SSHypothesisTesting {
     /// Performs the two-sided Wald Wolfowitz test for two samples
     /// - Parameter set1: Observations in group 1
     /// - Parameter set2: Observations in group 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public class func waldWolfowitzTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>) throws -> SSWaldWolfowitzTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1863,7 +1863,7 @@ extension SSHypothesisTesting {
     ///   - data: An Array of SSExamine objects
     ///   - alpha: Level of significance
     /// - Returns: A SSKruskalWallisHTestResult struct
-    /// - Throws: An `SSSwiftyStatsError.invalidArgument` is thrown if less than two SSExamine objects are passed or an SSExamine object has less than two elements.
+    /// - Throws: An ``SSSwiftyStatsError.invalidArgument`` is thrown if less than two SSExamine objects are passed or an SSExamine object has less than two elements.
     public class func kruskalWallisHTest<T, FPT>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSKruskalWallisHTestResult<FPT> where T: Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)

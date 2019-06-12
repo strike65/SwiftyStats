@@ -33,8 +33,9 @@ extension SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
+    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size <= 3
     public class func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
-        if array.count == 3 {
+        if array.count <= 3 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -82,6 +83,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
+    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size <= 3
     public class func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if data.sampleSize <= 3 {
             #if os(macOS) || os(iOS)
@@ -188,6 +190,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
+    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size == 0
     public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(array: Array<T>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if array.count == 0 {
             return nil
@@ -210,6 +213,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
+    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size == 0
     public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(data: SSExamine<T, FPT>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if data.sampleSize == 0 {
             return nil

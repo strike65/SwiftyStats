@@ -35,10 +35,10 @@ public class SSHypothesisTesting {
     
     
     /// Performs the two sample t test
-    /// - Parameter sample1: Data1 as Array<Double>
-    /// - Parameter sample2: Data2 as Array<Double>
+    /// - Parameter sample1: Data1 as Array<Numeric>
+    /// - Parameter sample2: Data2 as Array<Numeric>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SS2SampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
@@ -85,10 +85,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the two sample t test
-    /// - Parameter sample1: Data1 as SSExamine<Double, Double>
-    /// - Parameter sample2: Data2 as SSExamine<Double, Double>
+    /// - Parameter sample1: Data1 as SSExamine<Numeric, SSFloatingPoint>
+    /// - Parameter sample2: Data2 as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample2.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff sample1.sampleSize < 2 || sample2.sampleSize < 2
     public class func twoSampleTTest<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>!, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SS2SampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -266,10 +266,10 @@ public class SSHypothesisTesting {
     
     
     /// Performs the one sample t test
-    /// - Parameter sample: Data as SSExamine<Double, Double>
+    /// - Parameter sample: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter mean: Reference mean
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff sample.sampleSize < 2
     public class func oneSampleTTest<T, FPT: SSFloatingPoint & Codable>(sample: SSExamine<T, FPT>, mean: FPT, alpha: FPT) throws -> SSOneSampleTTestResult<FPT>  where T: Hashable & Comparable & Codable {
         if sample.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -335,10 +335,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the one sample t test
-    /// - Parameter data: Data as Array<Double>
+    /// - Parameter data: Data as Array<Numeric>
     /// - Parameter mean: Reference mean
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff sample.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff sample.sampleSize < 2
     public class func oneSampleTTEst<T, FPT: SSFloatingPoint & Codable>(data: Array<T>, mean: FPT, alpha: FPT) throws -> SSOneSampleTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
@@ -361,10 +361,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the t test for matched pairs
-    /// - Parameter set1: data of set1 as SSExamine<Double, Double>
-    /// - Parameter set2: data of set2 as SSExamine<Double, Double>
+    /// - Parameter set1: data of set1 as SSExamine<Numeric, SSFloatingPoint>
+    /// - Parameter set2: data of set2 as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff set1.sampleSize < 2 || set2.sampleSize < 2 || (set1.sampleSize != set2.sampleSize)
     public class func matchedPairsTTest<T, FPT: SSFloatingPoint & Codable>(set1: SSExamine<T, FPT>!, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSMatchedPairsTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if set1.sampleSize < 2 || set2.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -461,10 +461,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the t test for matched pairs
-    /// - Parameter set1: data of set1 as Array<Double>
-    /// - Parameter set2: data of set2 as Array<Double>
+    /// - Parameter set1: data of set1 as Array<Numeric>
+    /// - Parameter set2: data of set2 as Array<Numeric>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff data1.count < 2 || data2.count < 2 || data1.count != data2.count
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data1.count < 2 || data2.count < 2 || data1.count != data2.count
     public class func matchedPairsTTest<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSMatchedPairsTTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 || data2.count < 2 {
             #if os(macOS) || os(iOS)
@@ -500,9 +500,9 @@ public class SSHypothesisTesting {
     
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as Array<Double>
+    /// - Parameter data: data as Array<Numeric>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(data: Array<Array<T>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -524,9 +524,9 @@ public class SSHypothesisTesting {
     }
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as SSExamine<Double, Double>
+    /// - Parameter data: data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>?  where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -547,6 +547,11 @@ public class SSHypothesisTesting {
         }
     }
     
+    
+    /// Performs a one way ANOVA (multiple means test)
+    /// - Parameter dataFrame: data as SSDataFrame<Numeric, SSFloatingPoint>
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     public class func oneWayANOVA<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
@@ -571,6 +576,11 @@ public class SSHypothesisTesting {
         }
     }
     
+    /// Performs a one way ANOVA (multiple means test)
+    /// same as oneWayAnova(_:,_:)
+    /// - Parameter dataFrame: data as SSDataFrame<Numeric, SSFloatingPoint>
+    /// - Parameter alpha: Alpha
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
@@ -596,7 +606,8 @@ public class SSHypothesisTesting {
     }
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as Array<Double>
+    /// same as oneWayAnova(_:,_:)
+    /// - Parameter data: data as Array<Numeric>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(data: Array<Array<T>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
@@ -624,7 +635,8 @@ public class SSHypothesisTesting {
     }
     
     /// Performs a one way ANOVA (multiple means test)
-    /// - Parameter data: data as SSExamine<Double, Double>
+    /// same as oneWayAnova(_:,_:)
+    /// - Parameter data: data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
     /// - Throws: SSSwiftyStatsError iff data.count <= 2
     public class func multipleMeansTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, alpha: FPT) throws -> SSOneWayANOVATestResult<FPT>? where T: Hashable & Comparable & Codable {
@@ -746,37 +758,36 @@ public class SSHypothesisTesting {
     
     // TUKEY KRAMER
     // All means are compared --> k(k - 1) / 2 comparisons (k = number of means)
-    /*
-     Structure of the differences array:
-     
-                    m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
-     m(0)           -           d(0,1)      d(0,2)      m(0,3)      ...     d(0,k - 1)
-     m(1)           d(1,0)      -           d(1,2)      m(1,3)      ...     d(1,k - 1)
-     m(2)           d(2,0)      d(2,1)      -           m(2,3)      ...     d(2,k - 1)
-     m(3)           d(3,0)      d(3,1)      -           -           ...     d(3,k - 1)
-     .              .           .           .           .           ...     d(2,k - 1)
-     .              .           .           .           .           ...     .
-     m(k - 1)       d(k - 1,0)  d(k - 1,1)  d(k - 1,2)  d(k - 1,3)  ...     -
-     
-     
-     
-     Structure of the T array:
-     
-                    m(0)        m(1)        m(2)        ...     m(k - 1)
-     m(0)           -           T(0,1)      T(0,2)      ...     T(0,k - 1)
-     m(1)           T(1,0)      -           T(1,2)      ...     T(1,k - 1)
-     m(2)           T(2,0)      T(2,1)      -           ...     T(2,k - 1)
-     .              .           .           .           ...     .
-     .              .           .           .           ...     .
-     .              .           .           .           ...     .
-     m(k - 1)       T(k - 1,0)  T(k - 1,1)  T(k - 1,2)  ...     -
-     
-     */
+
     /// Performs the Tukey-Kramer test for multiple comparisons
-    /// - Parameter data: data as SSDataFrame<Double>
+    ///
+    /// ### Structure of the differences array: ###
+    ///
+    ///                   m(0)        m(1)        m(2)        m(3)        ...     m(k - 1)
+    ///    m(0)           -           d(0,1)      d(0,2)      m(0,3)      ...     d(0,k - 1)
+    ///    m(1)           d(1,0)      -           d(1,2)      m(1,3)      ...     d(1,k - 1)
+    ///    m(2)           d(2,0)      d(2,1)      -           m(2,3)      ...     d(2,k - 1)
+    ///    m(3)           d(3,0)      d(3,1)      -           -           ...     d(3,k - 1)
+    ///    .              .           .           .           .           ...     d(2,k - 1)
+    ///    .              .           .           .           .           ...     .
+    ///    m(k - 1)       d(k - 1,0)  d(k - 1,1)  d(k - 1,2)  d(k - 1,3)  ...     -
+    ///
+    ///
+    ///
+    /// ### Structure of the T array: ###
+    ///
+    ///                   m(0)        m(1)        m(2)        ...     m(k - 1)
+    ///    m(0)           -           T(0,1)      T(0,2)      ...     T(0,k - 1)
+    ///    m(1)           T(1,0)      -           T(1,2)      ...     T(1,k - 1)
+    ///    m(2)           T(2,0)      T(2,1)      -           ...     T(2,k - 1)
+    ///    .              .           .           .           ...     .
+    ///    .              .           .           .           ...     .
+    ///    .              .           .           .           ...     .
+    ///    m(k - 1)       T(k - 1,0)  T(k - 1,1)  T(k - 1,2)  ...     -
+    /// - Parameter data: data as SSDataFrame<Numeric>
     /// - Parameter alpha: Alpha
     /// - Returns:SSHSDResultRow
-    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
     public class func tukeyKramerTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>? where T: Hashable & Comparable & Codable {
         do {
@@ -799,10 +810,10 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the Tukey-Kramer test for multiple comparisons
-    /// - Parameter data: data as SSExamine<Double, Double>
+    /// - Parameter data: data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
     /// - Returns:SSHSDResultRow
-    /// - Throws: SSSwiftyStatsError iff data.count <= 2
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     /// - Precondition: Each examine object should be named uniquely.
     public class func tukeyKramerTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>?  where T: Hashable & Comparable & Codable {
         if data.count <= 2 {
@@ -971,6 +982,11 @@ public class SSHypothesisTesting {
     }
     
     /// Performs the post hoc test according to Scheffé
+    ///
+    /// - Parameter dataFrame: Data as SSDataFrame
+    /// - Parameter alpha: Alpha
+    /// - Returns: A SSPostHocTestResult struct
+    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.count <= 2
     public class func scheffeTest<T, FPT: SSFloatingPoint & Codable>(dataFrame: SSDataFrame<T, FPT>, alpha: FPT) throws -> Array<SSPostHocTestResult<FPT>>?   where T: Hashable & Comparable & Codable {
         do {
             var tukeyR: Array<SSPostHocTestResult<FPT>>?
