@@ -743,7 +743,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.", log: log_stat, type: .error)
+                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: log_stat, type: .error)
             }
             
             #endif
@@ -762,7 +762,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.", log: log_stat, type: .error)
+                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: log_stat, type: .error)
             }
             
             #endif
@@ -969,7 +969,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.", log: log_stat, type: .error)
+                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: log_stat, type: .error)
             }
             
             #endif
@@ -1001,7 +1001,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.", log: log_stat, type: .error)
+                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: log_stat, type: .error)
             }
             
             #endif
@@ -1909,7 +1909,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab. - contact the developer", log: log_stat, type: .error)
+                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub. - contact the developer", log: log_stat, type: .error)
             }
             
             #endif

@@ -934,7 +934,7 @@ extension SSCrosstab {
                             sum += temp1
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                     temp.append(sum)
@@ -961,7 +961,7 @@ extension SSCrosstab {
                             sum += temp1
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                     temp.append(sum)
@@ -1264,7 +1264,7 @@ extension SSCrosstab {
                     return temp1
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -1277,7 +1277,7 @@ extension SSCrosstab {
 //                return temp1
 //            }
 //            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
 //            }
         }
         else {
@@ -1296,7 +1296,7 @@ extension SSCrosstab {
                     return temp1
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -1310,7 +1310,7 @@ extension SSCrosstab {
 //                return temp1
 //            }
 //            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
 //            }
         }
         else {
@@ -1328,7 +1328,7 @@ extension SSCrosstab {
                         return temp / self.total
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 else {
@@ -1350,7 +1350,7 @@ extension SSCrosstab {
 //                return temp / self.total
 //            }
 //            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
 //            }
 //        }
 //        else {
@@ -1411,7 +1411,7 @@ extension SSCrosstab {
                         return temp / self.rowSums![row]
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 else {
@@ -1437,7 +1437,7 @@ extension SSCrosstab {
                         return temp / self.columnSums![column]
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 else {
@@ -1576,7 +1576,7 @@ extension SSCrosstab {
                         return temp - self.expectedFrequency(row: row, column: column)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 else {
@@ -1598,7 +1598,7 @@ extension SSCrosstab {
 //                return temp - self.expectedFrequency(row: row, column: column)
 //            }
 //            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
 //            }
 //        }
 //        else {
@@ -1711,7 +1711,7 @@ extension SSCrosstab {
                             }
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                 }
@@ -1744,7 +1744,7 @@ extension SSCrosstab {
                     }
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -1774,16 +1774,16 @@ extension SSCrosstab {
                                         sum1 += X * Y * frc
                                     }
                                     else {
-                                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                                     }
                                 }
                                 else {
-                                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                                 }
                             }
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                     var sum2: FPT = 0
@@ -1793,7 +1793,7 @@ extension SSCrosstab {
                             sum2 += X * self.rowSum(row: r)
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                     var sum3: FPT = 0
@@ -1803,7 +1803,7 @@ extension SSCrosstab {
                             sum3 += Y * self.columnSum(column: c)
                         }
                         else {
-                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                         }
                     }
                     return sum1 - (sum2 * sum3) / self.total
@@ -1831,7 +1831,7 @@ extension SSCrosstab {
                         sum2 += X * self.rowSum(row: r)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 SX = sum1 - pow1(sum2, 2) / self.total
@@ -1844,7 +1844,7 @@ extension SSCrosstab {
                         sum2 += Y * self.columnSum(column: c)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 SY = sum1 - pow1(sum2, 2) / self.total
@@ -1950,7 +1950,7 @@ extension SSCrosstab {
                     return (n11 * n22) / (n12 * n21)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -1973,7 +1973,7 @@ extension SSCrosstab {
                     return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -1996,7 +1996,7 @@ extension SSCrosstab {
     //                            sum2 += pow(self.columnSum(column: c), 2.0)
     //                        }
     //                        else {
-    //                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+    //                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
     //                        }
     //                    }
     //                }

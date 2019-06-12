@@ -49,7 +49,7 @@ extension SSExamine {
                     s = s + pow1(temp , 2) * makeFP(freq)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s
@@ -71,7 +71,7 @@ extension SSExamine {
                     s = s + pow1(temp, p) * makeFP(freq)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s
@@ -92,7 +92,7 @@ extension SSExamine {
                     s = s + temp * makeFP(freq)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s
@@ -118,7 +118,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s
@@ -146,7 +146,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return sum
@@ -160,7 +160,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return sum
@@ -291,11 +291,11 @@ extension SSExamine {
                         result = (temp1 + temp2) / 2
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -305,7 +305,7 @@ extension SSExamine {
                     result = temp1
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return result
@@ -432,7 +432,7 @@ extension SSExamine {
                     k = k + 1
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s / k
@@ -469,7 +469,7 @@ extension SSExamine {
                     s = s + temp
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             let temp: FPT = makeFP(a[integerValue(v)])
@@ -478,7 +478,7 @@ extension SSExamine {
                 s = s + v * (temp + temp1)
             }
             else {
-                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
             return s / makeFP(self.sampleSize)
         }
@@ -540,7 +540,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return p
@@ -568,7 +568,7 @@ extension SSExamine {
                     }
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return sp
@@ -616,7 +616,7 @@ extension SSExamine {
                     return tempMax - tempMin
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             else {
@@ -655,7 +655,7 @@ extension SSExamine {
                 return (tempMax + tempMin) / 2
             }
             else {
-                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
         }
         else {
@@ -745,7 +745,7 @@ extension SSExamine {
                         sum = sum + diff * diff * makeFP(freq)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return sum / makeFP(self.sampleSize - 1)
@@ -863,7 +863,7 @@ extension SSExamine {
                     s = s + (2 * makeFP(i) - N - 1) * x
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return s / (pow1(N, 2) * m)
@@ -898,7 +898,7 @@ extension SSExamine {
                         sum = sum + x
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return sum
@@ -1052,7 +1052,7 @@ extension SSExamine {
             if !t1.isNaN {
                 diffArray.append(abs(t1 - rp))
             }else {
-                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
@@ -1091,7 +1091,7 @@ extension SSExamine {
                 c = c + freq
             }
             else {
-                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
         }
         let cc: FPT = makeFP(c)
@@ -1131,7 +1131,7 @@ extension SSExamine {
                         }
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return s / k
@@ -1152,7 +1152,7 @@ extension SSExamine {
                         }
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return s / k
@@ -1197,7 +1197,7 @@ extension SSExamine {
                     sum = sum + pow1(diff, rr) * makeFP(freq)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return sum / makeFP(self.sampleSize)
@@ -1220,7 +1220,7 @@ extension SSExamine {
                     sum = sum + pow1(t, rr) * makeFP(freq)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             return sum / makeFP(self.sampleSize)
@@ -1244,7 +1244,7 @@ extension SSExamine {
                         sum = sum + pow1( ( t - m ) / sd, rr) * makeFP(freq)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 return sum / makeFP(self.sampleSize)
@@ -1387,7 +1387,7 @@ extension SSExamine {
                         tempArray.append(t)
                     }
                     else {
-                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                        fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
                 if let res = try! SSHypothesisTesting.esdOutlierTest(array: tempArray, alpha: 0.05, maxOutliers: self.sampleSize / 2, testType: .bothTails) {
@@ -1422,7 +1422,7 @@ extension SSExamine {
                     tempArray.append(temp)
                 }
                 else {
-                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitLab.")
+                    fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
             if let res: SSESDTestResult<SSElement, FPT> = try! SSHypothesisTesting.esdOutlierTest(data: self, alpha: alpha, maxOutliers: max, testType: t) {
