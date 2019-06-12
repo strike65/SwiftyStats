@@ -47,7 +47,7 @@ Your Podfile should looks like:
 
 ```ruby
 target 'YOURPROJECT' do
-  use frameworks!
+  use_frameworks!
   pod 'SwiftyStats'  
 end
 ```

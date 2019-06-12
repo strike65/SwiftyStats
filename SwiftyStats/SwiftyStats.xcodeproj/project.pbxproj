@@ -13,6 +13,8 @@
 		9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13CD20211B71D100153FC3 /* CodableFloat80.swift */; };
 		9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
 		9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
+		9F19FC4E22B132C40042E922 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F19FC4D22B132C40042E922 /* main.swift */; };
+		9F19FC5222B132EA0042E922 /* SwiftyStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */; };
 		9F1F70EC2103A0280037DFB5 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 9F1F70EB2103A0280037DFB5 /* CHANGELOG */; };
 		9F2EC6B1210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
 		9F2EC6B2210AEF3E005AA755 /* Hypergeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */; };
@@ -187,10 +189,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9F19FC4922B132C40042E922 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		9F0B3D9621503ACC00C4F920 /* Pearson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pearson.swift; sourceTree = "<group>"; };
 		9F13CD20211B71D100153FC3 /* CodableFloat80.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableFloat80.swift; sourceTree = "<group>"; };
 		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
+		9F19FC4B22B132C40042E922 /* SwiftStatsCLTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftStatsCLTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F19FC4D22B132C40042E922 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array-Extension.swift"; sourceTree = "<group>"; };
@@ -298,6 +314,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9F19FC4822B132C40042E922 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F19FC5222B132EA0042E922 /* SwiftyStats.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9F82D39F1F1E8F19001BFC9D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -323,6 +347,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F19FC4C22B132C40042E922 /* SwiftStatsCLTest */ = {
+			isa = PBXGroup;
+			children = (
+				9F19FC4D22B132C40042E922 /* main.swift */,
+			);
+			path = SwiftStatsCLTest;
+			sourceTree = "<group>";
+		};
 		9F4733E8214021E30041FD58 /* MarcumQ */ = {
 			isa = PBXGroup;
 			children = (
@@ -414,6 +446,7 @@
 				9FEA82401F76C9F6005E4349 /* CommonSource */,
 				9F95476F20FFA996002F1E76 /* Resources */,
 				9FEA825D1F76CA06005E4349 /* CommonTests */,
+				9F19FC4C22B132C40042E922 /* SwiftStatsCLTest */,
 				9F82D3A41F1E8F19001BFC9D /* Products */,
 				9FBB8AAC1F76D76500ED8755 /* Frameworks */,
 			);
@@ -425,6 +458,7 @@
 				9F82D3A31F1E8F19001BFC9D /* SwiftyStats.framework */,
 				9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */,
 				9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */,
+				9F19FC4B22B132C40042E922 /* SwiftStatsCLTest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -617,6 +651,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9F19FC4A22B132C40042E922 /* SwiftStatsCLTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F19FC4F22B132C40042E922 /* Build configuration list for PBXNativeTarget "SwiftStatsCLTest" */;
+			buildPhases = (
+				9F19FC4722B132C40042E922 /* Sources */,
+				9F19FC4822B132C40042E922 /* Frameworks */,
+				9F19FC4922B132C40042E922 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftStatsCLTest;
+			productName = SwiftStatsCLTest;
+			productReference = 9F19FC4B22B132C40042E922 /* SwiftStatsCLTest */;
+			productType = "com.apple.product-type.tool";
+		};
 		9F82D3A21F1E8F19001BFC9D /* SwiftyStats */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9F82D3B71F1E8F19001BFC9D /* Build configuration list for PBXNativeTarget "SwiftyStats" */;
@@ -678,10 +729,15 @@
 		9F82D39A1F1E8F19001BFC9D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = VTSoftware;
 				TargetAttributes = {
+					9F19FC4A22B132C40042E922 = {
+						CreatedOnToolsVersion = 10.2.1;
+						DevelopmentTeam = 8K3X84P22H;
+						ProvisioningStyle = Automatic;
+					};
 					9F82D3A21F1E8F19001BFC9D = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 8K3X84P22H;
@@ -718,6 +774,7 @@
 				9F82D3A21F1E8F19001BFC9D /* SwiftyStats */,
 				9F82D3AB1F1E8F19001BFC9D /* SwiftyStatsTests */,
 				9FEA82371F76C95F005E4349 /* SwiftyStatsMobile */,
+				9F19FC4A22B132C40042E922 /* SwiftStatsCLTest */,
 			);
 		};
 /* End PBXProject section */
@@ -781,6 +838,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9F19FC4722B132C40042E922 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F19FC4E22B132C40042E922 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9F82D39E1F1E8F19001BFC9D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -965,6 +1030,41 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		9F19FC5022B132C40042E922 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8K3X84P22H;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9F19FC5122B132C40042E922 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8K3X84P22H;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		9F82D3B51F1E8F19001BFC9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1235,6 +1335,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9F19FC4F22B132C40042E922 /* Build configuration list for PBXNativeTarget "SwiftStatsCLTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F19FC5022B132C40042E922 /* Debug */,
+				9F19FC5122B132C40042E922 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9F82D39D1F1E8F19001BFC9D /* Build configuration list for PBXProject "SwiftyStats" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
