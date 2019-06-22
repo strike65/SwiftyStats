@@ -1,3 +1,13 @@
+Version 1.1.0
+- namespaces (using enums without cases)
+- split "complex" expression into smaller pieces to optimize Buildtime
+- Probability distributions: SSProbStat.[DISTRIBUTION].[cdf|pdf|para|quantile]
+- Special functions: SSSpecialFunctions.[FUNCTION]
+- Helpers
+- SSMath.[FUNVTION]
+- SSMath.ComplexMath
+- exclude experimental sources
+
 Version 1.0.4
 - update access levels
 - advanced(by:) removed when accessing arrays
@@ -5,7 +15,7 @@ Version 1.0.4
 - update doc
 - add Array extension: indices(where:)
 - SSExamine.saveTo: parameter encloseElementsBy added
-- Target SwiftyStatsTests: added new Run Script build phase to avoid compliants regarding the signature
+- Target SwiftyStatsTests: added new Run Script build phase to avoid complaints regarding the signature
 - host the repo at GitHub again
 - complex type is internal
 
