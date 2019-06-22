@@ -21,153 +21,154 @@ import Foundation
 import Accelerate
 // naive implementation
 
-internal func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T) -> T {
-    var sum1, s: T
-    let tol: T = T.ulpOfOne
-    let maxIT: T = 1000
-    var k: T = 0
-    sum1 = 0
-    s = 0
-    var p1: T = 0
-    var p2: T = 0
-    var temp1: T = 0
-    let lz: T = log1(z)
-    var kz: T
-    while k < maxIT {
-        p1 = lpochhammer(x: a1, n: k) + lpochhammer(x: a2, n: k)
-        p2 = lpochhammer(x: b1, n: k) + lpochhammer(x: b2, n: k)
-        kz = k * lz
-        temp1 = p1 + kz - p2
-        temp1 = temp1 - logFactorial(integerValue(k))
-        s = exp1(temp1)
-        if abs((sum1 - (s + sum1))) < tol {
-            break
+extension SSSpecialFunctions {
+    internal static func h2f2<T: SSFloatingPoint & Codable>(a1: T, a2: T, b1: T, b2: T, z: T) -> T {
+        var sum1, s: T
+        let tol: T = T.ulpOfOne
+        let maxIT: T = 1000
+        var k: T = 0
+        sum1 = 0
+        s = 0
+        var p1: T = 0
+        var p2: T = 0
+        var temp1: T = 0
+        let lz: T = SSMath.log1(z)
+        var kz: T
+        while k < maxIT {
+            p1 = lpochhammer(x: a1, n: k) + lpochhammer(x: a2, n: k)
+            p2 = lpochhammer(x: b1, n: k) + lpochhammer(x: b2, n: k)
+            kz = k * lz
+            temp1 = p1 + kz - p2
+            temp1 = temp1 - SSMath.logFactorial(Helpers.integerValue(k))
+            s = SSMath.exp1(temp1)
+            if abs((sum1 - (s + sum1))) < tol {
+                break
+            }
+            sum1 = sum1 + SSMath.exp1(temp1)
+            k = k + 1
         }
-        sum1 = sum1 + exp1(temp1)
-        k = k + 1
+        return sum1
     }
-    return sum1
-}
-
-/*
- %% Original fortran documentation
- %     ACPAPFQ.  A NUMERICAL EVALUATOR FOR THE GENERALIZED HYPERGEOMETRIC
- %
- %     1  SERIES.  W.F. PERGER, A. BHALLA, M. NARDIN.
- %
- %     REF. IN COMP. PHYS. COMMUN. 77 (1993) 249
- %
- %     ****************************************************************
- %     *                                                              *
- %     *    SOLUTION TO THE GENERALIZED HYPERGEOMETRIC FUNCTION       *
- %     *                                                              *
- %     *                           by                                 *
- %     *                                                              *
- %     *                      W. F. PERGER,                           *
- %     *                                                              *
- %     *              MARK NARDIN  and ATUL BHALLA                    *
- %     *                                                              *
- %     *                                                              *
- %     *            Electrical Engineering Department                 *
- %     *            Michigan Technological University                 *
- %     *                  1400 Townsend Drive                         *
- %     *                Houghton, MI  49931-1295   USA                *
- %     *                     Copyright 1993                           *
- %     *                                                              *
- %     *               e-mail address: wfp@mtu.edu                    *
- %     *                                                              *
- %     *  Description : A numerical evaluator for the generalized     *
- %     *    hypergeometric function for complex arguments with large  *
- %     *    magnitudes using a direct summation of the Gauss series.  *
- %     *    The method used allows an accuracy of up to thirteen      *
- %     *    decimal places through the use of large integer arrays    *
- %     *    and a single final division.                              *
- %     *    (original subroutines for the confluent hypergeometric    *
- %     *    written by Mark Nardin, 1989; modifications made to cal-  *
- %     *    culate the generalized hypergeometric function were       *
- %     *    written by W.F. Perger and A. Bhalla, June, 1990)         *
- %     *                                                              *
- %     *  The evaluation of the pFq series is accomplished by a func- *
- %     *  ion call to PFQ, which is a double precision complex func-  *
- %     *  tion.  The required input is:                               *
- %     *  1. Double precision complex arrays A and B.  These are the  *
- %     *     arrays containing the parameters in the numerator and de-*
- %     *     nominator, respectively.                                 *
- %     *  2. Integers IP and IQ.  These integers indicate the number  *
- %     *     of numerator and denominator terms, respectively (these  *
- %     *     are p and q in the pFq function).                        *
- %     *  3. Double precision complex argument Z.                     *
- %     *  4. Integer LNPFQ.  This integer should be set to '1' if the *
- %     *     result from PFQ is to be returned as the natural logaritm*
- %     *     of the series, or '0' if not.  The user can generally set*
- %     *     LNPFQ = '0' and change it if required.                   *
- %     *  5. Integer IX.  This integer should be set to '0' if the    *
- %     *     user desires the program PFQ to estimate the number of   *
- %     *     array terms (in A and B) to be used, or an integer       *
- %     *     greater than zero specifying the number of integer pos-  *
- %     *     itions to be used.  This input parameter is escpecially  *
- %     *     useful as a means to check the results of a given run.   *
- %     *     Specificially, if the user obtains a result for a given  *
- %     *     set of parameters, then changes IX and re-runs the eval- *
- %     *     uator, and if the number of array positions was insuffi- *
- %     *     cient, then the two results will likely differ.  The rec-*
- %     *     commended would be to generally set IX = '0' and then set*
- %     *     it to 100 or so for a second run.  Note that the LENGTH  *
- %     *     parameter currently sets the upper limit on IX to 777,   *
- %     *     but that can easily be changed (it is a single PARAMETER *
- %     *     statement) and the program recompiled.                   *
- %     *  6. Integer NSIGFIG.  This integer specifies the requested   *
- %     *     number of significant figures in the final result.  If   *
- %     *     the user attempts to request more than the number of bits*
- %     *     in the mantissa allows, the program will abort with an   *
- %     *     appropriate error message.  The recommended value is 10. *
- %     *                                                              *
- %     *     Note: The variable NOUT is the file to which error mess- *
- %     *           ages are written (default is 6).  This can be      *
- %     *           changed in the FUNCTION PFQ to accomodate re-      *
- %     *           of output to another file                          *
- %     *                                                              *
- %     *  Subprograms called: HYPER.                                  *
- %     *                                                              *
- %     ****************************************************************
- 
- */
-
-
-internal func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
-    var sigfig: Int
-    switch z.re {
-    case is Double:
-        sigfig = 15
-    case is Float:
-        sigfig = 7
-        #if arch(x86_64)
-    case is Float80:
-        sigfig = 19
-        #endif
-    default:
-        sigfig = 15
-    }
-    var ans: Complex<T>
-    var zz: Complex<T> = z
-//    var ip: Int = a.count
-//    var iq: Int = b.count
-    let aa: Array<Complex<T>> = a
-    let bb: Array<Complex<T>> = b
-//    var i: Int = 0
-    do {
-        try ans = hyper(a: aa, b: bb, ip: aa.count, iq: bb.count, z: &zz, lnpfq: log ? 1 : 0, ix: 777, nsigfig: &sigfig)
-        if !ans.isNan {
-            return ans
+    
+    /*
+     %% Original fortran documentation
+     %     ACPAPFQ.  A NUMERICAL EVALUATOR FOR THE GENERALIZED HYPERGEOMETRIC
+     %
+     %     1  SERIES.  W.F. PERGER, A. BHALLA, M. NARDIN.
+     %
+     %     REF. IN COMP. PHYS. COMMUN. 77 (1993) 249
+     %
+     %     ****************************************************************
+     %     *                                                              *
+     %     *    SOLUTION TO THE GENERALIZED HYPERGEOMETRIC FUNCTION       *
+     %     *                                                              *
+     %     *                           by                                 *
+     %     *                                                              *
+     %     *                      W. F. PERGER,                           *
+     %     *                                                              *
+     %     *              MARK NARDIN  and ATUL BHALLA                    *
+     %     *                                                              *
+     %     *                                                              *
+     %     *            Electrical Engineering Department                 *
+     %     *            Michigan Technological University                 *
+     %     *                  1400 Townsend Drive                         *
+     %     *                Houghton, MI  49931-1295   USA                *
+     %     *                     Copyright 1993                           *
+     %     *                                                              *
+     %     *               e-mail address: wfp@mtu.edu                    *
+     %     *                                                              *
+     %     *  Description : A numerical evaluator for the generalized     *
+     %     *    hypergeometric function for complex arguments with large  *
+     %     *    magnitudes using a direct summation of the Gauss series.  *
+     %     *    The method used allows an accuracy of up to thirteen      *
+     %     *    decimal places through the use of large integer arrays    *
+     %     *    and a single final division.                              *
+     %     *    (original subroutines for the confluent hypergeometric    *
+     %     *    written by Mark Nardin, 1989; modifications made to cal-  *
+     %     *    culate the generalized hypergeometric function were       *
+     %     *    written by W.F. Perger and A. Bhalla, June, 1990)         *
+     %     *                                                              *
+     %     *  The evaluation of the pFq series is accomplished by a func- *
+     %     *  ion call to PFQ, which is a double precision complex func-  *
+     %     *  tion.  The required input is:                               *
+     %     *  1. Double precision complex arrays A and B.  These are the  *
+     %     *     arrays containing the parameters in the numerator and de-*
+     %     *     nominator, respectively.                                 *
+     %     *  2. Integers IP and IQ.  These integers indicate the number  *
+     %     *     of numerator and denominator terms, respectively (these  *
+     %     *     are p and q in the pFq function).                        *
+     %     *  3. Double precision complex argument Z.                     *
+     %     *  4. Integer LNPFQ.  This integer should be set to '1' if the *
+     %     *     result from PFQ is to be returned as the natural logaritm*
+     %     *     of the series, or '0' if not.  The user can generally set*
+     %     *     LNPFQ = '0' and change it if required.                   *
+     %     *  5. Integer IX.  This integer should be set to '0' if the    *
+     %     *     user desires the program PFQ to estimate the number of   *
+     %     *     array terms (in A and B) to be used, or an integer       *
+     %     *     greater than zero specifying the number of integer pos-  *
+     %     *     itions to be used.  This input parameter is escpecially  *
+     %     *     useful as a means to check the results of a given run.   *
+     %     *     Specificially, if the user obtains a result for a given  *
+     %     *     set of parameters, then changes IX and re-runs the eval- *
+     %     *     uator, and if the number of array positions was insuffi- *
+     %     *     cient, then the two results will likely differ.  The rec-*
+     %     *     commended would be to generally set IX = '0' and then set*
+     %     *     it to 100 or so for a second run.  Note that the LENGTH  *
+     %     *     parameter currently sets the upper limit on IX to 777,   *
+     %     *     but that can easily be changed (it is a single PARAMETER *
+     %     *     statement) and the program recompiled.                   *
+     %     *  6. Integer NSIGFIG.  This integer specifies the requested   *
+     %     *     number of significant figures in the final result.  If   *
+     %     *     the user attempts to request more than the number of bits*
+     %     *     in the mantissa allows, the program will abort with an   *
+     %     *     appropriate error message.  The recommended value is 10. *
+     %     *                                                              *
+     %     *     Note: The variable NOUT is the file to which error mess- *
+     %     *           ages are written (default is 6).  This can be      *
+     %     *           changed in the FUNCTION PFQ to accomodate re-      *
+     %     *           of output to another file                          *
+     %     *                                                              *
+     %     *  Subprograms called: HYPER.                                  *
+     %     *                                                              *
+     %     ****************************************************************
+     
+     */
+    
+    
+    internal static func hypergeometricPFQ<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, z: Complex<T>, log: Bool = false) throws -> Complex<T> {
+        var sigfig: Int
+        switch z.re {
+        case is Double:
+            sigfig = 15
+        case is Float:
+            sigfig = 7
+            #if arch(x86_64)
+        case is Float80:
+            sigfig = 19
+            #endif
+        default:
+            sigfig = 15
         }
+        var ans: Complex<T>
+        var zz: Complex<T> = z
+        //    var ip: Int = a.count
+        //    var iq: Int = b.count
+        let aa: Array<Complex<T>> = a
+        let bb: Array<Complex<T>> = b
+        //    var i: Int = 0
+        do {
+            try ans = hyper(a: aa, b: bb, ip: aa.count, iq: bb.count, z: &zz, lnpfq: log ? 1 : 0, ix: 777, nsigfig: &sigfig)
+            if !ans.isNan {
+                return ans
+            }
+        }
+        catch {
+            throw error
+        }
+        return ans
     }
-    catch {
-        throw error
-    }
-    return ans
 }
-
-
+    
 
 
 /*
@@ -217,6 +218,14 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     var cdum1, cdum2, final, oldtemp, temp, temp1, ans: Complex<T>
     var goon1, i1, ibit,icount,ii10,ir10,ixcnt,l,lmax,nmach,rexp: Int
     var e1, e2, e3: T
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    var ex5: T
+    var ex6: T
+    var ex7: T
+
     accy = 0
     cnt = 0
     creal = 0
@@ -253,16 +262,16 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     nmach = 0
     rexp = 0
     bitss = bits()
-    log2 = log101(2)
-    ibit = integerValue(bitss)
-    let intibito2: T = makeFP(ibit) / 2
-    let intibito4: T = makeFP(ibit) / 4
-    let iintibito2: Int = integerValue(intibito2)
-    let iintibito4: Int = integerValue(intibito4)
-    let intibito2f: T = makeFP(iintibito2)
-    let intibito4f: T = makeFP(iintibito4)
-    rmax = pow1(2, intibito2f)
-    sigfig = pow1(2, intibito4f)
+    log2 = SSMath.log101(2)
+    ibit = Helpers.integerValue(bitss)
+    let intibito2: T =  Helpers.makeFP(ibit) / 2
+    let intibito4: T =  Helpers.makeFP(ibit) / 4
+    let iintibito2: Int = Helpers.integerValue(intibito2)
+    let iintibito4: Int = Helpers.integerValue(intibito4)
+    let intibito2f: T =  Helpers.makeFP(iintibito2)
+    let intibito4f: T =  Helpers.makeFP(iintibito4)
+    rmax = SSMath.pow1(2, intibito2f)
+    sigfig = SSMath.pow1(2, intibito4f)
     for I1: Int in stride(from: 1, to: ip, by: 1) {
         i1 = I1
         ar2[i1 - 1] = (a[i1 - 1] &** sigfig).re
@@ -291,7 +300,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
      %     WARN THE USER THAT THE INPUT VALUE WAS SO CLOSE TO ZERO THAT IT
      %     WAS SET EQUAL TO ZERO.
      %
-    */
+     */
     for i1 in stride(from: 1, to: ip, by: 1) {
         if (!a[i1 - 1].re.isZero && ar[i1 - 1].isZero && ar2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
@@ -358,8 +367,8 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
      %     SCREENING OF NUMERATOR ARGUMENTS FOR NEGATIVE INTEGERS OR ZERO.
      %     ICOUNT WILL FORCE THE SERIES TO TERMINATE CORRECTLY.
      %
-    */
-    nmach = ifix(log101(pow1(2, fix(bitss))))
+     */
+    nmach = ifix(SSMath.log101(SSMath.pow1(2, fix(bitss))))
     icount = -1
     for i1 in 1...ip {
         if ar2[i1 - 1].isZero && ar[i1 - 1].isZero && ai2[i1 - 1].isZero && ai[i1 - 1].isZero {
@@ -367,9 +376,9 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             return ans
         }
         if ai[i1 - 1].isZero && ai2[i1 - 1].isZero && a[i1 - 1].re < 0 {
-            if abs(a[i1 - 1].re - round(a[i1 - 1].re)) < pow1(10, -makeFP(nmach)) {
+            if abs(a[i1 - 1].re - round(a[i1 - 1].re)) < SSMath.pow1(10, -Helpers.makeFP(nmach)) {
                 if (icount != -1) {
-                    icount = ifix(min(makeFP(icount), -round(a[i1 - 1].re)))
+                    icount = ifix(min( Helpers.makeFP(icount), -round(a[i1 - 1].re)))
                 }
                 else {
                     icount = -ifix(round(a[i1 - 1].re))
@@ -393,7 +402,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if ((ci[i1 - 1].isZero) && (ci2[i1 - 1].isZero) && (b[i1 - 1].re < 0)) {
-            if ((abs(b[i1 - 1].re) - round(b[i1 - 1].re) < pow1(10, makeFP(-nmach))) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
+            if ((abs(b[i1 - 1].re) - round(b[i1 - 1].re) < SSMath.pow1(10,  Helpers.makeFP(-nmach))) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
                     os_log("Abort - denominator argument was equal to zero", log: log_stat, type: .error)
@@ -403,9 +412,9 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             }
         }
     }
-    nmach = ifix(log101(pow1(2, makeFP(ibit))))
+    nmach = ifix(SSMath.log101(SSMath.pow1(2,  Helpers.makeFP(ibit))))
     nsigfig = min(nsigfig, nmach)
-    accy = pow1(10, makeFP(-nsigfig))
+    accy = SSMath.pow1(10,  Helpers.makeFP(-nsigfig))
     do {
         l = try ipremax(a: a, b: b, ip: ip, iq: iq, z: z)
     }
@@ -419,22 +428,22 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
          %     .
          %*/
         expon = 0
-        xl = makeFP(l)
+        xl =  Helpers.makeFP(l)
         for i in 1...ip {
             expon = expon + factor(a[i - 1] &++ xl &-- 1).re - factor(a[i - 1] &-- 1).re
         }
         for i in 1...iq {
             expon = expon - factor(b[i - 1] &++ xl &-- 1).re + factor(b[i - 1] &-- 1).re
         }
-        expon = (expon + xl) * log(z).re - factor(Complex<T>.init(re: xl, im: T.zero)).re
-        lmax = ifix(log101(exp1(1)) * expon)
+        expon = (expon + xl) * SSMath.ComplexMath.log(z).re - factor(Complex<T>.init(re: xl, im: T.zero)).re
+        lmax = ifix(SSMath.log101(SSMath.exp1(1)) * expon)
         l = lmax
         /*
          %
          %     Now, estimate the exponent of where the pFq series will terminate.
          %
          %
-        */
+         */
         temp1 = Complex<T>.init(re: 1, im: 0)
         creal = 1
         for i1 in 1...ip {
@@ -458,17 +467,17 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
          %     digits available per array position.
          %
          %
-        */
-        e1 = makeFP(l)
-        e2 = makeFP(nsigfig)
-        e3 = makeFP(nmach)
+         */
+        e1 =  Helpers.makeFP(l)
+        e2 =  Helpers.makeFP(nsigfig)
+        e3 =  Helpers.makeFP(nmach)
         l = ifix(2 * e1 + e2 / e3) + 2
     }
     /*
      %
      %     Make sure there are at least 5 array positions used.
      %
-    */
+     */
     l = max(l, 5)
     l = max(l, ix)
     if l < 0 || l > length {
@@ -509,34 +518,54 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     temp = Complex<T>(0,0)
     oldtemp = temp
     ixcnt = 0
-    e1 = makeFP(ibit)
-    e2 = makeFP(2)
+    e1 =  Helpers.makeFP(ibit)
+    e2 =  Helpers.makeFP(2)
     rexp = ifix(e1 / e2)
-    x = makeFP(rexp) * (sumr[l + 1 + aOffset] - 2)
+    x =  Helpers.makeFP(rexp) * (sumr[l + 1 + aOffset] - 2)
     rr10 = x * log2
     ir10  = ifix(rr10)
-    rr10 = rr10 - makeFP(ir10)
-    x = makeFP(rexp) * (sumi[l + 1 + aOffset] - 2)
+    rr10 = rr10 -  Helpers.makeFP(ir10)
+    x =  Helpers.makeFP(rexp) * (sumi[l + 1 + aOffset] - 2)
     ri10 = x * log2
     ii10 = ifix(ri10)
-    ri10 = ri10 - makeFP(ii10)
-    dum1 = (abs(sumr[1 + aOffset] * rmax * rmax + sumr[2 + aOffset] * rmax + sumr[3 + aOffset]) * sign(sumr[-1 + aOffset]))
-    dum2 = (abs(sumi[1 + aOffset] * rmax * rmax + sumi[2 + aOffset] * rmax + sumi[3 + aOffset]) * sign(sumi[-1 + aOffset]))
-    dum1 = dum1 * pow1(10, rr10)
-    dum2 = dum2 * pow1(10, ri10)
+    ri10 = ri10 -  Helpers.makeFP(ii10)
+    ex1 = sumr[1 + aOffset] * rmax * rmax
+    ex2 = sumr[2 + aOffset] * rmax
+    ex3 = sumr[3 + aOffset]
+    ex4 = ex1 + ex2 + ex3
+    dum1 = abs(ex4) * SSMath.sign(sumr[-1 + aOffset])
+    
+//    dum1 = (abs(sumr[1 + aOffset] * rmax * rmax + sumr[2 + aOffset] * rmax + sumr[3 + aOffset]) * SSMath.sign(sumr[-1 + aOffset]))
+    ex1 = sumi[1 + aOffset] * rmax * rmax
+    ex2 = sumi[2 + aOffset] * rmax
+    ex3 = sumi[3 + aOffset]
+    ex4 = ex1 + ex2 + ex3
+    dum2 = ex4 * SSMath.sign(sumi[-1 + aOffset])
+//    dum2 = (abs(sumi[1 + aOffset] * rmax * rmax + sumi[2 + aOffset] * rmax + sumi[3 + aOffset]) * SSMath.sign(sumi[-1 + aOffset]))
+    dum1 = dum1 * SSMath.pow1(10, rr10)
+    dum2 = dum2 * SSMath.pow1(10, ri10)
     cdum1 = Complex<T>(dum1,dum2)
-    x = makeFP(rexp) * (denomr[l + 1 + aOffset] - 2)
+    x =  Helpers.makeFP(rexp) * (denomr[l + 1 + aOffset] - 2)
     rr10 = x * log2
     ir10 = ifix(rr10)
-    rr10 = rr10 - makeFP(ir10)
-    x = makeFP(rexp) * (denomi[l + 1 + aOffset] - 2)
+    rr10 = rr10 -  Helpers.makeFP(ir10)
+    x =  Helpers.makeFP(rexp) * (denomi[l + 1 + aOffset] - 2)
     ri10 = x * log2
     ii10 = ifix(ri10)
-    ri10 = ri10 - makeFP(ii10)
-    dum1 = (abs(denomr[1 + aOffset] * rmax * rmax + denomr[2 + aOffset] * rmax + denomr[3 + aOffset]) * sign(denomr[-1 + aOffset]))
-    dum2 = (abs(denomi[1 + aOffset] * rmax * rmax + denomi[2 + aOffset] * rmax + denomi[3 + aOffset]) * sign(denomi[-1 + aOffset]))
-    dum1 = dum1 * pow1(10, rr10)
-    dum2 = dum2 * pow1(10, ri10)
+    ri10 = ri10 -  Helpers.makeFP(ii10)
+    ex1 = denomr[1 + aOffset] * rmax * rmax
+    ex2 = denomr[2 + aOffset] * rmax
+    ex3 = ex1 + ex2 + denomr[3 + aOffset]
+    dum1 = abs(ex3) * SSMath.sign(denomr[-1 + aOffset])
+//    dum1 = (abs(denomr[1 + aOffset] * rmax * rmax + denomr[2 + aOffset] * rmax + denomr[3 + aOffset]) * SSMath.sign(denomr[-1 + aOffset]))
+    dum2 = (abs(denomi[1 + aOffset] * rmax * rmax + denomi[2 + aOffset] * rmax + denomi[3 + aOffset]) * SSMath.sign(denomi[-1 + aOffset]))
+    ex1 = denomi[1 + aOffset] * rmax * rmax
+    ex2 = denomi[2 + aOffset] * rmax
+    ex3 = ex1 + ex2 + denomi[3 + aOffset]
+    dum2 = abs(ex3) * SSMath.sign(denomi[-1 + aOffset])
+//    dum2 = (abs(denomi[1 + aOffset] * rmax * rmax + denomi[2 + aOffset] * rmax + denomi[3 + aOffset]) * SSMath.sign(denomi[-1 + aOffset]))
+    dum1 = dum1 * SSMath.pow1(10, rr10)
+    dum2 = dum2 * SSMath.pow1(10, ri10)
     cdum2 = Complex<T>(dum1, dum2)
     temp = cdum1 &% cdum2
     goon1 = 1
@@ -586,20 +615,20 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             catch {
                 throw error
             }
-//            %
-//            %      First, estimate the exponent of the maximum term in the pFq
-//            %      series.
-//            %
+            //            %
+            //            %      First, estimate the exponent of the maximum term in the pFq
+            //            %      series.
+            //            %
             expon = 0
-            xl = makeFP(ixcnt)
+            xl =  Helpers.makeFP(ixcnt)
             for i in 1...ip {
                 expon = expon + factor(a[i - 1] &++ xl &-- 1).re - factor(a[i - 1] &-- T.one).re
             }
             for i in 1...iq {
                 expon = expon - factor(b[i - 1] &++ xl &-- 1).re + factor(b[i - 1] &-- T.one).re
             }
-            expon = expon + xl * log(z).re - factor(Complex<T>(xl,0)).re
-            lmax = ifix(log101(exp1(T.one)) * expon)
+            expon = expon + xl * SSMath.ComplexMath.log(z).re - factor(Complex<T>(xl,0)).re
+            lmax = ifix(SSMath.log101(SSMath.exp1(T.one)) * expon)
             if ((oldtemp &-- temp).abs < (temp &** accy).abs) {
                 do {
                     try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &final, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
@@ -615,27 +644,27 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         if ixcnt != icount {
             ixcnt = ixcnt + 1
             for i1 in 1...iq {
-//                %
-//                %      TAKE THE CURRENT SUM AND MULTIPLY BY THE DENOMINATOR OF THE NEXT
-//                %
-//                %      TERM, FOR BOTH THE MOST SIGNIFICANT HALF (CR,CI) AND THE LEAST
-//                %
-//                %      SIGNIFICANT HALF (CR2,CI2).
-//                %
-//                %
+                //                %
+                //                %      TAKE THE CURRENT SUM AND MULTIPLY BY THE DENOMINATOR OF THE NEXT
+                //                %
+                //                %      TERM, FOR BOTH THE MOST SIGNIFICANT HALF (CR,CI) AND THE LEAST
+                //                %
+                //                %      SIGNIFICANT HALF (CR2,CI2).
+                //                %
+                //                %
                 cmpmul(ar: &sumr, ai: &sumi, br: cr[i1 - 1], bi: ci[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
                 cmpmul(ar: &sumr, ai: &sumi, br: cr2[i1 - 1], bi: ci2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
                 qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
                 qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
-//                    %
-//                    %      STORE THIS TEMPORARILY IN THE SUM ARRAYS.
-//                    %
-//                    %
+                //                    %
+                //                    %      STORE THIS TEMPORARILY IN THE SUM ARRAYS.
+                //                    %
+                //                    %
                 cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &sumr, ci: &sumi, wk1: &wk1, l: l, rmax: rmax)
             }
-//            %
-//            %     MULTIPLY BY THE FACTORIAL TERM.
-//            %
+            //            %
+            //            %     MULTIPLY BY THE FACTORIAL TERM.
+            //            %
             foo1 = sumr
             foo2 = sumr
             armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
@@ -644,9 +673,9 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             foo2 = sumi
             armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
             sumi = foo2
-//            %
-//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
-//            %
+            //            %
+            //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+            //            %
             for _ in 1...ip-iq {
                 foo1 = sumr
                 foo2 = sumr
@@ -658,20 +687,20 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
                 sumi = foo2
             }
             for i1 in 1...iq {
-//            %
-//            %      UPDATE THE DENOMINATOR.
-//            %
-//            %
+                //            %
+                //            %      UPDATE THE DENOMINATOR.
+                //            %
+                //            %
                 cmpmul(ar: &denomr, ai: &denomi, br: cr[i1 - 1], bi: ci[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
                 cmpmul(ar: &denomr, ai: &denomi, br: cr2[i1 - 1], bi: ci2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
                 qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
                 qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
                 cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &denomr, ci: &denomi, wk1: &wk1, l: l, rmax: rmax)
             }
-//            %
-//            %
-//            %     MULTIPLY BY THE FACTORIAL TERM.
-//            %
+            //            %
+            //            %
+            //            %     MULTIPLY BY THE FACTORIAL TERM.
+            //            %
             foo1 = denomr
             foo2 = denomr
             armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
@@ -680,9 +709,9 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             foo1 = denomi
             armult(a: &foo1, b: cnt, c: &foo2, z: &wk6, l: l, rmax: rmax)
             denomi = foo2
-//            %
-//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
-//            %
+            //            %
+            //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+            //            %
             for _ in 1...ip-iq {
                 foo1 = denomr
                 foo2 = denomr
@@ -693,10 +722,10 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
                 armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
                 denomi = foo2
             }
-//           %
-//           %     FORM THE NEXT NUMERATOR TERM BY MULTIPLYING THE CURRENT
-//           %     NUMERATOR TERM (AN ARRAY) WITH THE A ARGUMENT (A SCALAR).
-//           %
+            //           %
+            //           %     FORM THE NEXT NUMERATOR TERM BY MULTIPLYING THE CURRENT
+            //           %     NUMERATOR TERM (AN ARRAY) WITH THE A ARGUMENT (A SCALAR).
+            //           %
             for i1 in 1...ip {
                 cmpmul(ar: &numr, ai: &numi, br: ar[i1 - 1], bi: ai[i1 - 1], cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
                 cmpmul(ar: &numr, ai: &numi, br: ar2[i1 - 1], bi: ai2[i1 - 1], cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
@@ -704,17 +733,17 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
                 qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
                 cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &numr, ci: &numi, wk1: &wk1, l: l, rmax: rmax)
             }
-//            %
-//            %     FINISH THE NEW NUMERATOR TERM BY MULTIPLYING BY THE Z ARGUMENT.
-//            %
+            //            %
+            //            %     FINISH THE NEW NUMERATOR TERM BY MULTIPLYING BY THE Z ARGUMENT.
+            //            %
             cmpmul(ar: &numr, ai: &numi, br: xr, bi: xi, cr: &qr1, ci: &qi1, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
             cmpmul(ar: &numr, ai: &numi, br: xr2, bi: xi2, cr: &qr2, ci: &qi2, wk1: &wk1, wk2: &wk2, cr2: &wk3, d1: &wk4, d2: &wk5, wk6: &wk6, l: l, rmax: rmax)
             qr2[l + 1 + aOffset] = qr2[l + 1 + aOffset] - T.one
             qi2[l + 1 + aOffset] = qi2[l + 1 + aOffset] - T.one
             cmpadd(ar: &qr1, ai: &qi1, br: &qr2, bi: &qi2, cr: &numr, ci: &numi, wk1: &wk1, l: l, rmax: rmax)
-//            %
-//            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
-//            %
+            //            %
+            //            %     MULTIPLY BY THE SCALING FACTOR, SIGFIG, TO KEEP THE SCALE CORRECT.
+            //            %
             for _ in 1...iq-ip {
                 foo1 = numr
                 foo2 = numr
@@ -725,10 +754,10 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
                 armult(a: &foo1, b: sigfig, c: &foo2, z: &wk6, l: l, rmax: rmax)
                 numi = foo2
             }
-//            %
-//            %     FINALLY, ADD THE NEW NUMERATOR TERM WITH THE CURRENT RUNNING
-//            %     SUM OF THE NUMERATOR AND STORE THE NEW RUNNING SUM IN SUMR, SUMI.
-//            %
+            //            %
+            //            %     FINALLY, ADD THE NEW NUMERATOR TERM WITH THE CURRENT RUNNING
+            //            %     SUM OF THE NUMERATOR AND STORE THE NEW RUNNING SUM IN SUMR, SUMI.
+            //            %
             foo1 = sumr
             foo2 = sumr
             bar1 = sumi
@@ -736,11 +765,11 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             cmpadd(ar: &foo1, ai: &bar1, br: &numr, bi: &numi, cr: &foo2, ci: &bar2, wk1: &wk1, l: l, rmax: rmax)
             sumi = bar2
             sumr = foo2
-//            %
-//            %     BECAUSE SIGFIG REPRESENTS "ONE" ON THE NEW SCALE, ADD SIGFIG
-//            %     TO THE CURRENT COUNT AND, CONSEQUENTLY, TO THE IP ARGUMENTS
-//            %     IN THE NUMERATOR AND THE IQ ARGUMENTS IN THE DENOMINATOR.
-//            %
+            //            %
+            //            %     BECAUSE SIGFIG REPRESENTS "ONE" ON THE NEW SCALE, ADD SIGFIG
+            //            %     TO THE CURRENT COUNT AND, CONSEQUENTLY, TO THE IP ARGUMENTS
+            //            %     IN THE NUMERATOR AND THE IQ ARGUMENTS IN THE DENOMINATOR.
+            //            %
             cnt = cnt + sigfig
             for i1 in 1...ip {
                 ar[i1 - 1] = ar[i1 - 1] + sigfig
@@ -762,13 +791,13 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
 }
 
 fileprivate func fix<T: SSFloatingPoint>(_ x: T) -> T {
-    let i: Int = integerValue(x)
-    let f: T = makeFP(i)
+    let i: Int = Helpers.integerValue(x)
+    let f: T =  Helpers.makeFP(i)
     return f
 }
 
 fileprivate func ifix<T: SSFloatingPoint>(_ x: T) -> Int {
-    let i: Int = integerValue(x)
+    let i: Int = Helpers.integerValue(x)
     return i
 }
 
@@ -810,7 +839,7 @@ fileprivate let aOffset = 1
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
     let one: T = T.one
     let zero: T = T.zero
@@ -823,7 +852,7 @@ fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
     for i in stride(from: 0, through: l + 1, by: 1) {
         z[i + aOffset] = zero
     }
-    ediff = integerValue(round(a[l + 1 + aOffset] - b[l + 1 + aOffset]))
+    ediff = Helpers.integerValue(round(a[l + 1 + aOffset] - b[l + 1 + aOffset]))
     if (abs(a[1 + aOffset]) < half || ediff <= -l) {
         for i in -1...l + 1 {
             c[i + aOffset]  = b[i + aOffset]
@@ -968,13 +997,13 @@ fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
                 }
                 for j in 1...l + 1 - i {
                     z[j + aOffset] = z[j + i - 1 + aOffset]
-//                    J = j
+                    //                    J = j
                 }
                 /// TODO: ???
                 for j in stride(from: l + 2 - 1, through: l, by: -1) {
                     z[j + aOffset] = 0
                 }
-                z[l + 1 + aOffset] = z[l + 1 + aOffset] - makeFP(i) + 1
+                z[l + 1 + aOffset] = z[l + 1 + aOffset] -  Helpers.makeFP(i) + 1
                 for i in stride(from: -1, through: l + 1, by: 1) {
                     c[i + aOffset] = z[i + aOffset]
                 }
@@ -1097,7 +1126,7 @@ fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
     for j in stride(from: l + 2 - i, through: l, by: -1) {
         z[j + aOffset] = 0
     }
-    z[l + 1 + aOffset] = z[l + 1 + aOffset] - makeFP(i) + 1
+    z[l + 1 + aOffset] = z[l + 1 + aOffset] -  Helpers.makeFP(i) + 1
     for i in -1...l + 1 {
         c[i + aOffset] = z[i + aOffset]
     }
@@ -1121,7 +1150,7 @@ fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
  %     *  Subprograms called: ARADD                                   *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func arsub<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>, c: inout Array<T>, wk1: inout Array<T>, wk2: inout Array<T>, l: Int, rmax: T) {
     let one: T = T.one
     for i in -1...l + 1 {
@@ -1146,15 +1175,15 @@ fileprivate func arsub<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-
-*/
+ 
+ */
 fileprivate func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Array<T>, z: inout Array<T>, l: Int, rmax: T) {
     let eps: T = T.ulpOfOne
     let one: T = T.one
     let half: T = T.half
     var b2: T = 0
     var carry: T = 0
-    z[-1 + aOffset] = sign(b) * a[-1 + aOffset]
+    z[-1 + aOffset] = SSMath.sign(b) * a[-1 + aOffset]
     b2 = abs(b)
     z[l + 1 + aOffset] = a[l + 1 + aOffset]
     for i in 0...l {
@@ -1168,7 +1197,7 @@ fileprivate func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Ar
         for i in stride(from: l, through: 1, by: -1) {
             z[i + aOffset] = a[i + aOffset] * b2 + z[i + aOffset]
             if (z[i + aOffset] >= rmax) {
-                carry = integerPart(z[i + aOffset] / rmax)
+                carry = Helpers.integerPart(z[i + aOffset] / rmax)
                 z[i + aOffset] = z[i + aOffset] - carry * rmax
                 z[i - 1 + aOffset] = carry
             }
@@ -1182,7 +1211,7 @@ fileprivate func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Ar
                 for i in stride(from: l, through: 1, by: -1) {
                     z[i + aOffset] = z[i - 1 + aOffset]
                 }
-                carry = integerPart(z[1 + aOffset] / rmax)
+                carry = Helpers.integerPart(z[1 + aOffset] / rmax)
                 z[2 + aOffset] = z[2 + aOffset] - carry * rmax
                 z[1 + aOffset] = carry
                 z[l + 1 + aOffset] = z[l + 1 + aOffset] + one
@@ -1214,7 +1243,7 @@ fileprivate func armult<T: SSFloatingPoint>(a: inout Array<T>, b: T, c: inout Ar
  %     *  Subprograms called: ARADD                                   *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func cmpadd<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<T>, br: inout Array<T>, bi: inout Array<T>, cr: inout Array<T>, ci: inout Array<T>, wk1: inout Array<T>, l: Int, rmax: T) {
     aradd(a: &ar, b: &br, c: &cr, z: &wk1, l: l, rmax: rmax)
     aradd(a: &ai, b: &bi, c: &ci, z: &wk1, l: l, rmax: rmax)
@@ -1255,7 +1284,7 @@ fileprivate func cmpsub<T: SSFloatingPoint>(ar: inout Array<T>, ai: inout Array<
  %     *  Subprograms called: ARMULT, ARSUB, ARADD                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func cmpmul<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: T,bi: T,cr: inout Array<T>,ci: inout Array<T>,wk1: inout Array<T>,wk2: inout Array<T>,cr2: inout Array<T>,d1: inout Array<T>,d2: inout Array<T>,wk6: inout Array<T>,l: Int,rmax: T) {
     armult(a: &ar, b: br, c: &d1, z: &wk6, l: l, rmax: rmax)
     armult(a: &ai, b: bi, c: &d2, z: &wk6, l: l, rmax: rmax)
@@ -1283,7 +1312,7 @@ fileprivate func cmpmul<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
  %     *  Subprograms called: CONV21, CONV12, EADD, ECPDIV, EMULT.    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T>,br: inout Array<T>,bi: inout Array<T>,c: inout Complex<T>,l: Int,lnpfq: Int,rmax: T,ibit: Int) throws {
     var cdum: Complex<T> = Complex<T>.init(re: 0, im: 0)
     var c: Complex<T> = Complex<T>.init(re: 0, im: 0)
@@ -1293,40 +1322,40 @@ fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
     var ae: Array<Array<T>> /* = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2) */
     var ce: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
     rexp = ibit / 2
-    x = makeFP(rexp) * (ai[l + aOffset + 1] - 2)
-    rr10 = x * log1(2) / log101(10)
-    ir10 = integerValue(rr10)
-    rr10 = rr10 - makeFP(ir10)
-    x = makeFP(rexp) * (ai[l + 1 + aOffset] - 2)
-    ri10 = x * log101(2) / log101(10)
-    ii10 = integerValue(ri10)
-    ri10 = ri10 - makeFP(ii10)
-    dum1 = (abs(ar[1 + aOffset] * rmax * rmax + ar[2 + aOffset] * rmax + ar[3 + aOffset]) * sign(ar[-1 + aOffset]))
-    dum2 = (abs(ai[1 + aOffset] * rmax * rmax + ai[2 + aOffset] * rmax + ai[3 + aOffset]) * sign(ai[-1 + aOffset]))
-    dum1 = dum1 * pow1(10, rr10)
-    dum2 = dum2 * pow1(10, ri10)
+    x =  Helpers.makeFP(rexp) * (ai[l + aOffset + 1] - 2)
+    rr10 = x * SSMath.log1(2) / SSMath.log101(10)
+    ir10 = Helpers.integerValue(rr10)
+    rr10 = rr10 -  Helpers.makeFP(ir10)
+    x =  Helpers.makeFP(rexp) * (ai[l + 1 + aOffset] - 2)
+    ri10 = x * SSMath.log101(2) / SSMath.log101(10)
+    ii10 = Helpers.integerValue(ri10)
+    ri10 = ri10 -  Helpers.makeFP(ii10)
+    dum1 = (abs(ar[1 + aOffset] * rmax * rmax + ar[2 + aOffset] * rmax + ar[3 + aOffset]) * SSMath.sign(ar[-1 + aOffset]))
+    dum2 = (abs(ai[1 + aOffset] * rmax * rmax + ai[2 + aOffset] * rmax + ai[3 + aOffset]) * SSMath.sign(ai[-1 + aOffset]))
+    dum1 = dum1 * SSMath.pow1(10, rr10)
+    dum2 = dum2 * SSMath.pow1(10, ri10)
     cdum.re = dum1
     cdum.im = dum2
     ae = conv12(cn: cdum)
-    ae[0][1] = ae[0][1] + makeFP(ir10)
-    ae[1][1] = ae[1][1] + makeFP(ii10)
-    x = makeFP(rexp) * (br[l + 1 + aOffset] - 2)
-    rr10 = x * log101(2) / log101(10)
-    ir10 = integerValue(rr10)
-    rr10 = rr10 - makeFP(ir10)
-    x = makeFP(rexp) * (bi[l + 1 + aOffset] - 2)
-    ri10 = x * log101(2) / log101(10)
-    ii10 = integerValue(ri10)
-    ri10 = ri10 - makeFP(ii10)
-    dum1 = (abs(br[1 + aOffset] * rmax * rmax + br[2 + aOffset] * rmax + br[3 + aOffset]) * sign(br[-1 + aOffset]))
-    dum2 = (abs(bi[1 + aOffset] * rmax * rmax + bi[2 + aOffset] * rmax + bi[3 + aOffset]) * sign(bi[-1 + aOffset]))
-    dum1 = dum1 * pow1(10, rr10)
-    dum2 = dum2 * pow1(10, ri10)
+    ae[0][1] = ae[0][1] +  Helpers.makeFP(ir10)
+    ae[1][1] = ae[1][1] +  Helpers.makeFP(ii10)
+    x =  Helpers.makeFP(rexp) * (br[l + 1 + aOffset] - 2)
+    rr10 = x * SSMath.log101(2) / SSMath.log101(10)
+    ir10 = Helpers.integerValue(rr10)
+    rr10 = rr10 -  Helpers.makeFP(ir10)
+    x =  Helpers.makeFP(rexp) * (bi[l + 1 + aOffset] - 2)
+    ri10 = x * SSMath.log101(2) / SSMath.log101(10)
+    ii10 = Helpers.integerValue(ri10)
+    ri10 = ri10 -  Helpers.makeFP(ii10)
+    dum1 = (abs(br[1 + aOffset] * rmax * rmax + br[2 + aOffset] * rmax + br[3 + aOffset]) * SSMath.sign(br[-1 + aOffset]))
+    dum2 = (abs(bi[1 + aOffset] * rmax * rmax + bi[2 + aOffset] * rmax + bi[3 + aOffset]) * SSMath.sign(bi[-1 + aOffset]))
+    dum1 = dum1 * SSMath.pow1(10, rr10)
+    dum2 = dum2 * SSMath.pow1(10, ri10)
     be = conv12(cn: cdum)
-    be[0][1] = be[0][1] + makeFP(ir10)
-    be[1][1] = be[1][1] + makeFP(ii10)
+    be[0][1] = be[0][1] +  Helpers.makeFP(ir10)
+    be[1][1] = be[1][1] +  Helpers.makeFP(ii10)
     ecpdiv(&ae, &be, &ce)
-    tenmax = makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
+    tenmax =  Helpers.makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
     if lnpfq == 0 {
         do {
             c = try conv21(cae: ce)
@@ -1355,16 +1384,16 @@ fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
             x1 = 0
         }
         else {
-            x1 = n1 * pow1(10, e1)
+            x1 = n1 * SSMath.pow1(10, e1)
         }
         if !x2.isZero {
-            phi = atan21(x2, x1)
+            phi = SSMath.atan21(x2, x1)
         }
         else {
             phi = T.zero
         }
         c = Complex<T>.init(re: 0, im: 0)
-        c.re = T.half * (log1(n3) + e3 * T.ln10)
+        c.re = T.half * (SSMath.log1(n3) + e3 * T.ln10)
         c.im = phi
     }
 }
@@ -1383,7 +1412,7 @@ fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func conv12<T: SSFloatingPoint>(cn: Complex<T>) -> Array<Array<T>> {
     var cae: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
     cae[0][0] = cn.re
@@ -1435,12 +1464,12 @@ fileprivate func conv12<T: SSFloatingPoint>(cn: Complex<T>) -> Array<Array<T>> {
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func conv21<T: SSFloatingPoint>(cae: Array<Array<T>>) throws -> Complex<T> {
     var cn: Complex<T> = Complex<T>.init(re: 0, im: 0)
     cn.re = 0
     cn.im = 0
-    let tenmax:T = makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
+    let tenmax:T =  Helpers.makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
     if cae[0][1] > tenmax || cae[1][1] > tenmax {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 10, *) {
@@ -1451,12 +1480,12 @@ fileprivate func conv21<T: SSFloatingPoint>(cae: Array<Array<T>>) throws -> Comp
         throw SSSwiftyStatsError.init(type: .maxExponentExceeded, file: #file, line: #line, function: #function)
     }
     else if cae[1][1] < -tenmax {
-        cn.re = cae[0][0] * pow1(10, cae[0][1])
+        cn.re = cae[0][0] * SSMath.pow1(10, cae[0][1])
         cn.im = 0
     }
     else {
-        cn.re = cae[0][0] * pow1(10, cae[0][1])
-        cn.im = cae[1][0] * pow1(10, cae[1][1])
+        cn.re = cae[0][0] * SSMath.pow1(10, cae[0][1])
+        cn.im = cae[1][0] * SSMath.pow1(10, cae[1][1])
     }
     return cn
 }
@@ -1474,7 +1503,7 @@ fileprivate func conv21<T: SSFloatingPoint>(cae: Array<Array<T>>) throws -> Comp
  %     *  Subprograms called: EADD, ECPMUL, EDIV, EMULT               *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func ecpdiv<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: inout Array<Array<T>>, _ c: inout Array<Array<T>>) {
     var b2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
     var c2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
@@ -1498,7 +1527,7 @@ fileprivate func ecpdiv<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: ino
     c[0][1] = e1
     c[1][0] = n2
     c[1][1] = e2
-
+    
 }
 
 /*
@@ -1514,7 +1543,7 @@ fileprivate func ecpdiv<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: ino
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func emult<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
     nf = n1 * n2
     ef = e1 + e2
@@ -1536,7 +1565,7 @@ fileprivate func emult<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func ediv<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
     nf = n1 / n2
     ef = e1 - e2
@@ -1561,8 +1590,8 @@ fileprivate func ediv<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ 
  %     *  Subprograms called: EMULT, ESUB, EADD                       *
  %     *                                                              *
  %     ****************************************************************
-
-*/
+ 
+ */
 fileprivate func ecpmul<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: inout Array<Array<T>>, _ c: inout Array<Array<T>>) {
     var c2: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2)
     var e1: T = 0
@@ -1583,7 +1612,7 @@ fileprivate func ecpmul<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: ino
     c[1][1] = e3
     c[0][0] = c2[0][0]
     c[0][1] = c2[0][1]
-
+    
 }
 
 /*
@@ -1598,7 +1627,7 @@ fileprivate func ecpmul<T: SSFloatingPoint>(_ a: inout Array<Array<T>>, _ b: ino
  %     *  Subprograms called: EADD                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func esub<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
     let dummy: T = -T.one * n2
     eadd(n1, e1, dummy, e2, &nf, &ef)
@@ -1616,7 +1645,7 @@ fileprivate func esub<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ 
  %     *  Subprograms called: none                                    *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func eadd<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ nf: inout T, _ ef: inout T) {
     let ediff: T = e1 - e2
     if (ediff > 36) {
@@ -1628,7 +1657,7 @@ fileprivate func eadd<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ 
         ef = e2
     }
     else {
-        nf = n1 * pow1(makeFP(10), ediff) + n2
+        nf = n1 * SSMath.pow1( Helpers.makeFP(10), ediff) + n2
         ef = e2
         while true {
             if (abs(nf) < 10) {
@@ -1658,7 +1687,7 @@ fileprivate func eadd<T: SSFloatingPoint>(_ n1: T, _ e1: T, _ n2: T, _ e2: T, _ 
  %     *  Subprograms called: none.                                   *
  %     *                                                              *
  %     ****************************************************************
-*/
+ */
 fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Complex<T>>, ip: Int, iq: Int, z: Complex<T>) throws -> Int {
     var expon, xl, xmax, xterm: T
     expon = 0
@@ -1668,15 +1697,15 @@ fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comp
     var ans: Int = 0
     for j in stride(from: 1, through: 100000, by: 1) {
         expon = T.zero
-        xl = makeFP(j)
+        xl =  Helpers.makeFP(j)
         for i in stride(from: 1, through: ip, by: 1) {
             expon = expon + (factor(a[i - 1] &++ xl &-- T.one)).re - factor(a[i - 1] &-- T.one).re
         }
         for i in stride(from: 1, to: iq, by: 1) {
             expon = expon - factor(b[i - 1] &++ xl &-- T.one).re + factor(b[i] &-- T.one).re
         }
-        expon = expon + xl * log(z).re - factor(Complex<T>(xl)).re
-        xmax = log101(exp1(T.one)) * expon
+        expon = expon + xl * SSMath.ComplexMath.log(z).re - factor(Complex<T>(xl)).re
+        xmax = SSMath.log101(SSMath.exp1(T.one)) * expon
         if ((xmax < xterm) && (j > 2)) {
             ans = j
             break
@@ -1708,7 +1737,7 @@ fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comp
  %     *                                                              *
  %     ****************************************************************
  %
-*/
+ */
 fileprivate func factor<T: SSFloatingPoint>(_ z: Complex<T>) -> Complex<T> {
     var pi: T = 0
     var f: Complex<T>
@@ -1720,10 +1749,10 @@ fileprivate func factor<T: SSFloatingPoint>(_ z: Complex<T>) -> Complex<T> {
         pi = T.pi
         var e1: T
         var e3, e4: Complex<T>
-        e1 = (T.half * log1(2 * pi))
+        e1 = (T.half * SSMath.log1(2 * pi))
         e3 = (z &++ T.half)
         e4 = (1 &% (12 &** z))
-        f =  e1 &++ e3 &** log(z) &-- z &++ e4;
+        f =  e1 &++ e3 &** SSMath.ComplexMath.log(z) &-- z &++ e4;
         e3 = (1 &% (30 &** z &** z))
         e4 = (2 &% (7 &** z &** z))
         f = f &** (1 &-- e3 &** (1 &-- e4))
@@ -1778,21 +1807,29 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
     var twoi: T = 0
     var zfaci: T = 0
     var zfacr: T = 0
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    var ex5: T
+    var ex6: T
+    var ex7: T
+
     var first : Bool = true
     var negarg : Bool = true
     var fn: Array<T> = [1,-1, 1,-1, 5, -691, 7, -3617, 43867, -174611, 854513, -236364091, 8553103, -23749461029, 8615841276005, -7709321041217, 2577687858367, -26315271553053477373,2929993913841559,-261082718496449122051, 1520097643918070802691,27833269579301024235023]
     var fd: Array<T> = [6,30,42,30,66,2730,6,510,789,330,138,2730, 6, 870,14322,510,6,1919190,6,13530,1806,960]
     var ans: Complex<T> = Complex<T>.init(re: 0, im: 0)
-    hlntpi = makeFP(1)
-    tenth = makeFP(0.1)
+    hlntpi =  Helpers.makeFP(1)
+    tenth =  Helpers.makeFP(0.1)
     argr = arg.re
     argi = arg.im
     if first {
-        pi = 4 * atan1(T.one)
+        pi = 4 * SSMath.atan1(T.one)
     }
-    tenmax = makeFP(T.greatestFiniteMagnitude.exponent - 1) * T.ln2 / T.ln10
-    dnum = pow1(tenth, tenmax)
-    expmax = -log1(dnum)
+    tenmax =  Helpers.makeFP(T.greatestFiniteMagnitude.exponent - 1) * T.ln2 / T.ln10
+    dnum = SSMath.pow1(tenth, tenmax)
+    expmax = -SSMath.log1(dnum)
     precis = T.one
     precis = precis / 2
     dnum = precis + T.one
@@ -1800,12 +1837,12 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
         precis = precis / 2
         dnum = precis + T.one
     }
-    precis = pow1(2, precis)
-    hlntpi = T.half * log1(2 * pi)
+    precis = SSMath.pow1(2, precis)
+    hlntpi = T.half * SSMath.log1(2 * pi)
     for i in stride(from: 1, through: fd.count, by: 1) {
-//    for i=1 : 7;
+        //    for i=1 : 7;
         fn[i] = fn[i - 1] / fd[i - 1]
-        twoi = 2 * makeFP(i)
+        twoi = 2 *  Helpers.makeFP(i)
         fn[i - 1] = fn[i - 1] / (twoi * (twoi - T.one))
     }
     first = false
@@ -1823,12 +1860,12 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             }
             else {
                 if lnpfq == 1 {
-                    ans.re = lgamma1(argr)
+                    ans.re = SSMath.lgamma1(argr)
                 }
                 else {
-                    ans.re = tgamma1(argr)
+                    ans.re = SSMath.tgamma1(argr)
                 }
-                argum = pi / (-argr * sin1(pi * argr))
+                argum = pi / (-argr * SSMath.sin1(pi * argr))
                 if (argum < 0) {
                     argum = -argum
                     clngi = pi
@@ -1836,7 +1873,7 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
                 else {
                     clngi = 0
                 }
-                facneg = log1(argum)
+                facneg = SSMath.log1(argum)
                 argur = -argr
                 negarg = true
             }
@@ -1851,7 +1888,7 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             ovlfac = ovlfac * argur;
             argur = argur + T.one
         }
-        clngr = (argur - T.half) * log1(argur) - argur + hlntpi
+        clngr = (argur - T.half) * SSMath.log1(argur) - argur + hlntpi
         fac = argur
         obasq = T.one / (argur * argur)
         for i in stride(from: 1, through: fn.count, by: 1) {
@@ -1859,7 +1896,7 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             clngr = clngr + fn[i - 1] * fac
         }
         
-        clngr = clngr - log1(ovlfac)
+        clngr = clngr - SSMath.log1(ovlfac)
         if negarg {
             clngr = facneg - clngr
         }
@@ -1880,11 +1917,18 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             argum = sqrt(argur * argur + argui2)
         }
         argur2 = argur * argur
-        termr = T.half * log1(argur2 + argui2)
-        termi = atan21(argui, argur)
-        clngr = (argur - T.half) * termr - argui * termi - argur + hlntpi
-        clngi = (argur - T.half) * termi + argui * termr - argui
-        fac = pow1(argur2 + argui2, -2)
+        termr = T.half * SSMath.log1(argur2 + argui2)
+        termi = SSMath.atan21(argui, argur)
+        ex1 = (argur - T.half) * termr
+        ex2 = argui * termi
+        ex3 = argur + hlntpi
+        clngr = ex1 - ex2 - ex3
+//        clngr = (argur - T.half) * termr - argui * termi - argur + hlntpi
+        ex1 = (argur - T.half) * termi
+        ex2 = argui * termr
+        clngi = ex1 + ex2 - argui
+//        clngi = (argur - T.half) * termi + argui * termr - argui
+        fac = SSMath.pow1(argur2 + argui2, -2)
         obasqr = (argur2 - argui2) * fac
         obasqi = -2 * argur * argui * fac
         zfacr = argur
@@ -1898,8 +1942,8 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             zfacr = termr
             zfaci = termi
         }
-        clngr = clngr - T.half * log1(ovlfr * ovlfr + ovlfi * ovlfi)
-        clngi = clngi - atan21(ovlfi, ovlfr)
+        clngr = clngr - T.half * SSMath.log1(ovlfr * ovlfr + ovlfi * ovlfi)
+        clngi = clngi - SSMath.atan21(ovlfi, ovlfr)
         if lnpfq == 1 {
             ans.re = clngr
             ans.im = clngi
@@ -1907,13 +1951,13 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
         }
         else {
             if ((clngr <= expmax) && (clngr >= -expmax)) {
-                fac = exp1(clngr)
+                fac = SSMath.exp1(clngr)
             }
             else {
                 ans = Complex<T>.nan
             }
-            ans.re = fac * cos1(clngi)
-            ans.im = fac * sin1(clngi)
+            ans.re = fac * SSMath.cos1(clngi)
+            ans.im = fac * SSMath.sin1(clngi)
         }
     }
     return ans

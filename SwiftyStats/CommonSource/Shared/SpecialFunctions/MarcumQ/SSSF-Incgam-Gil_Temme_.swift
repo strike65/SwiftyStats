@@ -20,7 +20,7 @@
  */
 import Foundation
 
-fileprivate let EPSS = "1.0e-15"
+// fileprivate let EPSS = "1.0e-15"
 
 //FOUNDATION_EXTERN double SQRT2OPI
 //FOUNDATION_EXTERN double EULERGAMMA
@@ -33,17 +33,192 @@ fileprivate let EPSS = "1.0e-15"
 //FOUNDATION_EXTERN double SQRTTWO
 
 
+extension SSSpecialFunctions {
+    
+    internal enum GammaHelper {
+        
+        internal static func dompart<T: SSFloatingPoint>(_ a: T,_ x: T,_ qt: Bool) -> T {
+            //! dompart is approx. of  x^a * exp(-x) / gamma(a+1)
+            var lnx, c, dp, la, mu, r: T
+            lnx = SSMath.log1(x)
+            if (a <= 1) {
+                r = -x + a * lnx
+            } else {
+                if (x == a) {
+                    r = 0
+                } else {
+                    la = x / a
+                    r = a * (1 - la + SSMath.log1(la))
+                }
+                r = r - T.half * SSMath.log1(2 * T.pi * a)
+            }
+            if (r < -300) {
+                dp = 0
+            } else {
+                dp = SSMath.exp1(r)
+            }
+            if (qt) {
+                return dp
+            } else {
+                if ((a < 3) || (x <  Helpers.makeFP(0.2))) {
+                    dp = SSMath.exp1(a * lnx - x) / SSMath.tgamma1( a + 1)
+                } else {
+                    mu = (x - a) / a
+                    c = lnec(mu)
+                    if ((a * c) > SSMath.log1(T.greatestFiniteMagnitude)) {
+                        dp = -100
+                    } else if ((a * c) < SSMath.log1(T.ulpOfOne * 10)) {
+                        dp = 0
+                    }
+                    else {
+                        dp = SSMath.exp1(a * c)/(sqrt(a * 2 * T.pi) * gamstar(a))
+                    }
+                }
+            }
+            return dp
+        }
+        
+        //MODULE IncgamFI
+        //IMPLICIT NONE
+        //INTEGER, PARAMETER  :: r8 = KIND(0.0d0)
+        //PRIVATE
+        //PUBLIC  :: incgam, invincgam, loggam, gamma, dompart
+        //CONTAINS
+        internal static func incgam<T: SSFloatingPoint>(a: T, x: T) -> (p: T, q: T, ierr: Int) {
+            //SUBROUTINE incgam(a,x,p,q,ierr)
+            //! -------------------------------------------------------------
+            //! Calculation of the incomplete gamma functions ratios P(a,x)
+            //! && Q(a,x).
+            //! -------------------------------------------------------------
+            //! Inputs:
+            //!   a ,    argument of the functions
+            //!   x ,    argument of the functions
+            //! Outputs:
+            //!   p,     function P(a,x)
+            //!   q,     function Q(a,x)
+            //!   ierr , error flag
+            //!          ierr=0, computation succesful
+            //!          ierr=1, overflow/underflow problems. The function values
+            //!          (P(a,x) && Q(a,x)) are set to zero.
+            //! ----------------------------------------------------------------------
+            //! Authors:
+            //!  Amparo Gil    (U. Cantabria, San && r, Spain)
+            //!                 e-mail: amparo.gil@unican.es
+            //!  Javier Segura (U. Cantabria, San && r, Spain)
+            //!                 e-mail: javier.segura@unican.es
+            //!  Nico M. Temme (CWI, Amsterdam, The Nether && )
+            //!                 e-mail: nico.temme@cwi.nl
+            //! -------------------------------------------------------------
+            //!  References: "Efficient && accurate algorithms for
+            //!  the computation && inversion of the incomplete gamma function ratios",
+            //!  A. Gil, J. Segura && N.M. Temme. SIAM J Sci Comput (2012)
+            //! -------------------------------------------------------------------
+            var p, q: T
+            p = 0
+            q = 0
+            var lnx, dp: T
+            var ierr: Int = 0
+            let dwarf = T.ulpOfOne * 10
+            if (x < dwarf) {
+                lnx = SSMath.log1(dwarf)
+            } else {
+                lnx = SSMath.log1(x)
+            }
+            if (a > alfa(x)) {
+                dp = dompart(a,x,false)
+                if (dp < 0) {
+                    ierr = 1
+                    p = 0
+                    q = 0
+                } else {
+                    if ((x <  Helpers.makeFP(0.3) * a) || (a < 12)) {
+                        p = ptaylor(a,x,dp)
+                    } else {
+                        p = pqasymp(a,x,dp,true)
+                    }
+                    q = 1 - p
+                }
+            }
+            else {
+                if (a < -dwarf/lnx) {
+                    q=0
+                } else if (x < 1) {
+                    dp = dompart(a,x,true)
+                    if (dp < 0) {
+                        ierr = 1
+                        q = 0
+                        p = 0
+                    } else {
+                        q = qtaylor(a,x,dp)
+                        p = 1 - q
+                    }
+                } else {
+                    dp = dompart(a,x,false)
+                    if (dp < 0) {
+                        ierr = 1
+                        p = 0
+                        q = 0
+                    } else {
+                        if ((x >  Helpers.makeFP(1.5) * a) || (a < 12)) {
+                            q = qfraction(a,x,dp)
+                        } else {
+                            q = pqasymp(a,x,dp,false)
+                            if (dp.isZero) {
+                                q = 0
+                            }
+                        }
+                        p = 1 - q
+                    }
+                }
+            }
+            return (p: p, q: q, ierr: ierr)
+        }
+        
+        
+        internal static func loggam<T: SSFloatingPoint>(_ x: T) -> T {
+            //! Computation of ln(gamma1(x)), x>0
+            var res: T
+            var ex1, ex2: T
+            if (x >= 3) {
+                res = (x - T.half) * SSMath.log1(x) - x + T.lnsqrt2pi + stirling(x)
+            }
+            else if (x >= 2) {
+                ex1 = (x - 2) * (3 - x)
+                ex2 = ex1 * auxloggam(x - 2)
+                res = ex2 + SSMath.log1p1(x - 2)
+                //        res = (x - 2) * (3 - x) * auxloggam(x - 2) + SSMath.log1p1(x - 2)
+            }
+            else if (x >= 1) {
+                res = (x - 1) * (2 - x) * auxloggam(x - 1)
+            }
+            else if (x > T.half) {
+                res = x * (1 - x) * auxloggam(x) - SSMath.log1p1(x - 1)
+            }
+            else if (x > 0) {
+                res = x * (1 - x) * auxloggam(x) - SSMath.log1(x)
+            } else {
+                res = T.infinity
+            }
+            return res
+        }
+    }
+}
+
+fileprivate func epss<T: SSFloatingPoint>() -> T {
+    return  Helpers.makeFP(1E-15)
+}
+
 fileprivate func alfa<T: SSFloatingPoint>(_ x: T) -> T {
     var lnx, res: T
-    lnx = log1(x)
+    lnx = SSMath.log1(x)
     let dwarf = T.ulpOfOne * 10
-    let const = log1(T.half)
-    if (x > makeFP(0.25)) {
-        res = x + makeFP(0.25)
+    let const = SSMath.log1(T.half)
+    if (x >  Helpers.makeFP(0.25)) {
+        res = x +  Helpers.makeFP(0.25)
     } else if (x >= dwarf) {
         res = const / lnx
     } else {
-        res = const / log1(dwarf)
+        res = const / SSMath.log1(dwarf)
     }
     return res
 }
@@ -51,11 +226,19 @@ fileprivate func alfa<T: SSFloatingPoint>(_ x: T) -> T {
 fileprivate func gamstar<T: SSFloatingPoint>(_ x: T) -> T {
     //    !  {gamstar(x)=exp(stirling(x)), x>0 or }
     //    !  {gamma(x)/(exp(-x+(x-0.5)*ln(x))/sqrt(2pi)}
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
     var res: T
     if (x >= 3) {
-        res = exp1(stirling(x))
+        res = SSMath.exp1(stirling(x))
     } else if (x > 0) {
-        res = gamma1(x) / (exp1(-x + (x - T.half) * log1(x)) * T.sqrtpi)
+        ex1 = (x - T.half)
+        ex2 = ex1 * SSMath.log1(x)
+        ex3 = SSMath.exp1(-x + ex2)
+        ex4 = ex3 * T.sqrtpi
+        res = gamma1(x) / ex4
     } else {
         res = T.infinity
     }
@@ -71,51 +254,60 @@ fileprivate func stirling<T:SSFloatingPoint>(_ x: T) -> T {
     var a: Array<T> = Array<T>.init(repeating: 0, count: 18)
     var c: Array<T> = Array<T>.init(repeating: 0, count: 7)
     
-    var ex1, ex2, ex3, ex4, ex5, ex6: T
     let dwarf = T.ulpOfOne * 10
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    var ex5: T
+    var ex6: T
+
     if (x < dwarf) {
         res = T.greatestFiniteMagnitude
     } else if (x < 1) {
-        ex1 = (x + T.half) * log1(x)
+        ex1 = (x + T.half) * SSMath.log1(x)
         ex2 = ex1 + x - T.lnsqrt2pi
-        res = lgamma1(x + 1) - ex2
-//        res = lgamma1(x + 1) - (x + T.half) * log1(x) + x - T.lnsqrt2pi
+        res = SSMath.lgamma1(x + 1) - ex2
+//        res = SSMath.lgamma1(x + 1) - (x + T.half) * SSMath.log1(x) + x - T.lnsqrt2pi
     } else if (x < 2) {
-        res = lgamma1(x) - (x - T.half) * log1(x) + x - T.lnsqrt2pi
+        res = SSMath.lgamma1(x) - (x - T.half) * SSMath.log1(x) + x - T.lnsqrt2pi
     } else if (x < 3) {
-        ex1 = (x - T.half) * log1(x) + x
-        res = lgamma1(x - 1) - ex1 - T.lnsqrt2pi + log1(x - 1)
+        ex1 = (x - T.half) * SSMath.log1(x)
+        ex2 = ex1 + x
+        ex3 = ex2 - T.lnsqrt2pi + SSMath.log1(x - T.one)
+        res = SSMath.lgamma1(x - 1) - ex3
+//        res = SSMath.lgamma1(x - 1) - (x - T.half) * SSMath.log1(x) + x - T.lnsqrt2pi + SSMath.log1(x - 1)
     } else if (x < 12) {
-        a[0] = makeFP(1.996379051590076518221)
-        a[1] = makeFP(-0.17971032528832887213e-2)
-        a[2] = makeFP(0.131292857963846713e-4)
-        a[3] = makeFP(-0.2340875228178749e-6)
-        a[4] = makeFP(0.72291210671127e-8)
-        a[5] = makeFP(-0.3280997607821e-9)
-        a[6] = makeFP(0.198750709010e-10)
-        a[7] = makeFP(-0.15092141830e-11)
-        a[8] = makeFP(0.1375340084e-12)
-        a[9] = makeFP(-0.145728923e-13)
-        a[10] = makeFP(0.17532367e-14)
-        a[11] = makeFP(-0.2351465e-15)
-        a[12] = makeFP(0.346551e-16)
-        a[13] = makeFP(-0.55471e-17)
-        a[14] = makeFP(0.9548e-18)
-        a[15] = makeFP(-0.1748e-18)
-        a[16] = makeFP(0.332e-19)
-        a[17] = makeFP(-0.58e-20)
+        a[0] =  Helpers.makeFP(1.996379051590076518221)
+        a[1] =  Helpers.makeFP(-0.17971032528832887213e-2)
+        a[2] =  Helpers.makeFP(0.131292857963846713e-4)
+        a[3] =  Helpers.makeFP(-0.2340875228178749e-6)
+        a[4] =  Helpers.makeFP(0.72291210671127e-8)
+        a[5] =  Helpers.makeFP(-0.3280997607821e-9)
+        a[6] =  Helpers.makeFP(0.198750709010e-10)
+        a[7] =  Helpers.makeFP(-0.15092141830e-11)
+        a[8] =  Helpers.makeFP(0.1375340084e-12)
+        a[9] =  Helpers.makeFP(-0.145728923e-13)
+        a[10] =  Helpers.makeFP(0.17532367e-14)
+        a[11] =  Helpers.makeFP(-0.2351465e-15)
+        a[12] =  Helpers.makeFP(0.346551e-16)
+        a[13] =  Helpers.makeFP(-0.55471e-17)
+        a[14] =  Helpers.makeFP(0.9548e-18)
+        a[15] =  Helpers.makeFP(-0.1748e-18)
+        a[16] =  Helpers.makeFP(0.332e-19)
+        a[17] =  Helpers.makeFP(-0.58e-20)
         z = 18 / (x * x) - 1
         res = chepolsum(17,z,a) / (12 * x)
     } else {
         z = 1 / (x * x)
         if (x < 1000) {
-            c[0] = makeFP(0.25721014990011306473e-1)
-            c[1] = makeFP(0.82475966166999631057e-1)
-            c[2] = makeFP(-0.25328157302663562668e-2)
-            c[3] = makeFP(0.60992926669463371e-3)
-            c[4] = makeFP(-0.33543297638406e-3)
-            c[5] = makeFP(0.250505279903e-3)
-            c[6] = makeFP(0.30865217988013567769)
+            c[0] =  Helpers.makeFP(0.25721014990011306473e-1)
+            c[1] =  Helpers.makeFP(0.82475966166999631057e-1)
+            c[2] =  Helpers.makeFP(-0.25328157302663562668e-2)
+            c[3] =  Helpers.makeFP(0.60992926669463371e-3)
+            c[4] =  Helpers.makeFP(-0.33543297638406e-3)
+            c[5] =  Helpers.makeFP(0.250505279903e-3)
+            c[6] =  Helpers.makeFP(0.30865217988013567769)
             ex1 = (c[5] * z) + c[4]
             ex2 = (ex1 * z) + c[3]
             ex3 = (ex2 * z) + c[2]
@@ -142,10 +334,10 @@ fileprivate func exmin1minx<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
 
     if(x.isZero){
         y = 1
-    } else if (abs(x) > makeFP(0.9)) {
-        y = (exp1(x) - 1 - x) / (x * x / 2)
+    } else if (abs(x) >  Helpers.makeFP(0.9)) {
+        y = (SSMath.exp1(x) - 1 - x) / (x * x / 2)
     } else {
-        t = sinh1(x / 2)
+        t = SSMath.sinh1(x / 2)
         t2 = t * t
         ex1 = 2 * t * sqrt(1 + t2)
         ex2 = x * x / 2
@@ -158,56 +350,30 @@ fileprivate func exmin1minx<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
 fileprivate func lnec<T: SSFloatingPoint>(_ x: T) -> T {
     //IMPLICIT NONE
     var ln1, y0, z, e2, r, s: T
-    z = log1p1(x)
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    z = SSMath.log1p1(x)
     y0 = z - x
     e2 = exmin1minx(z, T.ulpOfOne)
-    s = e2 * z * z / 2
-    r = (s + y0) / (s + 1 + z)
-    ln1 = y0 - r * (6 - r) / (6 - 4 * r)
+    ex1 = z / 2
+    ex2 = z * ex1
+    s = e2 * ex2
+    ex1 = s + T.one + z
+    ex2 = s + y0
+    r = ex2 / ex1
+//    r = (s + y0) / (s + 1 + z)
+    ex1 =  Helpers.makeFP(6.0) -  Helpers.makeFP(4.0) * r
+    ex2 =  Helpers.makeFP(6.0) - r
+    ex3 = r * ex2
+    ex4 = ex3 / ex1
+    ln1 = y0 - ex4
+//    ln1 = y0 - r * (6 - r) / (6 - 4 * r)
     return ln1
 }
 
 
-internal func dompart<T: SSFloatingPoint>(_ a: T,_ x: T,_ qt: Bool) -> T {
-    //! dompart is approx. of  x^a * exp(-x) / gamma(a+1)
-    var lnx, c, dp, la, mu, r: T
-    lnx = log1(x)
-    if (a <= 1) {
-        r = -x + a * lnx
-    } else {
-        if (x == a) {
-            r = 0
-        } else {
-            la = x / a
-            r = a * (1 - la + log1(la))
-        }
-        r = r - T.half * log1(2 * T.pi * a)
-    }
-    if (r < -300) {
-        dp = 0
-    } else {
-        dp = exp1(r)
-    }
-    if (qt) {
-        return dp
-    } else {
-        if ((a < 3) || (x < makeFP(0.2))) {
-            dp = exp1(a * lnx - x) / tgamma1( a + 1)
-        } else {
-            mu = (x - a) / a
-            c = lnec(mu)
-            if ((a * c) > log1(T.greatestFiniteMagnitude)) {
-                dp = -100
-            } else if ((a * c) < log1(T.ulpOfOne * 10)) {
-                dp = 0
-            }
-            else {
-                dp = exp1(a * c)/(sqrt(a * 2 * T.pi) * gamstar(a))
-            }
-        }
-    }
-    return dp
-}
 
 fileprivate func chepolsum<T: SSFloatingPoint>(_ n: Int, _ x: T,_ a: [T]) -> T {
     var res: T
@@ -216,7 +382,7 @@ fileprivate func chepolsum<T: SSFloatingPoint>(_ n: Int, _ x: T,_ a: [T]) -> T {
     if (n == 0) {
         res = a[0] / 2
     } else if (n == 1) {
-        res = a[0] / makeFP(2.08) + a[1] * x
+        res = a[0] /  Helpers.makeFP(2.08) + a[1] * x
     } else {
         tx = x + x
         r = a[n]
@@ -232,101 +398,6 @@ fileprivate func chepolsum<T: SSFloatingPoint>(_ n: Int, _ x: T,_ a: [T]) -> T {
 }
 
 
-//MODULE IncgamFI
-//IMPLICIT NONE
-//INTEGER, PARAMETER  :: r8 = KIND(0.0d0)
-//PRIVATE
-//PUBLIC  :: incgam, invincgam, loggam, gamma, dompart
-//CONTAINS
-internal func incgam<T: SSFloatingPoint>(a: T, x: T) -> (p: T, q: T, ierr: Int) {
-    //SUBROUTINE incgam(a,x,p,q,ierr)
-    //! -------------------------------------------------------------
-    //! Calculation of the incomplete gamma functions ratios P(a,x)
-    //! && Q(a,x).
-    //! -------------------------------------------------------------
-    //! Inputs:
-    //!   a ,    argument of the functions
-    //!   x ,    argument of the functions
-    //! Outputs:
-    //!   p,     function P(a,x)
-    //!   q,     function Q(a,x)
-    //!   ierr , error flag
-    //!          ierr=0, computation succesful
-    //!          ierr=1, overflow/underflow problems. The function values
-    //!          (P(a,x) && Q(a,x)) are set to zero.
-    //! ----------------------------------------------------------------------
-    //! Authors:
-    //!  Amparo Gil    (U. Cantabria, San && r, Spain)
-    //!                 e-mail: amparo.gil@unican.es
-    //!  Javier Segura (U. Cantabria, San && r, Spain)
-    //!                 e-mail: javier.segura@unican.es
-    //!  Nico M. Temme (CWI, Amsterdam, The Nether && )
-    //!                 e-mail: nico.temme@cwi.nl
-    //! -------------------------------------------------------------
-    //!  References: "Efficient && accurate algorithms for
-    //!  the computation && inversion of the incomplete gamma function ratios",
-    //!  A. Gil, J. Segura && N.M. Temme. SIAM J Sci Comput (2012)
-    //! -------------------------------------------------------------------
-    var p, q: T
-    p = 0
-    q = 0
-    var lnx, dp: T
-    var ierr: Int = 0
-    let dwarf = T.ulpOfOne * 10
-    if (x < dwarf) {
-        lnx = log1(dwarf)
-    } else {
-        lnx = log1(x)
-    }
-    if (a > alfa(x)) {
-        dp = dompart(a,x,false)
-        if (dp < 0) {
-            ierr = 1
-            p = 0
-            q = 0
-        } else {
-            if ((x < makeFP(0.3) * a) || (a < 12)) {
-                p = ptaylor(a,x,dp)
-            } else {
-                p = pqasymp(a,x,dp,true)
-            }
-            q = 1 - p
-        }
-    }
-    else {
-        if (a < -dwarf/lnx) {
-            q=0
-        } else if (x < 1) {
-            dp = dompart(a,x,true)
-            if (dp < 0) {
-                ierr = 1
-                q = 0
-                p = 0
-            } else {
-                q = qtaylor(a,x,dp)
-                p = 1 - q
-            }
-        } else {
-            dp = dompart(a,x,false)
-            if (dp < 0) {
-                ierr = 1
-                p = 0
-                q = 0
-            } else {
-                if ((x > makeFP(1.5) * a) || (a < 12)) {
-                    q = qfraction(a,x,dp)
-                } else {
-                    q = pqasymp(a,x,dp,false)
-                    if (dp.isZero) {
-                        q = 0
-                    }
-                }
-                p = 1 - q
-            }
-        }
-    }
-    return (p: p, q: q, ierr: ierr)
-}
 //
 fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,_ xr: inout T,_ ierr: inout Int) {
     //! -------------------------------------------------------------
@@ -367,9 +438,9 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
         porq = q
         s = 1
     }
-    logr = (1 / a) * (log1(p) + loggam(a + 1))
-    if (logr < log1(makeFP(0.2) * ( 1 + a))) {
-        r = exp1(logr)
+    logr = (1 / a) * (SSMath.log1(p) + SSSpecialFunctions.GammaHelper.loggam(a + 1))
+    if (logr < SSMath.log1( Helpers.makeFP(0.2) * ( 1 + a))) {
+        r = SSMath.exp1(logr)
         m = 0
         a2 = a * a
         a3 = a2 * a
@@ -407,15 +478,20 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
 //        x0=r*(1+r*(ck[2]+r*(ck[3] + r * (ex1))));
 
     }
-    else if ((q < min(makeFP(0.02), exp1(makeFP(-1.5) * a) / gamma1(a))) && (a < 10)) {
+    else if ((q < min( Helpers.makeFP(0.02), SSMath.exp1( Helpers.makeFP(-1.5) * a) / gamma1(a))) && (a < 10)) {
         m = 0
         b = 1 - a
         b2 = b * b
         b3 = b2 * b
-        eta = sqrt(-2 / a * log1(q * gamstar(a) * T.sqrt2pi / sqrt(a)))
+        ex1 = q * gamstar(a)
+        ex2 = T.sqrt2pi / sqrt(a)
+        ex3 = SSMath.log1(ex1 * ex2)
+        ex4 =  Helpers.makeFP(-2.0) / a
+        eta = sqrt(ex4 * ex3)
+//        eta = sqrt(-2 / a * SSMath.log1(q * gamstar(a) * T.sqrt2pi / sqrt(a)))
         x0 = a * lambdaeta(eta)
-        L = log1(x0)
-        if ((a > makeFP(0.12)) || (x0 > 5)) {
+        L = SSMath.log1(x0)
+        if ((a >  Helpers.makeFP(0.12)) || (x0 > 5)) {
             L2 = L * L
             L3 = L2 * L
             L4 = L3 * L
@@ -427,8 +503,8 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
              x0=x0-L+b*r*(ck[1]+r*(ck[2]+r*(ck[3]+r*ck[4])));
             */
             ck[1] = L - 1
-            let two: T = makeFP(2)
-            ex1 = makeFP(3) * b - two * b * L
+            let two: T =  Helpers.makeFP(2)
+            ex1 =  Helpers.makeFP(3) * b - two * b * L
             ex2 = ex1 + L2 - two * L + two
 //            ck[2]=(3*b-2*b*L+L2-2*L+2)/2.0;
             ck[2] = ex2 * T.half
@@ -440,7 +516,7 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
             ex6 = ex5 + two * L3
 //            ck[3]=(24*b*L-11*b2-24*b-6*L2+12*L-12-9*b*L2+6*b2*L+2*L3)/6.0;
             ck[3] = ex6 / 6
-            ex1 = makeFP(-12) * b3 * L
+            ex1 =  Helpers.makeFP(-12) * b3 * L
             ex2 = ex1 + 84 * b * L2
             ex3 = ex2 - 114 * b2 * L
             ex4 = ex3 + 72 + 36 * L2
@@ -469,29 +545,29 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
             x0 = x0 - L + b * r * ck[1]
         }
     }
-    else if (abs(porq - T.half) < makeFP(1.0e-5)) {
+    else if (abs(porq - T.half) <  Helpers.makeFP(1.0e-5)) {
         m = 0
-        ex1 = makeFP(8) / makeFP(405) + makeFP(184) / makeFP(25515)
+        ex1 =  Helpers.makeFP(8) /  Helpers.makeFP(405) +  Helpers.makeFP(184) /  Helpers.makeFP(25515)
         ex2 = ex1 / a
         ex3 = a - T.third
         ex4 = ex2 / a
         x0 = ex3 + ex4
-//        x0 = a - T.third + (makeFP(8) / makeFP(405) + makeFP(184) / makeFP(25515) / a) / a
+//        x0 = a - T.third + ( Helpers.makeFP(8) /  Helpers.makeFP(405) +  Helpers.makeFP(184) /  Helpers.makeFP(25515) / a) / a
     }
-    else if (abs(a - 1) < makeFP(1.0e-4)) {
+    else if (abs(a - 1) <  Helpers.makeFP(1.0e-4)) {
         m = 0
         if (pcase) {
-            x0 = -log1(1 - p)
+            x0 = -SSMath.log1(1 - p)
         } else {
-            x0 = -log1(q)
+            x0 = -SSMath.log1(q)
         }
     }
     else if (a < 1) {
         m = 0
         if (pcase) {
-            x0 = exp1((1 / a) * (log1(porq) + loggam(a + 1)))
+            x0 = SSMath.exp1((1 / a) * (SSMath.log1(porq) + SSSpecialFunctions.GammaHelper.loggam(a + 1)))
         } else {
-            x0 = exp1((1 / a) * (log1(1 - porq) + loggam(a + 1)))
+            x0 = SSMath.exp1((1 / a) * (SSMath.log1(1 - porq) + SSSpecialFunctions.GammaHelper.loggam(a + 1)))
         }
     }
     else {
@@ -512,25 +588,25 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
     a3 = a2 * a
     //! Implementation of the high order Newton-like method
     var incGammaAns: (p: T, q: T, ierr: Int)
-    while ((t > makeFP(1.0e-15)) || (n < 15)) {
+    while ((t >  Helpers.makeFP(1.0e-15)) || (n < 15)) {
         x = x0
         x2 = x * x
         if (m == 0) {
-            dlnr = (1 - a) * log1(x) + x + loggam(a)
-            if (dlnr > log1(T.greatestFiniteMagnitude)) {
+            dlnr = (1 - a) * SSMath.log1(x) + x + SSSpecialFunctions.GammaHelper.loggam(a)
+            if (dlnr > SSMath.log1(T.greatestFiniteMagnitude)) {
                 n = 20
                 ierr = -1
             } else {
-                r = exp1(dlnr)
+                r = SSMath.exp1(dlnr)
                 if (pcase) {
-                    incGammaAns = incgam(a: a,x: x)
+                    incGammaAns = SSSpecialFunctions.GammaHelper.incgam(a: a,x: x)
                     px = incGammaAns.p
                     qx = incGammaAns.q
                     ierr = incGammaAns.ierr
                     ck[1] = -r * (px - p)
                 } else {
 //                    incgam(a,x,&px,&qx,&ierrf)
-                    incGammaAns = incgam(a: a,x: x)
+                    incGammaAns = SSSpecialFunctions.GammaHelper.incgam(a: a,x: x)
                     px = incGammaAns.p
                     qx = incGammaAns.q
                     ierr = incGammaAns.ierr
@@ -547,7 +623,7 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
                 ck[3] = ex2 / ex1
 //                ck[3] = (2 * x2 - 4 * x * a + 4 * x + 2 * a2 - 3 * a + 1) / (6 * x2)
                 r = ck[1]
-                if (a > makeFP(0.1)) {
+                if (a >  Helpers.makeFP(0.1)) {
                     ex1 = ck[2] + r * ck[3]
                     ex2 = r * ex1
                     ex3 = 1 + ex2
@@ -555,7 +631,7 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
                     x0 = x + ex4
 //                    x0 = x + r * (1 + r * (ck[2] + r * ck[3]))
                 } else {
-                    if (a > makeFP(0.05)) {
+                    if (a >  Helpers.makeFP(0.05)) {
                         x0 = x + r * (1 + r * (ck[2]))
                     } else {
                         x0 = x + r
@@ -568,18 +644,18 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
             ex2 = y * y
             ex3 = T.minusOne * T.half * a
             ex4 = ex2 * ex3
-            fp = ex1 * exp1(ex4) / (gamstar(a))
-//            fp = -sqrt(a / T.twopi) * exp1(-T.half * a * y * y) / (gamstar(a))
+            fp = ex1 * SSMath.exp1(ex4) / (gamstar(a))
+//            fp = -sqrt(a / T.twopi) * SSMath.exp1(-T.half * a * y * y) / (gamstar(a))
             r = -(1 / fp) * x
             if (pcase) {
-                incGammaAns = incgam(a: a,x: x)
+                incGammaAns = SSSpecialFunctions.GammaHelper.incgam(a: a,x: x)
                 px = incGammaAns.p
                 qx = incGammaAns.q
                 ierr = incGammaAns.ierr
 //                incgam(a,x,&px,&qx,&ierrf)
                 ck[1] = -r * (px - p)
             } else {
-                incGammaAns = incgam(a: a,x: x)
+                incGammaAns = SSSpecialFunctions.GammaHelper.incgam(a: a,x: x)
                 px = incGammaAns.p
                 qx = incGammaAns.q
                 ierr = incGammaAns.ierr
@@ -596,10 +672,16 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
             ck[3] = ex5 / ex6
 //            ck[3] = (2 * x2 - 4 * x * a + 4 * x + 2 * a2 - 3 * a + 1) / (6 * x2)
             r = ck[1]
-            if (a > makeFP(0.1)) {
-                x0 = x + r * (1 + r * (ck[2] + r * ck[3]))
+            if (a >  Helpers.makeFP(0.1)) {
+                ex1 = ck[2]
+                ex2 = ex1 + r * ck[3]
+                ex3 = r * ex2
+                ex4 = T.one + ex3
+                ex5 = r * ex4
+                x0 = x + ex5
+//                x0 = x + r * (1 + r * (ck[2] + r * ck[3]))
             } else {
-                if (a > makeFP(0.05)) {
+                if (a >  Helpers.makeFP(0.05)) {
                     x0 = x + r * (1 + r * (ck[2]))
                 }
                 else {
@@ -627,7 +709,7 @@ fileprivate func sinh1<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
     if (x.isZero) {
         y = 0
     }
-    else if (ax < makeFP(0.12)) {
+    else if (ax <  Helpers.makeFP(0.12)) {
         e = eps / 10
         x2 = x * x
         y = 1
@@ -637,16 +719,16 @@ fileprivate func sinh1<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
         while (t > e) {
             u = u + 8 * k - 2
             k = k + 1
-            t = t * x2 / makeFP(u)
+            t = t * x2 /  Helpers.makeFP(u)
             y = y + t
         }
         y = x * y
     }
-    else if (ax < makeFP(0.36)) {
+    else if (ax <  Helpers.makeFP(0.36)) {
         t = sinh1( x / 3, eps)
         y = t * (3 + 4 * t * t)
     } else {
-        t = exp1(x)
+        t = SSMath.exp1(x)
         y = (t - 1/t) / 2
     }
     return y
@@ -659,18 +741,18 @@ fileprivate func exmin1<T: SSFloatingPoint>(_ x: T,_ eps: T) -> T {
     if (x.isZero) {
         y = 1
     }
-    else if ((x < makeFP(-0.69)) || (x > makeFP(0.4))) {
-        y = (exp1(x) - 1) / x
+    else if ((x <  Helpers.makeFP(-0.69)) || (x >  Helpers.makeFP(0.4))) {
+        y = (SSMath.exp1(x) - 1) / x
     } else {
         t = x / 2
-        y = exp1(t) * sinh1(t,eps) / t
+        y = SSMath.exp1(t) * sinh1(t,eps) / t
     }
     res = y
     return res
 }
 
 fileprivate func logoneplusx<T: SSFloatingPoint>(_ t: T) -> T {
-    return log1p1(t)
+    return SSMath.log1p1(t)
 //
 //FUNCTION logoneplusx(x)
 //USE Someconstants
@@ -711,92 +793,73 @@ fileprivate func auxloggam<T: SSFloatingPoint>(_ x: T) -> T {
     else if (x < 0) {
         ex1 = x * (1 + x)
         ex2 = ex1 * auxloggam(x + 1)
-        ex3 = ex2 + log1p1(x)
+        ex3 = ex2 + SSMath.log1p1(x)
         ex4 = x * (1 - x)
         g = -ex3 / ex4
-//        g = -(x * (1 + x) * auxloggam(x + 1) + log1p1(x)) / (x * (1 - x))
+//        g = -(x * (1 + x) * auxloggam(x + 1) + SSMath.log1p1(x)) / (x * (1 - x))
     }
     else if (x < 1) {
-        ak[0] = makeFP(-0.98283078605877425496)
-        ak[1] = makeFP(0.7611416167043584304e-1)
-        ak[2] = makeFP(-0.843232496593277796e-2)
-        ak[3] = makeFP(0.107949372632860815e-2)
-        ak[4] = makeFP(-0.14900748003692965e-3)
-        ak[5] = makeFP(0.2151239988855679e-4)
-        ak[6] = makeFP(-0.319793298608622e-5)
-        ak[7] = makeFP(0.48516930121399e-6)
-        ak[8] = makeFP(-0.7471487821163e-7)
-        ak[9] = makeFP(0.1163829670017e-7)
-        ak[10] = makeFP(-0.182940043712e-8)
-        ak[11] = makeFP(0.28969180607e-9)
-        ak[12] = makeFP(-0.4615701406e-10)
-        ak[13] = makeFP(0.739281023e-11)
-        ak[14] = makeFP(-0.118942800e-11)
-        ak[15] = makeFP(0.19212069e-12)
-        ak[16] = makeFP(-0.3113976e-13)
-        ak[17] = makeFP(0.506284e-14)
-        ak[18] = makeFP(-0.82542e-15)
-        ak[19] = makeFP(0.13491e-15)
-        ak[20] = makeFP(-0.2210e-16)
-        ak[21] = makeFP(0.363e-17)
-        ak[22] = makeFP(-0.60e-18)
-        ak[23] = makeFP(0.98e-19)
-        ak[24] = makeFP(-0.2e-19)
-        ak[25] = makeFP(0.3e-20)
+        ak[0] =  Helpers.makeFP(-0.98283078605877425496)
+        ak[1] =  Helpers.makeFP(0.7611416167043584304e-1)
+        ak[2] =  Helpers.makeFP(-0.843232496593277796e-2)
+        ak[3] =  Helpers.makeFP(0.107949372632860815e-2)
+        ak[4] =  Helpers.makeFP(-0.14900748003692965e-3)
+        ak[5] =  Helpers.makeFP(0.2151239988855679e-4)
+        ak[6] =  Helpers.makeFP(-0.319793298608622e-5)
+        ak[7] =  Helpers.makeFP(0.48516930121399e-6)
+        ak[8] =  Helpers.makeFP(-0.7471487821163e-7)
+        ak[9] =  Helpers.makeFP(0.1163829670017e-7)
+        ak[10] =  Helpers.makeFP(-0.182940043712e-8)
+        ak[11] =  Helpers.makeFP(0.28969180607e-9)
+        ak[12] =  Helpers.makeFP(-0.4615701406e-10)
+        ak[13] =  Helpers.makeFP(0.739281023e-11)
+        ak[14] =  Helpers.makeFP(-0.118942800e-11)
+        ak[15] =  Helpers.makeFP(0.19212069e-12)
+        ak[16] =  Helpers.makeFP(-0.3113976e-13)
+        ak[17] =  Helpers.makeFP(0.506284e-14)
+        ak[18] =  Helpers.makeFP(-0.82542e-15)
+        ak[19] =  Helpers.makeFP(0.13491e-15)
+        ak[20] =  Helpers.makeFP(-0.2210e-16)
+        ak[21] =  Helpers.makeFP(0.363e-17)
+        ak[22] =  Helpers.makeFP(-0.60e-18)
+        ak[23] =  Helpers.makeFP(0.98e-19)
+        ak[24] =  Helpers.makeFP(-0.2e-19)
+        ak[25] =  Helpers.makeFP(0.3e-20)
         t = 2 * x - 1
         g = chepolsum(25, t, ak)
     }
-    else if (x < makeFP(1.5)) {
-        ex1 = log1p1(x - 1)
+    else if (x <  Helpers.makeFP(1.5)) {
+        ex1 = SSMath.log1p1(x - 1)
         ex2 = (x - 1) * (2 - x)
         ex3 = ex2 * auxloggam(x - 1)
         ex4 = ex1 + ex3
         ex5 = (x * (1 - x))
         g = ex4 / ex5
-//        g = (log1p1(x - 1) + (x - 1) * (2 - x) * auxloggam(x - 1)) / (x * (1 - x))
+//        g = (SSMath.log1p1(x - 1) + (x - 1) * (2 - x) * auxloggam(x - 1)) / (x * (1 - x))
     }
     else {
-        ex1 = log1(x)
+        ex1 = SSMath.log1(x)
         ex2 = (x - 1) * (2 - x)
         ex3 = ex2 * auxloggam(x - 1)
         ex4 = ex1 + ex3
         ex5 = (x * (1 - x))
         g = ex4 / ex5
-//        g = (log1(x) + (x - 1) * (2 - x) * auxloggam(x - 1)) / (x * (1 - x))
+//        g = (SSMath.log1(x) + (x - 1) * (2 - x) * auxloggam(x - 1)) / (x * (1 - x))
     }
     return g
-}
-
-internal func loggam<T: SSFloatingPoint>(_ x: T) -> T {
-    //! Computation of ln(gamma1(x)), x>0
-    var res: T
-    var ex1, ex2: T
-    if (x >= 3) {
-        res = (x - T.half) * log1(x) - x + T.lnsqrt2pi + stirling(x)
-    }
-    else if (x >= 2) {
-        ex1 = (x - 2) * (3 - x)
-        ex2 = ex1 * auxloggam(x - 2)
-        res = ex2 + log1p1(x - 2)
-//        res = (x - 2) * (3 - x) * auxloggam(x - 2) + log1p1(x - 2)
-    }
-    else if (x >= 1) {
-        res = (x - 1) * (2 - x) * auxloggam(x - 1)
-    }
-    else if (x > T.half) {
-        res = x * (1 - x) * auxloggam(x) - log1p1(x - 1)
-    }
-    else if (x > 0) {
-        res = x * (1 - x) * auxloggam(x) - log1(x)
-    } else {
-        res = T.infinity
-    }
-    return res
 }
 
 fileprivate func gamma1<T: SSFloatingPoint>(_ x: T) -> T {
     var dw, gam, z: T
     var k, k1: Int
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    var ex5: T
+    var ex6: T
+    var ex7: T
+
     let dwarf = T.ulpOfOne * 10
     // ! {Euler gamma function Gamma(x), x real}
     k = nint(x)
@@ -806,41 +869,47 @@ fileprivate func gamma1<T: SSFloatingPoint>(_ x: T) -> T {
     } else {
         dw = T.ulpOfOne
     }
-    if ((k <= 0) && (abs(makeFP(k) - x) <= dw)) {
+    if ((k <= 0) && (abs( Helpers.makeFP(k) - x) <= dw)) {
         if (k % 2 > 0) {
             //    ! k is odd
-            gam = sign(makeFP(k) - x) * T.greatestFiniteMagnitude
+            gam = SSMath.sign( Helpers.makeFP(k) - x) * T.greatestFiniteMagnitude
         } else {
             //    ! k is even
-            gam = sign(x - makeFP(k)) * T.greatestFiniteMagnitude
+            gam = SSMath.sign(x -  Helpers.makeFP(k)) * T.greatestFiniteMagnitude
         }
-    } else if (x < makeFP(0.45)) {
-        gam = T.pi / (sin1(T.pi * x) * gamma1(1 - x))
-    } else if ((abs(makeFP(k) - x) < dw) && (x < 21)) {
+    } else if (x <  Helpers.makeFP(0.45)) {
+        gam = T.pi / (SSMath.sin1(T.pi * x) * gamma1(1 - x))
+    } else if ((abs( Helpers.makeFP(k) - x) < dw) && (x < 21)) {
         gam = 1
         for n in stride(from: 2, to: k1, by: 1) {
 //        for (n= 2; n<= k1;n++) {
-            gam = gam * makeFP(n)
+            gam = gam *  Helpers.makeFP(n)
         }
-    } else if ((abs(makeFP(k) - x - T.half) < dw) && (x < 21)) {
+    } else if ((abs( Helpers.makeFP(k) - x - T.half) < dw) && (x < 21)) {
         gam = sqrt(T.pi)
         for n in stride(from: 1, to: k1, by: 1) {
 //        for (n=1;n<=k1;n++) {
-            gam = gam * (makeFP(n) - T.half)
+            gam = gam * ( Helpers.makeFP(n) - T.half)
         }
     } else if (x < 3) {
-        if (makeFP(k) > x) {
+        if ( Helpers.makeFP(k) > x) {
             k = k1
         }
         k1 = 3 - k
-        z = makeFP(k1) + x
+        z =  Helpers.makeFP(k1) + x
         gam = gamma1(z)
         for n in stride(from: 1, to: k1, by: 1) {
 //        for( n=1;n <=k1;n++) {
-            gam = gam / (z - makeFP(n))
+            gam = gam / (z -  Helpers.makeFP(n))
         }
     } else {
-        gam = T.sqrt2Opi * exp1(-x + (x - T.half) * log1(x) + stirling(x))
+        ex1 = stirling(x)
+        ex2 = SSMath.log1(x)
+        ex3 = x - T.half
+        ex4 = ex3 * ex2
+        ex5 = -x + ex4 + ex1
+        gam = T.sqrt2Opi * SSMath.exp1(ex5)
+//        gam = T.sqrt2Opi * SSMath.exp1(-x + (x - T.half) * SSMath.log1(x) + stirling(x))
     }
     return gam
 }
@@ -860,24 +929,24 @@ fileprivate func auxgam<T: SSFloatingPoint>(_ x: T) -> T {
         ans = -ex3 / (1 - x)
 //        res = -(1 + (1 + x) * (1 + x) * auxgam(1 + x))/(1 - x)
     } else {
-        dr[0] = makeFP(-1.013609258009865776949)
-        dr[1] = makeFP(0.784903531024782283535e-1)
-        dr[2] = makeFP(0.67588668743258315530e-2)
-        dr[3] = makeFP(-0.12790434869623468120e-2)
-        dr[4] = makeFP(0.462939838642739585e-4)
-        dr[5] = makeFP(0.43381681744740352e-5)
-        dr[6] = makeFP(-0.5326872422618006e-6)
-        dr[7] = makeFP(0.172233457410539e-7)
-        dr[8] = makeFP(0.8300542107118e-9)
-        dr[9] = makeFP(-0.10553994239968e-9)
-        dr[10] = makeFP(0.39415842851e-11)
-        dr[11] = makeFP(0.362068537e-13)
-        dr[12] = makeFP(-0.107440229e-13)
-        dr[13] = makeFP(0.5000413e-15)
-        dr[14] = makeFP(-0.62452e-17)
-        dr[15] = makeFP(-0.5185e-18)
-        dr[16] = makeFP(0.347e-19)
-        dr[17] = makeFP(-0.9e-21)
+        dr[0] =  Helpers.makeFP(-1.013609258009865776949)
+        dr[1] =  Helpers.makeFP(0.784903531024782283535e-1)
+        dr[2] =  Helpers.makeFP(0.67588668743258315530e-2)
+        dr[3] =  Helpers.makeFP(-0.12790434869623468120e-2)
+        dr[4] =  Helpers.makeFP(0.462939838642739585e-4)
+        dr[5] =  Helpers.makeFP(0.43381681744740352e-5)
+        dr[6] =  Helpers.makeFP(-0.5326872422618006e-6)
+        dr[7] =  Helpers.makeFP(0.172233457410539e-7)
+        dr[8] =  Helpers.makeFP(0.8300542107118e-9)
+        dr[9] =  Helpers.makeFP(-0.10553994239968e-9)
+        dr[10] =  Helpers.makeFP(0.39415842851e-11)
+        dr[11] =  Helpers.makeFP(0.362068537e-13)
+        dr[12] =  Helpers.makeFP(-0.107440229e-13)
+        dr[13] =  Helpers.makeFP(0.5000413e-15)
+        dr[14] =  Helpers.makeFP(-0.62452e-17)
+        dr[15] =  Helpers.makeFP(-0.5185e-18)
+        dr[16] =  Helpers.makeFP(0.347e-19)
+        dr[17] =  Helpers.makeFP(-0.9e-21)
         t = 2 * x - 1
         ans = chepolsum(17, t, dr)
     }
@@ -887,7 +956,7 @@ fileprivate func auxgam<T: SSFloatingPoint>(_ x: T) -> T {
 
 fileprivate func lngam1<T: SSFloatingPoint>(_ x: T) -> T {
     //! {ln(gamma1(1+x)), -1<=x<=1}
-    return -log1p1(x * (x - 1) * auxgam(x))
+    return -SSMath.log1p1(x * (x - 1) * auxgam(x))
 }
 
 
@@ -896,10 +965,10 @@ fileprivate func nint<T: SSFloatingPoint>(_ x: T) -> Int {
     let c = ceil(x)
     let t = floor(x)
     if (abs(x - c) > abs(x - t)) {
-        return integerValue(t)
+        return Helpers.integerValue(t)
     }
     else {
-        return integerValue(c)
+        return Helpers.integerValue(c)
     }
 }
 
@@ -910,7 +979,7 @@ fileprivate func errorfunction1<T: SSFloatingPoint>(_ x: T, _ erfcc: Bool,_ expo
     r = Array<T>.init(repeating: 0, count: 9)
     s = Array<T>.init(repeating: 0, count: 9)
     if (erfcc) {
-        if (x < makeFP(-6.5)) {
+        if (x <  Helpers.makeFP(-6.5)) {
             y = 2
         } else if  (x < 0) {
             y = 2 - errorfunction1(-x, true, false)
@@ -918,7 +987,7 @@ fileprivate func errorfunction1<T: SSFloatingPoint>(_ x: T, _ erfcc: Bool,_ expo
             y = 1
         } else if  (x < T.half) {
             if (expo) {
-                y = exp1(x * x)
+                y = SSMath.exp1(x * x)
             }
             else {
                 y = 1
@@ -928,67 +997,67 @@ fileprivate func errorfunction1<T: SSFloatingPoint>(_ x: T, _ erfcc: Bool,_ expo
             if (expo) {
                 y = 1
             } else {
-                y = exp1(-x * x)
+                y = SSMath.exp1(-x * x)
             }
-            r[0] = makeFP( 1.230339354797997253e3)
-            r[1] = makeFP( 2.051078377826071465e3)
-            r[2] = makeFP( 1.712047612634070583e3)
-            r[3] = makeFP( 8.819522212417690904e2)
-            r[4] = makeFP( 2.986351381974001311e2)
-            r[5] = makeFP( 6.611919063714162948e1)
-            r[6] = makeFP( 8.883149794388375941)
-            r[7] = makeFP( 5.641884969886700892e-1)
-            r[8] = makeFP( 2.153115354744038463e-8)
-            s[0] = makeFP( 1.230339354803749420e3)
-            s[1] = makeFP( 3.439367674143721637e3)
-            s[2] = makeFP( 4.362619090143247158e3)
-            s[3] = makeFP( 3.290799235733459627e3)
-            s[4] = makeFP( 1.621389574566690189e3)
-            s[5] = makeFP( 5.371811018620098575e2)
-            s[6] = makeFP( 1.176939508913124993e2)
-            s[7] = makeFP( 1.574492611070983473e1)
+            r[0] =  Helpers.makeFP( 1.230339354797997253e3)
+            r[1] =  Helpers.makeFP( 2.051078377826071465e3)
+            r[2] =  Helpers.makeFP( 1.712047612634070583e3)
+            r[3] =  Helpers.makeFP( 8.819522212417690904e2)
+            r[4] =  Helpers.makeFP( 2.986351381974001311e2)
+            r[5] =  Helpers.makeFP( 6.611919063714162948e1)
+            r[6] =  Helpers.makeFP( 8.883149794388375941)
+            r[7] =  Helpers.makeFP( 5.641884969886700892e-1)
+            r[8] =  Helpers.makeFP( 2.153115354744038463e-8)
+            s[0] =  Helpers.makeFP( 1.230339354803749420e3)
+            s[1] =  Helpers.makeFP( 3.439367674143721637e3)
+            s[2] =  Helpers.makeFP( 4.362619090143247158e3)
+            s[3] =  Helpers.makeFP( 3.290799235733459627e3)
+            s[4] =  Helpers.makeFP( 1.621389574566690189e3)
+            s[5] =  Helpers.makeFP( 5.371811018620098575e2)
+            s[6] =  Helpers.makeFP( 1.176939508913124993e2)
+            s[7] =  Helpers.makeFP( 1.574492611070983473e1)
             y = y * fractio(x, 8, r, s)
         } else {
             z = x * x
             if (expo) {
                 y = 1
             } else {
-                y = exp1(-z)
+                y = SSMath.exp1(-z)
             }
             z = 1 / z
-            r[0] = makeFP(6.587491615298378032e-4)
-            r[1] = makeFP(1.608378514874227663e-2)
-            r[2] = makeFP(1.257817261112292462e-1)
-            r[3] = makeFP(3.603448999498044394e-1)
-            r[4] = makeFP(3.053266349612323440e-1)
-            r[5] = makeFP(1.631538713730209785e-2)
-            s[0] = makeFP(2.335204976268691854e-3)
-            s[1] = makeFP(6.051834131244131912e-2)
-            s[2] = makeFP(5.279051029514284122e-1)
-            s[3] = makeFP(1.872952849923460472)
-            s[4] = makeFP(2.568520192289822421)
+            r[0] =  Helpers.makeFP(6.587491615298378032e-4)
+            r[1] =  Helpers.makeFP(1.608378514874227663e-2)
+            r[2] =  Helpers.makeFP(1.257817261112292462e-1)
+            r[3] =  Helpers.makeFP(3.603448999498044394e-1)
+            r[4] =  Helpers.makeFP(3.053266349612323440e-1)
+            r[5] =  Helpers.makeFP(1.631538713730209785e-2)
+            s[0] =  Helpers.makeFP(2.335204976268691854e-3)
+            s[1] =  Helpers.makeFP(6.051834131244131912e-2)
+            s[2] =  Helpers.makeFP(5.279051029514284122e-1)
+            s[3] =  Helpers.makeFP(1.872952849923460472)
+            s[4] =  Helpers.makeFP(2.568520192289822421)
             y = y * (T.oosqrtpi - z * fractio(z, 5, r, s)) / x
         }
         errfu = y
     } else {
         if (x.isZero) {
             y = 0
-        } else if  (abs(x) > makeFP(6.5)) {
+        } else if  (abs(x) >  Helpers.makeFP(6.5)) {
             y = x / abs(x)
         } else if  (x > T.half) {
             y = 1 - errorfunction1(x, true, false)
         } else if  (x < -T.half) {
             y = errorfunction1(-x, true, false) - 1
         } else {
-            r[0] = makeFP(3.209377589138469473e3)
-            r[1] = makeFP(3.774852376853020208e2)
-            r[2] = makeFP(1.138641541510501556e2)
-            r[3] = makeFP(3.161123743870565597e0)
-            r[4] = makeFP(1.857777061846031527e-1)
-            s[0] = makeFP(2.844236833439170622e3)
-            s[1] = makeFP(1.282616526077372276e3)
-            s[2] = makeFP(2.440246379344441733e2)
-            s[3] = makeFP(2.360129095234412093e1)
+            r[0] =  Helpers.makeFP(3.209377589138469473e3)
+            r[1] =  Helpers.makeFP(3.774852376853020208e2)
+            r[2] =  Helpers.makeFP(1.138641541510501556e2)
+            r[3] =  Helpers.makeFP(3.161123743870565597e0)
+            r[4] =  Helpers.makeFP(1.857777061846031527e-1)
+            s[0] =  Helpers.makeFP(2.844236833439170622e3)
+            s[1] =  Helpers.makeFP(1.282616526077372276e3)
+            s[2] =  Helpers.makeFP(2.440246379344441733e2)
+            s[3] =  Helpers.makeFP(2.360129095234412093e1)
             z = x * x
             y = x * fractio(z, 4, r, s)
         }
@@ -1012,6 +1081,14 @@ fileprivate func fractio<T: SSFloatingPoint>(_ x: T,_ n: Int,_ r: Array<T>, _ s:
 fileprivate func pqasymp<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T,_ p: Bool) -> T {
     var res, y, mu, eta, u, v: T
     var s: T
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
+    var ex5: T
+    var ex6: T
+    var ex7: T
+
     if (dp.isZero) {
         if (p) {
             res = 0
@@ -1039,7 +1116,12 @@ fileprivate func pqasymp<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T,_ p: Bool) ->
             v = -v
         }
         u = T.half * errorfunction1(s * v,true,false)
-        v = s * exp1(-y) * saeta(a,eta) / sqrt(2 * T.pi * a)
+        ex1 =  T.twopi * a
+        ex2 = sqrt(ex1)
+        ex3 = s * SSMath.exp1(-y)
+        ex4 = ex3 * saeta(a, eta)
+        v = ex4 / ex2
+//        v = s * SSMath.exp1(-y) * saeta(a,eta) / sqrt(2 * T.pi * a)
         res = u + v
     }
     return res
@@ -1050,38 +1132,38 @@ fileprivate func saeta<T: SSFloatingPoint>(_ a: T,_ eta: T) -> T {
     var fm: Array<T> = Array<T>.init(repeating: 0, count: 27)
     var bm: Array<T> = Array<T>.init(repeating: 0, count: 27)
     var  m: Int
-    eps = makeFP(EPSS)
-    fm[0] = makeFP(1.0)
-    fm[1] = makeFP(-1.0/3.0)
-    fm[2] = makeFP(1.0/12.0)
-    fm[3] = makeFP(-2.0/135.0)
-    fm[4] = makeFP(1.0/864.0)
-    fm[5] = makeFP(1.0 / 2835.0)
-    fm[6] = makeFP(-139.0/777600.0)
-    fm[7] = makeFP(1.0/25515.0)
-    fm[8] = makeFP(-571.0/261273600.0)
-    fm[9] = makeFP(-281.0/151559100.0)
-    fm[10] = makeFP(8.29671134095308601e-7)
-    fm[11] = makeFP(-1.76659527368260793e-7)
-    fm[12] = makeFP(6.70785354340149857e-9)
-    fm[13] = makeFP(1.02618097842403080e-8)
-    fm[14] = makeFP(-4.38203601845335319e-9)
-    fm[15] = makeFP(9.14769958223679023e-10)
-    fm[16] = makeFP(-2.55141939949462497e-11)
-    fm[17] = makeFP(-5.83077213255042507e-11)
-    fm[18] = makeFP(2.43619480206674162e-11)
-    fm[19] = makeFP(-5.02766928011417559e-12)
-    fm[20] = makeFP(1.10043920319561347e-13)
-    fm[21] = makeFP(3.37176326240098538e-13)
-    fm[22] = makeFP(-1.39238872241816207e-13)
-    fm[23] = makeFP(2.85348938070474432e-14)
-    fm[24] = makeFP(-5.13911183424257258e-16)
-    fm[25] = makeFP(-1.97522882943494428e-15)
-    fm[26] = makeFP( 8.09952115670456133e-16)
+    eps = epss()
+    fm[0] =  Helpers.makeFP(1.0)
+    fm[1] =  Helpers.makeFP(-1.0/3.0)
+    fm[2] =  Helpers.makeFP(1.0/12.0)
+    fm[3] =  Helpers.makeFP(-2.0/135.0)
+    fm[4] =  Helpers.makeFP(1.0/864.0)
+    fm[5] =  Helpers.makeFP(1.0 / 2835.0)
+    fm[6] =  Helpers.makeFP(-139.0/777600.0)
+    fm[7] =  Helpers.makeFP(1.0/25515.0)
+    fm[8] =  Helpers.makeFP(-571.0/261273600.0)
+    fm[9] =  Helpers.makeFP(-281.0/151559100.0)
+    fm[10] =  Helpers.makeFP(8.29671134095308601e-7)
+    fm[11] =  Helpers.makeFP(-1.76659527368260793e-7)
+    fm[12] =  Helpers.makeFP(6.70785354340149857e-9)
+    fm[13] =  Helpers.makeFP(1.02618097842403080e-8)
+    fm[14] =  Helpers.makeFP(-4.38203601845335319e-9)
+    fm[15] =  Helpers.makeFP(9.14769958223679023e-10)
+    fm[16] =  Helpers.makeFP(-2.55141939949462497e-11)
+    fm[17] =  Helpers.makeFP(-5.83077213255042507e-11)
+    fm[18] =  Helpers.makeFP(2.43619480206674162e-11)
+    fm[19] =  Helpers.makeFP(-5.02766928011417559e-12)
+    fm[20] =  Helpers.makeFP(1.10043920319561347e-13)
+    fm[21] =  Helpers.makeFP(3.37176326240098538e-13)
+    fm[22] =  Helpers.makeFP(-1.39238872241816207e-13)
+    fm[23] =  Helpers.makeFP(2.85348938070474432e-14)
+    fm[24] =  Helpers.makeFP(-5.13911183424257258e-16)
+    fm[25] =  Helpers.makeFP(-1.97522882943494428e-15)
+    fm[26] =  Helpers.makeFP( 8.09952115670456133e-16)
     bm[25] = fm[26]
     bm[24] = fm[25]
     for m in stride(from: 24, through: 1, by: -1) {
-        bm[m-1] = fm[m] + makeFP(m + 1) * bm[m + 1] / a
+        bm[m-1] = fm[m] +  Helpers.makeFP(m + 1) * bm[m + 1] / a
     }
     s = bm[0]
     t = s
@@ -1099,7 +1181,7 @@ fileprivate func saeta<T: SSFloatingPoint>(_ a: T,_ eta: T) -> T {
 
 fileprivate func qfraction<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
     var res, eps, g, p, q, r, s, t, tau, ro: T
-    eps = makeFP(EPSS)
+    eps = epss()
     if (dp.isZero) {
         q = 0
     } else {
@@ -1128,8 +1210,8 @@ fileprivate func qfraction<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
 
 fileprivate func qtaylor<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
     var res, eps, lnx, p, q, r, s, t, u, v, ex1, ex2, ex3: T
-    eps = makeFP(EPSS)
-    lnx = log1(x)
+    eps = epss()
+    lnx = SSMath.log1(x)
     if (dp.isZero) {
         q = 0
     } else {
@@ -1156,8 +1238,8 @@ fileprivate func qtaylor<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
         ex1 = a * (1 - s)
         ex2 = (a + 1) * lnx
         ex3 = v / (a + 1)
-        v = ex1 * exp1(ex2) * ex3
-//        v = a * (1 - s) * exp1((a + 1) * lnx) * v / (a + 1)
+        v = ex1 * SSMath.exp1(ex2) * ex3
+//        v = a * (1 - s) * SSMath.exp1((a + 1) * lnx) * v / (a + 1)
         q=u+v
     }
     res = q
@@ -1166,7 +1248,7 @@ fileprivate func qtaylor<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
 
 fileprivate func ptaylor<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
     var res, eps,p,c,r: T
-    eps = makeFP(EPSS)
+    eps = epss()
     if (dp.isZero) {
         p = 0
     } else {
@@ -1190,20 +1272,20 @@ fileprivate func eps1<T: SSFloatingPoint>(_ eta: T) -> T {
     var ak: Array<T> = Array<T>.init(repeating: 0, count: 5)
     var bk: Array<T> = Array<T>.init(repeating: 0, count: 5)
     if (abs(eta) < 1) {
-        ak[0] = makeFP(-3.333333333438e-1)
-        bk[0] = makeFP(1.000000000000e+0)
-        ak[1] = makeFP(-2.070740359969e-1)
-        bk[1] = makeFP(7.045554412463e-1)
-        ak[2] = makeFP(-5.041806657154e-2)
-        bk[2] = makeFP(2.118190062224e-1)
-        ak[3] = makeFP(-4.923635739372e-3)
-        bk[3] = makeFP(3.048648397436e-2)
-        ak[4] = makeFP(-4.293658292782e-5)
-        bk[4] = makeFP(1.605037988091e-3)
+        ak[0] =  Helpers.makeFP(-3.333333333438e-1)
+        bk[0] =  Helpers.makeFP(1.000000000000e+0)
+        ak[1] =  Helpers.makeFP(-2.070740359969e-1)
+        bk[1] =  Helpers.makeFP(7.045554412463e-1)
+        ak[2] =  Helpers.makeFP(-5.041806657154e-2)
+        bk[2] =  Helpers.makeFP(2.118190062224e-1)
+        ak[3] =  Helpers.makeFP(-4.923635739372e-3)
+        bk[3] =  Helpers.makeFP(3.048648397436e-2)
+        ak[4] =  Helpers.makeFP(-4.293658292782e-5)
+        bk[4] =  Helpers.makeFP(1.605037988091e-3)
         res = ratfun(eta, ak, bk)
     } else {
         la = lambdaeta(eta)
-        res = log1(eta / (la - 1)) / eta
+        res = SSMath.log1(eta / (la - 1)) / eta
     }
     return res
 }
@@ -1215,32 +1297,32 @@ fileprivate func eps2<T: SSFloatingPoint>(_ eta: T) -> T {
     var bk: Array<T> = Array<T>.init(repeating: 0, count: 5)
     if (eta < -5) {
         x = eta * eta
-        lnmeta = log1(-eta)
+        lnmeta = SSMath.log1(-eta)
         ex1 = 12 - x - 6
         ex2 = (lnmeta * lnmeta)
         ex3 = 12 * x * eta
         res = (ex1 * ex2) / ex3
 //        res = (12 - x - 6 * (lnmeta * lnmeta)) / (12 * x * eta)
     } else if (eta < -2) {
-        ak[0] = makeFP(-1.72847633523e-2);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(-1.59372646475e-2);  bk[1] = makeFP(7.64050615669e-1)
-        ak[2] = makeFP(-4.64910887221e-3);  bk[2] = makeFP(2.97143406325e-1)
-        ak[3] = makeFP(-6.06834887760e-4);  bk[3] = makeFP(5.79490176079e-2)
-        ak[4] = makeFP(-6.14830384279e-6);  bk[4] = makeFP(5.74558524851e-3)
+        ak[0] =  Helpers.makeFP(-1.72847633523e-2);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(-1.59372646475e-2);  bk[1] =  Helpers.makeFP(7.64050615669e-1)
+        ak[2] =  Helpers.makeFP(-4.64910887221e-3);  bk[2] =  Helpers.makeFP(2.97143406325e-1)
+        ak[3] =  Helpers.makeFP(-6.06834887760e-4);  bk[3] =  Helpers.makeFP(5.79490176079e-2)
+        ak[4] =  Helpers.makeFP(-6.14830384279e-6);  bk[4] =  Helpers.makeFP(5.74558524851e-3)
         res = ratfun(eta,ak,bk)
     } else if (eta < 2) {
-        ak[0] = makeFP(-1.72839517431e-2);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(-1.46362417966e-2);  bk[1] = makeFP(6.90560400696e-1)
-        ak[2] = makeFP(-3.57406772616e-3);  bk[2] = makeFP(2.49962384741e-1)
-        ak[3] = makeFP(-3.91032032692e-4);  bk[3] = makeFP(4.43843438769e-2)
-        ak[4] = makeFP(2.49634036069e-6);   bk[4] = makeFP(4.24073217211e-3)
+        ak[0] =  Helpers.makeFP(-1.72839517431e-2);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(-1.46362417966e-2);  bk[1] =  Helpers.makeFP(6.90560400696e-1)
+        ak[2] =  Helpers.makeFP(-3.57406772616e-3);  bk[2] =  Helpers.makeFP(2.49962384741e-1)
+        ak[3] =  Helpers.makeFP(-3.91032032692e-4);  bk[3] =  Helpers.makeFP(4.43843438769e-2)
+        ak[4] =  Helpers.makeFP(2.49634036069e-6);   bk[4] =  Helpers.makeFP(4.24073217211e-3)
         res = ratfun(eta,ak,bk)
     } else if (eta < 1000) {
-        ak[0] = makeFP(9.99944669480e-1);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(1.04649839762e+2);  bk[1] = makeFP(1.04526456943e+2)
-        ak[2] = makeFP(8.57204033806e+2);  bk[2] = makeFP(8.23313447808e+2)
-        ak[3] = makeFP(7.31901559577e+2);  bk[3] = makeFP(3.11993802124e+3)
-        ak[4] = makeFP(4.55174411671e+1);  bk[4] = makeFP(3.97003311219e+3)
+        ak[0] =  Helpers.makeFP(9.99944669480e-1);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(1.04649839762e+2);  bk[1] =  Helpers.makeFP(1.04526456943e+2)
+        ak[2] =  Helpers.makeFP(8.57204033806e+2);  bk[2] =  Helpers.makeFP(8.23313447808e+2)
+        ak[3] =  Helpers.makeFP(7.31901559577e+2);  bk[3] =  Helpers.makeFP(3.11993802124e+3)
+        ak[4] =  Helpers.makeFP(4.55174411671e+1);  bk[4] =  Helpers.makeFP(3.97003311219e+3)
         x = 1 / eta
         res = ratfun(x, ak, bk) / (-12 * eta)
     } else {
@@ -1256,7 +1338,7 @@ fileprivate func eps3<T: SSFloatingPoint>(_ eta: T) -> T {
     var bk:Array<T> = Array<T>.init(repeating: 0, count: 5)
     if (eta < -8) {
         x = eta * eta
-        y = log1(-eta) / eta
+        y = SSMath.log1(-eta) / eta
         ex1 = 6 * x * y * y
         ex2 = ex1 - 12 + x
         ex3 = eta * y * ex2
@@ -1264,45 +1346,45 @@ fileprivate func eps3<T: SSFloatingPoint>(_ eta: T) -> T {
         ex5 = (12 * eta * x * x)
         res = ex4 / ex5
     } else if (eta < -4) {
-        ak[0] = makeFP(4.95346498136e-2);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(2.99521337141e-2);  bk[1] = makeFP(7.59803615283e-1)
-        ak[2] = makeFP(6.88296911516e-3);  bk[2] = makeFP(2.61547111595e-1)
-        ak[3] = makeFP(5.12634846317e-4);  bk[3] = makeFP(4.64854522477e-2)
-        ak[4] = makeFP(-2.01411722031e-5); bk[4] = makeFP(4.03751193496e-3)
+        ak[0] =  Helpers.makeFP(4.95346498136e-2);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(2.99521337141e-2);  bk[1] =  Helpers.makeFP(7.59803615283e-1)
+        ak[2] =  Helpers.makeFP(6.88296911516e-3);  bk[2] =  Helpers.makeFP(2.61547111595e-1)
+        ak[3] =  Helpers.makeFP(5.12634846317e-4);  bk[3] =  Helpers.makeFP(4.64854522477e-2)
+        ak[4] =  Helpers.makeFP(-2.01411722031e-5); bk[4] =  Helpers.makeFP(4.03751193496e-3)
         res = ratfun(eta,ak,bk) / (eta * eta)
     } else if (eta < -2) {
-        ak[0] = makeFP(4.52313583942e-3);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(1.20744920113e-3);  bk[1] = makeFP(9.12203410349e-1)
-        ak[2] = makeFP(-7.89724156582e-5); bk[2] = makeFP(4.05368773071e-1)
-        ak[3] = makeFP(-5.04476066942e-5); bk[3] = makeFP(9.01638932349e-2)
-        ak[4] = makeFP(-5.35770949796e-6); bk[4] = makeFP(9.48935714996e-3)
+        ak[0] =  Helpers.makeFP(4.52313583942e-3);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(1.20744920113e-3);  bk[1] =  Helpers.makeFP(9.12203410349e-1)
+        ak[2] =  Helpers.makeFP(-7.89724156582e-5); bk[2] =  Helpers.makeFP(4.05368773071e-1)
+        ak[3] =  Helpers.makeFP(-5.04476066942e-5); bk[3] =  Helpers.makeFP(9.01638932349e-2)
+        ak[4] =  Helpers.makeFP(-5.35770949796e-6); bk[4] =  Helpers.makeFP(9.48935714996e-3)
         res = ratfun(eta,ak,bk)
     } else if (eta < 2) {
-        ak[0] = makeFP(4.39937562904e-3);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(4.87225670639e-4);  bk[1] = makeFP(7.94435257415e-1)
-        ak[2] = makeFP(-1.28470657374e-4); bk[2] = makeFP(3.33094721709e-1)
-        ak[3] = makeFP(5.29110969589e-6); bk[3] = makeFP(7.03527806143e-2)
-        ak[4] = makeFP(1.57166771750e-7);  bk[4] = makeFP(8.06110846078e-3)
+        ak[0] =  Helpers.makeFP(4.39937562904e-3);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(4.87225670639e-4);  bk[1] =  Helpers.makeFP(7.94435257415e-1)
+        ak[2] =  Helpers.makeFP(-1.28470657374e-4); bk[2] =  Helpers.makeFP(3.33094721709e-1)
+        ak[3] =  Helpers.makeFP(5.29110969589e-6); bk[3] =  Helpers.makeFP(7.03527806143e-2)
+        ak[4] =  Helpers.makeFP(1.57166771750e-7);  bk[4] =  Helpers.makeFP(8.06110846078e-3)
         res = ratfun(eta,ak,bk)
     } else if (eta < 10) {
-        ak[0] = makeFP(-1.14811912320e-3);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(-1.12850923276e-1);  bk[1] = makeFP(1.42482206905e+1)
-        ak[2] = makeFP(1.51623048511e+0);   bk[2] = makeFP(6.97360396285e+1)
-        ak[3] = makeFP(-2.18472031183e-1);  bk[3] = makeFP(2.18938950816e+2)
-        ak[4] = makeFP(7.30002451555e-2);   bk[4] = makeFP(2.77067027185e+2)
+        ak[0] =  Helpers.makeFP(-1.14811912320e-3);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(-1.12850923276e-1);  bk[1] =  Helpers.makeFP(1.42482206905e+1)
+        ak[2] =  Helpers.makeFP(1.51623048511e+0);   bk[2] =  Helpers.makeFP(6.97360396285e+1)
+        ak[3] =  Helpers.makeFP(-2.18472031183e-1);  bk[3] =  Helpers.makeFP(2.18938950816e+2)
+        ak[4] =  Helpers.makeFP(7.30002451555e-2);   bk[4] =  Helpers.makeFP(2.77067027185e+2)
         x = 1 / eta
         res = ratfun(x,ak,bk) / (eta * eta)
     } else if (eta < 100) {
-        ak[0] = makeFP(-1.45727889667e-4);  bk[0] = makeFP(1.00000000000e+0)
-        ak[1] = makeFP(-2.90806748131e-1);  bk[1] = makeFP(1.39612587808e+2)
-        ak[2] = makeFP(-1.33085045450e+1);  bk[2] = makeFP(2.18901116348e+3)
-        ak[3] = makeFP(1.99722374056e+2);   bk[3] = makeFP(7.11524019009e+3)
-        ak[4] = makeFP(-1.14311378756e+1);  bk[4] = makeFP(4.55746081453e+4)
+        ak[0] =  Helpers.makeFP(-1.45727889667e-4);  bk[0] =  Helpers.makeFP(1.00000000000e+0)
+        ak[1] =  Helpers.makeFP(-2.90806748131e-1);  bk[1] =  Helpers.makeFP(1.39612587808e+2)
+        ak[2] =  Helpers.makeFP(-1.33085045450e+1);  bk[2] =  Helpers.makeFP(2.18901116348e+3)
+        ak[3] =  Helpers.makeFP(1.99722374056e+2);   bk[3] =  Helpers.makeFP(7.11524019009e+3)
+        ak[4] =  Helpers.makeFP(-1.14311378756e+1);  bk[4] =  Helpers.makeFP(4.55746081453e+4)
         x = 1 / eta
         res = ratfun(x,ak,bk) / (eta * eta)
     } else {
         eta3 = eta * eta * eta
-        res = -log1(eta) / (12 * eta3)
+        res = -SSMath.log1(eta) / (12 * eta3)
     }
     return res
 }
@@ -1310,7 +1392,7 @@ fileprivate func eps3<T: SSFloatingPoint>(_ eta: T) -> T {
 fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
     //     ! lambdaeta is the positive number satisfying
     //     ! eta^2/2=lambda-1-ln(lambda)
-    //     ! with sign(lambda-1)=sign(eta)
+    //     ! with SSMath.sign(lambda-1)=SSMath.sign(eta)
     var ak: Array<T> = Array<T>.init(repeating: 0, count: 7)
     var q, r, s, L, la: T
     var res: T
@@ -1320,13 +1402,13 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
     if (eta.isZero) {
         la = 1
     } else if (eta < -1) {
-        r = exp1(-1 - s)
-        ak[1] = makeFP(1)
-        ak[2] = makeFP(1)
-        ak[3] = makeFP(3.0 / 2)
-        ak[4] = makeFP(8.0 / 3)
-        ak[5] = makeFP(125.0 / 24)
-        ak[6] = makeFP(54.0 / 5)
+        r = SSMath.exp1(-1 - s)
+        ak[1] =  Helpers.makeFP(1)
+        ak[2] =  Helpers.makeFP(1)
+        ak[3] =  Helpers.makeFP(3.0 / 2)
+        ak[4] =  Helpers.makeFP(8.0 / 3)
+        ak[5] =  Helpers.makeFP(125.0 / 24)
+        ak[6] =  Helpers.makeFP(54.0 / 5)
         ex1 = ak[5] + r * ak[6]
         ex2 = r * ex1
         ex3 = r * (ak[4] + ex2)
@@ -1335,12 +1417,12 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
         la = r * (ak[1] + ex5)
 //        la = r * (ak[1] + r * (ak[2] + r * (ak[3] + r * (ak[4] + r * (ak[5] + r * ak[6])))))
     } else if (eta < 1) {
-        ak[1] = makeFP(1.0)
-        ak[2] = makeFP(1.0/3.0)
-        ak[3] = makeFP(1.0/36.0)
-        ak[4] = makeFP(-1.0/270.0)
-        ak[5] = makeFP(1.0/4320.0)
-        ak[6] = makeFP(1.0/17010.0)
+        ak[1] =  Helpers.makeFP(1.0)
+        ak[2] =  Helpers.makeFP(1.0/3.0)
+        ak[3] =  Helpers.makeFP(1.0/36.0)
+        ak[4] =  Helpers.makeFP(-1.0/270.0)
+        ak[5] =  Helpers.makeFP(1.0/4320.0)
+        ak[6] =  Helpers.makeFP(1.0/17010.0)
         r = eta
         ex1 = ak[5] + r * ak[6]
         ex2 = r * ex1
@@ -1351,7 +1433,7 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
 //        la=1+r*(ak[1]+r*(ak[2]+r*(ak[3]+r*(ak[4]+r*(ak[5]+r*ak[6])))));
     } else {
         r = 11 + s
-        L = log1(r)
+        L = SSMath.log1(r)
         la = r + L
         r = 1 / r
         L2 = L * L
@@ -1385,11 +1467,11 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
 //        la = la + L * r * (ak[1] + r * (ak[2] + r * (ak[3] + r * (ak[4] + r * (ak[5] + r * ak[6])))))
     }
     r = 1
-    if (((eta > makeFP(-3.5)) && (eta < makeFP(-0.03))) || ((eta > makeFP(0.03)) && (eta < makeFP(40.0)))) {
+    if (((eta >  Helpers.makeFP(-3.5)) && (eta <  Helpers.makeFP(-0.03))) || ((eta >  Helpers.makeFP(0.03)) && (eta <  Helpers.makeFP(40.0)))) {
         r = 1
         q = la
-        while (r > makeFP(1.0e-8)) {
-            la = q * (s + log1(q)) / (q - 1)
+        while (r >  Helpers.makeFP(1.0e-8)) {
+            la = q * (s + SSMath.log1(q)) / (q - 1)
             r = abs(q / la - 1)
             q = la
         }
@@ -1402,12 +1484,12 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
 fileprivate func invq<T: SSFloatingPoint>(_ x: T) -> T {
     var res, t: T
     // Abramowitx & Stegun 26.2.23
-    t = sqrt(-2 * log1(x))
+    t = sqrt(-2 * SSMath.log1(x))
     var ex1, ex2, ex3, ex4, ex5: T
-    ex1 = makeFP(2.515517)
-    ex2 = makeFP(0.802853) + t * makeFP(0.010328)
-    ex3 = makeFP(1.432788)
-    ex4 = makeFP(0.189269) + t * makeFP(0.001308)
+    ex1 =  Helpers.makeFP(2.515517)
+    ex2 =  Helpers.makeFP(0.802853) + t *  Helpers.makeFP(0.010328)
+    ex3 =  Helpers.makeFP(1.432788)
+    ex4 =  Helpers.makeFP(0.189269) + t *  Helpers.makeFP(0.001308)
     ex5 = t * (ex3 + t * ex4)
     t = t - (ex1 + t * ex2) / (1 + ex5)
     res = t
@@ -1422,10 +1504,10 @@ fileprivate func inverfc<T: SSFloatingPoint>(_ x: T) -> T {
     } else {
         // FIXME: CHECK THIS!
         y0 = T.sqrt2 * T.half * invq(x / 2)
-        f = erfc1(y0) - x
+        f = SSMath.erfc1(y0) - x
         f = errorfunction1(y0,true,false) - x
         y02 = y0 * y0
-        fp = -2 / sqrt(T.pi) * exp1(-y02)
+        fp = -2 / sqrt(T.pi) * SSMath.exp1(-y02)
         c1 = -1 / fp
         c2 = y0
         c3 = (4 * y02 + 1) / 3
@@ -1483,17 +1565,17 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
         q0 = q
     }
     t = 2 * q0
-    if (abs(t - 1) < makeFP(1.0e-10)) {
-        ex1 = makeFP(8.0 / 405.0)
-        ex2 = makeFP(184.0 / 25515.0) / a
+    if (abs(t - 1) <  Helpers.makeFP(1.0e-10)) {
+        ex1 =  Helpers.makeFP(8.0 / 405.0)
+        ex2 =  Helpers.makeFP(184.0 / 25515.0) / a
         ex3 = ex1 + ex2
         ex4 = ex3 / a
         x = a - T.third + ex4
-//        x = a - T.third + (makeFP(8.0 / 405.0) + makeFP(184.0 / 25515.0) / a) / a
+//        x = a - T.third + ( Helpers.makeFP(8.0 / 405.0) +  Helpers.makeFP(184.0 / 25515.0) / a) / a
     } else {
         if (t == 2) {
             z = -6
-        } else if (t < makeFP(1.0e-50)) {
+        } else if (t <  Helpers.makeFP(1.0e-50)) {
             z = 15
         } else {
             z = inverfc(t)
@@ -1504,27 +1586,27 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
             y5 = y * y4
             y6 = y3 * y3
             sq2 = T.sqrt2
-            if (abs(y) < makeFP(0.3)) {
-                ex1 = makeFP(1.0/36.0) * y
-                ex2 = ex1 + makeFP(1.0/1620.0) * y2
-                ex3 = ex2 + makeFP(-7.0/6480.0) * y3
-                ex4 = ex3 + makeFP(5.0/18144.0) * y4
-                ex5 = ex4 + makeFP(-11.0/382725.0) * y5
-                ex6 = ex5 + makeFP(-101.0/16329600.0) * y6
+            if (abs(y) <  Helpers.makeFP(0.3)) {
+                ex1 =  Helpers.makeFP(1.0/36.0) * y
+                ex2 = ex1 +  Helpers.makeFP(1.0/1620.0) * y2
+                ex3 = ex2 +  Helpers.makeFP(-7.0/6480.0) * y3
+                ex4 = ex3 +  Helpers.makeFP(5.0/18144.0) * y4
+                ex5 = ex4 +  Helpers.makeFP(-11.0/382725.0) * y5
+                ex6 = ex5 +  Helpers.makeFP(-101.0/16329600.0) * y6
                 a1 = -T.third + ex6
 //                a1= -1.0/3.0 + 1.0/36.0*y + 1.0/1620.0*y2 - 7.0/6480.0*y3+ 5.0/18144.0*y4 - 11.0/382725.0*y5 - 101.0/16329600.0*y6
-                ex1 = makeFP(-7.0/2592.0) * y
-                ex2 = ex1 + makeFP(533.0/204120.0) * y2
-                ex3 = ex2 + makeFP(-1579.0/2099520.0) * y3
-                ex4 = ex3 + makeFP(109.0/1749600.0) * y4
-                ex5 = ex4 + makeFP(10217.0/251942400.0) * y5
-                a2 = makeFP(-7.0/405.0) + ex5
+                ex1 =  Helpers.makeFP(-7.0/2592.0) * y
+                ex2 = ex1 +  Helpers.makeFP(533.0/204120.0) * y2
+                ex3 = ex2 +  Helpers.makeFP(-1579.0/2099520.0) * y3
+                ex4 = ex3 +  Helpers.makeFP(109.0/1749600.0) * y4
+                ex5 = ex4 +  Helpers.makeFP(10217.0/251942400.0) * y5
+                a2 =  Helpers.makeFP(-7.0/405.0) + ex5
 //                a2= -7.0/405.0 - 7.0/2592.0*y + 533.0/204120.0*y2- 1579.0/2099520.0*y3 + 109.0/1749600.0*y4 + 10217.0/251942400.0*y5
-                ex1 = makeFP(-63149.0/20995200.0) * y
-                ex2 = ex1 + makeFP(29233.0/36741600.0) * y2
-                ex3 = ex2 + makeFP(346793.0/5290790400.0) * y3
-                ex4 = ex3 + makeFP(-18442139.0/130947062400.0) * y4
-                a3 = makeFP(449.0/102060.0) + ex4
+                ex1 =  Helpers.makeFP(-63149.0/20995200.0) * y
+                ex2 = ex1 +  Helpers.makeFP(29233.0/36741600.0) * y2
+                ex3 = ex2 +  Helpers.makeFP(346793.0/5290790400.0) * y3
+                ex4 = ex3 +  Helpers.makeFP(-18442139.0/130947062400.0) * y4
+                a3 =  Helpers.makeFP(449.0/102060.0) + ex4
 //                a3= 449.0/102060.0 - 63149.0/20995200.0*y + 29233.0/36741600.0*y2+ 346793.0/5290790400.0*y3 - 18442139.0/130947062400.0*y4
             }
             else {
@@ -1540,7 +1622,7 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
                 ex2 = 2 * y * fp
                 fpp = -f * (ex1 + f + ex2) / y
 //                fpp = -f * (3 * f * fp + f + 2 * y * fp)/y
-                a1 = log1(f) / y
+                a1 = SSMath.log1(f) / y
                 a12 = a1 * a1
                 ex1 = -a1 / y
                 ex2 = ex1 + T.one / y2
@@ -1558,9 +1640,9 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
                 a2 = ex3 / ex4
 //                a2 = -(-12 * a1p * f - 12 * fp * a1 + f + 6 * a12 * f) / (12 * f * y)
                 ex5 = a1pp * f
-                ex6 = ex5 + makeFP(2.0) * a1p * fp
+                ex6 = ex5 +  Helpers.makeFP(2.0) * a1p * fp
                 ex7 = ex6 + fpp * a1
-                ex1 = makeFP(12.0) * ex7
+                ex1 =  Helpers.makeFP(12.0) * ex7
 //                ex1 = 12 * (a1pp * f + 2 * a1p * fp + fpp * a1)
                 ex2 = 12 * f * a1 * a1p
                 ex3 = 6 * fp * a12
@@ -1584,18 +1666,23 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
 //                a3=(6*((2*a1 - a12*y)*fp*fp + a12*(fpp*f*y + a1*f2)- a1p*a1p*f2*y) + 12*((a2p*y - a1*a1p)*f2 + fp*a1p*f)+ a1*f2 - f*(fp + 18*fp*a12))/(12*f2*y2);
 
             }
-            y = y + (a1 + (a2 + a3 / a) / a) / a
+            ex1 = a2 + a3 / a
+            ex2 = ex1 / a
+            ex3 = a1 + ex2
+            ex4 = ex3 / a
+            y = y + ex4
+//            y = y + (a1 + (a2 + a3 / a) / a) / a
             x = a * inveta(y / sq2)
         }
         var ig: (p: T, q: T, ierr: Int)
-        ig = incgam(a: a,x: x)
+        ig = SSSpecialFunctions.GammaHelper.incgam(a: a,x: x)
 //        p = ig.p
         f = ig.q
 //        ierr = ig.ierr
         ex1 = -sqrt(a / T.twopi)
-        ex2 = ex1 * exp1(-T.half * y * y)
+        ex2 = ex1 * SSMath.exp1(-T.half * y * y)
         fp = ex2 / gamstar(a)
-//        fp = -sqrt( a / T.twopi ) * exp1(-T.half * y * y) / (gamstar(a))
+//        fp = -sqrt( a / T.twopi ) * SSMath.exp1(-T.half * y * y) / (gamstar(a))
         y = (f - q0) / fp
         x2 = x * x
         x3 = x * x2
@@ -1634,8 +1721,14 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
         ex1 = 120 + mu * y + mu2 * y2
         ex2 = mu3 * y3 + mu4 * y4
         ex3 = y * (ex1 + ex2)
-        ex4 = ex3 + 144 * a2 * x2 - 96 * a3 * x
-        ex5 = ex4 - 126 * a * x - 96 * a * x3
+        var ex11: T = 144 * a2 * x2
+        var ex12: T = 96 * a3 * x
+        ex4 = ex3 + ex11 - ex12
+//        ex4 = ex3 + 144 * a2 * x2 - 96 * a3 * x
+//        ex5 = ex4 - 126 * a * x - 96 * a * x3
+        ex11 = 126 * a * x
+        ex12 = 96 * a * x3
+        ex5 = ex4 - ex11 - ex12
         ex6 = ex5 + 35 * a2 + 98 * x2
         x = x * (1 - ex3 / 120)
 //        x = x * (1 - y * (120 + mu * y + mu2 * y2 + mu3 * y3 + mu4 * y4) / 120)
@@ -1661,9 +1754,9 @@ fileprivate func inveta<T: SSFloatingPoint>(_ x: T) -> T {
         x2 = x * T.sqrt2
         if (x2 > 2) {
             p = z + 1
-            q = log1(p)
+            q = SSMath.log1(p)
             a = 1 / q
-            b = T.third + a * (a - makeFP(1.5))
+            b = T.third + a * (a -  Helpers.makeFP(1.5))
             r = q / p
             ex1 = a - T.half + b * r
             ex2 = 1 + r * ex1
@@ -1671,21 +1764,21 @@ fileprivate func inveta<T: SSFloatingPoint>(_ x: T) -> T {
             mu = z + q + ex3
 //            mu = z + q + r * (1 + r * (a - T.half + b * r))
             t = mu + 1
-        } else if (x2 > makeFP(-1.5)) {
-            ex1 = x2 * (makeFP(1.0/4320.0) + x2 / 17010)
-            ex2 = x2 * (makeFP(-1.0/270.0) + ex1)
-            ex3 = x2 * (makeFP(1.0/36.0) + ex2)
+        } else if (x2 >  Helpers.makeFP(-1.5)) {
+            ex1 = x2 * ( Helpers.makeFP(1.0/4320.0) + x2 / 17010)
+            ex2 = x2 * ( Helpers.makeFP(-1.0/270.0) + ex1)
+            ex3 = x2 * ( Helpers.makeFP(1.0/36.0) + ex2)
             ex4 = x2 * (T.third + ex3)
             mu = x2 * (1 + ex4)
-//            mu = x2 * (1 + x2 * (T.third + x2 * (makeFP(1.0/36.0) + x2 * (makeFP(-1.0/270.0) + x2 * (makeFP(1.0/4320.0) + x2 / 17010)))))
+//            mu = x2 * (1 + x2 * (T.third + x2 * ( Helpers.makeFP(1.0/36.0) + x2 * ( Helpers.makeFP(-1.0/270.0) + x2 * ( Helpers.makeFP(1.0/4320.0) + x2 / 17010)))))
             t = mu + 1
         } else {
-            p = exp1(-z - 1)
-            ex1 = p * (makeFP(8.0/3.0) + p * makeFP(125.0/24.0))
-            ex2 = p * (makeFP(1.5) + ex1)
+            p = SSMath.exp1(-z - 1)
+            ex1 = p * ( Helpers.makeFP(8.0/3.0) + p *  Helpers.makeFP(125.0/24.0))
+            ex2 = p * ( Helpers.makeFP(1.5) + ex1)
             ex3 = p * (1 + ex2)
             t = p * (1 + ex3)
-//            t = p * (1 + p * (1 + p * (makeFP(1.5) + p * (makeFP(8.0/3.0) + p * makeFP(125.0/24.0)))))
+//            t = p * (1 + p * (1 + p * ( Helpers.makeFP(1.5) + p * ( Helpers.makeFP(8.0/3.0) + p *  Helpers.makeFP(125.0/24.0)))))
             mu = t - 1
         }
         ready = false
@@ -1693,7 +1786,7 @@ fileprivate func inveta<T: SSFloatingPoint>(_ x: T) -> T {
             ready = true
             p = lnec(mu)
             r = -p - z
-            if (abs(r) > makeFP(1.0e-18)) {
+            if (abs(r) >  Helpers.makeFP(1.0e-18)) {
                 r = r * t / mu
                 p = r / t / mu
                 ex1 = 1 - p * (2 * t + 1)
@@ -1707,7 +1800,7 @@ fileprivate func inveta<T: SSFloatingPoint>(_ x: T) -> T {
                     t = 0
                     mu = -1
                     ready = true
-                } else if (k > 5) || (abs(q) < (makeFP(1.0e-10) * (abs(mu) + 1))) {
+                } else if (k > 5) || (abs(q) < ( Helpers.makeFP(1.0e-10) * (abs(mu) + 1))) {
                     ready = true
                 } else {
                     ready = false

@@ -147,10 +147,12 @@ public protocol SSFloatingPoint: FloatingPoint {
     static var sqrt6: Self { get }
 
     static var maxgamma: Self { get }
-    
+
 }
 
 extension Double: SSFloatingPoint {
+    
+    
     public static var threepiate: Double {
         return 1.1780972450961724644234912687298135815739
     }

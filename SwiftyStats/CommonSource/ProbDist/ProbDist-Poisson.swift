@@ -26,67 +26,73 @@ import Foundation
 import os.log
 #endif
 
-// MARK: binomial
 
-/// Returns the cdf of the Binomial Distribution
-/// - Parameter k: number of events
-/// - Parameter lambda: rate
-/// - Parameter tail: .lower, .upper
-/// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
-public func cdfPoissonDist<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT, tail: SSCDFTail) throws -> FPT {
-    if lambda <= 0 {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+extension SSProbDist {
+    enum Poisson {
+        // MARK: Poisson
+        
+        /// Returns the cdf of the Binomial Distribution
+        /// - Parameter k: number of events
+        /// - Parameter lambda: rate
+        /// - Parameter tail: .lower, .upper
+        /// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
+        public static func cdf<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT, tail: SSCDFTail) throws -> FPT {
+            if lambda <= 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if k < 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("k is expected to be > 0", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var conv: Bool = false
+            let result: FPT = SSSpecialFunctions.gammaNormalizedQ(x: lambda, a: 1 +  Helpers.makeFP(k), converged: &conv)
+            if conv {
+                switch tail {
+                case .lower:
+                    return result
+                case .upper:
+                    return 1 - result
+                }
+            }
+            else {
+                return FPT.nan
+            }
         }
-        #endif
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if k < 0 {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("k is expected to be > 0", log: log_stat, type: .error)
+        
+        
+        /// Returns the pdf of the Binomial Distribution
+        /// - Parameter k: number of events
+        /// - Parameter lambda: rate
+        /// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT) throws -> FPT {
+            if lambda <= 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if k < 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("k is expected to be > 0", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let result: FPT =  Helpers.makeFP(k) * SSMath.log1(lambda) - lambda - SSMath.logFactorial(k)
+            return SSMath.exp1(result)
         }
-        #endif
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    var conv: Bool = false
-    let result: FPT = gammaNormalizedQ(x: lambda, a: 1 + makeFP(k), converged: &conv)
-    if conv {
-        switch tail {
-            case .lower:
-                return result
-            case .upper:
-                return 1 - result
-        }
-    }
-    else {
-        return FPT.nan
     }
 }
 
-
-/// Returns the pdf of the Binomial Distribution
-/// - Parameter k: number of events
-/// - Parameter lambda: rate
-/// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0
-public func pdfPoissonDist<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT) throws -> FPT {
-    if lambda <= 0 {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("lambda is expected to be > 0", log: log_stat, type: .error)
-        }
-        #endif
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if k < 0 {
-        #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("k is expected to be > 0", log: log_stat, type: .error)
-        }
-        #endif
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result: FPT = makeFP(k) * log1(lambda) - lambda - logFactorial(k)
-    return exp1(result)
-}

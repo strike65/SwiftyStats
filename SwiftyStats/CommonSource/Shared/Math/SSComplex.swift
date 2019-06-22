@@ -56,69 +56,69 @@ internal protocol SSComplexNumeric : Hashable {
     init(re r: Element, im i: Element)
 }
 
-extension SSComplexNumeric {
+internal extension SSComplexNumeric {
     
-    public init(_ re: Element, _ im: Element) {
+    init(_ re: Element, _ im: Element) {
         self.init(re: re, im: im)
     }
-    public init(_ re: Element) {
+    init(_ re: Element) {
         self.init(re, 0)
     }
-    public var i: Self {
+    var i: Self {
         return Self(-im, re)
     }
-    public static prefix func &+++(_ c: Self) -> Self {
+    static prefix func &+++(_ c: Self) -> Self {
         return c
     }
-    public static func &++(_ lhs: Self, rhs: Self) -> Self {
+    static func &++(_ lhs: Self, rhs: Self) -> Self {
         return Self(lhs.re + rhs.re, lhs.im + rhs.im)
     }
-    public static func &++(_ lhs: Self, _ rhs: Element) -> Self {
+    static func &++(_ lhs: Self, _ rhs: Element) -> Self {
         return Self(lhs.re + rhs, lhs.im)
     }
-    public static func &++(_ lhs: Element, _ rhs: Self) -> Self {
+    static func &++(_ lhs: Element, _ rhs: Self) -> Self {
         return rhs &++ lhs
     }
-    public static func &+=(_ lhs: inout Self, _ rhs: Self) {
+    static func &+=(_ lhs: inout Self, _ rhs: Self) {
         lhs = lhs &++ rhs
     }
-    public static func &+=(_ lhs: inout Self, _ rhs: Element) {
+    static func &+=(_ lhs: inout Self, _ rhs: Element) {
         lhs = lhs &++ rhs
     }
-    public static prefix func &---(_ c: Self) -> Self {
+    static prefix func &---(_ c: Self) -> Self {
         return Self(-c.re, -c.im)
     }
-    public static func &--(_ lhs: Self, _ rhs: Self) -> Self {
+    static func &--(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.re - rhs.re, lhs.im - rhs.im)
     }
-    public static func &--(_ lhs: Self, _ rhs: Element) -> Self {
+    static func &--(_ lhs: Self, _ rhs: Element) -> Self {
         return Self(lhs.re - rhs, lhs.im)
     }
-    public static func &--(_ lhs: Element, _ rhs: Self) -> Self {
+    static func &--(_ lhs: Element, _ rhs: Self) -> Self {
         return &---rhs &++ lhs
     }
-    public static func &-=(_ lhs: inout Self, _ rhs: Self) {
+    static func &-=(_ lhs: inout Self, _ rhs: Self) {
         lhs = lhs &-- rhs
     }
-    public static func &-=(_ lhs: inout Self, _ rhs: Element) {
+    static func &-=(_ lhs: inout Self, _ rhs: Element) {
         lhs = lhs &-- rhs
     }
-    public static func &**(_ lhs: Self, _ rhs: Self) -> Self {
+    static func &**(_ lhs: Self, _ rhs: Self) -> Self {
         return Self(lhs.re * rhs.re - lhs.im * rhs.im, lhs.re * rhs.im + lhs.im * rhs.re)
     }
-    public static func &**(_ lhs: Self, _ rhs: Element) -> Self {
+    static func &**(_ lhs: Self, _ rhs: Element) -> Self {
         return Self(lhs.re * rhs, lhs.im * rhs)
     }
-    public static func &**(_ lhs: Element, _ rhs: Self) -> Self {
+    static func &**(_ lhs: Element, _ rhs: Self) -> Self {
         return rhs &** lhs
     }
-    public static func &**=(_ lhs: inout Self, _ rhs: Self) {
+    static func &**=(_ lhs: inout Self, _ rhs: Self) {
         lhs = lhs &** rhs
     }
-    public static func &**=(_ lhs: inout Self, _ rhs: Element) {
+    static func &**=(_ lhs: inout Self, _ rhs: Element) {
         lhs = lhs &** rhs
     }
-    public var conj: Self {
+    var conj: Self {
         return Self(self.re, -self.im)
     }
 }
@@ -127,34 +127,34 @@ internal typealias SSComplexFloatElement = SSFloatingPoint
 
 internal protocol SSComplexFloat : SSComplexNumeric & CustomStringConvertible where Element: SSFloatingPoint {
 }
-extension SSComplexFloat {
+internal extension SSComplexFloat {
 
     
-    public init(abs: Element, arg: Element) {
-        self.init(abs * cos1(arg), abs * sin1(arg))
+    init(abs: Element, arg: Element) {
+        self.init(abs * SSMath.cos1(arg), abs * SSMath.sin1(arg))
     }
     
-    public init(_ real: Element) {
+    init(_ real: Element) {
         self.init(re: real, im: 0)
     }
 
-    public var arg: Element {
+    var arg: Element {
         if self.re.isZero && self.im.isZero {
             return 0
         }
         else {
-            return atan21(self.im, self.re)
+            return SSMath.atan21(self.im, self.re)
         }
     }
 
-    public var abs: Element {
+    var abs: Element {
         return self.norm
 //        return (self.re * self.re + self.im * self.im).squareRoot()
     }
     
-    public var norm: Element {
+    var norm: Element {
         if !self.re.isZero && !self.im.isZero {
-            return hypot1(self.re, self.im)
+            return SSMath.hypot1(self.re, self.im)
         }
         else if self.re.isZero && !self.im.isZero {
             return Swift.abs(self.im)
@@ -166,7 +166,7 @@ extension SSComplexFloat {
         //        return self.re * self.re + self.im * self.im
     }
 
-    public static func &%(_ lhs: Self, _ rhs: Self) -> Self {
+    static func &%(_ lhs: Self, _ rhs: Self) -> Self {
         let ar: Element = lhs.re
         let ai: Element = lhs.im
         let br: Element = rhs.re
@@ -179,47 +179,47 @@ extension SSComplexFloat {
         return Self(zr, zi)
     }
     
-    public static func &%(_ lhs: Self, _ rhs: Element) -> Self {
+    static func &%(_ lhs: Self, _ rhs: Element) -> Self {
         return Self(lhs.re / rhs, lhs.im / rhs)
     }
     
-    public static func &%(_ lhs: Element, _ rhs: Self) -> Self {
+    static func &%(_ lhs: Element, _ rhs: Self) -> Self {
         return Self(lhs, 0) &% rhs
     }
 
-    public static func &%=(_ lhs: inout Self, _ rhs: Self) {
+    static func &%=(_ lhs: inout Self, _ rhs: Self) {
         lhs = lhs &% rhs
     }
     
-    public static func &%=(_ lhs: inout Self, _ rhs: Element) {
+    static func &%=(_ lhs: inout Self, _ rhs: Element) {
         lhs = lhs &% rhs
     }
 
-    public static var nan: Self {
+    static var nan: Self {
         return Self(Element.nan, Element.nan)
     }
     
-    public var isNan: Bool {
+    var isNan: Bool {
         return re.isNaN || im.isNaN
     }
     
-    public static var infinity: Self {
+    static var infinity: Self {
         return Self(Element.infinity, Element.infinity)
     }
     
-    public var isInfinite: Bool {
+    var isInfinite: Bool {
         return re.isInfinite || im.isInfinite
     }
     
-    public var isFinite: Bool {
+    var isFinite: Bool {
         return !self.isInfinite
     }
     
-    public static var zero: Self {
+    static var zero: Self {
         return Self(0,0)
     }
     
-    public var isZero: Bool {
+    var isZero: Bool {
         return re.isZero && im.isZero
     }
 }

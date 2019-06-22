@@ -48,6 +48,9 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         bi0s = 0
         bi1s = 0
         flows()
+        var ex1: T
+        var ex2: T
+        var ex3: T
         if iflag == 0 {
             vars.xi_global = T.twothirds * vars.r_global * sqrt(vars.r_global)
             iregion = 0
@@ -64,17 +67,17 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
             }
             switch iregion {
             case 1:
-                bi0s = pow1(vars.x_global, T.fourth)
+                bi0s = SSMath.pow1(vars.x_global, T.fourth)
                 bi1s = 0
                 a = 1 / (T.sqrtpi * bi0s)
                 b = bi0s / T.sqrtpi
                 asymp1r(F1: &bi0s, F2: &bi1s)
                 bi0s = a * bi0s
                 bi1s = b * bi1s
-                bi0s = exp1(vars.xi_global) * bi0s
-                bi1s = exp1(vars.xi_global) * bi1s
+                bi0s = SSMath.exp1(vars.xi_global) * bi0s
+                bi1s = SSMath.exp1(vars.xi_global) * bi1s
             case 2:
-                bi1s = pow1(vars.r_global, T.fourth)             /* dummy storage of number */
+                bi1s = SSMath.pow1(vars.r_global, T.fourth)             /* dummy storage of number */
                 bi0s = vars.xi_global - T.pi * T.fourth
                 a = 1 / (T.sqrtpi * bi1s)
                 b = bi1s / T.sqrtpi
@@ -84,15 +87,23 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                 Pxi = 0
                 asymp2r(Pxi: &Pxi, Qxi: &Qxi, Rxi: &Rxi, Sxi: &Sxi)
                 bi1s = vars.xi_global - T.pi * T.fourth
-                bi0s = a * (-Pxi * sin1(bi1s) + Qxi * cos1(bi1s))
-                bi1s = b * ( Rxi * cos1(bi1s) + Sxi * sin1(bi1s))
+                ex1 = -Pxi * SSMath.sin1(bi1s)
+                ex2 = Qxi * SSMath.cos1(bi1s)
+                ex3 = ex1 + ex2
+                bi0s = a * ex3
+                ex1 = Rxi * SSMath.cos1(bi1s)
+                ex2 = Sxi * SSMath.sin1(bi1s)
+                ex3 = ex1 + ex2
+                bi1s = b * ex3
+//                bi0s = a * (-Pxi * SSMath.sin1(bi1s) + Qxi * SSMath.cos1(bi1s))
+//                bi1s = b * ( Rxi * SSMath.cos1(bi1s) + Sxi * SSMath.sin1(bi1s))
             case 3:
-                nn = integerValue(ceil(makeFP(vars.n_parts) * vars.r_global / vars.r_min))
+                nn = Helpers.integerValue(ceil( Helpers.makeFP(vars.n_parts) * vars.r_global / vars.r_min))
                 taylorr(nn: nn, x_start: 0, tsm: &tsm)
                 bi0s = tsm[0][0] * bi0zer() + tsm[0][1] * bi1zer()
                 bi1s = tsm[1][0] * bi0zer() + tsm[1][1] * bi1zer()
-    //            bi0s = exp1(-vars.xi_global) * bi0s
-    //            bi1s = exp1(-vars.xi_global) * bi1s
+    //            bi0s = SSMath.exp1(-vars.xi_global) * bi0s
+    //            bi1s = SSMath.exp1(-vars.xi_global) * bi1s
             default:
                 bi0s = T.zero
                 bi1s = T.zero
@@ -135,6 +146,9 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         ai0s = 0
         ai1s = 0
         flows()
+        var ex1: T
+        var ex2: T
+        var ex3: T
         if iflag == 0 {
             vars.xi_global = T.twothirds * vars.r_global * sqrt(vars.r_global)
             iregion = 0
@@ -155,17 +169,17 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
             switch iregion {
             case 1:
                 ai1s = 2 * T.sqrtpi
-                ai0s = pow1(vars.x_global, T.fourth)
+                ai0s = SSMath.pow1(vars.x_global, T.fourth)
                 a = 1 / (ai1s * ai0s)
                 b = -ai0s / ai1s
                 iflag = 10
                 asymp1r(F1: &ai0s, F2: &ai1s)
                 ai0s = a * ai0s
                 ai1s = b * ai1s
-                ai0s = exp1(-vars.xi_global) * ai0s
-                ai1s = exp1(-vars.xi_global) * ai1s
+                ai0s = SSMath.exp1(-vars.xi_global) * ai0s
+                ai1s = SSMath.exp1(-vars.xi_global) * ai1s
             case 2:
-                ai1s = pow1(vars.r_global, T.fourth)
+                ai1s = SSMath.pow1(vars.r_global, T.fourth)
                 a = 1 / (T.sqrtpi * ai1s)
                 b = ai1s / T.sqrtpi
                 Rxi = 0
@@ -174,20 +188,31 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                 Pxi = 0
                 asymp2r(Pxi: &Pxi, Qxi: &Qxi, Rxi: &Rxi, Sxi: &Sxi)
                 ai1s = vars.xi_global - T.pifourth
-                ai0s = a * (Pxi * cos1(ai1s) + Qxi * sin1(ai1s))
-                ai1s = b * (Rxi * sin1(ai1s) - Sxi * cos1(ai1s))
+                ex1 = Pxi * SSMath.cos1(ai1s)
+                ex2 = Qxi * SSMath.sin1(ai1s)
+                ex3 = ex1 + ex2
+                ai0s = a * ex3
+                ex1 = Rxi * SSMath.sin1(ai1s)
+                ex2 = Sxi * SSMath.cos1(ai1s)
+                ex3 = ex1 - ex2
+                ai1s = b * ex3
+//                ai0s = a * (Pxi * SSMath.cos1(ai1s) + Qxi * SSMath.sin1(ai1s))
+//                ai1s = b * (Rxi * SSMath.sin1(ai1s) - Sxi * SSMath.cos1(ai1s))
             case 3:
-                nn = integerValue(ceil(makeFP(vars.n_parts) * (1 - vars.r_global / vars.r_min)))
+                ex1 = (T.one - vars.r_global / vars.r_min)
+                ex2 =  Helpers.makeFP(vars.n_parts)
+                ex3 = ex2 / ex1
+                nn = Helpers.integerValue(ceil(ex3))
                 ai1s = T.twosqrtpi
-                ai0s = pow1(vars.r_min, T.fourth)
+                ai0s = SSMath.pow1(vars.r_min, T.fourth)
                 a = 1 / (ai1s * ai0s)
                 b = -ai0s / ai1s
                 xi0 = T.twothirds * vars.r_min * sqrt(vars.r_min)
                 iflag = 10
                 asymp1r(F1: &ai0s, F2: &ai1s, x_in: xi0)
                 taylorr(nn: nn, x_start: vars.r_min, tsm: &tsm)
-                a = a * exp1(-xi0) * ai0s
-                b = b * exp1(-xi0) * ai1s
+                a = a * SSMath.exp1(-xi0) * ai0s
+                b = b * SSMath.exp1(-xi0) * ai1s
                 ai0s = tsm[0][0] * a + tsm[0][1] * b
                 ai1s = tsm[1][0] * a + tsm[1][1] * b
                 /*
@@ -197,7 +222,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                  end if
                  */
             case 4:
-                nn = integerValue(ceil(makeFP(vars.n_parts) * vars.r_global / vars.r_min))
+                nn = Helpers.integerValue(ceil( Helpers.makeFP(vars.n_parts) * vars.r_global / vars.r_min))
                 taylorr(nn: nn, x_start: T.zero, tsm: &tsm)
                 ai0s = tsm[0][0] * ai0zer() + tsm[0][1] * ai1zer()
                 ai1s = tsm[1][0] * ai0zer() + tsm[1][1] * ai1zer()
@@ -240,12 +265,12 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
             return
         }
         if vars.x_global > T.zero {
-            e1 = -log1(T.twosqrtpi * pow1(vars.r_global, T.fourth)) - log1(T.leastNormalMagnitude)
-            e2 = -log1(T.twosqrtpi / pow1(vars.r_global, T.fourth)) - log1(T.leastNormalMagnitude)
-            e3 = log1(T.twosqrtpi / pow1(vars.r_global, T.fourth)) + log1(T.greatestFiniteMagnitude)
-            e4 = log1(T.twosqrtpi * pow1(vars.r_global, T.fourth)) + log1(T.greatestFiniteMagnitude)
+            e1 = -SSMath.log1(T.twosqrtpi * SSMath.pow1(vars.r_global, T.fourth)) - SSMath.log1(T.leastNormalMagnitude)
+            e2 = -SSMath.log1(T.twosqrtpi / SSMath.pow1(vars.r_global, T.fourth)) - SSMath.log1(T.leastNormalMagnitude)
+            e3 = SSMath.log1(T.twosqrtpi / SSMath.pow1(vars.r_global, T.fourth)) + SSMath.log1(T.greatestFiniteMagnitude)
+            e4 = SSMath.log1(T.twosqrtpi * SSMath.pow1(vars.r_global, T.fourth)) + SSMath.log1(T.greatestFiniteMagnitude)
             tol = min( e1,e2,e3,e4) - 15
-            if vars.r_global >= (makeFP(1.5) * pow1(tol, T.twothirds)) {
+            if vars.r_global >= ( Helpers.makeFP(1.5) * SSMath.pow1(tol, T.twothirds)) {
                 iflag = -7
                 return
             }
@@ -276,7 +301,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
 
     private func asymp2r(Pxi: inout T, Qxi: inout T, Rxi: inout T, Sxi: inout T) {
         var xir: T
-        var itemp: Int = integerValue(floor(T.half * makeFP(vars.n_asymp) - T.half))
+        var itemp: Int = Helpers.integerValue(floor(T.half *  Helpers.makeFP(vars.n_asymp) - T.half))
         if itemp % 2 != 0 {
             itemp = itemp - 1
         }
@@ -284,7 +309,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         Qxi = vars.ucoef[itemp - 2]
         Rxi = vars.vcoef[itemp - 1]
         Sxi = vars.vcoef[itemp - 2]
-        xir = 1 / pow1(vars.xi_global, 2)
+        xir = 1 / SSMath.pow1(vars.xi_global, 2)
         for i in stride(from: itemp - 3, through: 1, by: -2) {
             Pxi = (vars.ucoef[i] - xir * Pxi)
             Rxi = (vars.vcoef[i] - xir * Rxi)
@@ -305,9 +330,12 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         var qterm: Array<T> = Array<T>.init(repeating: 0, count: vars.n_taylor + 1)
         
         var Phi: Array<Array<Array<T>>> = Array<Array<Array<T>>>.init(repeating: Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: 2), count: 2), count: nn)
-        h = (vars.x_global - x_start) / makeFP(nn)
+        h = (vars.x_global - x_start) /  Helpers.makeFP(nn)
+        var ex1: T
+        var ex2: T
+        var ex3: T
         for i in stride(from: 1, through: nn, by: 1) {
-            ifl = makeFP(i)
+            ifl =  Helpers.makeFP(i)
             xm = (x_start + h * (ifl - 1))
             pterm[0] = 1
             pterm[1] = T.zero
@@ -316,16 +344,24 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
             qterm[1] = 1
             qterm[2] = T.zero
             for j in stride(from: 3, through: vars.n_taylor, by: 1) {
-                jfl = makeFP(j)
-                pterm[j] = (xm * pterm[j - 2] + pterm[j - 3]) / (jfl * jfl - jfl)
-                qterm[j] = (xm * qterm[j - 2] + qterm[j - 3]) / (jfl * jfl - jfl)
+                jfl =  Helpers.makeFP(j)
+                ex1 = jfl * jfl - jfl
+                ex2 = xm * pterm[j - 2]
+                ex3 = ex2 + pterm[j - 3]
+                pterm[j] = ex3 / ex1
+                ex1 = jfl * jfl - jfl
+                ex2 = xm * qterm[j - 2]
+                ex3 = ex2 + qterm[j - 3]
+                qterm[j] = ex3 / ex1
+//                pterm[j] = (xm * pterm[j - 2] + pterm[j - 3]) / (jfl * jfl - jfl)
+//                qterm[j] = (xm * qterm[j - 2] + qterm[j - 3]) / (jfl * jfl - jfl)
             }
             Phi[i - 1][0][0] = pterm[vars.n_taylor]
-            Phi[i - 1][1][0] = pterm[vars.n_taylor] * makeFP(vars.n_taylor)
+            Phi[i - 1][1][0] = pterm[vars.n_taylor] *  Helpers.makeFP(vars.n_taylor)
             Phi[i - 1][0][1] = qterm[vars.n_taylor]
-            Phi[i - 1][1][1] = qterm[vars.n_taylor] * makeFP(vars.n_taylor)
+            Phi[i - 1][1][1] = qterm[vars.n_taylor] *  Helpers.makeFP(vars.n_taylor)
             for j in stride(from: vars.n_taylor - 1, through: 1, by: -1) {
-                jfl = makeFP(j)
+                jfl =  Helpers.makeFP(j)
                 Phi[i - 1][0][0] = pterm[j] + h * Phi[i - 1][0][0]
                 Phi[i - 1][1][0] = pterm[j] * jfl + h * Phi[i - 1][1][0]
                 Phi[i - 1][0][1] = qterm[j] + h * Phi[i - 1][0][1]

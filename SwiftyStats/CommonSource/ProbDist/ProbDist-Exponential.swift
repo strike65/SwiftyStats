@@ -25,117 +25,122 @@ import Foundation
 import os.log
 #endif
 
-// MARK: Exponential Dist
-
-/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
-/// - Parameter l: Lambda
-/// - Throws: SSSwiftyStatsError if l <= 0
-public func paraExponentialDist<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSContProbDistParams<FPT> {
-    if (l <= 0) {
-        #if os(macOS) || os(iOS)
+extension SSProbDist {
+    enum Exponential {
+        // MARK: Exponential Dist
         
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
+        /// - Parameter l: Lambda
+        /// - Throws: SSSwiftyStatsError if l <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSContProbDistParams<FPT> {
+            if (l <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            result.mean = 1 / l
+            result.variance = 1 / (l * l)
+            result.kurtosis = 9
+            result.skewness = 2
+            return result
         }
         
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
-    result.mean = 1 / l
-    result.variance = 1 / (l * l)
-    result.kurtosis = 9
-    result.skewness = 2
-    return result
-}
-
-/// Returns the pdf of the Exponential distribution.
-/// - Parameter x: x
-/// - Parameter l: Lambda
-/// - Throws: SSSwiftyStatsError if l <= 0
-public func pdfExponentialDist<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
-    if (l <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+        /// Returns the pdf of the Exponential distribution.
+        /// - Parameter x: x
+        /// - Parameter l: Lambda
+        /// - Throws: SSSwiftyStatsError if l <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
+            if (l <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if x < 0 {
+                return 0
+            }
+            else if x == 1 {
+                return l
+            }
+            else {
+                return l * SSMath.exp1(-l * x)
+            }
         }
         
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if x < 0 {
-        return 0
-    }
-    else if x == 1 {
-        return l
-    }
-    else {
-        return l * exp1(-l * x)
-    }
-}
-
-/// Returns the cdf of the Exponential distribution.
-/// - Parameter x: x
-/// - Parameter l: Lambda
-/// - Throws: SSSwiftyStatsError if l <= 0
-public func cdfExponentialDist<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
-    if (l <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+        /// Returns the cdf of the Exponential distribution.
+        /// - Parameter x: x
+        /// - Parameter l: Lambda
+        /// - Throws: SSSwiftyStatsError if l <= 0
+        public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, lambda l: FPT) throws -> FPT {
+            if (l <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if x <= 0 {
+                return 0
+            }
+            else {
+                return 1 - SSMath.exp1(-l * x)
+            }
         }
         
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if x <= 0 {
-        return 0
-    }
-    else {
-        return 1 - exp1(-l * x)
-    }
-}
-
-/// Returns the quantile of the Exponential distribution.
-/// - Parameter p: p
-/// - Parameter l: Lambda
-/// - Throws: SSSwiftyStatsError if l <= 0 || p < 0 || p > 1
-public func quantileExponentialDist<FPT: SSFloatingPoint & Codable>(p: FPT, lambda l: FPT) throws -> FPT {
-    if (l <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+        /// Returns the quantile of the Exponential distribution.
+        /// - Parameter p: p
+        /// - Parameter l: Lambda
+        /// - Throws: SSSwiftyStatsError if l <= 0 || p < 0 || p > 1
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, lambda l: FPT) throws -> FPT {
+            if (l <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("parameter lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p == 0 {
+                return 0
+            }
+            else if p == 1 {
+                return FPT.infinity
+            }
+            else {
+                return -SSMath.log1(1 - p) / l
+            }
         }
         
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p < 0 || p > 1 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p == 0 {
-        return 0
-    }
-    else if p == 1 {
-        return FPT.infinity
-    }
-    else {
-        return -log1(1 - p) / l
     }
 }
 

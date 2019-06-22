@@ -70,6 +70,57 @@ import Foundation
 //#include <math.h>
 //#include <stdlib.h>
 
+
+extension Helpers {
+    
+    internal static func KSfbar<FPT: SSFloatingPoint & Codable>(n: Int, x: FPT) -> FPT {
+        let w: FPT =  Helpers.makeFP(n) * x * x
+        let v: FPT = fbarSpecial(n, x)
+        if (v >= 0) {
+            return v
+        }
+        
+        if (n <= NEXACT) {
+            if (w < 4) {
+                return 1 - KScdf(n: n, x: x)
+            }
+            else {
+                return 2 * KSPlusbarUpper(n, x)
+            }
+        }
+        
+        if (w >=  Helpers.makeFP(2.65)) {
+            return 2 * KSPlusbarUpper(n, x)
+        }
+        
+        return 1 - KScdf(n: n, x: x)
+    }
+    
+    /// Computes the cdf of the Kolmogorov-Smirnov distribution (Author: Richard Simard)
+    /// (Double precision)
+    internal static func KScdf<FPT: SSFloatingPoint & Codable>(n: Int, x: FPT) -> FPT {
+        let w =  Helpers.makeFP(n) * x * x
+        let u = cdfSpecial(n, x)
+        if (u >= 0) {
+            return u
+        }
+        
+        if (n <= NEXACT) {
+            if (w <  Helpers.makeFP(0.754693 )) {
+                return DurbinMatrix(n, x)
+            }
+            if (w < 4) {
+                return Pomeranz (n, x)
+            }
+            return  Helpers.makeFP(1.0 ) - Helpers.KSfbar(n: n, x: x)
+        }
+        
+        if ((w * x *  Helpers.makeFP(n) <= 7) && (n <= NKOLMO)) {
+            return DurbinMatrix (n, x)
+        }
+        return Pelz(n, x)
+    }
+}
 //#define num_Pi     3.14159265358979323846 /* PI */
 //#define num_Ln2    0.69314718055994530941 /* log(2) */
 
@@ -129,7 +180,7 @@ fileprivate let LnFactorial: Array<Double> = [
 /*------------------------------------------------------------------------*/
 
 /// Returns the logarithm of n!
-fileprivate func getLogFactorial(_ n: Int) -> Double {
+fileprivate func getSSMath.logFactorial(_ n: Int) -> Double {
     /* Returns the natural logarithm of factorial n! */
     if (n <= MFACT) {
         return LnFactorial[n]
@@ -145,11 +196,14 @@ fileprivate func getLogFactorial(_ n: Int) -> Double {
 */
 /*------------------------------------------------------------------------*/
 
+
+
+
 fileprivate func rapfac<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
     /* Computes n! / n^n */
-    var res: FPT = 1 / (makeFP(n))
+    var res: FPT = 1 / ( Helpers.makeFP(n))
     for i:Int in 2...n {
-        res *= makeFP(i) / makeFP(n)
+        res *=  Helpers.makeFP(i) /  Helpers.makeFP(n)
     }
     return res
 }
@@ -161,7 +215,7 @@ fileprivate func rapfac<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
 // static double **CreateMatrixD (int N, int M)
 
 fileprivate func createMatrixD<FPT: SSFloatingPoint & Codable>(_ N: Int, _ M: Int) -> Array<Array<FPT>> {
-    return Array<Array<FPT>>.init(repeating: Array<FPT>.init(repeating: makeFP(0.0), count: M), count: N)
+    return Array<Array<FPT>>.init(repeating: Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: M), count: N)
 }
 
 
@@ -175,15 +229,15 @@ fileprivate func DeleteMatrixD<FPT: SSFloatingPoint & Codable>(_ T: inout Array<
 fileprivate func KSPlusbarAsymp<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* Compute the probability of the KS+ distribution using an asymptotic
      formula */
-    let t: FPT = (6 * (makeFP(n)) * x + 1)
-    let z: FPT = t * t / (18 * (makeFP(n)))
+    let t: FPT = (6 * ( Helpers.makeFP(n)) * x + 1)
+    let z: FPT = t * t / (18 * ( Helpers.makeFP(n)))
     let ex1: FPT = (2 * z * z)
     let ex2: FPT = ex1 - 4 * z - 1
-    var v: FPT = 1 - ex2 / (18 * (makeFP(n)))
+    var v: FPT = 1 - ex2 / (18 * ( Helpers.makeFP(n)))
     if (v <= 0) {
         return 0
     }
-    v = v * exp1(-z)
+    v = v * SSMath.exp1(-z)
     if (v >= 1) {
         return 1
     }
@@ -196,7 +250,7 @@ fileprivate func KSPlusbarAsymp<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
 fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* Compute the probability of the KS+ distribution in the upper tail using
      Smirnov's stable formula */
-    let EPSILON: FPT = makeFP(1.0E-12)
+    let EPSILON: FPT =  Helpers.makeFP(1.0E-12)
     var q:FPT
     var Sum:FPT = 0
     var term:FPT
@@ -205,13 +259,19 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
     var LOGJMAX:FPT
     var j: Int
     var jdiv: Int
-    var jmax: Int = integerValue((makeFP(n)) * (1 - x))
+    var jmax: Int = Helpers.integerValue(( Helpers.makeFP(n)) * (1 - x))
     if n > 200000 {
         return KSPlusbarAsymp(n, x)
     }
     
     /* Avoid log(0) for j = jmax and q ~ 1.0 */
-    if (1 - x - makeFP(jmax) / makeFP(n) <= 0) {
+    var ex1: FPT
+    var ex2: FPT
+    var ex3: FPT
+    ex1 =  Helpers.makeFP(jmax) /  Helpers.makeFP(n)
+    ex2 = x - ex1
+    ex3 = FPT.one - ex2
+    if (ex3 <= 0) {
         jmax = jmax - 1
     }
     
@@ -223,15 +283,19 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
     }
     
     j = jmax / jdiv + 1
-    LogCom = logFactorial(n) - logFactorial(j) - logFactorial(n - j)
+    LogCom = SSMath.logFactorial(n) - SSMath.logFactorial(j) - SSMath.logFactorial(n - j)
     LOGJMAX = LogCom
     
     while (j <= jmax) {
-        q = makeFP(j) / makeFP(n) + x
-        term = LogCom + makeFP(j - 1) * log1(q) + makeFP(n - j) * log1p1(-q)
-        t = exp1(term)
+        q =  Helpers.makeFP(j) /  Helpers.makeFP(n) + x
+        ex1 =  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
+        ex2 =  Helpers.makeFP(j - 1) * SSMath.log1(q)
+        ex3 = LogCom + ex2
+        term = ex3 + ex1
+//        term = LogCom +  Helpers.makeFP(j - 1) * SSMath.log1(q) +  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
+        t = SSMath.exp1(term)
         Sum = Sum + t
-        LogCom += LogCom + log1(makeFP(n - j) / makeFP(j + 1))
+        LogCom += LogCom + SSMath.log1( Helpers.makeFP(n - j) /  Helpers.makeFP(j + 1))
         if t <= Sum * EPSILON {
             break
         }
@@ -239,14 +303,18 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
     }
     
     j = jmax / jdiv
-    LogCom = LOGJMAX + log1(makeFP(j + 1) / makeFP(n - j))
+    LogCom = LOGJMAX + SSMath.log1( Helpers.makeFP(j + 1) /  Helpers.makeFP(n - j))
     
     while (j > 0) {
-        q = makeFP(j) / makeFP(n) + x
-        term = LogCom + makeFP(j - 1) * log1(q) + makeFP(n - j) * log1p1(-q)
-        t = exp1(term)
+        q =  Helpers.makeFP(j) /  Helpers.makeFP(n) + x
+        ex1 =  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
+        ex2 =  Helpers.makeFP(j - 1) * SSMath.log1(q)
+        ex3 = LogCom + ex2
+        term = ex3 + ex1
+//        term = LogCom +  Helpers.makeFP(j - 1) * SSMath.log1(q) +  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
+        t = SSMath.exp1(term)
         Sum += t
-        LogCom += log1(makeFP(j) / makeFP(n - j + 1))
+        LogCom += SSMath.log1( Helpers.makeFP(j) /  Helpers.makeFP(n - j + 1))
         if (t <= Sum * EPSILON) {
             break
         }
@@ -255,7 +323,7 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
     
     Sum *= x
     /* add the term j = 0 */
-    Sum += exp1(makeFP(n) * log1p1(-x))
+    Sum += SSMath.exp1( Helpers.makeFP(n) * SSMath.log1p1(-x))
     return Sum
 }
 
@@ -271,12 +339,12 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
      */
     
     let JMAX: Int = 20
-    let EPS: FPT = makeFP(1.0e-10)
+    let EPS: FPT =  Helpers.makeFP(1.0e-10)
     let C: FPT = FPT.sqrt2pi   /* 2.506628274631001        sqrt(2*Pi) */
     let C2: FPT = FPT.sqrtpihalf              /* 1.2533141373155001      sqrt(Pi/2) */
     let PI2: FPT =  FPT.pisquared
     let PI4: FPT = PI2 * PI2
-    let RACN: FPT = sqrt(makeFP(n))
+    let RACN: FPT = sqrt( Helpers.makeFP(n))
     let z: FPT = RACN * x
     let z2: FPT = z * z
     let z4: FPT = z2 * z2
@@ -291,8 +359,8 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     j = 0
     sum = 0
     while (j <= JMAX && term > EPS * sum) {
-        ti = makeFP(j) + FPT.half
-        term = exp1(-ti * ti * w)
+        ti =  Helpers.makeFP(j) + FPT.half
+        term = SSMath.exp1(-ti * ti * w)
         sum += term
         j = j + 1
     }
@@ -303,10 +371,10 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     j = 0
     var ex1, ex2, ex3, ex4, ex5, ex6: FPT
     while (j <= JMAX && abs(term) > EPS * abs(tom)) {
-        ti = makeFP(j) + FPT.half
+        ti =  Helpers.makeFP(j) + FPT.half
         ex1 = ti * ti - z2
         ex2 = -ti * ti * w
-        term = (PI2 * ex1) * exp1(ex2)
+        term = (PI2 * ex1) * SSMath.exp1(ex2)
         tom += term
         j = j + 1
     }
@@ -316,39 +384,49 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     tom = 0
     j = 0
     while (j <= JMAX && abs (term) > EPS * abs (tom)) {
-        ti = makeFP(j) + makeFP(0.5 )
+        ti =  Helpers.makeFP(j) +  Helpers.makeFP(0.5 )
         ex1 = 6 * z6 + 2 * z4
         ex2 = 2 * z4 - 5 * z2
         ex3 = 1 - 2 * z2
-        ex4 = ti * ti * ti * ti  /* use pow1(ti, 4) ? */
+        ex4 = ti * ti * ti * ti  /* use SSMath.pow1(ti, 4) ? */
         ex5 = ti * ti
         ex6 = PI2 * ex2
         let ex7: FPT = ex1 + ex6 * ex5
         let ex8: FPT = PI4 * ex3 * ex4
         term = ex7 + ex8
 //        term = ex1 + PI2 * ex2 * ti * ti + PI4 * ex3 * ex4
-        term *= exp1(-ti * ti * w)
+        term *= SSMath.exp1(-ti * ti * w)
         tom += term
         j = j + 1
     }
-    sum += tom * C2 / (makeFP(n) * 36 * z * z6)
+    ex1 =  Helpers.makeFP(36) * z
+    ex2 = ex1 * z6
+    ex3 =  Helpers.makeFP(n) * ex2
+    ex4 = C2 / ex3
+    sum = sum + (tom * ex4)
+//    sum += tom * C2 / ( Helpers.makeFP(n) * 36 * z * z6)
     
     term = 1
     tom = 0
     j = 1
     while (j <= JMAX && term > EPS * tom) {
-        ti = makeFP(j)
-        term = PI2 * ti * ti * exp1(-ti * ti * w)
+        ti =  Helpers.makeFP(j)
+        term = PI2 * ti * ti * SSMath.exp1(-ti * ti * w)
         tom += term
         j = j + 1
     }
-    sum -= tom * C2 / (makeFP(n) * 18 * z * z2)
+    ex1 =  Helpers.makeFP(18) * z
+    ex2 = ex1 * z2
+    ex3 =  Helpers.makeFP(n) * ex2
+    ex4 = C2 / ex3
+    sum = sum - (tom * ex4)
+//    sum -= tom * C2 / ( Helpers.makeFP(n) * 18 * z * z2)
     
     term = 1
     tom = 0
     j = 0
     while (j <= JMAX && abs(term) > EPS * abs(tom)) {
-        ti = makeFP(j) + makeFP(0.5 )
+        ti =  Helpers.makeFP(j) +  Helpers.makeFP(0.5 )
         ti = ti * ti
         ex1 = -30 * z6 - 90 * z6 * z2
         ex2 = (135 * z4 - 96 * z6)
@@ -357,26 +435,32 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex5 = (5 - 30 * z2)
         ex6 = PI4 * ex3 * ti * ti + ex4 * ex5
         term = ex1 + PI2 * ex2 * ti + ex6
-        term *= exp1(-ti * w)
+        term *= SSMath.exp1(-ti * w)
         tom += term
         j = j + 1
     }
-    sum += tom * C2 / (RACN * makeFP(n) * 3240 * z4 * z6)
+    ex1 =  Helpers.makeFP(3240) * z4
+    ex2 = ex1 * z6
+    ex3 =  Helpers.makeFP(n) * ex2
+    ex4 = RACN * ex3
+    ex5 = C2 / ex4
+    sum = sum + (tom * ex5)
+//    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 3240 * z4 * z6)
     
     term = 1
     tom = 0
     j = 1
     while (j <= JMAX && abs (term) > EPS * abs(tom)) {
-        ti = makeFP(j * j)
+        ti =  Helpers.makeFP(j * j)
         ex1 = 3 * PI2 * ti * z2
         ex2 = PI4 * ti * ti
         ex3 = -ti * w
-        term = (ex1 - ex2) * exp1(ex3)
-//        term = (3 * PI2 * ti * z2 - PI4 * ti * ti) * exp1(-ti * w)
+        term = (ex1 - ex2) * SSMath.exp1(ex3)
+//        term = (3 * PI2 * ti * z2 - PI4 * ti * ti) * SSMath.exp1(-ti * w)
         tom += term
         j = j + 1
     }
-    sum += tom * C2 / (RACN * makeFP(n) * 108 * z6)
+    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 108 * z6)
     return sum
 }
 
@@ -393,74 +477,74 @@ fileprivate func CalcFloorCeil<FPT: SSFloatingPoint & Codable> (
 {
     /* Precompute A_i, floors, and ceilings for limits of sums in the Pomeranz
      algorithm */
-    let ell: Int = integerValue(t)             /* floor (t) */
-    var z: FPT = t - (makeFP(ell))             /* t - floor (t) */
+    let ell: Int = Helpers.integerValue(t)             /* floor (t) */
+    var z: FPT = t - ( Helpers.makeFP(ell))             /* t - floor (t) */
     let w = ceil(t) - t
     var i: Int
     var ii: FPT
-    if (z > makeFP(0.5 )) {
+    if (z >  Helpers.makeFP(0.5 )) {
         i = 2
         while i <= 2 * n + 2 {
-            Atflo[i] = makeFP(i / 2) - 2 - makeFP(ell)
+            Atflo[i] =  Helpers.makeFP(i / 2) - 2 -  Helpers.makeFP(ell)
             i = i + 2
         }
         i = 1
         while i <= 2 * n + 2 {
-            Atflo[i] = makeFP(i / 2) - 1 - makeFP(ell)
+            Atflo[i] =  Helpers.makeFP(i / 2) - 1 -  Helpers.makeFP(ell)
             i = i + 2
         }
         i = 2
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atcei[i] = (makeFP(ii / 2) + makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atcei[i] = ( Helpers.makeFP(ii / 2) +  Helpers.makeFP(ell))
             i = i + 2
         }
         i = 1
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atcei[i] = (makeFP(ii / 2) + 1 + makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atcei[i] = ( Helpers.makeFP(ii / 2) + 1 +  Helpers.makeFP(ell))
             i = i + 2
         }
         
     } else if (z > 0) {
         i = 1
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atflo[i] = (makeFP(ii / 2) - 1 - makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atflo[i] = ( Helpers.makeFP(ii / 2) - 1 -  Helpers.makeFP(ell))
             i = i + 1
         }
         
         i = 2
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atcei[i] = (makeFP(ii / 2) + makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atcei[i] = ( Helpers.makeFP(ii / 2) +  Helpers.makeFP(ell))
             i = i + 1
         }
-        Atcei[1] = (1 + makeFP(ell))
+        Atcei[1] = (1 +  Helpers.makeFP(ell))
         
     } else {                       /* z == 0 */
         i = 2
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atflo[i] = (makeFP(ii / 2) - 1 - makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atflo[i] = ( Helpers.makeFP(ii / 2) - 1 -  Helpers.makeFP(ell))
             i = i + 2
         }
         i = 1
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atflo[i] = (makeFP(ii / 2) - makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atflo[i] = ( Helpers.makeFP(ii / 2) -  Helpers.makeFP(ell))
             i = i + 2
         }
         i = 2
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atcei[i] = (makeFP(ii / 2) - 1 + makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atcei[i] = ( Helpers.makeFP(ii / 2) - 1 +  Helpers.makeFP(ell))
             i = i + 2
         }
         i = 1
         while i <= 2 * n + 2 {
-            ii = makeFP(i)
-            Atcei[i] = (makeFP(ii / 2) + makeFP(ell))
+            ii =  Helpers.makeFP(i)
+            Atcei[i] = ( Helpers.makeFP(ii / 2) +  Helpers.makeFP(ell))
             i = i + 2
         }
     }
@@ -476,7 +560,7 @@ fileprivate func CalcFloorCeil<FPT: SSFloatingPoint & Codable> (
         A[i] = A[i - 2] + 1
         i += 1
     }
-    A[2 * n + 2] = makeFP(n)
+    A[2 * n + 2] =  Helpers.makeFP(n)
 }
 
 
@@ -484,11 +568,11 @@ fileprivate func CalcFloorCeil<FPT: SSFloatingPoint & Codable> (
 
 fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* The Pomeranz algorithm to compute the KS distribution */
-    let EPS: FPT = makeFP(1.0e-15)
+    let EPS: FPT =  Helpers.makeFP(1.0e-15)
     let ENO = 350
     let RENO: FPT = scalbn(1, ENO); /* for renormalization of V */
     var coreno: Int                    /* counter: how many renormalizations */
-    let t = makeFP(n) * x
+    let t =  Helpers.makeFP(n) * x
     var w:FPT
     var sum:FPT
     var minsum:FPT
@@ -500,9 +584,9 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     var klow: Int
     var kup: Int
     var kup0: Int
-    var A: Array<FPT> = Array<FPT>.init(repeating: makeFP(0.0), count: 2 * n + 3)
-    var Atflo: Array<FPT> = Array<FPT>.init(repeating: makeFP(0.0), count: 2 * n + 3)
-    var Atcei: Array<FPT> = Array<FPT>.init(repeating: makeFP(0.0), count: 2 * n + 3)
+    var A: Array<FPT> = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 2 * n + 3)
+    var Atflo: Array<FPT> = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 2 * n + 3)
+    var Atcei: Array<FPT> = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 2 * n + 3)
     var V: Array<Array<FPT>>
     var H: Array<Array<FPT>> /* = pow(w, j) / Factorial(j) */
     var i: Int
@@ -526,26 +610,26 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     
     /* Precompute H[][] = (A[j] - A[j-1]^k / k! for speed */
     H[0][0] = 1
-    w = 2 * A[2] / makeFP(n)
+    w = 2 * A[2] /  Helpers.makeFP(n)
     j = 1
     while j <= n + 1 {
-        H[0][j] = w * H[0][j - 1] / makeFP(j)
+        H[0][j] = w * H[0][j - 1] /  Helpers.makeFP(j)
         j += 1
     }
     
     H[1][0] = 1
-    w = (1 - 2 * A[2]) / makeFP(n)
+    w = (1 - 2 * A[2]) /  Helpers.makeFP(n)
     j = 1
     while j <= n + 1 {
-        H[1][j] = w * H[1][j - 1] / makeFP(j)
+        H[1][j] = w * H[1][j - 1] /  Helpers.makeFP(j)
         j += 1
     }
     
     H[2][0] = 1
-    w = A[2] / makeFP(n)
+    w = A[2] /  Helpers.makeFP(n)
     j = 1
     while j <= n + 1 {
-        H[2][j] = w * H[2][j - 1] / makeFP(j)
+        H[2][j] = w * H[2][j - 1] /  Helpers.makeFP(j)
         j += 1
     }
     
@@ -560,23 +644,23 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     r2 = 1
     i = 2
     while (i <= 2 * n + 2) {
-        jlow = 2 + integerValue(Atflo[i])
+        jlow = 2 + Helpers.integerValue(Atflo[i])
         if (jlow < 1) {
             jlow = 1
         }
-        jup = integerValue(Atcei[i])
+        jup = Helpers.integerValue(Atcei[i])
         if (jup > n + 1) {
             jup = n + 1
         }
         
-        klow = 2 + integerValue(Atflo[i - 1])
+        klow = 2 + Helpers.integerValue(Atflo[i - 1])
         if (klow < 1) {
             klow = 1
         }
-        kup0 = integerValue(Atcei[i - 1])
+        kup0 = Helpers.integerValue(Atcei[i - 1])
         
         /* Find to which case it corresponds */
-        w = (A[i] - A[i - 1]) / makeFP(n)
+        w = (A[i] - A[i - 1]) /  Helpers.makeFP(n)
         s = -1
         j = 0
         while j <= 3 {
@@ -610,7 +694,7 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
             j += 1
         }
         
-        if (minsum < makeFP(1.0e-280)) {
+        if (minsum <  Helpers.makeFP(1.0e-280)) {
             /* V is too small: renormalize to avoid underflow of probabilities */
             j = jlow
             while j <= jup {
@@ -628,11 +712,11 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     Atcei.removeAll()
     DeleteMatrixD(&H)
     DeleteMatrixD(&V)
-    w = logFactorial(n) - makeFP(coreno) * makeFP(ENO) * FPT.ln2 + log1(sum)
+    w = SSMath.logFactorial(n) -  Helpers.makeFP(coreno) *  Helpers.makeFP(ENO) * FPT.ln2 + SSMath.log1(sum)
     if (w >= 0) {
         return 1
     }
-    return exp1(w)
+    return SSMath.exp1(w)
 }
 
 
@@ -642,11 +726,11 @@ fileprivate func cdfSpecial<FPT: SSFloatingPoint & Codable> (_ n: Int, _ x: FPT)
     /* The KS distribution is known exactly for these cases */
     
     /* For nx^2 > 18, KSfbar(n, x) is smaller than 5e-16 */
-    if ((makeFP(n) * x * x >= 18) || (x >= 1)) {
+    if (( Helpers.makeFP(n) * x * x >= 18) || (x >= 1)) {
         return 1
     }
     
-    if (x <= makeFP(0.5 ) / makeFP(n)) {
+    if (x <=  Helpers.makeFP(0.5 ) /  Helpers.makeFP(n)) {
         return 0
     }
     
@@ -654,109 +738,60 @@ fileprivate func cdfSpecial<FPT: SSFloatingPoint & Codable> (_ n: Int, _ x: FPT)
         return 2 * x - 1
     }
 
-    if (x <= 1 / makeFP(n)) {
-        let t: FPT = 2 * x * makeFP(n) - 1
+    if (x <= 1 /  Helpers.makeFP(n)) {
+        let t: FPT = 2 * x *  Helpers.makeFP(n) - 1
         var w: FPT
         if (n <= NEXACT) {
             w = rapfac(n)
-            return w * pow1(t, makeFP(n))
+            return w * SSMath.pow1(t,  Helpers.makeFP(n))
         }
-        w = logFactorial(n) + makeFP(n) * log1(t / makeFP(n))
-        return exp1(w)
+        w = SSMath.logFactorial(n) +  Helpers.makeFP(n) * SSMath.log1(t /  Helpers.makeFP(n))
+        return SSMath.exp1(w)
     }
     
-    if (x >= makeFP(1.0 ) - makeFP(1.0 ) / makeFP(n)) {
-        return 1 - 2 * pow1(1 - x, makeFP(n))
+    if (x >=  Helpers.makeFP(1.0 ) -  Helpers.makeFP(1.0 ) /  Helpers.makeFP(n)) {
+        return 1 - 2 * SSMath.pow1(1 - x,  Helpers.makeFP(n))
     }
     return -1
 }
 
 
 /*========================================================================*/
-
-/// Computes the cdf of the Kolmogorov-Smirnov distribution (Author: Richard Simard)
-/// (Double precision)
-internal func KScdf<FPT: SSFloatingPoint & Codable>(n: Int, x: FPT) -> FPT {
-    let w = makeFP(n) * x * x
-    let u = cdfSpecial(n, x)
-   if (u >= 0) {
-        return u
-    }
-    
-    if (n <= NEXACT) {
-        if (w < makeFP(0.754693 )) {
-            return DurbinMatrix(n, x)
-        }
-        if (w < 4) {
-            return Pomeranz (n, x)
-        }
-        return makeFP(1.0 ) - KSfbar(n: n, x: x)
-    }
-    
-    if ((w * x * makeFP(n) <= 7) && (n <= NKOLMO)) {
-        return DurbinMatrix (n, x)
-    }
-    return Pelz(n, x)
-}
-
 
 /*=========================================================================*/
 
 fileprivate func fbarSpecial<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
-    let w = makeFP(n) * x * x
+    let w =  Helpers.makeFP(n) * x * x
     
     if ((w >= 370) || (x >= 1)) {
         return 0
     }
-    if ((w <= makeFP(0.0274 )) || (x <= makeFP(0.5 ) / makeFP(n))) {
+    if ((w <=  Helpers.makeFP(0.0274 )) || (x <=  Helpers.makeFP(0.5 ) /  Helpers.makeFP(n))) {
         return 1
     }
     if (n == 1) {
-        return makeFP(2.0 ) - 2 * x
+        return  Helpers.makeFP(2.0 ) - 2 * x
     }
     
-    if (x <= 1 / makeFP(n)) {
+    if (x <= 1 /  Helpers.makeFP(n)) {
         var z:FPT
-        let t = 2 * x * makeFP(n) - 1
+        let t = 2 * x *  Helpers.makeFP(n) - 1
         if (n <= NEXACT) {
             z = rapfac(n)
-            return 1 - z * pow1(t, makeFP(n))
+            return 1 - z * SSMath.pow1(t,  Helpers.makeFP(n))
         }
-        z = logFactorial(n) + makeFP(n) * log1(t / makeFP(n))
-        return makeFP(1.0 ) - exp1(z)
+        z = SSMath.logFactorial(n) +  Helpers.makeFP(n) * SSMath.log1(t /  Helpers.makeFP(n))
+        return  Helpers.makeFP(1.0 ) - SSMath.exp1(z)
     }
     
-    if (x >= makeFP(1.0 ) - 1 / makeFP(n)) {
-        return 2 * pow1(1 - x, makeFP(n))
+    if (x >=  Helpers.makeFP(1.0 ) - 1 /  Helpers.makeFP(n)) {
+        return 2 * SSMath.pow1(1 - x,  Helpers.makeFP(n))
     }
     return -1
 }
 
 
 /*========================================================================*/
-
-internal func KSfbar<FPT: SSFloatingPoint & Codable>(n: Int, x: FPT) -> FPT {
-    let w: FPT = makeFP(n) * x * x
-    let v: FPT = fbarSpecial(n, x)
-    if (v >= 0) {
-        return v
-    }
-    
-    if (n <= NEXACT) {
-        if (w < 4) {
-            return 1 - KScdf(n: n, x: x)
-        }
-        else {
-            return 2 * KSPlusbarUpper(n, x)
-        }
-    }
-    
-    if (w >= makeFP(2.65)) {
-        return 2 * KSPlusbarUpper(n, x)
-    }
-    
-    return 1 - KScdf(n: n, x: x)
-}
 
 
 /*=========================================================================
@@ -788,8 +823,8 @@ internal func KSfbar<FPT: SSFloatingPoint & Codable>(n: Int, x: FPT) -> FPT {
 //fileprivate let LOGNORM = 140
 
 fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT) -> FPT {
-    let NORM: FPT = makeFP(1.0e140)
-    let INORM: FPT = makeFP(1.0e-140)
+    let NORM: FPT =  Helpers.makeFP(1.0e140)
+    let INORM: FPT =  Helpers.makeFP(1.0e-140)
     let LOGNORM = 140
     var k: Int
     var m: Int
@@ -805,11 +840,11 @@ fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT
 //        if (s > 7.24 || (s > 3.76 && n > 99))
 //        return 1 - 2 * exp (-(2.000071 + .331 / sqrt (n) + 1.409 / n) * s);
 //    #endif
-    k = integerValue(makeFP(n) * d + 1)
+    k = Helpers.integerValue( Helpers.makeFP(n) * d + 1)
     m = 2 * k - 1
-    h = makeFP(k) - makeFP(n) * d
-    H = Array<FPT>.init(repeating: makeFP(0.0), count: m * m)
-    Q = Array<FPT>.init(repeating: makeFP(0.0), count: m * m)
+    h =  Helpers.makeFP(k) -  Helpers.makeFP(n) * d
+    H = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: m * m)
+    Q = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: m * m)
     for i in 0...m - 1 {
         for j in 0...m - 1 {
             if (i - j + 1 < 0) {
@@ -821,22 +856,22 @@ fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT
         }
     }
     for i in 0...m - 1 {
-        H[i * m] -= pow1(h, makeFP(i + 1))
-        H[(m - 1) * m + i] -= pow1(h, makeFP(m - i))
+        H[i * m] -= SSMath.pow1(h,  Helpers.makeFP(i + 1))
+        H[(m - 1) * m + i] -= SSMath.pow1(h,  Helpers.makeFP(m - i))
     }
     let test: FPT = 2 * h - 1
     if test > 0 {
-        H[(m - 1) * m] += pow1(2 * h - 1, makeFP(m))
+        H[(m - 1) * m] += SSMath.pow1(2 * h - 1,  Helpers.makeFP(m))
     }
     else {
         H[(m - 1) * m] += 0
     }
-//    H[(m - 1) * m] += (2 * h - 1 > 0 ? pow1(2 * h - 1, makeFP(m)) : 0)
+//    H[(m - 1) * m] += (2 * h - 1 > 0 ? SSMath.pow1(2 * h - 1,  Helpers.makeFP(m)) : 0)
     for i in 0...m - 1 {
         for j in 0...m - 1 {
             if (i - j + 1 > 0) {
                 for g in 1...i - j + 1 {
-                    H[i * m + j] /= makeFP(g)
+                    H[i * m + j] /=  Helpers.makeFP(g)
                 }
             }
         }
@@ -845,13 +880,13 @@ fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT
     mPower(H, eH, &Q, &eQ, m, n);
     s = Q[(k - 1) * m + k - 1]
     for i in 1...n {
-        s = s * makeFP(i) / makeFP(n)
+        s = s *  Helpers.makeFP(i) /  Helpers.makeFP(n)
         if (s < INORM) {
             s *= NORM
             eQ -= LOGNORM
         }
     }
-    s *= pow1(10, makeFP(eQ))
+    s *= SSMath.pow1(10,  Helpers.makeFP(eQ))
     H.removeAll()
     Q.removeAll()
     return s
@@ -875,7 +910,7 @@ fileprivate func mMultiply<FPT: SSFloatingPoint & Codable>(_ A: Array<FPT>, _ B:
 
 fileprivate func renormalize<FPT: SSFloatingPoint & Codable>(_ V: inout Array<FPT>, _ m: Int, _ p: UnsafeMutablePointer<Int>) {
 //    int i;
-    let INORM: FPT = makeFP(1.0e-140)
+    let INORM: FPT =  Helpers.makeFP(1.0e-140)
     let LOGNORM = 140
     for i in 0...m * m - 1 {
         V[i] *= INORM
@@ -886,7 +921,7 @@ fileprivate func renormalize<FPT: SSFloatingPoint & Codable>(_ V: inout Array<FP
 
 fileprivate func mPower<FPT: SSFloatingPoint & Codable>(_ A: Array<FPT>, _ eA: Int, _ V: inout Array<FPT>, _ eV: UnsafeMutablePointer<Int>, _ m: Int, _ n: Int) {
     var B: Array<FPT>
-    let NORM: FPT = makeFP(1.0e140)
+    let NORM: FPT =  Helpers.makeFP(1.0e140)
 //    int eB, i;
     if (n == 1) {
         for i in 0...m * m - 1 {
@@ -896,7 +931,7 @@ fileprivate func mPower<FPT: SSFloatingPoint & Codable>(_ A: Array<FPT>, _ eA: I
         return
     }
     mPower(A, eA, &V, eV, m, n / 2)
-    B = Array<FPT>.init(repeating: makeFP(0.0), count: m * m)
+    B = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: m * m)
     mMultiply(V, V, &B, m)
     var eB: Int = 2 * eV.pointee
     if (B[(m / 2) * m + (m / 2)] > NORM) {

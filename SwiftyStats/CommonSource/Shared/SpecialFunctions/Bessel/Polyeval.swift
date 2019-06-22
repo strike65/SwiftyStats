@@ -70,45 +70,47 @@ import Foundation
  Direct inquiries to 30 Frost Street, Cambridge, MA 02140
  */
 
-
-internal func polyeval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int ) -> FPT {
-    var ans: FPT
-    var i: Int
+extension SSSpecialFunctions.Helper {
     
-    var k: Int = 0
-    ans = coef[k]
-    k += 1
-    i = n
-    
-    repeat {
-        ans = ans * x  +  coef[k]
+    internal static func polyeval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int ) -> FPT {
+        var ans: FPT
+        var i: Int
+        
+        var k: Int = 0
+        ans = coef[k]
         k += 1
-        i -= 1
-    } while( i > 0 )
+        i = n
+        
+        repeat {
+            ans = ans * x  +  coef[k]
+            k += 1
+            i -= 1
+        } while( i > 0 )
+        
+        return ans
+    }
     
-    return ans
-}
-
-/*                            p1evl()    */
-/*                                          N
- * Evaluate polynomial when coefficient of x  is 1.0.
- * Otherwise same as polevl.
- */
-
-internal func poly1eval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int! ) -> FPT {
-    var ans: FPT
-    var i: Int
+    /*                            p1evl()    */
+    /*                                          N
+     * Evaluate polynomial when coefficient of x  is 1.0.
+     * Otherwise same as polevl.
+     */
     
-    var k: Int = 0
-    ans = x + coef[k]
-    k += 1
-    i = n - 1
-    
-    repeat {
-        ans = ans * x  + coef[k]
+    internal static func poly1eval<FPT: SSFloatingPoint>( x: FPT, coef: [FPT], n: Int! ) -> FPT {
+        var ans: FPT
+        var i: Int
+        
+        var k: Int = 0
+        ans = x + coef[k]
         k += 1
-        i -= 1
-    } while ( i > 0 )
-    
-    return ans
+        i = n - 1
+        
+        repeat {
+            ans = ans * x  + coef[k]
+            k += 1
+            i -= 1
+        } while ( i > 0 )
+        
+        return ans
+    }
 }

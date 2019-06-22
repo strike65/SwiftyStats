@@ -129,18 +129,18 @@ internal struct AiryVariables<T: SSFloatingPoint> {
             M = 53
         }
         basep = T.radix
-        eta = T.ulpOfOne / makeFP(basep)
+        eta = T.ulpOfOne /  Helpers.makeFP(basep)
         r_lolimit = T.ulpOfOne / abs(ai1zer())
-        r_uplimit = exp1(T.twothirds * log1(T.greatestFiniteMagnitude * makeFP(0.95)))
-        n_asymp = integerValue(makeFP(M) * log1(makeFP(basep)) + T.half)
+        r_uplimit = SSMath.exp1(T.twothirds * SSMath.log1(T.greatestFiniteMagnitude *  Helpers.makeFP(0.95)))
+        n_asymp = Helpers.integerValue( Helpers.makeFP(M) * SSMath.log1( Helpers.makeFP(basep)) + T.half)
         ucoef = Array<T>.init(repeating: 0, count: n_asymp)
         vcoef = Array<T>.init(repeating: 0, count: n_asymp)
-        ucoef[0] = makeFP(5.0) / makeFP(14.4)
-        vcoef[0] = T.minusOne * makeFP(7.0) / makeFP(72.0)
-//        ucoef[0] = makeFP("0.06944444444444444444444444444444444444444444444444444444444444444")
-//        vcoef[0] = makeFP("-0.09722222222222222222222222222222222222222222222222222222222222222")
+        ucoef[0] =  Helpers.makeFP(5.0) /  Helpers.makeFP(14.4)
+        vcoef[0] = T.minusOne *  Helpers.makeFP(7.0) /  Helpers.makeFP(72.0)
+//        ucoef[0] =  Helpers.makeFP("0.06944444444444444444444444444444444444444444444444444444444444444")
+//        vcoef[0] =  Helpers.makeFP("-0.09722222222222222222222222222222222222222222222222222222222222222")
         for i in stride(from: 0, through: n_asymp - 2, by: 1) {
-            ifl = makeFP(i + 1)
+            ifl =  Helpers.makeFP(i + 1)
             e1 = 6 * ifl + 5
             e2 = 6 * ifl + 1
             e3 = e1 * e2 * ucoef[i]
@@ -153,33 +153,33 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         var chi: T = T.one
         if n_asymp % 2 == 0 {
             for i in stride(from: 0, to: n_asymp / 2, by: 1) {
-                ifl = makeFP(i + 1)
+                ifl =  Helpers.makeFP(i + 1)
                 chi = chi * ifl / (ifl - T.half)
             }
         }
         else {
             chi = T.pihalf
             for i in stride(from: 0, to: (n_asymp - 1) / 2, by: 1) {
-                ifl = makeFP(i + 1)
+                ifl =  Helpers.makeFP(i + 1)
                 chi = chi * (ifl + T.half) / ifl
             }
         }
-        let Sfloat: T = makeFP(n_asymp)
+        let Sfloat: T =  Helpers.makeFP(n_asymp)
         var xinew = T.half * Sfloat
-        chi = makeFP(M) * log1(makeFP(basep)) + log1(abs(vcoef[n_asymp - 1])) + log1(2 * chi)
+        chi =  Helpers.makeFP(M) * SSMath.log1( Helpers.makeFP(basep)) + SSMath.log1(abs(vcoef[n_asymp - 1])) + SSMath.log1(2 * chi)
         fstpsz = 7 * T.pi / 72
         var fun, dfun, xiold: T
         while true {
             xiold = xinew
-            fun = Sfloat * log1(xiold) - fstpsz / xiold - chi
-            dfun = Sfloat / xiold + fstpsz / pow1(xiold, 2)
+            fun = Sfloat * SSMath.log1(xiold) - fstpsz / xiold - chi
+            dfun = Sfloat / xiold + fstpsz / SSMath.pow1(xiold, 2)
             xinew = xiold - fun / dfun
             if (abs((xinew - xiold) / xinew)) < (4 * eta) {
                 break
             }
         }
-        r_min = pow1(makeFP(1.5) * xinew, T.twothirds)
-        n_parts = integerValue(ceil(r_min))
+        r_min = SSMath.pow1( Helpers.makeFP(1.5) * xinew, T.twothirds)
+        n_parts = Helpers.integerValue(ceil(r_min))
         fstpsz = r_min / ceil(r_min)
         var lambda: Array<T> = Array<T>.init(repeating: 0, count: 3)
         lambda[0] = T.one / fstpsz
@@ -194,11 +194,11 @@ internal struct AiryVariables<T: SSFloatingPoint> {
             k = i.remainderReportingOverflow(dividingBy: 3).partialValue
             m = (i - 3).remainderReportingOverflow(dividingBy: 3).partialValue
             l = (i - 2).remainderReportingOverflow(dividingBy: 3).partialValue
-            ifl = makeFP(i)
+            ifl =  Helpers.makeFP(i)
             e1 = r_min * lambda[l] + fstpsz * lambda[m]
             e2 = ifl * (ifl - T.one)
-            lambda[k] = e1 / e2 * pow1(fstpsz, 2)
-//            lambda[k] = (r_min * lambda[l] + fstpsz * lambda[m]) / (ifl * (ifl - 1)) * pow1(fstpsz, 2)
+            lambda[k] = e1 / e2 * SSMath.pow1(fstpsz, 2)
+//            lambda[k] = (r_min * lambda[l] + fstpsz * lambda[m]) / (ifl * (ifl - 1)) * SSMath.pow1(fstpsz, 2)
             if (ifl * lambda[k]) < (T.half * eta) {
                 break
             }
@@ -211,13 +211,13 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         xi_global = daizr()[0]
         x_global = aizr()[0]
 
-//        n_asymp_mod = integerValue(T.half * log1(2) * makeFP(M) - T.fourth * log1(makeFP(M)) + T.half)
+//        n_asymp_mod = Helpers.integerValue(T.half * SSMath.log1(2) *  Helpers.makeFP(M) - T.fourth * SSMath.log1( Helpers.makeFP(M)) + T.half)
         //        mcoef = Array<T>.init(repeating: 0, count: n_asymp_mod)
         //        ncoef = Array<T>.init(repeating: 0, count: n_asymp_mod)
-        //        mcoef[0] = makeFP("0.15625")
-        //        ncoef[0] = makeFP(-1.4) * mcoef[0]
+        //        mcoef[0] =  Helpers.makeFP("0.15625")
+        //        ncoef[0] =  Helpers.makeFP(-1.4) * mcoef[0]
         //        for i in stride(from: 0, to: n_asymp_mod - 1, by: 1) {
-        //            ifl = makeFP(i)
+        //            ifl =  Helpers.makeFP(i)
         //            e1 = (6 * (ifl + 1) + 5)
         //            e2 = e1 * (6 * (ifl + 1) + 3)
         //            e3 = e2 * (6 * (ifl + 1) + 1)

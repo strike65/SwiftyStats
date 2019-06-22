@@ -24,28 +24,309 @@ import Foundation
 import Accelerate.vecLib.LinearAlgebra
 import os.log
 
+extension SSProbDist.StudentT {
+    enum NonCentral {
+        
+        
+        #if arch(i386) || arch(x86_64)
+        
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral Student's T distribution.
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter nonCentralityPara: noncentrality parameter
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSContProbDistParams<FPT> {
+            
+            var result:SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            if df < 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda.isZero {
+                do {
+                    return try SSProbDist.StudentT.para(degreesOfFreedom: df)
+                }
+                catch {
+                    throw error
+                }
+            }
+            let half: FPT = FPT.half
+            let one: FPT = FPT.one
+            let two: FPT =  Helpers.makeFP(2)
+            let three: FPT =  Helpers.makeFP(3)
+            let four: FPT =  Helpers.makeFP(4)
+            let minusThree: FPT = FPT.minusOne * three
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
+            let df_half: FPT = df / two
+            let df_half_m1: FPT = (df - one) / two
+            let lg_df_half: FPT = SSMath.lgamma1(df_half)
+            let lg_df_half_m1: FPT = SSMath.lgamma1(df_half_m1)
+            let lambda_sq: FPT = lambda * lambda
+            if df > 2 {
+                let a: FPT = ((lambda_sq + one) * df)
+                let b: FPT = (lambda_sq * df * SSMath.exp1(lg_df_half_m1 + lg_df_half_m1))
+                let c: FPT = (two * SSMath.exp1(lg_df_half + lg_df_half))
+                result.variance = a / (df - two) - b / c
+            }
+            else {
+                result.variance = 0
+            }
+            result.mean = lambda * df_half.squareRoot() * SSMath.exp1(lg_df_half_m1 - lg_df_half)
+            if df > 3 {
+                ex1 = SSMath.pow1(lambda, three)
+                ex2 = ex1 * SSMath.pow1(df, three * FPT.half)
+                ex3 = FPT.half * (FPT.minusOne + df)
+                ex4 = SSMath.tgamma1(ex3)
+                let a: FPT = ex2 * SSMath.pow1(ex4, three)
+                //        let a: FPT = SSMath.pow1(lambda, three) * SSMath.pow1(df, three * half) * SSMath.pow1(SSMath.tgamma1(half * (-1 + df)), three)
+                let b: FPT = two.squareRoot() * SSMath.pow1(SSMath.tgamma1(df_half), three)
+                ex1 = three * lambda
+                ex2 = ex1 * (one + SSMath.pow1(lambda, two))
+                ex3 = ex2 * SSMath.pow1(df, three * half)
+                let c: FPT = ex3 * SSMath.tgamma1(half * (FPT.minusOne + df))
+                //        let c: FPT = three * lambda * (one + SSMath.pow1(lambda, two)) * SSMath.pow1(df, three * half) * SSMath.tgamma1(half * (-1 + df))
+                let d: FPT = two * two.squareRoot() * (-1 + df_half) * SSMath.tgamma1(df_half)
+                ex2 = ex1 * (SSMath.pow1(lambda, two) / three + one)
+                ex3 = ex2 * SSMath.pow1(df, three * half)
+                let e: FPT = ex3 * SSSpecialFunctions.pochhammer(x: df_half, n: minusThree * half)
+                //        let e: FPT = three * lambda * (SSMath.pow1(lambda, two) / three + one) * SSMath.pow1(df, three * half) * pochhammer(x: df_half, n: -3 * half)
+                let f: FPT = two * two.squareRoot()
+                ex1 = a / b
+                ex2 = c / d
+                ex3 = e / f
+                let m3: FPT = ex1 - ex2 + ex3
+                //        let m3: FPT = (a / b) - (c / d) + (e / f)
+                result.skewness = m3 / SSMath.pow1(result.variance, three * half)
+            }
+            else {
+                result.skewness = FPT.nan
+            }
+            if df > 4 {
+                let quarter: FPT =  Helpers.makeFP(0.25)
+                let g:FPT = quarter * df * df
+                let h: FPT = four * (three + 6 * SSMath.pow1(lambda, two) + SSMath.pow1(lambda, four))
+                let i: FPT = 8 - 6 * df + df * df
+                let j_1: FPT = SSMath.pow1(four, -df)
+                ex1 = minusThree * SSMath.pow1(four, df)
+                ex2 = ex1 * SSMath.pow1(lambda, four)
+                ex3 = SSMath.tgamma1((-1 + df) / two)
+                let j_2: FPT = ex2 * SSMath.pow1(ex3, four)
+                //        let j_2: FPT = -3 * SSMath.pow1(four, df) * SSMath.pow1(lambda, four) * SSMath.pow1(SSMath.tgamma1((-1 + df) / two), four)
+                ex1 = SSMath.pow1(lambda, two) * (-5 + df)
+                ex2 = three + ex1
+                let j3_1: FPT = ex2 - (three * df)
+                //        let j3_1: FPT = (three + SSMath.pow1(lambda, two) * (-5 + df) - three * df)
+                let j3_2: FPT = FPT.pi * SSMath.tgamma1(-3 + df) * SSMath.tgamma1(-1 + df)
+                let j_3: FPT = 64 * SSMath.pow1(lambda, two) * j3_1 * j3_2
+                let j = j_1 * (j_2 + j_3)
+                let k = SSMath.pow1(SSMath.tgamma1(df_half), four)
+                let m4 = g * ((h / i) + (j / k))
+                result.kurtosis = m4 / SSMath.pow1(result.variance, two)
+            }
+            else {
+                result.kurtosis = FPT.nan
+            }
+            return result
+        }
+        
+        
+        /*  Algorithm AS 243  Lenth,R.V. (1989). Appl. Statist., Vol.38, 185-189.
+         *  ----------------
+         *  Cumulative probability at t of the non-central t-distribution
+         *  with df degrees of freedom (may be fractional) and non-centrality
+         *  parameter delta.
+         *
+         *  NOTE
+         *
+         *    Requires the following auxiliary routines:
+         *
+         *    lgammafn(x)    - log gamma function
+         *    pbeta(x, a, b)    - incomplete beta function
+         *    pnorm(x)    - normal distribution function
+         *
+         *  CONSTANTS
+         *
+         *    M_SQRT_2dPI  = 1/ {gamma(1.5) * sqrt(2)} = sqrt(2 / pi)
+         *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
+         */
+        /// Returns the cdf of the noncentral Student t distribution.
+        /// - Parameter x: x
+        /// - Parameter df: degrees of freedom
+        /// - Parameter ncp: noncentrality parameter
+        /// - Parameter tail: tail
+        /// - Parameter nSubIntervals: Number of subintervals. Possible values: 32,16,12,10,8,6,4,2. Default is set to 16.
+        /// - Returns: The tuple (cdf:, error:)
+        ///
+        /// ### NOTE ###
+        /// This functions uses an algorithm supposed by Viktor Witkovsky (witkovsky@savba.sk):
+        /// Witkovsky V. (2013). A Note on Computing Extreme Tail</p>
+        /// Probabilities of the Noncentral T Distribution with Large</p>
+        /// Noncentrality Parameter. Working Paper, Institute of Measurement</p>
+        /// Science, Slovak Academy of Sciences, Bratislava.
+        ///
+        /// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
+        /// error (in case of extreme parameters) the number of subintervals can be adjusted.
+        /// Swift Version (C) strike65 2018
+        public static func cdf<T: SSFloatingPoint & Codable>(t: T, degreesOfFreedom df: T, nonCentralityPara lambda: T, rlog: Bool! = false) throws -> T {
+            
+            var result: (cdf: T, error: T)
+            do {
+                result = try cdfNonCentralTVW(x: t, df: df, ncp: lambda, tail: .lower, nSubIntervals: 16)
+                return result.cdf
+            }
+            catch {
+                throw error
+            }
+            
+            
+        }
+        
+        /// Returns the pdf of the non-central Student's t-distribution
+        /// <img src="../img/nctpdf.png" alt="">
+        /// where H is the Hermite polynomial
+        /// - Parameter x: x
+        /// - Parameter nonCentralityPara: noncentrality parameter
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter rlog: Return log(pdf)
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT, rlog: Bool! = false) throws -> FPT {
+            var ex1: Float80
+            var ex2: Float80
+            var ex3: Float80
+            var ex4: Float80
+            var ex5: Float80
+            /* using Hermite */
+            let xx: Float80 =  Helpers.makeFP(x)
+            let dff: Float80 =  Helpers.makeFP(df)
+            let lambdaf: Float80 =  Helpers.makeFP(lambda)
+            
+            /* Mathematica */
+            ex1 = Float80.minusOne - dff
+            ex2 = -(lambdaf * xx)
+            ex3 = dff + SSMath.pow1(xx, 2)
+            ex4 = Float80.sqrt2 * sqrt(ex3)
+            ex5 = ex2 / ex4
+            let hermite: Float80 = SSSpecialFunctions.hermiteH(ny: ex1, z: ex5)
+            //    let hermite: Float80 = hermiteH(ny: -1 - dff, z: -(lambdaf * xx) / (Float80.sqrt2 * sqrt(dff + SSMath.pow1(xx, 2))))
+            let gamma: Float80 = tgammal((1.0 + dff) / 2)
+            let p1: Float80 =  powl(dff + xx * xx, 0.5 * (-1 - dff))
+            let e1: Float80 = expl(-powl(lambdaf, 2) / 2)
+            let p2: Float80 = powl(dff, (1 + dff / 2))
+            let p3: Float80 = powl(2, dff)
+            let f: Float80 = (hermite * gamma * p1 * p2 * p3 * e1) / Float80.pi
+            let result: Float80 = f
+            return  Helpers.makeFP(result)
+        }
+        
+        /// Returns the quantile function of the noncentral Student's t-distribution
+        /// - Parameter p: p
+        /// - Parameter nonCentralityPara: noncentrality parameter
+        /// - Parameter df: Degrees of freedom
+        /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT, rlog: Bool! = false) throws -> FPT {
+            let accu: FPT =  Helpers.makeFP(1E-13)
+            let eps: FPT = 10 * FPT.ulpOfOne
+            var ux, lx, nx, pp: FPT
+            if df.isNaN || p.isNaN || lambda.isNaN {
+                return FPT.nan
+            }
+            if df <= 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda.isZero {
+                do {
+                    return try SSProbDist.StudentT.quantile(p: p, degreesOfFreedom: df)
+                }
+                catch {
+                    throw error
+                }
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if let test = r_q_p01_boundaries(p: p, left: -FPT.infinity, right: FPT.infinity) {
+                return test
+            }
+            if df.isInfinite {
+                do {
+                    return try SSProbDist.Gaussian.quantile(p: p, mean: lambda, standardDeviation: 1)
+                }
+                catch {
+                    throw error
+                }
+            }
+            let p0 = r_dt_qIv(x: p, tail: .lower, log_p: rlog)
+            if p0 > (1 - FPT.ulpOfOne) {
+                return FPT.infinity
+            }
+            if p0 < FPT.leastNonzeroMagnitude {
+                return -FPT.infinity
+            }
+            func q(t:FPT, ncp: FPT, df:FPT) -> FPT {
+                do {
+                    let res: FPT = try  Helpers.makeFP(SSProbDist.StudentT.NonCentral.cdf(t: t, degreesOfFreedom: df, nonCentralityPara: ncp))
+                    return res
+                }
+                catch {
+                    return FPT.nan
+                }
+            }
+            pp = min(1 - FPT.ulpOfOne, p0 * (1 + eps))
+            ux = max(1, lambda)
+            //    var q: Double = try cdfStudentTNonCentral(t: ux, nonCentralityPara: ncp, degreesOfFreedom: df)
+            while (ux < FPT.greatestFiniteMagnitude) && (q(t: ux, ncp: lambda, df: df) < pp) {
+                ux = 2 * ux
+            }
+            
+            pp = p0 * (1 - eps)
+            
+            lx = min(-1, -lambda)
+            while ((lx > -FPT.greatestFiniteMagnitude) && (q(t: lx, ncp: lambda, df: df) > pp)) {
+                lx = 2 * lx
+            }
+            repeat {
+                nx =  Helpers.makeFP(1.0 / 2.0 ) * (lx + ux)
+                if try  Helpers.makeFP(SSProbDist.StudentT.NonCentral.cdf(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda)) > p {
+                    ux = nx
+                }
+                else {
+                    lx = nx
+                }
+            } while ((ux - lx) > accu * max(abs(lx), abs(ux)))
+            return  Helpers.makeFP(1.0 / 2.0 ) * (lx + ux)
+        }
+        
+        #endif
+        
+    }
+    
+}
 
 // matlab Witkovsky
 
-/// Returns the cdf of the noncentral Student t distribution.
-/// - Parameter x: x
-/// - Parameter df: degrees of freedom
-/// - Parameter ncp: noncentrality parameter
-/// - Parameter tail: tail
-/// - Parameter nSubIntervals: Number of subintervals. Possible values: 32,16,12,10,8,6,4,2. Default is set to 16.
-/// - Returns: The tuple (cdf:, error:)
-///
-/// ### NOTE ###
-/// This functions uses an algorithm supposed by Viktor Witkovsky (witkovsky@savba.sk):
-/// Witkovsky V. (2013). A Note on Computing Extreme Tail</p>
-/// Probabilities of the Noncentral T Distribution with Large</p>
-/// Noncentrality Parameter. Working Paper, Institute of Measurement</p>
-/// Science, Slovak Academy of Sciences, Bratislava.
-///
-/// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
-/// error (in case of extreme parameters) the number of subintervals can be adjusted.
-/// Swift Version (C) strike65 2018
-internal func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp: FPT, tail: SSCDFTail = .lower, nSubIntervals nSubs: Int = 16) throws -> (cdf: FPT, error: FPT) {
+fileprivate func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp: FPT, tail: SSCDFTail = .lower, nSubIntervals nSubs: Int = 16) throws -> (cdf: FPT, error: FPT) {
     var cdf: FPT = FPT.nan
     var cdfLower: FPT = 0
     var cdfUpper: FPT = 0
@@ -74,11 +355,11 @@ internal func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, 
     }
     if x.isZero {
         if ncp < 0 {
-            cdf = FPT.half * erfc1(-ncp / FPT.sqrt2)
+            cdf = FPT.half * SSMath.erfc1(-ncp / FPT.sqrt2)
             isLowerTail = false
         }
         else if ncp >= 0 {
-            cdf = FPT.half * erfc1(ncp / FPT.sqrt2)
+            cdf = FPT.half * SSMath.erfc1(ncp / FPT.sqrt2)
             isLowerTail = true
         }
         todo = false
@@ -188,39 +469,39 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
     var cdf: FPT = 0
     var ABC: (A: FPT, B: FPT, MOD: FPT)
     do {
-        ABC = try limits(x: makeFP(x), df: makeFP(df), ncp: makeFP(ncp), isLowerGamma: isLowerGamma, nf: nf)
+        ABC = try limits(x:  Helpers.makeFP(x), df:  Helpers.makeFP(df), ncp:  Helpers.makeFP(ncp), isLowerGamma: isLowerGamma, nf: nf)
     }
     catch {
         throw error
     }
     if !isLowerGamma {
-        cdf = cdfStandardNormalDist(u: ABC.A)
+        cdf = SSProbDist.Gaussian.Standard.cdf(u: ABC.A)
     }
     if isLowerGamma {
-        cdf = cdfStandardNormalDist(u: -ABC.B)
+        cdf = SSProbDist.Gaussian.Standard.cdf(u: -ABC.B)
     }
     var SUBS: Array<FPT> = [ABC.A, ABC.MOD, ABC.MOD, ABC.B]
     let coeffs: ( XK: [FPT], WK: [FPT], WG: [FPT], G: [Int]) = GKnodes(nsubs: nSubs)
     getSubs(subs: &SUBS, xk: coeffs.XK, subind: subind, z: &z)
     var M: Array<FPT> = Array<FPT>.init()
     var C: Array<FPT> = Array<FPT>.init()
-
+    
     let half_length: Int = SUBS.count / 2
     for i in stride(from: 0, to: half_length, by: 1) {
         M.append(FPT.half * (SUBS[i + half_length] - SUBS[i]))
         C.append(FPT.half * (SUBS[i + half_length] + SUBS[i]))
     }
     halfw = M
-    var T1: Array<FPT> = matMul(a: coeffs.XK, aCols: 1, aRows: coeffs.XK.count, b: M, bCols: M.count, bRows: 1)
-    var T2: Array<FPT> = matMul(a: Array<FPT>.init(repeating: 1, count: coeffs.XK.count), aCols: 1, aRows: coeffs.XK.count, b: C, bCols: C.count, bRows: 1)
-    let T3: Array<FPT> = matAdd(a: T1, b: T2)
+    var T1: Array<FPT> = SSMath.matMul(a: coeffs.XK, aCols: 1, aRows: coeffs.XK.count, b: M, bCols: M.count, bRows: 1)
+    var T2: Array<FPT> = SSMath.matMul(a: Array<FPT>.init(repeating: 1, count: coeffs.XK.count), aCols: 1, aRows: coeffs.XK.count, b: C, bCols: C.count, bRows: 1)
+    let T3: Array<FPT> = SSMath.matAdd(a: T1, b: T2)
     z = reshape(A: T3, aRows: coeffs.XK.count, aCols: nsub)
     let FV: Array<FPT> = function(z: z, x: x, df: df, ncp: ncp, isLowerGamma: isLowerGamma)
     var Q1: Array<FPT> = Array<FPT>.init(repeating: 0, count: nsub)
     var Q2: Array<FPT> = Array<FPT>.init(repeating: 0, count: nsub)
     let o: Array<FPT> = Array<FPT>.init(repeating: 1, count: nsub)
     var F: Array<FPT> = reshape(A: FV, aRows: halfw.count, aCols: coeffs.WK.count)
-    T1 = matMul(a: coeffs.WK, aCols: 1, aRows: nk, b: o, bCols: nsub, bRows: 1)
+    T1 = SSMath.matMul(a: coeffs.WK, aCols: 1, aRows: nk, b: o, bCols: nsub, bRows: 1)
     
     for i in stride(from: 0, to: T1.count, by: 1) {
         T1[i] *= F[i]
@@ -229,7 +510,7 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
     for i in stride(from: 0, to: S1.count, by: 1) {
         Q1[i] = halfw[i] * S1[i]
     }
-    T2 = matMul(a: coeffs.WG, aCols: 1, aRows: coeffs.WG.count, b: o, bCols: nsub, bRows: 1)
+    T2 = SSMath.matMul(a: coeffs.WG, aCols: 1, aRows: coeffs.WG.count, b: o, bCols: nsub, bRows: 1)
     F = coeffs.G.map{ F[$0] }
     for i in stride(from: 0, to: F.count, by: 1) {
         T2[i] *= F[i]
@@ -248,21 +529,23 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
 }
 
 fileprivate func function<FPT: SSFloatingPoint & Codable>(z: Array<FPT>, x: FPT, df: FPT, ncp: FPT, isLowerGamma: Bool) -> Array<FPT> {
+    var ex1: FPT
     let const: FPT = FPT.sqrt2piinv
     var FV: Array<FPT> = Array<FPT>.init(repeating: 0, count: z.count)
-    var q: Array<FPT> = (z.map { pow1($0 + ncp, 2) }).map { $0 * (df / (2 * x * x)) }
+    ex1 = df / (2 * x * x)
+    var q: Array<FPT> = (z.map { SSMath.pow1($0 + ncp, 2) }).map { $0 * ex1 }
     var dff: Array<FPT> = Array<FPT>.init(repeating: FPT.half * df, count: z.count)
     var z2: Array<FPT> = z.map{ -FPT.half * $0 * $0 }
     var c: Bool = false
     // gammainc in MATLAB is equal to the regularized Gamma function (P if isLowerGamma, or Q if !isLowerGamma
     if isLowerGamma {
         for i in stride(from: 0, to: z.count, by: 1) {
-            FV[i] = gammaNormalizedP(x: q[i], a: dff[i], converged: &c) * exp1(z2[i]) * const
+            FV[i] = SSSpecialFunctions.gammaNormalizedP(x: q[i], a: dff[i], converged: &c) * SSMath.exp1(z2[i]) * const
         }
     }
     else {
         for i in stride(from: 0, to: z.count, by: 1) {
-            FV[i] = gammaNormalizedQ(x: q[i], a: dff[i], converged: &c) * exp1(z2[i]) * const
+            FV[i] = SSSpecialFunctions.gammaNormalizedQ(x: q[i], a: dff[i], converged: &c) * SSMath.exp1(z2[i]) * const
         }
     }
     return FV
@@ -291,9 +574,9 @@ fileprivate func getSubs<FPT: SSFloatingPoint & Codable>(subs: inout Array<FPT>,
     var C: Array<FPT> = Array<FPT>.init(repeating: 0, count: 2)
     C[0] = FPT.half * (subs[2] + subs[0])
     C[1] = FPT.half * (subs[3] + subs[1])
-    let T1: Array<FPT> = matMul(a: xk, aCols: 1, aRows: xk.count, b: M, bCols: 2, bRows: 1)
-    var T2: Array<FPT> = matMul(a: Array<FPT>.init(repeating: 1, count: xk.count), aCols: 1, aRows: xk.count, b: C, bCols: 2, bRows: 1)
-    z = matAdd(a: T1, b: T2)
+    let T1: Array<FPT> = SSMath.matMul(a: xk, aCols: 1, aRows: xk.count, b: M, bCols: 2, bRows: 1)
+    var T2: Array<FPT> = SSMath.matMul(a: Array<FPT>.init(repeating: 1, count: xk.count), aCols: 1, aRows: xk.count, b: C, bCols: 2, bRows: 1)
+    z = SSMath.matAdd(a: T1, b: T2)
     T2.removeAll(keepingCapacity: true)
     for i in subind {
         T2.append(z[i])
@@ -306,7 +589,7 @@ fileprivate func getSubs<FPT: SSFloatingPoint & Codable>(subs: inout Array<FPT>,
 }
 
 
-func reshape<FPT: FloatingPoint>(A: Array<FPT>, aRows: Int, aCols: Int) -> Array<FPT> {
+fileprivate func reshape<FPT: FloatingPoint>(A: Array<FPT>, aRows: Int, aCols: Int) -> Array<FPT> {
     var C: Array<FPT> = Array<FPT>.init()
     let K: Int = aCols
     for k in stride(from: 0, to: K, by: 1) {
@@ -330,23 +613,34 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     var B: Double = 0
     var MOD: Double = 0
     var incpt: Array<Double> = [1.0,1.0,1.0]
+    var ex1: Double
+    var ex2: Double
+    var ex3: Double
+    var ex4: Double
+    var ex5: Double
+    var ex6: Double
+    var ex7: Double
     let tUpp: Double = log(1 / pow(Double.ulpOfOne, 2))
-    /* log1(1 / (1 - pow1(Double.ulpOfOne, 2))) */
+    /* SSMath.log1(1 / (1 - SSMath.pow1(Double.ulpOfOne, 2))) */
     let tLow: Double
     zUppBnd = 38.47
     tLow = 4.930380657631323424789330597969121543267e-32
     let NUminus2: Double = max(1, df - 2)
-    var ex1: Double
-    let ex2: Double = x * x + 2 * df
-    let ex3: Double = 4 * df * NUminus2
-    let ex4: Double = x * x * (ncp * ncp + 4 * NUminus2)
-    MOD = (x * sqrt(ex3 + ex4) - ncp *  ex2) / ( 2 * (x * x + df))
+    ex2 = x * x + 2 * df
+    ex3 = 4 * df * NUminus2
+    ex4 = x * x * (ncp * ncp + 4 * NUminus2)
+    ex5 = x * sqrt(ex3 + ex4)
+    ex6 = ex5 - ncp * ex2
+    ex1 = x * x
+    ex7 = 2 * (ex1 + df)
+    MOD = ex6 / ex7
+    //    MOD = (x * sqrt(ex3 + ex4) - ncp *  ex2) / ( 2 * (x * x + df))
     let dZ: Double = min(Double.half * abs(MOD + ncp), 0.01)
     var dMOD: Array<Double> = Array<Double>.init(arrayLiteral: -dZ, 0, dZ).map { $0 + MOD }
     var q : Array<Double> = dMOD.map { (df * ($0 + ncp)) * (($0 + ncp) / (x * x)) }
     var logfMOD: Array<Double> = Array<Double>.init()
     for i in stride(from: 0, through: 2, by: 1) {
-        ex1 = const + 0.5 * (NUminus2 * log1(q[i] / df) + df - q[i] - dMOD[i] * dMOD[i])
+        ex1 = const + 0.5 * (NUminus2 * SSMath.log1(q[i] / df) + df - q[i] - dMOD[i] * dMOD[i])
         logfMOD.append(ex1)
     }
     let logAbsTolBnd: Double = logfMOD[1] + logRelTolBnd
@@ -377,7 +671,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
         }
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-
+        
     }
     let D: Double = sqrt(abc[1] * abc[1] - 4 * abc[0] * (abc[2] - logAbsTolBnd))
     let C: Double = 2.0 * abc[0]
@@ -391,7 +685,17 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     var A1: Double
     if isLowerGamma {
         if df > 0 {
-            QuantUpp = df + 2 * tUpp + 1.62 * sqrt(df * tUpp) + 0.63012 * sqrt(df) * log(tUpp) - 1.12032 * sqrt(df) - 2.48 * sqrt(tUpp) - 0.65381 * log(tUpp) - 0.22872
+            ex1 = df
+            ex2 = ex1 + 2 * tUpp
+            ex3 = ex2 + 1.62 * sqrt(df * tUpp)
+            let ex41: Double = 0.63012 * sqrt(df)
+            let ex42: Double = ex41 * log(tUpp)
+            ex4 = ex3 + ex42
+            ex5 = ex4 - 1.12032 * sqrt(df)
+            ex6 = ex5 - 2.48 * sqrt(tUpp)
+            ex7 = ex6 - 0.65381 * log(tUpp)
+            QuantUpp = ex7 - 0.22872
+            //            QuantUpp = df + 2 * tUpp + 1.62 * sqrt(df * tUpp) + 0.63012 * sqrt(df) * log(tUpp) - 1.12032 * sqrt(df) - 2.48 * sqrt(tUpp) - 0.65381 * log(tUpp) - 0.22872
         }
         else {
             QuantUpp = 6.739648382445014e+01
@@ -405,7 +709,15 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     }
     else {
         if df > 1 {
-            QuantLow = df + 2 * tLow + 1.62 * sqrt(df * tLow) + 0.63012 * sqrt(df) * log(tLow) - 1.12032 * sqrt(df) - 2.48 * sqrt(tLow) - 0.65381 * log(tLow) - 0.22872
+            ex1 = df
+            ex2 = ex1 + 2 * tLow
+            ex3 = ex2 + 1.62 * sqrt(df * tLow)
+            ex4 = ex3 + 0.63012 * sqrt(df) * log(tLow)
+            ex5 = ex4 - 1.12032 * sqrt(df)
+            ex6 = ex5 - 2.48 * sqrt(tLow)
+            ex7 = ex6 - 0.65381 * log(tLow)
+            QuantLow = ex7 - 0.22872
+            //            QuantLow = df + 2 * tLow + 1.62 * sqrt(df * tLow) + 0.63012 * sqrt(df) * log(tLow) - 1.12032 * sqrt(df) - 2.48 * sqrt(tLow) - 0.65381 * log(tLow) - 0.22872
             QuantLow = max(0, QuantLow)
         }
         else {
@@ -420,7 +732,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
         }
         B = B0
     }
-    return (makeFP(A), makeFP(B), makeFP(MOD))
+    return ( Helpers.makeFP(A),  Helpers.makeFP(B),  Helpers.makeFP(MOD))
 }
 
 fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Array<FPT>, WK: Array<FPT>, WG: Array<FPT>, G: [Int]) {
@@ -471,7 +783,7 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
         0.2797053914892766679014677714237795824869250652266,
         0.12948496616886969327061143267908201832858740225995
     ]
-//    let g: Array<Int> = [2,4,6,8,10,12,14]
+    //    let g: Array<Int> = [2,4,6,8,10,12,14]
     let nodesf: Array<Float> = [
         -0.99145537112081263920685469752632851664204433837034,
         -0.94910791234275852452618968404785126240077093767062,
@@ -519,9 +831,11 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
         0.2797053914892766679014677714237795824869250652266,
         0.12948496616886969327061143267908201832858740225995
     ]
-//    let gf: Array<Int> = [2,4,6,8,10,12,14]
-
+    //    let gf: Array<Int> = [2,4,6,8,10,12,14]
+    
+    
     #if arch(i386) || arch(x86_64)
+    
     let nodesl: Array<Float80> = [
         -0.99145537112081263920685469752632851664204433837034,
         -0.94910791234275852452618968404785126240077093767062,
@@ -539,6 +853,7 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
         0.94910791234275852452618968404785126240077093767062,
         0.99145537112081263920685469752632851664204433837034
     ]
+    
     let wtl: Array<Float80> = [
         0.022935322010529224963732008058969591993560811275747,
         0.06309209262997855329070066318920428666507115721155,
@@ -591,4 +906,71 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
     }
 }
 
+
+//        private static func integrand<FPT: SSFloatingPoint & Codable>(t: FPT, df: FPT, ncp: FPT, p0: FPT, p1: FPT) -> FPT {
+//            return try! pdfStudentTDist(x: t, degreesOfFreedom: df, nonCentralityPara: ncp )
+//        }
+//
+//
+
+//        fileprivate static func infSum<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, lambda: FPT, epsilon: FPT = FPT.ulpOfOne, maxiter: Int = 1000) -> FPT {
+//            var xx: Float80 =  Helpers.makeFP(x)
+//            var dff: Float80 =  Helpers.makeFP(df)
+//            var sum: Float80 = 0
+//            var del: Float80 =  Helpers.makeFP(lambda)
+//            var eps: Float80 =  Helpers.makeFP(epsilon)
+//            if xx < 0 {
+//                del = -del
+//            }
+//            let y: Float80 = SSMath.pow1(xx,2) / (SSMath.pow1(xx,2) + dff)
+//            let la_sq_div_2: Float80 = SSMath.pow1(del, 2) / 2
+//            let f1: Float80 = SSMath.exp1(-la_sq_div_2)
+//
+//            func p(j: Int) -> Float80 {
+//                let f: Float80 = -SSMath.logFactorial(j) - la_sq_div_2 +  Helpers.makeFP(j) * SSMath.log1(la_sq_div_2)
+//                return SSMath.exp1(f)
+//            }
+//            func q(j: Int) -> Float80 {
+//                let f: Float80 = del / (Float80.sqrt2 * SSMath.tgamma1( Helpers.makeFP(j) + 1.5))
+//                let f2: Float80 = SSMath.exp1(-la_sq_div_2) * SSMath.pow1(la_sq_div_2,  Helpers.makeFP(j))
+//                return f * f2
+//            }
+//            var iBeta1: Float80 = 0
+//            var iBeta2: Float80 = 0
+//            var s1: Float80 = 0
+//            var s2: Float80 = 0
+//            var j: Int = 0
+//            var a1: Float80 = 0
+//            var a2: Float80 = 0
+//            let df_half: Float80 = dff / 2
+//            var jf: Float80
+//            var temp: Float80 = 0
+//            var pp: Float80 = 0
+//            var qq: Float80 = 0
+//            while (j <= maxiter) {
+//                jf =  Helpers.makeFP(j)
+//                a1 = jf + 0.5
+//                a2 = jf + 1
+//                iBeta1 = SSSpecialFunctions.betaNormalized(x: y, a: a1, b: df_half)
+//                pp = p(j: j)
+//                s1 = pp * iBeta1
+//                iBeta2 = SSSpecialFunctions.betaNormalized(x: y, a: a2, b: df_half)
+//                qq = q(j: j)
+//                s2 = qq * iBeta2
+//                temp = s1 + s2
+//                if temp <= eps && j > 20 || temp.isNaN{
+//                    break
+//                }
+//                sum += temp
+//                j += 1
+//            }
+//            let u: Float80 = SSProbDist.Gaussian.Standard.cdf(u: -del)
+//            let result: Float80 = u + 0.5 * sum
+//            if xx < 0 {
+//                return  Helpers.makeFP(1 - result)
+//            }
+//            else {
+//                return  Helpers.makeFP(result)
+//            }
+//        }
 

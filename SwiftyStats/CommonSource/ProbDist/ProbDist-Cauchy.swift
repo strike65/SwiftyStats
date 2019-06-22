@@ -26,106 +26,123 @@ import Foundation
 #if os(macOS) || os(iOS)
 import os.log
 #endif
-
-// MARK: Cauchy
-/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
-/// - Parameter a: Location parameter a
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func paraCauchyDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+extension SSProbDist {
+    enum Cauchy {
+        // MARK: Cauchy
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
+        /// - Parameter a: Location parameter a
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            return SSContProbDistParams()
         }
         
-        #endif
+        /// Returns the pdf of the Cauchy distribution.
+        /// - Parameter x: x
+        /// - Parameter a: Location parameter a
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let p = (x - a) / b
+            let result = FPT.pi * b * (1 + (p * p))
+            //    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
+            return 1 / result
+        }
         
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        /// Returns the cdf of the Cauchy distribution.
+        /// - Parameter x: x
+        /// - Parameter a: Location parameter a
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            ex1 = FPT.half
+            ex2 = (x - a) / b
+            ex3 = FPT.oopi * SSMath.atan1(ex2)
+            let result = ex1 + ex3
+            //    let result =  Helpers.makeFP(1.0 / 2.0 ) + 1 / FPT.pi * SSMath.atan1((x - a) / b)
+            return result
+        }
+        
+        /// Returns the pdf of the Cauchy distribution.
+        /// - Parameter x: x
+        /// - Parameter a: Location parameter a
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, location a: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0 and <= 1.0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p.isZero {
+                return -FPT.infinity
+            }
+            if abs(p - 1) < FPT.ulpOfOne {
+                return FPT.infinity
+            }
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            ex1 = -FPT.half + p
+            ex2 = ex1 * FPT.pi
+            ex3 = b * SSMath.tan1(ex2)
+            let result = a + ex3
+            //    let result = a + b * tan1((- Helpers.makeFP(1.0 / 2.0 ) + p) * FPT.pi)
+            return result
+        }
+        
     }
-    return SSContProbDistParams()
 }
-
-/// Returns the pdf of the Cauchy distribution.
-/// - Parameter x: x
-/// - Parameter a: Location parameter a
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfCauchyDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let p = (x - a) / b
-    let result = FPT.pi * b * (1 + (p * p))
-//    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
-    return 1 / result
-}
-
-/// Returns the cdf of the Cauchy distribution.
-/// - Parameter x: x
-/// - Parameter a: Location parameter a
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfCauchyDist<FPT: SSFloatingPoint & Codable>(x: FPT, location a: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result = makeFP(1.0 / 2.0 ) + 1 / FPT.pi * atan1((x - a) / b)
-    return result
-}
-
-/// Returns the pdf of the Cauchy distribution.
-/// - Parameter x: x
-/// - Parameter a: Location parameter a
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)
-public func quantileCauchyDist<FPT: SSFloatingPoint & Codable>(p: FPT, location a: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("shape parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p < 0 || p > 1 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("p is expected to be >= 0 and <= 1.0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p.isZero {
-        return -FPT.infinity
-    }
-    if abs(p - 1) < FPT.ulpOfOne {
-        return FPT.infinity
-    }
-    let result = a + b * tan1((-makeFP(1.0 / 2.0 ) + p) * FPT.pi)
-    return result
-}
-

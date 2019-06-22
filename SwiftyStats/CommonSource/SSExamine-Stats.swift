@@ -44,9 +44,9 @@ extension SSExamine {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
-                temp = makeFP(item)
+                temp =  Helpers.makeFP(item)
                 if !temp.isNaN {
-                    s = s + pow1(temp , 2) * makeFP(freq)
+                    s = s + SSMath.pow1(temp , 2) *  Helpers.makeFP(freq)
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
@@ -66,9 +66,9 @@ extension SSExamine {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
-                temp = makeFP(item)
+                temp =  Helpers.makeFP(item)
                 if !temp.isNaN {
-                    s = s + pow1(temp, p) * makeFP(freq)
+                    s = s + SSMath.pow1(temp, p) *  Helpers.makeFP(freq)
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
@@ -87,9 +87,9 @@ extension SSExamine {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
-                temp = makeFP(item)
+                temp =  Helpers.makeFP(item)
                 if !temp.isNaN {
-                    s = s + temp * makeFP(freq)
+                    s = s + temp *  Helpers.makeFP(freq)
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
@@ -108,10 +108,10 @@ extension SSExamine {
             var s: FPT = 0
             var temp: FPT
             for (item, freq) in self.elements {
-                temp = makeFP(item)
+                temp =  Helpers.makeFP(item)
                 if !temp.isNaN {
                     if !temp.isZero {
-                        s = s + (1 / temp) * makeFP(freq)
+                        s = s + (1 / temp) *  Helpers.makeFP(freq)
                     }
                     else {
                         return FPT.infinity
@@ -140,10 +140,10 @@ extension SSExamine {
             var temp: FPT
             if let m = value {
                 for (item, freq) in self.elements {
-                    temp = makeFP(item)
+                    temp =  Helpers.makeFP(item)
                     if !temp.isNaN {
                         diff = temp - m
-                        sum = sum + diff * diff * makeFP(freq)
+                        sum = sum + diff * diff *  Helpers.makeFP(freq)
                     }
                     else {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
@@ -154,10 +154,10 @@ extension SSExamine {
             else {
                 let m = self.arithmeticMean!
                 for (item, freq) in self.elements {
-                    temp = makeFP(item)
+                    temp =  Helpers.makeFP(item)
                     if !temp.isNaN {
                         diff = temp - m
-                        sum = sum + diff * diff * makeFP(freq)
+                        sum = sum + diff * diff *  Helpers.makeFP(freq)
                     }
                     else {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
@@ -184,7 +184,7 @@ extension SSExamine {
             else {
                 currMean = FPT.zero
             }
-            let n = makeFP(self.sampleSize) + FPT.one
+            let n =  Helpers.makeFP(self.sampleSize) + FPT.one
             let newMean = currMean + (x - currMean) / n
             aMean = newMean
         }
@@ -194,7 +194,7 @@ extension SSExamine {
     /// Arithemtic mean. Will be Double.nan for non-numeric data.
     public var arithmeticMean: FPT? {
         if isNotEmptyAndNumeric {
-            return self.total! / makeFP(self.sampleSize)
+            return self.total! /  Helpers.makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -278,15 +278,15 @@ extension SSExamine {
         }
         var result: FPT = 0
         if !isEmpty && self.sampleSize >= 2 {
-            let k: FPT = makeFP(self.sampleSize) * q
+            let k: FPT =  Helpers.makeFP(self.sampleSize) * q
             var a = self.elementsAsArray(sortOrder: .ascending)!
             var temp3: SSElement
-            if isInteger(k) {
-                temp3 = a[integerValue(k) - 1]
-                let temp1: FPT = makeFP(temp3)
+            if Helpers.isInteger(k) {
+                temp3 = a [Helpers.integerValue(k) - 1]
+                let temp1: FPT =  Helpers.makeFP(temp3)
                 if !temp1.isNaN {
-                    temp3 = a[integerValue(k)]
-                    let temp2: FPT = makeFP(temp3)
+                    temp3 = a [Helpers.integerValue(k)]
+                    let temp2: FPT =  Helpers.makeFP(temp3)
                     if !temp2.isNaN {
                         result = (temp1 + temp2) / 2
                     }
@@ -299,8 +299,8 @@ extension SSExamine {
                 }
             }
             else {
-                temp3 = a[integerValue(ceil(k - FPT.one))]
-                let temp1: FPT = makeFP(temp3)
+                temp3 = a [Helpers.integerValue(ceil(k - FPT.one))]
+                let temp1: FPT =  Helpers.makeFP(temp3)
                 if !temp1.isNaN {
                     result = temp1
                 }
@@ -321,8 +321,8 @@ extension SSExamine {
             if isNotEmptyAndNumeric {
                 var res = SSQuartile<FPT>()
                 do {
-                    res.q25 = try self.quantile(q: makeFP(0.25))!
-                    res.q75 = try self.quantile(q: makeFP(0.75))!
+                    res.q25 = try self.quantile(q:  Helpers.makeFP(0.25))!
+                    res.q75 = try self.quantile(q:  Helpers.makeFP(0.75))!
                     res.q50 = try self.quantile(q: FPT.half)!
                 }
                 catch {
@@ -341,8 +341,8 @@ extension SSExamine {
         get {
             if isNotEmptyAndNumeric {
                 let a: FPT = self.logProduct!
-                let b: FPT = makeFP(self.sampleSize)
-                let c: FPT = exp1(a / b)
+                let b: FPT =  Helpers.makeFP(self.sampleSize)
+                let c: FPT = SSMath.exp1(a / b)
                 return c
             }
             else {
@@ -355,7 +355,7 @@ extension SSExamine {
     public var harmonicMean: FPT? {
         get {
             if isNotEmptyAndNumeric {
-                return makeFP(self.sampleSize) / self.inverseTotal!
+                return  Helpers.makeFP(self.sampleSize) / self.inverseTotal!
             }
             else {
                 return nil
@@ -368,7 +368,7 @@ extension SSExamine {
     public var contraHarmonicMean: FPT? {
         if isNotEmptyAndNumeric {
             let st: FPT = self.squareTotal
-            let sqM: FPT = st / makeFP(self.sampleSize)
+            let sqM: FPT = st /  Helpers.makeFP(self.sampleSize)
             let m = self.arithmeticMean!
             if !m.isZero {
                 return sqM / m
@@ -391,8 +391,8 @@ extension SSExamine {
         }
         if isNotEmptyAndNumeric {
             if let sum: FPT = self.poweredTotal(power: order) {
-                let n: FPT = makeFP(self.sampleSize)
-                let result: FPT = pow1(sum / n, 1 / order)
+                let n: FPT =  Helpers.makeFP(self.sampleSize)
+                let result: FPT = SSMath.pow1(sum / n, 1 / order)
                 return result
             }
             else {
@@ -408,7 +408,7 @@ extension SSExamine {
     /// - Parameter alpha: Fraction to drop
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func trimmedMean(alpha: FPT) throws -> FPT? {
-        if alpha <= 0 || alpha >= makeFP(0.5 ) {
+        if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -422,11 +422,11 @@ extension SSExamine {
         if isNotEmptyAndNumeric {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
-            let v: FPT = floor(makeFP(l) * alpha)
+            let v: FPT = floor( Helpers.makeFP(l) * alpha)
             var s: FPT = 0
             var k: FPT = 0
-            for i in integerValue(v)...l - integerValue(v) - 1  {
-                let temp: FPT = makeFP(a[i])
+            for i in Helpers.integerValue(v)...l - Helpers.integerValue(v) - 1  {
+                let temp: FPT =  Helpers.makeFP(a[i])
                 if !temp.isNaN  {
                     s = s + temp
                     k = k + 1
@@ -446,7 +446,7 @@ extension SSExamine {
     /// - Parameter alpha: Fraction
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func winsorizedMean(alpha: FPT) throws -> FPT? {
-        if alpha <= 0 || alpha >= makeFP(0.5 ) {
+        if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -460,11 +460,11 @@ extension SSExamine {
         if isNotEmptyAndNumeric {
             let a = self.elementsAsArray(sortOrder: .ascending)!
             let l = a.count
-            let ll: FPT = makeFP(l)
-            let v: FPT = floor(makeFP(l) * alpha)
+            let ll: FPT =  Helpers.makeFP(l)
+            let v: FPT = floor( Helpers.makeFP(l) * alpha)
             var s: FPT = 0
-            for i in integerValue(v)...l - integerValue(v) - 1  {
-                let temp: FPT = makeFP(a[i])
+            for i in Helpers.integerValue(v)...l - Helpers.integerValue(v) - 1  {
+                let temp: FPT =  Helpers.makeFP(a[i])
                 if !temp.isNaN {
                     s = s + temp
                 }
@@ -472,15 +472,15 @@ extension SSExamine {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
-            let temp: FPT = makeFP(a[integerValue(v)])
-            let temp1: FPT = makeFP(a[integerValue(ll - integerPart(v) - 1)])
+            let temp: FPT =  Helpers.makeFP(a [Helpers.integerValue(v)])
+            let temp1: FPT =  Helpers.makeFP(a [Helpers.integerValue(ll - Helpers.integerPart(v) - 1)])
             if !temp.isNaN && !temp1.isNaN {
                 s = s + v * (temp + temp1)
             }
             else {
                 fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
-            return s / makeFP(self.sampleSize)
+            return s /  Helpers.makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -495,10 +495,10 @@ extension SSExamine {
                 return nil
             }
             else {
-                let q_13: FPT? = try! self.quantile(q: makeFP(1.0 / 3.0 ))
+                let q_13: FPT? = try! self.quantile(q:  Helpers.makeFP(1.0 / 3.0 ))
                 let q_5: FPT? = self.median
-                let q_23: FPT? = try! self.quantile(q: makeFP(2.0 / 3.0 ))
-                return makeFP(0.3 ) * q_13! + makeFP(0.4 ) * q_5! + makeFP(0.3 ) * q_23!
+                let q_23: FPT? = try! self.quantile(q:  Helpers.makeFP(2.0 / 3.0 ))
+                return  Helpers.makeFP(0.3 ) * q_13! +  Helpers.makeFP(0.4 ) * q_5! +  Helpers.makeFP(0.3 ) * q_23!
             }
         }
     }
@@ -530,13 +530,13 @@ extension SSExamine {
         if isNotEmptyAndNumeric {
             var p: FPT = 1
             for (item, freq) in self.elements {
-                let temp: FPT = makeFP(item)
+                let temp: FPT =  Helpers.makeFP(item)
                 if !temp.isNaN {
                     if temp.isZero {
                         return 0
                     }
                     else {
-                        p = p * pow1(temp, makeFP(freq))
+                        p = p * SSMath.pow1(temp,  Helpers.makeFP(freq))
                     }
                 }
                 else {
@@ -555,10 +555,10 @@ extension SSExamine {
         var sp : FPT = 0
         if isNotEmptyAndNumeric {
             for (item, freq) in self.elements {
-                let temp: FPT = makeFP(item)
+                let temp: FPT =  Helpers.makeFP(item)
                 if !temp.isNaN {
                     if temp > 0 {
-                        sp = sp + log1(temp) * makeFP(freq)
+                        sp = sp + SSMath.log1(temp) *  Helpers.makeFP(freq)
                     }
                     else if temp.isZero {
                         return -FPT.infinity
@@ -610,8 +610,8 @@ extension SSExamine {
     public var range: FPT? {
         get {
             if isNotEmptyAndNumeric {
-                let tempMax: FPT = makeFP(self.maximum)
-                let tempMin: FPT = makeFP(self.minimum)
+                let tempMax: FPT =  Helpers.makeFP(self.maximum)
+                let tempMin: FPT =  Helpers.makeFP(self.minimum)
                 if !tempMax.isNaN && !tempMin.isNaN {
                     return tempMax - tempMin
                 }
@@ -649,8 +649,8 @@ extension SSExamine {
     /// Returns the mid-range
     public var midRange: FPT? {
         if isNotEmptyAndNumeric {
-            let tempMax: FPT = makeFP(self.maximum)
-            let tempMin: FPT = makeFP(self.minimum)
+            let tempMax: FPT =  Helpers.makeFP(self.maximum)
+            let tempMin: FPT =  Helpers.makeFP(self.minimum)
             if !tempMax.isNaN && !tempMin.isNaN {
                 return (tempMax + tempMin) / 2
             }
@@ -669,7 +669,7 @@ extension SSExamine {
         get {
             if isNotEmptyAndNumeric {
                 do {
-                    return try interquantileRange(lowerQuantile: makeFP(0.25), upperQuantile: makeFP(0.75))!
+                    return try interquantileRange(lowerQuantile:  Helpers.makeFP(0.25), upperQuantile:  Helpers.makeFP(0.75))!
                 }
                 catch {
                     return nil
@@ -739,16 +739,16 @@ extension SSExamine {
                 var diff: FPT = 0
                 var sum: FPT = 0
                 for (item, freq) in self.elements {
-                    let temp: FPT = makeFP(item)
+                    let temp: FPT =  Helpers.makeFP(item)
                     if !temp.isNaN {
                         diff = temp - m
-                        sum = sum + diff * diff * makeFP(freq)
+                        sum = sum + diff * diff *  Helpers.makeFP(freq)
                     }
                     else {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
-                return sum / makeFP(self.sampleSize - 1)
+                return sum /  Helpers.makeFP(self.sampleSize - 1)
             }
             else {
                 return nil
@@ -774,7 +774,7 @@ extension SSExamine {
     public var standardError: FPT? {
         if isNotEmptyAndNumeric {
             if let sd = self.standardDeviation(type: .unbiased) {
-                return sd / makeFP(self.sampleSize)
+                return sd /  Helpers.makeFP(self.sampleSize)
             }
             else {
                 return nil
@@ -791,7 +791,7 @@ extension SSExamine {
         if !isEmpty {
             var s: FPT = 0
             for item in self.uniqueElements(sortOrder: .none)! {
-                s += self.rFrequency(item) * log21(self.rFrequency(item))
+                s += self.rFrequency(item) * SSMath.log21(self.rFrequency(item))
             }
             return -s
         }
@@ -803,7 +803,7 @@ extension SSExamine {
     /// Returns the relative entropy of the sample. Defined only for nominal or ordinal data
     public var relativeEntropy: FPT? {
         if let e = self.entropy {
-            return e / log21(makeFP(self.sampleSize))
+            return e / SSMath.log21( Helpers.makeFP(self.sampleSize))
         }
         else {
             return nil
@@ -817,7 +817,7 @@ extension SSExamine {
             var p: FPT = 0
             if let tot = self.total {
                 for item in self.elementsAsArray(sortOrder: .raw)! {
-                    let x: FPT = makeFP(item)
+                    let x: FPT =  Helpers.makeFP(item)
                     if !x.isNaN {
                         p = x / tot
                         s += p * p
@@ -855,18 +855,18 @@ extension SSExamine {
             }
             let sorted = self.elementsAsArray(sortOrder: .ascending)!
             var s: FPT = 0
-            let N: FPT = makeFP(self.sampleSize)
+            let N: FPT =  Helpers.makeFP(self.sampleSize)
             let m = self.arithmeticMean!
             for i in 1...self.sampleSize {
-                let x: FPT = makeFP(sorted[i - 1])
+                let x: FPT =  Helpers.makeFP(sorted[i - 1])
                 if !x.isNaN {
-                    s = s + (2 * makeFP(i) - N - 1) * x
+                    s = s + (2 *  Helpers.makeFP(i) - N - 1) * x
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
-            return s / (pow1(N, 2) * m)
+            return s / (SSMath.pow1(N, 2) * m)
         }
         else {
             return nil
@@ -877,7 +877,7 @@ extension SSExamine {
     public var giniNorm: FPT? {
         get {
             if let g = self.gini {
-                let N: FPT = makeFP(self.sampleSize)
+                let N: FPT =  Helpers.makeFP(self.sampleSize)
                 return g * N / (N - 1)
             }
             else {
@@ -893,7 +893,7 @@ extension SSExamine {
                 let a = self.elementsAsArray(sortOrder: .descending)!
                 var sum: FPT = 0
                 for i in 0..<g {
-                    let x: FPT = makeFP(a[i])
+                    let x: FPT =  Helpers.makeFP(a[i])
                     if !x.isNaN {
                         sum = sum + x
                     }
@@ -928,9 +928,9 @@ extension SSExamine {
             var u: FPT
             do {
                 let m = self.arithmeticMean!
-                let pp: FPT = makeFP(alpha)
-                u = try quantileStandardNormalDist(p: 1 - ( pp / 2))
-                let n: FPT = makeFP(self.sampleSize)
+                let pp: FPT =  Helpers.makeFP(alpha)
+                u = try SSProbDist.Gaussian.Standard.quantile(p: 1 - ( pp / 2))
+                let n: FPT =  Helpers.makeFP(self.sampleSize)
                 t1 = sd / n.squareRoot()
                 width = u * t1
                 upper = m + width
@@ -965,12 +965,12 @@ extension SSExamine {
             m = self.arithmeticMean!
             if let s = self.standardDeviation(type: .unbiased) {
                 do {
-                    u = try quantileStudentTDist(p: makeFP(1) - a / 2 , degreesOfFreedom: makeFP(self.sampleSize - 1))
+                    u = try SSProbDist.StudentT.quantile(p:  Helpers.makeFP(1) - a / 2 , degreesOfFreedom:  Helpers.makeFP(self.sampleSize - 1))
                 }
                 catch {
                     return nil
                 }
-                let n: FPT = makeFP(self.sampleSize)
+                let n: FPT =  Helpers.makeFP(self.sampleSize)
                 lower = m - u * s / n.squareRoot()
                 upper = m + u * s / n.squareRoot()
                 width = u * s / n.squareRoot()
@@ -992,7 +992,7 @@ extension SSExamine {
     /// Returns the 0.95-confidence interval of the mean using Student's T distribution.
     public var meanCI: SSConfIntv<FPT>? {
         get {
-            return self.studentTCI(alpha: makeFP(0.05))
+            return self.studentTCI(alpha:  Helpers.makeFP(0.05))
         }
     }
     
@@ -1048,7 +1048,7 @@ extension SSExamine {
         let values = self.elementsAsArray(sortOrder: .ascending)!
         let result: FPT
         for item in values  {
-            let t1: FPT = makeFP(item)
+            let t1: FPT =  Helpers.makeFP(item)
             if !t1.isNaN {
                 diffArray.append(abs(t1 - rp))
             }else {
@@ -1056,20 +1056,20 @@ extension SSExamine {
             }
         }
         let sortedDifferences = diffArray.sorted(by: {$0 < $1})
-        let k: FPT = makeFP(sortedDifferences.count) * makeFP(0.5 )
-        if isInteger(k) {
-            result = (sortedDifferences[integerValue(k - 1)] + sortedDifferences[integerValue(k)]) / 2
+        let k: FPT =  Helpers.makeFP(sortedDifferences.count) *  Helpers.makeFP(0.5 )
+        if Helpers.isInteger(k) {
+            result = (sortedDifferences [Helpers.integerValue(k - 1)] + sortedDifferences [Helpers.integerValue(k)]) / 2
         }
         else {
-            result = sortedDifferences[integerValue(ceil(k - FPT.one))]
+            result = sortedDifferences [Helpers.integerValue(ceil(k - FPT.one))]
         }
         var cf:FPT
         if c != nil {
             cf = c!
         }
         else {
-            // = 1 / quantileStandardNormalDist(0.75)
-            cf = makeFP(1.482602218505601860547)
+            // = 1 / Standard.quantile(0.75)
+            cf =  Helpers.makeFP(1.482602218505601860547)
         }
         return cf * result
     }
@@ -1084,9 +1084,9 @@ extension SSExamine {
         var f1: FPT
         var c: Int = 0
         for (item, freq) in self.elements {
-            let t1: FPT = makeFP(item)
+            let t1: FPT =  Helpers.makeFP(item)
             if !t1.isNaN {
-                f1 = makeFP(freq)
+                f1 =  Helpers.makeFP(freq)
                 sum = sum + abs(t1 - rp) * f1
                 c = c + freq
             }
@@ -1094,7 +1094,7 @@ extension SSExamine {
                 fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
             }
         }
-        let cc: FPT = makeFP(c)
+        let cc: FPT =  Helpers.makeFP(c)
         return sum / cc
     }
     
@@ -1120,10 +1120,10 @@ extension SSExamine {
                 var s: FPT = 0
                 var k: FPT = 0
                 for itm in a {
-                    let t: FPT = makeFP(itm)
+                    let t: FPT =  Helpers.makeFP(itm)
                     if !t.isNaN {
                         if t < m {
-                            s = s + pow1(t - m, 2)
+                            s = s + SSMath.pow1(t - m, 2)
                             k = k + 1
                         }
                         else {
@@ -1141,10 +1141,10 @@ extension SSExamine {
                 var s: FPT = 0
                 var k: FPT = 0
                 for itm in a {
-                    let t: FPT = makeFP(itm)
+                    let t: FPT =  Helpers.makeFP(itm)
                     if !t.isNaN {
                         if t > m {
-                            s = s + pow1(t - m, 2)
+                            s = s + SSMath.pow1(t - m, 2)
                             k = k + 1
                         }
                         else {
@@ -1189,18 +1189,18 @@ extension SSExamine {
             let m = self.arithmeticMean!
             var diff: FPT = 0
             var sum: FPT = 0
-            let rr: FPT = makeFP(r)
+            let rr: FPT =  Helpers.makeFP(r)
             for (item, freq) in self.elements {
-                let t: FPT = makeFP(item)
+                let t: FPT =  Helpers.makeFP(item)
                 if !t.isNaN {
                     diff = t - m
-                    sum = sum + pow1(diff, rr) * makeFP(freq)
+                    sum = sum + SSMath.pow1(diff, rr) *  Helpers.makeFP(freq)
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
-            return sum / makeFP(self.sampleSize)
+            return sum /  Helpers.makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -1213,17 +1213,17 @@ extension SSExamine {
     fileprivate func originMoment(r: Int!) -> FPT? {
         if isNotEmptyAndNumeric {
             var sum: FPT = 0
-            let rr: FPT = makeFP(r)
+            let rr: FPT =  Helpers.makeFP(r)
             for (item, freq) in self.elements {
-                let t: FPT = makeFP(item)
+                let t: FPT =  Helpers.makeFP(item)
                 if !t.isNaN {
-                    sum = sum + pow1(t, rr) * makeFP(freq)
+                    sum = sum + SSMath.pow1(t, rr) *  Helpers.makeFP(freq)
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                 }
             }
-            return sum / makeFP(self.sampleSize)
+            return sum /  Helpers.makeFP(self.sampleSize)
         }
         else {
             return nil
@@ -1236,18 +1236,18 @@ extension SSExamine {
             var sum: FPT = 0
             let m = self.arithmeticMean!
             let sd = self.standardDeviation(type: .biased)!
-            let rr: FPT = makeFP(r)
+            let rr: FPT =  Helpers.makeFP(r)
             if !sd.isZero {
                 for (item, freq) in self.elements {
-                    let t: FPT = makeFP(item)
+                    let t: FPT =  Helpers.makeFP(item)
                     if !t.isNaN {
-                        sum = sum + pow1( ( t - m ) / sd, rr) * makeFP(freq)
+                        sum = sum + SSMath.pow1( ( t - m ) / sd, rr) *  Helpers.makeFP(freq)
                     }
                     else {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
-                return sum / makeFP(self.sampleSize)
+                return sum /  Helpers.makeFP(self.sampleSize)
             }
             else {
                 return FPT.infinity
@@ -1289,7 +1289,7 @@ extension SSExamine {
         if isNotEmptyAndNumeric {
             let m4 = moment(r: 4, type: .central)!
             let m2 = moment(r: 2, type: .central)!
-            return m4 / pow1(m2, 2) - 3
+            return m4 / SSMath.pow1(m2, 2) - 3
         }
         else {
             return nil
@@ -1333,7 +1333,7 @@ extension SSExamine {
     public var skewness: FPT? {
         if isNotEmptyAndNumeric {
             if let m3 = moment(r: 3, type: .central), let s3 = standardDeviation(type: .biased) {
-                return m3 / pow1(s3, 3)
+                return m3 / SSMath.pow1(s3, 3)
             }
             else {
                 return nil
@@ -1372,7 +1372,7 @@ extension SSExamine {
             switch testType {
             case .grubbs:
                 do {
-                    let res: SSGrubbsTestResult<SSElement, FPT> = try SSHypothesisTesting.grubbsTest(data:self, alpha: makeFP(0.05))
+                    let res: SSGrubbsTestResult<SSElement, FPT> = try SSHypothesisTesting.grubbsTest(data:self, alpha:  Helpers.makeFP(0.05))
                     return res.hasOutliers
                 }
                 catch {
@@ -1382,7 +1382,7 @@ extension SSExamine {
                 var tempArray = Array<Double>()
                 let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
                 for itm in a {
-                    let t: Double = makeFP(itm)
+                    let t: Double =  Helpers.makeFP(itm)
                     if !t.isNaN {
                         tempArray.append(t)
                     }
@@ -1417,7 +1417,7 @@ extension SSExamine {
             var tempArray = Array<Double>()
             let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
             for itm in a {
-                let temp: Double = makeFP(itm)
+                let temp: Double =  Helpers.makeFP(itm)
                 if !temp.isNaN {
                     tempArray.append(temp)
                 }
@@ -1450,7 +1450,7 @@ extension SSExamine {
         else {
             do {
                 if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: .gaussian) {
-                    return r.pValue! > makeFP(self.alpha)
+                    return r.pValue! >  Helpers.makeFP(self.alpha)
                 }
                 else {
                     return nil
@@ -1486,19 +1486,19 @@ extension SSExamine {
                 do {
                     var res: SSBoxWhisker<SSElement, FPT> = SSBoxWhisker<SSElement, FPT>()
                     res.median = self.median
-                    res.q25 = try self.quantile(q: makeFP(0.25))
-                    res.q75 = try self.quantile(q: makeFP(0.75))
+                    res.q25 = try self.quantile(q:  Helpers.makeFP(0.25))
+                    res.q75 = try self.quantile(q:  Helpers.makeFP(0.75))
                     res.iqr = self.interquartileRange
                     let a = self.elementsAsArray(sortOrder: .descending)!
                     var iqr3h: FPT
                     var iqr3t: FPT
                     var notchCoeff: FPT
-                    let N: FPT = makeFP(self.sampleSize)
+                    let N: FPT =  Helpers.makeFP(self.sampleSize)
                     if res.iqr != nil {
-                        iqr3h = makeFP(1.5 ) * res.iqr!
-                        iqr3t = makeFP(2.0 ) * iqr3h
+                        iqr3h =  Helpers.makeFP(1.5 ) * res.iqr!
+                        iqr3t =  Helpers.makeFP(2.0 ) * iqr3h
                         //                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
-                        notchCoeff = makeFP(1.58 ) * res.iqr! / sqrt(N)
+                        notchCoeff =  Helpers.makeFP(1.58 ) * res.iqr! / sqrt(N)
                     }
                     else {
                         return nil
@@ -1508,7 +1508,7 @@ extension SSExamine {
                     res.extremes = Array<SSElement>()
                     res.outliers = Array<SSElement>()
                     for i in 0..<self.sampleSize {
-                        let temp: FPT = makeFP(a[i])
+                        let temp: FPT =  Helpers.makeFP(a[i])
                         if !temp.isNaN {
                             if temp > res.q75! + iqr3t {
                                 res.outliers?.append(a[i])
@@ -1523,7 +1523,7 @@ extension SSExamine {
                         }
                     }
                     for i in stride(from: self.sampleSize - 1, through: 0, by: -1) {
-                        let temp: FPT = makeFP(a[i])
+                        let temp: FPT =  Helpers.makeFP(a[i])
                         if !temp.isNaN {
                             if temp < res.q25! - iqr3t {
                                 res.outliers?.append(a[i])

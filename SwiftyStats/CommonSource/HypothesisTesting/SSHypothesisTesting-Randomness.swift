@@ -48,8 +48,8 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.sampleSize < 2
-    public class func runsTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public static func runsTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -86,8 +86,8 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
     /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError.invalidArgument iff data.sampleSize < 2
-    public class func runsTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>!, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
+    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    public static func runsTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>!, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -161,18 +161,22 @@ extension SSHypothesisTesting {
          */
         r = RR
         dtemp = n1 + n2
-        let ex1: FPT = 2 * n2 * n1 - n1 - n2
+        /********************************************
+ COMPILES TAKES TOO LONG
+        *********************************************/
+        let ex11: FPT = 2 * n2
+        let ex1: FPT = ex11 * n1 - n1 - n2
         let ex2: FPT = 2 * n2 * n1
         let ex3: FPT = (n2 + n1 - 1)
         let sigma: FPT = sqrt((ex2 * ex1) / ((dtemp * dtemp * ex3)))
         let mean: FPT = (2 * n2 * n1) / dtemp + 1
         var z: FPT = 0
-        dtemp = makeFP(r) - mean
+        dtemp =  Helpers.makeFP(r) - mean
         let pExact: FPT = FPT.nan
         var pAsymp: FPT = 0
         var cv: FPT
         do {
-            cv = try quantileStandardNormalDist(p: 1 - alpha / 2)
+            cv = try SSProbDist.Gaussian.Standard.quantile(p: 1 - alpha / 2)
         }
         catch {
             throw error
@@ -185,12 +189,12 @@ extension SSHypothesisTesting {
         //        }
         switch alternative {
         case .twoSided:
-            pAsymp = 2 * min(cdfStandardNormalDist(u: z), 1 - cdfStandardNormalDist(u: z))
-//            pAsymp = 2.0 * cdfStandardNormalDist(u: z)
+            pAsymp = 2 * min(SSProbDist.Gaussian.Standard.cdf(u: z), 1 - SSProbDist.Gaussian.Standard.cdf(u: z))
+//            pAsymp = 2.0 * Standard.cdf(u: z)
         case .less:
-            pAsymp = cdfStandardNormalDist(u: z)
+            pAsymp = SSProbDist.Gaussian.Standard.cdf(u: z)
         case .greater:
-            pAsymp = 1 - cdfStandardNormalDist(u: z)
+            pAsymp = 1 - SSProbDist.Gaussian.Standard.cdf(u: z)
         }
         //        if pAsymp > 0.5 {
         //            pAsymp = (1.0 - pAsymp) * 2.0
@@ -205,10 +209,10 @@ extension SSHypothesisTesting {
         //                var q = 0.0
         //                while rr <= r {
         //                    q = Double(rr) / 2.0
-        //                    sum += binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0,q - 1)
+        //                    sum += SSMath.binomial2(n1 - 1.0, q - 1.0) * SSMath.binomial2(n2 - 1.0,q - 1)
         //                    rr += 1
         //                }
-        //                pExact = 2.0 * sum / binomial2((n1 + n2), n1)
+        //                pExact = 2.0 * sum / SSMath.binomial2((n1 + n2), n1)
         //            }
         //            else {
         //                var rr = 2
@@ -216,10 +220,10 @@ extension SSHypothesisTesting {
         //                var q = 0.0
         //                while rr <= r {
         //                    q = Double(rr - 1) / 2.0
-        //                    sum += (binomial2(n1 - 1.0, q) * binomial2(n2 - 1.0, q - 1) / 2.0) + binomial2(n1 - 1.0, q - 1.0) * binomial2(n2 - 1.0, q)
+        //                    sum += (SSMath.binomial2(n1 - 1.0, q) * SSMath.binomial2(n2 - 1.0, q - 1) / 2.0) + SSMath.binomial2(n1 - 1.0, q - 1.0) * SSMath.binomial2(n2 - 1.0, q)
         //                    rr += 1
         //                }
-        //                pExact = sum / binomial2((n1 + n2), n1)
+        //                pExact = sum / SSMath.binomial2((n1 + n2), n1)
         //            }
         //        }
         var result: SSRunsTestResult<FPT> = SSRunsTestResult<FPT>()

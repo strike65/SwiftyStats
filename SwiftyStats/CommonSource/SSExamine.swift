@@ -661,13 +661,13 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     public func rFrequency(_ element: SSElement) -> FPT {
         //
         if let rf = self.elements[element] {
-            return makeFP(rf) / makeFP(self.sampleSize)
+            return  Helpers.makeFP(rf) /  Helpers.makeFP(self.sampleSize)
         }
         else {
             return 0
         }
 //        if contains(element) {
-//            return makeFP(self.elements[element]!) / makeFP(self.sampleSize)
+//            return  Helpers.makeFP(self.elements[element]!) /  Helpers.makeFP(self.sampleSize)
 //        }
 //        else {
 //            return 0
@@ -712,7 +712,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             sequence[element] = tempPos
         }
 //        if self.isNotEmptyAndNumeric {
-//            updateDescriptives(withElement: makeFP(element))
+//            updateDescriptives(withElement:  Helpers.makeFP(element))
 //        }
         updateCumulativeFrequencies()
     }
@@ -974,7 +974,7 @@ extension SSExamine {
             let n = Double(self.sampleSize)
             for (item, freq) in self.elements {
                 let f: Double = Double(freq)
-                tableItem = SSFrequencyTableItem<SSElement,FPT>(withItem: item, relativeFrequency: makeFP(f) / makeFP(n), frequency: freq)
+                tableItem = SSFrequencyTableItem<SSElement,FPT>(withItem: item, relativeFrequency:  Helpers.makeFP(f) /  Helpers.makeFP(n), frequency: freq)
                 result.append(tableItem)
             }
             switch sortOrder {
@@ -1006,18 +1006,18 @@ extension SSExamine {
         switch format {
         case .eachUniqueItem:
             for fItem:SSFrequencyTableItem<SSElement,FPT> in frequencyTable {
-                cumAbsFreq = cumAbsFreq + makeFP(fItem.frequency)
+                cumAbsFreq = cumAbsFreq +  Helpers.makeFP(fItem.frequency)
                 cumRelFreq = cumRelFreq + fItem.relativeFrequency
-                for _ in (integerValue(cumAbsFreq) - fItem.frequency)...(integerValue(cumAbsFreq) - 1) {
-                    tableItem = SSCumulativeFrequencyTableItem<SSElement,FPT>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: integerValue(cumAbsFreq))
+                for _ in (Helpers.integerValue(cumAbsFreq) - fItem.frequency)...(Helpers.integerValue(cumAbsFreq) - 1) {
+                    tableItem = SSCumulativeFrequencyTableItem<SSElement,FPT>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Helpers.integerValue(cumAbsFreq))
                     result.append(tableItem)
                 }
             }
         case .eachItem:
             for fItem:SSFrequencyTableItem<SSElement, FPT> in frequencyTable {
-                cumAbsFreq = cumAbsFreq + makeFP(fItem.frequency)
+                cumAbsFreq = cumAbsFreq +  Helpers.makeFP(fItem.frequency)
                 cumRelFreq = cumRelFreq + fItem.relativeFrequency
-                tableItem = SSCumulativeFrequencyTableItem<SSElement, FPT>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: integerValue(cumAbsFreq))
+                tableItem = SSCumulativeFrequencyTableItem<SSElement, FPT>(withItem: fItem.item, cumulativeRelativeFrequency: cumRelFreq, cumulativefrequency: Helpers.integerValue(cumAbsFreq))
                 result.append(tableItem)
             }
         }

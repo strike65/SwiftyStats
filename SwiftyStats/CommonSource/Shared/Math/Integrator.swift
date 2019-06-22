@@ -40,114 +40,117 @@
 
 
 import Foundation
-/// Integrates a real function with up to three parameters. Adapted from http://www.codeproject.com/KB/recipes/FastNumericalIntegration.aspx , Implemented by John D. Cook
-/// - Parameter integrand:The function to integrate
-/// - Parameter a:                   left limit
-/// - Parameter b:                   right limit
-/// - Parameter targetError: targeted absolute error
-/// - Parameter eval:                number of evaluations needed
-/// - Parameter estError:               estimated error
-/// - Returns: integral between a and b
-///
-/// ## Notes ##
-/// The double exponential rule is based on the observation that the trapezoid rule converges
-/// very rapidly for functions on the entire real line that go to zero like exp( - exp(t) ).
-/// The change of variables x = tanh( pi sinh(t) /2) transforms an integral over [-1, 1]
-/// into an integral with integrand suited to the double exponential rule.
-///
-/// The transformed integral is infinite, but we truncate the domain of integration to [-3, 3].
-/// The limit '3' was chosen for two reasons: for t = 3, the transformed x values
-/// are nearly equal to 1 for 12 or more significant figures.  Also, for t = 3, the
-/// smallest weights are 12 orders of magnitude smaller than the largest weights; setting
-/// the cutoff larger than 3 would not have a significant impact on the integral value
-/// unless there is a strong singularity at one of the end points.
-///
-/// The change of variables x(t) is an odd function, i.e. x(-t) = -x(t), and so we need only
-/// store the positive x values.  Also, the derivative w(t) = x'(t) is even, i.e. w(-t) = w(t),
-/// and so we need only store the weights corresponding to positive values of x.
-///
-/// The integration first applies the trapezoid rule to [-3, 3] in steps of size 1.
-/// Then it subsequently cuts the step size in half each time, comparing the results.
-/// Integration stops when subsequent iterations are close enough together or the maximum
-/// integration points have been used.
-/// By cutting h in half, the previous integral can be reused; we only need evaluate the
-/// integrand at the newly added points.
-///
-/// Finally, note that we're not strictly using the trapezoid rule: we don't treat the
-/// end points differently.  This is because we assume the values at the ends of the interval
-/// hardly matter due to the rapid decay of the integrand.
-///
-/// All values below were calculated with Mathematica.
-internal func integrate<FPT: SSFloatingPoint & Codable>(integrand: (FPT, FPT, FPT, FPT, FPT) -> FPT, parameters: Array<FPT>, leftLimit a: FPT, rightLimit b: FPT, maxAbsError targetError: FPT, numberOfEvaluations eval: inout Int, estimatedError estError: inout FPT) -> FPT {
-
-    let c: FPT = makeFP(1.0 / 2.0 ) * (b - a)
-    let d: FPT = makeFP(1.0 / 2.0 ) * (a + b)
-    //    targetAbsoluteError *= c
-    let targetAbsoluteError = targetError / c
-    // Offsets to where each level's integration constants start.
-    // The last element is not a beginning but an end.
-    let offsets: [Int] = [1, 4, 7, 13, 25, 49, 97, 193, 385]
-    let numLevels: Int = offsets.count - 1
-    var newContribution: FPT = 0
-    var integral: FPT = 0
-    estError = FPT.greatestFiniteMagnitude
-    var h: FPT = 1
-    var previousDelta: FPT = FPT.greatestFiniteMagnitude
-    var currentDelta: FPT = FPT.greatestFiniteMagnitude
-    integral = integrand(c * abscissas(0) + d, parameters[0],parameters[1],parameters[2],parameters[3]) * weights(0)
-    var i: Int = offsets[0]
-    while (i < offsets[1]) {
-        integral += weights(i) * (integrand(c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]) + integrand(-c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]))
-        i += 1
-    }
-    var level: Int = 1
-    while (level != numLevels) {
-        h *= makeFP(1.0 / 2.0 )
-        newContribution = 0
-        i = offsets[level]
-        while (i != offsets[level + 1]) {
-            newContribution += weights(i) * (integrand(c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]) + integrand( -c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]))
+extension SSMath {
+    /// Integrates a real function with up to three parameters. Adapted from http://www.codeproject.com/KB/recipes/FastNumericalIntegration.aspx , Implemented by John D. Cook
+    /// - Parameter integrand:The function to integrate
+    /// - Parameter a:                   left limit
+    /// - Parameter b:                   right limit
+    /// - Parameter targetError: targeted absolute error
+    /// - Parameter eval:                number of evaluations needed
+    /// - Parameter estError:               estimated error
+    /// - Returns: integral between a and b
+    ///
+    /// ## Notes ##
+    /// The double exponential rule is based on the observation that the trapezoid rule converges
+    /// very rapidly for functions on the entire real line that go to zero like exp( - exp(t) ).
+    /// The change of variables x = tanh( pi sinh(t) /2) transforms an integral over [-1, 1]
+    /// into an integral with integrand suited to the double exponential rule.
+    ///
+    /// The transformed integral is infinite, but we truncate the domain of integration to [-3, 3].
+    /// The limit '3' was chosen for two reasons: for t = 3, the transformed x values
+    /// are nearly equal to 1 for 12 or more significant figures.  Also, for t = 3, the
+    /// smallest weights are 12 orders of magnitude smaller than the largest weights; setting
+    /// the cutoff larger than 3 would not have a significant impact on the integral value
+    /// unless there is a strong singularity at one of the end points.
+    ///
+    /// The change of variables x(t) is an odd function, i.e. x(-t) = -x(t), and so we need only
+    /// store the positive x values.  Also, the derivative w(t) = x'(t) is even, i.e. w(-t) = w(t),
+    /// and so we need only store the weights corresponding to positive values of x.
+    ///
+    /// The integration first applies the trapezoid rule to [-3, 3] in steps of size 1.
+    /// Then it subsequently cuts the step size in half each time, comparing the results.
+    /// Integration stops when subsequent iterations are close enough together or the maximum
+    /// integration points have been used.
+    /// By cutting h in half, the previous integral can be reused; we only need evaluate the
+    /// integrand at the newly added points.
+    ///
+    /// Finally, note that we're not strictly using the trapezoid rule: we don't treat the
+    /// end points differently.  This is because we assume the values at the ends of the interval
+    /// hardly matter due to the rapid decay of the integrand.
+    ///
+    /// All values below were calculated with Mathematica.
+    internal static func integrate<FPT: SSFloatingPoint & Codable>(integrand: (FPT, FPT, FPT, FPT, FPT) -> FPT, parameters: Array<FPT>, leftLimit a: FPT, rightLimit b: FPT, maxAbsError targetError: FPT, numberOfEvaluations eval: inout Int, estimatedError estError: inout FPT) -> FPT {
+        
+        let c: FPT =  Helpers.makeFP(1.0 / 2.0 ) * (b - a)
+        let d: FPT =  Helpers.makeFP(1.0 / 2.0 ) * (a + b)
+        //    targetAbsoluteError *= c
+        let targetAbsoluteError = targetError / c
+        // Offsets to where each level's integration constants start.
+        // The last element is not a beginning but an end.
+        let offsets: [Int] = [1, 4, 7, 13, 25, 49, 97, 193, 385]
+        let numLevels: Int = offsets.count - 1
+        var newContribution: FPT = 0
+        var integral: FPT = 0
+        estError = FPT.greatestFiniteMagnitude
+        var h: FPT = 1
+        var previousDelta: FPT = FPT.greatestFiniteMagnitude
+        var currentDelta: FPT = FPT.greatestFiniteMagnitude
+        integral = integrand(c * abscissas(0) + d, parameters[0],parameters[1],parameters[2],parameters[3]) * weights(0)
+        var i: Int = offsets[0]
+        while (i < offsets[1]) {
+            integral += weights(i) * (integrand(c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]) + integrand(-c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]))
             i += 1
         }
-        newContribution = newContribution * h
-        
-        // difference in consecutive integral estimates
-        previousDelta = currentDelta
-        currentDelta = abs(makeFP(1.0 / 2.0 ) * integral - newContribution)
-        integral = makeFP(1.0 / 2.0 ) * integral + newContribution
-        // Once convergence kicks in, error is approximately squared at each step.
-        // Determine whether we're in the convergent region by looking at the trend in the error.
-        if (level == 1) {
+        var level: Int = 1
+        while (level != numLevels) {
+            h *=  Helpers.makeFP(1.0 / 2.0 )
+            newContribution = 0
+            i = offsets[level]
+            while (i != offsets[level + 1]) {
+                newContribution += weights(i) * (integrand(c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]) + integrand( -c * abscissas(i) + d, parameters[0],parameters[1],parameters[2],parameters[3]))
+                i += 1
+            }
+            newContribution = newContribution * h
+            
+            // difference in consecutive integral estimates
+            previousDelta = currentDelta
+            currentDelta = abs( Helpers.makeFP(1.0 / 2.0 ) * integral - newContribution)
+            integral =  Helpers.makeFP(1.0 / 2.0 ) * integral + newContribution
+            // Once convergence kicks in, error is approximately squared at each step.
+            // Determine whether we're in the convergent region by looking at the trend in the error.
+            if (level == 1) {
+                level += 1
+                continue // previousDelta meaningless, so cannot check convergence.
+            }
+            // Exact comparison with zero is harmless here.  Could possibly be replaced with
+            // a small positive upper limit on the size of currentDelta, but determining
+            // that upper limit would be difficult.  At worse, the loop is executed more
+            // times than necessary.  But no infinite loop can result since there is
+            // an upper bound on the loop variable.
+            if currentDelta.isZero {
+                break
+            }
+            let r: FPT = SSMath.log1( currentDelta ) / SSMath.log1( previousDelta )  // previousDelta != 0 or would have been kicked out previously
+            if (r >  Helpers.makeFP(1.9 ) && r <  Helpers.makeFP(2.1 )) {
+                // If convergence theory applied perfectly, r would be 2 in the convergence region.
+                // r close to 2 is good enough. We expect the difference between this integral estimate
+                // and the next one to be roughly delta^2.
+                estError = currentDelta * currentDelta
+            }
+            else {
+                // Not in the convergence region.  Assume only that error is decreasing.
+                estError = currentDelta
+            }
+            if (estError <  Helpers.makeFP(1.0 / 10.0 ) * targetAbsoluteError) {
+                break
+            }
             level += 1
-            continue // previousDelta meaningless, so cannot check convergence.
         }
-        // Exact comparison with zero is harmless here.  Could possibly be replaced with
-        // a small positive upper limit on the size of currentDelta, but determining
-        // that upper limit would be difficult.  At worse, the loop is executed more
-        // times than necessary.  But no infinite loop can result since there is
-        // an upper bound on the loop variable.
-        if currentDelta.isZero {
-            break
-        }
-        let r: FPT = log1( currentDelta ) / log1( previousDelta )  // previousDelta != 0 or would have been kicked out previously
-        if (r > makeFP(1.9 ) && r < makeFP(2.1 )) {
-            // If convergence theory applied perfectly, r would be 2 in the convergence region.
-            // r close to 2 is good enough. We expect the difference between this integral estimate
-            // and the next one to be roughly delta^2.
-            estError = currentDelta * currentDelta
-        }
-        else {
-            // Not in the convergence region.  Assume only that error is decreasing.
-            estError = currentDelta
-        }
-        if (estError < makeFP(1.0 / 10.0 ) * targetAbsoluteError) {
-            break
-        }
-        level += 1
+        eval = 2 * i - 1
+        estError *= c
+        return c * integral
     }
-    eval = 2 * i - 1
-    estError *= c
-    return c * integral
+    
 }
 
 fileprivate func abscissas<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
@@ -293,15 +296,15 @@ fileprivate func abscissas<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     #endif
     switch FPT.self {
     case is Float.Type:
-        return makeFP(abscissasF[i]) // as! FPT
+        return  Helpers.makeFP(abscissasF[i]) // as! FPT
     case is Double.Type:
-        return makeFP(abscissasD[i]) // as! FPT
+        return  Helpers.makeFP(abscissasD[i]) // as! FPT
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return makeFP(abscissasF80[i]) // as! FPT
+        return  Helpers.makeFP(abscissasF80[i]) // as! FPT
         #endif
     default:
-        return makeFP(abscissasD[i]) // as! FPT
+        return  Helpers.makeFP(abscissasD[i]) // as! FPT
     }
 }
 
@@ -368,15 +371,16 @@ fileprivate func weights<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     #endif
     switch FPT.self {
     case is Float.Type:
-        return makeFP(weightsF[i]) // as! FPT
+        return  Helpers.makeFP(weightsF[i]) // as! FPT
     case is Double.Type:
-        return makeFP(weightsD[i]) // as! FPT
+        return  Helpers.makeFP(weightsD[i]) // as! FPT
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return makeFP(weightsF80[i]) // as! FPT
+        return  Helpers.makeFP(weightsF80[i]) // as! FPT
         #endif
     default:
-        return makeFP(weightsD[i]) // as! FPT
+        return  Helpers.makeFP(weightsD[i]) // as! FPT
     }
 
 }
+

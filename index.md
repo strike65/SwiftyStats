@@ -6,7 +6,9 @@ SwiftyStats
 
 SwiftyStats is a framework written entirely in Swift that makes intensive use of generic types. SwiftyStats contains frequently used statistical procedures. 
 
-> It is a framework that is regularly maintained and has been created out of passion rather than necessity. Therefore different programming paradigms are used. Among other things, I decided to define probability functions as "free" functions. To avoid naming conflicts, the prefix `SwiftyStats` can be used.
+> It is a framework that is regularly developed and has been created out of passion rather than necessity.
+
+Therefore different programming paradigms are used. Among other things, I decided to "simulate" namespaces system using enums. This is work in progress and will particulary break some projects. *This will make a revision necessary for some projects, for which I ask for patience.*
 
 The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS/Linux)
@@ -15,12 +17,21 @@ The attached Xcode project contains four targets:
 > * SwiftStatsCLTest (a command line demo)
 
 Each target must be built individually (i.e. no dependencies are defined)!
+# The Swift Type Checker problem
+During development there
  
 # Overview
 
 SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). This class encapsulates the data to be processed and provides descriptive statistics. In principle, an `SSExamine` instance can contain data of any kind. The available statistical indicators depend of course on the type of data.
 
-The following classes/structures/extensions are provided (among others):
+The following namespaces are provided (among others):
+
+1. SSExamine (class)
+2. SSDataFrame (Class)
+3. SSCrossTab (struct)
+4. SSHypothesisTesting (enum without cases, static functions)
+5. SSProbDist (enum without cases)
+6. 
 
 * Class [`SSDataFrame`](docs/Classes/SSDataFrame.html): `SSDateFrame` instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
 * Structure [`SSCrossTab`](docs/Structures/SSCrossTab.html): Contains a cross table in the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
@@ -294,17 +305,17 @@ Cauchy
 
 Central
 
-    paraChiSquareDist(degreesOfFreedom:)
-    pdfChiSquareDist(chi:degreesOfFreedom:)
-    cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)
-    quantileChiSquareDist(p:degreesOfFreedom:)
+    para(degreesOfFreedom:)
+    pdf(chi:degreesOfFreedom:)
+    cdf(chi:degreesOfFreedom:tail:rlog:)
+    quantile(p:degreesOfFreedom:)
 
 noncentral
 
-    paraChiSquareDist(degreesOfFreedom:lambda:)
-    pdfChiSquareDist(chi:degreesOfFreedom:lambda:)
-    cdfChiSquareDist(chi:degreesOfFreedom:lambda:)
-    quantileChiSquareDist(p:degreesOfFreedom:lambda:)
+    para(degreesOfFreedom:lambda:)
+    pdf(chi:degreesOfFreedom:lambda:)
+    cdf(chi:degreesOfFreedom:lambda:)
+    quantile(p:degreesOfFreedom:lambda:)
 
 Erlang
 

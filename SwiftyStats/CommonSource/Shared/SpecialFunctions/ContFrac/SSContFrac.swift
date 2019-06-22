@@ -62,7 +62,7 @@ internal class SSContFrac<T: SSFloatingPoint>: NSObject {
     func compute(x: T, eps: T = T.ulpOfOne, maxIter: Int, converged: UnsafeMutablePointer<Bool>!, iterations: UnsafeMutablePointer<Int>!) -> T {
         var n: Int = 1
         var hPrev: T
-        let tiny: T = makeFP(1E-50)
+        let tiny: T =  Helpers.makeFP(1E-50)
         hPrev = self.a_N(n:0, point:x)
         if (hPrev == 0) {
             hPrev = tiny
@@ -100,7 +100,7 @@ internal class SSContFrac<T: SSFloatingPoint>: NSObject {
                 converged.pointee = false;
                 return T.nan;
             }
-            if (abs(DeltaN - makeFP(1.0)) < eps) {
+            if (abs(DeltaN -  Helpers.makeFP(1.0)) < eps) {
                 converged.pointee = true;
                 iterations.pointee = n;
                 return HN;

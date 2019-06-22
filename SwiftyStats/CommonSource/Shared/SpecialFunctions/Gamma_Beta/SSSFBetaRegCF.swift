@@ -20,6 +20,7 @@
  */
 
 import Foundation
+
 /// Class to compute the cf of the beta regularized function (http://dlmf.nist.gov/8.17#i) I_x(a,b)
 internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
     
@@ -37,7 +38,7 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
     }
     /// Returns the n_th a. Will always be  one in this case
     override func a_N(n: Int, point x: T) -> T {
-        return makeFP(1.0)
+        return  Helpers.makeFP(1.0)
     }
     
     /// Returns the nt_th b used by cf
@@ -45,7 +46,7 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
         var res: T = T.nan
         var k: T
         if n % 2 == 0 {
-            k = makeFP(n) / 2
+            k =  Helpers.makeFP(n) / 2
             let expr1: T = self.b - k
             let expr2: T = k * expr1 * x
             let expr3: T = 2 * k
@@ -53,7 +54,7 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
             res = expr2 / ( expr4 * ( self.a + expr3 ) )
         }
         else {
-            k = makeFP(n - 1) / makeFP(2)
+            k =  Helpers.makeFP(n - 1) /  Helpers.makeFP(2)
             let expr1: T = ( (self.a + k) * (self.a + self.b + k) ) * x
             let expr2: T = self.a + (2 * k)
             let expr3: T = expr2 + 1

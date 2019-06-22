@@ -345,17 +345,17 @@ Cauchy
 
 Central
 
-    paraChiSquareDist(degreesOfFreedom:)
-    pdfChiSquareDist(chi:degreesOfFreedom:)
-    cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)
-    quantileChiSquareDist(p:degreesOfFreedom:)
+    para(degreesOfFreedom:)
+    pdf(chi:degreesOfFreedom:)
+    cdf(chi:degreesOfFreedom:tail:rlog:)
+    quantile(p:degreesOfFreedom:)
 
 noncentral
 
-    paraChiSquareDist(degreesOfFreedom:lambda:)
-    pdfChiSquareDist(chi:degreesOfFreedom:lambda:)
-    cdfChiSquareDist(chi:degreesOfFreedom:lambda:)
-    quantileChiSquareDist(p:degreesOfFreedom:lambda:)
+    para(degreesOfFreedom:lambda:)
+    pdf(chi:degreesOfFreedom:lambda:)
+    cdf(chi:degreesOfFreedom:lambda:)
+    quantile(p:degreesOfFreedom:lambda:)
 
 Erlang
 

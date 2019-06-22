@@ -26,130 +26,135 @@ import Foundation
 import os.log
 #endif
 
-// MARK: Logistic
-/// Returns the Logit for a given p
-/// - Parameter p: p
-/// - Throws: SSSwiftyStatsError if p <= 0 || p >= 1
-public func logit<FPT: SSFloatingPoint & Codable>(p: FPT) throws -> FPT {
-    if p <= 0 || p >= 1 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
+extension SSProbDist {
+    enum Logistic {
+        // MARK: Logistic
+        /// Returns the Logit for a given p
+        /// - Parameter p: p
+        /// - Throws: SSSwiftyStatsError if p <= 0 || p >= 1
+        public static func logit<FPT: SSFloatingPoint & Codable>(p: FPT) throws -> FPT {
+            if p <= 0 || p >= 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            return SSMath.log1p1(p / (1 - p))
         }
         
-        #endif
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Logistic distribution.
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+            if b <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            result.mean = mean
+            result.variance = SSMath.pow1(b, 2) * SSMath.pow1(FPT.pi, 2) / 3
+            result.kurtosis =  Helpers.makeFP(4.2)
+            result.skewness = 0
+            return result
+        }
         
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        /// Returns the pdf of the Logistic distribution.
+        /// - Parameter x: x
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if b <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let expr1: FPT = SSMath.exp1(-(x - mean) / b)
+            let expr2: FPT = SSMath.exp1(-(x - mean) / b)
+            let result: FPT = expr1 / (b * SSMath.pow1(1 + expr2, 2))
+            return result
+        }
+        
+        /// Returns the cdf of the Logistic distribution.
+        /// - Parameter x: x
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if b <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let result: FPT =  Helpers.makeFP(0.5 ) * (1 + SSMath.tanh1(FPT.half * (x - mean) / b))
+            return result
+        }
+        
+        /// Returns the quantile of the Logistic distribution.
+        /// - Parameter p: p
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if b <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let result: FPT
+            if p.isZero {
+                return -FPT.infinity
+            }
+            else if abs(1 - p) < FPT.ulpOfOne {
+                return FPT.infinity
+            }
+            else {
+                result = mean - b * SSMath.log1(-1 + 1 / p)
+                return result
+            }
+        }
     }
-    return log1p1(p / (1 - p))
 }
 
-/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Logistic distribution.
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func paraLogisticDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
-    if b <= 0 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
-    result.mean = mean
-    result.variance = pow1(b, 2) * pow1(FPT.pi, 2) / 3
-    result.kurtosis = makeFP(4.2)
-    result.skewness = 0
-    return result
-}
-
-/// Returns the pdf of the Logistic distribution.
-/// - Parameter x: x
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfLogisticDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if b <= 0 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let expr1: FPT = exp1(-(x - mean) / b)
-    let expr2: FPT = exp1(-(x - mean) / b)
-    let result: FPT = expr1 / (b * pow1(1 + expr2, 2))
-    return result
-}
-
-/// Returns the cdf of the Logistic distribution.
-/// - Parameter x: x
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfLogisticDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if b <= 0 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result: FPT = makeFP(0.5 ) * (1 + tanh1(FPT.half * (x - mean) / b))
-    return result
-}
-
-/// Returns the quantile of the Logistic distribution.
-/// - Parameter p: p
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-public func quantileLogisticDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if b <= 0 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p < 0 || p > 1 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result: FPT
-    if p.isZero {
-        return -FPT.infinity
-    }
-    else if abs(1 - p) < FPT.ulpOfOne {
-        return FPT.infinity
-    }
-    else {
-        result = mean - b * log1(-1 + 1 / p)
-        return result
-    }
-}

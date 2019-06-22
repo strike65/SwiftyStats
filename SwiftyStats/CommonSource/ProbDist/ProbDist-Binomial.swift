@@ -26,37 +26,43 @@ import Foundation
 import os.log
 #endif
 
-// MARK: binomial
-
-/// Returns the cdf of the Binomial Distribution
-/// - Parameter k: number of successes
-/// - Parameter n: number of trials
-/// - Parameter p0: probability fpr success
-/// - Parameter tail: .lower, .upper
-public func cdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) -> FPT {
-    var i: Int = 0
-    var lowerSum: FPT = 0
-    var upperSum: FPT = 0
-    while i <= k {
-        lowerSum += binomial2(makeFP(n), makeFP(i)) * pow1(p0, makeFP(i)) * pow1(1 - p0, makeFP(n - i))
-        i += 1
-    }
-    upperSum = 1 - lowerSum
-    switch tail {
-    case .lower:
-        return lowerSum
-    case .upper:
-        return upperSum
+extension SSProbDist {
+    enum Binomial {
+        
+        // MARK: binomial
+        
+        /// Returns the cdf of the Binomial Distribution
+        /// - Parameter k: number of successes
+        /// - Parameter n: number of trials
+        /// - Parameter p0: probability fpr success
+        /// - Parameter tail: .lower, .upper
+        public static func cdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) -> FPT {
+            var i: Int = 0
+            var lowerSum: FPT = 0
+            var upperSum: FPT = 0
+            while i <= k {
+                lowerSum += SSMath.binomial2( Helpers.makeFP(n),  Helpers.makeFP(i)) * SSMath.pow1(p0,  Helpers.makeFP(i)) * SSMath.pow1(1 - p0,  Helpers.makeFP(n - i))
+                i += 1
+            }
+            upperSum = 1 - lowerSum
+            switch tail {
+            case .lower:
+                return lowerSum
+            case .upper:
+                return upperSum
+            }
+        }
+        
+        
+        /// Returns the pdf of the Binomial Distribution
+        /// - Parameter k: number of successes
+        /// - Parameter n: number of trials
+        /// - Parameter p0: probability fpr success
+        public static func pdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) -> FPT {
+            var result: FPT
+            result = SSMath.binomial2( Helpers.makeFP(n),  Helpers.makeFP(k)) * SSMath.pow1(p0,  Helpers.makeFP(k)) * SSMath.pow1(1 - p0,  Helpers.makeFP(n - k))
+            return result
+        }
     }
 }
 
-
-/// Returns the pdf of the Binomial Distribution
-/// - Parameter k: number of successes
-/// - Parameter n: number of trials
-/// - Parameter p0: probability fpr success
-public func pdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) -> FPT {
-    var result: FPT
-    result = binomial2(makeFP(n), makeFP(k)) * pow1(p0, makeFP(k)) * pow1(1 - p0, makeFP(n - k))
-    return result
-}

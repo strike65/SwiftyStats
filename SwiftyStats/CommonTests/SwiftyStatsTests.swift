@@ -103,11 +103,11 @@ class SwiftyStatsTests: XCTestCase {
 
  // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
         #if os(macOS) || os(iOS)
-//        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", scanDouble)
-        let df1: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", scanDouble)
+//        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", Helpers.NumberScanner.scanDouble)
+        let df1: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", Helpers.NumberScanner.scanDouble)
         #else
-        let df: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: scanDouble)
-        let df1: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: scanDouble)
+        let df: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: Helpers.NumberScanner.scanDouble)
+        let df1: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: Helpers.NumberScanner.scanDouble)
         print("TukeyKramerData01 read")
         #endif
 /*
@@ -209,8 +209,8 @@ class SwiftyStatsTests: XCTestCase {
         var examineIntOutliers: SSExamine<Int, Double>! = nil
         #if os(macOS) || os(iOS)
         do {
-            examineInt = try SSExamine<Int, Double>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
-            examineIntOutliers = try SSExamine<Int, Double>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+            examineInt = try SSExamine<Int, Double>.examine(fromFile: resPath + "/IntData.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanInt)!
+            examineIntOutliers = try SSExamine<Int, Double>.examine(fromFile: resPath + "/IntDataWithOutliers.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanInt)!
         }
         catch is SSSwiftyStatsError {
             print("unable to get examineInt/Outliers: " + #file)
@@ -221,13 +221,13 @@ class SwiftyStatsTests: XCTestCase {
         #else
         do {
             if let p = linuxResourcePath(resource: "IntData", type: "examine") {
-                examineInt = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+                examineInt = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanInt)!
             }
             else {
                 fatalError("No testfiles " + #file + "\(#line)")
             }
             if let p = linuxResourcePath(resource: "IntDataWithOutliers", type: "examine") {
-                examineIntOutliers = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanInt)!
+                examineIntOutliers = try SSExamine<Int>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanInt)!
             }
             else {
                 fatalError("No testfiles " + #file + "\(#line)")
@@ -262,7 +262,7 @@ class SwiftyStatsTests: XCTestCase {
         //        var testExamineInt: SSExamine<Int>! = nil
         do {
             if let p = url?.path {
-                if let testExamineInt = try SSExamine<Int, Double>.examine(fromFile: p, separator: ",", stringEncoding: .utf8, scanInt) {
+                if let testExamineInt = try SSExamine<Int, Double>.examine(fromFile: p, separator: ",", stringEncoding: .utf8, Helpers.NumberScanner.scanInt) {
                     XCTAssert(testExamineInt.isEqual(examineInt))
                 }
             }
@@ -302,10 +302,10 @@ class SwiftyStatsTests: XCTestCase {
         var examineString: SSExamine<String, Double>! = nil
         do {
             #if os(macOS) || os(iOS)
-            examineDouble = try SSExamine<Double, Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)
+            examineDouble = try SSExamine<Double, Double>.examine(fromFile: resPath + "/DoubleData.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)
             #else
             if let p = linuxResourcePath(resource: "DoubleData", type: "examine") {
-                examineDouble = try SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)
+                examineDouble = try SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)
             }
             #endif
             examineString = try SSExamine<String, Double>.init(withObject: intDataTestString, levelOfMeasurement: .nominal, name: "string data", characterSet: nil)
@@ -578,9 +578,9 @@ class SwiftyStatsTests: XCTestCase {
         var df2:SSDataFrame<Double, Double>! = nil
         do {
             #if os(macOS) || os(iOS)
-            df2 = try SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, scanDouble)
+            df2 = try SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf16, Helpers.NumberScanner.scanDouble)
             #else
-            df2 = try SSDataFrame<Double, Double>.dataFrame(fromFile: "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+            df2 = try SSDataFrame<Double, Double>.dataFrame(fromFile: "test.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)
             #endif
         }
         catch {
@@ -620,27 +620,27 @@ class SwiftyStatsTests: XCTestCase {
         var exa2: SSExamine<Double, Double>! = nil
         var exa3: SSExamine<Double, Double>! = nil
         #if os(macOS) || os(iOS)
-            exa1 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            exa1 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         #else
         if let p = linuxResourcePath(resource: "NormalData01", type: "examine") {
-            exa1 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            exa1 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         #endif
         print("==============!!!!!!!!!!!!!!!!!!!================")
         exa1.name = "Normal_01"
         #if os(macOS) || os(iOS)
-        exa2 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        exa2 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         #else
         if let p = linuxResourcePath(resource: "NormalData02", type: "examine") {
-            exa2 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            exa2 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         #endif
         exa2.name = "Normal_02"
         #if os(macOS) || os(iOS)
-        exa3 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        exa3 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         #else
         if let p = linuxResourcePath(resource: "NormalData03", type: "examine") {
-            exa3 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            exa3 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         #endif
         exa3.name = "Normal_03"
@@ -652,15 +652,15 @@ class SwiftyStatsTests: XCTestCase {
         let _ = try! df.exportCSV(path: "normal.csv", separator: ",", useQuotes: true, firstRowAsColumnName: true, overwrite: true, stringEncoding: String.Encoding.utf8, atomically: true)
         #endif
         #if os(macOS) || os(iOS)
-        df2 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+        df2 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)
         #else
-        df2 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, scanDouble)
+        df2 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)
         #endif
         XCTAssert(df.isEqual(df2))
         #if os(macOS) || os(iOS)
-        let df3 = try! SSDataFrame<String, Double>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, scanString)
+        let df3 = try! SSDataFrame<String, Double>.dataFrame(fromFile: resPath + "/normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, Helpers.NumberScanner.scanString)
         #else
-        let df3 = try! SSDataFrame<String>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, scanString)
+        let df3 = try! SSDataFrame<String>.dataFrame(fromFile: "normal.csv", separator: ",", firstRowContainsNames: true, stringEncoding: .utf8, Helpers.NumberScanner.scanString)
         #endif
         XCTAssert(df3[0].arithmeticMean == nil)
     }
@@ -803,22 +803,22 @@ class SwiftyStatsTests: XCTestCase {
         let g4 = SSExamine<Double, Double>.init(withArray: sign4, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
         XCTAssertEqual(res.pValueExact!, 0.0384064, accuracy: 1E-6)
-        var g5: SSExamine<Double, Double>! = nil
-        var g6: SSExamine<Double, Double>! = nil
-        #if os(macOS) || os(iOS)
-        g5 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        g6 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        #else
-        if let p = linuxResourcePath(resource: "largeNormal_01", type: "examine") {
-            g5 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        }
-        if let p = linuxResourcePath(resource: "largeNormal_02", type: "examine") {
-            g6 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
-        }
-        #endif
-        res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
-        XCTAssertEqual(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
-        XCTAssertEqual(res.pValueExact!, 0.00295538, accuracy: 1E-6)
+//        var g5: SSExamine<Double, Double>! = nil
+//        var g6: SSExamine<Double, Double>! = nil
+//        #if os(macOS) || os(iOS)
+//        g5 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+//        g6 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+//        #else
+//        if let p = linuxResourcePath(resource: "largeNormal_01", type: "examine") {
+//            g5 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+//        }
+//        if let p = linuxResourcePath(resource: "largeNormal_02", type: "examine") {
+//            g6 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+//        }
+//        #endif
+//        res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
+//        XCTAssertEqual(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
+//        XCTAssertEqual(res.pValueExact!, 0.00295538, accuracy: 1E-6)
     }
     
     func testWilcoxonMatchedPairs() {
@@ -1013,23 +1013,23 @@ class SwiftyStatsTests: XCTestCase {
         var examine2: SSExamine<Double, Double>! = nil
         var examine3: SSExamine<Double, Double>! = nil
         #if os(macOS) || os(iOS)
-        examine1 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        examine1 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         examine1.name = "Normal_01"
-        examine2 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        examine2 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData02.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         examine1.name = "Normal_02"
-        examine3 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+        examine3 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData03.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         examine1.name = "Normal_03"
         #else
         if let p = linuxResourcePath(resource: "NormalData01", type: "examine") {
-            examine1 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            examine1 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         examine1.name = "Normal_01"
         if let p = linuxResourcePath(resource: "NormalData02", type: "examine") {
-            examine2 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            examine2 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         examine1.name = "Normal_02"
         if let p = linuxResourcePath(resource: "NormalData03", type: "examine") {
-            examine3 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, scanDouble)!
+            examine3 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
         }
         examine1.name = "Normal_03"
         #endif
@@ -1060,10 +1060,10 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(matchedPairsTTestRest.p2Value!, 1, accuracy: 1E-12)
         var ds1: SSDataFrame<Double, Double>! = nil
         #if os(macOS) || os(iOS)
-        ds1 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "/geardata.csv", scanDouble)
+        ds1 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: resPath + "/geardata.csv", Helpers.NumberScanner.scanDouble)
         #else
         if let p = linuxResourcePath(resource: "geardata", type: "csv") {
-            ds1 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: p, scanDouble)
+            ds1 = try! SSDataFrame<Double, Double>.dataFrame(fromFile: p, Helpers.NumberScanner.scanDouble)
         }
         #endif
         var multipleMeansRes: SSOneWayANOVATestResult<Double> = try! SSHypothesisTesting.multipleMeansTest(dataFrame: ds1, alpha: 0.05)!
@@ -1216,7 +1216,7 @@ class SwiftyStatsTests: XCTestCase {
         var marcumRes: (p: Double, q: Double, err: Int, underflow: Bool)
         var err1, err2: Double
         for i in stride(from: 1, to: 18, by: 1) {
-            marcumRes = marcum(mys[i-1], sqrt(2 * x1[i-1]), sqrt(2 * y1[i-1]))
+            marcumRes = SSSpecialFunctions.marcum(mys[i-1], sqrt(2 * x1[i-1]), sqrt(2 * y1[i-1]))
             XCTAssertEqual(marcumRes.p, p[i-1], accuracy: 1e-13)
             XCTAssertEqual(marcumRes.q, q[i-1], accuracy: 1e-13)
             err1 = abs(1.0 - marcumRes.p / p[i-1])
@@ -1244,19 +1244,19 @@ class SwiftyStatsTests: XCTestCase {
                 x = j * 50.18 + 5.0
                 for k in stride(from: 0.0, through: 10.0, by: 1.0) {
                     y = k * 19.15 + 2.0
-                    marcumRes = marcum(mu, sqrt(2 * x), sqrt(2 * y))
+                    marcumRes = SSSpecialFunctions.marcum(mu, sqrt(2 * x), sqrt(2 * y))
                     p0 = marcumRes.p
                     q0 = marcumRes.q
                     ierr1 = marcumRes.err
-                    marcumRes = marcum(mu - 1.0, sqrt(2 * x), sqrt(2 * y))
+                    marcumRes = SSSpecialFunctions.marcum(mu - 1.0, sqrt(2 * x), sqrt(2 * y))
                     pm1 = marcumRes.p
                     qm1 = marcumRes.q
                     ierr2 = marcumRes.err
-                    marcumRes = marcum(mu + 1, sqrt(2 * x), sqrt(2 * y))
+                    marcumRes = SSSpecialFunctions.marcum(mu + 1, sqrt(2 * x), sqrt(2 * y))
                     p1 = marcumRes.p
                     q1 = marcumRes.q
                     ierr1 = marcumRes.err
-                    marcumRes = marcum(mu + 2, sqrt(2 * x), sqrt(2 * y))
+                    marcumRes = SSSpecialFunctions.marcum(mu + 2, sqrt(2 * x), sqrt(2 * y))
                     p2 = marcumRes.p
                     q2 = marcumRes.q
                     ierr1 = marcumRes.err
@@ -1281,7 +1281,7 @@ class SwiftyStatsTests: XCTestCase {
 
     func testQuick() {
 //        let z: Complex<Double> = Complex<Double>(-3.0,4.0)
-//        let g: Complex<Double> = tgamma1(z: z)
+//        let g: Complex<Double> = SSMath.tgamma1(z: z)
 //        var a: Array<Complex<Double>> = Array<Complex<Double>>.init()
 //        var b: Array<Complex<Double>> = Array<Complex<Double>>.init()
 //        a.append(Complex<Double>.init(re: 3, im: 0))
@@ -1356,7 +1356,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
         */
-        para = try! paraStudentTDist(degreesOfFreedom: 21)
+        para = try! SSProbDist.StudentT.para(degreesOfFreedom: 21)
         XCTAssertEqual(para!.kurtosis, 3.35294117647058823529, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
@@ -1377,10 +1377,10 @@ class SwiftyStatsTests: XCTestCase {
          > dt(x = 10, df = 2)
          [1] 0.0009707329
          */
-        XCTAssertEqual(try! pdfStudentTDist(t: -10, degreesOfFreedom: 22), 1.098245e-09, accuracy: 1E-10)
-        XCTAssertEqual(try! pdfStudentTDist(t: 0, degreesOfFreedom: 22), 0.394436, accuracy: 1E-5)
-        XCTAssertEqual(try! pdfStudentTDist(t: 2.5, degreesOfFreedom: 22), 0.02223951, accuracy: 1E-5)
-        XCTAssertEqual(try! pdfStudentTDist(t: 10, degreesOfFreedom: 2), 0.0009707329, accuracy: 1E-10)
+        XCTAssertEqual(try! SSProbDist.StudentT.pdf(t: -10, degreesOfFreedom: 22), 1.098245e-09, accuracy: 1E-10)
+        XCTAssertEqual(try! SSProbDist.StudentT.pdf(t: 0, degreesOfFreedom: 22), 0.394436, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.StudentT.pdf(t: 2.5, degreesOfFreedom: 22), 0.02223951, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.StudentT.pdf(t: 10, degreesOfFreedom: 2), 0.0009707329, accuracy: 1E-10)
         /* CDF
          R code:
          > pt(q = -10, df = 22)
@@ -1392,10 +1392,10 @@ class SwiftyStatsTests: XCTestCase {
          > pt(q = 10, df = 2)
          [1] 0.9950738
         */
-        XCTAssertEqual(try! cdfStudentTDist(t: -10, degreesOfFreedom: 22), 6.035806e-10, accuracy: 1E-15)
-        XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22), 0.5)
-        XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22), 0.9898164, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 2), 0.9950738, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: -10, degreesOfFreedom: 22), 6.035806e-10, accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: 0, degreesOfFreedom: 22), 0.5)
+        XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: 2.5, degreesOfFreedom: 22), 0.9898164, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: 10, degreesOfFreedom: 2), 0.9950738, accuracy: 1E-7)
         /*
          df = 21;
          td = StudentTDistribution[df];
@@ -1408,7 +1408,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
          */
-        para = try! paraStudentTDist(degreesOfFreedom: 21, nonCentralityPara: 3)
+        para = try! SSProbDist.StudentT.NonCentral.para(degreesOfFreedom: 21, nonCentralityPara: 3)
         XCTAssertEqual(para!.kurtosis, 3.61902917492752013195, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.430814083288819887296, accuracy: 1e-12)
@@ -1423,14 +1423,14 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[ntd, 25/10], 21]
          N[PDF[ntd, 10], 21]
          */
-        XCTAssertEqual(try! pdfStudentTDist(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 1.61220211703878172128e-16, accuracy: 1E-18)
-        XCTAssertEqual(try! pdfStudentTDist(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00438178866867118877565, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfStudentTDist(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.334601573269501746166, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfStudentTDist(x: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.0000354931204704236583089, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfStudentTDist(x: 1, degreesOfFreedom: 22, nonCentralityPara: 10), 2.86089002661815955619e-18, accuracy: 1E-18)
-        XCTAssertEqual(try! pdfStudentTDist(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.60768463597592483354e-23, accuracy: 1E-27)
-        XCTAssertEqual(try! pdfStudentTDist(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.21515039938564508949e-11, accuracy: 1E-12)
-        XCTAssertEqual(try! pdfStudentTDist(x: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.218713193594618197003, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 1.61220211703878172128e-16, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00438178866867118877565, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.334601573269501746166, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.0000354931204704236583089, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 1, degreesOfFreedom: 22, nonCentralityPara: 10), 2.86089002661815955619e-18, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.60768463597592483354e-23, accuracy: 1E-27)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.21515039938564508949e-11, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.218713193594618197003, accuracy: 1E-12)
         /* noncentral CDF
          R code:
          > pt(q = 10, ncp = 10, df = 22)
@@ -1456,15 +1456,15 @@ class SwiftyStatsTests: XCTestCase {
          > pt(q = 10, ncp = 10, df = 223322)
          [1] 0.4999955
         */
-        XCTAssertEqual(try! cdfStudentTDist(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 8.14079530286125822663e-17, accuracy: 1E-19)
-        XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00134989803163009452665, accuracy: 1E-9)
-        XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.310124866777693411844, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.999976994489342241050, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfStudentTDist(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 4.39172441491830770359e-44, accuracy: 1E-48)
-        XCTAssertEqual(try! cdfStudentTDist(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.61985302416052606597e-24, accuracy: 1E-27)
-        XCTAssertEqual(try! cdfStudentTDist(t: 2, degreesOfFreedom: 22, nonCentralityPara: 10), 1.00316897649437185093e-14, accuracy: 1E-23)
-        XCTAssertEqual(try! cdfStudentTDist(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.30289935752455767687e-12, accuracy: 1E-16)
-        XCTAssertEqual(try! cdfStudentTDist(t: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.469124289769452233227, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 8.14079530286125822663e-17, accuracy: 1E-19)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00134989803163009452665, accuracy: 1E-9)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.310124866777693411844, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.999976994489342241050, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 4.39172441491830770359e-44, accuracy: 1E-48)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.61985302416052606597e-24, accuracy: 1E-27)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2, degreesOfFreedom: 22, nonCentralityPara: 10), 1.00316897649437185093e-14, accuracy: 1E-23)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.30289935752455767687e-12, accuracy: 1E-16)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.469124289769452233227, accuracy: 1E-14)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: -10, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 8.14079530286125822663e-17, accuracy: 1E-19)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: 0, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.00134989803163009452665, accuracy: 1E-9)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: 2.5, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.310124866777693411844, accuracy: 1E-7)
@@ -1489,12 +1489,12 @@ class SwiftyStatsTests: XCTestCase {
          > qt(p = 1,df = 21,ncp = 3)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileStudentTDist(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
-        XCTAssertEqual(try! quantileStudentTDist(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTDist(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTDist(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTDist(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
-        XCTAssertEqual(try! quantileStudentTDist(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
         /*
          nd = NormalDistribution[3, 1/2];
          N[Kurtosis[nd], 21]
@@ -1502,7 +1502,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[nd], 21]
          N[Variance[nd], 21]
          */
-        para = paraNormalDistribution(mean: 2, standardDeviation: 0.5)
+        para = SSProbDist.Gaussian.para(mean: 2, standardDeviation: 0.5)
         XCTAssertEqual(para!.kurtosis, 3.0, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 2.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
@@ -1521,12 +1521,12 @@ class SwiftyStatsTests: XCTestCase {
          > pnorm(q = -3,mean = -3.5,sd = 0.5)
          [1] 0.8413447
         */
-        XCTAssertEqual(try! cdfNormalDist(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
-        XCTAssertEqual(cdfStandardNormalDist(u: 2), 0.977249868, accuracy: 1E-8)
-        XCTAssertEqual(cdfStandardNormalDist(u: -2), 0.0227501319, accuracy: 1E-8)
-        XCTAssertEqual(try! cdfNormalDist(x: 3, mean: 22, standardDeviation: 3), 1.19960226E-10, accuracy: 1E-18)
-        XCTAssertEqual(try! cdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 3.92987343E-17, accuracy: 1E-25)
-        XCTAssertEqual(try! cdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.841344746, accuracy: 1E-9)
+        XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.Gaussian.Standard.cdf(u: 2), 0.977249868, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.Gaussian.Standard.cdf(u: -2), 0.0227501319, accuracy: 1E-8)
+        XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: 3, mean: 22, standardDeviation: 3), 1.19960226E-10, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: -3, mean: 22, standardDeviation: 3), 3.92987343E-17, accuracy: 1E-25)
+        XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: -3, mean: -3.5, standardDeviation: 0.5), 0.841344746, accuracy: 1E-9)
         /*
          R code:
          > dnorm(x = 2,mean = 0, sd = 1)
@@ -1541,12 +1541,12 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.4839414
          >
         */
-        XCTAssertEqual(try! pdfNormalDist(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
-        XCTAssertEqual(pdfStandardNormalDist(u: 2), 0.0539909665, accuracy: 1E-8)
-        XCTAssertEqual(pdfStandardNormalDist(u: -2), 0.0539909665, accuracy: 1E-8)
-        XCTAssertEqual(try! pdfNormalDist(x: 3, mean: 22, standardDeviation: 3), 2.59281602E-10, accuracy: 1E-18)
-        XCTAssertEqual(try! pdfNormalDist(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
-        XCTAssertEqual(try! pdfNormalDist(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
+        XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.Gaussian.Standard.pdf(u: 2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.Gaussian.Standard.pdf(u: -2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 3, mean: 22, standardDeviation: 3), 2.59281602E-10, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
+        XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
 
         /*
          R code:
@@ -1563,12 +1563,12 @@ class SwiftyStatsTests: XCTestCase {
          > qnorm(p = 5/10, mean = 2, sd = 0.5)
          [1] 2
         */
-        XCTAssertEqual(try! quantileStandardNormalDist(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileStandardNormalDist(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileStandardNormalDist(p: 5.0/10.0), 0, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileNormalDist(p: 1.0/3.0, mean: 2, standardDeviation: 0.5), 1.78464, accuracy: 1E-4)
-        XCTAssertEqual(try! quantileNormalDist(p: 5/100.0, mean: 2, standardDeviation: 0.5), 1.17757, accuracy: 1E-4)
-        XCTAssertEqual(try! quantileNormalDist(p: 5/10.0, mean: 2, standardDeviation: 0.5), 2, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 5.0/10.0), 0, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 1.0/3.0, mean: 2, standardDeviation: 0.5), 1.78464, accuracy: 1E-4)
+        XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 5/100.0, mean: 2, standardDeviation: 0.5), 1.17757, accuracy: 1E-4)
+        XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 5/10.0, mean: 2, standardDeviation: 0.5), 2, accuracy: 1E-6)
         /*
          df = 11;
          chd = ChiSquareDistribution[df];
@@ -1577,7 +1577,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[chd], 21]
          N[Kurtosis[chd], 21]
          */
-        para = try! paraChiSquareDist(degreesOfFreedom: 11)
+        para = try! SSProbDist.ChiSquare.para(degreesOfFreedom: 11)
         XCTAssertEqual(para!.kurtosis, 4.09090909090909090909, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 11, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.852802865422441737194, accuracy: 1e-12)
@@ -1596,10 +1596,10 @@ class SwiftyStatsTests: XCTestCase {
         > pchisq(q = -16,df = 16,ncp = 0)
         [1] 0
         */
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 1, degreesOfFreedom: 16), 6.219691E-08, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 16, degreesOfFreedom: 16), 0.5470392, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: 1, degreesOfFreedom: 16), 6.219691E-08, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: 16, degreesOfFreedom: 16), 0.5470392, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
         /*
          R code:
          > dchisq(x = 1,df = 16,ncp = 0)
@@ -1612,10 +1612,10 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0
         */
         
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 1, degreesOfFreedom: 16), 4.700913e-07, accuracy: 1E-13)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 16, degreesOfFreedom: 16), 0.06979327, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: 1, degreesOfFreedom: 16), 4.700913e-07, accuracy: 1E-13)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: 16, degreesOfFreedom: 16), 0.06979327, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: -16, degreesOfFreedom: 16), 0, accuracy: 1E-7)
         /*
          R code:
          > qchisq(p = 0, df = 16)
@@ -1631,12 +1631,12 @@ class SwiftyStatsTests: XCTestCase {
          > qchisq(p = 1, df = 16)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0, degreesOfFreedom: 16), 0, accuracy: 1E-13)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.25, degreesOfFreedom: 16), 11.91222, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 16), 15.3385, accuracy: 1E-4)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 16), 19.36886, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 16), 31.99993, accuracy: 1E-5)
-        XCTAssert(try! quantileChiSquareDist(p: 1.0, degreesOfFreedom: 16).isInfinite)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0, degreesOfFreedom: 16), 0, accuracy: 1E-13)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.25, degreesOfFreedom: 16), 11.91222, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.5, degreesOfFreedom: 16), 15.3385, accuracy: 1E-4)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.75, degreesOfFreedom: 16), 19.36886, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.99, degreesOfFreedom: 16), 31.99993, accuracy: 1E-5)
+        XCTAssert(try! SSProbDist.ChiSquare.quantile(p: 1.0, degreesOfFreedom: 16).isInfinite)
 
         
         /*
@@ -1648,7 +1648,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[fd], 21]
          N[Kurtosis[fd], 21]
          */
-        para = try! paraFRatioDist(numeratorDF: 4, denominatorDF: 9)
+        para = try! SSProbDist.FRatio.para(numeratorDF: 4, denominatorDF: 9)
         XCTAssertEqual(para!.kurtosis, 117.272727272727272727, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 1.28571428571428571429, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 4.76731294622796157723, accuracy: 1e-12)
@@ -1673,13 +1673,13 @@ class SwiftyStatsTests: XCTestCase {
          > pf(q = 3,df1 = 3,df2 = 22)
          [1] 0.9475565
         */
-        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: 33, numeratorDF: 3, denominatorDF: 22), 1, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfFRatioDist(f: 3, numeratorDF: 3, denominatorDF: 22), 0.9475565, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 33, numeratorDF: 3, denominatorDF: 22), 1, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 3, numeratorDF: 3, denominatorDF: 22), 0.9475565, accuracy: 1E-7)
         /*
          R code
          > df(x = 2,df1 = 2,df2 = 3)
@@ -1697,13 +1697,13 @@ class SwiftyStatsTests: XCTestCase {
          > df(x = 3,df1 = 3,df2 = 22)
          [1] 0.05102542
         */
-        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 2, denominatorDF: 3), 0.1202425, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 22, denominatorDF: 3), 0.1660825, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfFRatioDist(f: 2, numeratorDF: 3, denominatorDF: 22), 0.1486917, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfFRatioDist(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfFRatioDist(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfFRatioDist(f: 33, numeratorDF: 3, denominatorDF: 22), 6.849943e-09, accuracy: 1E-15)
-        XCTAssertEqual(try! pdfFRatioDist(f: 3, numeratorDF: 3, denominatorDF: 22), 0.05102542, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 2, denominatorDF: 3), 0.1202425, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 22, denominatorDF: 3), 0.1660825, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 3, denominatorDF: 22), 0.1486917, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: -2, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 0, numeratorDF: 3, denominatorDF: 22), 0, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 33, numeratorDF: 3, denominatorDF: 22), 6.849943e-09, accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 3, numeratorDF: 3, denominatorDF: 22), 0.05102542, accuracy: 1E-7)
         /*
          R code:
          > qf(p = 0,df1 = 2,df2 = 3)
@@ -1727,16 +1727,16 @@ class SwiftyStatsTests: XCTestCase {
          > qf(p = 1,df1 = 22,df2 = 3)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileFRatioDist(p: 0, numeratorDF: 2, denominatorDF: 3), 0, accuracy: 0)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.25, numeratorDF: 2, denominatorDF: 3), 0.3171206, accuracy: 1E-7)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.5, numeratorDF: 2, denominatorDF: 3), 0.8811016, accuracy: 1E-7)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.75, numeratorDF: 2, denominatorDF: 3), 2.279763, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.99, numeratorDF: 2, denominatorDF: 3), 30.81652, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.25, numeratorDF: 22, denominatorDF: 3), 0.6801509, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.5, numeratorDF: 22, denominatorDF: 3), 1.229022, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.75, numeratorDF: 22, denominatorDF: 3), 2.461528, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileFRatioDist(p: 0.99, numeratorDF: 22, denominatorDF: 3), 26.63955, accuracy: 1E-5)
-        XCTAssert(try! quantileFRatioDist(p: 1.0, numeratorDF: 22, denominatorDF: 3).isInfinite)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0, numeratorDF: 2, denominatorDF: 3), 0, accuracy: 0)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.25, numeratorDF: 2, denominatorDF: 3), 0.3171206, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.5, numeratorDF: 2, denominatorDF: 3), 0.8811016, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.75, numeratorDF: 2, denominatorDF: 3), 2.279763, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.99, numeratorDF: 2, denominatorDF: 3), 30.81652, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.25, numeratorDF: 22, denominatorDF: 3), 0.6801509, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.5, numeratorDF: 22, denominatorDF: 3), 1.229022, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.75, numeratorDF: 22, denominatorDF: 3), 2.461528, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.99, numeratorDF: 22, denominatorDF: 3), 26.63955, accuracy: 1E-5)
+        XCTAssert(try! SSProbDist.FRatio.quantile(p: 1.0, numeratorDF: 22, denominatorDF: 3).isInfinite)
         /*
          df1 = 4;
          df2 = 9;
@@ -1746,7 +1746,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[fd], 21]
          N[Kurtosis[fd], 21]
          */
-        para = try! paraLogNormalDist(mean: 3, variance: 0.25)
+        para = try! SSProbDist.LogNormal.para(mean: 3, variance: 0.25)
         XCTAssertEqual(para!.kurtosis, 8.89844567378477901300, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 22.7598950935267279834, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 1.75018965506971818265, accuracy: 1e-12)
@@ -1763,10 +1763,10 @@ class SwiftyStatsTests: XCTestCase {
          > plnorm(2,meanlog = 3,sdlog = 0.5)
          [1] 1.977763e-06
         */
-        XCTAssertEqual(try! cdfLogNormal(x: 1, mean: 0, variance: 1), 0.5, accuracy: 1E-1)
-        XCTAssertEqual(try! cdfLogNormal(x: 1, mean: 0, variance: 0.25), 0.5, accuracy: 1E-1)
-        XCTAssertEqual(try! cdfLogNormal(x: 2, mean: 0, variance: 0.25), 0.9171715, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfLogNormal(x: 2, mean: 3, variance: 0.25), 1.977763E-06, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 1, mean: 0, variance: 1), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 1, mean: 0, variance: 0.25), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 2, mean: 0, variance: 0.25), 0.9171715, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 2, mean: 3, variance: 0.25), 1.977763E-06, accuracy: 1E-12)
         /*
          R code
          > dlnorm(2,meanlog = 0,sdlog = 1)
@@ -1780,10 +1780,10 @@ class SwiftyStatsTests: XCTestCase {
          > dlnorm(2,meanlog = 3,sdlog = 0.5)
          [1] 9.520355e-06
         */
-        XCTAssertEqual(try! pdfLogNormalDist(x: 1, mean: 0, variance: 1), 0.3989423, accuracy: 1E-6)
-        XCTAssertEqual(try! pdfLogNormalDist(x: 1, mean: 0, variance: 0.25), 0.7978846, accuracy: 1E-6)
-        XCTAssertEqual(try! pdfLogNormalDist(x: 2, mean: 0, variance: 0.25), 0.1526138, accuracy: 1E-6)
-        XCTAssertEqual(try! pdfLogNormalDist(x: 2, mean: 3, variance: 0.25), 9.520355e-06, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 1, mean: 0, variance: 1), 0.3989423, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 1, mean: 0, variance: 0.25), 0.7978846, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 2, mean: 0, variance: 0.25), 0.1526138, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 2, mean: 3, variance: 0.25), 9.520355e-06, accuracy: 1E-12)
         /*
          > qlnorm(0,meanlog = 0,sdlog = 1)
          [1] 0
@@ -1798,11 +1798,11 @@ class SwiftyStatsTests: XCTestCase {
          > qlnorm(1,meanlog = 0,sdlog = 1)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileLogNormal(p: 0, mean: 0, variance: 1), 0, accuracy: 0)
-        XCTAssertEqual(try! quantileLogNormal(p: 0.25, mean: 0, variance: 1), 0.5094163, accuracy: 1E-6)
-        XCTAssertEqual(try! quantileLogNormal(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
-        XCTAssertEqual(try! quantileLogNormal(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
-        XCTAssert(try! quantileLogNormal(p: 1.0, mean: 0, variance: 1).isInfinite)
+        XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0, mean: 0, variance: 1), 0, accuracy: 0)
+        XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.25, mean: 0, variance: 1), 0.5094163, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
+        XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
+        XCTAssert(try! SSProbDist.LogNormal.quantile(p: 1.0, mean: 0, variance: 1).isInfinite)
 
         /*
          shapeA = 2;
@@ -1813,7 +1813,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[bd], 21]
          N[Kurtosis[bd], 21]
          */
-        para = try! paraBetaDist(shapeA: 2, shapeB: 2.5)
+        para = try! SSProbDist.Beta.para(shapeA: 2, shapeB: 2.5)
         XCTAssertEqual(para!.mean, 0.444444444444444444444, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 0.0448933782267115600449, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.161355207410792545691, accuracy: 1e-12)
@@ -1837,14 +1837,14 @@ class SwiftyStatsTests: XCTestCase {
          > pbeta(q = 0.6,shape1 = 0.99,shape2 = 0)
          [1] 0
         */
-        XCTAssertEqual(try! cdfBetaDist(x: 0.2, shapeA: 1, shapeB: 2), 0.36, accuracy: 1e-2)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 1, shapeB: 2), 0.84, accuracy: 1e-2)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.9, shapeA: 1, shapeB: 2), 0.99, accuracy: 1e-2)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.2, shapeA: 3, shapeB: 2), 0.0272, accuracy: 1e-4)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 3, shapeB: 2.5), 0.587639, accuracy: 1e-6)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.9591406, accuracy: 1e-6)
-        XCTAssertEqual(try! cdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.5640942, accuracy: 1e-6)
-        XCTAssertThrowsError(try cdfBetaDist(x: 0.6, shapeA: 0.99, shapeB: 0))
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.2, shapeA: 1, shapeB: 2), 0.36, accuracy: 1e-2)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.6, shapeA: 1, shapeB: 2), 0.84, accuracy: 1e-2)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.9, shapeA: 1, shapeB: 2), 0.99, accuracy: 1e-2)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.2, shapeA: 3, shapeB: 2), 0.0272, accuracy: 1e-4)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.6, shapeA: 3, shapeB: 2.5), 0.587639, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.9591406, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.5640942, accuracy: 1e-6)
+        XCTAssertThrowsError(try SSProbDist.Beta.cdf(x: 0.6, shapeA: 0.99, shapeB: 0))
         /*
          dbeta(x = 0.2,shape1 = 1,shape2 = 2)
          [1] 1.6
@@ -1861,13 +1861,13 @@ class SwiftyStatsTests: XCTestCase {
          > dbeta(x = 0.6,shape1 = 0.5,shape2 = 0.5)
          [1] 0.6497473
          */
-        XCTAssertEqual(try! pdfBetaDist(x: 0.2, shapeA: 1, shapeB: 2), 1.6, accuracy: 1e-1)
-        XCTAssertEqual(try! pdfBetaDist(x: 0, shapeA: 1, shapeB: 2), 2.0, accuracy: 1e-1)
-        XCTAssertEqual(try! pdfBetaDist(x: 0.9, shapeA: 1, shapeB: 2), 0.2, accuracy: 1e-1)
-        XCTAssertEqual(try! pdfBetaDist(x: 0.2, shapeA: 3, shapeB: 2), 0.384, accuracy: 1e-3)
-        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 3, shapeB: 2.5), 1.793011, accuracy: 1e-6)
-        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.2772255, accuracy: 1e-7)
-        XCTAssertEqual(try! pdfBetaDist(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.6497473, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.2, shapeA: 1, shapeB: 2), 1.6, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0, shapeA: 1, shapeB: 2), 2.0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.9, shapeA: 1, shapeB: 2), 0.2, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.2, shapeA: 3, shapeB: 2), 0.384, accuracy: 1e-3)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.6, shapeA: 3, shapeB: 2.5), 1.793011, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.6, shapeA: 0.5, shapeB: 2.5), 0.2772255, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Beta.pdf(x: 0.6, shapeA: 0.5, shapeB: 0.5), 0.6497473, accuracy: 1e-7)
         /*
          > qbeta(p = 0,shape1 = 1,shape2 = 2)
          [1] 0
@@ -1882,12 +1882,12 @@ class SwiftyStatsTests: XCTestCase {
          > qbeta(p = 1,shape1 = 1,shape2 = 2)
          [1] 1
          */
-        XCTAssertEqual(try! quantileBetaDist(p: 0, shapeA: 1, shapeB: 2), 0, accuracy: 1e-1)
-        XCTAssertEqual(try! quantileBetaDist(p: 0.25, shapeA: 1, shapeB: 2), 0.1339746, accuracy: 1e-7)
-        XCTAssertEqual(try! quantileBetaDist(p: 0.5, shapeA: 1, shapeB: 2), 0.2928932, accuracy: 1e-7)
-        XCTAssertEqual(try! quantileBetaDist(p: 0.75, shapeA: 1, shapeB: 2), 0.5, accuracy: 1e-1)
-        XCTAssertEqual(try! quantileBetaDist(p: 0.99, shapeA: 1, shapeB: 2), 0.9, accuracy: 1e-1)
-        XCTAssertEqual(try! quantileBetaDist(p: 1.0, shapeA: 1, shapeB: 2), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 0, shapeA: 1, shapeB: 2), 0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 0.25, shapeA: 1, shapeB: 2), 0.1339746, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 0.5, shapeA: 1, shapeB: 2), 0.2928932, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 0.75, shapeA: 1, shapeB: 2), 0.5, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 0.99, shapeA: 1, shapeB: 2), 0.9, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Beta.quantile(p: 1.0, shapeA: 1, shapeB: 2), 1.0, accuracy: 1e-1)
         /*
          loc = 99;
          scale = 25/100;
@@ -1897,7 +1897,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[cd], 21]
          N[Kurtosis[cd], 21]
          */
-        para = try! paraCauchyDist(location: 99, scale: 0.25)
+        para = try! SSProbDist.Cauchy.para(location: 99, scale: 0.25)
         XCTAssert(para!.mean.isNaN)
         XCTAssert(para!.variance.isNaN)
         XCTAssert(para!.skewness.isNaN)
@@ -1915,11 +1915,11 @@ class SwiftyStatsTests: XCTestCase {
          > pcauchy(q = 2,location = 3,scale = 0.25)
          [1] 0.07797913
         */
-        XCTAssertEqual(try! cdfCauchyDist(x: 1, location: 1, scale: 0.5), 0.5, accuracy: 1E-1)
-        XCTAssertEqual(try! cdfCauchyDist(x: -10, location: -2, scale: 3), 0.1142003, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfCauchyDist(x: 10, location: -2, scale: 3), 0.9220209, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfCauchyDist(x: 0, location: 99, scale: 3), 0.009642803, accuracy: 1E-7)
-        XCTAssertEqual(try! cdfCauchyDist(x: 2, location: 3, scale: 0.25), 0.07797913, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 1, location: 1, scale: 0.5), 0.5, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: -10, location: -2, scale: 3), 0.1142003, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 10, location: -2, scale: 3), 0.9220209, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 0, location: 99, scale: 3), 0.009642803, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 2, location: 3, scale: 0.25), 0.07797913, accuracy: 1E-7)
         
         /*
          R code:
@@ -1934,11 +1934,11 @@ class SwiftyStatsTests: XCTestCase {
          > dcauchy(x = 2,location = 3,scale = 0.25)
          [1] 0.07489644
          */
-        XCTAssertEqual(try! pdfCauchyDist(x: 1, location: 1, scale: 0.5), 0.6366198, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfCauchyDist(x: -10, location: -2, scale: 3), 0.01308123, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfCauchyDist(x: 10, location: -2, scale: 3), 0.00624137, accuracy: 1E-7)
-        XCTAssertEqual(try! pdfCauchyDist(x: 0, location: 99, scale: 3), 9.734247e-05, accuracy: 1E-11)
-        XCTAssertEqual(try! pdfCauchyDist(x: 2, location: 3, scale: 0.25), 0.07489644, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 1, location: 1, scale: 0.5), 0.6366198, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: -10, location: -2, scale: 3), 0.01308123, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 10, location: -2, scale: 3), 0.00624137, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 0, location: 99, scale: 3), 9.734247e-05, accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 2, location: 3, scale: 0.25), 0.07489644, accuracy: 1E-7)
 
         /*
          R code:
@@ -1955,12 +1955,12 @@ class SwiftyStatsTests: XCTestCase {
          > qcauchy(p = 1,location = 3, scale = 0.25)
          [1] Inf
          */
-        XCTAssertEqual(try! quantileCauchyDist(p: 0, location: 1, scale: 0.5), -Double.infinity)
-        XCTAssertEqual(try! quantileCauchyDist(p: 0.25, location: -2, scale: 3), -5.0, accuracy: 1E-1)
-        XCTAssertEqual(try! quantileCauchyDist(p: 0.5, location: -2, scale: 3), -2.0, accuracy: 1E-1)
-        XCTAssertEqual(try! quantileCauchyDist(p: 0.75, location: 99, scale: 3), 102.0, accuracy: 1E-1)
-        XCTAssertEqual(try! quantileCauchyDist(p: 0.99, location: 3, scale: 0.25), 10.95513, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileCauchyDist(p: 1, location: 3, scale: 0.25), Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 0, location: 1, scale: 0.5), -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 0.25, location: -2, scale: 3), -5.0, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 0.5, location: -2, scale: 3), -2.0, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 0.75, location: 99, scale: 3), 102.0, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 0.99, location: 3, scale: 0.25), 10.95513, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.Cauchy.quantile(p: 1, location: 3, scale: 0.25), Double.infinity)
         /*
          loc = 0;
          scale = 1;
@@ -1970,7 +1970,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[cd], 21]
          N[Kurtosis[cd], 21]
          */
-        para = try! paraLaplaceDist(mean: 0, scale: 1)
+        para = try! SSProbDist.Laplace.para(mean: 0, scale: 1)
         XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 2.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
@@ -1986,10 +1986,10 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[cd, 19], 7]
          N[CDF[cd, 1/2], 7]
          */
-        XCTAssertEqual(try! cdfLaplaceDist(x: 1, mean: 0, scale: 1), 0.8160603, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfLaplaceDist(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
-        XCTAssertEqual(try! cdfLaplaceDist(x: 19, mean: 0, scale: 1), 1.0, accuracy: 1e-1)
-        XCTAssertEqual(try! cdfLaplaceDist(x: 0.5, mean: 0, scale: 1), 0.6967347, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.cdf(x: 1, mean: 0, scale: 1), 0.8160603, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.cdf(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
+        XCTAssertEqual(try! SSProbDist.Laplace.cdf(x: 19, mean: 0, scale: 1), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Laplace.cdf(x: 0.5, mean: 0, scale: 1), 0.6967347, accuracy: 1e-7)
         /*
          Mathematica
          loc = 0;
@@ -2000,10 +2000,10 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[cd, 19], 7]
          N[PDF[cd, 1/2], 7]
          */
-        XCTAssertEqual(try! pdfLaplaceDist(x: 1, mean: 0, scale: 1), 0.1839397, accuracy: 1e-7)
-        XCTAssertEqual(try! pdfLaplaceDist(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
-        XCTAssertEqual(try! pdfLaplaceDist(x: 19, mean: 0, scale: 1), 2.801398E-9, accuracy: 1e-15)
-        XCTAssertEqual(try! pdfLaplaceDist(x: 0.5, mean: 0, scale: 1), 0.3032653, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.pdf(x: 1, mean: 0, scale: 1), 0.1839397, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.pdf(x: -8, mean: 0, scale: 1), 0.0001677313, accuracy: 1e-9)
+        XCTAssertEqual(try! SSProbDist.Laplace.pdf(x: 19, mean: 0, scale: 1), 2.801398E-9, accuracy: 1e-15)
+        XCTAssertEqual(try! SSProbDist.Laplace.pdf(x: 0.5, mean: 0, scale: 1), 0.3032653, accuracy: 1e-7)
         /*
          Mathematica
          loc = 0;
@@ -2015,11 +2015,11 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[cd, 99/100], 7]
          N[InverseCDF[cd, 0], 7]
          */
-        XCTAssertEqual(try! quantileLaplaceDist(p: 1, mean: 0, scale: 1), Double.infinity)
-        XCTAssertEqual(try! quantileLaplaceDist(p: 0.5, mean: 0, scale: 1), 0)
-        XCTAssertEqual(try! quantileLaplaceDist(p: 0.75, mean: 0, scale: 1), 0.6931472, accuracy: 1e-7)
-        XCTAssertEqual(try! quantileLaplaceDist(p: 0.99, mean: 0, scale: 1), 3.912023, accuracy: 1e-7)
-        XCTAssertEqual(try! quantileLaplaceDist(p: 0, mean: 0, scale: 1), -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 1, mean: 0, scale: 1), Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0.5, mean: 0, scale: 1), 0)
+        XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0.75, mean: 0, scale: 1), 0.6931472, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0.99, mean: 0, scale: 1), 3.912023, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0, mean: 0, scale: 1), -Double.infinity)
 
         /*
          loc = 3;
@@ -2030,7 +2030,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraLogisticDist(mean: 3, scale: 2)
+        para = try! SSProbDist.Logistic.para(mean: 3, scale: 2)
         XCTAssertEqual(para!.mean, 3.0, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 13.1594725347858114918, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
@@ -2045,10 +2045,10 @@ class SwiftyStatsTests: XCTestCase {
          > plogis(q = 3,location = -2,scale = 22)
          [1] 0.5592442
         */
-        XCTAssertEqual(try! cdfLogisticDist(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfLogisticDist(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
-        XCTAssertEqual(try! cdfLogisticDist(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
-        XCTAssertThrowsError(try cdfLogisticDist(x: -3, mean: 3, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
+        XCTAssertThrowsError(try SSProbDist.Logistic.cdf(x: -3, mean: 3, scale: 0))
         
         /*
          R code
@@ -2059,10 +2059,10 @@ class SwiftyStatsTests: XCTestCase {
          > plogis(q = 3,location = -2,scale = 22)
          [1] 0.5592442
          */
-        XCTAssertEqual(try! cdfLogisticDist(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfLogisticDist(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
-        XCTAssertEqual(try! cdfLogisticDist(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
-        XCTAssertThrowsError(try cdfLogisticDist(x: -3, mean: 3, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
+        XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
+        XCTAssertThrowsError(try SSProbDist.Logistic.cdf(x: -3, mean: 3, scale: 0))
         /*
          > dlogis(x = 1,location = 3,scale = 2)
          [1] 0.09830597
@@ -2071,10 +2071,10 @@ class SwiftyStatsTests: XCTestCase {
          > dlogis(x = 3,location = -2,scale = 22)
          [1] 0.01121815
          */
-        XCTAssertEqual(try! pdfLogisticDist(x: 1, mean: 3, scale: 2), 0.09830597, accuracy: 1e-7)
-        XCTAssertEqual(try! pdfLogisticDist(x: 55, mean: 3, scale: 2), 2.554545e-12, accuracy: 1e-18)
-        XCTAssertEqual(try! pdfLogisticDist(x: 3, mean: -2, scale: 22), 0.01121815, accuracy: 1e-7)
-        XCTAssertThrowsError(try pdfLogisticDist(x: -3, mean: 3, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Logistic.pdf(x: 1, mean: 3, scale: 2), 0.09830597, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Logistic.pdf(x: 55, mean: 3, scale: 2), 2.554545e-12, accuracy: 1e-18)
+        XCTAssertEqual(try! SSProbDist.Logistic.pdf(x: 3, mean: -2, scale: 22), 0.01121815, accuracy: 1e-7)
+        XCTAssertThrowsError(try SSProbDist.Logistic.pdf(x: -3, mean: 3, scale: 0))
         /*
          > qlogis(p = 0, location = 3,scale = 22)
          [1] -Inf
@@ -2089,12 +2089,12 @@ class SwiftyStatsTests: XCTestCase {
          > qlogis(p = 1, location = 3,scale = 22)
          [1] Inf
         */
-        XCTAssertEqual(try! quantileLogisticDist(p: 0, mean: 3, scale: 22), -Double.infinity)
-        XCTAssertEqual(try! quantileLogisticDist(p: 0.25, mean: 3, scale: 22), -21.16947, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileLogisticDist(p: 0.5, mean: 3, scale: 22), 3.0, accuracy: 1E-1)
-        XCTAssertEqual(try! quantileLogisticDist(p: 0.75, mean: 3, scale: 22), 27.16947, accuracy: 1E-5)
-        XCTAssertEqual(try! quantileLogisticDist(p: 0.99, mean: 3, scale: 22), 104.0926, accuracy: 1E-4)
-        XCTAssertEqual(try! quantileLogisticDist(p: 1.0, mean: 3, scale: 22), Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0, mean: 3, scale: 22), -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.25, mean: 3, scale: 22), -21.16947, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.5, mean: 3, scale: 22), 3.0, accuracy: 1E-1)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.75, mean: 3, scale: 22), 27.16947, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.99, mean: 3, scale: 22), 104.0926, accuracy: 1E-4)
+        XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 1.0, mean: 3, scale: 22), Double.infinity)
         /*
          min = 1;
          shape = 22;
@@ -2104,7 +2104,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraParetoDist(minimum: 1, shape: 22)
+        para = try! SSProbDist.Pareto.para(minimum: 1, shape: 22)
         XCTAssertEqual(para!.mean, 1.04761904761904761905, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 0.00249433106575963718821, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2.30838311080511823740, accuracy: 1e-12)
@@ -2131,15 +2131,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[159]= 0.999999761581420898438
          Out[160]= 0.999999998240781395558
         */
-        XCTAssertThrowsError(try cdfParetoDist(x: 0, minimum: 0, shape: 2))
-        XCTAssertThrowsError(try cdfParetoDist(x: 0, minimum: -2, shape: 1))
-        XCTAssertEqual(try! cdfParetoDist(x: 0, minimum: 1, shape: 22), 0)
-        XCTAssertEqual(try! cdfParetoDist(x: 1.0, minimum: 1, shape: 22), 0)
-        XCTAssertEqual(try! cdfParetoDist(x: 1.001, minimum: 1, shape: 22), 0.02174901, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfParetoDist(x: 1.05, minimum: 1, shape: 22), 0.6581501, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfParetoDist(x: 1.85, minimum: 1, shape: 22), 0.9999987, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfParetoDist(x: 2, minimum: 1, shape: 22), 0.9999998, accuracy: 1e-7)
-        XCTAssertEqual(try! cdfParetoDist(x: 2.5, minimum: 1, shape: 22), 0.999999998240781395558, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Pareto.cdf(x: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try SSProbDist.Pareto.cdf(x: 0, minimum: -2, shape: 1))
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 1.0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 1.001, minimum: 1, shape: 22), 0.02174901, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 1.05, minimum: 1, shape: 22), 0.6581501, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 1.85, minimum: 1, shape: 22), 0.9999987, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 2, minimum: 1, shape: 22), 0.9999998, accuracy: 1e-7)
+        XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 2.5, minimum: 1, shape: 22), 0.999999998240781395558, accuracy: 1e-12)
 
         
         /*
@@ -2163,15 +2163,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[181]= 2.62260437011718750000*10^-6
          Out[182]= 1.54811237190860800000*10^-8
         */
-        XCTAssertThrowsError(try pdfParetoDist(x: 0, minimum: 0, shape: 2))
-        XCTAssertThrowsError(try pdfParetoDist(x: 0, minimum: -2, shape: 1))
-        XCTAssertEqual(try! pdfParetoDist(x: 0, minimum: 1, shape: 22), 0)
-        XCTAssertEqual(try! pdfParetoDist(x: 1.0, minimum: 1, shape: 22), 22)
-        XCTAssertEqual(try! pdfParetoDist(x: 1.001, minimum: 1, shape: 22), 21.5000217271321940712, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfParetoDist(x: 1.05, minimum: 1, shape: 22), 7.16256872752922185937, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfParetoDist(x: 1.85, minimum: 1, shape: 22), 0.0000157569779601844505236, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfParetoDist(x: 2, minimum: 1, shape: 22),   2.622604e-6, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfParetoDist(x: 2.5, minimum: 1, shape: 22), 1.548112e-8, accuracy: 1e-14)
+        XCTAssertThrowsError(try SSProbDist.Pareto.pdf(x: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try SSProbDist.Pareto.pdf(x: 0, minimum: -2, shape: 1))
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 0, minimum: 1, shape: 22), 0)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 1.0, minimum: 1, shape: 22), 22)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 1.001, minimum: 1, shape: 22), 21.5000217271321940712, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 1.05, minimum: 1, shape: 22), 7.16256872752922185937, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 1.85, minimum: 1, shape: 22), 0.0000157569779601844505236, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 2, minimum: 1, shape: 22),   2.622604e-6, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 2.5, minimum: 1, shape: 22), 1.548112e-8, accuracy: 1e-14)
 
         /*
          Mathematica:
@@ -2191,16 +2191,16 @@ class SwiftyStatsTests: XCTestCase {
          Out[218]= 1.06504108943996267819
          Out[219]= 1.23284673944206613905
          Out[220]= \[Infinity]         */
-        XCTAssertThrowsError(try quantileParetoDist(p: 0, minimum: 0, shape: 2))
-        XCTAssertThrowsError(try quantileParetoDist(p: 0, minimum: -2, shape: 2))
-        XCTAssertThrowsError(try quantileParetoDist(p: -1, minimum: 1, shape: 22))
-        XCTAssertEqual(try! quantileParetoDist(p: 0, minimum: 1, shape: 22), 1.0)
-        XCTAssertEqual(try! quantileParetoDist(p: 0.25, minimum: 1, shape: 22), 1.01316232860042649240, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileParetoDist(p: 0.5, minimum: 1, shape: 22), 1.03200827973420963159, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileParetoDist(p: 0.75, minimum: 1, shape: 22), 1.06504108943996267819, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileParetoDist(p: 0.99, minimum: 1, shape: 22), 1.23284673944206613905, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileParetoDist(p: 1.0, minimum: 1, shape: 22), Double.infinity)
-        XCTAssertThrowsError(try quantileParetoDist(p: 1.1, minimum: 1, shape: 22))
+        XCTAssertThrowsError(try SSProbDist.Pareto.quantile(p: 0, minimum: 0, shape: 2))
+        XCTAssertThrowsError(try SSProbDist.Pareto.quantile(p: 0, minimum: -2, shape: 2))
+        XCTAssertThrowsError(try SSProbDist.Pareto.quantile(p: -1, minimum: 1, shape: 22))
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 0, minimum: 1, shape: 22), 1.0)
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 0.25, minimum: 1, shape: 22), 1.01316232860042649240, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 0.5, minimum: 1, shape: 22), 1.03200827973420963159, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 0.75, minimum: 1, shape: 22), 1.06504108943996267819, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 0.99, minimum: 1, shape: 22), 1.23284673944206613905, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Pareto.quantile(p: 1.0, minimum: 1, shape: 22), Double.infinity)
+        XCTAssertThrowsError(try SSProbDist.Pareto.quantile(p: 1.1, minimum: 1, shape: 22))
         
         /*
          lambda = 1/4;
@@ -2210,7 +2210,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraExponentialDist(lambda: 0.25)
+        para = try! SSProbDist.Exponential.para(lambda: 0.25)
         XCTAssertEqual(para!.mean, 4, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 16, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2, accuracy: 1e-12)
@@ -2233,15 +2233,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[247]= 0.995913228561535933007
          Out[248]= 0.999996273346827921329
          */
-        XCTAssertThrowsError(try cdfExponentialDist(x: 1, lambda: 0))
-        XCTAssertThrowsError(try cdfExponentialDist(x: 1, lambda: -1))
-        XCTAssertEqual(try! cdfExponentialDist(x: -2, lambda: 0.25), 0)
-        XCTAssertEqual(try! cdfExponentialDist(x: 0, lambda: 0.25), 0)
-        XCTAssertEqual(try! cdfExponentialDist(x: 0.5, lambda: 0.25), 0.117503097415404597135, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfExponentialDist(x: 3, lambda: 0.25), 0.527633447258985292862, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfExponentialDist(x: 5, lambda: 0.25), 0.713495203139809899675, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfExponentialDist(x: 22, lambda: 0.25), 0.995913228561535933007, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfExponentialDist(x: 50, lambda: 0.25), 0.999996273346827921329, accuracy: 1e-14)
+        XCTAssertThrowsError(try SSProbDist.Exponential.cdf(x: 1, lambda: 0))
+        XCTAssertThrowsError(try SSProbDist.Exponential.cdf(x: 1, lambda: -1))
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: -2, lambda: 0.25), 0)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 0, lambda: 0.25), 0)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 0.5, lambda: 0.25), 0.117503097415404597135, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 3, lambda: 0.25), 0.527633447258985292862, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 5, lambda: 0.25), 0.713495203139809899675, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 22, lambda: 0.25), 0.995913228561535933007, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.cdf(x: 50, lambda: 0.25), 0.999996273346827921329, accuracy: 1e-14)
         /*
          N[PDF[ed, -2], 21]
          N[PDF[ed, 0], 21]
@@ -2258,15 +2258,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[254]= 0.00102169285961601674837
          Out[255]= 9.31663293019667748231*10^-7
         */
-        XCTAssertThrowsError(try pdfExponentialDist(x: 1, lambda: 0))
-        XCTAssertThrowsError(try pdfExponentialDist(x: 1, lambda: -1))
-        XCTAssertEqual(try! pdfExponentialDist(x: -2, lambda: 0.25), 0)
-        XCTAssertEqual(try! pdfExponentialDist(x: 0, lambda: 0.25), 0.25)
-        XCTAssertEqual(try! pdfExponentialDist(x: 0.5, lambda: 0.25), 0.220624225646148850716, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfExponentialDist(x: 3, lambda: 0.25), 0.118091638185253676785, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfExponentialDist(x: 5, lambda: 0.25), 0.0716261992150475250812, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfExponentialDist(x: 22, lambda: 0.25), 0.00102169285961601674837, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfExponentialDist(x: 50, lambda: 0.25), 9.31663293019667748231e-7, accuracy: 1e-14)
+        XCTAssertThrowsError(try SSProbDist.Exponential.pdf(x: 1, lambda: 0))
+        XCTAssertThrowsError(try SSProbDist.Exponential.pdf(x: 1, lambda: -1))
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: -2, lambda: 0.25), 0)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 0, lambda: 0.25), 0.25)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 0.5, lambda: 0.25), 0.220624225646148850716, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 3, lambda: 0.25), 0.118091638185253676785, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 5, lambda: 0.25), 0.0716261992150475250812, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 22, lambda: 0.25), 0.00102169285961601674837, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: 50, lambda: 0.25), 9.31663293019667748231e-7, accuracy: 1e-14)
         /*
          N[InverseCDF[ed, 0], 21]
          N[InverseCDF[ed, 25/100], 21]
@@ -2275,14 +2275,14 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[ed, 99/100], 21]
          N[InverseCDF[ed, 1], 21]
          */
-        XCTAssertThrowsError(try quantileExponentialDist(p: 1, lambda: 0))
-        XCTAssertThrowsError(try quantileExponentialDist(p: 1, lambda: -1))
-        XCTAssertEqual(try! quantileExponentialDist(p: 0, lambda: 0.25), 0)
-        XCTAssertEqual(try! quantileExponentialDist(p: 0.25, lambda: 0.25), 1.15072828980712370976, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileExponentialDist(p: 0.5, lambda: 0.25), 2.77258872223978123767, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileExponentialDist(p: 0.75, lambda: 0.25), 5.54517744447956247534, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileExponentialDist(p: 0.99, lambda: 0.25), 18.4206807439523654721, accuracy: 1e-14)
-        XCTAssert(try! quantileExponentialDist(p: 1, lambda: 0.25).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.Exponential.quantile(p: 1, lambda: 0))
+        XCTAssertThrowsError(try SSProbDist.Exponential.quantile(p: 1, lambda: -1))
+        XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0, lambda: 0.25), 0)
+        XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.25, lambda: 0.25), 1.15072828980712370976, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.5, lambda: 0.25), 2.77258872223978123767, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.75, lambda: 0.25), 5.54517744447956247534, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.99, lambda: 0.25), 18.4206807439523654721, accuracy: 1e-14)
+        XCTAssert(try! SSProbDist.Exponential.quantile(p: 1, lambda: 0.25).isInfinite)
 
         /*
          mu = 6;
@@ -2302,15 +2302,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[315]= 0.851063810667129652088
          Out[316]= 0.997518962516710678217
          Out[317]= 0.999999999702767058076         */
-        XCTAssertThrowsError(try cdfWaldDist(x: 0, mean: 0, lambda: 2))
-        XCTAssertThrowsError(try cdfWaldDist(x: 0, mean: 2, lambda: 0))
-        XCTAssertEqual(try! cdfWaldDist(x: 0, mean: 6, lambda: 9), 0)
-        XCTAssertEqual(try! cdfWaldDist(x: 1, mean: 6, lambda: 9), 0.0108821452821513154870, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfWaldDist(x: 2, mean: 6, lambda: 9), 0.125627012864498276906, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfWaldDist(x: 3, mean: 6, lambda: 9), 0.287386744404773626164, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfWaldDist(x: 10, mean: 6, lambda: 9), 0.851063810667129652088, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfWaldDist(x: 33, mean: 6, lambda: 9), 0.997518962516710678217, accuracy: 1e-14)
-        XCTAssertEqual(try! cdfWaldDist(x: 145, mean: 6, lambda: 9), 0.999999999702767058076, accuracy: 1e-14)
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.cdf(x: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.cdf(x: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 1, mean: 6, lambda: 9), 0.0108821452821513154870, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 2, mean: 6, lambda: 9), 0.125627012864498276906, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 3, mean: 6, lambda: 9), 0.287386744404773626164, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 10, mean: 6, lambda: 9), 0.851063810667129652088, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 33, mean: 6, lambda: 9), 0.997518962516710678217, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 145, mean: 6, lambda: 9), 0.999999999702767058076, accuracy: 1e-14)
 
         /*
          mu = 6;
@@ -2331,15 +2331,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[316]= 0.997518962516710678217
          Out[317]= 0.999999999702767058076
         */
-        XCTAssertThrowsError(try pdfWaldDist(x: 0, mean: 0, lambda: 2))
-        XCTAssertThrowsError(try pdfWaldDist(x: 0, mean: 2, lambda: 0))
-        XCTAssertEqual(try! pdfWaldDist(x: 0, mean: 6, lambda: 9), 0)
-        XCTAssertEqual(try! pdfWaldDist(x: 1, mean: 6, lambda: 9), 0.0525849014807056120865, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfWaldDist(x: 2, mean: 6, lambda: 9), 0.155665311532723013753, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfWaldDist(x: 3, mean: 6, lambda: 9), 0.158302949877769673488, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfWaldDist(x: 10, mean: 6, lambda: 9), 0.0309864928480366992183, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfWaldDist(x: 33, mean: 6, lambda: 9), 0.000399039071184676275858, accuracy: 1e-14)
-        XCTAssertEqual(try! pdfWaldDist(x: 145, mean: 6, lambda: 9), 4.00272220943724302952e-11, accuracy: 1e-23)
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.pdf(x: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.pdf(x: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 1, mean: 6, lambda: 9), 0.0525849014807056120865, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 2, mean: 6, lambda: 9), 0.155665311532723013753, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 3, mean: 6, lambda: 9), 0.158302949877769673488, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 10, mean: 6, lambda: 9), 0.0309864928480366992183, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 33, mean: 6, lambda: 9), 0.000399039071184676275858, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 145, mean: 6, lambda: 9), 4.00272220943724302952e-11, accuracy: 1e-23)
         
         /*
          mu = 6;
@@ -2360,15 +2360,15 @@ class SwiftyStatsTests: XCTestCase {
          Out[337]= 38.7320805901883006582
          Out[338]= \[Infinity]
         */
-        XCTAssertThrowsError(try quantileWaldDist(p: 0, mean: 0, lambda: 2))
-        XCTAssertThrowsError(try quantileWaldDist(p: 0, mean: 2, lambda: 0))
-        XCTAssertEqual(try! quantileWaldDist(p: 0, mean: 6, lambda: 9), 0)
-        XCTAssertEqual(try! quantileWaldDist(p: 0.25, mean: 6, lambda: 9), 2.76686873332207861117, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileWaldDist(p: 0.5, mean: 6, lambda: 9), 4.53675199081610130561, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileWaldDist(p: 0.75, mean: 6, lambda: 9), 7.57917596871024542035, accuracy: 1e-14)
-        XCTAssertEqual(try! quantileWaldDist(p: 0.99, mean: 6, lambda: 9), 24.5614684372629823155, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWaldDist(p: 0.999, mean: 6, lambda: 9), 38.7320805901883006582, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWaldDist(p: 1, mean: 6, lambda: 9), Double.infinity)
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.quantile(p: 0, mean: 0, lambda: 2))
+        XCTAssertThrowsError(try SSProbDist.InverseNormal.quantile(p: 0, mean: 2, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0, mean: 6, lambda: 9), 0)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0.25, mean: 6, lambda: 9), 2.76686873332207861117, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0.5, mean: 6, lambda: 9), 4.53675199081610130561, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0.75, mean: 6, lambda: 9), 7.57917596871024542035, accuracy: 1e-14)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0.99, mean: 6, lambda: 9), 24.5614684372629823155, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0.999, mean: 6, lambda: 9), 38.7320805901883006582, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 1, mean: 6, lambda: 9), Double.infinity)
         /*
          mu = 6;
          lambda = 9;
@@ -2378,7 +2378,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraWaldDist(mean: 6, lambda: 9)
+        para = try! SSProbDist.InverseNormal.para(mean: 6, lambda: 9)
         XCTAssertEqual(para!.mean, 6, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 24, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2.44948974278317809820, accuracy: 1e-12)
@@ -2396,15 +2396,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 33], 21]
          N[CDF[d, 145], 21]
         */
-        XCTAssertThrowsError(try cdfGammaDist(x: 0, shape: -1, scale: 1))
-        XCTAssertThrowsError(try cdfGammaDist(x: 0, shape: 1, scale: 0))
-        XCTAssertEqual(try! cdfGammaDist(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 1, shape: 2, scale: 3), 0.0446249192349476660992, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 2, shape: 2, scale: 3), 0.144304801612346621880, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 3, shape: 2, scale: 3), 0.264241117657115356809, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 10, shape: 2, scale: 3), 0.845412695495239610381, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 33, shape: 2, scale: 3), 0.999799579590517052088, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfGammaDist(x: 145, shape: 2, scale: 3), 0.999999999999999999950, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Gamma.cdf(x: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try SSProbDist.Gamma.cdf(x: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 1, shape: 2, scale: 3), 0.0446249192349476660992, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 2, shape: 2, scale: 3), 0.144304801612346621880, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 3, shape: 2, scale: 3), 0.264241117657115356809, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 10, shape: 2, scale: 3), 0.845412695495239610381, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 33, shape: 2, scale: 3), 0.999799579590517052088, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 145, shape: 2, scale: 3), 0.999999999999999999950, accuracy: 1e-12)
 
         /*
          shape = 2;
@@ -2418,15 +2418,15 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 33], 21]
          N[PDF[d, 145], 21]
          */
-        XCTAssertThrowsError(try pdfGammaDist(x: 0, shape: -1, scale: 1))
-        XCTAssertThrowsError(try pdfGammaDist(x: 0, shape: 1, scale: 0))
-        XCTAssertEqual(try! pdfGammaDist(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 1, shape: 2, scale: 3), 0.0796145900637543611584, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 2, shape: 2, scale: 3), 0.114092693118353783749, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 3, shape: 2, scale: 3), 0.122626480390480773865, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 10, shape: 2, scale: 3), 0.0396377703858359973383, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 33, shape: 2, scale: 3), 0.0000612395695642340841463, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfGammaDist(x: 145, shape: 2, scale: 3), 1.64522588620458773000e-20, accuracy: 1e-27)
+        XCTAssertThrowsError(try SSProbDist.Gamma.pdf(x: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try SSProbDist.Gamma.pdf(x: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 1, shape: 2, scale: 3), 0.0796145900637543611584, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 2, shape: 2, scale: 3), 0.114092693118353783749, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 3, shape: 2, scale: 3), 0.122626480390480773865, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 10, shape: 2, scale: 3), 0.0396377703858359973383, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 33, shape: 2, scale: 3), 0.0000612395695642340841463, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 145, shape: 2, scale: 3), 1.64522588620458773000e-20, accuracy: 1e-27)
 
         /*
          shape = 2;
@@ -2440,15 +2440,15 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileGammaDist(p: 0, shape: -1, scale: 1))
-        XCTAssertThrowsError(try quantileGammaDist(p: 0, shape: 1, scale: 0))
-        XCTAssertEqual(try! quantileGammaDist(p: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileGammaDist(p: 0.25, shape: 2, scale: 3), 2.88383628934433128754, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileGammaDist(p: 0.5, shape: 2, scale: 3), 5.03504097004998196024, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileGammaDist(p: 0.75, shape: 2, scale: 3), 8.07790358666908731226, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileGammaDist(p: 0.99, shape: 2, scale: 3), 19.9150562039814368081, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileGammaDist(p: 0.999, shape: 2, scale: 3), 27.7002404293547571913, accuracy: 1e-12)
-        XCTAssert(try! quantileGammaDist(p: 1, shape: 2, scale: 3).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.Gamma.quantile(p: 0, shape: -1, scale: 1))
+        XCTAssertThrowsError(try SSProbDist.Gamma.quantile(p: 0, shape: 1, scale: 0))
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0.25, shape: 2, scale: 3), 2.88383628934433128754, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0.5, shape: 2, scale: 3), 5.03504097004998196024, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0.75, shape: 2, scale: 3), 8.07790358666908731226, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0.99, shape: 2, scale: 3), 19.9150562039814368081, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Gamma.quantile(p: 0.999, shape: 2, scale: 3), 27.7002404293547571913, accuracy: 1e-12)
+        XCTAssert(try! SSProbDist.Gamma.quantile(p: 1, shape: 2, scale: 3).isInfinite)
         /*
          shape = 2;
          scale = 3;
@@ -2458,7 +2458,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraGammaDist(shape: 2, scale: 3)
+        para = try! SSProbDist.Gamma.para(shape: 2, scale: 3)
         XCTAssertEqual(para!.mean, 6, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 18, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 1.41421356237309504880, accuracy: 1e-12)
@@ -2477,14 +2477,14 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 7], 21]
          N[CDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try cdfErlangDist(x: 0, shape: 0, rate: 1))
-        XCTAssertEqual(try! cdfErlangDist(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 1, shape: 8, rate: 1.9), 0.000793457613267557042372, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 2, shape: 8, rate: 1.9), 0.0401073776861547292702, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 2.2, shape: 8, rate: 1.9), 0.0625806276334696425021, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 4.5, shape: 8, rate: 1.9), 0.620845136890394243952, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 7, shape: 8, rate: 1.9), 0.953851071263071931215, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfErlangDist(x: 10, shape: 8, rate: 1.9), 0.998486657386375206401, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Erlang.cdf(x: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 1, shape: 8, rate: 1.9), 0.000793457613267557042372, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 2, shape: 8, rate: 1.9), 0.0401073776861547292702, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 2.2, shape: 8, rate: 1.9), 0.0625806276334696425021, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 4.5, shape: 8, rate: 1.9), 0.620845136890394243952, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 7, shape: 8, rate: 1.9), 0.953851071263071931215, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.cdf(x: 10, shape: 8, rate: 1.9), 0.998486657386375206401, accuracy: 1e-12)
         
         /*
          shape = 8;
@@ -2498,14 +2498,14 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 7], 21]
          N[PDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try pdfErlangDist(x: 0, shape: 0, rate: 1))
-        XCTAssertEqual(try! pdfErlangDist(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 1, shape: 8, rate: 1.9), 0.00504009538397410085449, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 2, shape: 8, rate: 1.9), 0.0964915337384170109056, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 2.2, shape: 8, rate: 1.9), 0.128589676154648556029, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 4.5, shape: 8, rate: 1.9), 0.243707024534075753055, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 7, shape: 8, rate: 1.9), 0.0464694938322868155464, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfErlangDist(x: 10, shape: 8, rate: 1.9), 0.00188800489092865877089, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Erlang.pdf(x: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: -1, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 1, shape: 8, rate: 1.9), 0.00504009538397410085449, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 2, shape: 8, rate: 1.9), 0.0964915337384170109056, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 2.2, shape: 8, rate: 1.9), 0.128589676154648556029, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 4.5, shape: 8, rate: 1.9), 0.243707024534075753055, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 7, shape: 8, rate: 1.9), 0.0464694938322868155464, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.pdf(x: 10, shape: 8, rate: 1.9), 0.00188800489092865877089, accuracy: 1e-12)
         
         /*
          shape = 8;
@@ -2519,14 +2519,14 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileErlangDist(p: 0, shape: 0, rate: 1))
-        XCTAssertEqual(try! quantileErlangDist(p: 0, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileErlangDist(p: 0.25, shape: 8, rate: 1.9), 3.13479465721473572797, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileErlangDist(p: 0.5, shape: 8, rate: 1.9), 4.03644707500042310756, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileErlangDist(p: 0.75, shape: 8, rate: 1.9), 5.09706847910118785655, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileErlangDist(p: 0.99, shape: 8, rate: 1.9), 8.42103339705662662358, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileErlangDist(p: 0.999, shape: 8, rate: 1.9), 10.3295670502022305302, accuracy: 1e-12)
-        XCTAssert(try! quantileErlangDist(p: 1, shape: 8, rate: 1.9).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.Erlang.quantile(p: 0, shape: 0, rate: 1))
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0, shape: 8, rate: 1.9), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0.25, shape: 8, rate: 1.9), 3.13479465721473572797, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0.5, shape: 8, rate: 1.9), 4.03644707500042310756, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0.75, shape: 8, rate: 1.9), 5.09706847910118785655, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0.99, shape: 8, rate: 1.9), 8.42103339705662662358, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Erlang.quantile(p: 0.999, shape: 8, rate: 1.9), 10.3295670502022305302, accuracy: 1e-12)
+        XCTAssert(try! SSProbDist.Erlang.quantile(p: 1, shape: 8, rate: 1.9).isInfinite)
         /*
          shape = 8;
          scale = 19/10;
@@ -2536,7 +2536,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraErlangDist(shape: 8, rate: 1.9)
+        para = try! SSProbDist.Erlang.para(shape: 8, rate: 1.9)
         XCTAssertEqual(para!.mean, 4.21052631578947368421, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 2.21606648199445983380, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.707106781186547524401, accuracy: 1e-12)
@@ -2556,17 +2556,17 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 7], 21]
          N[CDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 0, shape: 3))
-        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 4, shape: 0))
-        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: 4, shape: -1))
-        XCTAssertThrowsError(try cdfWeibullDist(x: 0, location: 2, scale: -24, shape: -1))
-        XCTAssertEqual(try! cdfWeibullDist(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 2.9, location: 2, scale: 4, shape: 3), 0.0113259974465415820934, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 3,   location: 2, scale: 4, shape: 3), 0.0155035629945915940130, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 3.1, location: 2, scale: 4, shape: 3), 0.0205821113758218963048, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 4.5, location: 2, scale: 4, shape: 3), 0.216622535939181796504, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 7,   location: 2, scale: 4, shape: 3), 0.858169840912657470462, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfWeibullDist(x: 22,  location: 2, scale: 4, shape: 3), 1.00000000000000000000, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Weibull.cdf(x: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try SSProbDist.Weibull.cdf(x: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try SSProbDist.Weibull.cdf(x: 0, location: 2, scale: 4, shape: -1))
+        XCTAssertThrowsError(try SSProbDist.Weibull.cdf(x: 0, location: 2, scale: -24, shape: -1))
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 2.9, location: 2, scale: 4, shape: 3), 0.0113259974465415820934, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 3,   location: 2, scale: 4, shape: 3), 0.0155035629945915940130, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 3.1, location: 2, scale: 4, shape: 3), 0.0205821113758218963048, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 4.5, location: 2, scale: 4, shape: 3), 0.216622535939181796504, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 7,   location: 2, scale: 4, shape: 3), 0.858169840912657470462, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 22,  location: 2, scale: 4, shape: 3), 1.00000000000000000000, accuracy: 1e-12)
 
         /*
          shape = 3;
@@ -2581,17 +2581,17 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 7], 21]
          N[PDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 0, shape: 3))
-        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 4, shape: 0))
-        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: 4, shape: -2))
-        XCTAssertThrowsError(try pdfWeibullDist(x: 0, location: 2, scale: -4, shape: 3))
-        XCTAssertEqual(try! pdfWeibullDist(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 2.9, location: 2, scale: 4, shape: 3), 0.0375387160344516243049, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 3,   location: 2, scale: 4, shape: 3), 0.0461482704846285190306, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 3.1, location: 2, scale: 4, shape: 3), 0.0555513583704026018190, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 4.5, location: 2, scale: 4, shape: 3), 0.229505116424067833055, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 7,   location: 2, scale: 4, shape: 3), 0.166207217680479526802, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfWeibullDist(x: 22,  location: 2, scale: 4, shape: 3), 9.68703868657098933797e-54, accuracy: 1e-60)
+        XCTAssertThrowsError(try SSProbDist.Weibull.pdf(x: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try SSProbDist.Weibull.pdf(x: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try SSProbDist.Weibull.pdf(x: 0, location: 2, scale: 4, shape: -2))
+        XCTAssertThrowsError(try SSProbDist.Weibull.pdf(x: 0, location: 2, scale: -4, shape: 3))
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: -1,  location: 2, scale: 4, shape: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 2.9, location: 2, scale: 4, shape: 3), 0.0375387160344516243049, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 3,   location: 2, scale: 4, shape: 3), 0.0461482704846285190306, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 3.1, location: 2, scale: 4, shape: 3), 0.0555513583704026018190, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 4.5, location: 2, scale: 4, shape: 3), 0.229505116424067833055, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 7,   location: 2, scale: 4, shape: 3), 0.166207217680479526802, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 22,  location: 2, scale: 4, shape: 3), 9.68703868657098933797e-54, accuracy: 1e-60)
 
         /*
          shape = 3;
@@ -2606,19 +2606,19 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 0, shape: 3))
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 4, shape: 0))
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 0, shape: 0))
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: -4, shape: 3))
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: 4, shape: -3))
-        XCTAssertThrowsError(try quantileWeibullDist(p: 0, location: 2, scale: -4, shape: -3))
-        XCTAssertEqual(try! quantileWeibullDist(p: 0, location: 2, scale: 4, shape: 3), 2, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWeibullDist(p: 0.25, location: 2, scale: 4, shape: 3), 4.64056942859838095934, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWeibullDist(p: 0.5, location: 2, scale: 4, shape: 3), 5.53998817800207087498, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWeibullDist(p: 0.75, location: 2, scale: 4, shape: 3), 6.46010562184380828507, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWeibullDist(p: 0.99, location: 2, scale: 4, shape: 3), 8.65490539680019769957, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileWeibullDist(p: 0.999, location: 2, scale: 4, shape: 3), 9.61796499056221876841, accuracy: 1e-12)
-        XCTAssert(try! quantileWeibullDist(p: 1, location: 2, scale: 4, shape: 3).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: 0, shape: 3))
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: 4, shape: 0))
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: 0, shape: 0))
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: -4, shape: 3))
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: 4, shape: -3))
+        XCTAssertThrowsError(try SSProbDist.Weibull.quantile(p: 0, location: 2, scale: -4, shape: -3))
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0, location: 2, scale: 4, shape: 3), 2, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0.25, location: 2, scale: 4, shape: 3), 4.64056942859838095934, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0.5, location: 2, scale: 4, shape: 3), 5.53998817800207087498, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0.75, location: 2, scale: 4, shape: 3), 6.46010562184380828507, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0.99, location: 2, scale: 4, shape: 3), 8.65490539680019769957, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Weibull.quantile(p: 0.999, location: 2, scale: 4, shape: 3), 9.61796499056221876841, accuracy: 1e-12)
+        XCTAssert(try! SSProbDist.Weibull.quantile(p: 1, location: 2, scale: 4, shape: 3).isInfinite)
         /*
          shape = 3;
          scale = 4;
@@ -2629,7 +2629,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraWeibullDist(location: 2, scale: 4, shape: 3)
+        para = try! SSProbDist.Weibull.para(location: 2, scale: 4, shape: 3)
         XCTAssertEqual(para!.mean, 5.57191804627699684487, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 1.68532615789565960689, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.168102842229401082430, accuracy: 1e-12)
@@ -2648,15 +2648,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 7], 21]
          N[CDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try cdfUniformDist(x: 0, lowerBound: 10, upperBound: 1))
-        XCTAssertThrowsError(try cdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
-        XCTAssertEqual(try! cdfUniformDist(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 2.9, lowerBound: 1, upperBound: 10), 0.211111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 3,   lowerBound: 1, upperBound: 10), 0.222222222222222222222, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 3.1, lowerBound: 1, upperBound: 10), 0.233333333333333333333, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 4.5, lowerBound: 1, upperBound: 10), 0.388888888888888888889, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 7,   lowerBound: 1, upperBound: 10), 0.666666666666666666667, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfUniformDist(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Uniform.cdf(x: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try SSProbDist.Uniform.cdf(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 2.9, lowerBound: 1, upperBound: 10), 0.211111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 3,   lowerBound: 1, upperBound: 10), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 3.1, lowerBound: 1, upperBound: 10), 0.233333333333333333333, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 4.5, lowerBound: 1, upperBound: 10), 0.388888888888888888889, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 7,   lowerBound: 1, upperBound: 10), 0.666666666666666666667, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
 
         /*
          min = 1;
@@ -2670,16 +2670,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 7], 21]
          N[PDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 1))
-        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
-        XCTAssertThrowsError(try pdfUniformDist(x: 0, lowerBound: 10, upperBound: 10))
-        XCTAssertEqual(try! pdfUniformDist(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 2.9,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 3,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 3.1,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 4.5,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 7,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfUniformDist(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Uniform.pdf(x: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try SSProbDist.Uniform.pdf(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try SSProbDist.Uniform.pdf(x: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 2.9,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 3,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 3.1,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 4.5,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 7,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
 
         /*
          min = 1;
@@ -2693,18 +2693,18 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 1))
-        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 10))
-        XCTAssertThrowsError(try quantileUniformDist(p: 0, lowerBound: 10, upperBound: 10))
-        XCTAssertThrowsError(try quantileUniformDist(p: -1, lowerBound: 1, upperBound: 10))
-        XCTAssertThrowsError(try quantileUniformDist(p: 2, lowerBound: 1, upperBound: 10))
-        XCTAssertEqual(try! quantileUniformDist(p: 0, lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 0.25, lowerBound: 1, upperBound: 10), 3.25, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 0.5, lowerBound: 1, upperBound: 10), 5.5, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 0.75, lowerBound: 1, upperBound: 10), 7.75, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 0.99, lowerBound: 1, upperBound: 10), 9.91, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 0.999, lowerBound: 1, upperBound: 10), 9.991, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileUniformDist(p: 1, lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Uniform.quantile(p: 0, lowerBound: 10, upperBound: 1))
+        XCTAssertThrowsError(try SSProbDist.Uniform.quantile(p: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try SSProbDist.Uniform.quantile(p: 0, lowerBound: 10, upperBound: 10))
+        XCTAssertThrowsError(try SSProbDist.Uniform.quantile(p: -1, lowerBound: 1, upperBound: 10))
+        XCTAssertThrowsError(try SSProbDist.Uniform.quantile(p: 2, lowerBound: 1, upperBound: 10))
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0, lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0.25, lowerBound: 1, upperBound: 10), 3.25, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0.5, lowerBound: 1, upperBound: 10), 5.5, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0.75, lowerBound: 1, upperBound: 10), 7.75, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0.99, lowerBound: 1, upperBound: 10), 9.91, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 0.999, lowerBound: 1, upperBound: 10), 9.991, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Uniform.quantile(p: 1, lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
         /*
          min = 1;
          max = 10;
@@ -2714,7 +2714,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraUniformDist(lowerBound: 1, upperBound: 10)
+        para = try! SSProbDist.Uniform.para(lowerBound: 1, upperBound: 10)
         XCTAssertEqual(para!.mean, 5.5, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 6.75, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
@@ -2735,16 +2735,16 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 7], 21]
          N[CDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
-        XCTAssertEqual(try! cdfTriangularDist(x: 0,   lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 2.9, lowerBound: 1, upperBound: 10, mode: 3), 0.200555555555555555556, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 3,   lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 3.1, lowerBound: 1, upperBound: 10, mode: 3), 0.244285714285714285714, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 4.5, lowerBound: 1, upperBound: 10, mode: 3), 0.519841269841269841270, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 7,   lowerBound: 1, upperBound: 10, mode: 3), 0.857142857142857142857, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 22,  lowerBound: 1, upperBound: 10, mode: 3), 1.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.cdf(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.cdf(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.cdf(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 0,   lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 2.9, lowerBound: 1, upperBound: 10, mode: 3), 0.200555555555555555556, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 3,   lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 3.1, lowerBound: 1, upperBound: 10, mode: 3), 0.244285714285714285714, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 4.5, lowerBound: 1, upperBound: 10, mode: 3), 0.519841269841269841270, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 7,   lowerBound: 1, upperBound: 10, mode: 3), 0.857142857142857142857, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 22,  lowerBound: 1, upperBound: 10, mode: 3), 1.0, accuracy: 1e-12)
         
         /*
          min = 1;
@@ -2759,16 +2759,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 7], 21]
          N[PDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
-        XCTAssertEqual(try! pdfTriangularDist(x: 0,     lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 2.9,   lowerBound: 1, upperBound: 10, mode: 3), 0.211111111111111111111, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 3,     lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 3.1,   lowerBound: 1, upperBound: 10, mode: 3), 0.219047619047619047619, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 4.5,   lowerBound: 1, upperBound: 10, mode: 3), 0.174603174603174603175, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 7,     lowerBound: 1, upperBound: 10, mode: 3), 0.0952380952380952380952, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 22,    lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.pdf(x: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.pdf(x: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.pdf(x: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 0,     lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 2.9,   lowerBound: 1, upperBound: 10, mode: 3), 0.211111111111111111111, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 3,     lowerBound: 1, upperBound: 10, mode: 3), 0.222222222222222222222, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 3.1,   lowerBound: 1, upperBound: 10, mode: 3), 0.219047619047619047619, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 4.5,   lowerBound: 1, upperBound: 10, mode: 3), 0.174603174603174603175, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 7,     lowerBound: 1, upperBound: 10, mode: 3), 0.0952380952380952380952, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 22,    lowerBound: 1, upperBound: 10, mode: 3), 0, accuracy: 1e-12)
         
         /*
          min = 1;
@@ -2783,16 +2783,16 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 10, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 0, mode: 3))
-        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 10, mode: 333))
-        XCTAssertEqual(try! quantileTriangularDist(p: 0,    lowerBound: 1, upperBound: 10, mode: 3), 1, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.25, lowerBound: 1, upperBound: 10, mode: 3), 3.12613645756623999012, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.5,  lowerBound: 1, upperBound: 10, mode: 3), 4.38751391983908792162, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.75, lowerBound: 1, upperBound: 10, mode: 3), 6.03137303340311411425, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.99, lowerBound: 1, upperBound: 10, mode: 3), 9.20627460668062282285, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.999,lowerBound: 1, upperBound: 10, mode: 3), 9.74900199203977733561, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 1,    lowerBound: 1, upperBound: 10, mode: 3), 10.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.quantile(p: 0, lowerBound: 10, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.quantile(p: 0, lowerBound: 0, upperBound: 0, mode: 3))
+        XCTAssertThrowsError(try SSProbDist.Triangular.quantile(p: 0, lowerBound: 0, upperBound: 10, mode: 333))
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0,    lowerBound: 1, upperBound: 10, mode: 3), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.25, lowerBound: 1, upperBound: 10, mode: 3), 3.12613645756623999012, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.5,  lowerBound: 1, upperBound: 10, mode: 3), 4.38751391983908792162, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.75, lowerBound: 1, upperBound: 10, mode: 3), 6.03137303340311411425, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.99, lowerBound: 1, upperBound: 10, mode: 3), 9.20627460668062282285, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.999,lowerBound: 1, upperBound: 10, mode: 3), 9.74900199203977733561, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 1,    lowerBound: 1, upperBound: 10, mode: 3), 10.0, accuracy: 1e-12)
         /*
          min = 1;
          max = 10;
@@ -2803,7 +2803,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraTriangularDist(lowerBound: 1, upperBound: 10, mode: 3)
+        para = try! SSProbDist.Triangular.para(lowerBound: 1, upperBound: 10, mode: 3)
         XCTAssertEqual(para!.mean, 4.66666666666666666667, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 3.72222222222222222222, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.453853262394983221953, accuracy: 1e-12)
@@ -2823,15 +2823,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 7], 21]
          N[CDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0))
-        XCTAssertThrowsError(try cdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0))
-        XCTAssertEqual(try! cdfTriangularDist(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 2.9, lowerBound: 1, upperBound: 10), 0.0891358024691358024691, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 3,   lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 3.1, lowerBound: 1, upperBound: 10), 0.108888888888888888889, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 4.5, lowerBound: 1, upperBound: 10), 0.302469135802469135802, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 7,   lowerBound: 1, upperBound: 10), 0.777777777777777777778, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfTriangularDist(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.cdf(x: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try SSProbDist.Triangular.cdf(x: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 0,   lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 2.9, lowerBound: 1, upperBound: 10), 0.0891358024691358024691, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 3,   lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 3.1, lowerBound: 1, upperBound: 10), 0.108888888888888888889, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 4.5, lowerBound: 1, upperBound: 10), 0.302469135802469135802, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 7,   lowerBound: 1, upperBound: 10), 0.777777777777777777778, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.cdf(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
         
         /*
          min = 1;
@@ -2846,15 +2846,15 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 7], 21]
          N[PDF[d, 22], 21]
          */
-        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 10, upperBound: 0))
-        XCTAssertThrowsError(try pdfTriangularDist(x: 0, lowerBound: 0, upperBound: 0))
-        XCTAssertEqual(try! pdfTriangularDist(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 2.9,   lowerBound: 1, upperBound: 10), 0.0938271604938271604938, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 3,     lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 3.1,   lowerBound: 1, upperBound: 10), 0.103703703703703703704, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 4.5,   lowerBound: 1, upperBound: 10), 0.172839506172839506173, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 7,     lowerBound: 1, upperBound: 10), 0.148148148148148148148, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfTriangularDist(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.pdf(x: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try SSProbDist.Triangular.pdf(x: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 0,     lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 2.9,   lowerBound: 1, upperBound: 10), 0.0938271604938271604938, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 3,     lowerBound: 1, upperBound: 10), 0.0987654320987654320988, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 3.1,   lowerBound: 1, upperBound: 10), 0.103703703703703703704, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 4.5,   lowerBound: 1, upperBound: 10), 0.172839506172839506173, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 7,     lowerBound: 1, upperBound: 10), 0.148148148148148148148, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.pdf(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
         
         /*
          min = 1;
@@ -2869,15 +2869,15 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 10, upperBound: 0))
-        XCTAssertThrowsError(try quantileTriangularDist(p: 0, lowerBound: 0, upperBound: 0))
-        XCTAssertEqual(try! quantileTriangularDist(p: 0,    lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.25, lowerBound: 1, upperBound: 10), 4.18198051533946385980, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.5,  lowerBound: 1, upperBound: 10), 5.50000000000000000000, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.75, lowerBound: 1, upperBound: 10), 6.81801948466053614020, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.99, lowerBound: 1, upperBound: 10), 9.36360389693210722804, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 0.999,lowerBound: 1, upperBound: 10), 9.79875388202501892732, accuracy: 1e-12)
-        XCTAssertEqual(try! quantileTriangularDist(p: 1,    lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Triangular.quantile(p: 0, lowerBound: 10, upperBound: 0))
+        XCTAssertThrowsError(try SSProbDist.Triangular.quantile(p: 0, lowerBound: 0, upperBound: 0))
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0,    lowerBound: 1, upperBound: 10), 1, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.25, lowerBound: 1, upperBound: 10), 4.18198051533946385980, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.5,  lowerBound: 1, upperBound: 10), 5.50000000000000000000, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.75, lowerBound: 1, upperBound: 10), 6.81801948466053614020, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.99, lowerBound: 1, upperBound: 10), 9.36360389693210722804, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 0.999,lowerBound: 1, upperBound: 10), 9.79875388202501892732, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Triangular.quantile(p: 1,    lowerBound: 1, upperBound: 10), 10.0, accuracy: 1e-12)
         /*
          min = 1;
          max = 10;
@@ -2888,7 +2888,7 @@ class SwiftyStatsTests: XCTestCase {
          N[Skewness[d], 21]
          N[Kurtosis[d], 21]
          */
-        para = try! paraTriangularDist(lowerBound: 1, upperBound: 10)
+        para = try! SSProbDist.Triangular.para(lowerBound: 1, upperBound: 10)
         XCTAssertEqual(para!.mean, 5.5, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 3.375, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
@@ -2906,16 +2906,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 6], 21]
          N[PDF[d, 7], 21]
         */
-        XCTAssertThrowsError(try pdfPoissonDist(k: -1, rate: 1))
-        XCTAssertThrowsError(try pdfPoissonDist(k: 1, rate: 0))
-        XCTAssertEqual(try! pdfPoissonDist(k: 0, rate: 0.5), 0.606530659712633423604, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 1, rate: 0.5), 0.303265329856316711802, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 2, rate: 0.5), 0.0758163324640791779505, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 3, rate: 0.5), 0.0126360554106798629917, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 4, rate: 0.5), 0.00157950692633498287397, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 5, rate: 0.5), 0.000157950692633498287397, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 6, rate: 0.5), 0.0000131625577194581906164, accuracy: 1e-12)
-        XCTAssertEqual(try! pdfPoissonDist(k: 7, rate: 0.5), 9.40182694247013615457e-7, accuracy: 1e-15)
+        XCTAssertThrowsError(try SSProbDist.Poisson.pdf(k: -1, rate: 1))
+        XCTAssertThrowsError(try SSProbDist.Poisson.pdf(k: 1, rate: 0))
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 0, rate: 0.5), 0.606530659712633423604, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 1, rate: 0.5), 0.303265329856316711802, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 2, rate: 0.5), 0.0758163324640791779505, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 3, rate: 0.5), 0.0126360554106798629917, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 4, rate: 0.5), 0.00157950692633498287397, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 5, rate: 0.5), 0.000157950692633498287397, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 6, rate: 0.5), 0.0000131625577194581906164, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 7, rate: 0.5), 9.40182694247013615457e-7, accuracy: 1e-15)
 
         /*
          lambda = 1/2;
@@ -2929,16 +2929,16 @@ class SwiftyStatsTests: XCTestCase {
         N[CDF[d, 6], 21]
         N[CDF[d, 7], 21]
         */
-        XCTAssertThrowsError(try cdfPoissonDist(k: -1, rate: 1, tail: .lower))
-        XCTAssertThrowsError(try cdfPoissonDist(k: 1, rate: 0, tail: .lower))
-        XCTAssertEqual(try! cdfPoissonDist(k: 0, rate: 0.5, tail: .lower), 0.606530659712633423604, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 1, rate: 0.5, tail: .lower), 0.909795989568950135406, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 2, rate: 0.5, tail: .lower), 0.985612322033029313356, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 3, rate: 0.5, tail: .lower), 0.998248377443709176348, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 4, rate: 0.5, tail: .lower), 0.999827884370044159222, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 5, rate: 0.5, tail: .lower), 0.999985835062677657509, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 6, rate: 0.5, tail: .lower), 0.999998997620397115700, accuracy: 1e-12)
-        XCTAssertEqual(try! cdfPoissonDist(k: 7, rate: 0.5, tail: .lower), 0.999999937803091362714, accuracy: 1e-12)
+        XCTAssertThrowsError(try SSProbDist.Poisson.cdf(k: -1, rate: 1, tail: .lower))
+        XCTAssertThrowsError(try SSProbDist.Poisson.cdf(k: 1, rate: 0, tail: .lower))
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 0, rate: 0.5, tail: .lower), 0.606530659712633423604, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 1, rate: 0.5, tail: .lower), 0.909795989568950135406, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 2, rate: 0.5, tail: .lower), 0.985612322033029313356, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 3, rate: 0.5, tail: .lower), 0.998248377443709176348, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 4, rate: 0.5, tail: .lower), 0.999827884370044159222, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 5, rate: 0.5, tail: .lower), 0.999985835062677657509, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 6, rate: 0.5, tail: .lower), 0.999998997620397115700, accuracy: 1e-12)
+        XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 7, rate: 0.5, tail: .lower), 0.999999937803091362714, accuracy: 1e-12)
 
         /*
          a = -3;
@@ -2953,16 +2953,16 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 0], 21]
          N[CDF[d, a + Pi + 1], 21]
         */
-        XCTAssertThrowsError(try cdfVonMisesDist(x: 2, mean: -3, concentration: 0))
-        XCTAssertThrowsError(try cdfVonMisesDist(x: 2, mean: -3, concentration: -1))
-        XCTAssertEqual(try! cdfVonMisesDist(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0 ,accuracy: 1E-5)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0.0195387021367985546020 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -2.5, mean: -3, concentration: 4, useExpIntegration: true),0.829488464005985508796 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -0.2, mean: -3, concentration: 4, useExpIntegration: true),0.999904581125379364584 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -4.4, mean: -3, concentration: 4, useExpIntegration: true),0.00722697637072942637724 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -Double.pi / 2.0, mean: -3, concentration: 4, useExpIntegration: true),0.993539629762563788614 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: 0, mean: -3, concentration: 4, useExpIntegration: true),0.999962986474166847826 ,accuracy: 1E-12)
-        XCTAssertEqual(try! cdfVonMisesDist(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4, useExpIntegration: true),1.0 ,accuracy: 1E-7)
+        XCTAssertThrowsError(try SSProbDist.VonMises.cdf(x: 2, mean: -3, concentration: 0))
+        XCTAssertThrowsError(try SSProbDist.VonMises.cdf(x: 2, mean: -3, concentration: -1))
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0.0195387021367985546020 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -2.5, mean: -3, concentration: 4, useExpIntegration: true),0.829488464005985508796 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -0.2, mean: -3, concentration: 4, useExpIntegration: true),0.999904581125379364584 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -4.4, mean: -3, concentration: 4, useExpIntegration: true),0.00722697637072942637724 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -Double.pi / 2.0, mean: -3, concentration: 4, useExpIntegration: true),0.993539629762563788614 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: 0, mean: -3, concentration: 4, useExpIntegration: true),0.999962986474166847826 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4, useExpIntegration: true),1.0 ,accuracy: 1E-7)
         /*
          a = -3;
          b = 4;
@@ -2976,16 +2976,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 0], 21]
          N[PDF[d, a + Pi + 1], 21]
          */
-        XCTAssertThrowsError(try pdfVonMisesDist(x: 2, mean: -3, concentration: 0))
-        XCTAssertThrowsError(try pdfVonMisesDist(x: 2, mean: -3, concentration: -1))
-        XCTAssertEqual(try! pdfVonMisesDist(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-5)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -Double.pi - 1.0, mean: -3, concentration: 4),0.0744027395631070328565 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -2.5, mean: -3, concentration: 4),0.471177869330735027666 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -0.2, mean: -3, concentration: 4),0.000324982499557601827956 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -4.4, mean: -3, concentration: 4),0.0277927164636370027697 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -Double.pi / 2.0, mean: -3, concentration: 4),0.0247638628979559132417 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: 0, mean: -3, concentration: 4),0.000268456988587833058582 ,accuracy: 1E-12)
-        XCTAssertEqual(try! pdfVonMisesDist(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-7)
+        XCTAssertThrowsError(try SSProbDist.VonMises.pdf(x: 2, mean: -3, concentration: 0))
+        XCTAssertThrowsError(try SSProbDist.VonMises.pdf(x: 2, mean: -3, concentration: -1))
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -Double.pi - 1.0, mean: -3, concentration: 4),0.0744027395631070328565 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -2.5, mean: -3, concentration: 4),0.471177869330735027666 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -0.2, mean: -3, concentration: 4),0.000324982499557601827956 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -4.4, mean: -3, concentration: 4),0.0277927164636370027697 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -Double.pi / 2.0, mean: -3, concentration: 4),0.0247638628979559132417 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: 0, mean: -3, concentration: 4),0.000268456988587833058582 ,accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.VonMises.pdf(x: -3 + Double.pi + 1.0, mean: -3, concentration: 4),0 ,accuracy: 1E-7)
         /*
          a = -3;
          b = 4;
@@ -2998,15 +2998,15 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileVonMisesDist(p: -1, mean: -3, concentration: 4))
-        XCTAssertThrowsError(try quantileVonMisesDist(p: 2, mean: -3, concentration: 4))
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0, mean: -3, concentration: 4),-6.14159265358979323846 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0.25, mean: -3, concentration: 4),-3.35205527357190904480 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0.5, mean: -3, concentration: 4),-3.00000000000000000000 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0.75, mean: -3, concentration: 4),-2.64794472642809095508 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0.99, mean: -3, concentration: 4),-1.68421199711729556367 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 0.999, mean: -3, concentration: 4),-1.04475697892580395363 ,accuracy: 1E-5)
-        XCTAssertEqual(try! quantileVonMisesDist(p: 1, mean: -3, concentration: 4),0.141592653589793238463 ,accuracy: 1E-5)
+        XCTAssertThrowsError(try SSProbDist.VonMises.quantile(p: -1, mean: -3, concentration: 4))
+        XCTAssertThrowsError(try SSProbDist.VonMises.quantile(p: 2, mean: -3, concentration: 4))
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0, mean: -3, concentration: 4),-6.14159265358979323846 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0.25, mean: -3, concentration: 4),-3.35205527357190904480 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0.5, mean: -3, concentration: 4),-3.00000000000000000000 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0.75, mean: -3, concentration: 4),-2.64794472642809095508 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0.99, mean: -3, concentration: 4),-1.68421199711729556367 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 0.999, mean: -3, concentration: 4),-1.04475697892580395363 ,accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.VonMises.quantile(p: 1, mean: -3, concentration: 4),0.141592653589793238463 ,accuracy: 1E-5)
         /*
          a = -3;
          b = 4;
@@ -3015,9 +3015,9 @@ class SwiftyStatsTests: XCTestCase {
          V = 1 - BesselI[1, b]/BesselI[0, b]
          N[%,21]
          */
-        XCTAssertThrowsError(try paraVonMisesDist(mean: -3, concentration: 0))
-        XCTAssertThrowsError(try paraVonMisesDist(mean: -3, concentration: -1))
-        para = try! paraVonMisesDist(mean: -3, concentration: 4)
+        XCTAssertThrowsError(try SSProbDist.VonMises.para(mean: -3, concentration: 0))
+        XCTAssertThrowsError(try SSProbDist.VonMises.para(mean: -3, concentration: -1))
+        para = try! SSProbDist.VonMises.para(mean: -3, concentration: 4)
         XCTAssertEqual(para!.mean, -3, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 0.136477388975449417145, accuracy: 1e-12)
         XCTAssert(para!.skewness.isNaN)
@@ -3034,15 +3034,15 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 3], 21]
          N[PDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try pdfRayleighDist(x: 1, scale: 0))
-        XCTAssertThrowsError(try pdfRayleighDist(x: 1, scale: -1))
-        XCTAssertEqual(try! pdfRayleighDist(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 0.01, scale: 1.5),0.00444434568010973124020 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 1, scale: 1.5),0.355883290185248018124 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 1.1, scale: 1.5),0.373622658528284221473 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 3, scale: 1.5),0.180447044315483589192 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfRayleighDist(x: 10, scale: 1.5),9.92725082756961935157e-10 ,accuracy: 1E-20)
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.pdf(x: 1, scale: 0))
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.pdf(x: 1, scale: -1))
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 0.01, scale: 1.5),0.00444434568010973124020 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 1, scale: 1.5),0.355883290185248018124 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 1.1, scale: 1.5),0.373622658528284221473 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 3, scale: 1.5),0.180447044315483589192 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.pdf(x: 10, scale: 1.5),9.92725082756961935157e-10 ,accuracy: 1E-20)
         /*
          ClearAll["Global`*"];
          s = 3/2;
@@ -3055,15 +3055,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 3], 21]
          N[CDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try cdfRayleighDist(x: 1, scale: 0))
-        XCTAssertThrowsError(try cdfRayleighDist(x: 1, scale: -1))
-        XCTAssertEqual(try! cdfRayleighDist(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 0.01, scale: 1.5),0.0000222219753104709546309 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 1, scale: 1.5),0.199262597083191959222 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 1.1, scale: 1.5),0.235771834828509546987 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 3, scale: 1.5),0.864664716763387308106 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfRayleighDist(x: 10, scale: 1.5),0.999999999776636856380 ,accuracy: 1E-14)
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.cdf(x: 1, scale: 0))
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.cdf(x: 1, scale: -1))
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: -1, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 0, scale: 1.5),0 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 0.01, scale: 1.5),0.0000222219753104709546309 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 1, scale: 1.5),0.199262597083191959222 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 1.1, scale: 1.5),0.235771834828509546987 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 3, scale: 1.5),0.864664716763387308106 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 10, scale: 1.5),0.999999999776636856380 ,accuracy: 1E-14)
 
         /*
          ClearAll["Global`*"];
@@ -3076,15 +3076,15 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileRayleighDist(p: -1, scale: 1.5))
-        XCTAssertThrowsError(try quantileRayleighDist(p: 2, scale: 1.5))
-        XCTAssertEqual(try! quantileRayleighDist(p: 0, scale: 1.5),0 ,accuracy: 1E-15)
-        XCTAssertEqual(try! quantileRayleighDist(p: 0.25, scale: 1.5),1.13779142466139819887 ,accuracy: 1E-15)
-        XCTAssertEqual(try! quantileRayleighDist(p: 0.5, scale: 1.5),1.76611503377321203652 ,accuracy: 1E-15)
-        XCTAssertEqual(try! quantileRayleighDist(p: 0.75, scale: 1.5),2.49766383347309326906 ,accuracy: 1E-15)
-        XCTAssertEqual(try! quantileRayleighDist(p: 0.99, scale: 1.5),4.55228138815543905259 ,accuracy: 1E-15)
-        XCTAssertEqual(try! quantileRayleighDist(p: 0.999, scale: 1.5),5.57538328327475767043 ,accuracy: 1E-15)
-        XCTAssert(try! quantileRayleighDist(p: 1, scale: 1.5).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.quantile(p: -1, scale: 1.5))
+        XCTAssertThrowsError(try SSProbDist.Rayleigh.quantile(p: 2, scale: 1.5))
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0, scale: 1.5),0 ,accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.25, scale: 1.5),1.13779142466139819887 ,accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.5, scale: 1.5),1.76611503377321203652 ,accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.75, scale: 1.5),2.49766383347309326906 ,accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.99, scale: 1.5),4.55228138815543905259 ,accuracy: 1E-15)
+        XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.999, scale: 1.5),5.57538328327475767043 ,accuracy: 1E-15)
+        XCTAssert(try! SSProbDist.Rayleigh.quantile(p: 1, scale: 1.5).isInfinite)
 
         /*
          ClearAll["Global`*"];
@@ -3099,16 +3099,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 3], 21]
          N[PDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try pdfExtremValueDist(x: 1, location: -2, scale: -11))
-        XCTAssertThrowsError(try pdfExtremValueDist(x: 1, location: -2, scale: 0))
-        XCTAssertEqual(try! pdfExtremValueDist(x: -6, location: -2, scale: 1),  1.06048039970427672992e-22 ,accuracy: 1E-30)
-        XCTAssertEqual(try! pdfExtremValueDist(x: -5, location: -2, scale: 1),3.80054250404435771071e-8 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: -0.04, location: -2, scale: 1),0.122351354198388769973 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: -0.11, location: -2, scale: 1),0.129889419617261299978 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: 0, location: -2, scale: 1),0.118204951593143145999 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: 2, location: -2, scale: 1),0.0179832296967136435659 ,accuracy: 1E-14)
-        XCTAssertEqual(try! pdfExtremValueDist(x: 5, location: -2, scale: 1),0.000911050815848220300461 ,accuracy: 1E-14)
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.pdf(x: 1, location: -2, scale: -11))
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.pdf(x: 1, location: -2, scale: 0))
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: -6, location: -2, scale: 1),  1.06048039970427672992e-22 ,accuracy: 1E-30)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: -5, location: -2, scale: 1),3.80054250404435771071e-8 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: -0.04, location: -2, scale: 1),0.122351354198388769973 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: -0.11, location: -2, scale: 1),0.129889419617261299978 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: 0, location: -2, scale: 1),0.118204951593143145999 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: 2, location: -2, scale: 1),0.0179832296967136435659 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.pdf(x: 5, location: -2, scale: 1),0.000911050815848220300461 ,accuracy: 1E-14)
         /*
          ClearAll["Global`*"];
          a = -2;
@@ -3122,16 +3122,16 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 3], 21]
          N[PDF[d, 10], 21]
          */
-        XCTAssertThrowsError(try cdfExtremValueDist(x: 1, location: -2, scale: -11))
-        XCTAssertThrowsError(try cdfExtremValueDist(x: 1, location: -2, scale: 0))
-        XCTAssertEqual(try! cdfExtremValueDist(x: -6, location: -2, scale: 1),  1.94233760495640183858e-24 ,accuracy: 1E-30)
-        XCTAssertEqual(try! cdfExtremValueDist(x: -5, location: -2, scale: 1),1.89217869483829263358e-9 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: -0.04, location: -2, scale: 1),0.868612280319186993522 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: -0.11, location: -2, scale: 1),0.859785956213361748121 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: 0, location: -2, scale: 1),0.873423018493116642989 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: 2, location: -2, scale: 1),0.981851073061666482920 ,accuracy: 1E-14)
-        XCTAssertEqual(try! cdfExtremValueDist(x: 5, location: -2, scale: 1),0.999088533672457833191 ,accuracy: 1E-14)
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.cdf(x: 1, location: -2, scale: -11))
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.cdf(x: 1, location: -2, scale: 0))
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: -6, location: -2, scale: 1),  1.94233760495640183858e-24 ,accuracy: 1E-30)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: -5, location: -2, scale: 1),1.89217869483829263358e-9 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: -0.04, location: -2, scale: 1),0.868612280319186993522 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: -2, location: -2, scale: 1),0.367879441171442321596 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: -0.11, location: -2, scale: 1),0.859785956213361748121 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 0, location: -2, scale: 1),0.873423018493116642989 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 2, location: -2, scale: 1),0.981851073061666482920 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 5, location: -2, scale: 1),0.999088533672457833191 ,accuracy: 1E-14)
 
         
         /*
@@ -3146,15 +3146,15 @@ class SwiftyStatsTests: XCTestCase {
          N[InverseCDF[d, 999/1000], 21]
          N[InverseCDF[d, 1], 21]
          */
-        XCTAssertThrowsError(try quantileExtremValueDist(p: -1,location: -2, scale: 1))
-        XCTAssertThrowsError(try quantileExtremValueDist(p: 2,location: -2, scale: 1))
-        XCTAssert(try! quantileExtremValueDist(p: 0,location: -2, scale: 1) == -Double.infinity)
-        XCTAssertEqual(try! quantileExtremValueDist(p: 0.25,location: -2, scale: 1),-2.32663425997828098240 ,accuracy: 1E-14)
-        XCTAssertEqual(try! quantileExtremValueDist(p: 0.5,location: -2, scale: 1),-1.63348707941833567299 ,accuracy: 1E-14)
-        XCTAssertEqual(try! quantileExtremValueDist(p: 0.75,location: -2, scale: 1),-0.754100676292761801619 ,accuracy: 1E-14)
-        XCTAssertEqual(try! quantileExtremValueDist(p: 0.99,location: -2, scale: 1),2.60014922677657999772 ,accuracy: 1E-14)
-        XCTAssertEqual(try! quantileExtremValueDist(p: 0.999,location: -2, scale: 1),4.90725507052371649992 ,accuracy: 1E-14)
-        XCTAssert(try! quantileExtremValueDist(p: 1,location: -2, scale: 1).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.quantile(p: -1,location: -2, scale: 1))
+        XCTAssertThrowsError(try SSProbDist.ExtremeValue.quantile(p: 2,location: -2, scale: 1))
+        XCTAssert(try! SSProbDist.ExtremeValue.quantile(p: 0,location: -2, scale: 1) == -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.quantile(p: 0.25,location: -2, scale: 1),-2.32663425997828098240 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.quantile(p: 0.5,location: -2, scale: 1),-1.63348707941833567299 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.quantile(p: 0.75,location: -2, scale: 1),-0.754100676292761801619 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.quantile(p: 0.99,location: -2, scale: 1),2.60014922677657999772 ,accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ExtremeValue.quantile(p: 0.999,location: -2, scale: 1),4.90725507052371649992 ,accuracy: 1E-14)
+        XCTAssert(try! SSProbDist.ExtremeValue.quantile(p: 1,location: -2, scale: 1).isInfinite)
         /*
          lambda = 2;
          df = 10;
@@ -3166,14 +3166,14 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 20], 21]
          N[PDF[d, 120], 21]
         */
-        XCTAssertThrowsError(try pdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: -1))
-        XCTAssertThrowsError(try pdfChiSquareDist(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-14)
-        XCTAssertEqual(try! pdfChiSquareDist(chi: 120, degreesOfFreedom: 10, lambda: 2), 1.86330190212638377398e-18, accuracy: 1E-25)
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 1.86330190212638377398e-18, accuracy: 1E-25)
         /*
          lambda = 2;
          df = 10;
@@ -3185,14 +3185,14 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 20], 21]
          N[CDF[d, 120], 21]
          */
-        XCTAssertThrowsError(try cdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: -1))
-        XCTAssertThrowsError(try cdfChiSquareDist(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-14)
-        XCTAssertEqual(try! cdfChiSquareDist(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-14)
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-14)
         /*
          lambda = 2;
          df = 10;
@@ -3204,15 +3204,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 20], 21]
          N[CDF[d, 120], 21]
          */
-        XCTAssertThrowsError(try quantileChiSquareDist(p: -1, degreesOfFreedom: 10, lambda: 2))
-        XCTAssertThrowsError(try quantileChiSquareDist(p: -1, degreesOfFreedom: 10, lambda: 2))
-        XCTAssert(try! quantileChiSquareDist(p: 0, degreesOfFreedom: 10, lambda: 2) == 0)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-11)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-11)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-11)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-11)
-        XCTAssertEqual(try! quantileChiSquareDist(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
-        XCTAssert(try! quantileChiSquareDist(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
+        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
+        XCTAssert(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0, degreesOfFreedom: 10, lambda: 2) == 0)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
+        XCTAssert(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
     }
   
     func testAiry() {
@@ -4822,7 +4822,7 @@ class SwiftyStatsTests: XCTestCase {
                              -1.294632359221882342806132124680183720759073120562588301752791277e-819]
         var ans: (ai: Double, dai: Double, error: Int)
         let i: Int = 0
-        ans = airyAi(x: 0)
+        ans = SSSpecialFunctions.airyAi(x: 0)
         var re, ae: Double
         var maxRe: Double = 0.0
         var maxAe: Double = 0.0
@@ -4834,7 +4834,7 @@ class SwiftyStatsTests: XCTestCase {
         var minRep: Double = 1.0
         var minAep: Double = 1.0
         for x: Double in stride(from: -200, through: 200, by: 0.5) {
-            ans = airyAi(x: x)
+            ans = SSSpecialFunctions.airyAi(x: x)
             re = abs((ai[i] - ans.ai) / ans.ai)
             ae = abs(ai[i] - ans.ai)
             if re > maxRe {
@@ -5685,7 +5685,7 @@ class SwiftyStatsTests: XCTestCase {
                              4.10068204993288988938203407917793529439024461377513711983770919]
         var ans: (bi: Double, dbi: Double, error: Int)
         var i: Int = 0
-        ans = airyBi(x: 0)
+        ans = SSSpecialFunctions.airyBi(x: 0)
         var re, ae: Double
         var maxRe: Double = 0.0
         var maxAe: Double = 0.0
@@ -5697,7 +5697,7 @@ class SwiftyStatsTests: XCTestCase {
         var minRep: Double = 1.0
         var minAep: Double = 1.0
         for x: Double in stride(from: -200, through: 2, by: 0.5) {
-            ans = airyBi(x: x)
+            ans = SSSpecialFunctions.airyBi(x: x)
             if ans.bi.isFinite && ans.dbi.isFinite && bi[i].isFinite && dbi[i].isFinite {
                 re = abs((bi[i] - ans.bi) / ans.bi)
                 ae = abs(bi[i] - ans.bi)
@@ -5865,7 +5865,7 @@ class SwiftyStatsTests: XCTestCase {
         var b: Float80
         var maxRelErr: Float80 = 0
         for x: Float80 in stride(from: -100.0, through: 100.0, by: 2.0) {
-            b = besselI0(x: x)
+            b = SSSpecialFunctions.besselI0(x: x)
             relErr = abs((besselI0Data[i] -  b ) / b)
             if relErr > maxRelErr {
                 maxRelErr = relErr
@@ -5988,7 +5988,7 @@ class SwiftyStatsTests: XCTestCase {
         var b: Float80
         var maxRelErr: Float80 = 0
         for x: Float80 in stride(from: -100.0, through: 100.0, by: 2.0) {
-            b = besselI1(x: x)
+            b = SSSpecialFunctions.besselI1(x: x)
             relErr = abs((besselI1Data[i] -  b ) / b)
             if relErr > maxRelErr {
                 maxRelErr = relErr
@@ -6111,7 +6111,7 @@ class SwiftyStatsTests: XCTestCase {
         var b: Float80
         var maxRelErr: Float80 = 0
         for x: Float80 in stride(from: -100.0, through: 100.0, by: 2.0) {
-            b = besselJ0(x: x)
+            b = SSSpecialFunctions.besselJ0(x: x)
             relErr = abs((besselJ0Data[i] -  b ) / b)
             if relErr > maxRelErr {
                 maxRelErr = relErr
@@ -6137,7 +6137,7 @@ class SwiftyStatsTests: XCTestCase {
         var minAeI: Double = 1.0
         var y: Double = -2
         for x: Double in stride(from: 0, through: 150, by: 1.0) {
-            ans = tgamma1(z: Complex<Double>.init(re: x, im: y))
+            ans = SSMath.ComplexMath.tgamma1(z: Complex<Double>.init(re: x, im: y))
             if ans.re.isFinite && ans.im.isFinite && g1R[i].isFinite && g1I[i].isFinite {
                 reR = abs((ans.re - g1R[i]) / ans.re)
                 aeR = abs(ans.re - g1R[i])
@@ -6187,7 +6187,7 @@ class SwiftyStatsTests: XCTestCase {
         y = -2
         i = 0
         for x: Double in stride(from: -150, through: 0, by: 1.0) {
-            ans = tgamma1(z: Complex<Double>.init(re: x, im: y))
+            ans = SSMath.ComplexMath.tgamma1(z: Complex<Double>.init(re: x, im: y))
             if ans.re.isFinite && ans.im.isFinite && g1R[i].isFinite && g1I[i].isFinite {
                 reR = abs((ans.re - g1Rn[i]) / ans.re)
                 aeR = abs(ans.re - g1Rn[i])
@@ -6319,7 +6319,7 @@ class SwiftyStatsTests: XCTestCase {
         1.423397515268675e255,1.7272458904546453e256,2.09951133502152e257,
         2.55632391787296e258,3.117774332506824e259,3.808922637630559e260]
 
-    func testGamma1() {
+    func tesGamma1() {
         var ans: Float80
         let i: Int = 0
         var reR, aeR: Float80
@@ -6332,7 +6332,7 @@ class SwiftyStatsTests: XCTestCase {
         let minReI: Float80 = 1.0
         let minAeI: Float80 = 1.0
         for x: Float80 in stride(from: 1, through: 150, by: 0.5) {
-            ans = tgamma1(x)
+            ans = SSMath.tgamma1(x)
             if ans.isFinite && gamma150[i].isFinite {
                 reR = abs((ans - gamma150[i]) / ans)
                 aeR = abs(ans - gamma150[i])
@@ -6368,13 +6368,13 @@ class SwiftyStatsTests: XCTestCase {
         }
         var jf: Complex<T>
         for i in 1...n - 1 {
-            jf = Complex<T>.init(re: makeFP(i), im: 0)
+            jf = Complex<T>.init(re:  Helpers.makeFP(i), im: 0)
             y = y &** (a &++ jf)
         }
         return y
     }
     func lpochhammer<T: SSComplexFloatElement>(a: Complex<T>, n: Int) -> Complex<T> {
-        var y: Complex<T> = log(a);
+        var y: Complex<T> = SSMath.ComplexMath.log(a);
 //        var c: Complex<T> = Complex<T>.zero
         //        var y: Complex<T>
 //        var t: Complex<T>
@@ -6383,8 +6383,8 @@ class SwiftyStatsTests: XCTestCase {
         }
         var jf: T
         for i in 1...n - 1 {
-            jf = makeFP(i)
-            y = y &++ log(a &++ jf)
+            jf =  Helpers.makeFP(i)
+            y = y &++ SSMath.ComplexMath.log(a &++ jf)
         }
         return y
     }

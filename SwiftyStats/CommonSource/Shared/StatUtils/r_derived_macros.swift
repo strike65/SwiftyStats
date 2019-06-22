@@ -37,7 +37,7 @@ import Foundation
  * of accuracy.
  */
 internal func logspace_add<T: SSFloatingPoint>(_ logx: T, _ logy: T) -> T {
-    return max(logx, logy) + log1p1(exp1(-abs(logx - logy)))
+    return max(logx, logy) + SSMath.log1p1(SSMath.exp1(-abs(logx - logy)))
 }
 
 
@@ -74,10 +74,10 @@ internal func r_d__0<T: SSFloatingPoint>(log_p: Bool) -> T {
 
 internal func r_log1_exp<T: SSFloatingPoint>(x: T, log_p: Bool) -> T {
     if x > -T.ln2 {
-        return log1(-expm11(x))
+        return SSMath.log1(-SSMath.expm11(x))
     }
     else {
-        return log1p1(-exp1(x))
+        return SSMath.log1p1(-SSMath.exp1(x))
     }
 }
 
@@ -86,7 +86,7 @@ internal func rd_exp<T: SSFloatingPoint>(x: T, log_p: Bool) -> T {
         return x
     }
     else {
-        return exp1(x)
+        return SSMath.exp1(x)
     }
 }
 
@@ -112,7 +112,7 @@ internal func r_dt_1<T: SSFloatingPoint>(tail: SSCDFTail, log_p: Bool) -> T {
 
 internal func r_d_val<T: SSFloatingPoint>(_ x: T, log_p: Bool) -> T {
     if log_p {
-        return log1(x)
+        return SSMath.log1(x)
     }
     else {
         return x
@@ -121,7 +121,7 @@ internal func r_d_val<T: SSFloatingPoint>(_ x: T, log_p: Bool) -> T {
 
 internal func r_d_Clog<T: SSFloatingPoint>(x: T, log_p: Bool) -> T {
     if log_p {
-        return log1p1(-x)
+        return SSMath.log1p1(-x)
     }
     else {
         return (T.half - x + T.half)
@@ -149,7 +149,7 @@ internal func r_d_Lval<T: SSFloatingPoint>(x: T, tail: SSCDFTail) -> T {
 
 internal func r_dt_qIv<T: SSFloatingPoint>(x: T, tail: SSCDFTail, log_p: Bool) -> T {
     if log_p {
-        return tail == .lower ? exp1(x) : -expm11(x)
+        return tail == .lower ? SSMath.exp1(x) : -SSMath.expm11(x)
     }
     else {
         return r_d_Lval(x: x, tail: tail)

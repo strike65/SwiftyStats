@@ -22,91 +22,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*                            j0.c
- *
- *    Bessel function of order zero
- *
- *
- *
- * SYNOPSIS:
- *
- * double x, y, j0();
- *
- * y = j0( x );
- *
- *
- *
- * DESCRIPTION:
- *
- * Returns Bessel function of order zero of the argument.
- *
- * The domain is divided into the intervals [0, 5] and
- * (5, infinity). In the first interval the following rational
- * approximation is used:
- *
- *
- *        2         2
- * (w - r  ) (w - r  ) P (w) / Q (w)
- *       1         2    3       8
- *
- *            2
- * where w = x  and the two r's are zeros of the function.
- *
- * In the second interval, the Hankel asymptotic expansion
- * is employed with two rational functions of degree 6/6
- * and 7/7.
- *
- *
- *
- * ACCURACY:
- *
- *                      Absolute error:
- * arithmetic   domain     # trials      peak         rms
- *    DEC       0, 30       10000       4.4e-17     6.3e-18
- *    IEEE      0, 30       60000       4.2e-16     1.1e-16
- *
- */
-/*                            y0.c
- *
- *    Bessel function of the second kind, order zero
- *
- *
- *
- * SYNOPSIS:
- *
- * double x, y, y0();
- *
- * y = y0( x );
- *
- *
- *
- * DESCRIPTION:
- *
- * Returns Bessel function of the second kind, of order
- * zero, of the argument.
- *
- * The domain is divided into the intervals [0, 5] and
- * (5, infinity). In the first interval a rational approximation
- * R(x) is employed to compute
- *   y0(x)  = R(x)  +   2 * log(x) * j0(x) / PI.
- * Thus a call to j0() is required.
- *
- * In the second interval, the Hankel asymptotic expansion
- * is employed with two rational functions of degree 6/6
- * and 7/7.
- *
- *
- *
- * ACCURACY:
- *
- *  Absolute error, when y0(x) < 1; else relative error:
- *
- * arithmetic   domain     # trials      peak         rms
- *    DEC       0, 30        9400       7.0e-17     7.9e-18
- *    IEEE      0, 30       30000       1.3e-15     1.6e-16
- *
- */
-
 /*
  Cephes Math Library Release 2.8:  June, 2000
  Copyright 1984, 1987, 1989, 2000 by Stephen L. Moshier
@@ -116,6 +31,168 @@
  * except YP, YQ which are designed for absolute error. */
 
 import Foundation
+import os.log
+
+
+extension SSSpecialFunctions {
+    
+    /*                            j0.c
+     *
+     *    Bessel function of order zero
+     *
+     *
+     *
+     * SYNOPSIS:
+     *
+     * double x, y, j0();
+     *
+     * y = j0( x );
+     *
+     *
+     *
+     * DESCRIPTION:
+     *
+     * Returns Bessel function of order zero of the argument.
+     *
+     * The domain is divided into the intervals [0, 5] and
+     * (5, infinity). In the first interval the following rational
+     * approximation is used:
+     *
+     *
+     *        2         2
+     * (w - r  ) (w - r  ) P (w) / Q (w)
+     *       1         2    3       8
+     *
+     *            2
+     * where w = x  and the two r's are zeros of the function.
+     *
+     * In the second interval, the Hankel asymptotic expansion
+     * is employed with two rational functions of degree 6/6
+     * and 7/7.
+     *
+     *
+     *
+     * ACCURACY:
+     *
+     *                      Absolute error:
+     * arithmetic   domain     # trials      peak         rms
+     *    DEC       0, 30       10000       4.4e-17     6.3e-18
+     *    IEEE      0, 30       60000       4.2e-16     1.1e-16
+     *
+     */
+
+    /// Returns the Bessel function of order zero J0(x)
+    /// - Parameter x: Argument
+    internal static func besselJ0<FPT: SSFloatingPoint >(x: FPT) -> FPT {
+        let DR1: FPT =  Helpers.makeFP(5.7831859629467845211759957584558070350719)
+        let DR2: FPT  =  Helpers.makeFP(30.47126234366208639907816317502275584842)
+        
+        var w, z, p, q, xn: FPT
+        var xx: FPT = x
+        if( x < 0 ) {
+            xx = -x
+        }
+        
+        if( xx <= 5) {
+            z = xx * xx;
+            if( xx <  Helpers.makeFP(1.0e-5) ) {
+                return( 1 - z / 4 )
+            }
+            
+            p = (z - DR1) * (z - DR2)
+            
+            p = p * Helper.polyeval(x: z,coef: coeff("RP"),n: 3) / Helper.poly1eval(x: z, coef: coeff("RQ"), n: 8 )
+            return p
+        }
+        
+        w = 5 / xx;
+        q = 25 / ( xx * xx )
+        p = Helper.polyeval(x: q, coef: coeff("PP"), n: 6) / Helper.polyeval(x: q, coef: coeff("PQ"), n: 6 )
+        q = Helper.polyeval(x: q, coef: coeff("QP"), n: 7) / Helper.poly1eval(x: q, coef: coeff("QQ"), n: 7 )
+        xn = xx - FPT.pifourth
+        p = p * SSMath.cos1(xn) - w * q * SSMath.sin1(xn);
+        return ( p * FPT.sqrt2Opi / sqrt(xx) )
+    }
+    /*                            y0.c
+     *
+     *    Bessel function of the second kind, order zero
+     *
+     *
+     *
+     * SYNOPSIS:
+     *
+     * double x, y, y0();
+     *
+     * y = y0( x );
+     *
+     *
+     *
+     * DESCRIPTION:
+     *
+     * Returns Bessel function of the second kind, of order
+     * zero, of the argument.
+     *
+     * The domain is divided into the intervals [0, 5] and
+     * (5, infinity). In the first interval a rational approximation
+     * R(x) is employed to compute
+     *   y0(x)  = R(x)  +   2 * log(x) * j0(x) / PI.
+     * Thus a call to j0() is required.
+     *
+     * In the second interval, the Hankel asymptotic expansion
+     * is employed with two rational functions of degree 6/6
+     * and 7/7.
+     *
+     *
+     *
+     * ACCURACY:
+     *
+     *  Absolute error, when y0(x) < 1; else relative error:
+     *
+     * arithmetic   domain     # trials      peak         rms
+     *    DEC       0, 30        9400       7.0e-17     7.9e-18
+     *    IEEE      0, 30       30000       1.3e-15     1.6e-16
+     *
+     */
+    
+    /// Returns the Bessel function of second kind of order zero Y0(x)
+    /// - Parameter x: Argument
+    internal static func besselY<FPT: SSFloatingPoint >(x: FPT) -> FPT {
+        
+        var w, z, p, q, xn: FPT
+        
+        if( x <= 5 ) {
+            if( x <= 0 )
+            {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("BesselY: not defined in that domain", log: log_stat, type: .error)
+                }
+                #endif
+                printError("BesselY: not defined in that domain")
+                return -FPT.infinity
+            }
+            z = x * x
+            w = Helper.polyeval(x: z, coef: coeff("YP"), n: 7) / Helper.poly1eval( x: z, coef: coeff("YQ"), n: 7 )
+            w += FPT.twopi * SSMath.log1(x) * besselJ0(x: x)
+            return w
+        }
+        
+        w = 5 / x
+        z = 25 / (x * x)
+        p = Helper.polyeval(x: z, coef: coeff("PP"), n: 6) / Helper.polyeval(x: z,coef: coeff("PQ"), n: 6 )
+        q = Helper.polyeval(x: z,coef: coeff("QP"),n: 7) / Helper.poly1eval(x: z, coef: coeff("QQ"), n: 7 )
+        xn = x - FPT.fourth
+        p = p * SSMath.sin1(xn) + w * q * SSMath.cos1(xn)
+        return( p * FPT.sqrt2Opi / sqrt(x) )
+    }
+}
+
+
+/* Rational approximation coefficients YP[], YQ[] are used here.
+ * The function computed is  y0(x)  -  2 * log(x) * j0(x) / PI,
+ * whose value at x = 0 is  2 * ( log(0.5) + EUL ) / PI
+ * = 0.073804295108687225.
+ */
 
 fileprivate func coeff<FPT: SSFloatingPoint >(_ name: String) -> [FPT] {
     let PPFloat: Array<Float> = [
@@ -472,84 +549,3 @@ fileprivate func coeff<FPT: SSFloatingPoint >(_ name: String) -> [FPT] {
     }
     return Array<Double>() as! Array<FPT>
 }
-
-/// Returns the Bessel function of order zero J0(x)
-/// - Parameter x: Argument
-internal func besselJ0<FPT: SSFloatingPoint >(x: FPT) -> FPT {
-    let DR1: FPT = makeFP(5.7831859629467845211759957584558070350719)
-    let DR2: FPT  = makeFP(30.47126234366208639907816317502275584842)
-    
-    var w, z, p, q, xn: FPT
-    var xx: FPT = x
-    if( x < 0 ) {
-        xx = -x
-    }
-    
-    if( xx <= 5) {
-        z = xx * xx;
-        if( xx < makeFP(1.0e-5) ) {
-            return( 1 - z / 4 )
-        }
-        
-        p = (z - DR1) * (z - DR2)
-        
-        p = p * polyeval(x: z,coef: coeff("RP"),n: 3) / poly1eval(x: z, coef: coeff("RQ"), n: 8 )
-        return p
-    }
-    
-    w = 5 / xx;
-    q = 25 / ( xx * xx )
-    p = polyeval(x: q, coef: coeff("PP"), n: 6) / polyeval(x: q, coef: coeff("PQ"), n: 6 )
-    q = polyeval(x: q, coef: coeff("QP"), n: 7) / poly1eval(x: q, coef: coeff("QQ"), n: 7 )
-    xn = xx - FPT.pifourth
-    p = p * cos1(xn) - w * q * sin1(xn);
-    return ( p * FPT.sqrt2Opi / sqrt(xx) )
-}
-
-/*                            y0() 2    */
-/* Bessel function of second kind, order zero    */
-
-/* Rational approximation coefficients YP[], YQ[] are used here.
- * The function computed is  y0(x)  -  2 * log(x) * j0(x) / PI,
- * whose value at x = 0 is  2 * ( log(0.5) + EUL ) / PI
- * = 0.073804295108687225.
- */
-
-/*
- #define PIO4 .78539816339744830962
- #define SQ2OPI .79788456080286535588
- */
-import os.log
-
-/// Returns the Bessel function of second kind of order zero Y0(x)
-/// - Parameter x: Argument
-internal func besselY<FPT: SSFloatingPoint >(x: FPT) -> FPT {
-    
-    var w, z, p, q, xn: FPT
-    
-    if( x <= 5 ) {
-        if( x <= 0 )
-        {
-            #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
-                os_log("BesselY: not defined in that domain", log: log_stat, type: .error)
-            }
-            #endif
-            printError("BesselY: not defined in that domain")
-            return -FPT.infinity
-        }
-        z = x * x
-        w = polyeval(x: z, coef: coeff("YP"), n: 7) / poly1eval( x: z, coef: coeff("YQ"), n: 7 )
-        w += FPT.twopi * log1(x) * besselJ0(x: x)
-        return w
-    }
-    
-    w = 5 / x
-    z = 25 / (x * x)
-    p = polyeval(x: z, coef: coeff("PP"), n: 6) / polyeval(x: z,coef: coeff("PQ"), n: 6 )
-    q = polyeval(x: z,coef: coeff("QP"),n: 7)/poly1eval(x: z, coef: coeff("QQ"), n: 7 )
-    xn = x - FPT.fourth
-    p = p * sin1(xn) + w * q * cos1(xn)
-    return( p * FPT.sqrt2Opi / sqrt(x) )
-}
-

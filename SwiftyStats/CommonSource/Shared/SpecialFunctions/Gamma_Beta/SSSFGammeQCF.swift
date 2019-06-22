@@ -33,11 +33,11 @@ internal class SSGammaQ<T: SSFloatingPoint>: SSContFrac<T> {
     }
     /// Returns the n_th a
     override func a_N(n: Int, point x: T) -> T {
-        return makeFP(n + n) + 1 - self.a + x
+        return  Helpers.makeFP(n + n) + 1 - self.a + x
     }
     
     /// Returns the n_th b
     override func b_N(n: Int, point x: T) -> T {
-        return makeFP(n) * self.a - makeFP(n * n)
+        return  Helpers.makeFP(n) * self.a -  Helpers.makeFP(n * n)
     }
 }

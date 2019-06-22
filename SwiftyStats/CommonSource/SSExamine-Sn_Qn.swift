@@ -82,8 +82,8 @@ extension SSExamine {
         let np1_2: Int = (n + 1) / 2
         var work: [FPT] = Array<FPT>.init(repeating: 0, count: n)
         let sorted_data: Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
-        var val1: FPT = makeFP( sorted_data[n / 2])
-        var val2: FPT = makeFP(sorted_data[0])
+        var val1: FPT =  Helpers.makeFP( sorted_data[n / 2])
+        var val2: FPT =  Helpers.makeFP(sorted_data[0])
         
         work[0] = val1 - val2
         
@@ -113,11 +113,11 @@ extension SSExamine {
                         leftB = tryB + even
                     }
                     else {
-                        val1 = makeFP(sorted_data[i - 1])
-                        val2 = makeFP(sorted_data[i - tryA + Amin - 2])
+                        val1 =  Helpers.makeFP(sorted_data[i - 1])
+                        val2 =  Helpers.makeFP(sorted_data[i - tryA + Amin - 2])
                         medA = val1 - val2
-                        val1 = makeFP(sorted_data[tryB + i - 1])
-                        val2 = makeFP(sorted_data[i - 1])
+                        val1 =  Helpers.makeFP(sorted_data[tryB + i - 1])
+                        val2 =  Helpers.makeFP(sorted_data[i - 1])
                         medB = val1 - val2
                         if (medA >= medB) {
                             rightA = tryA
@@ -131,16 +131,16 @@ extension SSExamine {
             } /* while */
             
             if (leftA > Amax) {
-                val1 = makeFP(sorted_data[leftB + i - 1])
-                val2 = makeFP(sorted_data[i - 1])
+                val1 =  Helpers.makeFP(sorted_data[leftB + i - 1])
+                val2 =  Helpers.makeFP(sorted_data[i - 1])
                 work[i - 1] = val1 - val2
             }
             else {
-                val1 = makeFP(sorted_data[i - 1])
-                val2 = makeFP(sorted_data[i - leftA + Amin - 2])
+                val1 =  Helpers.makeFP(sorted_data[i - 1])
+                val2 =  Helpers.makeFP(sorted_data[i - leftA + Amin - 2])
                 medA = val1 - val2
-                val1 = makeFP(sorted_data[leftB + i - 1])
-                val2 = makeFP(sorted_data[i - 1])
+                val1 =  Helpers.makeFP(sorted_data[leftB + i - 1])
+                val2 =  Helpers.makeFP(sorted_data[i - 1])
                 medB = val1 - val2
                 work[i - 1] = min(medA, medB)
             }
@@ -173,11 +173,11 @@ extension SSExamine {
                         leftB = tryB + even
                     }
                     else {
-                        val1 = makeFP(sorted_data[i + tryA - Amin])
-                        val2 = makeFP(sorted_data[i - 1])
+                        val1 =  Helpers.makeFP(sorted_data[i + tryA - Amin])
+                        val2 =  Helpers.makeFP(sorted_data[i - 1])
                         medA = val1 - val2
-                        val1 = makeFP(sorted_data[i - 1])
-                        val2 = makeFP(sorted_data[i - tryB - 1])
+                        val1 =  Helpers.makeFP(sorted_data[i - 1])
+                        val2 =  Helpers.makeFP(sorted_data[i - tryB - 1])
                         medB = val1 - val2
                         if (medA >= medB) {
                             rightA = tryA
@@ -192,23 +192,23 @@ extension SSExamine {
             } /* while */
             
             if (leftA > Amax) {
-                val1 = makeFP(sorted_data[i - 1])
-                val2 = makeFP(sorted_data[i - leftB - 1])
+                val1 =  Helpers.makeFP(sorted_data[i - 1])
+                val2 =  Helpers.makeFP(sorted_data[i - leftB - 1])
                 work[i - 1] = val1 - val2
             }
             else {
-                val1 = makeFP(sorted_data[i + leftA - Amin])
-                val2 = makeFP(sorted_data[i - 1])
+                val1 =  Helpers.makeFP(sorted_data[i + leftA - Amin])
+                val2 =  Helpers.makeFP(sorted_data[i - 1])
                 medA = val1 - val2
-                val1 = makeFP(sorted_data[i - 1])
-                val2 = makeFP(sorted_data[i - leftB - 1])
+                val1 =  Helpers.makeFP(sorted_data[i - 1])
+                val2 =  Helpers.makeFP(sorted_data[i - leftB - 1])
                 medB = val1 - val2
                 work[i - 1] = min(medA, medB)
             }
         }
         
-        val1 = makeFP(sorted_data[n - 1])
-        val2 = makeFP(sorted_data[np1_2 - 1])
+        val1 =  Helpers.makeFP(sorted_data[n - 1])
+        val2 =  Helpers.makeFP(sorted_data[np1_2 - 1])
         work[n - 1] = val1 - val2
         /* sort work array */
         return work.sorted(by: {$0 < $1})[np1_2 - 1]
@@ -231,39 +231,39 @@ extension SSExamine {
             else {
                 if let sn0 = self.sn0() {
                     var cn: FPT = 1
-                    let scale: FPT = makeFP(1.1926)
+                    let scale: FPT =  Helpers.makeFP(1.1926)
                     /* determine correction factor for finite sample bias */
                     let n: Int = self.sampleSize
                     if (n <= 9) {
                         if (n == 2) {
-                            cn = makeFP(0.743)
+                            cn =  Helpers.makeFP(0.743)
                         }
                         else if (n == 3) {
-                            cn = makeFP(1.851)
+                            cn =  Helpers.makeFP(1.851)
                         }
                         else if (n == 4) {
-                            cn = makeFP(0.954)
+                            cn =  Helpers.makeFP(0.954)
                         }
                         else if (n == 5) {
-                            cn = makeFP(1.351)
+                            cn =  Helpers.makeFP(1.351)
                         }
                         else if (n == 6) {
-                            cn = makeFP(0.993)
+                            cn =  Helpers.makeFP(0.993)
                         }
                         else if (n == 7) {
-                            cn = makeFP(1.198)
+                            cn =  Helpers.makeFP(1.198)
                         }
                         else if (n == 8) {
-                            cn = makeFP(1.005)
+                            cn =  Helpers.makeFP(1.005)
                         }
                         else if (n == 9) {
-                            cn = makeFP(1.131)
+                            cn =  Helpers.makeFP(1.131)
                         }
                     }
                     else if (n % 2 == 1) /* n odd, >= 11 */
                     {
                         
-                        cn = makeFP(n) / (makeFP(n) - makeFP(0.9 ))
+                        cn =  Helpers.makeFP(n) / ( Helpers.makeFP(n) -  Helpers.makeFP(0.9 ))
                     }
                     let sn = scale * cn * sn0
                     return sn
@@ -279,7 +279,7 @@ extension SSExamine {
         if !self.isNotEmptyAndNumeric {
             return nil
         }
-        let n: FPT = makeFP(self.sampleSize)
+        let n: FPT =  Helpers.makeFP(self.sampleSize)
         let ni = self.sampleSize
         var sorted_data:Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
         var a_srt: Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)
@@ -309,7 +309,7 @@ extension SSExamine {
             return 0
         }
         
-        h = integerValue(n / 2 + 1)
+        h = Helpers.integerValue(n / 2 + 1)
         k = Int64(h * (h - 1) / 2)
         
     //    for (i = 0; i < ni; ++i) {
@@ -336,8 +336,8 @@ extension SSExamine {
                 if (left[i] <= right[i]) {
                     weight[j] = right[i] - left[i] + 1
                     jh = left[i] + weight[j] / 2
-                    val1 = makeFP(sorted_data[i])
-                    val2 = makeFP(sorted_data[ni - jh])
+                    val1 =  Helpers.makeFP(sorted_data[i])
+                    val2 =  Helpers.makeFP(sorted_data[ni - jh])
                     work[j] = val1 - val2
                     j += 1
                 }
@@ -350,9 +350,9 @@ extension SSExamine {
 //            for (i = ni - 1; i >= 0; --i)
 //            {
             for i in stride(from: ni - 1, through: 0, by: -1) {
-                val1 = makeFP(sorted_data[i])
-//                val2 = makeFP(sorted_data[ni - j - 1])
-                while (j < ni && (val1 - makeFP(sorted_data[ni - j - 1])) < trial) {
+                val1 =  Helpers.makeFP(sorted_data[i])
+//                val2 =  Helpers.makeFP(sorted_data[ni - j - 1])
+                while (j < ni && (val1 -  Helpers.makeFP(sorted_data[ni - j - 1])) < trial) {
                     j += 1
                 }
                 p[i] = j
@@ -362,8 +362,8 @@ extension SSExamine {
 //            for (i = 0; i < ni; ++i)
 //            {
             for i in stride(from: 0, to: ni, by: 1) {
-                val1 = makeFP(sorted_data[i])
-                while ((val1 - makeFP(sorted_data[ni - j + 1])) > trial) {
+                val1 =  Helpers.makeFP(sorted_data[i])
+                while ((val1 -  Helpers.makeFP(sorted_data[ni - j + 1])) > trial) {
                     j -= 1
                 }
                 q[i] = j
@@ -403,8 +403,8 @@ extension SSExamine {
             j = 0
             for i in stride(from: 1, to: ni, by: 1) {
                 for jj in stride(from: left[i], through: right[i], by: 1) {
-                    val1 = makeFP(sorted_data[i])
-                    val2 = makeFP(sorted_data[ni - jj])
+                    val1 =  Helpers.makeFP(sorted_data[i])
+                    val2 =  Helpers.makeFP(sorted_data[ni - jj])
                     work[j] = val1 - val2
                     j += 1
                 } /* j will be = sum_{i=2}^n (right[i] - left[i] + 1)_{+}  */
@@ -446,9 +446,9 @@ extension SSExamine {
                 return nil
             }
             if let Qn0 = qn0() {
-                let scale: FPT = makeFP(2.21914) // as! FPT /* asymptotic consistency for sigma^2 */
+                let scale: FPT =  Helpers.makeFP(2.21914) // as! FPT /* asymptotic consistency for sigma^2 */
                 let n = self.sampleSize
-                let nn: FPT = makeFP(self.sampleSize)
+                let nn: FPT =  Helpers.makeFP(self.sampleSize)
                 // Qn0 = (double) FUNCTION(gsl_stats,Qn0_from_sorted_data)(sorted_data, stride, n, work, work_int);
                 var dn: FPT = 1
                 var qn: FPT = 0
@@ -457,49 +457,49 @@ extension SSExamine {
                  * comes from the 'robustbase' R package */
                 if (n <= 12) {
                     if (n == 2) {
-                        dn = makeFP(0.399356)
+                        dn =  Helpers.makeFP(0.399356)
                     }
                     else if (n == 3) {
-                        dn = makeFP(0.99365)
+                        dn =  Helpers.makeFP(0.99365)
                     }
                     else if (n == 4) {
-                        dn = makeFP(0.51321)
+                        dn =  Helpers.makeFP(0.51321)
                     }
                     else if (n == 5) {
-                        dn = makeFP(0.84401)
+                        dn =  Helpers.makeFP(0.84401)
                     }
                     else if (n == 6) {
-                        dn = makeFP(0.61220)
+                        dn =  Helpers.makeFP(0.61220)
                     }
                     else if (n == 7) {
-                        dn = makeFP(0.85877)
+                        dn =  Helpers.makeFP(0.85877)
                     }
                     else if (n == 8) {
-                        dn = makeFP(0.66993)
+                        dn =  Helpers.makeFP(0.66993)
                     }
                     else if (n == 9) {
-                        dn = makeFP(0.87344)
+                        dn =  Helpers.makeFP(0.87344)
                     }
                     else if (n == 10) {
-                        dn = makeFP(0.72014)
+                        dn =  Helpers.makeFP(0.72014)
                     }
                     else if (n == 11) {
-                        dn = makeFP(0.88906)
+                        dn =  Helpers.makeFP(0.88906)
                     }
                     else if (n == 12) {
-                        dn = makeFP(0.75743)
+                        dn =  Helpers.makeFP(0.75743)
                     }
                 }
                 else {
                     if (n % 2 == 1) { /* n odd */
-                        dn = makeFP(1.60188 ) + (makeFP(-2.1284 ) - makeFP(5.172 ) / nn) / nn
+                        dn =  Helpers.makeFP(1.60188 ) + ( Helpers.makeFP(-2.1284 ) -  Helpers.makeFP(5.172 ) / nn) / nn
                     }
                     else {            /* n even */
-                        let ex1: FPT = makeFP(77.0) / nn
-                        let ex2: FPT = makeFP(6.987) - ex1
-                        let ex3: FPT = makeFP(1.9654) + ex2 / nn
-                        dn = makeFP(3.67561 ) + ex3 / nn
-//                        dn = makeFP(3.67561 ) + (makeFP(1.9654 ) + (makeFP(6.987 ) - makeFP(77.0 ) / nn) / nn) / nn
+                        let ex1: FPT =  Helpers.makeFP(77.0) / nn
+                        let ex2: FPT =  Helpers.makeFP(6.987) - ex1
+                        let ex3: FPT =  Helpers.makeFP(1.9654) + ex2 / nn
+                        dn =  Helpers.makeFP(3.67561 ) + ex3 / nn
+//                        dn =  Helpers.makeFP(3.67561 ) + ( Helpers.makeFP(1.9654 ) + ( Helpers.makeFP(6.987 ) -  Helpers.makeFP(77.0 ) / nn) / nn) / nn
                     }
                 
                     dn = 1 / (dn / nn + 1)

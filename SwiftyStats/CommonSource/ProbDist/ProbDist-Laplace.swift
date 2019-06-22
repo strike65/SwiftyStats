@@ -26,118 +26,123 @@ import Foundation
 import os.log
 #endif
 
-
-// MARK: Laplace
-/// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Laplace distribution.
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func paraLaplaceDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
+extension SSProbDist {
+    enum Laplace {
         
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+        // MARK: Laplace
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Laplace distribution.
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            result.mean = mean
+            result.variance = 2 * SSMath.pow1(b, 2)
+            result.kurtosis = 6
+            result.skewness = 0
+            return result
         }
         
-        #endif
         
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        /// Returns the pdf of the Laplace distribution.
+        /// - Parameter x: x
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let result = 1 / (2 * b) * SSMath.exp1(-abs(x - mean) / b)
+            return result
+        }
+        
+        /// Returns the cdf of the Laplace distribution.
+        /// - Parameter x: x
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0
+        public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let xm: FPT = x - mean
+            let expr1: FPT = (1 - SSMath.exp1(-abs(xm) / b))
+            let half: FPT =  Helpers.makeFP(1.0 / 2.0 )
+            let result: FPT = half * (1 + SSMath.sign(xm) * expr1)
+            return result
+        }
+        
+        /// Returns the quantile of the Laplace distribution.
+        /// - Parameter p: p
+        /// - Parameter mean: mean
+        /// - Parameter b: Scale parameter b
+        /// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
+            if (b <= 0) {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let result: FPT
+            if p.isZero {
+                return -FPT.infinity
+            }
+            else if abs(p - 1) < FPT.ulpOfOne {
+                return FPT.infinity
+            }
+            else if (p <=  Helpers.makeFP(0.5 )) {
+                result = mean + b * SSMath.log1p1(2 * p - 1)
+            }
+            else {
+                result = mean - b * SSMath.log1p1(2 * (1 - p) - 1)
+            }
+            return result
+        }
     }
-    var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
-    result.mean = mean
-    result.variance = 2 * pow1(b, 2)
-    result.kurtosis = 6
-    result.skewness = 0
-    return result
 }
 
-
-/// Returns the pdf of the Laplace distribution.
-/// - Parameter x: x
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func pdfLaplaceDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result = 1 / (2 * b) * exp1(-abs(x - mean) / b)
-    return result
-}
-
-/// Returns the cdf of the Laplace distribution.
-/// - Parameter x: x
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0
-public func cdfLaplaceDist<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let xm: FPT = x - mean
-    let expr1: FPT = (1 - exp1(-abs(xm) / b))
-    let half: FPT = makeFP(1.0 / 2.0 )
-    let result: FPT = half * (1 + sign(xm) * expr1)
-    return result
-}
-
-/// Returns the quantile of the Laplace distribution.
-/// - Parameter p: p
-/// - Parameter mean: mean
-/// - Parameter b: Scale parameter b
-/// - Throws: SSSwiftyStatsError if b <= 0 || p < 0 || p > 1
-public func quantileLaplaceDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, scale b: FPT) throws -> FPT {
-    if (b <= 0) {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("scale parameter b is expected to be > 0", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if p < 0 || p > 1 {
-        #if os(macOS) || os(iOS)
-        
-        if #available(macOS 10.12, iOS 10, *) {
-            os_log("p is expected to be >= 0 or <= 1.0 ", log: log_stat, type: .error)
-        }
-        
-        #endif
-        
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    let result: FPT
-    if p.isZero {
-        return -FPT.infinity
-    }
-    else if abs(p - 1) < FPT.ulpOfOne {
-        return FPT.infinity
-    }
-    else if (p <= makeFP(0.5 )) {
-        result = mean + b * log1p1(2 * p - 1)
-    }
-    else {
-        result = mean - b * log1p1(2 * (1 - p) - 1)
-    }
-    return result
-}

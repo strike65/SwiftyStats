@@ -159,7 +159,7 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     
     /* find (f(w/2) - 1) ^ cc */
     /* (first term in integral of hartley's form). */
-    pr_w = 2.0 * cdfStandardNormalDist(u: qsqz) - 1.0 /* erf(qsqz / M_SQRT2) */
+    pr_w = 2.0 * SSProbDist.Gaussian.Standard.cdf(u: qsqz) - 1.0 /* erf(qsqz / M_SQRT2) */
     
     /* if pr_w ^ cc < 2e-22 then set pr_w = 0 */
     if pr_w >= exp(C2 / cc) {
@@ -236,8 +236,8 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
                 break
             }
             do {
-                pplus = try cdfNormalDist(x: ac, mean: 0, variance: 1) * 2.0 // cdfStandardNormalDist(u: ac)
-                pminus = try cdfNormalDist(x: ac, mean: w, variance: 1) * 2.0  // pnorm(ac, w,  1., 1,0)
+                pplus = try SSProbDist.Gaussian.cdf(x: ac, mean: 0, variance: 1) * 2.0 // Standard.cdf(u: ac)
+                pminus = try SSProbDist.Gaussian.cdf(x: ac, mean: w, variance: 1) * 2.0  // pnorm(ac, w,  1., 1,0)
             }
             catch {
                 throw error

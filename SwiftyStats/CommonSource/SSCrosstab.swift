@@ -196,7 +196,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             #endif
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !isNumber(initialValue) {
+        if !Helpers.isNumber(initialValue) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -228,7 +228,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             self.counts.append(Array<N>.init(repeating: initialValue, count: columns))
         }
         
-        self.isNumeric = isNumber(initialValue)
+        self.isNumeric = Helpers.isNumber(initialValue)
     }
     
     /// Returns `true` if rows = 2 and columns = 2
@@ -929,7 +929,7 @@ extension SSCrosstab {
                 for r in 0..<self.rowCount {
                     sum = 0
                     for c in 0..<self.columnCount {
-                        let temp1: FPT = makeFP(self[r, c])
+                        let temp1: FPT =  Helpers.makeFP(self[r, c])
                         if !temp1.isNaN {
                             sum += temp1
                         }
@@ -956,7 +956,7 @@ extension SSCrosstab {
                 for c in 0..<self.columnCount {
                     sum = 0
                     for r in 0..<self.rowCount {
-                        let temp1: FPT = makeFP(self[r, c])
+                        let temp1: FPT =  Helpers.makeFP(self[r, c])
                         if !temp1.isNaN {
                             sum += temp1
                         }
@@ -1259,7 +1259,7 @@ extension SSCrosstab {
         if self.isNumeric {
             if isValidColumnIndex(column: atColumn) {
                 let column = try! self.column(at: atColumn, sorted: true)
-                let temp1: FPT = makeFP(column.last)
+                let temp1: FPT =  Helpers.makeFP(column.last)
                 if !temp1.isNaN {
                     return temp1
                 }
@@ -1272,7 +1272,7 @@ extension SSCrosstab {
             }
 //            assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
 //            let column = try! self.column(at: atColumn, sorted: true)
-//            let temp1: FPT = makeFP(column.last)
+//            let temp1: FPT =  Helpers.makeFP(column.last)
 //            if !temp1.isNaN {
 //                return temp1
 //            }
@@ -1291,7 +1291,7 @@ extension SSCrosstab {
         if self.isNumeric {
             if isValidRowIndex(row: atRow) {
                 let row = try! self.row(at: atRow, sorted: true)
-                let temp1: FPT = makeFP(row.last)
+                let temp1: FPT =  Helpers.makeFP(row.last)
                 if !temp1.isNaN {
                     return temp1
                 }
@@ -1305,7 +1305,7 @@ extension SSCrosstab {
 //        if self.isNumeric {
 //            assert(isValidRowIndex(row: atRow), "Row-Index out of range")
 //            let row = try! self.row(at: atRow, sorted: true)
-//            let temp1: FPT = makeFP(row.last)
+//            let temp1: FPT =  Helpers.makeFP(row.last)
 //            if !temp1.isNaN {
 //                return temp1
 //            }
@@ -1323,7 +1323,7 @@ extension SSCrosstab {
         if isValidRowIndex(row: row) {
             if isValidColumnIndex(column: column) {
                 if self.isNumeric {
-                    let temp: FPT = makeFP(self[row, column])
+                    let temp: FPT =  Helpers.makeFP(self[row, column])
                     if !temp.isNaN {
                         return temp / self.total
                     }
@@ -1345,7 +1345,7 @@ extension SSCrosstab {
 //        assert(isValidRowIndex(row: row), "Row-index out of range")
 //        assert(isValidColumnIndex(column: column), "Column-index out of range")
 //        if self.isNumeric {
-//            let temp: FPT = makeFP(self[row, column])
+//            let temp: FPT =  Helpers.makeFP(self[row, column])
 //            if !temp.isNaN {
 //                return temp / self.total
 //            }
@@ -1364,7 +1364,7 @@ extension SSCrosstab {
         if isValidRowName(name: rowName) {
             if isValidColumnName(name: columnName) {
                 if self.isNumeric {
-                    let temp: FPT = makeFP(self[rowName, columnName])
+                    let temp: FPT =  Helpers.makeFP(self[rowName, columnName])
                     return temp / self.total
                 }
                 else {
@@ -1393,7 +1393,7 @@ extension SSCrosstab {
 //        assert(isValidRowName(name: rowName), "Row-Name unknown")
 //        assert(isValidColumnName(name: columnName), "Column-Name unknown")
 //        if self.isNumeric {
-//            let temp: FPT = makeFP(self[rowName, columnName])
+//            let temp: FPT =  Helpers.makeFP(self[rowName, columnName])
 //            return temp / self.total
 //        }
 //        else {
@@ -1406,7 +1406,7 @@ extension SSCrosstab {
         if isValidRowIndex(row: row) {
             if isValidColumnIndex(column: column) {
                 if self.isNumeric {
-                    let temp: FPT = makeFP(self[row, column])
+                    let temp: FPT =  Helpers.makeFP(self[row, column])
                     if !temp.isNaN {
                         return temp / self.rowSums![row]
                     }
@@ -1432,7 +1432,7 @@ extension SSCrosstab {
         if isValidRowIndex(row: row) {
             if isValidColumnIndex(column: column) {
                 if self.isNumeric {
-                    let temp: FPT = makeFP(self[row, column])
+                    let temp: FPT =  Helpers.makeFP(self[row, column])
                     if  !temp.isNaN {
                         return temp / self.columnSums![column]
                     }
@@ -1571,7 +1571,7 @@ extension SSCrosstab {
         if isValidRowIndex(row: row) {
             if isValidColumnIndex(column: column) {
                 if self.isNumeric {
-                    let temp: FPT = makeFP(self[row, column])
+                    let temp: FPT =  Helpers.makeFP(self[row, column])
                     if  !temp.isNaN {
                         return temp - self.expectedFrequency(row: row, column: column)
                     }
@@ -1593,7 +1593,7 @@ extension SSCrosstab {
 //        assert(isValidRowIndex(row: row), "Row-index out of range")
 //        assert(isValidColumnIndex(column: column), "Column-index out of range")
 //        if self.isNumeric {
-//            let temp: FPT = makeFP(self[row, column])
+//            let temp: FPT =  Helpers.makeFP(self[row, column])
 //            if  !temp.isNaN {
 //                return temp - self.expectedFrequency(row: row, column: column)
 //            }
@@ -1664,7 +1664,7 @@ extension SSCrosstab {
     /// Degrees of freedom
     public var degreesOfFreedom: FPT {
         get {
-            let df: FPT = makeFP((self.rowCount - 1) * (self.columnCount - 1))
+            let df: FPT =  Helpers.makeFP((self.rowCount - 1) * (self.columnCount - 1))
             if df >= 0 {
                 return df
             }
@@ -1682,7 +1682,7 @@ extension SSCrosstab {
                 var sum: FPT = 0
                 for r in 0..<self.rowCount {
                     for c in 0..<self.columnCount {
-                        sum += pow1(self.residual(row: r, column: c), 2) / self.expectedFrequency(row: r, column: c)
+                        sum += SSMath.pow1(self.residual(row: r, column: c), 2) / self.expectedFrequency(row: r, column: c)
                     }
                 }
                 return sum
@@ -1701,10 +1701,10 @@ extension SSCrosstab {
             if self.isNumeric {
                 for r in 0..<self.rowCount {
                     for c in 0..<self.columnCount {
-                        let temp: FPT = makeFP(self[r, c])
+                        let temp: FPT =  Helpers.makeFP(self[r, c])
                         if !temp.isNaN {
                             if temp != 0 {
-                                sum += temp * log1(temp / self.expectedFrequency(row: r, column: c))
+                                sum += temp * SSMath.log1(temp / self.expectedFrequency(row: r, column: c))
                             }
                             else {
                                 sum = 0
@@ -1728,19 +1728,19 @@ extension SSCrosstab {
     public var chiSquareYates: FPT {
         get {
             if self.is2x2Table {
-                let n11: FPT = makeFP(self[0,0])
-                let n12: FPT = makeFP(self[0,1])
-                let n21: FPT = makeFP(self[1,0])
-                let n22: FPT = makeFP(self[1,1])
+                let n11: FPT =  Helpers.makeFP(self[0,0])
+                let n12: FPT =  Helpers.makeFP(self[0,1])
+                let n21: FPT =  Helpers.makeFP(self[1,0])
+                let n22: FPT =  Helpers.makeFP(self[1,1])
                 if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
                     let temp = abs(n11 * n22 - n12 * n21)
                     let t = self.total
-                    if temp <= (makeFP(0.5 ) * t) {
+                    if temp <= ( Helpers.makeFP(0.5 ) * t) {
                         return 0
                     }
                     else {
                         let den = self.rowSum(row: 0) * self.rowSum(row: 1) * self.columnSum(column: 0) * self.columnSum(column: 1)
-                        return t * pow1(temp - makeFP(0.5 ) * t, 2) / den
+                        return t * SSMath.pow1(temp -  Helpers.makeFP(0.5 ) * t, 2) / den
                     }
                 }
                 else {
@@ -1764,12 +1764,12 @@ extension SSCrosstab {
                 var sum1: FPT = 0
                 if self.isNumeric {
                     for r in 0..<self.rowCount {
-                        let X:FPT = makeFP(self.rowNames![r])
+                        let X:FPT =  Helpers.makeFP(self.rowNames![r])
                         if !X.isNaN {
                             for c in 0..<self.columnCount {
-                                let Y: FPT = makeFP(self.columnNames![c])
+                                let Y: FPT =  Helpers.makeFP(self.columnNames![c])
                                 if !Y.isNaN {
-                                    let frc: FPT = makeFP(self[r, c])
+                                    let frc: FPT =  Helpers.makeFP(self[r, c])
                                     if !frc.isNaN {
                                         sum1 += X * Y * frc
                                     }
@@ -1788,7 +1788,7 @@ extension SSCrosstab {
                     }
                     var sum2: FPT = 0
                     for r in 0..<self.rowCount {
-                        let X: FPT = makeFP(self.rowNames![r])
+                        let X: FPT =  Helpers.makeFP(self.rowNames![r])
                         if !X.isNaN {
                             sum2 += X * self.rowSum(row: r)
                         }
@@ -1798,7 +1798,7 @@ extension SSCrosstab {
                     }
                     var sum3: FPT = 0
                     for c in 0..<self.columnCount {
-                        let Y: FPT = makeFP(self.columnNames![c])
+                        let Y: FPT =  Helpers.makeFP(self.columnNames![c])
                         if !Y.isNaN {
                             sum3 += Y * self.columnSum(column: c)
                         }
@@ -1825,7 +1825,7 @@ extension SSCrosstab {
                 var SX: FPT
                 var SY: FPT
                 for r in 0..<self.rowCount {
-                    let X: FPT = makeFP(self.rowNames![r])
+                    let X: FPT =  Helpers.makeFP(self.rowNames![r])
                     if !X.isNaN {
                         sum1 += X * X * self.rowSum(row: r)
                         sum2 += X * self.rowSum(row: r)
@@ -1834,11 +1834,11 @@ extension SSCrosstab {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
-                SX = sum1 - pow1(sum2, 2) / self.total
+                SX = sum1 - SSMath.pow1(sum2, 2) / self.total
                 sum1 = 0
                 sum2 = 0
                 for c in 0..<self.columnCount {
-                    let Y: FPT = makeFP(self.columnNames![c])
+                    let Y: FPT =  Helpers.makeFP(self.columnNames![c])
                     if !Y.isNaN {
                         sum1 += Y * Y * self.columnSum(column: c)
                         sum2 += Y * self.columnSum(column: c)
@@ -1847,7 +1847,7 @@ extension SSCrosstab {
                         fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
                     }
                 }
-                SY = sum1 - pow1(sum2, 2) / self.total
+                SY = sum1 - SSMath.pow1(sum2, 2) / self.total
                 return self.covariance / (SX * SY).squareRoot()
             }
             else {
@@ -1859,7 +1859,7 @@ extension SSCrosstab {
     /// Returns the Mantel-Haenszel Chi-Square
     public var chiSquareMH: FPT {
         get {
-            return (self.total - 1) * pow1(self.pearsonR, 2)
+            return (self.total - 1) * SSMath.pow1(self.pearsonR, 2)
         }
     }
     
@@ -1888,7 +1888,7 @@ extension SSCrosstab {
     /// Returns Cramer's V
     public var cramerV: FPT {
         get {
-            let q: FPT = makeFP(min(self.rowCount, self.columnCount))
+            let q: FPT =  Helpers.makeFP(min(self.rowCount, self.columnCount))
             let chi = self.chiSquare
             return (chi / (self.total * (q - 1))).squareRoot()
         }
@@ -1942,10 +1942,10 @@ extension SSCrosstab {
     public var r0: FPT {
         get {
             if self.is2x2Table {
-                let n11: FPT = makeFP(self[0,0])
-                let n12: FPT = makeFP(self[0,1])
-                let n21: FPT = makeFP(self[1,0])
-                let n22: FPT = makeFP(self[1,1])
+                let n11: FPT =  Helpers.makeFP(self[0,0])
+                let n12: FPT =  Helpers.makeFP(self[0,1])
+                let n21: FPT =  Helpers.makeFP(self[1,0])
+                let n22: FPT =  Helpers.makeFP(self[1,1])
                 if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
                     return (n11 * n22) / (n12 * n21)
                 }
@@ -1965,10 +1965,10 @@ extension SSCrosstab {
     public var r1: FPT {
         get {
             if self.is2x2Table {
-                let n11: FPT = makeFP(self[0,0])
-                let n12: FPT = makeFP(self[0,1])
-                let n21: FPT = makeFP(self[1,0])
-                let n22: FPT = makeFP(self[1,1])
+                let n11: FPT =  Helpers.makeFP(self[0,0])
+                let n12: FPT =  Helpers.makeFP(self[0,1])
+                let n21: FPT =  Helpers.makeFP(self[1,0])
+                let n22: FPT =  Helpers.makeFP(self[1,1])
                 if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
                     return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
                 }

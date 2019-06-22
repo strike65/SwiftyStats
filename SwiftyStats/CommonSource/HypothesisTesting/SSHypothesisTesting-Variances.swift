@@ -35,8 +35,8 @@ extension SSHypothesisTesting {
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples as SSExamine objects
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data.count < 2 or no variances are obtainable
-    public class func bartlettTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public static func bartlettTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -82,8 +82,8 @@ extension SSHypothesisTesting {
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data.count < 2 or no variances are obtainable
-    public class func bartlettTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public static func bartlettTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         var _N: FPT = 0
         var _pS: FPT = 0
         var _s1: FPT = 0
@@ -129,11 +129,11 @@ extension SSHypothesisTesting {
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
-        _k = makeFP(_data.count)
+        _k =  Helpers.makeFP(_data.count)
         for examine in _data {
-            _N += makeFP(examine.sampleSize)
+            _N +=  Helpers.makeFP(examine.sampleSize)
             if let v = examine.variance(type: .unbiased) {
-                _s1 += (makeFP(examine.sampleSize) - 1) * log1(v)
+                _s1 += ( Helpers.makeFP(examine.sampleSize) - 1) * SSMath.log1(v)
             }
             else {
                 #if os(macOS) || os(iOS)
@@ -148,19 +148,19 @@ extension SSHypothesisTesting {
             }
         }
         for examine in _data {
-            _pS += (makeFP(examine.sampleSize) - 1) * examine.variance(type: .unbiased)! / (_N - _k)
-            _s2 += 1 / makeFP(examine.sampleSize - 1)
+            _pS += ( Helpers.makeFP(examine.sampleSize) - 1) * examine.variance(type: .unbiased)! / (_N - _k)
+            _s2 += 1 /  Helpers.makeFP(examine.sampleSize - 1)
         }
-        ex1 = ((_N - _k) * log1(_pS) - _s1)
+        ex1 = ((_N - _k) * SSMath.log1(_pS) - _s1)
         ex2 = (1 / (3 * (_k - 1)))
         ex3 = (_s2 - 1 / (_N - _k))
         _testStatisticValue = ex1 / (1 + ex2 * ex3)
         do {
-            _cdfChiSquare = try cdfChiSquareDist(chi: _testStatisticValue, degreesOfFreedom: _k - 1)
-            _cutoff90Percent = try quantileChiSquareDist(p: makeFP(0.9), degreesOfFreedom: _k - 1)
-            _cutoff95Percent = try quantileChiSquareDist(p: makeFP(0.95), degreesOfFreedom: _k - 1)
-            _cutoff99Percent = try quantileChiSquareDist(p: makeFP(0.99), degreesOfFreedom: _k - 1)
-            _cutoffAlpha = try quantileChiSquareDist(p: 1 - alpha, degreesOfFreedom: _k - 1)
+            _cdfChiSquare = try SSProbDist.ChiSquare.cdf(chi: _testStatisticValue, degreesOfFreedom: _k - 1)
+            _cutoff90Percent = try SSProbDist.ChiSquare.quantile(p:  Helpers.makeFP(0.9), degreesOfFreedom: _k - 1)
+            _cutoff95Percent = try SSProbDist.ChiSquare.quantile(p:  Helpers.makeFP(0.95), degreesOfFreedom: _k - 1)
+            _cutoff99Percent = try SSProbDist.ChiSquare.quantile(p:  Helpers.makeFP(0.99), degreesOfFreedom: _k - 1)
+            _cutoffAlpha = try SSProbDist.ChiSquare.quantile(p: 1 - alpha, degreesOfFreedom: _k - 1)
             _df = _k - 1
             result = SSVarianceEqualityTestResult<FPT>()
             result.testStatistic = _testStatisticValue
@@ -183,8 +183,8 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array containing SSExamine objects
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data.count < 2 or no variances are obtainable
-    public class func leveneTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable  {
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public static func leveneTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable  {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -228,8 +228,8 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array containing samples
     /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data.count < 2 or no variances are obtainable
-    public class func leveneTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    public static func leveneTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         var _N: FPT = 0
         var _s1: FPT = 0
         var _s2: FPT = 0
@@ -282,7 +282,7 @@ extension SSHypothesisTesting {
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
-        _k = makeFP(_data.count)
+        _k =  Helpers.makeFP(_data.count)
         var _zi: Array<FPT>
         var _zij: Array<Array<FPT>>
         var _ni: Array<FPT>
@@ -296,7 +296,7 @@ extension SSHypothesisTesting {
         _means = Array<FPT>()
         do {
             for examine in _data {
-                _ntemp = makeFP(examine.sampleSize)
+                _ntemp =  Helpers.makeFP(examine.sampleSize)
                 _N += _ntemp
                 _ni.append(_ntemp)
                 _y.append(examine.elementsAsArray(sortOrder: .raw)!)
@@ -316,7 +316,7 @@ extension SSHypothesisTesting {
                         return nil
                     }
                 case .trimmedMean:
-                    if let m = try examine.trimmedMean(alpha: makeFP(0.1)) {
+                    if let m = try examine.trimmedMean(alpha:  Helpers.makeFP(0.1)) {
                         _means.append(m)
                     }
                     else {
@@ -329,12 +329,12 @@ extension SSHypothesisTesting {
             _s2 = 0
             i = 0
             _temp = Array<FPT>()
-            while i < integerValue(_k) {
+            while i < Helpers.integerValue(_k) {
                 _s1 = 0
                 _temp.removeAll()
                 j = 0
-                while j < integerValue(_ni[i]) {
-                    _t = abs(makeFP(_y[i][j]) - _means[i])
+                while j < Helpers.integerValue(_ni[i]) {
+                    _t = abs( Helpers.makeFP(_y[i][j]) - _means[i])
                     _temp.append(_t)
                     _s1 += _t
                     _s2 += _t
@@ -348,17 +348,17 @@ extension SSHypothesisTesting {
             _s1 = 0
             _s2 = 0
             i = 0
-            while i < integerValue(_k) {
+            while i < Helpers.integerValue(_k) {
                 _s1 += _ni[i] * ((_zi[i] - _zMean) * (_zi[i] - _zMean))
                 i += 1
             }
             i = 0
-            while i < integerValue(_k) {
+            while i < Helpers.integerValue(_k) {
                 j = 0
-                while j < integerValue(_ni[i]) {
+                while j < Helpers.integerValue(_ni[i]) {
                     let zij = _zij[i][j]
                     let zi = _zi[i]
-                    _s2 = _s2 + pow1(zij, 2) - (2 * zi * zij) + pow1(zi, 2)
+                    _s2 = _s2 + SSMath.pow1(zij, 2) - (2 * zi * zij) + SSMath.pow1(zi, 2)
                     //                    _s2 = _s2 + p1 * p1
                     //                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
                     j += 1
@@ -366,11 +366,11 @@ extension SSHypothesisTesting {
                 i += 1
             }
             _testStatisticValue = ((_N - _k) * _s1) / ((_k - 1) * _s2)
-            _cdfFRatio = try cdfFRatioDist(f: _testStatisticValue, numeratorDF: _k - 1, denominatorDF: _N - _k)
-            _cutoffAlpha = try quantileFRatioDist(p: 1 - alpha, numeratorDF: _k - 1, denominatorDF: _N - _k)
-            _cutoff90Percent = try quantileFRatioDist(p: makeFP(0.9), numeratorDF: _k - 1, denominatorDF: _N - _k)
-            _cutoff95Percent = try quantileFRatioDist(p: makeFP(0.95), numeratorDF: _k - 1, denominatorDF: _N - _k)
-            _cutoff99Percent = try quantileFRatioDist(p: makeFP(0.99), numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cdfFRatio = try SSProbDist.FRatio.cdf(f: _testStatisticValue, numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cutoffAlpha = try SSProbDist.FRatio.quantile(p: 1 - alpha, numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cutoff90Percent = try SSProbDist.FRatio.quantile(p:  Helpers.makeFP(0.9), numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cutoff95Percent = try SSProbDist.FRatio.quantile(p:  Helpers.makeFP(0.95), numeratorDF: _k - 1, denominatorDF: _N - _k)
+            _cutoff99Percent = try SSProbDist.FRatio.quantile(p:  Helpers.makeFP(0.99), numeratorDF: _k - 1, denominatorDF: _N - _k)
             _variancesAreEqual = !(_testStatisticValue > _cutoffAlpha)
             var result = SSVarianceEqualityTestResult<FPT>()
             result.cv90Pct = _cutoff90Percent
@@ -400,8 +400,8 @@ extension SSHypothesisTesting {
     /// - Parameter data: Data as Array<Numeric>
     /// - Parameter s0: nominal variance
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data.sampleSize < 2 || s0 <= 0
-    public class func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(array: Array<T>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2 || s0 <= 0
+    public static func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(array: Array<T>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -436,8 +436,8 @@ extension SSHypothesisTesting {
     /// - Parameter sample: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter s0: nominal variance
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument if sample.sampleSize < 2 || s0 <= 0
-    public class func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(sample: SSExamine<T, FPT>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError if sample.sampleSize < 2 || s0 <= 0
+    public static func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(sample: SSExamine<T, FPT>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if sample.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -468,10 +468,10 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
-            let df: FPT = makeFP(sample.sampleSize - 1)
+            let df: FPT =  Helpers.makeFP(sample.sampleSize - 1)
             let ratio: FPT = sample.variance(type: .unbiased)! / s0
             let testStatisticValue: FPT = df * ratio
-            let cdfChiSquare: FPT = try cdfChiSquareDist(chi: testStatisticValue, degreesOfFreedom: df)
+            let cdfChiSquare: FPT = try SSProbDist.ChiSquare.cdf(chi: testStatisticValue, degreesOfFreedom: df)
             let twoTailed: FPT
             let oneTailed: FPT
             if cdfChiSquare > FPT.half {
@@ -488,7 +488,7 @@ extension SSHypothesisTesting {
             result.testStatisticValue = testStatisticValue
             result.p1Value = oneTailed
             result.p2Value = twoTailed
-            result.sampleSize = makeFP(sample.sampleSize)
+            result.sampleSize =  Helpers.makeFP(sample.sampleSize)
             result.sigmaUEQs0 = (cdfChiSquare < alpha || cdfChiSquare > (1 - alpha)) ? true : false
             result.sigmaLTEs0 = (cdfChiSquare < alpha) ? true : false
             result.sigmaGTEs0 = (cdfChiSquare > (1 - alpha)) ? true : false
@@ -504,8 +504,8 @@ extension SSHypothesisTesting {
     /// - Parameter data1: Data as Array<Numeric>
     /// - Parameter data1: Data as Array<Numeric>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument iff data1.sampleSize < 2 || data1.sampleSize < 2
-    public class func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError iff data1.sampleSize < 2 || data1.sampleSize < 2
+    public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -540,8 +540,8 @@ extension SSHypothesisTesting {
     /// - Parameter sample1: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter sample2: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError.invalidArgument iff sample1.sampleSize < 2 || sample1.sampleSize < 2
-    public class func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
+    /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample1.sampleSize < 2
+    public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -592,11 +592,11 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let df1: FPT = makeFP(sample1.sampleSize - 1)
-        let df2: FPT = makeFP(sample2.sampleSize - 1)
+        let df1: FPT =  Helpers.makeFP(sample1.sampleSize - 1)
+        let df2: FPT =  Helpers.makeFP(sample2.sampleSize - 1)
         let cdfTestStat: FPT
         do {
-            cdfTestStat = try cdfFRatioDist(f: testStat, numeratorDF: df1, denominatorDF: df2)
+            cdfTestStat = try SSProbDist.FRatio.cdf(f: testStat, numeratorDF: df1, denominatorDF: df2)
         }
         catch {
             throw error
@@ -638,19 +638,19 @@ extension SSHypothesisTesting {
         var ciGreaterAlphaLower: FPT
         var ciGreaterAlphaUpper: FPT
         do {
-            ciTwoSidedAlphaUpper = try (testStat / quantileFRatioDist(p: alpha / 2, numeratorDF: df1, denominatorDF: df2))
-            ciTwoSidedAlphaLower = try (testStat * quantileFRatioDist(p: alpha / 2, numeratorDF: df2, denominatorDF: df1))
+            ciTwoSidedAlphaUpper = try (testStat / SSProbDist.FRatio.quantile(p: alpha / 2, numeratorDF: df1, denominatorDF: df2))
+            ciTwoSidedAlphaLower = try (testStat * SSProbDist.FRatio.quantile(p: alpha / 2, numeratorDF: df2, denominatorDF: df1))
             ciLessAlphaLower = 0
-            ciLessAlphaUpper = try (testStat / quantileFRatioDist(p: alpha, numeratorDF: df1, denominatorDF: df2))
-            ciGreaterAlphaLower = try (testStat * quantileFRatioDist(p: alpha, numeratorDF: df2, denominatorDF: df1))
+            ciLessAlphaUpper = try (testStat / SSProbDist.FRatio.quantile(p: alpha, numeratorDF: df1, denominatorDF: df2))
+            ciGreaterAlphaLower = try (testStat * SSProbDist.FRatio.quantile(p: alpha, numeratorDF: df2, denominatorDF: df1))
             ciGreaterAlphaUpper = FPT.infinity
         }
         catch {
             throw error
         }
         var result: SSFTestResult<FPT> = SSFTestResult<FPT>()
-        result.sampleSize1 = makeFP(sample1.sampleSize)
-        result.sampleSize2 = makeFP(sample2.sampleSize)
+        result.sampleSize1 =  Helpers.makeFP(sample1.sampleSize)
+        result.sampleSize2 =  Helpers.makeFP(sample2.sampleSize)
         result.dfNumerator = df1
         result.dfDenominator = df2
         result.variance1 = s1

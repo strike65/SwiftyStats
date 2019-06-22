@@ -37,7 +37,7 @@ extension SSHypothesisTesting {
     ///   - lag: Lag
     /// - Returns: The autocorrelation coefficient for Lag `lag`
     /// - Throws: Throws SSSwiftyStatsError.invalidArgument if `array.count` < 2
-    public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, lag: Int) throws -> FPT {
+    public static func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, lag: Int) throws -> FPT {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -63,7 +63,7 @@ extension SSHypothesisTesting {
     /// - Parameter lag: Lag
     /// - Returns: Autocorrelation coefficient for Lag `lag`
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, lag: Int) throws -> FPT {
+    public static func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, lag: Int) throws -> FPT {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -88,7 +88,7 @@ extension SSHypothesisTesting {
         }
         i = 0
         while i < n {
-            den += pow1(elements[i] - mean, 2)
+            den += SSMath.pow1(elements[i] - mean, 2)
             i += 1
         }
         r = num / den
@@ -106,7 +106,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Array<Double>
     /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {
+    public static func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -138,7 +138,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: SSExamine object
     /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
-    public class func autocorrelation<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>) throws -> SSBoxLjungResult<FPT> {
+    public static func autocorrelation<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>) throws -> SSBoxLjungResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
@@ -162,10 +162,10 @@ extension SSHypothesisTesting {
         var i: Int = 0
         var k: Int = 0
         let n = data.sampleSize
-        let nn: FPT = makeFP(n)
+        let nn: FPT =  Helpers.makeFP(n)
         let elements = data.elementsAsArray(sortOrder: .raw)!
         while i < n {
-            den += pow1(elements[i] - mean, 2)
+            den += SSMath.pow1(elements[i] - mean, 2)
             i += 1
         }
         var l = 0
@@ -189,7 +189,7 @@ extension SSHypothesisTesting {
             l = 1
             while l < k {
                 oldsum = sum
-                comp = comp + pow1(acr[l], 2)
+                comp = comp + SSMath.pow1(acr[l], 2)
                 sum = comp + oldsum
                 comp = (oldsum - sum) + comp
                 l += 1
@@ -214,25 +214,25 @@ extension SSHypothesisTesting {
         var ex1, ex2, ex3: FPT
         
         while k < acr.count {
-            kk = makeFP(k)
+            kk =  Helpers.makeFP(k)
             ex1 = nn - kk
             ex2 = ex1 / (nn + 2)
             ex3 = nr * ex2
             serWhiteNoise.append(ex3.squareRoot())
             l = 1
             while l <= k {
-                ll = makeFP(l)
+                ll =  Helpers.makeFP(l)
                 ex1 = nn - ll
                 oldsum = sum
-                comp = comp + (pow1(acr[l], 2) / ex1)
+                comp = comp + (SSMath.pow1(acr[l], 2) / ex1)
                 sum = comp + oldsum
                 comp = (oldsum - sum) + comp
-//                sum += sum + (pow1(acr[l], 2) / (nn - ll))
+//                sum += sum + (SSMath.pow1(acr[l], 2) / (nn - ll))
                 l += 1
             }
             statBoxLjung.append(f * sum)
             do {
-                try sig.append(1 - cdfChiSquareDist(chi: statBoxLjung[k], degreesOfFreedom: kk))
+                try sig.append(1 - SSProbDist.ChiSquare.cdf(chi: statBoxLjung[k], degreesOfFreedom: kk))
             }
             catch {
                 throw error

@@ -25,6 +25,8 @@ import Foundation
 import os.log
 #endif
 
+extension SSProbDist {
+    enum Pareto {
 
 // MARK: Pareto
 
@@ -32,7 +34,7 @@ import os.log
 /// - Parameter a: minimum
 /// - Parameter b: Shape parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-public func paraParetoDist<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSContProbDistParams<FPT> {
+public static func para<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSContProbDistParams<FPT> {
     if (a <= 0) {
         #if os(macOS) || os(iOS)
         
@@ -100,7 +102,7 @@ public func paraParetoDist<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape
 /// - Parameter a: minimum
 /// - Parameter b: Shape parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-public func pdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
+public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
     if (a <= 0) {
         #if os(macOS) || os(iOS)
         
@@ -126,9 +128,9 @@ public func pdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT
     if x < a {
         return 0
     }
-    let a1: FPT = pow1(a, b)
+    let a1: FPT = SSMath.pow1(a, b)
     let a2: FPT = a1 * b
-    let result: FPT = a2 * pow1(x, -1 - b)
+    let result: FPT = a2 * SSMath.pow1(x, -1 - b)
     return result
 }
 
@@ -137,7 +139,7 @@ public func pdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT
 /// - Parameter a: minimum
 /// - Parameter b: Shape parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-public func cdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
+public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
     if (a <= 0) {
         #if os(macOS) || os(iOS)
         
@@ -164,7 +166,7 @@ public func cdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT
         return 0
     }
     else {
-        return 1 - pow1(a / x, b)
+        return 1 - SSMath.pow1(a / x, b)
     }
 }
 
@@ -174,7 +176,7 @@ public func cdfParetoDist<FPT: SSFloatingPoint & Codable>(x: FPT, minimum a: FPT
 /// - Parameter a: minimum
 /// - Parameter b: Shape parameter b
 /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-public func quantileParetoDist<FPT: SSFloatingPoint & Codable>(p: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
+public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, minimum a: FPT, shape b: FPT) throws -> FPT {
     if (a <= 0) {
         #if os(macOS) || os(iOS)
         
@@ -215,7 +217,9 @@ public func quantileParetoDist<FPT: SSFloatingPoint & Codable>(p: FPT, minimum a
         return FPT.infinity
     }
     else {
-        return a * pow1(1 - p, -1 / b)
+        return a * SSMath.pow1(1 - p, -1 / b)
     }
+}
+}
 }
 

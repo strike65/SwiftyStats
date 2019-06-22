@@ -33,9 +33,8 @@ extension SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size <= 3
-    public class func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
-        if array.count <= 3 {
+    public static func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
+        if array.count == 3 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -57,7 +56,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if !isNumber(array[0]) {
+        if !Helpers.isNumber(array[0]) {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -83,8 +82,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: An Array<Double> containing the data
     /// - Parameter alpha: Alpha
     /// - Returns: SSGrubbsTestResult
-    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size <= 3
-    public class func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
+    public static func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if data.sampleSize <= 3 {
             #if os(macOS) || os(iOS)
             
@@ -125,21 +123,21 @@ extension SSHypothesisTesting {
         let quantile: FPT
         var mi: FPT, ma: FPT
         if let s = data.standardDeviation(type: .unbiased) {
-            ma = makeFP(data.maximum!)
-            mi = makeFP(data.minimum!)
+            ma =  Helpers.makeFP(data.maximum!)
+            mi =  Helpers.makeFP(data.minimum!)
             maxDiff = max(abs(ma - mean), abs(mi - mean))
             g = maxDiff / s
             do {
-                let pp: FPT = alpha / (2 * makeFP(data.sampleSize))
-                quantile = try quantileStudentTDist(p: pp, degreesOfFreedom: makeFP(data.sampleSize - 2))
+                let pp: FPT = alpha / (2 *  Helpers.makeFP(data.sampleSize))
+                quantile = try SSProbDist.StudentT.quantile(p: pp, degreesOfFreedom:  Helpers.makeFP(data.sampleSize - 2))
             }
             catch {
                 throw error
             }
-            let t2 = pow1(quantile, 2)
-            let e1: FPT = makeFP(data.sampleSize) - 1
-            let e2: FPT = (makeFP(data.sampleSize) - 2 + t2)
-            let e3: FPT = sqrt(makeFP(data.sampleSize))
+            let t2 = SSMath.pow1(quantile, 2)
+            let e1: FPT =  Helpers.makeFP(data.sampleSize) - 1
+            let e2: FPT = ( Helpers.makeFP(data.sampleSize) - 2 + t2)
+            let e3: FPT = sqrt( Helpers.makeFP(data.sampleSize))
             let t: FPT = e1 * sqrt(t2 / e2) / e3
             var res:SSGrubbsTestResult<T, FPT> = SSGrubbsTestResult<T, FPT>()
             res.sampleSize = data.sampleSize
@@ -161,25 +159,25 @@ extension SSHypothesisTesting {
     /************************************************************************************************/
     
     /// Returns p for run i
-    fileprivate class func rosnerP<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int) -> FPT {
-        let n: FPT = makeFP(sampleSize)
-        let ii: FPT = makeFP(i)
+    fileprivate static func rosnerP<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int) -> FPT {
+        let n: FPT =  Helpers.makeFP(sampleSize)
+        let ii: FPT =  Helpers.makeFP(i)
         return 1 - ( alpha / ( 2 * (n - ii + 1) ) )
     }
     
-    fileprivate class func rosnerLambdaRun<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int!) -> FPT {
+    fileprivate static func rosnerLambdaRun<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int!) -> FPT {
         let p: FPT = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
-        let df: FPT = makeFP(sampleSize - i - 1)
+        let df: FPT =  Helpers.makeFP(sampleSize - i - 1)
         let cdfStudentT: FPT
         do {
-            cdfStudentT = try quantileStudentTDist(p: p, degreesOfFreedom: df)
+            cdfStudentT = try SSProbDist.StudentT.quantile(p: p, degreesOfFreedom: df)
         }
         catch {
             return FPT.nan
         }
-        let num: FPT = makeFP(sampleSize - i) * cdfStudentT
-        let ni: FPT = makeFP(sampleSize - i)
-        let denom: FPT = sqrt((ni - 1 + pow1(cdfStudentT, 2 ) ) * ( df + 2 ) )
+        let num: FPT =  Helpers.makeFP(sampleSize - i) * cdfStudentT
+        let ni: FPT =  Helpers.makeFP(sampleSize - i)
+        let denom: FPT = sqrt((ni - 1 + SSMath.pow1(cdfStudentT, 2 ) ) * ( df + 2 ) )
         return num / denom
     }
     
@@ -190,8 +188,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
-    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size == 0
-    public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(array: Array<T>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
+    public static func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(array: Array<T>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if array.count == 0 {
             return nil
         }
@@ -213,8 +210,7 @@ extension SSHypothesisTesting {
     /// - Parameter alpha: Alpha
     /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
     /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
-    /// - Throws: SSSwiftyStatsError.invalidArgument if sample size == 0
-    public class func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(data: SSExamine<T, FPT>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
+    public static func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(data: SSExamine<T, FPT>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if data.sampleSize == 0 {
             return nil
         }
@@ -258,7 +254,7 @@ extension SSHypothesisTesting {
         while k <= maxOutliers {
             i = 0
             while i <= (sortedData.count - 1) {
-                t = makeFP(sortedData[i])
+                t =  Helpers.makeFP(sortedData[i])
                 currentMean = currentData.arithmeticMean!
                 difference = abs(t - currentMean)
                 if difference > maxDiff {
