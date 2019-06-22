@@ -28,7 +28,7 @@ import os.log
 
 public enum SSProbDist {
     
-    enum StudentT {
+    public enum StudentT {
         // MARK: STUDENT's T
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.

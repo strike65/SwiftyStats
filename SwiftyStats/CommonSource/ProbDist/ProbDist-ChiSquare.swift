@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum ChiSquare {
+    public enum ChiSquare {
         
         // MARK: Chi Square
         // MARK: Central
@@ -198,7 +198,7 @@ extension SSProbDist {
         
         // MARK: noncentral
         
-        enum NonCentral {
+        public enum NonCentral {
             /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
             /// - Parameter df: Degrees of freedom
             /// - Parameter lambda: noncentrality parameter

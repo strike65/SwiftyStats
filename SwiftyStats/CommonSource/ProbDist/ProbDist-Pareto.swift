@@ -26,7 +26,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Pareto {
+    public enum Pareto {
 
 // MARK: Pareto
 

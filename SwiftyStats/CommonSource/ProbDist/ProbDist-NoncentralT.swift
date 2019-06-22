@@ -25,7 +25,7 @@ import Accelerate.vecLib.LinearAlgebra
 import os.log
 
 extension SSProbDist.StudentT {
-    enum NonCentral {
+    public enum NonCentral {
         
         
         #if arch(i386) || arch(x86_64)

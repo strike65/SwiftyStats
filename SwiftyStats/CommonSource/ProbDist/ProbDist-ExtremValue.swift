@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum ExtremeValue {
+    public enum ExtremeValue {
         // MARK: ExtremeValue
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Extrem Value distribution.

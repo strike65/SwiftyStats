@@ -245,6 +245,16 @@ extension SSHypothesisTesting {
         var _ntemp: FPT
         var _k: FPT
         var _data: Array<SSExamine<T, FPT>> = Array<SSExamine<T, FPT>>()
+        var _zi: Array<FPT>
+        var _zij: Array<Array<FPT>>
+        var _ni: Array<FPT>
+        var _y: Array<Array<T>>
+        var _means: Array<FPT>
+        var _temp: Array<FPT>
+        var i: Int
+        var j: Int
+        var ex1: FPT
+        var ex2: FPT
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -283,14 +293,6 @@ extension SSHypothesisTesting {
             }
         }
         _k =  Helpers.makeFP(_data.count)
-        var _zi: Array<FPT>
-        var _zij: Array<Array<FPT>>
-        var _ni: Array<FPT>
-        var _y: Array<Array<T>>
-        var _means: Array<FPT>
-        var _temp: Array<FPT>
-        var i: Int
-        var j: Int
         _ni = Array<FPT>()
         _y = Array<Array<T>>()
         _means = Array<FPT>()
@@ -358,9 +360,10 @@ extension SSHypothesisTesting {
                 while j < Helpers.integerValue(_ni[i]) {
                     let zij = _zij[i][j]
                     let zi = _zi[i]
-                    _s2 = _s2 + SSMath.pow1(zij, 2) - (2 * zi * zij) + SSMath.pow1(zi, 2)
-                    //                    _s2 = _s2 + p1 * p1
-                    //                    _s2 += (_zij[i][j] - _zi[i]) * (_zij[i][j] - _zi[i])
+                    ex1 = _s2 + SSMath.pow1(zij, 2)
+                    ex2 = (2 * zi * zij)
+                    _s2 = ex1 - ex2 + SSMath.pow1(zi, 2)
+//                    _s2 = _s2 + SSMath.pow1(zij, 2) - (2 * zi * zij) + SSMath.pow1(zi, 2)
                     j += 1
                 }
                 i += 1

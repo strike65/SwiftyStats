@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Binomial {
+    public enum Binomial {
         
         // MARK: binomial
         

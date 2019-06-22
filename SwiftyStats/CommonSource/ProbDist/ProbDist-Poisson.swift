@@ -28,7 +28,7 @@ import os.log
 
 
 extension SSProbDist {
-    enum Poisson {
+    public enum Poisson {
         // MARK: Poisson
         
         /// Returns the cdf of the Binomial Distribution

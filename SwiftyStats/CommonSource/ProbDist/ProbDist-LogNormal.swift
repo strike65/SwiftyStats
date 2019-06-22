@@ -28,7 +28,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum LogNormal {
+    public enum LogNormal {
         
         // MARK: Log Normal
         
@@ -89,7 +89,13 @@ extension SSProbDist {
                 let e1: FPT = sqrt(v) * x
                 let e2: FPT = e1 * sqrt(2 * FPT.pi)
                 let e3: FPT = SSMath.pow1(SSMath.log1(x) - mean, 2)
-                let r:FPT = 1 / e2 * SSMath.exp1(-1 * e3 / (2 * v))
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
+                ex1 = FPT.minusOne * e3
+                ex2 = 2 * v
+                ex3 = ex1 / ex2
+                let r:FPT = SSMath.reciprocal(e2) * SSMath.exp1(ex3)
                 //        let e1: FPT = SSMath.exp1(-1 * SSMath.pow1(SSMath.log1(x) - mean, 2) / (2 * v))
                 //        let r = 1 / (sqrt(v) * x * sqrt(2 * FPT.pi)) * e1
                 return r

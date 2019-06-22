@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Erlang {
+    public enum Erlang {
         // MARK: Erlang
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.

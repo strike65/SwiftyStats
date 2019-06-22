@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Logistic {
+    public enum Logistic {
         // MARK: Logistic
         /// Returns the Logit for a given p
         /// - Parameter p: p

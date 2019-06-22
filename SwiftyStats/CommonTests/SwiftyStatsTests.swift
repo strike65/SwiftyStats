@@ -294,7 +294,7 @@ class SwiftyStatsTests: XCTestCase {
         let intDataTestString = "18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28"
         
         XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
-        print(examineInt.elementsAsString(withDelimiter: ",", asRow: false)!)
+//        print(examineInt.elementsAsString(withDelimiter: ",", asRow: false)!)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .raw)! == intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
@@ -539,8 +539,6 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssert(examineIntOutliers.hasOutliers(testType: .esd)!)
         
         let examine2: SSExamine<Double, Double> = examineDouble.copy() as! SSExamine<Double, Double>
-        print("\(examineDouble.hashValue)")
-        print("\(examine2.hashValue)")
         XCTAssert(examineDouble.elementsAsArray(sortOrder: .raw) == examine2.elementsAsArray(sortOrder: .raw))
         XCTAssert(examineDouble == examine2)
     }

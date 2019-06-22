@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum FRatio {
+    public enum FRatio {
         // MARK: F-RATIO
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the F ratio distribution.
@@ -179,6 +179,11 @@ extension SSProbDist {
         /// - Parameter df2: denominator degrees of freedom
         /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
         public static func cdf<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> FPT {
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
+            var ex5: FPT
             if f <= 0 {
                 return 0
             }
@@ -204,7 +209,12 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            let result = SSSpecialFunctions.betaNormalized(x: (f * df1) / (df2 + df1 * f), a: df1 / 2, b: df2 / 2)
+            ex1 = f * df1
+            ex2 = df2 + ex1
+            ex3 = ex1 / ex2
+            ex4 = df1 * FPT.half
+            ex5 = df2 * FPT.half
+            let result = SSSpecialFunctions.betaNormalized(x: ex3, a: ex4, b: ex5)
             return result
         }
         
@@ -289,7 +299,7 @@ extension SSProbDist {
         
         /* noncentral */
         
-        enum NonCentral {
+        public enum NonCentral {
             
             /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral F ratio distribution.
             /// - Parameter df1: numerator degrees of freedom
@@ -297,6 +307,12 @@ extension SSProbDist {
             /// - Parameter lambda: noncentrality
             /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
             public static func para<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
+                var e1, e2, e3, e4, e5, e6, e7: FPT
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
+                var ex4: FPT
+                var ex5: FPT
                 var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
                 if df1 <= 0 {
                     #if os(macOS) || os(iOS)
@@ -329,12 +345,16 @@ extension SSProbDist {
                     }
                 }
                 if (df2 > 2) {
-                    result.mean = df2 * (lambda + df1) / ((df2 - 2) * df1)
+                    ex1 = lambda + df1
+                    ex2 = df2 * ex1
+                    ex3 = df2 - 2
+                    ex4 = ex3 * df1
+                    result.mean = ex2 / ex4
+//                    result.mean = df2 * (lambda + df1) / ((df2 - 2) * df1)
                 }
                 else {
                     result.mean = FPT.nan
                 }
-                var e1, e2, e3, e4, e5, e6, e7: FPT
                 if (df2 > 4) {
                     e1 = (1 + df1) * (1 + df1)
                     e2 = (df2 - 2) * (2 * lambda + df1)
@@ -352,18 +372,30 @@ extension SSProbDist {
                     e3 = e2 * (2 * df1 + df2 - 1)
                     
                     e4 = 3 * (df2 + 2 * df1)
-                    e5 = e4 * (2 * df1 + df2 - 2) * lambda
-                    
-                    e6 = 6 * (df1 + df2 - 2) * SSMath.pow1(lambda, 2)
-                    
-                    e7 = e3 + e5 + e6 + 2 * SSMath.pow1(lambda, 3)
-                    
+                    ex1 = 2 * df1
+                    ex2 = df2 - 2
+                    ex3 = ex1 + ex2
+                    ex4 = ex3 * lambda
+                    e5 = e4 * ex4
+//                    e5 = e4 * (2 * df1 + df2 - 2) * lambda
+                    ex1 = df1 + df2 - 2
+                    ex2 = 6 * ex1
+                    e6 = ex2 * SSMath.pow1(lambda,2)
+//                    e6 = 6 * (df1 + df2 - 2) * SSMath.pow1(lambda, 2)
+                    ex1 = e3 + e5 + e6
+                    ex2 = ex1 + 2
+                    e7 = ex2 * SSMath.pow1(lambda, 3)
+//                    e7 = e3 + e5 + e6 + 2 * SSMath.pow1(lambda, 3)
+
                     let d1 = e1 * e7
                     
                     e1 = df2 - 6
                     
                     e2 = df1 * (df1 + df2 - 2)
-                    e3 = e2 + 2 * (df1 + df2 - 2) * lambda
+                    ex1 = df1 + df2 - 2
+                    ex2 = 2 * ex1
+                    ex3 = ex2 * lambda
+                    e3 = e2 + ex3
                     e4 = e3 + SSMath.pow1(lambda, 2)
                     
                     let d2 = e1 * SSMath.pow1(e4,  Helpers.makeFP(1.5))
@@ -379,31 +411,55 @@ extension SSProbDist {
                     e2 = df1 * (-2 + df1 + df2)
                     e3 = 4 * SSMath.pow1(-2 + df2, 2)
                     e4 = e3 + SSMath.pow1(df1, 2) * (10 + df2)
-                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
+                    ex1 = (df2 - 2)
+                    ex2 = (10 + df2)
+                    ex3 = ex1 * ex2
+                    ex4 = df1 * ex3
+                    e5 = e4 + ex4
+//                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
                     let d1: FPT = e2 * e5
                     
                     e2 = 4 * (-2 + df1 + df2)
                     e3 = 4 * SSMath.pow1(-2 + df2, 2)
                     e4 = e3 + SSMath.pow1(df1, 2) * (10 + df2)
-                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
+                    ex1 = (df2 - 2)
+                    ex2 = (10 + df2)
+                    ex3 = ex1 * ex2
+                    ex4 = df1 * ex3
+                    e5 = e4 + ex4
+//                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
                     let d2: FPT = e1 * e4 * lambda
                     
                     e2 = 2 * (10 + df2)
                     e3 = e2 * (-2 + df1 + df2)
-                    e4 = e3 * (-4 + 3 * df1 + 2 * df2)
+                    ex1 = 3 * df1
+                    ex2 = 2 * df2
+                    ex3 = ex1 + ex2
+                    ex4 = ex3 - 4
+                    e4 = e3 * ex4
+//                    e4 = e3 * (-4 + 3 * df1 + 2 * df2)
                     let d3: FPT = e4 * SSMath.pow1(lambda,2)
                     
                     e2 = 4 * (10 + df2)
                     let d4: FPT = e2 * (df1 + df2 - 2) * SSMath.pow1(lambda, 3)
                     
                     let d5: FPT = SSMath.pow1(lambda, 4) * (10 + df2)
-                    
-                    let A: FPT = e1 * (d1 + d2 + d3 + d4 + d5)
+                    ex1 = d1 + d2
+                    ex2 = ex1 + d3
+                    ex3 = ex2 + d4
+                    ex5 = ex4 + d5
+                    let A: FPT = e1 * ex5
+//                    let A: FPT = e1 * (d1 + d2 + d3 + d4 + d5)
                     
                     let d6: FPT = (-8 + df2) * (-8 + df2)
                     
                     e1 = df1 * (-2 + df1 + df2)
-                    e2 = e1 + 2 * (-2 + df1 + df2) * lambda
+                    ex1 = df1 + df2
+                    ex2 = ex1 - 2
+                    ex3 = ex2 * lambda
+                    ex4 = 2 * ex3
+                    e2 = e1 + ex4
+//                    e2 = e1 + 2 * (-2 + df1 + df2) * lambda
                     e3 = e2 + SSMath.pow1(lambda, 2)
                     
                     let d7: FPT = SSMath.pow1(e3, 2)
@@ -425,6 +481,10 @@ extension SSProbDist {
             /// - Parameter lambda: Noncentrality
             /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
             public static func pdf<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> FPT {
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
+                var ex4: FPT
                 if df1 <= 0 {
                     #if os(macOS) || os(iOS)
                     
@@ -463,7 +523,12 @@ extension SSProbDist {
                 catch {
                     throw error
                 }
-                let ans: FPT = (df1 / df2) / ((1 + y) * (1 + y)) * beta
+                ex1 = df1 / df2
+                ex2 = (1 + y)
+                ex3 = ex2 * ex2
+                ex4 = ex1 / ex3
+                let ans: FPT = ex4 * beta
+//                let ans: FPT = (df1 / df2) / ((1 + y) * (1 + y)) * beta
                 return ans
             }
             

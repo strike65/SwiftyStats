@@ -411,28 +411,6 @@ internal enum Helpers {
         //    return result as Array<FPT>
     }
     
-    
-    
-    /// Returns the maximum of two comparable values
-    //public func maximum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
-    //    if t1 > t2 {
-    //        return t1
-    //    }
-    //    else {
-    //        return t2
-    //    }
-    //}
-    
-    ///// Returns the minimum of two comparable values
-    //internal static func minimum<T>(_ t1: T, _ t2: T) -> T where T:Comparable {
-    //    if t1 < t2 {
-    //        return t1
-    //    }
-    //    else {
-    //        return t2
-    //    }
-    //}
-    
     /// Returns a SSExamine object of length (i.e. number of unique elements) one and count "count"
     /// - Parameter value: Value
     /// - Parameter count: Number of values

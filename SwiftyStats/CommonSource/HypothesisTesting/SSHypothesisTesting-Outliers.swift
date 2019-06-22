@@ -162,12 +162,24 @@ extension SSHypothesisTesting {
     fileprivate static func rosnerP<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int) -> FPT {
         let n: FPT =  Helpers.makeFP(sampleSize)
         let ii: FPT =  Helpers.makeFP(i)
-        return 1 - ( alpha / ( 2 * (n - ii + 1) ) )
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
+        ex1 = n - ii
+        ex2 = ex1 + FPT.one
+        ex3 = 2 * ex2
+        ex4 = alpha / ex3
+        return FPT.one - ex4
     }
     
     fileprivate static func rosnerLambdaRun<FPT: SSFloatingPoint & Codable>(alpha: FPT, sampleSize: Int, run i: Int!) -> FPT {
         let p: FPT = rosnerP(alpha: alpha, sampleSize: sampleSize, run: i)
         let df: FPT =  Helpers.makeFP(sampleSize - i - 1)
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         let cdfStudentT: FPT
         do {
             cdfStudentT = try SSProbDist.StudentT.quantile(p: p, degreesOfFreedom: df)
@@ -177,7 +189,11 @@ extension SSHypothesisTesting {
         }
         let num: FPT =  Helpers.makeFP(sampleSize - i) * cdfStudentT
         let ni: FPT =  Helpers.makeFP(sampleSize - i)
-        let denom: FPT = sqrt((ni - 1 + SSMath.pow1(cdfStudentT, 2 ) ) * ( df + 2 ) )
+        ex1 = ni - FPT.one
+        ex2 = ex1 + SSMath.pow1(cdfStudentT, 2)
+        ex3 = df + 2
+        ex4 = ex2 * ex3
+        let denom: FPT = sqrt(ex4)
         return num / denom
     }
     
@@ -286,7 +302,6 @@ extension SSHypothesisTesting {
             currentData.append(contentOf: sortedData)
             testStats.append(currentTestStat)
             lambdas.append(currentLambda)
-            print("\(currentLambda)")
             itemsRemoved.append(itemToRemove)
             means.append(currentMean)
             stdDevs.append(currentSd)

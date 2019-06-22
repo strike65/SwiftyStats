@@ -442,6 +442,9 @@ extension SSExamine {
     /// Returns the Qn statisticx by Rousseeuw, P.J. and Croux, C. (1993)
     public var Qn: FPT? {
         get {
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
             if !self.isNotEmptyAndNumeric {
                 return nil
             }
@@ -492,7 +495,11 @@ extension SSExamine {
                 }
                 else {
                     if (n % 2 == 1) { /* n odd */
-                        dn =  Helpers.makeFP(1.60188 ) + ( Helpers.makeFP(-2.1284 ) -  Helpers.makeFP(5.172 ) / nn) / nn
+                        ex1 = Helpers.makeFP(5.172 ) / nn
+                        ex2 = Helpers.makeFP(-2.1284) - ex1
+                        ex3 = ex2 / nn
+                        dn =  Helpers.makeFP(1.60188 ) + ex3
+//                        dn =  Helpers.makeFP(1.60188 ) + ( Helpers.makeFP(-2.1284 ) -  Helpers.makeFP(5.172) / nn) / nn
                     }
                     else {            /* n even */
                         let ex1: FPT =  Helpers.makeFP(77.0) / nn

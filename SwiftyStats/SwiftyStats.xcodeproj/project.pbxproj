@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
-		9F06A0672149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
 		9F06A0682149B0400029DE0A /* SSSF-MarcumQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */; };
 		9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13CD20211B71D100153FC3 /* CodableFloat80.swift */; };
 		9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */; };
@@ -100,6 +98,8 @@
 		9FC1C9782160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */; };
 		9FC1FC38210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
 		9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */; };
+		9FC9082022BEB8160021C141 /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
+		9FC9082122BEB8160021C141 /* SSSF-Incgam-Gil_Temme_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4733E9214024CD0041FD58 /* SSSF-Incgam-Gil_Temme_.swift */; };
 		9FCB77EC21103884002B6738 /* ProbDist-ExtremValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */; };
 		9FCB77ED21103884002B6738 /* ProbDist-ExtremValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */; };
 		9FD6663122B6BB860072FDB2 /* SSSpecialFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD6663022B6BB860072FDB2 /* SSSpecialFunctions.swift */; };
@@ -258,6 +258,7 @@
 		9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HypergeometricPFQ.swift; sourceTree = "<group>"; };
 		9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
+		9FC9081D22BE90430021C141 /* StatsPlaground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = StatsPlaground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ExtremValue.swift"; sourceTree = "<group>"; };
 		9FD6663022B6BB860072FDB2 /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 		9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chebyshev.swift; sourceTree = "<group>"; };
@@ -433,6 +434,7 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
+				9FC9081C22BE902F0021C141 /* Playground */,
 				9FB18A8622B80800003D721E /* Experimental Sources */,
 				9F9757DA22AE6471000AC8EF /* make_doc.sh */,
 				9F3F485822B02E20005FAB3A /* index.md */,
@@ -499,6 +501,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9FC9081C22BE902F0021C141 /* Playground */ = {
+			isa = PBXGroup;
+			children = (
+				9FC9081D22BE90430021C141 /* StatsPlaground.playground */,
+			);
+			path = Playground;
 			sourceTree = "<group>";
 		};
 		9FE86EC2215D193300DD5349 /* SpecialFunctions */ = {
@@ -881,7 +891,6 @@
 				9FEA82751F76CAF5005E4349 /* SSDataGroupSorter.swift in Sources */,
 				9F7EFB2D2101ECAF00F0F573 /* ProbDist-StudentT.swift in Sources */,
 				9FEA82831F76CAF5005E4349 /* SSSimard-KSProb.swift in Sources */,
-				9F06A0672149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9F13CD21211B71D100153FC3 /* CodableFloat80.swift in Sources */,
 				9FEA82711F76CAF5005E4349 /* SSConstants.swift in Sources */,
 				9FE86EC7215D19C800DD5349 /* SSSFBetaRegCF.swift in Sources */,
@@ -902,6 +911,7 @@
 				9FEA827D1F76CAF5005E4349 /* SSHypothesisTesting-Randomness.swift in Sources */,
 				9F371A3D212EAA6800BECC71 /* ProbDist-NoncentralT.swift in Sources */,
 				9F7EFB4B2101EFC400F0F573 /* ProbDist-Wald_InverseNormal.swift in Sources */,
+				9FC9082022BEB8160021C141 /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9F7EFB4E2101EFFF00F0F573 /* ProbDist-Gamma.swift in Sources */,
 				9FD82699216FB29500AE1956 /* SSComplex.swift in Sources */,
 				9F180B802110AF66007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
@@ -993,6 +1003,7 @@
 				9FEA82981F76CB1D005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB552101F06300F0F573 /* ProbDist-Weibull.swift in Sources */,
 				9F180B812110AF67007C6C1C /* SSExamine-Sn_Qn.swift in Sources */,
+				9FC9082122BEB8160021C141 /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9FEA828A1F76CB1D005E4349 /* SSContFrac.swift in Sources */,
 				9FE86EC8215D19C800DD5349 /* SSSFBetaRegCF.swift in Sources */,
 				9FD8269A216FB29600AE1956 /* SSComplex.swift in Sources */,
@@ -1015,7 +1026,6 @@
 				9F2F23AF22A989FF0014CC4C /* Array-Extension.swift in Sources */,
 				9FEA829A1F76CB1D005E4349 /* SSProtocols.swift in Sources */,
 				9F7EFB332101EDB200F0F573 /* ProbDist-StudentT.swift in Sources */,
-				9F06A0662149AD330029DE0A /* SSSF-Incgam-Gil_Temme_.swift in Sources */,
 				9FC1C9782160F9E900AE4457 /* SSMath-GenericFP.swift in Sources */,
 				9F429DBC2150F28800C27B6B /* Airy.swift in Sources */,
 				9FEA82961F76CB1D005E4349 /* SSHypothesisTesting-TTests.swift in Sources */,
@@ -1217,7 +1227,7 @@
 				PRODUCT_NAME = SwiftyStats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;

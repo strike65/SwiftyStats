@@ -27,7 +27,7 @@ import os.log
 
 
 extension SSProbDist {
-    enum InverseNormal {
+    public enum InverseNormal {
         // MARK: Wald / Inverse Normal
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Wald (inverse normal) distribution.

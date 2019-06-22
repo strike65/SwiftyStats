@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Rayleigh {
+    public enum Rayleigh {
         // MARK: Rayleigh
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.

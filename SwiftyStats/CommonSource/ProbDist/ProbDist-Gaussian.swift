@@ -28,7 +28,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Gaussian {
+    public enum Gaussian {
         
         // MARK: GAUSSIAN
         
@@ -88,9 +88,13 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            //    let u = (x - m) / sqrt(v)
-            //    return Standard.cdf(u: u)
-            let n: FPT =  Helpers.makeFP(1.0 / 2.0 ) * SSMath.erfc1((m - x) / (FPT.sqrt2 * v.squareRoot()))
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            ex1 = m - x
+            ex2 = FPT.sqrt2 * sqrt(v)
+            ex3 = ex1 / ex2
+            let n: FPT =  FPT.half * SSMath.erfc1(ex3)
             return n
         }
         
@@ -125,6 +129,10 @@ extension SSProbDist {
         /// - Parameter v: Variance
         /// - Throws: SSSwiftyStatsError if v <= 0.0
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean m: FPT, variance v: FPT) throws -> FPT  {
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
             if v <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -137,7 +145,11 @@ extension SSProbDist {
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
             let expr1:FPT = v.squareRoot() * FPT.sqrt2pi
-            let pdf: FPT = 1 / expr1 * SSMath.exp1(-1 * SSMath.pow1(x - m, 2) / (2 * v))
+            ex1 = x - m
+            ex2 = FPT.minusOne * SSMath.pow1(ex1, 2)
+            ex3 = 2 * v
+            ex4 = ex2 / ex3
+            let pdf: FPT = SSMath.reciprocal(expr1) * SSMath.exp1(ex4)
             return pdf
         }
         
@@ -147,6 +159,10 @@ extension SSProbDist {
         /// - Parameter sd: Standard deviation
         /// - Throws: SSSwiftyStatsError if sd <= 0.0
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean m: FPT, standardDeviation sd: FPT) throws -> FPT {
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
             if sd <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -165,7 +181,11 @@ extension SSProbDist {
                 return FPT.infinity
             }
             do {
-                return try m + FPT.sqrt2 * sd * inverf(z: -1 + 2 * p)
+                ex1 = 2 * p
+                ex2 = FPT.minusOne + ex1
+                ex3 = try sd * inverf(z: ex2)
+                ex4 = FPT.sqrt2 * ex3
+                return m + ex4
             }
             catch {
                 return FPT.nan
@@ -196,14 +216,14 @@ extension SSProbDist {
                 return FPT.infinity
             }
             do {
-                return try quantileNormalDist(p:p, mean:m, standardDeviation: v.squareRoot())
+                return try quantile(p:p, mean:m, standardDeviation: v.squareRoot())
             }
             catch {
                 return FPT.nan
             }
         }
         
-        enum Standard {
+        public enum Standard {
             /// Returns the CDF of the standard Gaussian distribution (mean = 0.0, standard deviation = 1.0)
             /// - Parameter u: Standardized variate (u = (x - mean)/sd)
             public static func cdf<FPT: SSFloatingPoint & Codable>(u: FPT) -> FPT {
@@ -216,7 +236,13 @@ extension SSProbDist {
             /// Returns the PDF of the standard Gaussian distribution (mean = 0.0, standard deviation = 1.0)
             /// - Parameter u: Standardized variate (u = (x - mean)/sd)
             public static func pdf<FPT: SSFloatingPoint & Codable>(u: FPT!) -> FPT {
-                return FPT.sqrt2piinv * SSMath.exp1(-1 * u * u / 2)
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
+                ex1 = FPT.minusOne * u
+                ex2 = ex1 * u
+                ex3 = ex2 / 2
+                return FPT.sqrt2piinv * SSMath.exp1(ex3)
             }
             
             /// Returns the quantile function of the standard Gaussian distribution. Uses algorithm AS241 at
@@ -296,6 +322,11 @@ extension SSProbDist {
                 let F7: T =  Helpers.makeFP(2.04426310338993978564E-15)
                 let Q: T = p - HALF
                 var _res: T
+                var ex1: T
+                var ex2: T
+                var ex3: T
+                var ex4: T
+                var ex5: T
                 if(abs(Q) <= SPLIT1)
                 {
                     R = CONST1 - Q * Q
@@ -305,7 +336,13 @@ extension SSProbDist {
                     let _e4: T = (B7 * R + B6) * R + B5
                     let _e5: T = (_e4 * R + B4) * R + B3
                     let _e6: T = (_e5 * R + B2) * R + B1
-                    _res = Q * (_e3 * R + A0) / ( _e6 * R + ONE)
+                    ex1 = _e3 * R
+                    ex2 = ex1 + A0
+                    ex3 = _e6 * R
+                    ex4 = ex3 + T.one
+                    ex5 = ex2 / ex4
+                    _res = Q * ex5
+//                    _res = Q * (_e3 * R + A0) / ( _e6 * R + ONE)
                     //        _res = Q * ((((((((A7 * R + A6) * R + A5) * R + A4) * R + A3) * R + A2) * R + A1) * R + A0) / (((((((B7 * R + B6) * R + B5) * R + B4) * R + B3) * R + B2) * R + B1) * R + ONE)
                     return _res
                 }
@@ -332,7 +369,11 @@ extension SSProbDist {
                         let _e4: T = ((D7 * R + D6) * R + D5)
                         let _e5: T = ((_e4 * R + D4) * R + D3)
                         let _e6: T = ((_e5 * R + D2) * R + D1)
-                        _res = ( _e3 * R + C0) / (_e6 * R + ONE)
+                        ex1 = _e3 * R
+                        ex2 = ex1 + C0
+                        ex3 = _e6 * R
+                        ex4 = ex3 + T.one
+                        _res = ex2 / ex4
                         //            _res = (((((((C7 * R + C6) * R + C5) * R + C4) * R + C3) * R + C2) * R + C1) * R + C0) / (((((((D7 * R + D6) * R + D5) * R + D4) * R + D3) * R + D2) * R + D1) * R + ONE)
                     }
                     else
@@ -345,7 +386,12 @@ extension SSProbDist {
                         let _e4: T = ((F7 * R + F6) * R + F5)
                         let _e5: T = ((_e4 * R + F4) * R + F3)
                         let _e6: T = ((_e5 * R + F2) * R + F1)
-                        _res = (_e3 * R + E0) / (_e6 * R + ONE)
+                        ex1 = _e3 * R
+                        ex2 = ex1 + E0
+                        ex3 = _e6 * R
+                        ex4 = ex3 + T.one
+                        _res = ex2 / ex4
+//                        _res = (_e3 * R + E0) / (_e6 * R + ONE)
                     }
                     if(Q < ZERO) {
                         _res = -_res

@@ -109,6 +109,11 @@ extension SSSpecialFunctions {
         var _a: T = T.nan
         var _b: T = T.nan
         var _x: T = T.nan
+        var ex1: T
+        var ex2: T
+        var ex3: T
+        var ex4: T
+        var ex5: T
         if b < 0 {
             if b == floor(b) {
                 return T.infinity
@@ -149,7 +154,12 @@ extension SSSpecialFunctions {
                 let lb = SSMath.log1(betaFunction(a: a, b: b))
                 let expr1:T = (a * SSMath.log1(x))
                 let expr2:T  = (b * SSMath.log1p1(-x))
-                result = SSMath.exp1(expr1 + expr2 - SSMath.log1(a) - lb) * (1 / cfresult)
+                ex1 = expr1 + expr2
+                ex2 = ex1 - SSMath.log1(a)
+                ex3 = ex2 - lb
+                ex4 = SSMath.exp1(ex3)
+                ex5 = SSMath.reciprocal(cfresult)
+                result = ex4 * ex5
             }
         }
         return result
@@ -241,7 +251,10 @@ extension SSSpecialFunctions {
             }
             else {
                 converged.pointee = true
-                result = SSMath.exp1(-x + (a * SSMath.log1(x)) - SSMath.lgamma1(a)) * sum
+                ex1 = a * SSMath.log1(x)
+                ex2 = -x + ex1
+                ex3 = ex2 - SSMath.lgamma1(a)
+                result = SSMath.exp1(ex3) * sum
                 return result
             }
         }
@@ -255,6 +268,9 @@ extension SSSpecialFunctions {
         //        converged.pointee = true
         //        return 1
         //    }
+        var ex1: T
+        var ex2: T
+        var ex3: T
         if a.isZero {
             converged.pointee = true
             return 0
@@ -323,7 +339,10 @@ extension SSSpecialFunctions {
             }
             else {
                 converged.pointee = true
-                return SSMath.exp1(-x + (a * SSMath.log1(x)) - SSMath.lgamma1(a)) * temp
+                ex1 = a * SSMath.log1(x)
+                ex2 = -x + ex1
+                ex3 = ex2 - SSMath.lgamma1(a)
+                return SSMath.exp1(ex3) * temp
             }
         }
     }

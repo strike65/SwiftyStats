@@ -109,7 +109,8 @@ extension SSSpecialFunctions {
         
         /* See if a Kummer transformation will help */
         temp = b - a
-        if( abs(temp) < (1 / 1000) * abs(a) ) {
+        let temp1: FPT = SSMath.reciprocal(1000)
+        if( abs(temp) < temp1 * abs(a) ) {
             return( SSMath.exp1(x) * hypergeometric1F1(a: temp, b: b, x: -x )  )
         }
         pcanc = 0
@@ -296,7 +297,9 @@ extension SSSpecialFunctions {
     fileprivate static func hyp2f0<FPT: SSFloatingPoint & Codable>( a: FPT, b: FPT, x: FPT, type: Int, err: inout FPT ) -> FPT {
         var a0, alast, t, tlast, maxt: FPT
         var n, an, bn, u, sum, temp: FPT
-        
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
         an = a
         bn = b
         a0 = 1
@@ -345,12 +348,18 @@ extension SSSpecialFunctions {
                 
                 switch( type ) {    /* "type" given as subroutine argument */
                 case 1:
-                    let a1 =  Helpers.makeFP(0.125 ) +  Helpers.makeFP(0.25 ) * b
-                    let a2 =  Helpers.makeFP(-0.5 ) * a +  Helpers.makeFP(0.25 ) * xx
-                    let a3 =  Helpers.makeFP(-0.25 ) * n
-                    alast *= (  Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
+                    ex1 = Helpers.makeFP(0.25 ) * b
+                    let a1 =  Helpers.makeFP(0.125) +  ex1
+                    ex1 = Helpers.makeFP(0.25 ) * xx
+                    ex2 = Helpers.makeFP(-0.5) * a
+                    let a2 =  ex2 + ex1
+                    let a3 =  Helpers.makeFP(-0.25) * n
+                    ex1 = a1 + a2 + a3
+                    ex2 = ex1 / xx
+                    ex3 = FPT.half + ex2
+//                    alast *= Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx
+                    alast = alast * ex3
                     break
-                    
                 case 2:
                     let e1: FPT =  Helpers.makeFP(2.0 / 3.0 ) - b
                     let e2: FPT = 2 * a
@@ -383,9 +392,13 @@ extension SSSpecialFunctions {
                 switch( type ) {    /* "type" given as subroutine argument */
                 case 1:
                     let a1 =  Helpers.makeFP(0.125 ) +  Helpers.makeFP(0.25 ) * b
-                    let a2 =  Helpers.makeFP(-0.5 ) * a +  Helpers.makeFP(0.25 ) * xx
+                    let a2 =  -FPT.half * a +  Helpers.makeFP(0.25) * xx
                     let a3 =  Helpers.makeFP(-0.25 ) * n
-                    alast *= (  Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
+                    ex1 =  a1 + a2 + a3
+                    ex2 = ex1 / xx
+                    ex3 = FPT.half + ex2
+                    alast = alast * ex3
+//                    alast *= (  Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
                     break
                     
                 case 2:

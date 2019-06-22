@@ -623,51 +623,55 @@ internal enum SSMath {
         var kk: UInt64 = Helpers.integerValue(k)
         var nn: UInt64 = Helpers.integerValue(n)
         var overflow: Bool = false
-        var ex1: (UInt64, Bool) = (0, false)
-        var ex2: (UInt64, Bool) = (0, false)
+        var expr1: (UInt64, Bool) = (0, false)
+        var expr2: (UInt64, Bool) = (0, false)
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         kk = k > n - k ? nn - kk : kk
         for j: UInt64 in stride(from: 1, through: kk, by: 1) {
             if nn % j == 0 {
-                ex1 = nn.dividedReportingOverflow(by: j)
-                if ex1.1 {
+                expr1 = nn.dividedReportingOverflow(by: j)
+                if expr1.1 {
                     overflow = true
                     break
                 }
-                ex2 = ans.multipliedReportingOverflow(by: ex1.0)
-                if ex2.1 {
+                expr2 = ans.multipliedReportingOverflow(by: expr1.0)
+                if expr2.1 {
                     overflow = true
                     break
                 }
-                ans = ex2.0
+                ans = expr2.0
             }
             else {
                 if ans % j == 0 {
-                    ex1 = ans.dividedReportingOverflow(by: j)
-                    if ex1.1 {
+                    expr1 = ans.dividedReportingOverflow(by: j)
+                    if expr1.1 {
                         overflow = true
                         break
                     }
-                    ans = ex1.0
-                    ex2 = ans.multipliedReportingOverflow(by: nn)
-                    if ex2.1 {
+                    ans = expr1.0
+                    expr2 = ans.multipliedReportingOverflow(by: nn)
+                    if expr2.1 {
                         overflow = true
                         break
                     }
-                    ans = ex2.0
+                    ans = expr2.0
                 }
                 else {
-                    ex1 = ans.multipliedReportingOverflow(by: nn)
-                    if ex1.1 {
+                    expr1 = ans.multipliedReportingOverflow(by: nn)
+                    if expr1.1 {
                         overflow = true
                         break
                     }
-                    ans = ex1.0
-                    ex2 = ans.dividedReportingOverflow(by: j)
-                    if ex2.1 {
+                    ans = expr1.0
+                    expr2 = ans.dividedReportingOverflow(by: j)
+                    if expr2.1 {
                         overflow = true
                         break
                     }
-                    ans = ex2.0
+                    ans = expr2.0
                 }
             }
             nn = nn - 1
@@ -677,7 +681,11 @@ internal enum SSMath {
         }
         else {
             let num: FPT = SSMath.lgamma1( Helpers.makeFP(n) + 1)
-            let den: FPT = SSMath.lgamma1( Helpers.makeFP(n - k + 1)) + SSMath.lgamma1( Helpers.makeFP(k + 1))
+            ex1 = Helpers.makeFP(n - k + 1)
+            ex2 = SSMath.lgamma1(ex1)
+            ex3 = Helpers.makeFP(k + 1)
+            ex4 = SSMath.lgamma1(ex3)
+            let den: FPT = ex2 + ex4
             let q: FPT = num - den
             return SSMath.exp1(q).rounded(FloatingPointRoundingRule.toNearestOrAwayFromZero)
             

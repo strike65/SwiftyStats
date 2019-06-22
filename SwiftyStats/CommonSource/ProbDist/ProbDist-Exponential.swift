@@ -26,7 +26,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Exponential {
+    public enum Exponential {
         // MARK: Exponential Dist
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.

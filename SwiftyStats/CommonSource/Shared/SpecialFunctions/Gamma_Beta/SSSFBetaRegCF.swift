@@ -45,6 +45,9 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
     override func b_N(n: Int, point x: T) -> T {
         var res: T = T.nan
         var k: T
+        var ex1: T
+        var ex2: T
+        var ex3: T
         if n % 2 == 0 {
             k =  Helpers.makeFP(n) / 2
             let expr1: T = self.b - k
@@ -55,7 +58,11 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
         }
         else {
             k =  Helpers.makeFP(n - 1) /  Helpers.makeFP(2)
-            let expr1: T = ( (self.a + k) * (self.a + self.b + k) ) * x
+            ex1 = self.a + k
+            ex2 = self.a + self.b + k
+            ex3 = ex1 * ex2
+            let expr1: T = ex3 * x
+//            let expr1: T = ( (self.a + k) * (self.a + self.b + k) ) * x
             let expr2: T = self.a + (2 * k)
             let expr3: T = expr2 + 1
             res = ( -1 ) * (expr1 / ( expr2 * expr3 ) )

@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Beta {
+    public enum Beta {
         
         // MARK: Beta
         

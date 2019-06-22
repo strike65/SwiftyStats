@@ -849,6 +849,10 @@ extension SSExamine {
     
     /// Returns the Gini coefficient
     public var gini: FPT? {
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         if isNotEmptyAndNumeric {
             if self.sampleSize < 2 {
                 return nil
@@ -860,7 +864,11 @@ extension SSExamine {
             for i in 1...self.sampleSize {
                 let x: FPT =  Helpers.makeFP(sorted[i - 1])
                 if !x.isNaN {
-                    s = s + (2 *  Helpers.makeFP(i) - N - 1) * x
+                    ex1 = 2 *  Helpers.makeFP(i)
+                    ex2 = ex1 - N
+                    ex3 = ex2 - FPT.one
+                    ex4 = ex3 * x
+                    s = s + ex4
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")

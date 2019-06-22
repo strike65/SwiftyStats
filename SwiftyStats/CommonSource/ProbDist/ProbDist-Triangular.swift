@@ -27,7 +27,7 @@ import os.log
 #endif
 
 extension SSProbDist {
-    enum Triangular {
+    public enum Triangular {
         
         // MARK: TRIANGULAR
         
@@ -103,7 +103,10 @@ extension SSProbDist {
             ex2 = ex1 + b2 - ac
             ex3 = ex2 - bc + c2
             let s11: FPT = ex3
-            let s12: FPT = s1 - s2 - s3 + s4 - s5
+            ex1 = s1 - s2
+            ex2 = ex1 - s3
+            ex3 = ex2 + s4
+            let s12: FPT = ex3 - s5
             ex1 = s12 + s6
             ex2 = ex1 - s7 - s8
             ex3 = ex2 - s9 + s10
@@ -292,7 +295,11 @@ extension SSProbDist {
             if p == 0 {
                 return a
             }
-            let t1 = (-a + c) / (-a + b)
+            var ex1: FPT
+            var ex2: FPT
+            ex1 = c - a
+            ex2 = b - a
+            let t1 = ex1 / ex2
             if p <= t1 {
                 let s1:FPT = (-a + b)
                 let s2:FPT = (-a + c)
@@ -327,7 +334,9 @@ extension SSProbDist {
             }
             var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
             result.mean = (a + b) / 2
-            result.variance = 1 / 24 * (b - a) * (b - a)
+            let ex1: FPT = b - a
+            let ex2: FPT = ex1 * ex1
+            result.variance = 1 / 24 * ex2
             result.kurtosis =  Helpers.makeFP(2.4)
             result.skewness = 0
             return result
@@ -350,7 +359,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            return try! pdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
+            return try! pdf(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
         }
         
         /// Returns the cdf of the Triangular distribution.
@@ -370,7 +379,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            return try! cdfTriangularDist(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
+            return try! cdf(x: x, lowerBound: a, upperBound: b, mode: (a + b) / 2)
         }
         
         /// Returns the quantile of the Triangular distribution.
@@ -401,7 +410,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            return try! quantileTriangularDist(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2)
+            return try! quantile(p: p, lowerBound: a, upperBound: b, mode: (a + b) / 2)
         }
         
     }

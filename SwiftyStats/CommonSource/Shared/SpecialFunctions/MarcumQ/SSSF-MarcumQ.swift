@@ -3650,8 +3650,11 @@ fileprivate func zetaxy<T: SSFloatingPoint>(_ x: inout T,_ y: inout T) -> T {
     if (abs(z) <  Helpers.makeFP(0.05)) {
         ck[0] = 1
         ck[1] = -T.third * (3 * x + 1)
-        ex1 = 72 * x2 + 42 * x + 7
-        ck[2] =  Helpers.makeFP(1.0/36.0) * ex1
+        ex1 = 72 * x2
+        ex2 = 42 * x
+        ex3 = ex1 + ex2
+        ex4 = ex3 + 7
+        ck[2] =  Helpers.makeFP(1.0/36.0) * ex4
         //        ck[2]=(1.0/36.0)*(72*x2+42*x+7);
         ex1 = 2700 * x3
         ex2 = ex1 + 2142 * x2
