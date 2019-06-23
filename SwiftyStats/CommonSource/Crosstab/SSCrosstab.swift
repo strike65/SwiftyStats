@@ -1965,12 +1965,20 @@ extension SSCrosstab {
     public var r1: FPT {
         get {
             if self.is2x2Table {
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
+                var ex4: FPT
                 let n11: FPT =  Helpers.makeFP(self[0,0])
                 let n12: FPT =  Helpers.makeFP(self[0,1])
                 let n21: FPT =  Helpers.makeFP(self[1,0])
                 let n22: FPT =  Helpers.makeFP(self[1,1])
                 if !n11.isNaN && !n12.isNaN && !n21.isNaN && !n21.isNaN {
-                    return (n11 * (n21 + n22)) / (n21 * (n11 + n12))
+                    ex1 = n21 + n22
+                    ex2 = n11 * ex1
+                    ex3 = n11 + n12
+                    ex4 = n21 * ex3
+                    return ex2 / ex4
                 }
                 else {
                     fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")

@@ -90,6 +90,7 @@ extension SSHypothesisTesting {
         var _s2: FPT = 0
         var _k: FPT = 0
         var _df: FPT = 0
+        var ssize: FPT = 0
         var _testStatisticValue: FPT = 0
         var _cdfChiSquare: FPT = 0
         var _cutoff90Percent: FPT = 0
@@ -98,7 +99,11 @@ extension SSHypothesisTesting {
         var _cutoffAlpha: FPT = 0
         var _data:Array<SSExamine<T, FPT>> = Array<SSExamine<T, FPT>>()
         var result: SSVarianceEqualityTestResult<FPT>
-        var ex1, ex2, ex3: FPT
+        var sumVars: [(sampleSize: FPT, variance: FPT)] = [(sampleSize: FPT, variance: FPT)]()
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -131,8 +136,10 @@ extension SSHypothesisTesting {
         }
         _k =  Helpers.makeFP(_data.count)
         for examine in _data {
-            _N +=  Helpers.makeFP(examine.sampleSize)
+            ssize = Helpers.makeFP(examine.sampleSize)
+            _N +=  ssize
             if let v = examine.variance(type: .unbiased) {
+                sumVars.append((ssize, v))
                 _s1 += ( Helpers.makeFP(examine.sampleSize) - 1) * SSMath.log1(v)
             }
             else {
@@ -147,9 +154,13 @@ extension SSHypothesisTesting {
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
-        for examine in _data {
-            _pS += ( Helpers.makeFP(examine.sampleSize) - 1) * examine.variance(type: .unbiased)! / (_N - _k)
-            _s2 += 1 /  Helpers.makeFP(examine.sampleSize - 1)
+        ex1 = _N - _k
+        for (sampleSize, variance) in sumVars {
+            ex2 = sampleSize - FPT.one
+            ex3 = ex2 * variance
+            ex4 = ex3 / ex1
+            _pS += ex4
+            _s2 += 1 /  (sampleSize - FPT.one)
         }
         ex1 = ((_N - _k) * SSMath.log1(_pS) - _s1)
         ex2 = (1 / (3 * (_k - 1)))
@@ -255,6 +266,8 @@ extension SSHypothesisTesting {
         var j: Int
         var ex1: FPT
         var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
@@ -351,7 +364,9 @@ extension SSHypothesisTesting {
             _s2 = 0
             i = 0
             while i < Helpers.integerValue(_k) {
-                _s1 += _ni[i] * ((_zi[i] - _zMean) * (_zi[i] - _zMean))
+                ex1 = _zi[i] - _zMean
+                ex2 = ex1 * ex1
+                _s1 += _ni[i] * (ex2)
                 i += 1
             }
             i = 0
@@ -368,7 +383,11 @@ extension SSHypothesisTesting {
                 }
                 i += 1
             }
-            _testStatisticValue = ((_N - _k) * _s1) / ((_k - 1) * _s2)
+            ex1 = _N - _k
+            ex2 = ex1 * _s1
+            ex3 = _k - FPT.one
+            ex4 = ex3 * _s2
+            _testStatisticValue = ex2 / ex4
             _cdfFRatio = try SSProbDist.FRatio.cdf(f: _testStatisticValue, numeratorDF: _k - 1, denominatorDF: _N - _k)
             _cutoffAlpha = try SSProbDist.FRatio.quantile(p: 1 - alpha, numeratorDF: _k - 1, denominatorDF: _N - _k)
             _cutoff90Percent = try SSProbDist.FRatio.quantile(p:  Helpers.makeFP(0.9), numeratorDF: _k - 1, denominatorDF: _N - _k)

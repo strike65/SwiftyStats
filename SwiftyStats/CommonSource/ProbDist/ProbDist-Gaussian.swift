@@ -362,13 +362,25 @@ extension SSProbDist {
                     if (R <= SPLIT2)
                     {
                         R = R - CONST2
-                        let _e1: T = ((C7 * R + C6) * R + C5)
-                        let _e2: T = (_e1 * R + C4) * R + C3
-                        let _e3: T = (_e2 * R + C2) * R + C1
-                        
-                        let _e4: T = ((D7 * R + D6) * R + D5)
-                        let _e5: T = ((_e4 * R + D4) * R + D3)
-                        let _e6: T = ((_e5 * R + D2) * R + D1)
+                        ex1 = C7 * R + C6
+                        ex2 = ex1 * R
+                        let _e1: T = ex2 + C5
+//                        let _e1: T = ((C7 * R + C6) * R + C5)
+                        ex1 = _e1 * R + C4
+                        ex2 = ex1 * R
+                        let _e2: T = ex2 + C3
+                        ex1 = _e2 * R + C2
+                        ex2 = ex1 * R
+                        let _e3: T = ex2 + C1
+                        ex1 = D7 * R + D6
+                        ex2 = ex1 * R
+                        let _e4: T = (ex2 + D5)
+                        ex1 = (_e4 * R + D4)
+                        ex2 = ex1 * R
+                        let _e5: T = (ex2 + D3)
+                        ex1 = _e5 * R + D2
+                        ex2 = ex1 * R
+                        let _e6: T = (ex2 + D1)
                         ex1 = _e3 * R
                         ex2 = ex1 + C0
                         ex3 = _e6 * R
@@ -379,13 +391,24 @@ extension SSProbDist {
                     else
                     {
                         R = R - SPLIT2
-                        let _e1: T = ((E7 * R + E6) * R + E5)
-                        let _e2: T = ((_e1 * R + E4) * R + E3)
-                        let _e3: T = ((_e2 * R + E2) * R + E1)
-                        
-                        let _e4: T = ((F7 * R + F6) * R + F5)
-                        let _e5: T = ((_e4 * R + F4) * R + F3)
-                        let _e6: T = ((_e5 * R + F2) * R + F1)
+                        ex1 = (E7 * R + E6)
+                        ex2 = ex1 * R
+                        let _e1: T = (ex2 + E5)
+                        ex1 = (_e1 * R + E4)
+                        ex2 = ex1 * R
+                        let _e2: T = (ex2 + E3)
+                        ex1 = (_e2 * R + E2)
+                        ex2 = ex1 * R
+                        let _e3: T = (ex2 + E1)
+                        ex1 = (F7 * R + F6)
+                        ex2 = ex1 * R
+                        let _e4: T = (ex2 + F5)
+                        ex1 = (_e4 * R + F4)
+                        ex2 = ex1 * R
+                        let _e5: T = (ex2 + F3)
+                        ex1 = (_e5 * R + F2)
+                        ex2 = ex1 * R
+                        let _e6: T = (ex2 + F1)
                         ex1 = _e3 * R
                         ex2 = ex1 + E0
                         ex3 = _e6 * R

@@ -113,7 +113,11 @@ extension SSProbDist.StudentT {
             if df > 4 {
                 let quarter: FPT =  Helpers.makeFP(0.25)
                 let g:FPT = quarter * df * df
-                let h: FPT = four * (three + 6 * SSMath.pow1(lambda, two) + SSMath.pow1(lambda, four))
+                ex1 = 6 * SSMath.pow1(lambda, two)
+                ex2 = three + ex1
+                ex3 = ex2 + SSMath.pow1(lambda, four)
+                let h = four * ex3
+//                let h: FPT = four * (three + 6 * SSMath.pow1(lambda, two) + SSMath.pow1(lambda, four))
                 let i: FPT = 8 - 6 * df + df * df
                 let j_1: FPT = SSMath.pow1(four, -df)
                 ex1 = minusThree * SSMath.pow1(four, df)

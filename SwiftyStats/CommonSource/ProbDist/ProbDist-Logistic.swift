@@ -111,7 +111,13 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            let result: FPT =  Helpers.makeFP(0.5 ) * (1 + SSMath.tanh1(FPT.half * (x - mean) / b))
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            ex1 = x - mean
+            ex2 = ex1 / b
+            ex3 = FPT.one + SSMath.tanh1(FPT.half * ex2)
+            let result = FPT.half * ex3
             return result
         }
         

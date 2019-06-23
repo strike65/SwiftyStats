@@ -147,16 +147,25 @@ public enum SSHypothesisTesting {
         var oneTailedUEV: FPT = 0
         var var1: FPT = 0
         var var2: FPT = 0
+        var ex1: FPT
+        var ex2: FPT
+        var ex3: FPT
+        var ex4: FPT
         let n1: FPT =  Helpers.makeFP(sample1.sampleSize)
         let n2: FPT =  Helpers.makeFP(sample2.sampleSize)
         var1 = sample1.variance(type: .unbiased)!
         var2 = sample2.variance(type: .unbiased)!
         mean1 = sample1.arithmeticMean!
         mean2 = sample2.arithmeticMean!
-        let k: FPT = (var1 / n1) / ((var1 / n1) + (var2 / n2))
-        var ex1: FPT = SSMath.pow1(k, 2) / (n1 - 1)
-        var ex2: FPT = (1 - ( k + k) + k * k)
-        var ex3: FPT = (n2 - 1)
+        ex1 = var1 / n1
+        ex2 = var2 / n2
+        ex3 = ex1 + ex2
+        let k: FPT = ex1 / ex3
+        ex1 = SSMath.pow1(k, 2) / (n1 - 1)
+        let ktk: FPT = k * k
+        let kpk: FPT = k + k
+        ex2 = FPT.one - kpk + ktk
+        ex3 = (n2 - 1)
         dfUnequalVariances = ceil( 1 / ( ex1 + ( ex2 / ex3 ) ) )
         dfEqualVariances = n1 + n2 - 2
         stdDev1 = sample1.standardDeviation(type: .unbiased)!
@@ -165,20 +174,17 @@ public enum SSHypothesisTesting {
         ex2 = (n2 - FPT.one) * var2
         ex3 = ex1 + ex2
         pooledVariance = ex3 / dfEqualVariances
-//        pooledVariance = ((n1 - 1) * var1 + (n2 - 1) * var2) / dfEqualVariances
         pooledStdDev = sqrt(pooledVariance)
         differenceInMeans = mean1 - mean2
         ex1 = SSMath.reciprocal(n1)
         ex2 = SSMath.reciprocal(n2)
         ex3 = sqrt(ex1 + ex2)
-        let ex4: FPT = pooledStdDev * ex3
+        ex4 = pooledStdDev * ex3
         tValueEqualVariances = differenceInMeans / ex4
-//        tValueEqualVariances = differenceInMeans / (pooledStdDev * sqrt(1 / n1 + 1 / n2))
         ex1 = var1 / n1
         ex2 = var2 / n2
         ex3 = sqrt(ex1 + ex2)
         tValueUnequalVariances = differenceInMeans / ex3
-//        tValueUnequalVariances = differenceInMeans / sqrt(var1 / n1 + var2 / n2)
         do {
             cdfTValueEqualVariances = try SSProbDist.StudentT.cdf(t: tValueEqualVariances, degreesOfFreedom: dfEqualVariances)
             cdfTValueUnequalVariances = try SSProbDist.StudentT.cdf(t: tValueUnequalVariances, degreesOfFreedom: dfUnequalVariances)
@@ -432,7 +438,7 @@ public enum SSHypothesisTesting {
         var ex1: FPT = df + FPT.one
         var ex2: FPT = 2 * cov
         var ex3: FPT = s1 + s2
-        let ex4: FPT = (ex3 - ex2) / ex1
+        var ex4: FPT = (ex3 - ex2) / ex1
         let sed: FPT = sqrt(ex4)
 //        let sed: FPT = sqrt((s1 + s2 - 2 * cov) / (df + 1))
         let sdDiff: FPT = sqrt(s1 + s2 - 2 * cov)
@@ -445,7 +451,8 @@ public enum SSHypothesisTesting {
             ex1 = sqrt(df - 1)
             ex2 = (1 - corr * corr)
             ex3 = ex1 / ex2
-            let pCorr: FPT = try (2 * (1 - SSProbDist.StudentT.cdf(t: corr * ex3 , degreesOfFreedom: df - 1)))
+            ex4 = try FPT.one - SSProbDist.StudentT.cdf(t: corr * ex3 , degreesOfFreedom: df - 1)
+            let pCorr: FPT = 2 * ex4
             let lowerCIDiff: FPT =  try (diffMeans - SSProbDist.StudentT.quantile(p:  Helpers.makeFP(0.975), degreesOfFreedom: df) * sed)
             let upperCIDiff: FPT =  try (diffMeans + SSProbDist.StudentT.quantile(p:  Helpers.makeFP(0.975), degreesOfFreedom: df) * sed)
             var pTwoTailed: FPT = try SSProbDist.StudentT.cdf(t: t, degreesOfFreedom: df)

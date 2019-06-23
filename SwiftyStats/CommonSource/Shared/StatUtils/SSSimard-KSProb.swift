@@ -295,7 +295,11 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
 //        term = LogCom +  Helpers.makeFP(j - 1) * SSMath.log1(q) +  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
         t = SSMath.exp1(term)
         Sum = Sum + t
-        LogCom += LogCom + SSMath.log1( Helpers.makeFP(n - j) /  Helpers.makeFP(j + 1))
+        ex1 = Helpers.makeFP(j + 1)
+        ex2 = Helpers.makeFP(n - j)
+        ex3 = ex2 / ex1
+        LogCom += SSMath.log1(ex3)
+//        LogCom += LogCom + SSMath.log1( Helpers.makeFP(n - j) /  Helpers.makeFP(j + 1))
         if t <= Sum * EPSILON {
             break
         }
@@ -355,6 +359,15 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     var tom: FPT
     var sum: FPT
     var j: Int
+    var ex1: FPT
+    var ex2: FPT
+    var ex3: FPT
+    var ex4: FPT
+    var ex5: FPT
+    var ex6: FPT
+    var ex7: FPT
+    var ex8: FPT
+    var ex9: FPT
     term = 1
     j = 0
     sum = 0
@@ -369,7 +382,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     term = 1
     tom = 0
     j = 0
-    var ex1, ex2, ex3, ex4, ex5, ex6: FPT
     while (j <= JMAX && abs(term) > EPS * abs(tom)) {
         ti =  Helpers.makeFP(j) + FPT.half
         ex1 = ti * ti - z2
@@ -378,7 +390,9 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         tom += term
         j = j + 1
     }
-    sum += tom * C2 / (RACN * 3 * z4)
+    ex1 = RACN * 3 * z4
+    ex2 = C2 / ex1
+    sum += tom * ex2
     
     term = 1
     tom = 0
@@ -411,7 +425,11 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     j = 1
     while (j <= JMAX && term > EPS * tom) {
         ti =  Helpers.makeFP(j)
-        term = PI2 * ti * ti * SSMath.exp1(-ti * ti * w)
+        ex1 = ti * ti
+        ex2 = -ex1 * w
+        ex4 = PI2 * ex1
+        term = ex4 * SSMath.exp1(ex2)
+//        term = PI2 * ti * ti * SSMath.exp1(-ti * ti * w)
         tom += term
         j = j + 1
     }
@@ -433,8 +451,12 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex3 = (212 * z4 - 60 * z2)
         ex4 = PI2 * PI4 * ti * ti * ti
         ex5 = (5 - 30 * z2)
-        ex6 = PI4 * ex3 * ti * ti + ex4 * ex5
-        term = ex1 + PI2 * ex2 * ti + ex6
+        ex6 = PI4 * ex3
+        ex7 = ex6 * ti
+        ex8 = ex7 * ti
+        ex9 = ex8 + (ex4 * ex5)
+//        ex6 = PI4 * ex3 * ti * ti + ex4 * ex5
+        term = ex1 + PI2 * ex2 * ti + ex9
         term *= SSMath.exp1(-ti * w)
         tom += term
         j = j + 1
@@ -460,7 +482,12 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         tom += term
         j = j + 1
     }
-    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 108 * z6)
+    ex1 = RACN *  Helpers.makeFP(n)
+    ex2 = ex1 * 108 * z6
+    ex3 = C2 / ex2
+    ex4 = tom * ex3
+    sum = sum + ex4
+//    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 108 * z6)
     return sum
 }
 
@@ -591,6 +618,9 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     var H: Array<Array<FPT>> /* = pow(w, j) / Factorial(j) */
     var i: Int
     var j: Int
+    var ex1: FPT
+    var ex2: FPT
+    var ex3: FPT
     V = createMatrixD(2, n + 2)
     H = createMatrixD(4, n + 2)
     
@@ -712,7 +742,10 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     Atcei.removeAll()
     DeleteMatrixD(&H)
     DeleteMatrixD(&V)
-    w = SSMath.logFactorial(n) -  Helpers.makeFP(coreno) *  Helpers.makeFP(ENO) * FPT.ln2 + SSMath.log1(sum)
+    ex1 = Helpers.makeFP(coreno) *  Helpers.makeFP(ENO)
+    ex2 = ex1 * FPT.ln2
+    ex3 = SSMath.logFactorial(n) - ex2
+    w = ex3 + SSMath.log1(sum)
     if (w >= 0) {
         return 1
     }

@@ -260,11 +260,19 @@ extension SSProbDist {
                         throw error
                     }
                 }
+                var ex1: FPT
+                var ex2: FPT
+                var ex3: FPT
                 var result: FPT = 0
                 if chi >= 0 {
                     let bessel: FPT = SSSpecialFunctions.besselI(order: df / 2 - 1, x: sqrt(lambda * chi))
-                    let a =  Helpers.makeFP(1.0 / 2.0 ) * SSMath.exp1(-(chi + lambda) / 2)
-                    let b = SSMath.pow1(chi / lambda, (df / 4) -  Helpers.makeFP(1.0 / 2.0 ))
+                    ex1 = chi + lambda
+                    ex2 = ex1 * FPT.half
+                    let a = FPT.half * SSMath.exp1(-ex2)
+                    ex1 = df / 4
+                    ex2 = ex1 - FPT.half
+                    ex3 = chi / lambda
+                    let b = SSMath.pow1(ex3, ex2)
                     result = a * b * bessel
                 }
                 else {

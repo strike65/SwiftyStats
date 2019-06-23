@@ -40,8 +40,17 @@ extension SSProbDist {
             var i: Int = 0
             var lowerSum: FPT = 0
             var upperSum: FPT = 0
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
+            let _N: FPT = Helpers.makeFP(n)
             while i <= k {
-                lowerSum += SSMath.binomial2( Helpers.makeFP(n),  Helpers.makeFP(i)) * SSMath.pow1(p0,  Helpers.makeFP(i)) * SSMath.pow1(1 - p0,  Helpers.makeFP(n - i))
+                ex1 = Helpers.makeFP(i)
+                ex2 = SSMath.binomial2(_N, ex1)
+                ex3 = ex2 * SSMath.pow1(p0,  ex1)
+                ex4 = ex3 * SSMath.pow1(FPT.one - p0,  _N - ex1)
+                lowerSum += ex4
                 i += 1
             }
             upperSum = 1 - lowerSum

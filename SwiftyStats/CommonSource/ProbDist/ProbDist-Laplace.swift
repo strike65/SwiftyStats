@@ -72,7 +72,17 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            let result = 1 / (2 * b) * SSMath.exp1(-abs(x - mean) / b)
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
+            var ex5: FPT
+            ex1 = SSMath.reciprocal(2 * b)
+            ex2 = x - mean
+            ex3 = -abs(ex2)
+            ex4 = ex3 / b
+            ex5 = SSMath.exp1(ex4)
+            let result = ex1 * ex5
             return result
         }
         
@@ -129,6 +139,9 @@ extension SSProbDist {
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
             let result: FPT
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
             if p.isZero {
                 return -FPT.infinity
             }
@@ -136,10 +149,15 @@ extension SSProbDist {
                 return FPT.infinity
             }
             else if (p <=  Helpers.makeFP(0.5 )) {
-                result = mean + b * SSMath.log1p1(2 * p - 1)
+                ex1 = 2 * p - FPT.one
+                ex2 = b * SSMath.log1p1(ex1)
+                result = mean + ex2
             }
             else {
-                result = mean - b * SSMath.log1p1(2 * (1 - p) - 1)
+                ex1 = FPT.one - p
+                ex2 = 2 * ex1 - FPT.one
+                ex3 = b * SSMath.log1p1(ex2)
+                result = mean - ex3
             }
             return result
         }

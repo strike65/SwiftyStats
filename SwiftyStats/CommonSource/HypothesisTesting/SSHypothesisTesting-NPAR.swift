@@ -113,6 +113,7 @@ extension SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov.
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
+    /// This procedure returns exact p values when possible.
     /// - Parameter data: SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter target: Distribution to test for
     /// - Throws: SSSwiftyStatsError if data.count < 2

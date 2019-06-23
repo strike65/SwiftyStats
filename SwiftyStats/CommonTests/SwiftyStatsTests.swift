@@ -336,6 +336,7 @@ class SwiftyStatsTests: XCTestCase {
             print("other error")
         }
         examineEmpty.removeAll()
+        examineDouble.alpha = 0.05
         XCTAssert(examineEmpty.isEmpty)
         XCTAssertNil(examineEmpty.gini)
         XCTAssertNil(examineString.gini)
@@ -422,7 +423,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(examineDouble.meanAbsoluteDeviation(center: examineDouble.arithmeticMean!)!, 5.14695, accuracy: 1E-5)
         XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: 1.0)!, 4.0, accuracy: 1E-4)
         XCTAssertEqual(examineDouble.medianAbsoluteDeviation(center: examineDouble.median!, scaleFactor: nil)!, 5.9304, accuracy: 1E-4)
-        XCTAssert(examineDouble.isGaussian!)
+        XCTAssert(!examineDouble.isGaussian!)
         XCTAssertEqual(outliers, expectedOutliers)
         XCTAssert(examineWithZero.product!.isZero)
         XCTAssert(!examineDouble.hasOutliers(testType: .grubbs)!)
@@ -1161,6 +1162,9 @@ class SwiftyStatsTests: XCTestCase {
         let laplace = try! SSExamine<Double, Double>.init(withObject: laplaceData, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         laplace.name = "Laplace Distribution"
         
+        // R:
+        // normalData <- c(-1.39472,0.572422,-0.807981,1.12284,0.582314,-2.02361,-1.07106,-1.07723,0.105198,-0.806512,-1.47555,0.117081,-0.40699,-0.554643,-0.0838551,-2.38265,-0.748096,1.13259,0.134903,-1.11957,-0.268167,-0.249893,-0.636138,0.411145,1.40698,0.868583,0.221741,-0.751367,-0.843731,-1.92446,-0.770097,1.34406,0.113856,0.442025,0.206676,0.448239,0.701375,-1.50239,0.118701,0.992643,0.119639,-0.0365253,0.205961,-0.37079,-0.224489,-0.428072,0.911177,-0.279192,0.560748,-0.24796,-1.05229,2.03458,-2.02889,-1.08878,-0.826172,0.381449,-0.134957,-0.07598,-1.03606,1.65422,-0.290542,0.221982,0.0674381,-0.32888,1.59649,0.418209,-0.899435,0.329175,-0.177973,1.62596,0.599629,-1.5299,-2.18709,0.297174,0.997437,1.55026,0.857938,0.177222,1.62641,-0.982871,0.307966,-0.518949,2.34573,-0.17761,2.3379,0.598934,-0.727655,0.320675,1.5864,0.0940648,0.350143,-0.617015,0.839371,0.224846,0.0201539,-1.49075,0.847894,-0.790432,1.80993,1.32279,0.141171,-1.14471,0.601558,0.678619,-0.45809,0.312201,1.3017,0.0407581,0.993514,0.931535,1.13858)
+        // ks.test(normalData, "pnorm",mean(doubleData), sd(doubleData), exact = "true")
         var res: SSKSTestResult<Double> = try! SSHypothesisTesting.ksGoFTest(array: normal.elementsAsArray(sortOrder: .raw)!, targetDistribution: .gaussian)!
         XCTAssertEqual(res.pValue!, 0.932551, accuracy: 1E-5)
         

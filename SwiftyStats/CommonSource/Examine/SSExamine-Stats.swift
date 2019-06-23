@@ -1458,7 +1458,14 @@ extension SSExamine {
         else {
             do {
                 if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: .gaussian) {
-                    return r.pValue! >  Helpers.makeFP(self.alpha)
+                    if let p = r.pValue {
+                        let test = p > self.alpha
+                        return test
+//                        return r.pValue! >  self.alpha
+                    }
+                    else {
+                        return nil
+                    }
                 }
                 else {
                     return nil

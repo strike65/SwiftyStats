@@ -67,7 +67,16 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /**
     Significance level to use, default: 0.05
      */
-    public var alpha: Double! = 0.05
+    private var _alpha: FPT = FPT.zero
+    
+    public var alpha: FPT {
+        get {
+            return _alpha
+        }
+        set(newAlpha) {
+            _alpha = newAlpha
+        }
+    }
     
     /** Indicates if there are changes
     */
@@ -542,7 +551,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         cumRelFrequencies.removeAll()
         count = 0
         descriptionString = "SSExamine Instance - standard"
-        alpha = 0.05
+        alpha = Helpers.makeFP(0.05)
         hasChanges = false
         isNumeric = true
         aMean = nil
@@ -566,7 +575,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         try container.encodeIfPresent(self.name, forKey: CodingKeys.name)
         try container.encodeIfPresent(self.tag, forKey: CodingKeys.tag)
         try container.encodeIfPresent(self.descriptionString, forKey: CodingKeys.descriptionString)
-        try container.encodeIfPresent(self.alpha, forKey: CodingKeys.alpha)
+        try container.encodeIfPresent(self._alpha, forKey: CodingKeys.alpha)
         try container.encodeIfPresent(self.levelOfMeasurement.rawValue, forKey: CodingKeys.levelOfMeasurement)
         try container.encodeIfPresent(self.isNumeric, forKey: CodingKeys.isNumeric)
         try container.encodeIfPresent(self.elementsAsArray(sortOrder: .raw), forKey: CodingKeys.data)
@@ -580,7 +589,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         self.tag = try container.decodeIfPresent(String.self, forKey: CodingKeys.tag)
         self.name = try container.decodeIfPresent(String.self, forKey: CodingKeys.name)
         self.descriptionString = try container.decodeIfPresent(String.self, forKey: CodingKeys.descriptionString)
-        self.alpha = try container.decodeIfPresent(Double.self, forKey: CodingKeys.alpha)
+        self._alpha = try container.decodeIfPresent(FPT.self, forKey: CodingKeys.alpha) ?? FPT.zero
         if let lm = try container.decodeIfPresent(String.self, forKey: CodingKeys.levelOfMeasurement) {
             self.levelOfMeasurement = SSLevelOfMeasurement(rawValue:lm)
         }

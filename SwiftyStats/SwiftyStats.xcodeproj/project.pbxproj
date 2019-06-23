@@ -110,8 +110,8 @@
 		9FDEEFAA210D097200AC6FB7 /* Chebyshev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */; };
 		9FE86EC7215D19C800DD5349 /* SSSFBetaRegCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC6215D19C800DD5349 /* SSSFBetaRegCF.swift */; };
 		9FE86EC8215D19C800DD5349 /* SSSFBetaRegCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC6215D19C800DD5349 /* SSSFBetaRegCF.swift */; };
-		9FE86ECA215D19F000DD5349 /* SSSFGammeQCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC9215D19F000DD5349 /* SSSFGammeQCF.swift */; };
-		9FE86ECB215D19F000DD5349 /* SSSFGammeQCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC9215D19F000DD5349 /* SSSFGammeQCF.swift */; };
+		9FE86ECA215D19F000DD5349 /* SSSFGammaQCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC9215D19F000DD5349 /* SSSFGammaQCF.swift */; };
+		9FE86ECB215D19F000DD5349 /* SSSFGammaQCF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE86EC9215D19F000DD5349 /* SSSFGammaQCF.swift */; };
 		9FE86ED1215D1B3100DD5349 /* CodableFloat80.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13CD20211B71D100153FC3 /* CodableFloat80.swift */; };
 		9FEA826F1F76CA58005E4349 /* SwiftyStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9FEA82701F76CA76005E4349 /* SwiftyStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEA826B1F76CA06005E4349 /* SwiftyStatsTests.swift */; };
@@ -263,7 +263,7 @@
 		9FD6663022B6BB860072FDB2 /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 		9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chebyshev.swift; sourceTree = "<group>"; };
 		9FE86EC6215D19C800DD5349 /* SSSFBetaRegCF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSFBetaRegCF.swift; sourceTree = "<group>"; };
-		9FE86EC9215D19F000DD5349 /* SSSFGammeQCF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSFGammeQCF.swift; sourceTree = "<group>"; };
+		9FE86EC9215D19F000DD5349 /* SSSFGammaQCF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSFGammaQCF.swift; sourceTree = "<group>"; };
 		9FEA82381F76C95F005E4349 /* SwiftyStatsMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStatsMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEA82411F76C9F6005E4349 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FEA82421F76C9F6005E4349 /* scratch */ = {isa = PBXFileReference; lastKnownFileType = text; path = scratch; sourceTree = "<group>"; };
@@ -412,7 +412,6 @@
 				9FE86ED0215D1AE000DD5349 /* Extensions */,
 				9FE86ECF215D1ACF00DD5349 /* EnumsStructsProtConst */,
 				9FE86ECC215D1A3200DD5349 /* StatUtils */,
-				9FE86EC2215D193300DD5349 /* SpecialFunctions */,
 				9FEA82521F76C9F6005E4349 /* SSLogging.swift */,
 			);
 			path = Shared;
@@ -486,6 +485,42 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		9FB055BA22BFF6FB00DD6170 /* Examine */ = {
+			isa = PBXGroup;
+			children = (
+				9FEA824B1F76C9F6005E4349 /* SSFrequencyTables.swift */,
+				9FEA82481F76C9F6005E4349 /* SSExamine-FileManagement.swift */,
+				9FEA82491F76C9F6005E4349 /* SSExamine-Stats.swift */,
+				9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */,
+				9FEA824A1F76C9F6005E4349 /* SSExamine.swift */,
+			);
+			path = Examine;
+			sourceTree = "<group>";
+		};
+		9FB055BB22BFF72C00DD6170 /* Crosstab */ = {
+			isa = PBXGroup;
+			children = (
+				9FEA82451F76C9F6005E4349 /* SSCrosstab.swift */,
+			);
+			path = Crosstab;
+			sourceTree = "<group>";
+		};
+		9FB055BC22BFF73600DD6170 /* DataFrame */ = {
+			isa = PBXGroup;
+			children = (
+				9FEA82461F76C9F6005E4349 /* SSDataFrame.swift */,
+			);
+			path = DataFrame;
+			sourceTree = "<group>";
+		};
+		9FB055BD22BFF74A00DD6170 /* DEPRECATIONS */ = {
+			isa = PBXGroup;
+			children = (
+				9FB18A8722B80F19003D721E /* SSDeprecated.swift */,
+			);
+			path = DEPRECATIONS;
+			sourceTree = "<group>";
+		};
 		9FB18A8622B80800003D721E /* Experimental Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -531,7 +566,7 @@
 			children = (
 				9FEA82561F76C9F6005E4349 /* SSSF-Gamma-Beta.swift */,
 				9FE86EC6215D19C800DD5349 /* SSSFBetaRegCF.swift */,
-				9FE86EC9215D19F000DD5349 /* SSSFGammeQCF.swift */,
+				9FE86EC9215D19F000DD5349 /* SSSFGammaQCF.swift */,
 			);
 			path = Gamma_Beta;
 			sourceTree = "<group>";
@@ -562,6 +597,7 @@
 				9FEA82571F76C9F6005E4349 /* SSSwiftyStatsError.swift */,
 				9FEA82581F76C9F6005E4349 /* SSTukey.swift */,
 				9F6F0D702102664C006ACA13 /* r_derived_macros.swift */,
+				9FEA82471F76C9F6005E4349 /* SSDataGroupSorter.swift */,
 			);
 			path = StatUtils;
 			sourceTree = "<group>";
@@ -620,18 +656,14 @@
 			isa = PBXGroup;
 			children = (
 				9F7EFB612101F22200F0F573 /* HypothesisTesting */,
+				9FE86EC2215D193300DD5349 /* SpecialFunctions */,
 				9F7EFB602101F17900F0F573 /* Shared */,
 				9F7EFB5F2101F16400F0F573 /* ProbDist */,
-				9FEA82451F76C9F6005E4349 /* SSCrosstab.swift */,
-				9FEA82461F76C9F6005E4349 /* SSDataFrame.swift */,
-				9FEA82471F76C9F6005E4349 /* SSDataGroupSorter.swift */,
-				9FEA82481F76C9F6005E4349 /* SSExamine-FileManagement.swift */,
-				9FEA82491F76C9F6005E4349 /* SSExamine-Stats.swift */,
-				9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */,
-				9FEA824A1F76C9F6005E4349 /* SSExamine.swift */,
-				9FEA824B1F76C9F6005E4349 /* SSFrequencyTables.swift */,
+				9FB055BA22BFF6FB00DD6170 /* Examine */,
+				9FB055BB22BFF72C00DD6170 /* Crosstab */,
+				9FB055BC22BFF73600DD6170 /* DataFrame */,
 				9FEA825B1F76C9F6005E4349 /* SwiftyStats.h */,
-				9FB18A8722B80F19003D721E /* SSDeprecated.swift */,
+				9FB055BD22BFF74A00DD6170 /* DEPRECATIONS */,
 			);
 			path = CommonSource;
 			sourceTree = "<group>";
@@ -901,7 +933,7 @@
 				9F7EFB5D2101F0EF00F0F573 /* ProbDist-Binomial.swift in Sources */,
 				9FEA827B1F76CAF5005E4349 /* SSHypothesisTesting-NPAR.swift in Sources */,
 				9FEA827C1F76CAF5005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
-				9FE86ECA215D19F000DD5349 /* SSSFGammeQCF.swift in Sources */,
+				9FE86ECA215D19F000DD5349 /* SSSFGammaQCF.swift in Sources */,
 				9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */,
 				9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */,
 				9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */,
@@ -1014,7 +1046,7 @@
 				9FC1FC39210A33F600F5B43B /* ProbDist-Poisson.swift in Sources */,
 				9FEA828C1F76CB1D005E4349 /* SSDataFrame.swift in Sources */,
 				9F7EFB402101EEB900F0F573 /* ProbDist-Laplace.swift in Sources */,
-				9FE86ECB215D19F000DD5349 /* SSSFGammeQCF.swift in Sources */,
+				9FE86ECB215D19F000DD5349 /* SSSFGammaQCF.swift in Sources */,
 				9FEA82A01F76CB1D005E4349 /* SwiftyStats-EnumsStructs.swift in Sources */,
 				9F7EFB582101F08E00F0F573 /* ProbDist-Uniform.swift in Sources */,
 				9FDEEFAA210D097200AC6FB7 /* Chebyshev.swift in Sources */,

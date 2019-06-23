@@ -105,8 +105,14 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
             var result: FPT = 0
-            result = SSMath.exp1(-SSMath.exp1(-(-a + x) / b ))
+            ex1 = -a + x
+            ex2 = ex1 / b
+            ex3 = SSMath.exp1(-ex2)
+            result = SSMath.exp1(-ex3)
             return result
         }
         

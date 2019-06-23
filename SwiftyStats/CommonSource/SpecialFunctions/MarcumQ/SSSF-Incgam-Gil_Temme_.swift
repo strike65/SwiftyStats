@@ -40,6 +40,9 @@ extension SSSpecialFunctions {
         internal static func dompart<T: SSFloatingPoint>(_ a: T,_ x: T,_ qt: Bool) -> T {
             //! dompart is approx. of  x^a * exp(-x) / gamma(a+1)
             var lnx, c, dp, la, mu, r: T
+            var ex1: T
+            var ex2: T
+            var ex3: T
             lnx = SSMath.log1(x)
             if (a <= 1) {
                 r = -x + a * lnx
@@ -71,7 +74,10 @@ extension SSSpecialFunctions {
                         dp = 0
                     }
                     else {
-                        dp = SSMath.exp1(a * c)/(sqrt(a * 2 * T.pi) * gamstar(a))
+                        ex1 = a * c
+                        ex2 = a * 2 * T.pi
+                        ex3 = sqrt(ex2) * gamstar(a)
+                        dp = SSMath.exp1(ex1) / ex3
                     }
                 }
             }
@@ -466,9 +472,6 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
     var ex3: T
     var ex4: T
     var ex5: T
-    var ex6: T
-    var ex7: T
-
     ierr = 0
     if (p < T.half) {
         pcase = true
@@ -549,7 +552,10 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
             ck[1] = L - 1
             let two: T =  Helpers.makeFP(2)
             expr1 =  Helpers.makeFP(3) * b - two * b * L
-            expr2 = expr1 + L2 - two * L + two
+            ex1 = two * L
+            ex2 = ex1 + two
+            ex3 = L2 - ex2
+            expr2 = expr1 + ex3
 //            ck[2]=(3*b-2*b*L+L2-2*L+2)/2.0;
             ck[2] = expr2 * T.half
             expr1 = 24 * b * L
@@ -652,7 +658,11 @@ fileprivate func invincgam<T: SSFloatingPoint>(_ a: T,_ p: inout T,_ q: inout T,
         x = x0
         x2 = x * x
         if (m == 0) {
-            dlnr = (1 - a) * SSMath.log1(x) + x + SSSpecialFunctions.GammaHelper.loggam(a)
+            ex1 = T.one - a
+            ex2 = ex1 * SSMath.log1(x)
+            ex3 = ex2 + x
+            dlnr = ex3 + SSSpecialFunctions.GammaHelper.loggam(a)
+//            dlnr = (1 - a) * SSMath.log1(x) + x + SSSpecialFunctions.GammaHelper.loggam(a)
             if (dlnr > SSMath.log1(T.greatestFiniteMagnitude)) {
                 n = 20
                 ierr = -1
@@ -1234,12 +1244,17 @@ fileprivate func saeta<T: SSFloatingPoint>(_ a: T,_ eta: T) -> T {
 
 fileprivate func qfraction<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
     var res, eps, g, p, q, r, s, t, tau, ro: T
+    var ex1: T
+    var ex2: T
     eps = epss()
     if (dp.isZero) {
         q = 0
     } else {
         p = 0
-        q = (x - 1 - a) * ( x + 1 - a)
+        ex1 = x - T.one - a
+        ex2 = x + T.one - a
+        q = ex1 * ex2
+//        q = (x - 1 - a) * ( x + 1 - a)
         r = 4 * (x + 1 - a)
         s = 1 - a
         ro = 0
@@ -1255,7 +1270,10 @@ fileprivate func qfraction<T: SSFloatingPoint>(_ a: T,_ x: T,_ dp: T) -> T {
             t = ro * t
             g = g + t
         }
-        q = (a / (x + 1 - a)) * g * dp
+        ex1 = x + T.one - a
+        ex2 = a / ex1
+        q = ex2 * g * dp
+//        q = (a / (x + 1 - a)) * g * dp
     }
     res = q
     return res
@@ -1451,6 +1469,9 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
     var res: T
     var L2, L3, L4, L5: T
     var expr1, expr2, expr3, expr4, expr5: T
+    var ex1: T
+    var ex2: T
+    var ex3: T
     s = eta * eta * T.half
     if (eta.isZero) {
         la = 1
@@ -1495,7 +1516,11 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
         L5 = L4 * L
         ak[1] = 1
         ak[2] = (2 - L) * T.half
-        ak[3] = (-9 * L + 6 + 2 * L2) / 6
+        ex1 = -9 * L
+        ex2 = ex1 + 6
+        ex3 = ex2 + 2 * L2
+        ak[3] = ex3 / 6
+//        ak[3] = (-9 * L + 6 + 2 * L2) / 6
         expr1 = 3 * L3
         expr2 = 36 * L
         expr3 = -22 * L2
@@ -1536,6 +1561,9 @@ fileprivate func lambdaeta<T: SSFloatingPoint>(_ eta: T) -> T {
 
 fileprivate func invq<T: SSFloatingPoint>(_ x: T) -> T {
     var res, t: T
+    var ex1: T
+    var ex2: T
+    var ex3: T
     // Abramowitx & Stegun 26.2.23
     t = sqrt(-2 * SSMath.log1(x))
     var expr1, expr2, expr3, expr4, expr5: T
@@ -1544,7 +1572,10 @@ fileprivate func invq<T: SSFloatingPoint>(_ x: T) -> T {
     expr3 =  Helpers.makeFP(1.432788)
     expr4 =  Helpers.makeFP(0.189269) + t *  Helpers.makeFP(0.001308)
     expr5 = t * (expr3 + t * expr4)
-    t = t - (expr1 + t * expr2) / (1 + expr5)
+    ex1 = expr1 + t * expr2
+    ex2 = T.one + expr5
+    ex3 = ex1 / ex2
+    t = t - ex3
     res = t
     return res
 }
@@ -1602,6 +1633,10 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
     var res,a1, a2, a3, a4, sq2, q0, t, x, x2, x3, x4, y, y2, y3, y4, y5, y6, z: T
     var mu, mu2, mu3, mu4, mup, f, a12, fp, f2, fpp, a1p, a1pp, a2p: T
     var expr1, expr2, expr3, expr4, expr5,expr6, expr7: T
+    var ex1: T
+    var ex2: T
+    var ex3: T
+    var ex4: T
     y = 0
     y2 = 0
     y3 = 0
@@ -1670,7 +1705,11 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
                 mup = (mu + 1) * y / mu
                 f = y / mu
                 f2 = f * f
-                fp = f * (1 - f2 - y * f) / y
+                ex1 = T.one - f2
+                ex2 = ex1 - y * f
+                ex3 = ex2 / y
+                fp = f * ex3
+//                fp = f * (1 - f2 - y * f) / y
                 expr1 = 3 * f * fp
                 expr2 = 2 * y * fp
                 fpp = -f * (expr1 + f + expr2) / y
@@ -1701,20 +1740,37 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
                 expr3 = 6 * fp * a12
                 expr4 = expr1 - fp - expr2 - expr3
                 expr5 = expr4 / (12 * f * y)
-                a2p = -a2/y - a2 * fp / f + expr5
+                ex1 = -a2 / y
+                ex2 = a2 * fp
+                ex3 = ex2 / f
+                ex4 = ex1 - ex3
+                a2p = ex4 + expr5
+//                a2p = -a2/y - a2 * fp / f + expr5
                 expr1 = 2 * a1 - a12 * y
-                expr2 = a12 * (fpp * f * y + a1 * f2)
+                ex1 = fpp * f * y
+                ex2 = ex1 + a1 * f2
+                expr2 = a12 * ex2
+//                expr2 = a12 * (fpp * f * y + a1 * f2)
                 expr3 = a1p * a1p * f2 * y
-                expr4 = 6 * (expr1 * fp * fp + expr2 - expr3)
+                ex1 = expr1 * fp * fp
+                ex2 = ex1 + expr2 - expr3
+                expr4 = 6 * ex2
+//                expr4 = 6 * (expr1 * fp * fp + expr2 - expr3)
                 let A1: T = expr4
                 expr1 = (a2p * y - a1 * a1p) * f2
                 expr2 = fp * a1p * f
                 let A2: T = 12 * (expr1 + expr2)
-                expr1 = -f * (fp + 18 * fp * a12)
+                ex1 = 18 * fp * a12
+                ex2 = fp + ex1
+                expr1 = -f * ex2
+//                expr1 = -f * (fp + 18 * fp * a12)
                 let A3: T = expr1
                 let A4: T = 12 * f2 * y2
-                
-                a3 = (A1 + A2 + a1 * f2 + A3) / A4
+                ex1 = A1 + A2
+                ex2 = ex1 + a1 * f2
+                ex3 = ex2 + A3
+                a3 = ex3 / A4
+//                a3 = (A1 + A2 + a1 * f2 + A3) / A4
 //                a3 =(expr4 + 12 * (expr5 + expr6) + a1 * f2 - f * (fp + 18 * fp * a12)) / (12 * f2 * y2)
 //                a3=(6*((2*a1 - a12*y)*fp*fp + a12*(fpp*f*y + a1*f2)- a1p*a1p*f2*y) + 12*((a2p*y - a1*a1p)*f2 + fp*a1p*f)+ a1*f2 - f*(fp + 18*fp*a12))/(12*f2*y2);
 
@@ -1755,17 +1811,41 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
         mu2 = 20 * expr5
 //        mu2 = 20 * (2 * x2 - 4 * a * x + 4 * x + 2 * a2 - 3 * a + 1)
         expr1 = 6 * a + 6 * a3
-        expr2 = expr1 - 6 * x3 - 11 * x - 1
-        expr3 = expr2 - 29 * a * x - 11 * a2
-        expr4 = expr3 - 18 * x2 - 18 * a2 * x
+        ex1 = 6 * x3
+        ex2 = 11 * x
+        ex3 = ex1 - ex2 - T.one
+        expr2 = expr1 - ex3
+//        expr2 = expr1 - 6 * x3 - 11 * x - 1
+        ex1 = 29 * a * x
+        ex2 = 11 * a2
+        ex3 = ex1 - ex2
+        expr3 = expr2 - ex3
+//        expr3 = expr2 - 29 * a * x - 11 * a2
+        ex1 = 18 * x2
+        ex2 = 18 * a2 * x
+        ex3 = ex1 - ex2
+        expr4 = expr3 - ex3
+//        expr4 = expr3 - 18 * x2 - 18 * a2 * x
         expr5 = expr4 + 18 * a * x2
         mu3 = 5 * expr5
 //        mu3 = 5 * (6 * a + 6 * a3 - 6 * x3 - 11 * x - 1 + 29 * a * x - 11 * a2 - 18 * x2 - 18 * a2 * x + 18 * a * x2)
         expr1 = 24 * x4 - 10 * a
         expr2 = expr1 - 50 * a3 + 96 * x3
         expr3 = expr2 + 26 * x + 24 * a4
-        expr4 = expr3 + 144 * a2 * x2 - 96 * a3 * x
-        expr5 = expr4 - 126 * a * x - 96 * a * x3
+        ex1 = 144 * a2 * x2
+        ex2 = 96 * a3 * x
+        ex3 = ex1 - ex2
+        expr4 = expr3 + ex3
+        ex1 = 144 * a2 * x2
+        ex2 = 96 * a3 * x
+        ex3 = ex1 - ex2
+        expr4 = expr3 + ex3
+//        expr4 = expr3 + 144 * a2 * x2 - 96 * a3 * x
+        ex1 = 126 * a * x
+        ex2 = 96 * a * x3
+        ex3 = ex1 - ex2
+        expr5 = expr4 - ex3
+//        expr5 = expr4 - 126 * a * x - 96 * a * x3
         expr6 = expr5 + 35 * a2 + 98 * x2
         expr7 = expr6 + 196 * a2 * x
         mu4 = expr7 - 242 * a * x2 + T.one
