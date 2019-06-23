@@ -1,12 +1,15 @@
 Version 1.1.0
 - namespaces (using enums without cases)
-- split "complex" expression into smaller pieces to optimize Buildtime
+- split "complex" expression into smaller pieces to optimize time needed to build
 - Probability distributions: SSProbStat.[DISTRIBUTION].[cdf|pdf|para|quantile]
 - Special functions: SSSpecialFunctions.[FUNCTION]
 - Helpers
-- SSMath.[FUNVTION]
+- SSMath.[FUNCTION]
 - SSMath.ComplexMath
 - exclude experimental sources
+- added StatsPlayground (interactive testing the framework)
+- fixed: SSExamine encoding
+- fixed: Kolmogorov-Smirnov-cdf
 
 Version 1.0.4
 - update access levels

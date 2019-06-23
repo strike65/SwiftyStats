@@ -112,6 +112,8 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         arg_local = false
         mod_local = false
         theta_grid = Array<T>()
+        var ex1: T
+        var ex2: T
         var eta, ifl: T
         var M, i: Int
         var basep: Int
@@ -146,7 +148,9 @@ internal struct AiryVariables<T: SSFloatingPoint> {
             e3 = e1 * e2 * ucoef[i]
             e4 = ((ifl + 1) * 72)
             ucoef[i + 1] = e3 / e4
-            e1 = -(6 * ifl + 7) * ucoef[i + 1]
+            ex1 = 6 * ifl
+            ex2 = ex1 + 7
+            e1 = -ex2 * ucoef[i + 1]
             e2 = (6 * ifl + 5)
             vcoef[i + 1] = e1 / e2
         }

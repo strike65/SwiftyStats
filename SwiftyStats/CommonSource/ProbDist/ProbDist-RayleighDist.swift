@@ -61,7 +61,11 @@ extension SSProbDist {
             ex5 = ex4 * FPT.sqrtpihalf
             result.skewness = ex5 / ex3
             //    result.skewness = ((-3 + FPT.pi) * FPT.sqrtpihalf) / SSMath.pow1(2 - FPT.pi / 2,  Helpers.makeFP(3.0 / 2.0 ))
-            result.kurtosis = (32 - 3 * FPT.pisquared) / SSMath.pow1(4 - FPT.pi, 2)
+            ex1 = 3 * FPT.pisquared
+            ex2 = 32 - ex1
+            ex3 = 4 - FPT.pi
+            ex4 = SSMath.pow1(ex3, 2)
+            result.kurtosis = ex2 / ex4
             return result
         }
         

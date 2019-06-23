@@ -357,7 +357,9 @@ extension SSProbDist {
                 }
                 if (df2 > 4) {
                     e1 = (1 + df1) * (1 + df1)
-                    e2 = (df2 - 2) * (2 * lambda + df1)
+                    ex1 = df2 - 2
+                    ex2 = 2 * lambda + df1
+                    e2 = ex1 * ex2
                     e3 = 2 * SSMath.pow1(df2, 2) * (e1 + e2)
                     e1 = df2 - 4
                     e2 = SSMath.pow1(df2 - 2, 2) * SSMath.pow1(df1, 2)
@@ -369,8 +371,10 @@ extension SSProbDist {
                 if (df2 > 6) {
                     e1 = 2 * FPT.sqrt2 * sqrt(df2 - 4)
                     e2 = df1 * (df1 + df2 - 2)
-                    e3 = e2 * (2 * df1 + df2 - 1)
-                    
+                    ex1 = 2 * df1
+                    ex2 = df2 - FPT.one
+                    ex3 = ex1 + ex2
+                    e3 = e2 * ex3
                     e4 = 3 * (df2 + 2 * df1)
                     ex1 = 2 * df1
                     ex2 = df2 - 2
@@ -441,8 +445,9 @@ extension SSProbDist {
                     let d3: FPT = e4 * SSMath.pow1(lambda,2)
                     
                     e2 = 4 * (10 + df2)
-                    let d4: FPT = e2 * (df1 + df2 - 2) * SSMath.pow1(lambda, 3)
-                    
+                    ex1 = df1 + df2 - 2
+                    ex2 = ex1 * SSMath.pow1(lambda, 3)
+                    let d4: FPT = e2 * ex2
                     let d5: FPT = SSMath.pow1(lambda, 4) * (10 + df2)
                     ex1 = d1 + d2
                     ex2 = ex1 + d3
@@ -518,7 +523,10 @@ extension SSProbDist {
                 let y: FPT = f * df1 / df2
                 let beta: FPT
                 do {
-                    beta = try SSProbDist.Beta.pdf(x: y / (1 + y), shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
+                    ex1 =  y / (FPT.one + y)
+                    ex2 = df1 / 2
+                    ex3 = df2 / 2
+                    beta = try SSProbDist.Beta.pdf(x: ex1, shapeA: ex2, shapeB: ex3, lambda: lambda)
                 }
                 catch {
                     throw error

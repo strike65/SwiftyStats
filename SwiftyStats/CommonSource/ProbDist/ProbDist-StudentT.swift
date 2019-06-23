@@ -47,6 +47,8 @@ public enum SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
+            var ex1: FPT
+            var ex2: FPT
             result.mean = 0
             if df > 2 {
                 result.variance = df / (df - 2)
@@ -56,7 +58,9 @@ public enum SSProbDist {
             }
             result.skewness = 0
             if df > 4 {
-                result.kurtosis = 3 + 6 / (df - 4)
+                ex1 = df - 4
+                ex2 = 6 / ex1
+                result.kurtosis = 3 + ex2
             }
             else {
                 result.kurtosis = FPT.nan

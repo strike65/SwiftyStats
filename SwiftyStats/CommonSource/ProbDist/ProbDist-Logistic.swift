@@ -149,6 +149,8 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
+            var ex1: FPT
+            var ex2: FPT
             let result: FPT
             if p.isZero {
                 return -FPT.infinity
@@ -157,7 +159,9 @@ extension SSProbDist {
                 return FPT.infinity
             }
             else {
-                result = mean - b * SSMath.log1(-1 + 1 / p)
+                ex1 = FPT.minusOne + SSMath.reciprocal(p)
+                ex2 = b * SSMath.log1(ex1)
+                result = mean - ex2
                 return result
             }
         }

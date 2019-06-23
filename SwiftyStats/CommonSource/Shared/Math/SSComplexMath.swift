@@ -457,6 +457,12 @@ extension SSMath {
             var c: Complex<Float80> = Complex<Float80>.zero
             var y: Complex<Float80> = Complex<Float80>.zero
             var t: Complex<Float80> = Complex<Float80>.zero
+            var cex1: Complex<Float80>
+            var cex2: Complex<Float80>
+            var cex3: Complex<Float80>
+            var cex4: Complex<Float80>
+            var cex5: Complex<Float80>
+            var cex6: Complex<Float80>
             /// no imaginary part
             if zl.im.isZero {
                 if Helpers.isInteger(zl.re) && zl.re <= Float80.zero {
@@ -484,7 +490,14 @@ extension SSMath {
                     sum = t
                 }
                 let zg: Complex<Float80> = zz &++ g &-- Float80.half
-                temp = (Float80.lnsqrt2pi &++ ComplexMath.log(coeff[0] &++ sum)) &-- zg &++ ((zz &-- Float80.half) &** ComplexMath.log(zg))
+                cex1 = coeff[0] &++ sum
+                cex2 = Float80.lnsqrt2pi &++ ComplexMath.log(cex1)
+                cex3 = cex2 &-- zg
+                cex4 = zz &-- Float80.half
+                cex5 = cex4 &** ComplexMath.log(zg)
+                cex6 = cex3 &++ cex5
+                temp = cex6
+//                temp = (Float80.lnsqrt2pi &++ ComplexMath.log(coeff[0] &++ sum)) &-- zg &++ ((zz &-- Float80.half) &** ComplexMath.log(zg))
                 //        if isNegRe {
                 approx = logMinusPi &-- ComplexMath.log(zl) &-- temp &-- ComplexMath.log(ComplexMath.sin(Float80.pi &** zl))
                 approx = approx &++ (2 * Float80.pi * ceil(zl.re / 2 - Float80.one)) &** Complex<Float80>.init(re: 0 , im: 1)

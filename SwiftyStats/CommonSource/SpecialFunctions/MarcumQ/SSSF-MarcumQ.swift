@@ -3800,7 +3800,9 @@ fileprivate func oddchepolsum<T: SSFloatingPoint>(_ n: Int, _ x: T, _ ak: Array<
         s = x * ex4
     }
     else {
-        y = 2 * ( 2 * x * x - 1)
+        ex1 = 2 * x * x
+        ex3 = ex1 - T.one
+        y = 2 * ex3
         r = ak[n]
         h = ak[n-1] + r * y
         k=n-2

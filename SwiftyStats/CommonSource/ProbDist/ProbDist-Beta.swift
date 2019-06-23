@@ -81,9 +81,10 @@ extension SSProbDist {
             let k4:FPT = 2 * a * b
             let k5:FPT = a + b + 2
             let k6:FPT = (a + b + 3)
-            let kk1:FPT = (3 * k1 * ( k2 + k3 - k4 ))
-            let kk2:FPT = (a * b * k5 * k6)
-            result.kurtosis = kk1 / kk2
+            ex1 = k2 + k3 - k4
+            ex2 = 3 * k1 * ex1
+            ex3 = a * b * k5 * k6
+            result.kurtosis = ex2 / ex3
             return result
         }
         
@@ -116,13 +117,19 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            //    if (x < 0) {
-            //        return 0.0
-            //    }
-            //    if(x >= 1.0) {
-            //        return 0.0
-            //    }
-            let result = SSMath.pow1(x, a - 1) * SSMath.pow1(1 - x, b - 1) / SSSpecialFunctions.betaFunction(a: a, b: b)
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var ex4: FPT
+            var ex6: FPT
+            var ex7: FPT
+            ex1 = a - FPT.one
+            ex2 = SSMath.pow1(x, ex1)
+            ex3 = FPT.one - x
+            ex4 = b - FPT.one
+            ex6 = SSMath.pow1(ex3, ex4)
+            ex7 = ex2 * ex6
+            let result = ex7 / SSSpecialFunctions.betaFunction(a: a, b: b)
             return result
         }
         

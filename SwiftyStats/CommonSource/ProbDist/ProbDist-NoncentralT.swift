@@ -94,7 +94,11 @@ extension SSProbDist.StudentT {
                 ex3 = ex2 * SSMath.pow1(df, three * half)
                 let c: FPT = ex3 * SSMath.tgamma1(half * (FPT.minusOne + df))
                 //        let c: FPT = three * lambda * (one + SSMath.pow1(lambda, two)) * SSMath.pow1(df, three * half) * SSMath.tgamma1(half * (-1 + df))
-                let d: FPT = two * two.squareRoot() * (-1 + df_half) * SSMath.tgamma1(df_half)
+                ex1 = two * sqrt(two)
+                ex2 = FPT.minusOne + df_half
+                ex3 = ex1 * ex2
+                let d: FPT = ex3 * SSMath.tgamma1(df_half)
+                ex1 = three * lambda
                 ex2 = ex1 * (SSMath.pow1(lambda, two) / three + one)
                 ex3 = ex2 * SSMath.pow1(df, three * half)
                 let e: FPT = ex3 * SSSpecialFunctions.pochhammer(x: df_half, n: minusThree * half)
@@ -118,7 +122,10 @@ extension SSProbDist.StudentT {
                 ex3 = ex2 + SSMath.pow1(lambda, four)
                 let h = four * ex3
 //                let h: FPT = four * (three + 6 * SSMath.pow1(lambda, two) + SSMath.pow1(lambda, four))
-                let i: FPT = 8 - 6 * df + df * df
+                ex1 = 8
+                ex2 = ex1 - 6 * df
+                ex3 = ex2 + df * df
+                let i: FPT = ex3
                 let j_1: FPT = SSMath.pow1(four, -df)
                 ex1 = minusThree * SSMath.pow1(four, df)
                 ex2 = ex1 * SSMath.pow1(lambda, four)

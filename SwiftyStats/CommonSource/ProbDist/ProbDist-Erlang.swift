@@ -97,7 +97,12 @@ extension SSProbDist {
             if x.isZero || x < 0 {
                 return 0
             }
-            let s1:FPT = SSMath.exp1(-lambda * x) * SSMath.pow1(lambda,  Helpers.makeFP(k)) * SSMath.pow1(x,  Helpers.makeFP(k - 1))
+            var ex1: FPT
+            var ex2: FPT
+            let _k: FPT = Helpers.makeFP(k)
+            ex1 = SSMath.exp1(-lambda * x)
+            ex2 = ex1 * SSMath.pow1(lambda, _k)
+            let s1:FPT = ex2 * SSMath.pow1(x,  _k - FPT.one)
             let s2:FPT = SSMath.logFactorial(Int(k - 1))
             return s1 / SSMath.exp1(s2)
         }

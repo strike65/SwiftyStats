@@ -400,7 +400,9 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
         }
         if ((ci[i1 - 1].isZero) && (ci2[i1 - 1].isZero) && (b[i1 - 1].re < 0)) {
-            if ((abs(b[i1 - 1].re) - round(b[i1 - 1].re) < SSMath.pow1(10,  Helpers.makeFP(-nmach))) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
+            ex1 = (abs(b[i1 - 1].re) - round(b[i1 - 1].re))
+            ex2 = SSMath.pow1(10,  Helpers.makeFP(-nmach))
+            if ((ex1 < ex2) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
                     os_log("Abort - denominator argument was equal to zero", log: log_stat, type: .error)
