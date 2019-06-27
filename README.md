@@ -109,27 +109,31 @@ The integrated test suite uses numerical data for comparison with the results ca
 # How to use
 
 ```swift
-import SwiftyStats
+   import SwiftyStats
 
-// example data
-let data: Array<Double> = [3.14,1.21,5.6]
-// because our data are double valued items, the parameter "characterSet" is ignored
-let test = SSExamine<Double, Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
-// prints out the arithmetic mean
-print("\(test.arithmeticMean)")
-// you can use the class to analyze strings too:
-let testString = "This string must be analyzed!"
-// in this case, only characters contained in CharacterSet.alphanumerics are added
-let stringAnalyze = VTExamine<String>(withObject: data, levelOfMeasurement: .nominal, characterSet: CharacterSet.alphanumerics)
-print("\(stringAnalyze.frequency("i")")
-// print out the 95% quantile of the Student T distribution
-do {
-let q = try SSProbDist.StudentT.quantile(p: 0.95, degreesOfFreedom: 21)
-print("\(q)")
-}
-catch {
-print(error.localizedDescription)
-}
+   // example data
+   let data: Array<Double> = [3.14,1.21,5.6]
+   // because our data are double valued items, the parameter "characterSet" is ignored
+   let test = SSExamine<Double, Double>.init(withObject: data,
+                                     levelOfMeasurement: .interval,
+                                           characterSet: nil)
+   // prints out the arithmetic mean
+   print("\(test.arithmeticMean)")
+   // you can use the class to analyze strings too:
+   let testString = "This string must be analyzed!"
+   // in this case, only characters contained in CharacterSet.alphanumerics are added
+   let stringAnalyze = VTExamine<String>(withObject: data, 
+                                 levelOfMeasurement: .nominal, 
+                                       characterSet: CharacterSet.alphanumerics)
+   print("\(stringAnalyze.frequency("i")")
+   // print out the 95% quantile of the Student T distribution
+   do {
+      let q = try SSProbDist.StudentT.quantile(p: 0.95, degreesOfFreedom: 21)
+      print("\(q)")
+   }
+   catch {
+      print(error.localizedDescription)
+   }
 ```
 Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean". For each distribution there are the following functions defined:
 
