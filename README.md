@@ -7,10 +7,10 @@ SwiftyStats
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
-Some projects will be broken.,This is work in progress and will particulary break some projects. *This will make a revision necessary for some projects, for which I ask for patience.*
+By using version 1.1.0 some projects will be broken due to the introduction of namespaces. I have made great effort to make this update process as smooth as possible. However, this is work in progress and will particulary break some projects. *This will make a revision necessary for some projects, for which I ask for patience.*
 
 The attached Xcode project contains four targets:
-> * SwiftyStats (for macOS/Linux)
+> * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
 > * SwiftyStatsTests (Testsuite)
 > * SwiftStatsCLTest (a command line demo)
@@ -19,7 +19,9 @@ The attached Xcode project contains four targets:
 
 In addition a Plaground is added to the Xcode project, so that you can "interactively" 
 > * try out the framework and 
-> * can do prototyping
+> * do prototyping
+
+If you are on Linux, please use SPM.
 
 # The Swift Type Checker problem
 Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `z1 + z1 - w) / (z1 * w)`) had to be simplified.
