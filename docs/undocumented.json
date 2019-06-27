@@ -1,6 +1,762 @@
 {
   "warnings": [
     {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Crosstab/SSCrosstab.swift",
+      "line": 145,
+      "symbol": "SSCrosstab.isNumeric",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 39,
+      "symbol": "pdfStudentTDist(t:degreesOfFreedom:rlog:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 43,
+      "symbol": "cdfStudentTDist(t:degreesOfFreedom:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 47,
+      "symbol": "quantileStudentTDist(p:degreesOfFreedom:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 52,
+      "symbol": "paraStudentTDist(degreesOfFreedom:nonCentralityPara:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 56,
+      "symbol": "cdfStudentTDist(t:degreesOfFreedom:nonCentralityPara:rlog:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 60,
+      "symbol": "pdfStudentTDist(x:degreesOfFreedom:nonCentralityPara:rlog:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 64,
+      "symbol": "quantileStudentTDist(p:degreesOfFreedom:nonCentralityPara:rlog:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 69,
+      "symbol": "paraChiSquareDist(degreesOfFreedom:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 73,
+      "symbol": "pdfChiSquareDist(chi:degreesOfFreedom:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 77,
+      "symbol": "cdfChiSquareDist(chi:degreesOfFreedom:tail:rlog:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 81,
+      "symbol": "quantileChiSquareDist(p:degreesOfFreedom:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 85,
+      "symbol": "paraChiSquareDist(degreesOfFreedom:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 89,
+      "symbol": "pdfChiSquareDist(chi:degreesOfFreedom:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 93,
+      "symbol": "cdfChiSquareDist(chi:degreesOfFreedom:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 97,
+      "symbol": "quantileChiSquareDist(p:degreesOfFreedom:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 102,
+      "symbol": "paraFRatioDist(numeratorDF:denominatorDF:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 107,
+      "symbol": "pdfFRatioDist(f:numeratorDF:denominatorDF:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 112,
+      "symbol": "cdfFRatioDist(f:numeratorDF:denominatorDF:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 117,
+      "symbol": "quantileFRatioDist(p:numeratorDF:denominatorDF:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 124,
+      "symbol": "paraFRatioDist(numeratorDF:denominatorDF:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 129,
+      "symbol": "pdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 134,
+      "symbol": "cdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 138,
+      "symbol": "paraLogNormalDist(mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 143,
+      "symbol": "pdfLogNormalDist(x:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 148,
+      "symbol": "cdfLogNormal(x:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 154,
+      "symbol": "quantileLogNormal(p:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 158,
+      "symbol": "paraBetaDist(shapeA:shapeB:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 162,
+      "symbol": "pdfBetaDist(x:shapeA:shapeB:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 166,
+      "symbol": "cdfBetaDist(x:shapeA:shapeB:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 170,
+      "symbol": "quantileBetaDist(p:shapeA:shapeB:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 174,
+      "symbol": "paraCauchyDist(location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 178,
+      "symbol": "pdfCauchyDist(x:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 182,
+      "symbol": "cdfCauchyDist(x:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 186,
+      "symbol": "quantileCauchyDist(p:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 190,
+      "symbol": "paraLaplaceDist(mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 194,
+      "symbol": "pdfLaplaceDist(x:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 198,
+      "symbol": "cdfLaplaceDist(x:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 203,
+      "symbol": "quantileLaplaceDist(p:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 208,
+      "symbol": "paraLogisticDist(mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 213,
+      "symbol": "pdfLogisticDist(x:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 218,
+      "symbol": "cdfLogisticDist(x:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 223,
+      "symbol": "quantileLogisticDist(p:mean:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 227,
+      "symbol": "paraParetoDist(minimum:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 231,
+      "symbol": "pdfParetoDist(x:minimum:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 235,
+      "symbol": "cdfParetoDist(x:minimum:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 239,
+      "symbol": "quantileParetoDist(p:minimum:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 243,
+      "symbol": "paraExponentialDist(lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 247,
+      "symbol": "pdfExponentialDist(x:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 251,
+      "symbol": "cdfExponentialDist(x:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 255,
+      "symbol": "quantileExponentialDist(p:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 259,
+      "symbol": "paraWaldDist(mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 263,
+      "symbol": "pdfWaldDist(x:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 267,
+      "symbol": "cdfWaldDist(x:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 271,
+      "symbol": "quantileWaldDist(p:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 275,
+      "symbol": "paraInversNormal(mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 279,
+      "symbol": "pdfInversNormal(x:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 283,
+      "symbol": "cdfInversNormal(x:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 287,
+      "symbol": "quantileInversNormal(p:mean:lambda:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 291,
+      "symbol": "paraGammaDist(shape:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 295,
+      "symbol": "pdfGammaDist(x:shape:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 299,
+      "symbol": "cdfGammaDist(x:shape:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 303,
+      "symbol": "quantileGammaDist(p:shape:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 307,
+      "symbol": "paraErlangDist(shape:rate:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 311,
+      "symbol": "pdfErlangDist(x:shape:rate:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 315,
+      "symbol": "cdfErlangDist(x:shape:rate:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 319,
+      "symbol": "quantileErlangDist(p:shape:rate:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 323,
+      "symbol": "paraWeibullDist(location:scale:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 327,
+      "symbol": "pdfWeibullDist(x:location:scale:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 331,
+      "symbol": "cdfWeibullDist(x:location:scale:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 335,
+      "symbol": "quantileWeibullDist(p:location:scale:shape:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 339,
+      "symbol": "paraUniformDist(lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 343,
+      "symbol": "pdfUniformDist(x:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 347,
+      "symbol": "cdfUniformDist(x:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 351,
+      "symbol": "quantileUniformDist(p:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 355,
+      "symbol": "paraTriangularDist(lowerBound:upperBound:mode:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 359,
+      "symbol": "pdfTriangularDist(x:lowerBound:upperBound:mode:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 363,
+      "symbol": "cdfTriangularDist(x:lowerBound:upperBound:mode:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 367,
+      "symbol": "quantileTriangularDist(p:lowerBound:upperBound:mode:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 371,
+      "symbol": "paraTriangularDist(lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 375,
+      "symbol": "pdfTriangularDist(x:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 379,
+      "symbol": "cdfTriangularDist(x:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 383,
+      "symbol": "quantileTriangularDist(p:lowerBound:upperBound:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 387,
+      "symbol": "paraNormalDistribution(mean:standardDeviation:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 391,
+      "symbol": "cdfNormalDist(x:mean:standardDeviation:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 395,
+      "symbol": "cdfNormalDist(x:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 399,
+      "symbol": "pdfNormalDist(x:mean:standardDeviation:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 403,
+      "symbol": "pdfNormalDist(x:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 407,
+      "symbol": "quantileNormalDist(p:mean:standardDeviation:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 411,
+      "symbol": "quantileNormalDist(p:mean:variance:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 415,
+      "symbol": "cdfStandardNormalDist(u:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 419,
+      "symbol": "pdfStandardNormalDist(u:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 423,
+      "symbol": "quantileStandardNormalDist(p:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 427,
+      "symbol": "cdfPoissonDist(k:rate:tail:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 431,
+      "symbol": "pdfPoissonDist(k:rate:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 435,
+      "symbol": "paraRayleighDist(scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 439,
+      "symbol": "pdfRayleighDist(x:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 443,
+      "symbol": "cdfRayleighDist(x:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 447,
+      "symbol": "quantileRayleighDist(p:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 451,
+      "symbol": "paraExtremValueDist(location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 455,
+      "symbol": "pdfExtremValueDist(x:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 459,
+      "symbol": "cdfExtremValueDist(x:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
+      "line": 463,
+      "symbol": "quantileExtremValueDist(p:location:scale:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine-Stats.swift",
+      "line": 814,
+      "symbol": "SSExamine.herfindahlIndex",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine-Stats.swift",
+      "line": 1482,
+      "symbol": "SSExamine.testForDistribution(targetDistribution:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
+      "line": 72,
+      "symbol": "SSExamine.alpha",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
+      "line": 186,
+      "symbol": "SSExamine.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
+      "line": 605,
+      "symbol": "SSExamine.copy(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
       "line": null,
       "symbol": "SSHypothesisTesting",
@@ -39,49 +795,357 @@
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
       "line": 30,
       "symbol": "SSHypothesisTesting",
-      "symbol_kind": "source.lang.swift.decl.class",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
-      "line": 1025,
+      "line": 1048,
       "symbol": "SSHypothesisTesting.bonferroniTest(dataFrame:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.class",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSCrosstab.swift",
-      "line": 145,
-      "symbol": "SSCrosstab.isNumeric",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Beta.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Beta",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSExamine-Stats.swift",
-      "line": 814,
-      "symbol": "SSExamine.herfindahlIndex",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Binomial.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Binomial",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSExamine-Stats.swift",
-      "line": 1467,
-      "symbol": "SSExamine.testForDistribution(targetDistribution:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Cauchy.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Cauchy",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSExamine.swift",
-      "line": 177,
-      "symbol": "SSExamine.init()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-ChiSquare.swift",
+      "line": 30,
+      "symbol": "SSProbDist.ChiSquare",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/SSExamine.swift",
-      "line": 596,
-      "symbol": "SSExamine.copy(with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-ChiSquare.swift",
+      "line": 201,
+      "symbol": "SSProbDist.ChiSquare.NonCentral",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Erlang.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Erlang",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Exponential.swift",
+      "line": 29,
+      "symbol": "SSProbDist.Exponential",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-ExtremValue.swift",
+      "line": 30,
+      "symbol": "SSProbDist.ExtremeValue",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-FRatio.swift",
+      "line": 30,
+      "symbol": "SSProbDist.FRatio",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-FRatio.swift",
+      "line": 302,
+      "symbol": "SSProbDist.FRatio.NonCentral",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Gamma.swift",
+      "line": 29,
+      "symbol": "SSProbDist.Gamma",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Gaussian.swift",
+      "line": 31,
+      "symbol": "SSProbDist.Gaussian",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Gaussian.swift",
+      "line": 226,
+      "symbol": "SSProbDist.Gaussian.Standard",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Laplace.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Laplace",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-LogNormal.swift",
+      "line": 31,
+      "symbol": "SSProbDist.LogNormal",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Logistic.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Logistic",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-NoncentralT.swift",
+      "line": 28,
+      "symbol": "SSProbDist.StudentT.NonCentral",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Pareto.swift",
+      "line": 29,
+      "symbol": "SSProbDist.Pareto",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Poisson.swift",
+      "line": 31,
+      "symbol": "SSProbDist.Poisson",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-RayleighDist.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Rayleigh",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": null,
+      "symbol": "SSProbDist.StudentT",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": 29,
+      "symbol": "SSProbDist",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-StudentT.swift",
+      "line": 31,
+      "symbol": "SSProbDist.StudentT",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Triangular.swift",
+      "line": 30,
+      "symbol": "SSProbDist.Triangular",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Uniform.swift",
+      "line": 31,
+      "symbol": "SSProbDist.Uniform",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Wald_InverseNormal.swift",
+      "line": 30,
+      "symbol": "SSProbDist.InverseNormal",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-Weibull.swift",
+      "line": 29,
+      "symbol": "SSProbDist.Weibull",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/ProbDist/ProbDist-vMises-Circular.swift",
+      "line": 29,
+      "symbol": "SSProbDist.VonMises",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
@@ -289,317 +1353,44 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 276,
+      "line": 278,
       "symbol": "Double.lnsqrtpi",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 408,
+      "line": 410,
       "symbol": "Double.maxgamma",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 538,
+      "line": 540,
       "symbol": "Float.lnsqrtpi",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 670,
+      "line": 672,
       "symbol": "Float.maxgamma",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 799,
+      "line": 801,
       "symbol": "Float80.lnsqrtpi",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 930,
+      "line": 932,
       "symbol": "Float80.maxgamma",
       "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": null,
-      "symbol": "SSComplexFloat",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 61,
-      "symbol": "SSComplexNumeric.init(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 64,
-      "symbol": "SSComplexNumeric.init(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 67,
-      "symbol": "SSComplexNumeric.i",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 70,
-      "symbol": "SSComplexNumeric.&+++(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 73,
-      "symbol": "SSComplexNumeric.&++(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 76,
-      "symbol": "SSComplexNumeric.&++(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 79,
-      "symbol": "SSComplexNumeric.&++(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 82,
-      "symbol": "SSComplexNumeric.&+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 85,
-      "symbol": "SSComplexNumeric.&+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 88,
-      "symbol": "SSComplexNumeric.&---(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 91,
-      "symbol": "SSComplexNumeric.&--(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 94,
-      "symbol": "SSComplexNumeric.&--(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 97,
-      "symbol": "SSComplexNumeric.&--(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 100,
-      "symbol": "SSComplexNumeric.&-=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 103,
-      "symbol": "SSComplexNumeric.&-=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 106,
-      "symbol": "SSComplexNumeric.&**(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 109,
-      "symbol": "SSComplexNumeric.&**(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 112,
-      "symbol": "SSComplexNumeric.&**(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 115,
-      "symbol": "SSComplexNumeric.&**=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 118,
-      "symbol": "SSComplexNumeric.&**=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 121,
-      "symbol": "SSComplexNumeric.conj",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 133,
-      "symbol": "SSComplexFloat.init(abs:arg:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 137,
-      "symbol": "SSComplexFloat.init(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 141,
-      "symbol": "SSComplexFloat.arg",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 150,
-      "symbol": "SSComplexFloat.abs",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 155,
-      "symbol": "SSComplexFloat.norm",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 169,
-      "symbol": "SSComplexFloat.&%(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 182,
-      "symbol": "SSComplexFloat.&%(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 186,
-      "symbol": "SSComplexFloat.&%(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 190,
-      "symbol": "SSComplexFloat.&%=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 194,
-      "symbol": "SSComplexFloat.&%=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 198,
-      "symbol": "SSComplexFloat.nan",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 202,
-      "symbol": "SSComplexFloat.isNan",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 206,
-      "symbol": "SSComplexFloat.infinity",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 210,
-      "symbol": "SSComplexFloat.isInfinite",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 214,
-      "symbol": "SSComplexFloat.isFinite",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 218,
-      "symbol": "SSComplexFloat.zero",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Math/SSComplex.swift",
-      "line": 222,
-      "symbol": "SSComplexFloat.isZero",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {

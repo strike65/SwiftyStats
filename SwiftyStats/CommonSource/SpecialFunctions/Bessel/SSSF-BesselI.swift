@@ -22,21 +22,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- References:
- DiDonato,  A.    R.   and  Morris,  A.  H.   (1993)  ``Algorithm  708:
- Significant  Digit   Computation  of  the   Incomplete  Beta  Function
- Ratios.''  ACM Trans.  Math.  Softw. 18, 360-373.
- 
- DiDonato,  A.  R.   and Morris,  A.  H.  (1986)  ``Computation of  the
- incomplete gamma function ratios and their inverse.'' ACM Trans. Math.
- Softw. 12, 377-393.
- 
- Cody,  W.D. (1993).  ``ALGORITHM  715: SPECFUN  -  A Portable  FORTRAN
- Package  of   Special  Function   Routines  and  Test   Drivers''  ACM
- Trans. Math.  Softw. 19, 22-32.
- 
- */
 
 import Foundation
 #if os(macOS) || os(iOS)

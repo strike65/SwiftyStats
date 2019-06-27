@@ -20,6 +20,7 @@
 import Foundation
 
 extension SSSpecialFunctions {
+    // Returns the Hermite polynomial http://functions.wolfram.com/Polynomials/HermiteH/26/01/01/ (naive implementation)
     internal static func hermiteH<T: SSFloatingPoint & Codable>(ny: T, z: T) -> T {
         let hyper1: T = hypergeometric1F1(a: -(ny / 2), b: T.half, x: SSMath.pow1(z, 2))
         let hyper2: T = hypergeometric1F1(a: (1 - ny) / 2, b:  Helpers.makeFP(1.5), x: SSMath.pow1(z, 2))

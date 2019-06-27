@@ -1,14 +1,13 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.0.4-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.0-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
 
 SwiftyStats
 ===========
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
-SwiftyStats is a framework written entirely in Swift that makes intensive use of generic types. SwiftyStats contains frequently used statistical procedures. 
-
+SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
-Therefore different programming paradigms are used. Among other things, I decided to "simulate" namespaces system using enums. This is work in progress and will particulary break some projects. *This will make a revision necessary for some projects, for which I ask for patience.*
+Some projects will be broken.,This is work in progress and will particulary break some projects. *This will make a revision necessary for some projects, for which I ask for patience.*
 
 The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS/Linux)
@@ -16,36 +15,28 @@ The attached Xcode project contains four targets:
 > * SwiftyStatsTests (Testsuite)
 > * SwiftStatsCLTest (a command line demo)
 
-Each target must be built individually (i.e. no dependencies are defined)!
+*Each target must be built individually (i.e. no dependencies are defined)!*
+
+In addition a Plaground is added to the Xcode project, so that you can "interactively" 
+> * try out the framework and 
+> * can do prototyping
+
 # The Swift Type Checker problem
-During development there
+Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `z1 + z1 - w) / (z1 * w)`) had to be simplified.
  
 # Overview
 
 SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). This class encapsulates the data to be processed and provides descriptive statistics. In principle, an `SSExamine` instance can contain data of any kind. The available statistical indicators depend of course on the type of data.
 
-The following namespaces are provided (among others):
+The following "namespaces"/classes are provided (among others):
 
-1. SSExamine (class)
-2. SSDataFrame (Class)
-3. SSCrossTab (struct)
-4. SSHypothesisTesting (enum without cases, static functions)
-5. SSProbDist (enum without cases)
-6. 
+* SSExamine (class)
+* SSHypothesisTesting (enum)
+* SSProbDist (enum)
+* [`SSDataFrame`](docs/Classes/SSDataFrame.html) instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
+* [`SSCrossTab`](docs/Structures/SSCrossTab.html) contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
 
-* Class [`SSDataFrame`](docs/Classes/SSDataFrame.html): `SSDateFrame` instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
-* Structure [`SSCrossTab`](docs/Structures/SSCrossTab.html): Contains a cross table in the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
-* Array<T>-Extension: Provides the function [indices(where:)](docs/Extensions/Array.html)
-* Float80-/Double-/Float-Extension: Adds heavily used constants.
-* String-Extension: Provides the two hash methods `djb2hash` and `sdbmhash`.
-
-In addition, a large number of probability functions (PDF, CDF, Parameters, Quantile) are available.
-Those Functions are prefixed by `pdf`, `cdf`, `quantile` for "probability density function", "cumulative density function" and "inverse cumulative density" function respectively. 
-
-The prefix `para` denotes functions returning a `SSContProbDistParams` struct (fields: `mean`, `variance`, `skewness`, `kurtosis`).  
-> Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean".  
-
-> **Please always check if `NaN` or `nil` is returned.** 
+There are several extensions to standard Swift types (`Array`, Floating point types, `String `).
 
 
 # How to Install
@@ -86,7 +77,7 @@ Edit your `Package.swift` file:
 ```swift
 import PackageDescription
 // for Swift 4.2 or 5
-let version = "1.0.4"
+let version = "1.1.0"
 // for earlier versions:
 // let version = "0.8.14"
 let package = Package(
@@ -96,7 +87,7 @@ let package = Package(
 	]
 )
 ```
-Then rebuild your project.  
+Rebuild your project.  
 For more information about the Swift Package Manager click [here](https://github.com/apple/swift-package-manager/tree/master/Documentation)
 
 ## Build Swift Module from command line
@@ -113,7 +104,7 @@ For more information about the Swift Package Manager click [here](https://github
 # Tests
 The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems and numerical software. 
 
-# Preview of use
+# How to use
 
 ```swift
 import SwiftyStats
@@ -129,7 +120,24 @@ let testString = "This string must be analyzed!"
 // in this case, only characters contained in CharacterSet.alphanumerics are added
 let stringAnalyze = VTExamine<String>(withObject: data, levelOfMeasurement: .nominal, characterSet: CharacterSet.alphanumerics)
 print("\(stringAnalyze.frequency("i")")
+// print out the 95% quantile of the Student T distribution
+do {
+	let q = try SSProbDist.StudentT.quantile(p: 0.95, degreesOfFreedom: 21)
+	print("\(q)")
+}
+catch {
+	print(error.localizedDescription)
+}
 ```
+Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean". For each distribution there are the following functions defined:
+
+* cdf: Cumulative Distribution Function
+* pdf: Probability Density Function
+* quantile: Inverse CDF
+* para: returns a `SSContProbDistParams` struct (`mean`, `variance`, `skewness`, `kurtosis`)
+
+> **Please always check if `NaN` or `nil` is returned.** 
+
 ### Obtainable Statistics
 (This list is not exhaustive.)
 
@@ -280,195 +288,32 @@ print("\(stringAnalyze.frequency("i")")
     r0
     r1 
 
-#### Probability Functions
+#### Probability Functions (cdf, pdf, quantile, para - see above)
 
-Beta
-
-    paraBetaDist(shapeA:shapeB:)
-    pdfBetaDist(x:shapeA:shapeB:)
-    cdfBetaDist(x:shapeA:shapeB:)
-    quantileBetaDist(p:shapeA:shapeB:)
-    cdfBetaDist(x:shapeA:shapeB:lambda:)
-    pdfBetaDist(x:shapeA:shapeB:lambda:)
-
-binomial
-
-    cdfBinomialDistribution(k:n:probability:tail:)
-    pdfBinomialDistribution(k:n:probability:)
-
-Cauchy
-
-    paraCauchyDist(location:scale:)
-    pdfCauchyDist(x:location:scale:)
-    cdfCauchyDist(x:location:scale:)
-    quantileCauchyDist(p:location:scale:)
-
-Central
-
-    para(degreesOfFreedom:)
-    pdf(chi:degreesOfFreedom:)
-    cdf(chi:degreesOfFreedom:tail:rlog:)
-    quantile(p:degreesOfFreedom:)
-
-noncentral
-
-    para(degreesOfFreedom:lambda:)
-    pdf(chi:degreesOfFreedom:lambda:)
-    cdf(chi:degreesOfFreedom:lambda:)
-    quantile(p:degreesOfFreedom:lambda:)
-
-Erlang
-
-    paraErlangDist(shape:rate:)
-    pdfErlangDist(x:shape:rate:)
-    cdfErlangDist(x:shape:rate:)
-    quantileErlangDist(p:shape:rate:)
-
-Exponential Dist
-
-    paraExponentialDist(lambda:)
-    pdfExponentialDist(x:lambda:)
-    cdfExponentialDist(x:lambda:)
-    quantileExponentialDist(p:lambda:)
-
-Chi Square
-
-    paraExtremValueDist(location:scale:)
-    pdfExtremValueDist(x:location:scale:)
-    cdfExtremValueDist(x:location:scale:)
-    quantileExtremValueDist(p:location:scale:)
-
-F-RATIO
-
-    paraFRatioDist(numeratorDF:denominatorDF:)
-    pdfFRatioDist(f:numeratorDF:denominatorDF:)
-    cdfFRatioDist(f:numeratorDF:denominatorDF:)
-    quantileFRatioDist(p:numeratorDF:denominatorDF:)
-    paraFRatioDist(numeratorDF:denominatorDF:lambda:)
-    pdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)
-    cdfFRatioDist(f:numeratorDF:denominatorDF:lambda:)
-
-Gamma
-
-    paraGammaDist(shape:scale:)
-    pdfGammaDist(x:shape:scale:)
-    cdfGammaDist(x:shape:scale:)
-    quantileGammaDist(p:shape:scale:)
-
-GAUSSIAN
-
-    paraNormalDistribution(mean:standardDeviation:)
-    cdfNormalDist(x:mean:standardDeviation:)
-    cdfNormalDist(x:mean:variance:)
-    cdfStandardNormalDist(u:)
-    pdfNormalDist(x:mean:standardDeviation:)
-    pdfNormalDist(x:mean:variance:)
-    pdfStandardNormalDist(u:)
-    quantileStandardNormalDist(p:)
-    quantileNormalDist(p:mean:standardDeviation:)
-    quantileNormalDist(p:mean:variance:)
-
-Laplace
-
-    paraLaplaceDist(mean:scale:)
-    pdfLaplaceDist(x:mean:scale:)
-    cdfLaplaceDist(x:mean:scale:)
-    quantileLaplaceDist(p:mean:scale:)
-
-Log Normal
-
-    paraLogNormalDist(mean:variance:)
-    pdfLogNormalDist(x:mean:variance:)
-    cdfLogNormal(x:mean:variance:)
-    quantileLogNormal(p:mean:variance:)
-
-Logistic
-
-    logit(p:)
-    paraLogisticDist(mean:scale:)
-    pdfLogisticDist(x:mean:scale:)
-    cdfLogisticDist(x:mean:scale:)
-    quantileLogisticDist(p:mean:scale:)
-
-Pareto
-
-    paraParetoDist(minimum:shape:)
-    pdfParetoDist(x:minimum:shape:)
-    cdfParetoDist(x:minimum:shape:)
-    quantileParetoDist(p:minimum:shape:)
-
-binomial
-
-    cdfPoissonDist(k:rate:tail:)
-    pdfPoissonDist(k:rate:)
-
-Chi Square
-
-    paraRayleighDist(scale:)
-    pdfRayleighDist(x:scale:)
-    cdfRayleighDist(x:scale:)
-    quantileRayleighDist(p:scale:)
-
-STUDENT's T
-
-    paraStudentTDist(degreesOfFreedom:)
-    pdfStudentTDist(t:degreesOfFreedom:rlog:)
-    cdfStudentTDist(t:degreesOfFreedom:)
-    quantileStudentTDist(p:degreesOfFreedom:)
-
-NON-CENTRAL T-DISTRIBUTION
-
-    paraStudentTDist(degreesOfFreedom:nonCentralityPara:)
-    cdfStudentTDist(t:degreesOfFreedom:nonCentralityPara:rlog:)
-    pdfStudentTDist(x:degreesOfFreedom:nonCentralityPara:rlog:)
-    quantileStudentTDist(p:degreesOfFreedom:nonCentralityPara:rlog:)
-
-TRIANGULAR
-
-    paraTriangularDist(lowerBound:upperBound:mode:)
-    pdfTriangularDist(x:lowerBound:upperBound:mode:)
-    cdfTriangularDist(x:lowerBound:upperBound:mode:)
-    quantileTriangularDist(p:lowerBound:upperBound:mode:)
-
-TRIANGULAR with two params
-
-    paraTriangularDist(lowerBound:upperBound:)
-    pdfTriangularDist(x:lowerBound:upperBound:)
-    cdfTriangularDist(x:lowerBound:upperBound:)
-    quantileTriangularDist(p:lowerBound:upperBound:)
-
-UNIFORM
-
-    paraUniformDist(lowerBound:upperBound:)
-    pdfUniformDist(x:lowerBound:upperBound:)
-    cdfUniformDist(x:lowerBound:upperBound:)
-    quantileUniformDist(p:lowerBound:upperBound:)
-
-Wald / Inverse Normal
-
-    paraWaldDist(mean:lambda:)
-    pdfWaldDist(x:mean:lambda:)
-    cdfWaldDist(x:mean:lambda:)
-    quantileWaldDist(p:mean:lambda:)
-    paraInverseNormalDist(mean:lamdba:)
-    pdfInverseNormalDist(x:mean:scale:)
-    cdfInverseNormalDist(x:mean:scale:)
-    quantileInverseNormalDist(p:mean:scale:)
-
-Weibull
-
-    paraWeibullDist(location:scale:shape:)
-    pdfWeibullDist(x:location:scale:shape:)
-    cdfWeibullDist(x:location:scale:shape:)
-    quantileWeibullDist(p:location:scale:shape:)
-
-CIRCULAR DISTRIBUTION
-
-    paraVonMisesDist(mean:concentration:)
-    pdfVonMisesDist(x:mean:concentration:)
-    cdfVonMisesDist(x:mean:concentration:useExpIntegration:)
-    quantileVonMisesDist(p:mean:concentration:) 
-
+* Beta
+* Binomial
+* Cauchy
+* Erlang
+* Exponential
+* Chi Square (central, non-central)
+* F-RATIO (central, non central)
+* Gamma
+* GAUSSIAN
+* Laplace
+* Log Normal
+* Logistic
+* Pareto
+* Binomial
+* Poisson
+* Rayleigh
+* STUDENT's T
+* NON-CENTRAL T-DISTRIBUTION
+* TRIANGULAR
+* TRIANGULAR with two params
+* UNIFORM
+* Wald / Inverse Normal
+* Weibull
+* CIRCULAR DISTRIBUTION
     
 #### SSHypothesisTesting
 

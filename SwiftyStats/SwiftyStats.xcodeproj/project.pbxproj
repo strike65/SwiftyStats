@@ -205,6 +205,7 @@
 		9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSExamine-Sn_Qn.swift"; sourceTree = "<group>"; };
 		9F19FC4B22B132C40042E922 /* SwiftStatsCLTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftStatsCLTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F19FC4D22B132C40042E922 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		9F1A9DA222C3465600286CDB /* REFERENCES */ = {isa = PBXFileReference; lastKnownFileType = text; path = REFERENCES; sourceTree = "<group>"; };
 		9F1F70EB2103A0280037DFB5 /* CHANGELOG */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG; path = ../CHANGELOG; sourceTree = "<group>"; };
 		9F2EC6B0210AEF3E005AA755 /* Hypergeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hypergeo.swift; sourceTree = "<group>"; };
 		9F2F23AD22A989FF0014CC4C /* Array-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array-Extension.swift"; sourceTree = "<group>"; };
@@ -444,6 +445,7 @@
 				9FEA82411F76C9F6005E4349 /* Info.plist */,
 				9FEA82421F76C9F6005E4349 /* scratch */,
 				9F368BE71F20F340004A5193 /* LICENSE */,
+				9F1A9DA222C3465600286CDB /* REFERENCES */,
 				9F368BE81F20F340004A5193 /* README.md */,
 				9FEA82401F76C9F6005E4349 /* CommonSource */,
 				9F95476F20FFA996002F1E76 /* Resources */,

@@ -161,9 +161,6 @@ extension SSHypothesisTesting {
          */
         r = RR
         dtemp = n1 + n2
-        /********************************************
- COMPILES TAKES TOO LONG
-        *********************************************/
         let ex11: FPT = 2 * n2
         let ex1: FPT = ex11 * n1 - n1 - n2
         let ex2: FPT = 2 * n2 * n1

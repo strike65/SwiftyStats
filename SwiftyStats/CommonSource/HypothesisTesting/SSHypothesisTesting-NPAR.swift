@@ -352,6 +352,7 @@ extension SSHypothesisTesting {
     /************************************************************************************************/
     // Marsaglia et al.: Evaluating the Anderson-Darling Distribution. Journal of
     // Statistical Software 9 (2), 1–5. February 2004. http://www.jstatsoft.org/v09/i02
+    // The code is licensed under the GPL v.2 or v.3
     /************************************************************************************************/
     /************************************************************************************************/
     
@@ -562,7 +563,7 @@ extension SSHypothesisTesting {
         return result
     }
 
-    /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
+    /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2 by L. C. Dinneen and B. C. Blakesley
     fileprivate static func cdfMannWhitney<FPT: SSFloatingPoint & Codable>(U: FPT, m: Int!, n: Int!) throws -> FPT {
         // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
         if m <= 0 || n <= 0 {
