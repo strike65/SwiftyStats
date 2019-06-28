@@ -122,7 +122,7 @@ The integrated test suite uses numerical data for comparison with the results ca
    // you can use the class to analyze strings too:
    let testString = "This string must be analyzed!"
    // in this case, only characters contained in CharacterSet.alphanumerics are added
-   let stringAnalyze = SSExamine<String>(withObject: data, 
+   let stringAnalyze = SSExamine<String>(withObject: testString,
                                  levelOfMeasurement: .nominal, 
                                        characterSet: CharacterSet.alphanumerics)
    print("\(stringAnalyze.frequency("i")")
