@@ -225,14 +225,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Functions.html">Functions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:11SwiftyStats16paraStudentTDist16degreesOfFreedomAA20SSContProbDistParamsVyxGx_tKSeRzSERzAA15SSFloatingPointRzlF">paraStudentTDist(degreesOfFreedom:)</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -354,8 +346,25 @@
 <blockquote>
 <p>It is a framework that is regularly developed and has been created out of passion rather than necessity.</p>
 </blockquote>
+<h1 id='important' class='heading'>Important</h1>
 
-<p>Some projects will be broken.,This is work in progress and will particulary break some projects. <em>This will make a revision necessary for some projects, for which I ask for patience.</em></p>
+<p>Due to many changes and improvements, it is very likely that projects created with older versions (earlier than 1.1.0) will need to be modified after an update to version 1.1.0. This is especially true for the introduction of namespaces. As a result, the calling conventions for probability distributions have changed. Legacy functions such as <code>pdfStudentTDist(_:_:_:)</code> have been declared deprecated and will be removed in a later release. The <strong>new</strong> calling convention looks like <code>SSProbDist.StudentT.pdf()</code>.</p>
+<h1 id='overview' class='heading'>Overview</h1>
+
+<p>SwiftyStats is based on the class <a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a>. This class encapsulates the data to be processed and provides descriptive statistics. In principle, an <code><a href="Classes/SSExamine.html">SSExamine</a></code> instance can contain data of any kind. The available statistical indicators depend of course on the type of data.</p>
+
+<p>The following <q>namespaces</q>/classes are provided (among others):</p>
+
+<ul>
+<li><a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a> (class)</li>
+<li><a href="docs/Enums/SSHypothesisTesting.html"><code><a href="Enums/SSHypothesisTesting.html">SSHypothesisTesting</a></code></a> (enum)</li>
+<li><a href="docs/Enums/SSProbDist.html"><code><a href="Enums/SSProbDist.html">SSProbDist</a></code></a> (enum)</li>
+<li><a href="docs/Classes/SSDataFrame.html"><code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code></a> instances encapsulate datasets. You can imagine the structure of an <code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code> object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.</li>
+<li><a href="docs/Structures/SSCrossTab.html"><code>SSCrossTab</code></a> contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).</li>
+</ul>
+
+<p>There are several extensions to standard Swift types (<code>Array</code>, Floating point types, <code>String</code>).</p>
+<h1 id='using-xcode' class='heading'>Using Xcode</h1>
 
 <p>The attached Xcode project contains four targets:</p>
 
@@ -383,21 +392,6 @@
 <h1 id='the-swift-type-checker-problem' class='heading'>The Swift Type Checker problem</h1>
 
 <p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look <q>nice</q> in some places, because <q>complex</q> expressions (like <code>z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
-<h1 id='overview' class='heading'>Overview</h1>
-
-<p>SwiftyStats is based on the class <a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a>. This class encapsulates the data to be processed and provides descriptive statistics. In principle, an <code><a href="Classes/SSExamine.html">SSExamine</a></code> instance can contain data of any kind. The available statistical indicators depend of course on the type of data.</p>
-
-<p>The following <q>namespaces</q>/classes are provided (among others):</p>
-
-<ul>
-<li><a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a> (class)</li>
-<li><a href="docs/Enums/SSHypothesisTesting.html"><code><a href="Enums/SSHypothesisTesting.html">SSHypothesisTesting</a></code></a> (enum)</li>
-<li><a href="docs/Enums/SSProbDist.html"><code><a href="Enums/SSProbDist.html">SSProbDist</a></code></a> (enum)</li>
-<li><a href="docs/Classes/SSDataFrame.html"><code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code></a> instances encapsulate datasets. You can imagine the structure of an <code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code> object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.</li>
-<li><a href="docs/Structures/SSCrossTab.html"><code>SSCrossTab</code></a> contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).</li>
-</ul>
-
-<p>There are several extensions to standard Swift types (<code>Array</code>, Floating point types, <code>String</code>).</p>
 <h1 id='how-to-install' class='heading'>How to Install</h1>
 <h2 id='cocoapods-recommended-if-your-are-on-a-mac' class='heading'>CocoaPods (recommended if your are on a Mac)</h2>
 
@@ -461,6 +455,10 @@ For more information about the Swift Package Manager click <a href="https://gith
 <h1 id='tests' class='heading'>Tests</h1>
 
 <p>The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems and numerical software. </p>
+
+<blockquote>
+<p>Adding new tests to accomplish a code coverage of 100% is desired. This will be take some time. Any help is appreciated.</p>
+</blockquote>
 <h1 id='how-to-use' class='heading'>How to use</h1>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftyStats</span>
 
@@ -497,156 +495,119 @@ print(error.localizedDescription)
 <blockquote>
 <p><strong>Please always check if <code>NaN</code> or <code>nil</code> is returned.</strong> </p>
 </blockquote>
-<h3 id='obtainable-statistics' class='heading'>Obtainable Statistics</h3>
-
-<p>(This list is not exhaustive.)</p>
+<h3 id='obtainable-statistics-more-to-come' class='heading'>Obtainable Statistics (more to come)</h3>
 <h4 id='ssexamine' class='heading'>SSExamine</h4>
 
-<p>arithmeticMean
-mode
-commonest
-scarcest
-quantile(q:)
-quartile
-geometricMean
-harmonicMean
-contraHarmonicMean
-poweredMean(order:)
-trimmedMean(alpha:)
-winsorizedMean(alpha:)
-gastwirth
-median
-product
-logProduct
-maximum
-minimum
-range
-quartileDeviation
-relativeQuartileDistance
-midRange
-interquartileRange
-interquantileRange(lowerQuantile:upperQuantile:)
-variance(type:)
-standardDeviation(type:)
-standardError
-entropy
-relativeEntropy
-herfindahlIndex
-conc
-gini
-giniNorm
-CR(<em>:)
-normalCI(alpha:populationSD:)
-studentTCI(alpha:)
-meanCI
-cv
-coefficientOfVariation
-meanDifference
-medianAbsoluteDeviation(center:scaleFactor:)
-meanAbsoluteDeviation(center:)
-meanRelativeDifference
-semiVariance(type:)
-moment(r:type:)
-autocorrelation(n:)
-kurtosisExcess
-kurtosis
-kurtosisType
-skewness
-skewnessType
-hasOutliers(testType:)
-outliers(alpha:max:testType:)
-isGaussian
-testForDistribution(targetDistribution:)
-boxWhisker
-elementsAsString(withDelimiter:asRow:encloseElementsBy:)
-elementsAsArray(sortOrder:)
-uniqueElements(sortOrder:)
-frequencyTable(sortOrder:)
-cumulativeFrequencyTable(format:)
-eCDF(</em>:)
-smallestFrequency
-largestFrequency </p>
+<ul>
+<li>arithmeticMean</li>
+<li>mode</li>
+<li>commonest</li>
+<li>scarcest</li>
+<li>quantile(q:)</li>
+<li>quartile</li>
+<li>geometricMean</li>
+<li>harmonicMean</li>
+<li>contraHarmonicMean</li>
+<li>poweredMean(order:)</li>
+<li>trimmedMean(alpha:)</li>
+<li>winsorizedMean(alpha:)</li>
+<li>gastwirth</li>
+<li>median</li>
+<li>product</li>
+<li>logProduct</li>
+<li>maximum</li>
+<li>minimum</li>
+<li>range</li>
+<li>quartileDeviation</li>
+<li>relativeQuartileDistance</li>
+<li>midRange</li>
+<li>interquartileRange</li>
+<li>interquantileRange(lowerQuantile:upperQuantile:)</li>
+<li>variance(type:)</li>
+<li>standardDeviation(type:)</li>
+<li>standardError</li>
+<li>entropy</li>
+<li>relativeEntropy</li>
+<li>herfindahlIndex</li>
+<li>conc</li>
+<li>gini</li>
+<li>giniNorm</li>
+<li>CR()</li>
+<li>normalCI(alpha:populationSD:)</li>
+<li>studentTCI(alpha:)</li>
+<li>meanCI</li>
+<li>cv</li>
+<li>coefficientOfVariation</li>
+<li>meanDifference</li>
+<li>medianAbsoluteDeviation(center:scaleFactor:)</li>
+<li>meanAbsoluteDeviation(center:)</li>
+<li>meanRelativeDifference</li>
+<li>semiVariance(type:)</li>
+<li>moment(r:type:)</li>
+<li>autocorrelation(n:)</li>
+<li>kurtosisExcess</li>
+<li>kurtosis</li>
+<li>kurtosisType</li>
+<li>skewness</li>
+<li>skewnessType</li>
+<li>hasOutliers(testType:)</li>
+<li>outliers(alpha:max:testType:)</li>
+<li>isGaussian</li>
+<li>testForDistribution(targetDistribution:)</li>
+<li>boxWhisker</li>
+<li>elementsAsString(withDelimiter:asRow:encloseElementsBy:)</li>
+<li>elementsAsArray(sortOrder:)</li>
+<li>uniqueElements(sortOrder:)</li>
+<li>frequencyTable(sortOrder:)</li>
+<li>cumulativeFrequencyTable(format:)</li>
+<li>eCDF(_:)</li>
+<li>smallestFrequency</li>
+<li>largestFrequency</li>
+</ul>
 <h4 id='sscrosstab' class='heading'>SSCrossTab</h4>
 
-<p>rowCount
-columnCount
-firstRow
-lastRow
-firstColumn
-lastColumn
-rowNames
-columnNames
-columnLevelOfMeasurement
-rowLevelOfMeasurement
-isNumeric
-encode(to:)
-init(from:)
-is2x2Table
-isEmpty
-isSquare
-row(at:sorted:)
-column(at:sorted:)
-rowNamed(<em>:sorted:)
-columnNamed(</em>:sorted:)
-appendRow(<em>:name:)
-appendColumn(</em>:name:)
-removeRow(rowName:)
-removeColumn(columnName:)
-removeRow(at:)
-removeColumn(at:)
-setRow(at:newRow:)
-setRow(name:newRow:)
-setColumn(name:newColumn:)
-setColumn(at:newColumn:)
-insertRow(newRow:at:name:)
-insertColumn(newColumn:at:name:)
-replaceRow(newRow:at:name:)
-replaceColumn(newColumn:at:name:)
-setRowNames(rowNames:)
-setColumnNames(columnNames:)
-description
-rowSums
-columnSums
-rowSum(row:)
-rowSum(rowName:)
-columnSum(column:)
-columnSum(columnName:)
-nameOfColumn(column:)
-nameOfRow(row:)
-firstIndexOfColumn(columnName:)
-firstIndexOfRow(rowName:)
-total
-rowTotal()
-colummTotal()
-largestRowTotal()
-largestCellCount(atColumn:)
-largestCellCount(atRow:)
-relativeTotalFrequency(row:column:)
-relativeTotalFrequency(rowName:columnName:)
-relativeRowFrequency(row:column:)
-relativeColumnFrequency(row:column:)
-relativeRowMarginFrequency(row:)
-relativeColumnMarginFrequency(column:)
-expectedFrequency(row:column:)
-expectedFrequency(rowName:columnName:)
-residual(row:column:)
-standardizedResidual(row:column:)
-adjustedResidual(row:column:)
-degreesOfFreedom
-chiSquare
-chiSquareLikelihoodRatio
-chiSquareYates
-covariance
-pearsonR
-chiSquareMH
-phi
-ccont
-coefficientOfContingency
-cramerV
-lambda_C_R()
-lambda_R_C()
-r0
-r1 </p>
+<ul>
+<li>rowCount</li>
+<li>columnCount</li>
+<li>rowSums</li>
+<li>columnSums</li>
+<li>rowSum(row:)</li>
+<li>rowSum(rowName:)</li>
+<li>columnSum(column:)</li>
+<li>columnSum(columnName:)</li>
+<li>total</li>
+<li>rowTotal()</li>
+<li>colummTotal()</li>
+<li>largestRowTotal()</li>
+<li>largestCellCount(atColumn:)</li>
+<li>largestCellCount(atRow:)</li>
+<li>relativeTotalFrequency(row:column:)</li>
+<li>relativeTotalFrequency(rowName:columnName:)</li>
+<li>relativeRowFrequency(row:column:)</li>
+<li>relativeColumnFrequency(row:column:)</li>
+<li>relativeRowMarginFrequency(row:)</li>
+<li>relativeColumnMarginFrequency(column:)</li>
+<li>expectedFrequency(row:column:)</li>
+<li>expectedFrequency(rowName:columnName:)</li>
+<li>residual(row:column:)</li>
+<li>standardizedResidual(row:column:)</li>
+<li>adjustedResidual(row:column:)</li>
+<li>degreesOfFreedom</li>
+<li>chiSquare</li>
+<li>chiSquareLikelihoodRatio</li>
+<li>chiSquareYates</li>
+<li>covariance</li>
+<li>pearsonR</li>
+<li>chiSquareMH</li>
+<li>phi</li>
+<li>ccont</li>
+<li>coefficientOfContingency</li>
+<li>cramerV</li>
+<li>lambda_C_R()</li>
+<li>lambda_R_C()</li>
+<li>r0</li>
+<li>r1</li>
+</ul>
 <h4 id='probability-functions-cdf-pdf-quantile-para-see-above' class='heading'>Probability Functions (cdf, pdf, quantile, para - see above)</h4>
 
 <ul>
@@ -676,77 +637,66 @@ r1 </p>
 <li>CIRCULAR DISTRIBUTION</li>
 </ul>
 <h4 id='sshypothesistesting' class='heading'>SSHypothesisTesting</h4>
+<h5 id='equality-of-means' class='heading'>Equality of means</h5>
 
-<p>Equality of means</p>
+<ul>
+<li>twoSampleTTest(data1:data2:alpha:)</li>
+<li>twoSampleTTest(sample1:sample2:alpha:)</li>
+<li>oneSampleTTest(sample:mean:alpha:)</li>
+<li>oneSampleTTEst(data:mean:alpha:)</li>
+<li>matchedPairsTTest(set1:set2:alpha:)</li>
+<li>matchedPairsTTest(data1:data2:alpha:)</li>
+<li>oneWayANOVA(data:alpha:)</li>
+<li>oneWayANOVA(data:alpha:)</li>
+<li>oneWayANOVA(dataFrame:alpha:)</li>
+<li>multipleMeansTest(dataFrame:alpha:)</li>
+<li>multipleMeansTest(data:alpha:)</li>
+<li>multipleMeansTest(data:alpha:)</li>
+<li>tukeyKramerTest(dataFrame:alpha:)</li>
+<li>tukeyKramerTest(data:alpha:)</li>
+<li>scheffeTest(dataFrame:alpha:)</li>
+<li>bonferroniTest(dataFrame:)</li>
+</ul>
+<h5 id='autocorrelation' class='heading'>Autocorrelation</h5>
 
-<p>twoSampleTTest(data1:data2:alpha:)
-twoSampleTTest(sample1:sample2:alpha:)
-oneSampleTTest(sample:mean:alpha:)
-oneSampleTTEst(data:mean:alpha:)
-matchedPairsTTest(set1:set2:alpha:)
-matchedPairsTTest(data1:data2:alpha:)
-oneWayANOVA(data:alpha:)
-oneWayANOVA(data:alpha:)
-oneWayANOVA(dataFrame:alpha:)
-multipleMeansTest(dataFrame:alpha:)
-multipleMeansTest(data:alpha:)
-multipleMeansTest(data:alpha:)
-tukeyKramerTest(dataFrame:alpha:)
-tukeyKramerTest(data:alpha:)
-scheffeTest(dataFrame:alpha:)
-bonferroniTest(dataFrame:)</p>
+<ul>
+<li>autocorrelationCoefficient(array:lag:)</li>
+<li>autocorrelation(array:)</li>
+</ul>
+<h5 id='npar-tests' class='heading'>NPAR tests</h5>
 
-<p>Autocorrelation</p>
+<ul>
+<li>ksGoFTest(array:targetDistribution:)</li>
+<li>adNormalityTest(data:alpha:)</li>
+<li>mannWhitneyUTest(set1:set2:)</li>
+<li>wilcoxonMatchedPairs(set1:set2:)</li>
+<li>signTest(set1:set2:)</li>
+<li>binomialTest(numberOfSuccess:numberOfTrials:probability:alpha:alternative:)</li>
+<li>binomialTest(data:characterSet:testProbability:successCodedAs:alpha:alternative:)</li>
+<li>binomialTest(data:testProbability:successCodedAs:alpha:alternative:)</li>
+<li>kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)</li>
+<li>waldWolfowitzTwoSampleTest(set1:set2:)</li>
+<li>kruskalWallisHTest(data:alpha:)</li>
+</ul>
+<h5 id='outliers' class='heading'>Outliers</h5>
 
-<p>autocorrelationCoefficient(array:lag:)
-autocorrelationCoefficient(data:lag:)
-autocorrelation(array:)
-autocorrelation(data:)</p>
+<ul>
+<li>grubbsTest(array:alpha:)</li>
+<li>esdOutlierTest(array:alpha:maxOutliers:testType:)</li>
+</ul>
+<h5 id='randomness' class='heading'>Randomness</h5>
 
-<p>NPAR tests</p>
+<ul>
+<li>runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)</li>
+</ul>
+<h5 id='equality-of-variances' class='heading'>Equality of variances</h5>
 
-<p>kolmogorovSmirnovGoFTest(array:targetDistribution:)
-ksGoFTest(array:targetDistribution:)
-kolmogorovSmirnovGoFTest(data:targetDistribution:)
-ksGoFTest(data:targetDistribution:)
-adNormalityTest(data:alpha:)
-adNormalityTest(array:alpha:)
-mannWhitneyUTest(set1:set2:)
-mannWhitneyUTest(set1:set2:)
-wilcoxonMatchedPairs(set1:set2:)
-wilcoxonMatchedPairs(set1:set2:)
-signTest(set1:set2:)
-signTest(set1:set2:)
-binomialTest(numberOfSuccess:numberOfTrials:probability:alpha:alternative:)
-binomialTest(data:characterSet:testProbability:successCodedAs:alpha:alternative:)
-binomialTest(data:testProbability:successCodedAs:alpha:alternative:)
-kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)
-kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)
-waldWolfowitzTwoSampleTest(set1:set2:)
-kruskalWallisHTest(data:alpha:)</p>
-
-<p>Outliers</p>
-
-<p>grubbsTest(array:alpha:)
-grubbsTest(data:alpha:)
-esdOutlierTest(array:alpha:maxOutliers:testType:)
-esdOutlierTest(data:alpha:maxOutliers:testType:)</p>
-
-<p>Randomness</p>
-
-<p>runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)
-runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)</p>
-
-<p>Equality of variances</p>
-
-<p>bartlettTest(data:alpha:)
-bartlettTest(array:alpha:)
-leveneTest(data:testType:alpha:)
-leveneTest(array:testType:alpha:)
-chiSquareVarianceTest(array:nominalVariance:alpha:)
-chiSquareVarianceTest(sample:nominalVariance:alpha:)
-fTestVarianceEquality(data1:data2:alpha:)
-fTestVarianceEquality(sample1:sample2:alpha:) </p>
+<ul>
+<li>bartlettTest(array:alpha:)</li>
+<li>leveneTest(array:testType:alpha:)</li>
+<li>chiSquareVarianceTest(array:nominalVariance:alpha:)</li>
+<li>fTestVarianceEquality(data1:data2:alpha:)</li>
+</ul>
 <h1 id='license' class='heading'>LICENSE</h1>
 
 <p>This framework is published under the <a href="http://www.gnu.org/licenses/">GNU GPL 3</a></p>

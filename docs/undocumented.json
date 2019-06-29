@@ -8,13 +8,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/DEPRECATIONS/SSDeprecated.swift",
-      "line": 36,
-      "symbol": "paraStudentTDist(degreesOfFreedom:)",
-      "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine-Stats.swift",
       "line": 814,
       "symbol": "SSExamine.herfindahlIndex",
@@ -23,7 +16,7 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine-Stats.swift",
-      "line": 1482,
+      "line": 1481,
       "symbol": "SSExamine.testForDistribution(targetDistribution:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -44,14 +37,14 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
-      "line": 605,
+      "line": 595,
       "symbol": "SSExamine.copy(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/HypothesisTesting/SSHypothesisTesting-TTests.swift",
-      "line": 1044,
+      "line": 1043,
       "symbol": "SSHypothesisTesting.bonferroniTest(dataFrame:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
@@ -282,14 +275,14 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Namespaces.swift",
-      "line": 224,
+      "line": 221,
       "symbol": "SSProbDist",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Namespaces.swift",
-      "line": 302,
+      "line": 300,
       "symbol": "SSProbDist",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
