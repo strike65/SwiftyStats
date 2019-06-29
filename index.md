@@ -7,7 +7,7 @@
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
-#Important
+# Important
 
 Due to many changes and improvements, it is very likely that projects created with older versions (earlier than 1.1.0) will need to be modified after an update to version 1.1.0. This is especially true for the introduction of namespaces. As a result, the calling conventions for probability distributions have changed. Legacy functions such as `pdfStudentTDist(_:_:_:)` have been declared deprecated and will be removed in a later release. The **new** calling convention looks like `SSProbDist.StudentT.pdf()`.
 
@@ -25,7 +25,7 @@ The following "namespaces"/classes are provided (among others):
 
 There are several extensions to standard Swift types (`Array`, Floating point types, `String `).
 
-#Using Xcode
+# Using Xcode
 
 The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS/Linux)
