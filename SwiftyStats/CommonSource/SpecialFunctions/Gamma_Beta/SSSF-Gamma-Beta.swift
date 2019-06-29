@@ -38,7 +38,6 @@
  
  */
 
-// MARK: Beta and Gamma function
 
 import Foundation
 extension SSSpecialFunctions {
@@ -67,18 +66,11 @@ extension SSSpecialFunctions {
                 return T.infinity
             }
         }
-        //    #if arch(x86_64)
-        //    var g1: Float80 = tgammal(a)
-        //    var g2: Float80 = Float80(b).gammaValue
-        //    let sum: Float80 = Float80(a + b)
-        //    var g3: Float80 = sum.gammaValue
-        //    #else
         var g1 = SSMath.tgamma1(a)
         var g2 = SSMath.tgamma1(b)
         let sum = a + b
         var g3 = SSMath.tgamma1(sum)
         var ans: T = 0
-        //    #endif
         var sign:Int = 1
         if !(g1.isInfinite || g2.isInfinite || g3.isInfinite) && !(g1.isNaN || g2.isNaN || g2.isNaN) {
             if g3.isZero {
@@ -133,7 +125,6 @@ extension SSSpecialFunctions {
         let s2 = (2 + b + a)
         let s3 = (b + 1)
         let s4 = (1 + b + a)
-        //
         let cf: SSBetaRegularized<T> = SSBetaRegularized<T>.init()
         if (_x < 0) || (_x > 1) {
             return T.nan
@@ -200,20 +191,11 @@ extension SSSpecialFunctions {
             ex3 = SSMath.erfc1(sqrt(x))
             ex4 = T.one - (ex3 - ex2)
             return ex4
-            //        return 1 - (SSMath.erfc1(sqrt(x)) - (SSMath.exp1(-x) / (T.sqrtpi * sqrt(x))))
         }
         if a == 1 {
             converged.pointee = true
             return 1 - SSMath.exp1(-x)
         }
-        //    if Helpers.isInteger(a) && a > 0 {
-        ////    if a == floor(a) && a > 0 {
-        //        let t: T = expSum(n: a - 1, z: x)
-        ////        result =  Helpers.makeFP(1.0) - SSMath.exp1(-x) * t
-        //        result = SSMath.expm11(-x) * t
-        //        converged.pointee = true
-        //        return result
-        //    }
         var incg: (p: T, q: T, ierr: Int)
         if x < 0 || a <= 0 {
             return T.nan
@@ -264,10 +246,6 @@ extension SSSpecialFunctions {
     /// Returns the normalized (regularized) Gammma function Q (http://mathworld.wolfram.com/RegularizedGammaFunction.html http://dlmf.nist.gov/8.2)
     /// <img src="../img/GammaQ.png" alt="">
     internal static func gammaNormalizedQ<T: SSFloatingPoint>(x: T, a: T, converged: UnsafeMutablePointer<Bool>) -> T {
-        //    if a > 0 && x.isZero {
-        //        converged.pointee = true
-        //        return 1
-        //    }
         var ex1: T
         var ex2: T
         var ex3: T
@@ -312,12 +290,6 @@ extension SSSpecialFunctions {
             converged.pointee = true
             return 1
         }
-            //    else if a == floor(a) && a > 0 {
-            //        let t = expSum(n: a - 1, z: x)
-            //        result = SSMath.exp1(-x) * t
-            //        converged.pointee = true
-            //        return result
-            //    }
         else if x < (a + 1) {
             result = 1 - gammaNormalizedP(x: x, a: a, converged: &conv)
             if !conv {

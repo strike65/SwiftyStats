@@ -18,7 +18,6 @@ GNU General Public License for more details.
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//import Foundation
 #if os(Linux)
 import Glibc
 #else
@@ -149,7 +148,6 @@ internal extension SSComplexFloat {
 
     var abs: Element {
         return self.norm
-//        return (self.re * self.re + self.im * self.im).squareRoot()
     }
     
     var norm: Element {
@@ -163,7 +161,6 @@ internal extension SSComplexFloat {
             return Swift.abs(self.re)
         }
         return 0
-        //        return self.re * self.re + self.im * self.im
     }
 
     static func &%(_ lhs: Self, _ rhs: Self) -> Self {

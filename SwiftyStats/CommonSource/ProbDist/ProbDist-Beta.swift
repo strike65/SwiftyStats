@@ -68,7 +68,6 @@ extension SSProbDist {
             ex3 = ex2 + 1
             ex4 = SSMath.pow1(ex2, 2) * ex3
             result.variance = ex1 / ex4
-            //    result.variance = (a * b) / (SSMath.pow1(a + b, 2) * (a + b + 1))
             let s1:FPT = (2 * (b - a))
             let s2:FPT = (a + b + 1)
             let s3:FPT = sqrt(a) * sqrt(b)
@@ -217,13 +216,6 @@ extension SSProbDist {
             else if p.isZero {
                 return 0
             }
-            
-            //    if abs(p - 1.0) < 1E-12 {
-            //        return 1.0
-            //    }
-            //    else if p.isZero {
-            //        return 0.0
-            //    }
             var bVal: FPT
             var maxB: FPT
             var minB: FPT
@@ -306,7 +298,7 @@ extension SSProbDist {
                 return 1
             }
             else {
-                var e1, e2, e3: FPT
+                var e1, e2, e3, e4, e5: FPT
                 var i, beta_log,bi, bj, p_sum, pb_sum, pi, pj, si, sj: FPT
                 let errorMax: FPT = FPT.ulpOfOne * 10
                 i = 0
@@ -325,11 +317,12 @@ extension SSProbDist {
                     pj = pi
                     bj = bi
                     sj = si
-                    
                     i = i + 1
                     pi = FPT.half * lambda * pj / i
                     bi = bj - sj
-                    e1 = ( a + b + i - 1)
+                    e4 = a + b
+                    e5 = e4 + i
+                    e1 = e5 - FPT.one
                     e2 = sj / (a + i)
                     si = x * e1 * e2
                     

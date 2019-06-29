@@ -62,7 +62,6 @@ internal class SSBetaRegularized<T: SSFloatingPoint>: SSContFrac<T> {
             ex2 = self.a + self.b + k
             ex3 = ex1 * ex2
             let expr1: T = ex3 * x
-//            let expr1: T = ( (self.a + k) * (self.a + self.b + k) ) * x
             let expr2: T = self.a + (2 * k)
             let expr3: T = expr2 + 1
             res = ( -1 ) * (expr1 / ( expr2 * expr3 ) )

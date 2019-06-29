@@ -115,7 +115,6 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        //        let examine = SSExamine<Double, Double>.init(withArray: data, characterSet: nil)
         var g: FPT
         var maxDiff:FPT = 0
         let mean = data.arithmeticMean!
@@ -245,7 +244,6 @@ extension SSHypothesisTesting {
         }
         let examine = data
         var sortedData = examine.elementsAsArray(sortOrder: .ascending)!
-        // var dataRed: Array<Double> = Array<Double>()
         let orgMean: FPT = examine.arithmeticMean!
         let sd: FPT = examine.standardDeviation(type: .unbiased)!
         var maxDiff: FPT = 0

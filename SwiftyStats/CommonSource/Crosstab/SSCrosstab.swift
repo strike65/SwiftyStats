@@ -392,13 +392,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             else {
                 fatalError("Index out of range.")
             }
-//            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-//            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
-//                return self.counts[r][c]
-//            }
-//            else {
-//                fatalError("Index out of range")
-//            }
         }
         set {
             if isValidRowName(name: rowName) && isValidColumnName(name: columnName) {
@@ -412,13 +405,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             else {
                 fatalError("Index out of range.")
             }
-//            assert(self.rnames != nil && self.cnames != nil, "Index out of range")
-//            if let r = self.rnames!.firstIndex(of: rowName), let c = self.cnames!.firstIndex(of: columnName) {
-//                self.counts[r][c] = newValue
-//            }
-//            else {
-//                fatalError("Index out of range")
-//            }
         }
     }
     
@@ -431,9 +417,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             else {
                 fatalError("Index out of range.")
             }
-//            assert(isValidRowIndex(row: row), "Row-Index out of range")
-//            assert(isValidColumnIndex(column: column), "Column-Index out of range")
-//            return self.counts[row][column]
         }
         set {
             if isValidRowIndex(row: row) && isValidColumnIndex(column: column) {
@@ -442,9 +425,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             else {
                 fatalError("Index out of range.")
             }
-//            assert(isValidRowIndex(row: row), "Row-Index out of range")
-//            assert(isValidColumnIndex(column: column), "Column-Index out of range")
-//            self.counts[row][column] = newValue
         }
     }
     
@@ -495,11 +475,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             if self.cnames != nil {
                 self.cnames!.append(name!)
             }
-            //            else {
-            //                self.cnames = Array<String>.init(repeating: "(NA)", count: self.columns)
-            //                self.cnames!.remove(at: self.columns - 1)
-            //                self.cnames!.append(name!)
-            //            }
         }
     }
     
@@ -539,12 +514,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(index >= 0 && index < self.rr, "Row-Index out of range")
-//        let removed = self.counts.remove(at: index)
-//        self.rr -= 1
-//        if self.rnames != nil {
-//            self.rnames!.remove(at: index)
-//        }
     }
     
     /// Remove column at `index`
@@ -563,16 +532,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(idx >= 0 && idx < self.cc, "Column-Index out of range")
-//        var temp: Array<N> = Array<N>()
-//        for i in 0..<self.counts.count {
-//            temp.append(self.counts[i].remove(at: idx))
-//        }
-//        if self.cnames != nil {
-//            self.cnames!.remove(at: idx)
-//        }
-//        self.cc -= 1
-//        return temp
     }
     
     /// Sets a row at a given index
@@ -597,21 +556,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(isValidRowIndex(row: idx), "Row-Index out of range")
-//        if newRow.count != self.columnCount {
-//            #if os(macOS) || os(iOS)
-//
-//            if #available(macOS 10.12, iOS 10, *) {
-//                os_log("New row: wrong length", log: log_stat, type: .error)
-//            }
-//
-//            #endif
-//
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        for c in 0..<self.columnCount {
-//            self[idx, c] = newRow[c]
-//        }
     }
     
     /// Sets a row at a given index
@@ -645,22 +589,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             
             throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
-//        assert(isValidRowName(name: name), "Row-Index out of range")
-//        if newRow.count != self.columnCount {
-//            #if os(macOS) || os(iOS)
-//
-//            if #available(macOS 10.12, iOS 10, *) {
-//                os_log("New row: wrong length", log: log_stat, type: .error)
-//            }
-//
-//            #endif
-//
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        let i = firstIndexOfRow(rowName: name)!
-//        for c in 0..<self.columnCount {
-//            self[i, c] = newRow[c]
-//        }
     }
     
     /// Sets a column at a given index
@@ -694,22 +622,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             
             throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
-//        assert(isValidColumnName(name: name), "Column-Index out of range")
-//        if newColumn.count != self.rowCount {
-//            #if os(macOS) || os(iOS)
-//
-//            if #available(macOS 10.12, iOS 10, *) {
-//                os_log("New column: wrong length", log: log_stat, type: .error)
-//            }
-//
-//            #endif
-//
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        let i = firstIndexOfColumn(columnName: name)!
-//        for r in 0..<self.rowCount {
-//            self[r, i] = newColumn[r]
-//        }
     }
     
     /// Sets a column at a given index
@@ -734,21 +646,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range")
         }
-//        assert(isValidColumnIndex(column: idx), "Column-Index out of range")
-//        if newColumn.count != self.rowCount {
-//            #if os(macOS) || os(iOS)
-//
-//            if #available(macOS 10.12, iOS 10, *) {
-//                os_log("New column: wrong length", log: log_stat, type: .error)
-//            }
-//
-//            #endif
-//
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        for r in 0..<self.rowCount {
-//            self[r, at] = newColumn[r]
-//        }
     }
     
     /// Inserts a row at index at
@@ -766,21 +663,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
                 }
             }
         }
-//        assert(at >= 0 && at < self.rr, "Row-Index out of range")
-//        if !(newRow.count == self.cc) {
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        self.counts.insert(newRow, at: at)
-//        self.rr += 1
-//        if name != nil {
-//            if self.rnames != nil {
-//                self.rnames!.insert(name!, at: at)
-//            }
-//            //            else {
-//            //                self.rnames = Array<String>.init(repeating: "(NA)", count: self.rows - 1)
-//            //                self.rnames!.insert(name!, at: at)
-//            //            }
-//        }
     }
     
     /// Inserts a column at index at
@@ -805,24 +687,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(at >= 0 && at < self.cc, "Column-Index out of range")
-//        if !(newColumn.count == self.rr) {
-//            throw SSSwiftyStatsError.init(type: .sizeMismatch, file: #file, line: #line, function: #function)
-//        }
-//        var i = 0
-//        for v in newColumn {
-//            self.counts[i].insert(v, at: at)
-//            i += 1
-//        }
-//        self.cc += 1
-//        if name != nil {
-//            if self.cnames != nil {
-//                self.cnames!.insert(name!, at: at)
-//            }
-//            else {
-//                self.cnames = Array<String>.init(repeating: "(NA)", count: self.columns - 1)
-//                self.cnames!.insert(name!, at: at)
-//            }
     }
     
     /// Replaces the row at a given index
@@ -840,14 +704,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(self.isValidRowIndex(row: at), "Row-Index out of range")
-//        do {
-//            try self.insertRow(newRow: newRow, at: at, name: name)
-//        }
-//        catch {
-//            throw error
-//        }
-//        let _ = self.removeRow(at: at + 1)
     }
     
     
@@ -866,14 +722,6 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             fatalError("Index out of range.")
         }
-//        assert(self.isValidColumnIndex(column: at), "Column-Index out of range")
-//        do {
-//            try self.insertColumn(newColumn: newColumn, at: at, name: name)
-//        }
-//        catch {
-//            throw error
-//        }
-//        let _ = self.removeColumn(at: at + 1)
     }
     
     
@@ -987,13 +835,6 @@ extension SSCrosstab {
         else {
             fatalError("Index out of range.")
         }
-//        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
-//        if let rs = self.rowSums {
-//            return rs[row]
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Sum of row named rowName
@@ -1009,17 +850,6 @@ extension SSCrosstab {
         else {
             fatalError("Index out of range.")
         }
-//        if let rn = self.rowNames {
-//            if let i = rn.firstIndex(of: rowName) {
-//                return self.rowSum(row: i)
-//            }
-//            else {
-//                return FPT.nan
-//            }
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// The sum of a column
@@ -1035,13 +865,6 @@ extension SSCrosstab {
         else {
             fatalError("Index out of range.")
         }
-//        assert(isValidColumnIndex(column: column), "Column-Index out of range")
-//        if let cs = self.columnSums {
-//            return cs[column]
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Sum of column named columnName
@@ -1062,17 +885,6 @@ extension SSCrosstab {
             #endif
             throw SSSwiftyStatsError.init(type: .unknownColumnName, file: #file, line: #line, function: #function)
         }
-//        if let rn = self.columnNames {
-//            if let i = rn.firstIndex(of: columnName) {
-//                return self.columnSum(column: i)
-//            }
-//            else {
-//                return FPT.nan
-//            }
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the name of the column or nil if there is no name
@@ -1088,13 +900,6 @@ extension SSCrosstab {
         else {
             fatalError("Index out of range.")
         }
-//        assert(column < self.columnCount && column >= 0, "Column-Index out of range")
-//        if let cn = self.columnNames {
-//            return cn[column]
-//        }
-//        else {
-//            return nil
-//        }
     }
     
     /// Returns the name of the row or nil if there is no name
@@ -1110,13 +915,6 @@ extension SSCrosstab {
         else {
             fatalError("Index out of range.")
         }
-//        assert(row < self.rowCount && row >= 0, "Row-Index out of range")
-//        if let rn = self.rowNames {
-//            return rn[row]
-//        }
-//        else {
-//            return nil
-//        }
     }
     
     /// Returns the index of the column with name columnName or nil if there is no column with that name.
@@ -1178,7 +976,7 @@ extension SSCrosstab {
     
     
     
-    /// Returns the largets column total
+    /// Returns the largets row total
     ///
     /// - Returns: FPT Type or FPT.nan
     /// - Throws: SSSwiftyStatsError.missingData if there are no data
@@ -1201,30 +999,6 @@ extension SSCrosstab {
         }
 
     }
-    /// Returns the largest column total
-//    public var largestRowTotal: throws FPT {
-//        get {
-//            if self.rowCount > 0 {
-//
-//            }
-//            else {
-//                #if os(macOS) || os(iOS)
-//                if #available(macOS 10.12, iOS 10, *) {
-//                    os_log("New column: wrong length", log: log_stat, type: .error)
-//                }
-//                #endif
-//                throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
-//
-//            }
-//            assert(self.rowCount > 0, "Missing data")
-//            if let r = self.rowSums?.sorted(by: {$0 > $1}) {
-//                return r.first!
-//            }
-//            else {
-//                return FPT.nan
-//            }
-//        }
-//    }
     
     /// Returns the largest column total
     func largestColumTotal() throws -> FPT {
@@ -1244,14 +1018,6 @@ extension SSCrosstab {
             #endif
             throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
         }
-//
-//        assert(self.columnCount > 0, "Missing data")
-//        if let c = self.columnSums?.sorted(by: {$0 > $1}) {
-//            return c.first!
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the largest cell count for column
@@ -1270,15 +1036,6 @@ extension SSCrosstab {
             else {
                 fatalError("Index out of range.")
             }
-//            assert(isValidColumnIndex(column: atColumn), "Row-Index out of range")
-//            let column = try! self.column(at: atColumn, sorted: true)
-//            let temp1: FPT =  Helpers.makeFP(column.last)
-//            if !temp1.isNaN {
-//                return temp1
-//            }
-//            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
-//            }
         }
         else {
             return FPT.nan
@@ -1302,16 +1059,6 @@ extension SSCrosstab {
             else {
                 fatalError("Index out of range.")
             }
-//        if self.isNumeric {
-//            assert(isValidRowIndex(row: atRow), "Row-Index out of range")
-//            let row = try! self.row(at: atRow, sorted: true)
-//            let temp1: FPT =  Helpers.makeFP(row.last)
-//            if !temp1.isNaN {
-//                return temp1
-//            }
-//            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
-//            }
         }
         else {
             return FPT.nan
@@ -1342,20 +1089,6 @@ extension SSCrosstab {
         else {
             fatalError("Row index out of range.")
         }
-//        assert(isValidRowIndex(row: row), "Row-index out of range")
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        if self.isNumeric {
-//            let temp: FPT =  Helpers.makeFP(self[row, column])
-//            if !temp.isNaN {
-//                return temp / self.total
-//            }
-//            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
-//            }
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     
@@ -1390,15 +1123,6 @@ extension SSCrosstab {
             #endif
             throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
-//        assert(isValidRowName(name: rowName), "Row-Name unknown")
-//        assert(isValidColumnName(name: columnName), "Column-Name unknown")
-//        if self.isNumeric {
-//            let temp: FPT =  Helpers.makeFP(self[rowName, columnName])
-//            return temp / self.total
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the relative row frequency of cell[row, column]
@@ -1485,15 +1209,6 @@ extension SSCrosstab {
         else {
             fatalError("Column-index out of range")
         }
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        var temp: FPT = 0
-//        if self.isNumeric {
-//            temp = self.columnSums![column]
-//            return temp / self.total
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the expected frequency for cell[row, column]
@@ -1514,14 +1229,6 @@ extension SSCrosstab {
         else {
             fatalError("Row-index out of range")
         }
-//        assert(isValidRowIndex(row: row), "Row-index out of range")
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        if self.isNumeric {
-//            return (self.rowSum(row: row) * self.columnSum(column: column)) / self.total
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the expected frequency for cell[rowName, columnName]
@@ -1554,16 +1261,6 @@ extension SSCrosstab {
             #endif
             throw SSSwiftyStatsError.init(type: .unknownRowName, file: #file, line: #line, function: #function)
         }
-//        assert(isValidRowName(name: rowName), "Row-index out of range")
-//        assert(isValidColumnName(name: columnName), "Column-index out of range")
-//        if self.isNumeric {
-//            let r = self.firstIndexOfRow(rowName: rowName)!
-//            let c = self.firstIndexOfColumn(columnName: columnName)!
-//            return (self.rowSum(row: r) * self.columnSum(column: c)) / self.total
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the residual for cell[row, column]
@@ -1590,20 +1287,6 @@ extension SSCrosstab {
         else {
             fatalError("Row-index out of range")
         }
-//        assert(isValidRowIndex(row: row), "Row-index out of range")
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        if self.isNumeric {
-//            let temp: FPT =  Helpers.makeFP(self[row, column])
-//            if  !temp.isNaN {
-//                return temp - self.expectedFrequency(row: row, column: column)
-//            }
-//            else {
-//                fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
-//            }
-//        }
-//        else {
-//            return FPT.nan
-//        }
     }
     
     /// Returns the standardized residual for cell[row, column]
@@ -1619,9 +1302,6 @@ extension SSCrosstab {
         else {
             fatalError("Row-index out of range")
         }
-//        assert(isValidRowIndex(row: row), "Row-index out of range")
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        return self.residual(row: row, column: column) / expectedFrequency(row: row, column: column).squareRoot()
     }
     
     /// Returns the adjusted residual for cell[row, column]
@@ -1644,21 +1324,6 @@ extension SSCrosstab {
         else {
             fatalError("Row-index out of range")
         }
-//        assert(isValidRowIndex(row: row), "Row-index out of range")
-//        assert(isValidColumnIndex(column: column), "Column-index out of range")
-//        let rowSum: FPT = self.rowSum(row: row)
-//        let columnSum: FPT = self.columnSum(column: column)
-//        let e1: FPT = self.residual(row: row, column: column)
-//        let e2: FPT = expectedFrequency(row: row, column: column)
-//        let e3: FPT = e2 * (FPT.one - rowSum / self.total)
-//        let e4: FPT = e3 * sqrt(FPT.one - columnSum / self.total)
-//        let e5 = e1 / e4
-//        return e5
-//        return self.residual(row: row, column: column)
-//            / (
-//                (expectedFrequency(row: row, column: column))
-//                    * (FPT.one - rowSum / self.total)
-//                    * (FPT.one - columnSum / self.total)).squareRoot()
     }
     
     /// Degrees of freedom
@@ -1989,31 +1654,5 @@ extension SSCrosstab {
             }
         }
     }
-    
-    
-    //    public var tauCR: Double {
-    //        assert( false, "not implemented yet")
-    //        get {
-    //            if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
-    //                var sum1 = 0.0
-    //                var sum2 = 0.0
-    //                for r in 0..<self.rowCount {
-    //                    for c in 0..<self.columnCount {
-    //                        if let fij = castValueToFloatingPoint(self[r,c]) {
-    //                            sum1 += pow(fij, 2.0) / self.rowSum(row: r)
-    //                            sum2 += pow(self.columnSum(column: c), 2.0)
-    //                        }
-    //                        else {
-    //                            fatalError("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.")
-    //                        }
-    //                    }
-    //                }
-    //                return (self.total * sum1 - sum2) / (pow(self.total, 2.0) - sum2)
-    //            }
-    //            else {
-    //                return Double.nan
-    //            }
-    //        }
-    //    }
 }
 

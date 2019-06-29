@@ -83,8 +83,6 @@ extension SSProbDist {
             ex3 = SSMath.exp1(-ex2)
             ex4 = SSMath.exp1(-ex3)
             result = SSMath.exp1(-ex2) * ex4 / b
-            //    result = SSMath.exp1(-ex2) * SSMath.exp1(-SSMath.exp1(-ex2)) / b
-            //    result = SSMath.exp1(-(x - a) / b) * SSMath.exp1(-SSMath.exp1(-(x - a) / b)) / b
             return result
         }
         

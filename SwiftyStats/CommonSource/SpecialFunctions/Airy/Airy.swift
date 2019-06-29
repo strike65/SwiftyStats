@@ -18,7 +18,6 @@
  */
 
 extension SSSpecialFunctions {
-    // MARK: Airy Functions
     
     /// Returns the real AiryAi and AiryAi'
     /// - Parameter x: x

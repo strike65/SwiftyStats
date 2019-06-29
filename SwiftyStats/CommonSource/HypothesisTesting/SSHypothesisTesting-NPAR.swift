@@ -29,9 +29,7 @@ import os.log
 
 
 extension SSHypothesisTesting {
-    /************************************************************************************************/
-    // MARK: NPAR tests
-    
+
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
@@ -183,7 +181,6 @@ extension SSHypothesisTesting {
                 let ix1: Int = data.sampleSize - ik
                 ex1 = tot - dest3
                 dest1 =  Helpers.makeFP(ix1) / (tot - ex1)
-//                dest1 =  Helpers.makeFP(ix1) / (tot - dest3)
             }
             else {
                 dest1 = FPT.nan
@@ -403,7 +400,6 @@ extension SSHypothesisTesting {
         }
         r = 1.0 / z
         ad = r * PRIV_ADf(z, 0)
-        // 100
         j = 1
         while j < 400 {
             r *= (0.5 - Double(j)) / Double(j)
@@ -670,7 +666,6 @@ extension SSHypothesisTesting {
             comp = comp +  Helpers.makeFP(i)
             sum = comp + oldsum
             comp = (oldsum - sum) + comp
-//            sum +=  Helpers.makeFP(i)
             i += 1
         }
         return sum
@@ -745,7 +740,6 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var groups:Array<Int> = Array<Int>()
-//        var ties: Array<FPT>
         var sumRanksSet1: FPT = 0
         var sumRanksSet2: FPT = 0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
@@ -766,7 +760,6 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
-//        ties = rr.ties!
         sumRanksSet1 = rr.sumOfRanks[0]
         sumRanksSet2 = rr.sumOfRanks[1]
         let n1: FPT =  Helpers.makeFP(set1.sampleSize)
@@ -783,8 +776,6 @@ extension SSHypothesisTesting {
         ex2 = ex1 / 2
         ex3 = mn + ex2
         let U2 = ex3 - sumRanksSet2
-//        let U11 = mn + (n1 * (n1 + 1)) / 2 - sumRanksSet1
-//        let U2 = mn + (n2 * (n2 + 1)) / 2 - sumRanksSet2
         if (U1 + U2) != mn {
             #if os(macOS) || os(iOS)
             
@@ -823,7 +814,6 @@ extension SSHypothesisTesting {
             let ex1: FPT = (mn / (S * (S - 1)))
             let ex2: FPT = (SSMath.pow1(S, 3) - S) / 12
             denom = sqrt(ex1 * (ex2 - temp1))
-//            denom = sqrt((mn / (S * (S - 1))) * ((SSMath.pow1(S, 3) - S) / 12 - temp1))
             num = abs(U - mn / 2)
             z = num / denom
             pasymp1 = min(1 - SSProbDist.StandardNormal.cdf(u: z), SSProbDist.StandardNormal.cdf(u: z))
@@ -967,8 +957,6 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var i: Int
-        //        var np: Int = 0
-        //        var nn: Int = 0
         var nties: Int = 0
         var temp: FPT = 0
         var diff:Array<FPT> = Array<FPT>()
@@ -993,7 +981,6 @@ extension SSHypothesisTesting {
             i += 1
         }
         var ranks: Array<FPT>
-//        var ties: Array<FPT>
         let ranking: Rank<FPT, FPT> = Rank.init(data: absDiffSorted, groups: nil)
         ranks = ranking.ranks
         guard let ties: Array<FPT> = ranking.ties else {
@@ -1007,7 +994,6 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
-//        ties = ranking.ties!
         nties = ranking.numberOfTies
         let n = absDiffSorted.count
         var nposranks: Int = 0
@@ -1037,7 +1023,6 @@ extension SSHypothesisTesting {
         ex3 = n_n_one / 2
         ex4 = sumnegranks + sumposranks
         if ex4 != ex3 {
-//        if sumnegranks + sumposranks != ( Helpers.makeFP(n) * ( Helpers.makeFP(n) + 1)) / 2 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
@@ -1061,20 +1046,11 @@ extension SSHypothesisTesting {
         ex4 = abs(ex3)
         ex5 = ex4 - n_n_one / 4
         let z0: FPT = ex5
-//        let z01: FPT = abs(min(sumnegranks, sumposranks)) -  Helpers.makeFP(n) * ( Helpers.makeFP(n) + 1) / 4
         ex1 = 2 * n_fp + FPT.one
         let n1n21n1: FPT = n_n_one * ex1
-//        let n1n21n1: FPT = ( Helpers.makeFP(n)) * (( Helpers.makeFP(n)) + 1) * (2 *  Helpers.makeFP(n) + 1)
         let sigma: FPT = sqrt(n1n21n1 / 24 - ts)
         let correct: FPT = FPT.half * SSMath.sign(z0)
-//        if z0 < 0.0 {
-//            correct = -0.5
-//        }
-//        else {
-//            correct = 0.5
-//        }
         z = (z0 - correct) / sigma
-//        z = (fabs(max(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
         let pp: FPT = SSProbDist.StandardNormal.cdf(u: z)
         let p: FPT = 1 - SSProbDist.StandardNormal.cdf(u: z)
         let cohenD: FPT = abs(z) / sqrt(2 *  Helpers.makeFP(N))
@@ -1311,7 +1287,6 @@ extension SSHypothesisTesting {
         else {
             do {
                 res = try SSProbDist.Beta.quantile(p: alpha, shapeA: success, shapeB: trials - success + 1)
-                //                res = try quantileBetaDist(p: alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -1328,7 +1303,6 @@ extension SSHypothesisTesting {
         else {
             do {
                 res = try SSProbDist.Beta.quantile(p: 1 - alpha, shapeA: success + 1, shapeB: trials - success)
-                //                res = try quantileBetaDist(p: 1.0 - alpha, shapeA: success + 0.5, shapeB: trials - success + 0.5)
             }
             catch {
                 throw error
@@ -1474,9 +1448,6 @@ extension SSHypothesisTesting {
                 ex5 = SSMath.reciprocal(ex4)
                 cintClopperPearson.upperBound = ex5
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
-//                fQ = try quantile(p:  Helpers.makeFP(1.0 ) - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
-//                cintClopperPearson.upperBound =  Helpers.makeFP(1.0 ) / ( Helpers.makeFP(1.0 ) + ((n - success) / ((success +  Helpers.makeFP(1.0 )) * fQ)))
-//                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
@@ -1500,14 +1471,6 @@ extension SSHypothesisTesting {
                 cintClopperPearson.lowerBound = ex4
                 cintClopperPearson.upperBound = 1
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
-//                fQ = try quantile(p: ex1, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-//                let ex1: FPT = (n - success + FPT.one)
-//                let ex2: FPT = success * fQ
-//                let ex3: FPT = FPT.one + (ex1 / ex2)
-//                cintClopperPearson.lowerBound = FPT.one / ex3
-//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
-//                cintClopperPearson.upperBound = 1
-//                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
@@ -1544,11 +1507,6 @@ extension SSHypothesisTesting {
                 ex5 = SSMath.reciprocal(ex4)
                 cintClopperPearson.lowerBound = ex5
                 cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
-//                fQ = try quantile(p: 1 - alpha / 2, numeratorDF: 2 * (success + 1), denominatorDF: 2 * (n - success))
-//                cintClopperPearson.upperBound = 1 / (1 + ((n - success) / ((success + 1) * fQ)))
-//                fQ = try quantile(p: alpha / 2, numeratorDF: 2 * success, denominatorDF: 2 * (n - success + 1))
-//                cintClopperPearson.lowerBound = 1 / (1 + ((n - success + 1) / (success * fQ)))
-//                cintClopperPearson.intervalWidth = abs(cintClopperPearson.upperBound! - cintClopperPearson.lowerBound!)
             }
             catch {
                 throw error
@@ -1689,7 +1647,6 @@ extension SSHypothesisTesting {
             ex2 = n1 + n2
             ex3 = ex1 / ex2
             z = maxD * sqrt(ex3)
-//            z = maxD * sqrt(n1 * n2 / (n1 + n2))
             if ((z >= 0) && (z <  Helpers.makeFP(0.27 ))) {
                 p = 1
             }
@@ -1697,7 +1654,6 @@ extension SSHypothesisTesting {
                 ex1 =  Helpers.makeFP(-1.233701)
                 ex2 = ex1 * SSMath.pow1(z, -2)
                 q = SSMath.exp1(ex2)
-//                q = SSMath.exp1( Helpers.makeFP(-1.233701 ) * SSMath.pow1(z, -2))
                 ex1 = SSMath.pow1(q, 25)
                 ex2 = SSMath.pow1(q, 9)
                 ex3 = q + ex1 + ex2
@@ -1705,7 +1661,6 @@ extension SSHypothesisTesting {
                 ex5 = ex4 / z
                 ex6 = FPT.one - ex5
                 p = ex6
-//                p = 1 - (( Helpers.makeFP(2.506628) * (q + SSMath.pow1(q, 9) + SSMath.pow1(q, 25))) / z)
             }
             else if ((z >= 1) && (z <  Helpers.makeFP(3.1 ))) {
                 q = SSMath.exp1(-2 * SSMath.pow1(z, 2))
@@ -1716,7 +1671,6 @@ extension SSHypothesisTesting {
                 ex5 = ex4 - ex3
                 ex6 = q - ex5
                 p = 2 * ex6
-//                p = 2 * (q - SSMath.pow1(q, 4) + SSMath.pow1(q, 9) - SSMath.pow1(q, 16))
             }
             else if (z >=  Helpers.makeFP(3.1 )) {
                 p = 0
@@ -1835,7 +1789,6 @@ extension SSHypothesisTesting {
         ex5 = 2 * n1 * n2
         ex6 = ex5 - n1 - n2
         let sigma: FPT = sqrt(ex5 * (ex6) / (ex4))
-//        let sigma1 = sqrt(2.0 * n1 * n2 * (2.0 * n1 * n2 - n1 - n2) / ((n1 + n2) * (n1 + n2) * (n1 + n2 - 1.0)))
         let mean: FPT = (2 * n1 * n2) / dtemp + 1
         var z: FPT = 0
         var sum: FPT = 0

@@ -184,7 +184,6 @@ extension SSExamine {
                             leftB = tryB + even
                         }
                         else {
-//                            rightB = tryB
                             leftA = tryA + even
                         }
                     }
@@ -290,12 +289,6 @@ extension SSExamine {
         var p: Array<Int> = Array<Int>.init(repeating: 0, count: ni)
         var q: Array<Int> = Array<Int>.init(repeating: 0, count: ni)
         var weight: Array<Int> = Array<Int>.init(repeating: 0, count: ni)
-    //    int *left = &work_int[0];
-    //    int *right = &work_int[n];
-    //    int *p = &work_int[2*n];
-    //    int *q = &work_int[3*n];
-    //    int *weight = &work_int[4*n];
-        
         var trial: FPT = 0
         var found: Bool = false
         
@@ -312,7 +305,6 @@ extension SSExamine {
         h = Helpers.integerValue(n / 2 + 1)
         k = Int64(h * (h - 1) / 2)
         
-    //    for (i = 0; i < ni; ++i) {
         for i in stride(from: 0, to: ni, by: 1) {
             left[i] = ni - i + 1
             right[i] = (i <= h) ? ni : ni - (i - h)
@@ -330,8 +322,6 @@ extension SSExamine {
         while (!found && (nr - nl > ni)) {
             j = 0
             /* Truncation to float : try to make sure that the same values are got later (guard bits !) */
-    //        for (i = 1; i < ni; ++i)
-    //        {
             for i in stride(from: 1, to: ni, by: 1) {
                 if (left[i] <= right[i]) {
                     weight[j] = right[i] - left[i] + 1
@@ -344,14 +334,9 @@ extension SSExamine {
             }
             
             trial = qn_whimed(a: &work, w: &weight, n: &j, a_cand: &a_cand, a_srt: &a_srt, w_cand: &p)
-//            trial = FUNCTION(Qn,whimed)(work, weight, j, a_cand, a_srt, /*iw_cand*/ p);
-            
             j = 0
-//            for (i = ni - 1; i >= 0; --i)
-//            {
             for i in stride(from: ni - 1, through: 0, by: -1) {
                 val1 =  Helpers.makeFP(sorted_data[i])
-//                val2 =  Helpers.makeFP(sorted_data[ni - j - 1])
                 while (j < ni && (val1 -  Helpers.makeFP(sorted_data[ni - j - 1])) < trial) {
                     j += 1
                 }
@@ -359,8 +344,6 @@ extension SSExamine {
             }
             
             j = ni + 1;
-//            for (i = 0; i < ni; ++i)
-//            {
             for i in stride(from: 0, to: ni, by: 1) {
                 val1 =  Helpers.makeFP(sorted_data[i])
                 while ((val1 -  Helpers.makeFP(sorted_data[ni - j + 1])) > trial) {
@@ -372,8 +355,6 @@ extension SSExamine {
             sump = 0;
             sumq = 0;
             
-//            for (i = 0; i < ni; ++i)
-//            {
             for i in stride(from: 0, to: ni, by: 1) {
                 sump += Int64(p[i])
                 sumq += Int64(q[i] - 1)
@@ -452,7 +433,6 @@ extension SSExamine {
                 let scale: FPT =  Helpers.makeFP(2.21914) // as! FPT /* asymptotic consistency for sigma^2 */
                 let n = self.sampleSize
                 let nn: FPT =  Helpers.makeFP(self.sampleSize)
-                // Qn0 = (double) FUNCTION(gsl_stats,Qn0_from_sorted_data)(sorted_data, stride, n, work, work_int);
                 var dn: FPT = 1
                 var qn: FPT = 0
                 
@@ -499,14 +479,12 @@ extension SSExamine {
                         ex2 = Helpers.makeFP(-2.1284) - ex1
                         ex3 = ex2 / nn
                         dn =  Helpers.makeFP(1.60188 ) + ex3
-//                        dn =  Helpers.makeFP(1.60188 ) + ( Helpers.makeFP(-2.1284 ) -  Helpers.makeFP(5.172) / nn) / nn
                     }
                     else {            /* n even */
                         let ex1: FPT =  Helpers.makeFP(77.0) / nn
                         let ex2: FPT =  Helpers.makeFP(6.987) - ex1
                         let ex3: FPT =  Helpers.makeFP(1.9654) + ex2 / nn
                         dn =  Helpers.makeFP(3.67561 ) + ex3 / nn
-//                        dn =  Helpers.makeFP(3.67561 ) + ( Helpers.makeFP(1.9654 ) + ( Helpers.makeFP(6.987 ) -  Helpers.makeFP(77.0 ) / nn) / nn) / nn
                     }
                 
                     dn = 1 / (dn / nn + 1)
@@ -567,8 +545,6 @@ extension SSExamine {
             wmid = 0
             wright = 0
             
-            //        for (i = 0; i < n; ++i)
-            //        {
             for i in stride(from: 0, to: n, by: 1) {
                 if (a[i] < trial) {
                     wleft += Int64(w[i])
@@ -587,8 +563,6 @@ extension SSExamine {
              */
             kcand = 0
             if (2 * (wrest + wleft) > w_tot) {
-                //            for (i = 0; i < n; ++i)
-                //            {
                 for i in stride(from: 0, to: n, by: 1) {
                     if (a[i] < trial) {
                         a_cand[kcand] = a[i]
@@ -598,8 +572,6 @@ extension SSExamine {
                 }
             }
             else if (2 * (wrest + wleft + wmid) <= w_tot) {
-                //            for (i = 0; i < n; ++i)
-                //            {
                 for i in stride(from: 0, to: n, by: 1) {
                     if (a[i] > trial) {
                         a_cand[kcand] = a[i]
@@ -614,8 +586,6 @@ extension SSExamine {
             }
             n = kcand
             for i in stride(from: 0, to: n, by: 1) {
-                //        for (i = 0; i < n; ++i)
-                //        {
                 a[i] = a_cand[i]
                 w[i] = w_cand[i]
             }

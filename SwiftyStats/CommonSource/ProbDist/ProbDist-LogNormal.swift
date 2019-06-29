@@ -60,7 +60,6 @@ extension SSProbDist {
             ex2 = ex1 + 2 * SSMath.pow1(delta, 3)
             ex3 = ex2 + 3 * SSMath.pow1(delta, 2)
             result.kurtosis = ex3 - 3
-            //    result.kurtosis = SSMath.pow1(delta, 4) + 2 * SSMath.pow1(delta, 3) + 3 * SSMath.pow1(delta, 2) - 3
             return result
         }
         
@@ -94,9 +93,7 @@ extension SSProbDist {
                 ex1 = FPT.minusOne * e3
                 ex2 = 2 * v
                 ex3 = ex1 / ex2
-                let r:FPT = SSMath.reciprocal(e2) * SSMath.exp1(ex3)
-                //        let e1: FPT = SSMath.exp1(-1 * SSMath.pow1(SSMath.log1(x) - mean, 2) / (2 * v))
-                //        let r = 1 / (sqrt(v) * x * sqrt(2 * FPT.pi)) * e1
+                let r: FPT = SSMath.reciprocal(e2) * SSMath.exp1(ex3)
                 return r
             }
         }
@@ -121,7 +118,7 @@ extension SSProbDist {
             if x <= 0 {
                 return 0
             }
-            let r = SSProbDist.StandardNormal.cdf(u: (SSMath.log1(x) - mean) / sqrt(v))
+            let r: FPT = SSProbDist.StandardNormal.cdf(u: (SSMath.log1(x) - mean) / sqrt(v))
             return r
         }
         

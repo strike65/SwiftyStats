@@ -105,7 +105,6 @@ extension SSHypothesisTesting {
         var n1: FPT = 0
         var r: Int = 1
         var cp: FPT = 0
-        //        var isPrevPos: Bool
         switch useCP {
         case .mean:
             cp = data.arithmeticMean!
@@ -177,51 +176,15 @@ extension SSHypothesisTesting {
         catch {
             throw error
         }
-        //        if n1 + n2 >= 60 {
         z = dtemp / sigma
-        //        }
-        //        else {
-        //            z = (dtemp - 0.5) / sigma
-        //        }
         switch alternative {
         case .twoSided:
             pAsymp = 2 * min(SSProbDist.StandardNormal.cdf(u: z), 1 - SSProbDist.StandardNormal.cdf(u: z))
-//            pAsymp = 2.0 * Standard.cdf(u: z)
         case .less:
             pAsymp = SSProbDist.StandardNormal.cdf(u: z)
         case .greater:
             pAsymp = 1 - SSProbDist.StandardNormal.cdf(u: z)
         }
-        //        if pAsymp > 0.5 {
-        //            pAsymp = (1.0 - pAsymp) * 2.0
-        //        }
-        //        else {
-        //            pAsymp *= 2.0
-        //        }
-        //        if n1 + n2 <= 30 {
-        //            if r % 2 == 0 {
-        //                var rr = 2
-        //                var sum = 0.0
-        //                var q = 0.0
-        //                while rr <= r {
-        //                    q = Double(rr) / 2.0
-        //                    sum += SSMath.binomial2(n1 - 1.0, q - 1.0) * SSMath.binomial2(n2 - 1.0,q - 1)
-        //                    rr += 1
-        //                }
-        //                pExact = 2.0 * sum / SSMath.binomial2((n1 + n2), n1)
-        //            }
-        //            else {
-        //                var rr = 2
-        //                var sum = 0.0
-        //                var q = 0.0
-        //                while rr <= r {
-        //                    q = Double(rr - 1) / 2.0
-        //                    sum += (SSMath.binomial2(n1 - 1.0, q) * SSMath.binomial2(n2 - 1.0, q - 1) / 2.0) + SSMath.binomial2(n1 - 1.0, q - 1.0) * SSMath.binomial2(n2 - 1.0, q)
-        //                    rr += 1
-        //                }
-        //                pExact = sum / SSMath.binomial2((n1 + n2), n1)
-        //            }
-        //        }
         var result: SSRunsTestResult<FPT> = SSRunsTestResult<FPT>()
         result.nGTEcp = n2
         result.nLTcp = n1

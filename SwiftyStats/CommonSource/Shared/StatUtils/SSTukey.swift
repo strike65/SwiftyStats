@@ -70,6 +70,431 @@ import os.log
 #endif
 
 
+extension Helpers {
+    
+    /// This a translation from the R function ptukey to Swift. See Remarks below
+    /// q = value of studentized range
+    /// rr = no. of rows or groups
+    /// cc = no. of columns or treatments
+    /// df = degrees of freedom of error term
+    /// ir[0] = error flag = 1 if wprob probability > 1
+    /// ir[1] = error flag = 1 if qprob probability > 1
+    ///
+    /// qprob = returned probability integral over [0, q]
+    ///
+    /// The program will not terminate if ir[0] or ir[1] are raised.
+    ///
+    /// All references in wprob to Abramowitz and Stegun
+    /// are from the following reference:
+    ///
+    /// Abramowitz, Milton and Stegun, Irene A.
+    /// Handbook of Mathematical Functions.
+    /// New York:  Dover publications, Inc. (1970).
+    ///
+    /// All constants taken from this text are
+    /// given to 25 significant digits.
+    ///
+    /// nlegq = order of legendre quadrature
+    /// ihalfq = int ((nlegq + 1) / 2)
+    /// eps = max. allowable value of integral
+    /// eps1 & eps2 = values below which there is
+    /// no contribution to integral.
+    ///
+    /// d.f. <= dhaf:    integral is divided into ulen1 length intervals.  else
+    /// d.f. <= dquar:    integral is divided into ulen2 length intervals.  else
+    /// d.f. <= deigh:    integral is divided into ulen3 length intervals.  else
+    /// d.f. <= dlarg:    integral is divided into ulen4 length intervals.
+    ///
+    /// d.f. > dlarg:    the range is used to calculate integral.
+    ///
+    /// M_LN2 = log(2)
+    ///
+    /// xlegq = legendre 16-point nodes
+    /// alegq = legendre 16-point coefficients
+    ///
+    /// The coefficients and nodes for the legendre quadrature used in
+    /// qprob and wprob were calculated using the algorithms found in:
+    ///
+    /// Stroud, A. H. and Secrest, D.
+    /// Gaussian Quadrature Formulas.
+    /// Englewood Cliffs,
+    /// New Jersey:  Prentice-Hall, Inc, 1966.
+    ///
+    /// All values matched the tables (provided in same reference)
+    /// to 30 significant digits.
+    ///
+    /// f(x) = .5 + erf(x / sqrt(2)) / 2      for x > 0
+    ///
+    /// f(x) = erfc( -x / sqrt(2)) / 2          for x < 0
+    ///
+    /// where f(x) is standard normal c. d. f.
+    ///
+    /// if degrees of freedom large, approximate integral
+    /// with range distribution.
+    internal static func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
+        /*  function ptukey() [was qprob() ]:
+         
+         q = value of studentized range
+         rr = no. of rows or groups
+         cc = no. of columns or treatments
+         df = degrees of freedom of error term
+         ir[0] = error flag = 1 if wprob probability > 1
+         ir[1] = error flag = 1 if qprob probability > 1
+         
+         qprob = returned probability integral over [0, q]
+         
+         The program will not terminate if ir[0] or ir[1] are raised.
+         
+         All references in wprob to Abramowitz and Stegun
+         are from the following reference:
+         
+         Abramowitz, Milton and Stegun, Irene A.
+         Handbook of Mathematical Functions.
+         New York:  Dover publications, Inc. (1970).
+         
+         All constants taken from this text are
+         given to 25 significant digits.
+         
+         nlegq = order of legendre quadrature
+         ihalfq = int ((nlegq + 1) / 2)
+         eps = max. allowable value of integral
+         eps1 & eps2 = values below which there is
+         no contribution to integral.
+         
+         d.f. <= dhaf:    integral is divided into ulen1 length intervals.  else
+         d.f. <= dquar:    integral is divided into ulen2 length intervals.  else
+         d.f. <= deigh:    integral is divided into ulen3 length intervals.  else
+         d.f. <= dlarg:    integral is divided into ulen4 length intervals.
+         
+         d.f. > dlarg:    the range is used to calculate integral.
+         
+         M_LN2 = log(2)
+         
+         xlegq = legendre 16-point nodes
+         alegq = legendre 16-point coefficients
+         
+         The coefficients and nodes for the legendre quadrature used in
+         qprob and wprob were calculated using the algorithms found in:
+         
+         Stroud, A. H. and Secrest, D.
+         Gaussian Quadrature Formulas.
+         Englewood Cliffs,
+         New Jersey:  Prentice-Hall, Inc, 1966.
+         
+         All values matched the tables (provided in same reference)
+         to 30 significant digits.
+         
+         f(x) = .5 + erf(x / sqrt(2)) / 2      for x > 0
+         
+         f(x) = erfc( -x / sqrt(2)) / 2          for x < 0
+         
+         where f(x) is standard normal c. d. f.
+         
+         if degrees of freedom large, approximate integral
+         with range distribution.
+         */
+        let nlegq = 16
+        let ihalfq = 8
+        /*  const double eps = 1.0; not used if = 1 */
+        let eps1 = -30.0
+        let eps2 = 1.0e-14
+        let dhaf  = 100.0
+        let dquar = 800.0
+        let deigh = 5000.0
+        let dlarg = 25000.0
+        let ulen1 = 1.0
+        let ulen2 = 0.5
+        let ulen3 = 0.25
+        let ulen4 = 0.125
+        let xlegq = [
+            0.989400934991649932596154173450,
+            0.944575023073232576077988415535,
+            0.865631202387831743880467897712,
+            0.755404408355003033895101194847,
+            0.617876244402643748446671764049,
+            0.458016777657227386342419442984,
+            0.281603550779258913230460501460,
+            0.950125098376374401853193354250e-1]
+        let alegq = [
+            0.271524594117540948517805724560e-1,
+            0.622535239386478928628438369944e-1,
+            0.951585116824927848099251076022e-1,
+            0.124628971255533872052476282192,
+            0.149595988816576732081501730547,
+            0.169156519395002538189312079030,
+            0.182603415044923588866763667969,
+            0.189450610455068496285396723208]
+        var ans: Double
+        var f2: Double
+        var f21: Double
+        var f2lf: Double
+        var ff4: Double
+        var otsum: Double
+        var qsqz: Double
+        var rotsum: Double
+        var t1: Double
+        var twa1: Double
+        var ulen: Double
+        var wprb: Double
+        var i: Int
+        var j: Int
+        var jj: Int
+        if q.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN {
+            return Double.nan
+        }
+        
+        
+        if (q <= 0) {
+            return r_dt_0(tail: tail, log_p: returnLogP)
+        }
+        
+        /* df must be > 1 */
+        /* there must be at least two values */
+        
+        if (df < 2 || nranges < 1 || numberOfMeans < 2) {
+            return Double.nan
+        }
+        
+        if !q.isFinite {
+            return r_dt_1(tail: tail, log_p: returnLogP)
+        }
+        
+        if (df > dlarg) {
+            do {
+                return r_dt_val(x: try wprob(w: q, rr: nranges, cc: numberOfMeans), tail: tail, log_p: returnLogP)
+            }
+            catch {
+                throw error
+            }
+        }
+        f2 = df * 0.5
+        /* lgammafn(u) = log(gamma(u)) */
+        f2lf = ((f2 * log(df)) - (df * Double.ln2)) - lgamma(f2)
+        f21 = f2 - 1.0
+        
+        /* integral is divided into unit, half-unit, quarter-unit, or */
+        /* eighth-unit length intervals depending on the value of the */
+        /* degrees of freedom. */
+        
+        ff4 = df * 0.25;
+        if        (df <= dhaf) { ulen = ulen1 }
+        else if (df <= dquar) { ulen = ulen2 }
+        else if (df <= deigh) { ulen = ulen3 }
+        else { ulen = ulen4 }
+        
+        f2lf += log(ulen)
+        
+        /* integrate over each subinterval */
+        
+        ans = 0.0
+        i = 1
+        otsum = 0.0
+        while i <= 50 {
+            otsum = 0.0
+            
+            twa1 = 2.0 * Double(i) - 1.0 * ulen
+            jj = 1
+            while jj <= nlegq {
+                if (ihalfq < jj) {
+                    j = jj - ihalfq - 1
+                    t1 = (f2lf + (f21 * log(twa1 + (xlegq[j] * ulen)))) - (((xlegq[j] * ulen) + twa1) * ff4)
+                } else {
+                    j = jj - 1
+                    t1 = (f2lf + (f21 * log(twa1 - (xlegq[j] * ulen)))) + (((xlegq[j] * ulen) - twa1) * ff4)
+                }
+                
+                /* if exp(t1) < 9e-14, then doesn't contribute to integral */
+                if (t1 >= eps1) {
+                    if (ihalfq < jj) {
+                        qsqz = q * sqrt(((xlegq[j] * ulen) + twa1) * 0.5)
+                    } else {
+                        qsqz = q * sqrt(((-(xlegq[j] * ulen)) + twa1) * 0.5)
+                    }
+                    
+                    /* call wprob to find integral of range portion */
+                    do {
+                        wprb = try wprob(w: qsqz, rr: nranges, cc: numberOfMeans)
+                    }
+                    catch {
+                        throw error
+                    }
+                    rotsum = (wprb * alegq[j]) * exp(t1)
+                    otsum += rotsum
+                }
+                /* end legendre integral for interval i */
+                /* L200: */
+                jj += 1
+            }
+            if Double(i) * ulen > 1.0 && otsum <= eps2 {
+                break
+            }
+            ans += otsum
+            i += 1
+        }
+        if otsum > eps2 {
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        if ans > 1.0 {
+            ans = 1.0
+        }
+        return r_dt_val(x: ans, tail: tail, log_p: returnLogP)
+    }
+    
+    
+    
+    
+    /*
+     *  Copenhaver, Margaret Diponzio & Holland, Burt S.
+     *  Multiple comparisons of simple effects in
+     *  the two-way analysis of variance with fixed effects.
+     *  Journal of Statistical Computation and Simulation,
+     *  Vol.30, pp.1-15, 1988.
+     *
+     *  Uses the secant method to find critical values.
+     *
+     *  p = confidence level (1 - alpha)
+     *  rr = no. of rows or groups
+     *  cc = no. of columns or treatments
+     *  df = degrees of freedom of error term
+     *
+     *  ir(1) = error flag = 1 if wprob probability > 1
+     *  ir(2) = error flag = 1 if ptukey probability > 1
+     *  ir(3) = error flag = 1 if convergence not reached in 50 iterations
+     *               = 2 if df < 2
+     *
+     *  qtukey = returned critical value
+     *
+     *  If the difference between successive iterates is less than eps,
+     *  the search is terminated
+     */
+    
+    
+    /// In R, the function is called as follows:
+    /// qtukey <- function(p, nmeans, df, nranges=1, lower.tail = TRUE, log.p = FALSE)
+    ///
+    ///  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
+    internal static func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
+        let eps = 0.0001
+        let maxiter = 50
+        
+        var ans = 0.0
+        var valx0: Double
+        var valx1: Double
+        var x0: Double
+        var x1: Double
+        var xabs: Double
+        var iter: Int
+        var pp: Double
+        if (p.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN) {
+            return p + nranges + numberOfMeans + df;
+        }
+        
+        /* df must be > 1 ; there must be at least two values */
+        if (df < 2 || nranges < 1 || numberOfMeans < 2) {
+            return Double.nan
+        }
+        if log_p {
+            if p > 0 {
+                return Double.nan
+            }
+            if p == 0.0 {
+                return (tail == .lower) ? 0 : Double.infinity
+            }
+            if p == -Double.infinity {
+                return (tail == .lower) ? Double.infinity : 0
+            }
+        }
+        else {
+            if p < 0 || p > 1 {
+                return Double.nan
+            }
+            if p == 0.0 {
+                return (tail == .lower) ? Double.infinity : 0
+            }
+            if p == 1.0 {
+                return (tail == .lower) ? 0 : Double.infinity
+            }
+        }
+        
+        pp = r_dt_qIv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
+        
+        /* Initial value */
+        
+        x0 = qinv(p: pp, c: numberOfMeans, v: df);
+        
+        /* Find prob(value < x0) */
+        do {
+            valx0 = try ptukey(q: x0, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, /*LOG_P*/returnLogP: false) - pp
+        }
+        catch {
+            throw error
+        }
+        
+        /* Find the second iterate and prob(value < x1). */
+        /* If the first iterate has probability value */
+        /* exceeding p then second iterate is 1 less than */
+        /* first iterate; otherwise it is 1 greater. */
+        
+        if (valx0 > 0.0) {
+            x1 = max(0.0, x0 - 1.0)
+        }
+        else {
+            x1 = x0 + 1.0
+        }
+        do {
+            valx1 = try ptukey(q: x1, nranges: nranges, numberOfMeans: numberOfMeans, df: df, /*LOWER*/tail: .lower, /*LOG_P*/returnLogP: false) - pp
+        }
+        catch {
+            throw error
+        }
+        
+        /* Find new iterate */
+        iter = 1
+        while iter < maxiter {
+            ans = x1 - ((valx1 * (x1 - x0)) / (valx1 - valx0))
+            valx0 = valx1
+            
+            /* New iterate must be >= 0 */
+            
+            x0 = x1
+            if (ans < 0.0) {
+                ans = 0.0
+                valx1 = -pp
+            }
+            /* Find prob(value < new iterate) */
+            do {
+                valx1 = try ptukey(q: ans, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, returnLogP: false) - pp
+            }
+            catch {
+                throw error
+            }
+            x1 = ans
+            
+            /* If the difference between two successive */
+            /* iterates is less than eps, stop */
+            
+            xabs = fabs(x1 - x0)
+            if (xabs < eps) {
+                return ans
+            }
+            iter += 1
+        }
+        /* The process did not converge in 'maxiter' iterations */
+        #if os(macOS) || os(iOS)
+        
+        if #available(macOS 10.12, iOS 10, *) {
+            os_log("qtukey didn't converge", log: log_stat, type: .info)
+        }
+        
+        #endif
+        
+        return ans
+    }
+    
+    
+    
+}
+
 fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     /*  wprob() :
      
@@ -285,274 +710,6 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
 }
 
 
-/// This a translation from the R function ptukey to Swift. See Remarks below
-/// q = value of studentized range
-/// rr = no. of rows or groups
-/// cc = no. of columns or treatments
-/// df = degrees of freedom of error term
-/// ir[0] = error flag = 1 if wprob probability > 1
-/// ir[1] = error flag = 1 if qprob probability > 1
-///
-/// qprob = returned probability integral over [0, q]
-///
-/// The program will not terminate if ir[0] or ir[1] are raised.
-///
-/// All references in wprob to Abramowitz and Stegun
-/// are from the following reference:
-///
-/// Abramowitz, Milton and Stegun, Irene A.
-/// Handbook of Mathematical Functions.
-/// New York:  Dover publications, Inc. (1970).
-///
-/// All constants taken from this text are
-/// given to 25 significant digits.
-///
-/// nlegq = order of legendre quadrature
-/// ihalfq = int ((nlegq + 1) / 2)
-/// eps = max. allowable value of integral
-/// eps1 & eps2 = values below which there is
-/// no contribution to integral.
-///
-/// d.f. <= dhaf:	integral is divided into ulen1 length intervals.  else
-/// d.f. <= dquar:	integral is divided into ulen2 length intervals.  else
-/// d.f. <= deigh:	integral is divided into ulen3 length intervals.  else
-/// d.f. <= dlarg:	integral is divided into ulen4 length intervals.
-///
-/// d.f. > dlarg:	the range is used to calculate integral.
-///
-/// M_LN2 = log(2)
-///
-/// xlegq = legendre 16-point nodes
-/// alegq = legendre 16-point coefficients
-///
-/// The coefficients and nodes for the legendre quadrature used in
-/// qprob and wprob were calculated using the algorithms found in:
-///
-/// Stroud, A. H. and Secrest, D.
-/// Gaussian Quadrature Formulas.
-/// Englewood Cliffs,
-/// New Jersey:  Prentice-Hall, Inc, 1966.
-///
-/// All values matched the tables (provided in same reference)
-/// to 30 significant digits.
-///
-/// f(x) = .5 + erf(x / sqrt(2)) / 2      for x > 0
-///
-/// f(x) = erfc( -x / sqrt(2)) / 2	      for x < 0
-///
-/// where f(x) is standard normal c. d. f.
-///
-/// if degrees of freedom large, approximate integral
-/// with range distribution.
-internal func ptukey(q: Double, nranges: Double, numberOfMeans: Double, df: Double, tail: SSCDFTail, returnLogP: Bool) throws -> Double {
-    /*  function ptukey() [was qprob() ]:
-     
-     q = value of studentized range
-     rr = no. of rows or groups
-     cc = no. of columns or treatments
-     df = degrees of freedom of error term
-     ir[0] = error flag = 1 if wprob probability > 1
-     ir[1] = error flag = 1 if qprob probability > 1
-     
-     qprob = returned probability integral over [0, q]
-     
-     The program will not terminate if ir[0] or ir[1] are raised.
-     
-     All references in wprob to Abramowitz and Stegun
-     are from the following reference:
-     
-     Abramowitz, Milton and Stegun, Irene A.
-     Handbook of Mathematical Functions.
-     New York:  Dover publications, Inc. (1970).
-     
-     All constants taken from this text are
-     given to 25 significant digits.
-     
-     nlegq = order of legendre quadrature
-     ihalfq = int ((nlegq + 1) / 2)
-     eps = max. allowable value of integral
-     eps1 & eps2 = values below which there is
-     no contribution to integral.
-     
-     d.f. <= dhaf:	integral is divided into ulen1 length intervals.  else
-     d.f. <= dquar:	integral is divided into ulen2 length intervals.  else
-     d.f. <= deigh:	integral is divided into ulen3 length intervals.  else
-     d.f. <= dlarg:	integral is divided into ulen4 length intervals.
-     
-     d.f. > dlarg:	the range is used to calculate integral.
-     
-     M_LN2 = log(2)
-     
-     xlegq = legendre 16-point nodes
-     alegq = legendre 16-point coefficients
-     
-     The coefficients and nodes for the legendre quadrature used in
-     qprob and wprob were calculated using the algorithms found in:
-     
-     Stroud, A. H. and Secrest, D.
-     Gaussian Quadrature Formulas.
-     Englewood Cliffs,
-     New Jersey:  Prentice-Hall, Inc, 1966.
-     
-     All values matched the tables (provided in same reference)
-     to 30 significant digits.
-     
-     f(x) = .5 + erf(x / sqrt(2)) / 2      for x > 0
-     
-     f(x) = erfc( -x / sqrt(2)) / 2	      for x < 0
-     
-     where f(x) is standard normal c. d. f.
-     
-     if degrees of freedom large, approximate integral
-     with range distribution.
-     */
-    let nlegq = 16
-    let ihalfq = 8
-    /*  const double eps = 1.0; not used if = 1 */
-    let eps1 = -30.0
-    let eps2 = 1.0e-14
-    let dhaf  = 100.0
-    let dquar = 800.0
-    let deigh = 5000.0
-    let dlarg = 25000.0
-    let ulen1 = 1.0
-    let ulen2 = 0.5
-    let ulen3 = 0.25
-    let ulen4 = 0.125
-    let xlegq = [
-        0.989400934991649932596154173450,
-        0.944575023073232576077988415535,
-        0.865631202387831743880467897712,
-        0.755404408355003033895101194847,
-        0.617876244402643748446671764049,
-        0.458016777657227386342419442984,
-        0.281603550779258913230460501460,
-        0.950125098376374401853193354250e-1]
-    let alegq = [
-        0.271524594117540948517805724560e-1,
-        0.622535239386478928628438369944e-1,
-        0.951585116824927848099251076022e-1,
-        0.124628971255533872052476282192,
-        0.149595988816576732081501730547,
-        0.169156519395002538189312079030,
-        0.182603415044923588866763667969,
-        0.189450610455068496285396723208]
-    var ans: Double
-    var f2: Double
-    var f21: Double
-    var f2lf: Double
-    var ff4: Double
-    var otsum: Double
-    var qsqz: Double
-    var rotsum: Double
-    var t1: Double
-    var twa1: Double
-    var ulen: Double
-    var wprb: Double
-    var i: Int
-    var j: Int
-    var jj: Int
-    if q.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN {
-        return Double.nan
-    }
-    
-    
-    if (q <= 0) {
-        return r_dt_0(tail: tail, log_p: returnLogP)
-    }
-    
-    /* df must be > 1 */
-    /* there must be at least two values */
-    
-    if (df < 2 || nranges < 1 || numberOfMeans < 2) {
-        return Double.nan
-    }
-    
-    if !q.isFinite {
-        return r_dt_1(tail: tail, log_p: returnLogP)
-    }
-    
-    if (df > dlarg) {
-        do {
-            return r_dt_val(x: try wprob(w: q, rr: nranges, cc: numberOfMeans), tail: tail, log_p: returnLogP)
-        }
-        catch {
-            throw error
-        }
-    }
-    f2 = df * 0.5
-    /* lgammafn(u) = log(gamma(u)) */
-    f2lf = ((f2 * log(df)) - (df * Double.ln2)) - lgamma(f2)
-    f21 = f2 - 1.0
-    
-    /* integral is divided into unit, half-unit, quarter-unit, or */
-    /* eighth-unit length intervals depending on the value of the */
-    /* degrees of freedom. */
-    
-    ff4 = df * 0.25;
-    if	    (df <= dhaf) { ulen = ulen1 }
-    else if (df <= dquar) { ulen = ulen2 }
-    else if (df <= deigh) { ulen = ulen3 }
-    else { ulen = ulen4 }
-    
-    f2lf += log(ulen)
-    
-    /* integrate over each subinterval */
-    
-    ans = 0.0
-    i = 1
-    otsum = 0.0
-    while i <= 50 {
-        otsum = 0.0
-        
-        twa1 = 2.0 * Double(i) - 1.0 * ulen
-        jj = 1
-        while jj <= nlegq {
-            if (ihalfq < jj) {
-                j = jj - ihalfq - 1
-                t1 = (f2lf + (f21 * log(twa1 + (xlegq[j] * ulen)))) - (((xlegq[j] * ulen) + twa1) * ff4)
-            } else {
-                j = jj - 1
-                t1 = (f2lf + (f21 * log(twa1 - (xlegq[j] * ulen)))) + (((xlegq[j] * ulen) - twa1) * ff4)
-            }
-            
-            /* if exp(t1) < 9e-14, then doesn't contribute to integral */
-            if (t1 >= eps1) {
-                if (ihalfq < jj) {
-                    qsqz = q * sqrt(((xlegq[j] * ulen) + twa1) * 0.5)
-                } else {
-                    qsqz = q * sqrt(((-(xlegq[j] * ulen)) + twa1) * 0.5)
-                }
-                
-                /* call wprob to find integral of range portion */
-                do {
-                    wprb = try wprob(w: qsqz, rr: nranges, cc: numberOfMeans)
-                }
-                catch {
-                    throw error
-                }
-                rotsum = (wprb * alegq[j]) * exp(t1)
-                otsum += rotsum
-            }
-            /* end legendre integral for interval i */
-            /* L200: */
-            jj += 1
-        }
-        if Double(i) * ulen > 1.0 && otsum <= eps2 {
-            break
-        }
-        ans += otsum
-        i += 1
-    }
-    if otsum > eps2 {
-        throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-    }
-    if ans > 1.0 {
-        ans = 1.0
-    }
-    return r_dt_val(x: ans, tail: tail, log_p: returnLogP)
-}
-
 
 /* qinv() :
  *	this function finds percentage point of the studentized range
@@ -601,155 +758,5 @@ fileprivate func qinv(p: Double, c: Double, v: Double) -> Double {
         q += -c3 / v + c4 * t / v
     }
     return t * (q * log (c - 1.0) + c5);
-}
-
-/*
- *  Copenhaver, Margaret Diponzio & Holland, Burt S.
- *  Multiple comparisons of simple effects in
- *  the two-way analysis of variance with fixed effects.
- *  Journal of Statistical Computation and Simulation,
- *  Vol.30, pp.1-15, 1988.
- *
- *  Uses the secant method to find critical values.
- *
- *  p = confidence level (1 - alpha)
- *  rr = no. of rows or groups
- *  cc = no. of columns or treatments
- *  df = degrees of freedom of error term
- *
- *  ir(1) = error flag = 1 if wprob probability > 1
- *  ir(2) = error flag = 1 if ptukey probability > 1
- *  ir(3) = error flag = 1 if convergence not reached in 50 iterations
- *		       = 2 if df < 2
- *
- *  qtukey = returned critical value
- *
- *  If the difference between successive iterates is less than eps,
- *  the search is terminated
- */
-
-
-/// In R, the function is called as follows:
-/// qtukey <- function(p, nmeans, df, nranges=1, lower.tail = TRUE, log.p = FALSE)
-///
-///  .Call(C_qtukey, p, nranges, nmeans, df, lower.tail, log.p)
-internal func qtukey(p: Double, nranges: Double /*nranges*/, numberOfMeans: Double/*nmeans*/, df: Double, tail: SSCDFTail, log_p: Bool) throws -> Double {
-    let eps = 0.0001
-    let maxiter = 50
-    
-    var ans = 0.0
-    var valx0: Double
-    var valx1: Double
-    var x0: Double
-    var x1: Double
-    var xabs: Double
-    var iter: Int
-    var pp: Double
-    if (p.isNaN || nranges.isNaN || numberOfMeans.isNaN || df.isNaN) {
-        return p + nranges + numberOfMeans + df;
-    }
-    
-    /* df must be > 1 ; there must be at least two values */
-    if (df < 2 || nranges < 1 || numberOfMeans < 2) {
-        return Double.nan
-    }
-    if log_p {
-        if p > 0 {
-            return Double.nan
-        }
-        if p == 0.0 {
-            return (tail == .lower) ? 0 : Double.infinity
-        }
-        if p == -Double.infinity {
-            return (tail == .lower) ? Double.infinity : 0
-        }
-    }
-    else {
-        if p < 0 || p > 1 {
-            return Double.nan
-        }
-        if p == 0.0 {
-            return (tail == .lower) ? Double.infinity : 0
-        }
-        if p == 1.0 {
-            return (tail == .lower) ? 0 : Double.infinity
-        }
-    }
-    
-    //   r_q_P01_boundaries(x: p, right: 0, left: Double.infinity, tail: tail, log_p: log_p)
-    
-    pp = r_dt_qIv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
-    
-    /* Initial value */
-    
-    x0 = qinv(p: pp, c: numberOfMeans, v: df);
-    
-    /* Find prob(value < x0) */
-    do {
-        valx0 = try ptukey(q: x0, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, /*LOG_P*/returnLogP: false) - pp
-    }
-    catch {
-        throw error
-    }
-    
-    /* Find the second iterate and prob(value < x1). */
-    /* If the first iterate has probability value */
-    /* exceeding p then second iterate is 1 less than */
-    /* first iterate; otherwise it is 1 greater. */
-    
-    if (valx0 > 0.0) {
-        x1 = max(0.0, x0 - 1.0)
-    }
-    else {
-        x1 = x0 + 1.0
-    }
-    do {
-        valx1 = try ptukey(q: x1, nranges: nranges, numberOfMeans: numberOfMeans, df: df, /*LOWER*/tail: .lower, /*LOG_P*/returnLogP: false) - pp
-    }
-    catch {
-        throw error
-    }
-    
-    /* Find new iterate */
-    iter = 1
-    while iter < maxiter {
-        ans = x1 - ((valx1 * (x1 - x0)) / (valx1 - valx0))
-        valx0 = valx1
-        
-        /* New iterate must be >= 0 */
-        
-        x0 = x1
-        if (ans < 0.0) {
-            ans = 0.0
-            valx1 = -pp
-        }
-        /* Find prob(value < new iterate) */
-        do {
-            valx1 = try ptukey(q: ans, nranges: nranges, numberOfMeans: numberOfMeans, df: df, tail: .lower, returnLogP: false) - pp
-        }
-        catch {
-            throw error
-        }
-        x1 = ans
-        
-        /* If the difference between two successive */
-        /* iterates is less than eps, stop */
-        
-        xabs = fabs(x1 - x0)
-        if (xabs < eps) {
-            return ans
-        }
-        iter += 1
-    }
-    /* The process did not converge in 'maxiter' iterations */
-    #if os(macOS) || os(iOS)
-    
-    if #available(macOS 10.12, iOS 10, *) {
-        os_log("qtukey didn't converge", log: log_stat, type: .info)
-    }
-    
-    #endif
-    
-    return ans
 }
 

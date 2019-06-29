@@ -60,7 +60,6 @@ extension SSProbDist {
             ex4 =  Helpers.makeFP(-3.0) + FPT.pi
             ex5 = ex4 * FPT.sqrtpihalf
             result.skewness = ex5 / ex3
-            //    result.skewness = ((-3 + FPT.pi) * FPT.sqrtpihalf) / SSMath.pow1(2 - FPT.pi / 2,  Helpers.makeFP(3.0 / 2.0 ))
             ex1 = 3 * FPT.pisquared
             ex2 = 32 - ex1
             ex3 = 4 - FPT.pi
@@ -94,7 +93,6 @@ extension SSProbDist {
                 let ex2: FPT = x * SSMath.exp1(ex1)
                 let ex3: FPT = ex2 / sSquare
                 result = ex3
-                //        result = (x * SSMath.exp1(-(x * x) / (2 * s * s))) / (s * s)
             }
             return result
         }
@@ -124,7 +122,6 @@ extension SSProbDist {
                 ex2 = FPT.minusOne * (x * x)
                 ex3 = SSMath.exp1( ex2 / ex1)
                 result = FPT.one - ex3
-                //        result = 1 - SSMath.exp1(-(x * x) / (2 * s * s))
             }
             return result
         }

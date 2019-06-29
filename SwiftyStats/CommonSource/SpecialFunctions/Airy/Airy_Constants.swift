@@ -114,6 +114,8 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         theta_grid = Array<T>()
         var ex1: T
         var ex2: T
+        var ex3: T
+        var ex4: T
         var eta, ifl: T
         var M, i: Int
         var basep: Int
@@ -139,8 +141,6 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         vcoef = Array<T>.init(repeating: 0, count: n_asymp)
         ucoef[0] =  Helpers.makeFP(5.0) /  Helpers.makeFP(14.4)
         vcoef[0] = T.minusOne *  Helpers.makeFP(7.0) /  Helpers.makeFP(72.0)
-//        ucoef[0] =  Helpers.makeFP("0.06944444444444444444444444444444444444444444444444444444444444444")
-//        vcoef[0] =  Helpers.makeFP("-0.09722222222222222222222222222222222222222222222222222222222222222")
         for i in stride(from: 0, through: n_asymp - 2, by: 1) {
             ifl =  Helpers.makeFP(i + 1)
             e1 = 6 * ifl + 5
@@ -170,15 +170,25 @@ internal struct AiryVariables<T: SSFloatingPoint> {
         }
         let Sfloat: T =  Helpers.makeFP(n_asymp)
         var xinew = T.half * Sfloat
-        chi =  Helpers.makeFP(M) * SSMath.log1( Helpers.makeFP(basep)) + SSMath.log1(abs(vcoef[n_asymp - 1])) + SSMath.log1(2 * chi)
+        ex1 = Helpers.makeFP(basep)
+        ex2 = Helpers.makeFP(M) * SSMath.log1( ex1)
+        ex3 = 2 * chi
+        ex4 = SSMath.log1(abs(vcoef[n_asymp - 1])) + SSMath.log1(ex3)
+        chi =  ex2 + ex4
         fstpsz = 7 * T.pi / 72
         var fun, dfun, xiold: T
         while true {
             xiold = xinew
-            fun = Sfloat * SSMath.log1(xiold) - fstpsz / xiold - chi
+            ex1 = Sfloat * SSMath.log1(xiold)
+            ex2 = fstpsz / xiold
+            ex3 = ex1 - ex2
+            fun = ex3 - chi
             dfun = Sfloat / xiold + fstpsz / SSMath.pow1(xiold, 2)
             xinew = xiold - fun / dfun
-            if (abs((xinew - xiold) / xinew)) < (4 * eta) {
+            ex1 = xinew - xiold
+            ex2 = abs((ex1) / xinew)
+            ex3 = Helpers.makeFP(4) * eta
+            if ex2 < ex3 {
                 break
             }
         }
@@ -202,7 +212,6 @@ internal struct AiryVariables<T: SSFloatingPoint> {
             e1 = r_min * lambda[l] + fstpsz * lambda[m]
             e2 = ifl * (ifl - T.one)
             lambda[k] = e1 / e2 * SSMath.pow1(fstpsz, 2)
-//            lambda[k] = (r_min * lambda[l] + fstpsz * lambda[m]) / (ifl * (ifl - 1)) * SSMath.pow1(fstpsz, 2)
             if (ifl * lambda[k]) < (T.half * eta) {
                 break
             }
@@ -723,7 +732,6 @@ func Tcoeff<T: SSFloatingPoint>() -> Array<T> {
     }
 }
 
-
 func Wcoeff<T: SSFloatingPoint>() -> Array<T> {
     let f: Array<Float> = [
     -0.07291666666666666666666666666666666666666666666666666666666666666667,
@@ -935,7 +943,6 @@ func Wcoeff<T: SSFloatingPoint>() -> Array<T> {
         return result as! Array<T>
     }
 }
-
 
 func Vcoeff<T: SSFloatingPoint>() -> Array<T> {
     let f: Array<Float> = [

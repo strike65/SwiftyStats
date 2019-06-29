@@ -151,11 +151,8 @@ extension SSSpecialFunctions {
         }
         var ans: Complex<T>
         var zz: Complex<T> = z
-        //    var ip: Int = a.count
-        //    var iq: Int = b.count
         let aa: Array<Complex<T>> = a
         let bb: Array<Complex<T>> = b
-        //    var i: Int = 0
         do {
             try ans = hyper(a: aa, b: bb, ip: aa.count, iq: bb.count, z: &zz, lnpfq: log ? 1 : 0, ix: 777, nsigfig: &sigfig)
             if !ans.isNan {
@@ -541,14 +538,11 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     ex3 = sumr[3 + aOffset]
     ex4 = ex1 + ex2 + ex3
     dum1 = abs(ex4) * SSMath.sign(sumr[-1 + aOffset])
-    
-//    dum1 = (abs(sumr[1 + aOffset] * rmax * rmax + sumr[2 + aOffset] * rmax + sumr[3 + aOffset]) * SSMath.sign(sumr[-1 + aOffset]))
     ex1 = sumi[1 + aOffset] * rmax * rmax
     ex2 = sumi[2 + aOffset] * rmax
     ex3 = sumi[3 + aOffset]
     ex4 = ex1 + ex2 + ex3
     dum2 = ex4 * SSMath.sign(sumi[-1 + aOffset])
-//    dum2 = (abs(sumi[1 + aOffset] * rmax * rmax + sumi[2 + aOffset] * rmax + sumi[3 + aOffset]) * SSMath.sign(sumi[-1 + aOffset]))
     dum1 = dum1 * SSMath.pow1(10, rr10)
     dum2 = dum2 * SSMath.pow1(10, ri10)
     cdum1 = Complex<T>(dum1,dum2)
@@ -566,7 +560,6 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     ex4 = abs(ex3)
     ex5 = denomr[-1 + aOffset]
     dum1 = ex4 * SSMath.sign(ex5)
-//    dum1 = (abs(denomr[1 + aOffset] * rmax * rmax + denomr[2 + aOffset] * rmax + denomr[3 + aOffset]) * SSMath.sign(denomr[-1 + aOffset]))
     ex1 = denomi[1 + aOffset] * rmax * rmax
     ex2 = denomi[2 + aOffset] * rmax
     ex3 = ex1 + ex2 + denomi[3 + aOffset]
@@ -599,8 +592,6 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             }
             if (mx1 - mx2 > 2) {
                 if (creal >= 0) {
-                    //%        write (6,*) ' cdabs(temp1/cnt)=',cdabs(temp1/cnt)
-                    //%
                     if ((temp1 &% cnt).abs <= 1) {
                         do {
                             try arydiv(ar: &sumr, ai: &sumi, br: &denomr, bi: &denomi, c: &final, l: l, lnpfq: lnpfq, rmax: rmax, ibit: ibit)
@@ -608,7 +599,6 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
                         catch {
                             throw error
                         }
-                        //arydiv(sumr,sumi,denomr,denomi,final,l,lnpfq,rmax,ibit)
                         ans = final
                         return ans
                     }
@@ -1008,7 +998,6 @@ fileprivate func aradd<T: SSFloatingPoint>(a: inout Array<T>, b: inout Array<T>,
                 }
                 for j in 1...l + 1 - i {
                     z[j + aOffset] = z[j + i - 1 + aOffset]
-                    //                    J = j
                 }
                 /// TODO: ???
                 for j in stride(from: l + 2 - 1, through: l, by: -1) {
@@ -1348,12 +1337,10 @@ fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
     ex2 = ex1 + (ar[2 + aOffset] * rmax)
     ex3 = ex2 + ar[3 + aOffset]
     dum1 = abs(ex3) * SSMath.sign(ar[-1 + aOffset])
-//    dum1 = (abs(ar[1 + aOffset] * rmax * rmax + ar[2 + aOffset] * rmax + ar[3 + aOffset]) * SSMath.sign(ar[-1 + aOffset]))
     ex1 = ai[1 + aOffset] * rmax * rmax
     ex2 = ex1 + ai[2 + aOffset] * rmax
     ex3 = ex2 + ai[3 + aOffset]
     dum2 = abs(ex3) * SSMath.sign(ai[-1 + aOffset])
-//    dum2 = (abs(ai[1 + aOffset] * rmax * rmax + ai[2 + aOffset] * rmax + ai[3 + aOffset]) * SSMath.sign(ai[-1 + aOffset]))
     dum1 = dum1 * SSMath.pow1(10, rr10)
     dum2 = dum2 * SSMath.pow1(10, ri10)
     cdum.re = dum1
@@ -1373,12 +1360,10 @@ fileprivate func arydiv<T: SSFloatingPoint>(ar: inout Array<T>,ai: inout Array<T
     ex2 = ex1 + br[2 + aOffset] * rmax
     ex3 = ex2 + br[3 + aOffset]
     dum1 = abs(ex3) * SSMath.sign(br[-1 + aOffset])
-//    dum1 = (abs(br[1 + aOffset] * rmax * rmax + br[2 + aOffset] * rmax + br[3 + aOffset]) * SSMath.sign(br[-1 + aOffset]))
     ex1 = bi[1 + aOffset] * rmax * rmax
     ex2 = ex1 + bi[2 + aOffset] * rmax
     ex3 = ex2 + bi[3 + aOffset]
     dum2 = abs(ex3) * SSMath.sign(bi[-1 + aOffset])
-//    dum2 = (abs(bi[1 + aOffset] * rmax * rmax + bi[2 + aOffset] * rmax + bi[3 + aOffset]) * SSMath.sign(bi[-1 + aOffset]))
     dum1 = dum1 * SSMath.pow1(10, rr10)
     dum2 = dum2 * SSMath.pow1(10, ri10)
     be = conv12(cn: cdum)
@@ -1723,6 +1708,8 @@ fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comp
     var cex1: Complex<T>
     var cex2: Complex<T>
     var cex3: Complex<T>
+    var ex1: T
+    var ex2: T
     expon = 0
     xl = 0
     xmax = 0
@@ -1743,7 +1730,9 @@ fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comp
             cex3 = b[i - 1] &-- T.one
             expon = expon - factor(cex1).re + factor(cex2).re
         }
-        expon = expon + xl * SSMath.ComplexMath.log(z).re - factor(Complex<T>(xl)).re
+        ex1 = xl * SSMath.ComplexMath.log(z).re
+        ex2 = expon + ex1
+        expon = ex2 - factor(Complex<T>(xl)).re
         xmax = SSMath.log101(SSMath.exp1(T.one)) * expon
         if ((xmax < xterm) && (j > 2)) {
             ans = j
@@ -1874,7 +1863,6 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
     precis = SSMath.pow1(2, precis)
     hlntpi = T.half * SSMath.log1(2 * pi)
     for i in stride(from: 1, through: fd.count, by: 1) {
-        //    for i=1 : 7;
         fn[i] = fn[i - 1] / fd[i - 1]
         twoi = 2 *  Helpers.makeFP(i)
         fn[i - 1] = fn[i - 1] / (twoi * (twoi - T.one))
@@ -1922,7 +1910,10 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             ovlfac = ovlfac * argur;
             argur = argur + T.one
         }
-        clngr = (argur - T.half) * SSMath.log1(argur) - argur + hlntpi
+        ex1 = (argur - T.half)
+        ex2 = ex1 * SSMath.log1(argur)
+        ex3 = ex2 - argur
+        clngr = ex3 + hlntpi
         fac = argur
         obasq = T.one / (argur * argur)
         for i in stride(from: 1, through: fn.count, by: 1) {
@@ -1958,11 +1949,9 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
         ex2 = argui * termi
         ex3 = argur + hlntpi
         clngr = ex1 - ex2 - ex3
-//        clngr = (argur - T.half) * termr - argui * termi - argur + hlntpi
         ex1 = (argur - T.half) * termi
         ex2 = argui * termr
         clngi = ex1 + ex2 - argui
-//        clngi = (argur - T.half) * termi + argui * termr - argui
         fac = SSMath.pow1(argur2 + argui2, -2)
         obasqr = (argur2 - argui2) * fac
         obasqi = -2 * argur * argui * fac

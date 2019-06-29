@@ -220,13 +220,6 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
         super.init()
         createName(name: name)
-//        if let n = name {
-//            self.name = n
-//        }
-//        else {
-//            self.tag = UUID.init().uuidString
-//            self.name = self.tag
-//        }
         self.levelOfMeasurement = lom
         if object is String  {
             self.levelOfMeasurement = .nominal
@@ -259,9 +252,6 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     public class func examine(fromFile path: String, separator: String, elementsEnclosedBy: String? = nil, stringEncoding: String.Encoding = String.Encoding.utf8, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
-//        #if DEBUG
-//        print(fullFilename)
-//        #endif
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
@@ -631,11 +621,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             for key in temp {
                 if i == 0 {
                     cumRelFrequencies[key] = rFrequency(key)
-//                    cumRelFrequencies[key] = relFrequencies[key]
                 }
                 else {
                     cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + rFrequency(key)
-//                    cumRelFrequencies[key] = cumRelFrequencies[temp[i - 1]]! + relFrequencies[key]!
                 }
                 i = i + 1
             }
@@ -675,12 +663,6 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         else {
             return 0
         }
-//        if contains(element) {
-//            return  Helpers.makeFP(self.elements[element]!) /  Helpers.makeFP(self.sampleSize)
-//        }
-//        else {
-//            return 0
-//        }
     }
     
     /// Returns the absolute frequency of item
@@ -720,9 +702,6 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             tempPos.append(count)
             sequence[element] = tempPos
         }
-//        if self.isNotEmptyAndNumeric {
-//            updateDescriptives(withElement:  Helpers.makeFP(element))
-//        }
         updateCumulativeFrequencies()
     }
     
@@ -753,7 +732,6 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                 append(item)
             }
         }
-        //        updateCumulativeFrequencies()
     }
     
     /// Appends the characters of the given string. Only characters contained in the character set are appended.

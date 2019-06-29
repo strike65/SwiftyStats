@@ -112,7 +112,6 @@ extension SSProbDist {
             ex3 = ex2 - s9 + s10
             let ss1: FPT = ex3
             result.skewness = (FPT.sqrt2 * ss1) / (5 * SSMath.pow1(s11,  Helpers.makeFP(1.5)))
-            //        result.var skewness:FPT = (SQRTTWO * ( 2.0 * a3 - 3.0 * a2 * b - 3.0 * a * b2 + 2.0 * b3 - 3.0 * a3 * c + 12.0 * a * b * c - 3.0 * b2 * c - 3.0 * a * c2 - 3.0 * b * c2 + 2.0 * c3)) / (5.0 * pow(a2 - a * b + b2 - a * c - b * c + c2, 1.5))
             return result
         }
         
@@ -156,18 +155,29 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
+            var s1: FPT
+            var s2: FPT
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
             if ((x < a) || (x > b)) {
                 return 0
             }
             else if ((x == a) || ((x > a) && (x <= c))) {
-                let s1 = (2 * ( x - a))
-                let s2 = (a - b - c)
-                return s1 / (a * s2 + b * c)
+                s1 = (2 * ( x - a))
+                s2 = (a - b - c)
+                ex1 = a * s2
+                ex2 = b * c
+                ex3 = ex1 + ex2
+                return s1 / ex3
             }
             else {
-                let s1 = (2 * (b - x))
-                let s2 = (-a + b - c)
-                return s1 / (b * s2 + a * c)
+                s1 = (2 * (b - x))
+                s2 = (-a + b - c)
+                ex1 = b * s2
+                ex2 = a * c
+                ex3 = ex1 + ex2
+                return s1 / ex3
             }
         }
         
@@ -228,7 +238,6 @@ extension SSProbDist {
                 ex3 = ex1 * ex2
                 ex4 = x - a
                 return SSMath.pow1(ex4,2) / ex3
-                //        return SSMath.pow1(x - a, 2) / ((b - a) * (c - a))
             }
             else {
                 ex1 = b - x
@@ -237,7 +246,6 @@ extension SSProbDist {
                 ex4 = ex2 * ex3
                 ex5 = SSMath.pow1(ex1, 2) / ex4
                 return FPT.one - ex5
-                //        return 1 - SSMath.pow1(b - x, 2) / ((b - a) * (b - c))
             }
         }
         

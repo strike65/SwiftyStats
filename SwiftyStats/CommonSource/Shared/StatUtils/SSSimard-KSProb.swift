@@ -121,9 +121,6 @@ extension Helpers {
         return Pelz(n, x)
     }
 }
-//#define num_Pi     3.14159265358979323846 /* PI */
-//#define num_Ln2    0.69314718055994530941 /* log(2) */
-
 /* For x close to 0 or 1, we use the exact formulae of Ruben-Gambino in all
  cases. For n <= NEXACT, we use exact algorithms: the Durbin matrix and
  the Pomeranz algorithms. For n > NEXACT, we use asymptotic methods
@@ -134,70 +131,8 @@ extension Helpers {
  for x close to 0, but at the price of a slower speed. */
 fileprivate let NEXACT: Int = 500
 fileprivate let NKOLMO: Int = 100000
-//fileprivate let num_Ln2 = 0.69314718055994530941
 
 /* The Durbin matrix algorithm for the Kolmogorov-Smirnov distribution */
-//static double DurbinMatrix (int n, double d);
-
-
-/*========================================================================*/
-//#if 0
-//    
-//    /* For ANSI C89 only, not for ISO C99 */
-//    #define MAXI 50
-//    #define EPSILON 1.0e-15
-//    
-//    double log1p (double x)
-//{
-//    /* returns a value equivalent to log(1 + x) accurate also for small x. */
-//    if (fabs (x) > 0.1) {
-//        return log (1.0 + x);
-//    } else {
-//        double term = x;
-//        double sum = x;
-//        int s = 2;
-//        while ((fabs (term) > EPSILON * fabs (sum)) && (s < MAXI)) {
-//            term *= -x;
-//            sum += term / s;
-//            s++;
-//        }
-//        return sum;
-//    }
-//}
-//    
-//    #undef MAXI
-//    #undef EPSILON
-//    
-//#endif
-//
-/*========================================================================*/
-/*
-fileprivate let MFACT = 120
-/* The natural logarithm of factorial n! for  0 <= n <= MFACT */
-fileprivate let LnFactorial: Array<Double> = [
-0,0,0.693147180559945309417,1.79175946922805500081,3.17805383034794561965,4.78749174278204599425,6.57925121201010099506,8.52516136106541430017,10.6046029027452502284,12.8018274800814696112,15.1044125730755152952,17.5023078458738858393,19.9872144956618861495,22.5521638531234228856,25.1912211827386815001,27.8992713838408915661,30.6718601060806728038,33.5050734501368888840,36.3954452080330535762,39.3398841871994940362,42.3356164607534850297,45.3801388984769080262,48.4711813518352238796,51.6066755677643735704,54.7847293981123191901,58.0036052229805199393,61.2617017610020019848,64.5575386270063310590,67.8897431371815349829,71.2570389671680090101,74.6582363488301643855,78.0922235533153106314,81.5579594561150371785,85.0544670175815174140,88.5808275421976788036,92.1361756036870924833,95.7196945421432024850,99.3306124547874269293,102.968198614513812699,106.631760260643459126,110.320639714757395429,114.034211781461703233,117.771881399745071539,121.533081515438633962,125.317271149356895125,129.123933639127214883,132.952575035616309883,136.802722637326368470,140.673923648234259399,144.565743946344886009,148.477766951773032068,152.409592584497357839,156.360836303078785194,160.331128216630907028,164.320112263195181412,168.327445448427652330,172.352797139162801564,176.395848406997351715,180.456291417543771052,184.533828861449490502,188.628173423671591187,192.739047287844902436,196.866181672889993991,201.009316399281526679,205.168199482641198536,209.342586752536835646,213.532241494563261191,217.736934113954227251,221.956441819130333950,226.190548323727593332,230.439043565776952321,234.701723442818267743,238.978389561834323054,243.268849002982714183,247.572914096186883937,251.890402209723194377,256.221135550009525456,260.564940971863209305,264.921649798552801042,269.291097651019822536,273.673124285693704149,278.067573440366142914,282.474292687630396027,286.893133295426993951,291.323950094270307566,295.766601350760624021,300.220948647014131754,304.686856765668715473,309.164193580146921945,313.652829949879061783,318.152639620209326850,322.663499126726176891,327.185287703775217201,331.717887196928473138,336.261181979198477034,340.815058870799017869,345.379407062266854107,349.954118040770236930,354.539085519440808849,359.134205369575398776,363.739375555563490144,368.354496072404749595,372.979468885689020676,377.614197873918656447,382.258588773060029111,386.912549123217552482,391.575988217329619626,396.248817051791525799,400.930948278915745492,405.622296161144889192,410.322776526937305421,415.032306728249639556,419.750805599544734099,424.478193418257074668,429.214391866651570128,433.959323995014820194,438.712914186121184840,443.475088120918940959,448.245772745384605719,453.024896238496135104,457.812387981278181098]
-
-/*------------------------------------------------------------------------*/
-
-/// Returns the logarithm of n!
-fileprivate func getSSMath.logFactorial(_ n: Int) -> Double {
-    /* Returns the natural logarithm of factorial n! */
-    if (n <= MFACT) {
-        return LnFactorial[n]
-        
-    } else {
-        let x = Double(n + 1)
-        let y = 1.0 / (x * x)
-        var z = ((-(5.95238095238E-4 * y) + 7.936500793651E-4) * y - 2.7777777777778E-3) * y + 8.3333333333333E-2
-        z = ((x - 0.5) * log(x) - x) + 9.1893853320467E-1 + z / x
-        return z
-    }
-}
-*/
-/*------------------------------------------------------------------------*/
-
-
-
 
 fileprivate func rapfac<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
     /* Computes n! / n^n */
@@ -208,23 +143,13 @@ fileprivate func rapfac<FPT: SSFloatingPoint & Codable>(_ n: Int) -> FPT {
     return res
 }
 
-
-/*========================================================================*/
-
-
-// static double **CreateMatrixD (int N, int M)
-
 fileprivate func createMatrixD<FPT: SSFloatingPoint & Codable>(_ N: Int, _ M: Int) -> Array<Array<FPT>> {
     return Array<Array<FPT>>.init(repeating: Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: M), count: N)
 }
 
-
 fileprivate func DeleteMatrixD<FPT: SSFloatingPoint & Codable>(_ T: inout Array<Array<FPT>>) {
     T.removeAll()
 }
-
-
-/*========================================================================*/
 
 fileprivate func KSPlusbarAsymp<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* Compute the probability of the KS+ distribution using an asymptotic
@@ -243,9 +168,6 @@ fileprivate func KSPlusbarAsymp<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
     }
     return v
 }
-
-
-/*-------------------------------------------------------------------------*/
 
 fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* Compute the probability of the KS+ distribution in the upper tail using
@@ -292,14 +214,12 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
         ex2 =  Helpers.makeFP(j - 1) * SSMath.log1(q)
         ex3 = LogCom + ex2
         term = ex3 + ex1
-//        term = LogCom +  Helpers.makeFP(j - 1) * SSMath.log1(q) +  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
         t = SSMath.exp1(term)
         Sum = Sum + t
         ex1 = Helpers.makeFP(j + 1)
         ex2 = Helpers.makeFP(n - j)
         ex3 = ex2 / ex1
         LogCom += SSMath.log1(ex3)
-//        LogCom += LogCom + SSMath.log1( Helpers.makeFP(n - j) /  Helpers.makeFP(j + 1))
         if t <= Sum * EPSILON {
             break
         }
@@ -315,7 +235,6 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
         ex2 =  Helpers.makeFP(j - 1) * SSMath.log1(q)
         ex3 = LogCom + ex2
         term = ex3 + ex1
-//        term = LogCom +  Helpers.makeFP(j - 1) * SSMath.log1(q) +  Helpers.makeFP(n - j) * SSMath.log1p1(-q)
         t = SSMath.exp1(term)
         Sum += t
         LogCom += SSMath.log1( Helpers.makeFP(j) /  Helpers.makeFP(n - j + 1))
@@ -332,8 +251,6 @@ fileprivate func KSPlusbarUpper<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: F
 }
 
 
-/*========================================================================*/
-
 fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* Approximating the Lower Tail-Areas of the Kolmogorov-Smirnov One-Sample
      Statistic,
@@ -344,8 +261,8 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     
     let JMAX: Int = 20
     let EPS: FPT =  Helpers.makeFP(1.0e-10)
-    let C: FPT = FPT.sqrt2pi   /* 2.506628274631001        sqrt(2*Pi) */
-    let C2: FPT = FPT.sqrtpihalf              /* 1.2533141373155001      sqrt(Pi/2) */
+    let C: FPT = FPT.sqrt2pi
+    let C2: FPT = FPT.sqrtpihalf
     let PI2: FPT =  FPT.pisquared
     let PI4: FPT = PI2 * PI2
     let RACN: FPT = sqrt( Helpers.makeFP(n))
@@ -408,7 +325,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         let ex7: FPT = ex1 + ex6 * ex5
         let ex8: FPT = PI4 * ex3 * ex4
         term = ex7 + ex8
-//        term = ex1 + PI2 * ex2 * ti * ti + PI4 * ex3 * ex4
         term *= SSMath.exp1(-ti * ti * w)
         tom += term
         j = j + 1
@@ -418,8 +334,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     ex3 =  Helpers.makeFP(n) * ex2
     ex4 = C2 / ex3
     sum = sum + (tom * ex4)
-//    sum += tom * C2 / ( Helpers.makeFP(n) * 36 * z * z6)
-    
     term = 1
     tom = 0
     j = 1
@@ -429,7 +343,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex2 = -ex1 * w
         ex4 = PI2 * ex1
         term = ex4 * SSMath.exp1(ex2)
-//        term = PI2 * ti * ti * SSMath.exp1(-ti * ti * w)
         tom += term
         j = j + 1
     }
@@ -438,8 +351,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     ex3 =  Helpers.makeFP(n) * ex2
     ex4 = C2 / ex3
     sum = sum - (tom * ex4)
-//    sum -= tom * C2 / ( Helpers.makeFP(n) * 18 * z * z2)
-    
     term = 1
     tom = 0
     j = 0
@@ -455,7 +366,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex7 = ex6 * ti
         ex8 = ex7 * ti
         ex9 = ex8 + (ex4 * ex5)
-//        ex6 = PI4 * ex3 * ti * ti + ex4 * ex5
         term = ex1 + PI2 * ex2 * ti + ex9
         term *= SSMath.exp1(-ti * w)
         tom += term
@@ -467,8 +377,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     ex4 = RACN * ex3
     ex5 = C2 / ex4
     sum = sum + (tom * ex5)
-//    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 3240 * z4 * z6)
-    
     term = 1
     tom = 0
     j = 1
@@ -478,7 +386,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
         ex2 = PI4 * ti * ti
         ex3 = -ti * w
         term = (ex1 - ex2) * SSMath.exp1(ex3)
-//        term = (3 * PI2 * ti * z2 - PI4 * ti * ti) * SSMath.exp1(-ti * w)
         tom += term
         j = j + 1
     }
@@ -487,7 +394,6 @@ fileprivate func Pelz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT
     ex3 = C2 / ex2
     ex4 = tom * ex3
     sum = sum + ex4
-//    sum += tom * C2 / (RACN *  Helpers.makeFP(n) * 108 * z6)
     return sum
 }
 
@@ -589,9 +495,6 @@ fileprivate func CalcFloorCeil<FPT: SSFloatingPoint & Codable> (
     }
     A[2 * n + 2] =  Helpers.makeFP(n)
 }
-
-
-/*========================================================================*/
 
 fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     /* The Pomeranz algorithm to compute the KS distribution */
@@ -752,9 +655,6 @@ fileprivate func Pomeranz<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) ->
     return SSMath.exp1(w)
 }
 
-
-/*========================================================================*/
-
 fileprivate func cdfSpecial<FPT: SSFloatingPoint & Codable> (_ n: Int, _ x: FPT) -> FPT {
     /* The KS distribution is known exactly for these cases */
     
@@ -788,11 +688,6 @@ fileprivate func cdfSpecial<FPT: SSFloatingPoint & Codable> (_ n: Int, _ x: FPT)
     return -1
 }
 
-
-/*========================================================================*/
-
-/*=========================================================================*/
-
 fileprivate func fbarSpecial<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT) -> FPT {
     let w =  Helpers.makeFP(n) * x * x
     
@@ -823,10 +718,6 @@ fileprivate func fbarSpecial<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT)
     return -1
 }
 
-
-/*========================================================================*/
-
-
 /*=========================================================================
  
  The following implements the Durbin matrix algorithm and was programmed by
@@ -850,10 +741,6 @@ fileprivate func fbarSpecial<FPT: SSFloatingPoint & Codable>(_ n: Int, _ x: FPT)
  See G. Marsaglia, Wai Wan Tsang and Jingbo Wong,
  J.Stat.Software, 8, 18, pp 1--4, (2003).
  */
-
-//fileprivate let NORM = 1.0e140
-//fileprivate let INORM = 1.0e-140
-//fileprivate let LOGNORM = 140
 
 fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT) -> FPT {
     let NORM: FPT =  Helpers.makeFP(1.0e140)
@@ -899,7 +786,6 @@ fileprivate func DurbinMatrix<FPT: SSFloatingPoint & Codable>(_ n: Int, _ d: FPT
     else {
         H[(m - 1) * m] += 0
     }
-//    H[(m - 1) * m] += (2 * h - 1 > 0 ? SSMath.pow1(2 * h - 1,  Helpers.makeFP(m)) : 0)
     for i in 0...m - 1 {
         for j in 0...m - 1 {
             if (i - j + 1 > 0) {
@@ -942,7 +828,6 @@ fileprivate func mMultiply<FPT: SSFloatingPoint & Codable>(_ A: Array<FPT>, _ B:
 
 
 fileprivate func renormalize<FPT: SSFloatingPoint & Codable>(_ V: inout Array<FPT>, _ m: Int, _ p: UnsafeMutablePointer<Int>) {
-//    int i;
     let INORM: FPT =  Helpers.makeFP(1.0e-140)
     let LOGNORM = 140
     for i in 0...m * m - 1 {
@@ -955,7 +840,6 @@ fileprivate func renormalize<FPT: SSFloatingPoint & Codable>(_ V: inout Array<FP
 fileprivate func mPower<FPT: SSFloatingPoint & Codable>(_ A: Array<FPT>, _ eA: Int, _ V: inout Array<FPT>, _ eV: UnsafeMutablePointer<Int>, _ m: Int, _ n: Int) {
     var B: Array<FPT>
     let NORM: FPT =  Helpers.makeFP(1.0e140)
-//    int eB, i;
     if (n == 1) {
         for i in 0...m * m - 1 {
             V[i] = A[i]

@@ -1467,15 +1467,6 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2, degreesOfFreedom: 22, nonCentralityPara: 10), 1.00316897649437185093e-14, accuracy: 1E-23)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.30289935752455767687e-12, accuracy: 1E-16)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.469124289769452233227, accuracy: 1E-14)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: -10, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 8.14079530286125822663e-17, accuracy: 1E-19)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 0, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.00134989803163009452665, accuracy: 1E-9)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 2.5, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.310124866777693411844, accuracy: 1E-7)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 10, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.999976994489342241050, accuracy: 1E-7)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: -10, df: 22, delta: 10, errtol: Double.ulpOfOne, maxitr: 1000), 4.39172441491830770359e-44, accuracy: 1E-48)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 0, df: 22, delta: 10, errtol: Double.ulpOfOne, maxitr: 1000), 7.61985302416052606597e-24, accuracy: 1E-27)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 2, df: 22, delta: 10, errtol: Double.ulpOfOne, maxitr: 1000), 1.00316897649437185093e-14, accuracy: 1E-23)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 2.5, df: 22, delta: 10, errtol: Double.ulpOfOne, maxitr: 1000), 1.30289935752455767687e-12, accuracy: 1E-16)
-//        XCTAssertEqual(try! cdfNoncentralTBenton(t: 10, df: 22, delta: 10, errtol: Double.ulpOfOne, maxitr: 1000), 0.469124289769452233227, accuracy: 1E-16)
         /*
          R code:
          > qt(p = 0,df = 21,ncp = 3)

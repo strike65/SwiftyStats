@@ -104,7 +104,6 @@ extension SSSpecialFunctions {
             ex3 = b &++ jf &-- 2
             ex4 = ex1 &** ex2
             A1[j - 1] = ex4 &** ex3
-            //        A1[j - 1] = (A1[j - 2] &++ B1[j - 2]) &** (jf &-- 1) &** (b &++ jf &-- 2)
             B1[j - 1] = B1[j - 2] &** (a &++ jf &-- 2) &** z
             C1[j - 1] = C1[j - 2] &** (jf &-- 1) &** (b &++ jf &-- 2)
             if A1[j - 1].isInfinite || B1[j - 1].isInfinite || C1[j - 1].isInfinite {

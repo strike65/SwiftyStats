@@ -62,8 +62,6 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            //    let u = (x  - m) / sd
-            //    return Standard.cdf(u: u
             let n: FPT = FPT.half * SSMath.erfc1((m - x) / (FPT.sqrt2 * sd))
             return n
         }
@@ -116,7 +114,6 @@ extension SSProbDist {
             let e3: FPT = 2 * SSMath.pow1(sd, 2)
             let e4: FPT = SSMath.exp1(e2 / e3)
             let pdf: FPT = e1 * e4
-            //    let pdf: FPT = 1 / (sd * FPT.sqrt2pi) * SSMath.exp1(-1 * SSMath.pow1(x - m, 2) / (2 * sd * sd))
             return pdf
         }
         
@@ -228,7 +225,6 @@ extension SSProbDist {
         /// - Parameter u: Standardized variate (u = (x - mean)/sd)
         public static func cdf<FPT: SSFloatingPoint & Codable>(u: FPT) -> FPT {
             return  Helpers.makeFP(1.0 / 2.0 ) * SSMath.erfc1(-u / FPT.sqrt2)
-            //    return 0.5 * (1.0 + erf(u / SQRTTWO))
         }
         
         
@@ -365,7 +361,6 @@ extension SSProbDist {
                     ex1 = C7 * R + C6
                     ex2 = ex1 * R
                     let _e1: T = ex2 + C5
-                    //                        let _e1: T = ((C7 * R + C6) * R + C5)
                     ex1 = _e1 * R + C4
                     ex2 = ex1 * R
                     let _e2: T = ex2 + C3
@@ -386,7 +381,6 @@ extension SSProbDist {
                     ex3 = _e6 * R
                     ex4 = ex3 + T.one
                     _res = ex2 / ex4
-                    //            _res = (((((((C7 * R + C6) * R + C5) * R + C4) * R + C3) * R + C2) * R + C1) * R + C0) / (((((((D7 * R + D6) * R + D5) * R + D4) * R + D3) * R + D2) * R + D1) * R + ONE)
                 }
                 else
                 {
@@ -414,7 +408,6 @@ extension SSProbDist {
                     ex3 = _e6 * R
                     ex4 = ex3 + T.one
                     _res = ex2 / ex4
-                    //                        _res = (_e3 * R + E0) / (_e6 * R + ONE)
                 }
                 if(Q < ZERO) {
                     _res = -_res

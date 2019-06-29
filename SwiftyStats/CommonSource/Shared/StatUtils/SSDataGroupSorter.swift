@@ -89,7 +89,6 @@ internal class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable
         var i: Int = lo
         var j: Int = hi
         let x:T = ref.o[(lo + hi) / 2]
-        //        var x:T = ref.sortedData[(i + j) / 2]
         var temp: T
         var tg: Int
         while i <= j {

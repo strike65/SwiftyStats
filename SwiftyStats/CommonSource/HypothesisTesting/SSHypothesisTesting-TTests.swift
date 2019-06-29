@@ -436,7 +436,6 @@ extension SSHypothesisTesting {
         var ex3: FPT = s1 + s2
         var ex4: FPT = (ex3 - ex2) / ex1
         let sed: FPT = sqrt(ex4)
-//        let sed: FPT = sqrt((s1 + s2 - 2 * cov) / (df + 1))
         let sdDiff: FPT = sqrt(s1 + s2 - 2 * cov)
         var t: FPT = diffMeans / sed
         if t.isNaN {
@@ -929,7 +928,7 @@ extension SSHypothesisTesting {
                 if j >= i + 1 {
                     temp1 = Double.nan
                     do {
-                        temp1 = try ptukey(q:  Helpers.makeFP(Q[i][j]), nranges: 1, numberOfMeans: Double(data.count), df:  Helpers.makeFP(n_total) - Double(data.count), tail: .upper, returnLogP: false)
+                        temp1 = try Helpers.ptukey(q:  Helpers.makeFP(Q[i][j]), nranges: 1, numberOfMeans: Double(data.count), df:  Helpers.makeFP(n_total) - Double(data.count), tail: .upper, returnLogP: false)
                     }
                     catch {
                         #if os(macOS) || os(iOS)
@@ -951,7 +950,7 @@ extension SSHypothesisTesting {
         var halfWidth: FPT
         var criticalQ: Double = 0
         do {
-            criticalQ = try qtukey(p: 1.0 -  Helpers.makeFP(alpha), nranges: 1, numberOfMeans: Double(data.count), df:  Helpers.makeFP(n_total) - Double(data.count), tail: .lower, log_p: false)
+            criticalQ = try Helpers.qtukey(p: 1.0 -  Helpers.makeFP(alpha), nranges: 1, numberOfMeans: Double(data.count), df:  Helpers.makeFP(n_total) - Double(data.count), tail: .lower, log_p: false)
         }
         catch {
             #if os(macOS) || os(iOS)

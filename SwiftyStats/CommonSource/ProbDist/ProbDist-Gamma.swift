@@ -105,10 +105,8 @@ extension SSProbDist {
                 ex1 = a1 + a2
                 ex2 = ex1 + a3 * SSMath.log1(x)
                 let a4: FPT = ex2 - SSMath.lgamma1(a)
-                //        let a4: FPT = a1 + a2 + a3 * SSMath.log1(x) - SSMath.lgamma1(a)
                 let result = SSMath.exp1(a4)
                 return result
-                //            return exp(-a * log(b) + (-x / b) + (-1.0 + a) * log(x) - lgamma(a))
             }
         }
         

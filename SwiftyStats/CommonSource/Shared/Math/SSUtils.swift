@@ -402,13 +402,6 @@ extension Helpers {
             return  Helpers.makeFP(value)
         })
         return result
-        //    var temp: FPT
-        //    var result: Array<FPT> = Array<FPT>()
-        //    for item in array {
-        //        temp =  Helpers.makeFP(item)
-        //        result.append(temp)
-        //    }
-        //    return result as Array<FPT>
     }
     
     /// Returns a SSExamine object of length (i.e. number of unique elements) one and count "count"
@@ -422,8 +415,6 @@ extension Helpers {
     
     
     enum NumberScanner {
-        // MARK: Scanning Functions
-        
         internal static func scanDouble(string: String?) -> Double? {
             guard string != nil else {
                 return nil
@@ -437,20 +428,6 @@ extension Helpers {
                 return nil
             }
         }
-        
-        //internal static func scanDecimal(string: String?) -> Decimal? {
-        //    guard string != nil else {
-        //        return nil
-        //    }
-        //    var res: Decimal = 0.0
-        //    let s = Scanner.init(string: string!)
-        //    if s.scanDecimal(&res) {
-        //        return res
-        //    }
-        //    else {
-        //        return nil
-        //    }
-        //}
         
         internal static func scanFloat(string: String?) -> Float? {
             guard string != nil else {
@@ -590,6 +567,7 @@ extension Helpers {
         
     }
 }
+
 // MARK: Logging
 
 struct StandardErrorOutputStream: TextOutputStream {

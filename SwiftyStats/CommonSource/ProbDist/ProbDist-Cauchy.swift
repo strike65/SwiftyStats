@@ -67,7 +67,6 @@ extension SSProbDist {
             }
             let p = (x - a) / b
             let result = FPT.pi * b * (1 + (p * p))
-            //    let result = Double.pi * b * (1.0 * pow((x - a) / b, 2.0))
             return 1 / result
         }
         
@@ -95,7 +94,6 @@ extension SSProbDist {
             ex2 = (x - a) / b
             ex3 = FPT.oopi * SSMath.atan1(ex2)
             let result = ex1 + ex3
-            //    let result =  Helpers.makeFP(1.0 / 2.0 ) + 1 / FPT.pi * SSMath.atan1((x - a) / b)
             return result
         }
         
@@ -140,7 +138,6 @@ extension SSProbDist {
             ex2 = ex1 * FPT.pi
             ex3 = b * SSMath.tan1(ex2)
             let result = a + ex3
-            //    let result = a + b * tan1((- Helpers.makeFP(1.0 / 2.0 ) + p) * FPT.pi)
             return result
         }
         

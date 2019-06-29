@@ -425,25 +425,6 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         }
     }
     
-    //    // MARK: NSCoding protocol
-    //    public func encode(with aCoder: NSCoder) {
-    //        aCoder.encode(cols, forKey: "cols")
-    //        aCoder.encode(rows, forKey: "rows")
-    //        aCoder.encode(cNames, forKey: "cNames")
-    //        aCoder.encode(data, forKey: "data")
-    //        aCoder.encode(tags, forKey:"tags")
-    //    }
-    //
-    //
-    //    required public init?(coder aDecoder: NSCoder) {
-    //        rows = aDecoder.decodeInteger(forKey: "rows")
-    //        cols = aDecoder.decodeInteger(forKey: "cols")
-    //        cNames = aDecoder.decodeObject(forKey: "cNames") as! Array<String>
-    //        data = aDecoder.decodeObject(forKey: "data") as! Array<SSExamine<SSElement, Double>>
-    //        tags = aDecoder.decodeObject(forKey: "tags") as! Array<String>
-    //    }
-    
-    // NSCopying / NSMutableCopying
     /// Returns a new instance that’s a copy of the receiver.
     ///
     /// The returned object is implicitly retained by the sender, who is responsible for releasing it. The copy returned is immutable if the consideration “immutable vs. mutable” applies to the receiving object; otherwise the exact nature of the copy is determined by the class.
@@ -750,7 +731,6 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         }
         catch {
             throw error
-            //            return SSDataFrame<SSElement>()
         }
     }
     

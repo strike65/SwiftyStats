@@ -1461,7 +1461,6 @@ extension SSExamine {
                     if let p = r.pValue {
                         let test = p > self.alpha
                         return test
-//                        return r.pValue! >  self.alpha
                     }
                     else {
                         return nil
@@ -1512,7 +1511,6 @@ extension SSExamine {
                     if res.iqr != nil {
                         iqr3h =  Helpers.makeFP(1.5 ) * res.iqr!
                         iqr3t =  Helpers.makeFP(2.0 ) * iqr3h
-                        //                        notchCoeff = 0.5 *  ((1.25 * res.iqr!) / (1.35 * sqrt(N))) * (1.96 / SQRTTWO + 1.96)
                         notchCoeff =  Helpers.makeFP(1.58 ) * res.iqr! / sqrt(N)
                     }
                     else {

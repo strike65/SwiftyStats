@@ -71,7 +71,6 @@ extension SSProbDist {
             var b: FPT = SSMath.tgamma1(FPT.one + FPT.one / shape)
             var c: FPT = SSMath.pow1(b, 2)
             result.variance = SSMath.pow1(scale, 2) * (a - SSMath.pow1(b, 2))
-            //    result.variance = SSMath.pow1(scale, 2) * (SSMath.tgamma1(1 + 2 / shape) - SSMath.pow1(SSMath.tgamma1(1 + 1 / shape), 2))
             a = -3 * SSMath.pow1(SSMath.tgamma1(1 + 1 / shape), 4)
             ex1 = FPT.one + SSMath.reciprocal(shape)
             ex2 = SSMath.tgamma1(ex1)
@@ -140,7 +139,6 @@ extension SSProbDist {
             let ex3: FPT = FPT.minusOne * SSMath.pow1(ex1, c)
             let ex4: FPT = c / b
             let result = ex4 * ex2 * SSMath.exp1(ex3)
-            //    let result = c / b * SSMath.pow1((x - a) / b, c - 1) * SSMath.exp1(-SSMath.pow1((x - a) / b, c))
             return result
         }
         

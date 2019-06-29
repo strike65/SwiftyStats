@@ -593,12 +593,9 @@ extension SSMath {
         } else if (TransF == CblasTrans && TransG == CblasTrans) {
             
             for i in stride(from: 0, to: n1, by: 1) {
-                //        for (i = 0; i < n1; i++) {
                 for j in stride(from: 0, to: n2, by: 1) {
-                    //            for (j = 0; j < n2; j++) {
                     var temp: FPT = 0
                     for k in stride(from: 0, to: K, by: 1) {
-                        //                for (k = 0; k < K; k++) {
                         temp += F[ldf * k + i] * G[ldg * j + k]
                     }
                     C[ldc * i + j] += alpha * temp

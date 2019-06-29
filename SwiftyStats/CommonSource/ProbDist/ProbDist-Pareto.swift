@@ -79,7 +79,6 @@ extension SSProbDist {
                 let b4: FPT = (-4 + b) * (-3 + b)
                 let temp: FPT = (-12 + b2 * b3 ) / (b4 * b)
                 result.kurtosis = temp
-                //            result.kurtosis = (3.0 * (b - 2.0) * (2.0 + b + 3.0 * b * b)) / ((b - 4.0) * (b - 3.0) * b)
             }
             else {
                 result.kurtosis = FPT.nan

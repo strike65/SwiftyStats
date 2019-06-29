@@ -23,8 +23,6 @@ import Foundation
 
 extension SSSpecialFunctions {
     
-//    fileprivate let EPSS = "1.0e-15"
-    
     // MARK: Marcum Functions
     
     /// Computes the Marcum-Functions P(µ,x,y) and Q(µ,x,y)
@@ -257,7 +255,6 @@ fileprivate func nmax<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> Int {
     ex1 = -mu + y
     ex2 = -mu * SSMath.log1(y)
     c = ex1 + ex2 + lneps
-    //    c = -mu + y - mu * SSMath.log1(y) + lneps
     ex1 = mu * mu + 4 * x * y
     ex2 = -mu + sqrt(ex1)
     n = 10 + 2 * ex2
@@ -269,7 +266,6 @@ fileprivate func nmax<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T) -> Int {
         ex22 = mu + n
         ex3 = SSMath.log1(ex21) + SSMath.log1(ex22)
         n = -ex1 / ex3
-        //        let n: T = -(SSMath.log1(mu + n) * mu - 2 * n + c) / (SSMath.log1(n / (x * y)) + SSMath.log1(mu + n))
     }
     if (n < 0) {
         n = T.zero
@@ -290,9 +286,7 @@ fileprivate func factor<T: SSFloatingPoint>(_ x: T, _ n: Int) -> T {
 }
 
 fileprivate func pol<T: SSFloatingPoint>(_ fjkm: Array<T>, _ d: Int, _ v: T) -> T {
-    //IMPLICIT NONE
     var s: T
-    //    double fjkm[32];
     var m: Int
     m = d
     s = fjkm[d]
@@ -3121,25 +3115,13 @@ fileprivate func fjkproc16_007<T: SSFloatingPoint>(fjk: inout Array<Array<T>>, u
     j = 0; k = 6; d = j + 2 * k; fjk[j][k] = un[d] * pol(fjkm,d,v);
 }
 
-//fileprivate func fjkproc16_008<T: SSFloatingPoint>(fjk: inout Array<Array<T>>, un: Array<T>, v: T) {
-//    var d, j, k: Int
-//    var fjkm:Array<T> = Array<T>.init(repeating: 0, count: 33)
-//}
-//
-//fileprivate func fjkproc16_009<T: SSFloatingPoint>(fjk: inout Array<Array<T>>, un: Array<T>, v: T) {
-//    var d, j, k: Int
-//    var fjkm:Array<T> = Array<T>.init(repeating: 0, count: 33)
-//}
 fileprivate func fjkproc16<T: SSFloatingPoint>(_ u: T,_ fjk: inout Array<Array<T>>) {
-    //    var fjkm:Array<T> = Array<T>.init(repeating: 0, count: 33)
     var un:Array<T> = Array<T>.init(repeating: 0, count: 65)
     var v: T
-    //    var j,k,d: Int
     v = u * u
     un[1] = u
     un[2] = v
     for n in stride(from: 2, through: 64, by: 1) {
-        //    for(n=2; n <= 64; n++) {
         un[n] = u * un[n-1]
     }
     fjk[0][0] = 1
@@ -3204,7 +3186,6 @@ fileprivate func ps<T: SSFloatingPoint>(_ mu: T,_ mulnmu: T,_ lnx: T,_ y: T,_ ln
         ex1 = n - lneps
         ex2 = SSMath.log1(n) - lnx
         f = ex1 / ex2
-        //        f = (n - lneps) / (SSMath.log1(n) - lnx)
     } else if  ((a==0) && (b==1)) {
         ex1 =  Helpers.makeFP(2) * n - lneps + mulnmu
         ex2 = ex1 - mu * SSMath.log1(mu + n)
@@ -3229,8 +3210,6 @@ fileprivate func ps<T: SSFloatingPoint>(_ mu: T,_ mulnmu: T,_ lnx: T,_ y: T,_ ln
         ex6 = SSMath.log1(n) - lnx
         ex7 = ex6 - lny + SSMath.log1(mu + n)
         f = ex5 / ex7
-        //        let f1: T = (2 * n - lneps - y + mu * lny - mu * SSMath.log1(mu + n) + mu) / (SSMath.log1(n) - lnx - lny + SSMath.log1(mu + n))
-        
     }
     return f
 }
@@ -3277,7 +3256,6 @@ fileprivate func ignega<T: SSFloatingPoint>(_ n: Int,_ x: T, _ eps: T) -> T {
     //! Computes the Incomplete Gama(1/2-n,x), x >= 0,
     //! n=0,1,2, ...
     //!------------------------------------------------
-    //    double eps, ignega;
     var a, delta, g, p, q, r, s, t, tau, ro: T
     var k: Int
     var ex1: T
@@ -3291,7 +3269,6 @@ fileprivate func ignega<T: SSFloatingPoint>(_ n: Int,_ x: T, _ eps: T) -> T {
         ex2 = x + T.one - a
         ex3 = ex1 * ex2
         q = ex3
-        //        let q1: T = (x - 1 - a) * (x + 1 - a)
         r = 4 * (x + 1 - a)
         s = 1 - a
         ro = 0
@@ -3327,7 +3304,10 @@ fileprivate func ignega<T: SSFloatingPoint>(_ n: Int,_ x: T, _ eps: T) -> T {
             //        for (k=1;k<=n;k++) {
             g = g / (T.half -  Helpers.makeFP(k))
         }
-        g = SSMath.exp1(x) * (g - SSMath.exp1(a * SSMath.log1(x)) * s)
+        ex1 = a * SSMath.log1(x)
+        ex2 = SSMath.exp1(ex1) * s
+        ex3 = g - ex2
+        g = SSMath.exp1(x) * ex3
     }
     return g
 }
@@ -3349,7 +3329,6 @@ fileprivate func startkbes<T: SSFloatingPoint>(_ x: T, _ eps: T) -> Int {
         ex1 = r * (q + 1 / q)
         ex2 = 2 / (1 + ex1)
         y = r * (1 + ex2)
-        //        y = r * (1 + 2 / (1 + r * (q + 1 / q)))
     } else {
         r = 2 * x / p
         r2 = r * r
@@ -3410,7 +3389,6 @@ fileprivate func startijbes<T: SSFloatingPoint>(_ x: T,_ n: Int, _ t: Int,_ eps:
 
 
 fileprivate func alfinv<T: SSFloatingPoint>(_ t: Int, _ r: T, _ p: inout T, _ q: inout T) -> T {
-    //    var r, p, q,
     var a, b, a2, lna: T
     var ex1, ex2, ex3: T
     //    int t;
@@ -3462,12 +3440,10 @@ fileprivate func falfa<T: SSFloatingPoint>(_ al: T,_ r: T,_ t: Int, _ df: inout 
         ex1 = r / ch
         ex2 = al * sh / ch
         res = ex2 - T.one - ex1
-        //        res = al * sh / ch - 1 - r / ch
         ex1 = al + r * sh
         ex2 = ex1 / ch
         ex3 = sh + ex2
         df = ex3 / ch
-        //        df = (sh + (al + r * sh) / ch) / ch
     } else {
         res = al - (sh + r) / ch
         df = sh * (r + sh) / (ch * ch)
@@ -3666,7 +3642,6 @@ fileprivate func zetaxy<T: SSFloatingPoint>(_ x: inout T,_ y: inout T) -> T {
         ex3 = ex1 + ex2
         ex4 = ex3 + 7
         ck[2] =  Helpers.makeFP(1.0/36.0) * ex4
-        //        ck[2]=(1.0/36.0)*(72*x2+42*x+7);
         ex1 = 2700 * x3
         ex2 = ex1 + 2142 * x2
         ex3 = ex2 + 657 * x + 73
@@ -3760,7 +3735,6 @@ fileprivate func zetaxy<T: SSFloatingPoint>(_ x: inout T,_ y: inout T) -> T {
             res = -res
         }
     }
-    //    res = res;
     return res
 }
 
@@ -3820,30 +3794,6 @@ fileprivate func oddchepolsum<T: SSFloatingPoint>(_ n: Int, _ x: T, _ ak: Array<
 
 fileprivate func logoneplusx<T: SSFloatingPoint>(_ t: T) -> T {
     return SSMath.log1p1(t)
-    //    var ck: Array<T> = Array<T>.init(repeating: 0, count: 100)
-    //    var c, p, p2, pj, x, y: T
-    //    var j: Int
-    //    if (( Helpers.makeFP(-0.2928) < t) && (t <  Helpers.makeFP(0.4142))) {
-    //        p =  Helpers.makeFP(1.18920711500272106671749997056047591529)
-    //        p = (p - 1) / (p + 1)
-    //        pj=p
-    //        ck[0] = pj
-    //        p2 = p * p
-    //        j = 1
-    //        c = 1
-    //        while (abs(c) > T.ulpOfOne) {
-    //            pj = pj * p2
-    //            c = pj / (2 *  Helpers.makeFP(j) + 1)
-    //            ck[j] = c
-    //            j = j + 1
-    //        }
-    //        x = t / (2 + t) * (1 + p2 ) / (2 * p)
-    //        y = 4 * oddchepolsum(j - 1, x, ck)
-    //    }
-    //    else {
-    //        y = SSMath.log1( 1 + t)
-    //    }
-    //    return y
 }
 
 fileprivate func xminsinx<T: SSFloatingPoint>(_ x: T) -> T {
@@ -3861,7 +3811,6 @@ fileprivate func xminsinx<T: SSFloatingPoint>(_ x: T) -> T {
         ex3 = x - SSMath.sin1(x)
         ex4 = ex3 / ex2
         f = 6 * ex4
-//        f = 6 * (x - SSMath.sin1(x)) / (x * x * x)
     }
     else {
         fk[0] =  Helpers.makeFP(1.95088260487819821294e-0)
@@ -3983,8 +3932,6 @@ fileprivate func integrand<T: SSFloatingPoint>(_ theta: T,_ b0: inout T,_ inte: 
         ex3 = rtheta - 2 * costheta
         ex4 = rtheta * ex3 + 1
         p = (ex1 + ex2) / ex4
-        //        p=((dr*sintheta+(costheta-rtheta)*rtheta)/(rtheta*(rtheta-2*costheta)+1))
-        //        p=((ex1 + (ex2) * rtheta)/(rtheta * ex3 + 1))
         ft = p
         f = f * ft
     }
@@ -4014,19 +3961,10 @@ fileprivate func qser<T: SSFloatingPoint>(_ mu: T,_ x: T,_ y: T,_ p: inout T,_ q
     var conv: Bool = false
     let dwarf: T = T.ulpOfOne * 10
     let epss: T =  Helpers.makeFP(1e-15)
-    //    var incgamRes: (p: T, q: T, ierr: Int) = SSSpecialFunctions.GammaHelper.incgam(a: mu, x: y)
-    //    p = incgamRes.p
-    //    q = incgamRes.q
-    //    ierr = incgamRes.ierr
     p = SSSpecialFunctions.gammaNormalizedP(x: y, a: mu, converged: &conv)
     if !conv {
         ierr = 1
     }
-    //    q = gammaNormalizedQ(x: y, a: mu, converged: &conv)
-    //    if !conv {
-    //        ierr = 1
-    //    }
-    //    CALL SSSpecialFunctions.GammaHelper.incgam(mu,y,p,q,ierr)
     q0 = q
     ex1 = mu * SSMath.log1(y)
     ex2 = ex1 - y
@@ -4047,7 +3985,6 @@ fileprivate func qser<T: SSFloatingPoint>(_ mu: T,_ x: T,_ y: T,_ p: inout T,_ q
             ex3 = ex1 * ex2
             ex4 = h0 / ex3
             h0 = xy * ex4
-            //            let h01: T = xy * h0 / ( Helpers.makeFP(n + 1) * (mu +  Helpers.makeFP(n + 1)))
             q = q + q0
             n = n + 1
         }
@@ -4063,18 +4000,10 @@ fileprivate func qser<T: SSFloatingPoint>(_ mu: T,_ x: T,_ y: T,_ p: inout T,_ q
         m = 0
         while ((k < 10000) && (m == 0)) {
             a = mu + k
-            //            incgamRes = SSSpecialFunctions.GammaHelper.incgam(a: mu, x: y)
-            //            q1 = incgamRes.q
-            //            ierr = incgamRes.ierr
             q1 = SSSpecialFunctions.gammaNormalizedQ(x: x1, a: a, converged: &conv)
             if !conv {
                 ierr = 1
             }
-            //            p1 = gammaNormalizedP(x: x1, a: a, converged: &conv)
-            //            if !conv {
-            //                ierr = 1
-            //            }
-            //            CALL  SSSpecialFunctions.GammaHelper.incgam(a,x1,p1,q1,ierr)
             t = SSSpecialFunctions.GammaHelper.dompart(k,x,false) * q1
             S = S + t
             k = k + 1
@@ -4097,22 +4026,18 @@ fileprivate func qser<T: SSFloatingPoint>(_ mu: T,_ x: T,_ y: T,_ p: inout T,_ q
             ierro = 1
         }
     }
-    //    return (p: p, q: q)
 }
 
 fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T, _ q: inout T, _ ierr: inout Int) {
     //    !----------------------------------------------
     //    ! Computes backward the series expansion for P
-    //        ! For computing the incomplete gamma functions we
-    //        ! use the routine incgam included in the module
-    //        ! IncgamFI. Reference: A. Gil, J. Segura and
-    //        ! NM Temme, Efficient and accurate algorithms for
-    //            ! the computation and inversion of the incomplete
-    //            ! gamma function ratios. SIAM J Sci Comput.
-    //            !----------------------------------------------
-    //            USE Someconstants
-    //            USE IncgamFI
-    //            IMPLICIT NONE
+    //    ! For computing the incomplete gamma functions we
+    //    ! use the routine incgam included in the module
+    //    ! IncgamFI. Reference: A. Gil, J. Segura and
+    //    ! NM Temme, Efficient and accurate algorithms for
+    //    ! the computation and inversion of the incomplete
+    //    ! gamma function ratios. SIAM J Sci Comput.
+    //    !----------------------------------------------
     var lh0, h0, p1, xy, S: T
     let dwarf = T.ulpOfOne * 10
     var a, x1, expo, facto, t: T
@@ -4131,7 +4056,6 @@ fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
     ex3 = ex2 + ( Helpers.makeFP(n) + mu) * SSMath.log1(y)
     ex4 = ex3 - SSSpecialFunctions.GammaHelper.loggam(mu +  Helpers.makeFP(n + 1))
     lh0 = ex4 - SSSpecialFunctions.GammaHelper.loggam( Helpers.makeFP(n + 1))
-    //    lh0 = -x - y + n * SSMath.log1(x) + (n + mu) * SSMath.log1(y) - SSSpecialFunctions.GammaHelper.loggam(mu +  Helpers.makeFP(n + 1)) - SSSpecialFunctions.GammaHelper.loggam( Helpers.makeFP(n + 1))
     var incg: (p:T, q: T, ierr: Int)
     if (lh0 < SSMath.log1(dwarf)) {
         x1 = y
@@ -4146,9 +4070,7 @@ fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
             facto = factor(x,k)
             incg = SSSpecialFunctions.GammaHelper.incgam(a: a, x: x1)
             p1 = incg.p
-            //            q1 = incg.q
             ierr = incg.ierr
-            //            SSSpecialFunctions.GammaHelper.incgam(a,x1,&p1,&q1,ierr)
             t = facto * p1
             S = S + t
             k = k - 1
@@ -4156,9 +4078,7 @@ fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
         if (ierr == 0) {
             incg = SSSpecialFunctions.GammaHelper.incgam(a: mu, x: x1)
             p1 = incg.p
-            //            q1 = incg.q
             ierr = incg.ierr
-            //            SSSpecialFunctions.GammaHelper.incgam(mu,x1,&p1,&q1,ierr);
             S = S + p1
             p = S * expo
             q = 1 - p
@@ -4174,7 +4094,6 @@ fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
         p = incg.p
         q = incg.q
         ierr = incg.ierr
-        //        SSSpecialFunctions.GammaHelper.incgam(temp,y,p,q,ierr);
         if (ierr == 0) {
             ex1 =  Helpers.makeFP(n) + T.one
             ex2 = SSSpecialFunctions.GammaHelper.loggam(ex1)
@@ -4182,7 +4101,6 @@ fileprivate func pser<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
             ex4 = -x + ex3 - ex2
             ex5 = SSMath.exp1(ex4)
             p1 = p * ex5
-            //            let p11 = p * SSMath.exp1(-x +  Helpers.makeFP(n) * SSMath.log1(x) - SSSpecialFunctions.GammaHelper.loggam( Helpers.makeFP(n + 1)))
             p = 0
             while (n > 0) {
                 h0 = h0 *  Helpers.makeFP(n) * (mu +  Helpers.makeFP(n)) / xy
@@ -4215,10 +4133,8 @@ fileprivate func prec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y:T , _ p: inout T,
     ex5 = b * b
     ex6 = ex4 + ex5
     ex1 = b * sqrt(ex6)
-    //    let ex11: T = b * sqrt(2 * (x + y) + b * b)
     ex2 = b * b + b * ex1
     nu = y - x + ex2
-    //    nu = y - x + b * b + b * sqrt(2 * (x + y) + b * b)
     n1 = Helpers.integerValue(mu)
     n2 = Helpers.integerValue(nu) + 2
     n3 = n2 - n1
@@ -4232,7 +4148,6 @@ fileprivate func prec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y:T , _ p: inout T,
     MarcumPQtrap(mur,x,y,&p0,&q,&ierr)
     if (ierr == 0) {
         for n in stride(from: 0, through: n3 - 1, by: 1) {
-            //        for (n=0; n <= n3-1; n++) {
             p = ((1 + cmu) * p0 - p1) / cmu
             p1 = p0
             p0 = p
@@ -4240,7 +4155,6 @@ fileprivate func prec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y:T , _ p: inout T,
             ex2 = mur -  Helpers.makeFP(n)
             ex3 = ex2 - T.one + ex1
             cmu = y / ex3
-            //            cmu = y / (mur -  Helpers.makeFP(n) - 1 + x * cmu)
         }
         q = 1 - p
     } else {
@@ -4267,7 +4181,6 @@ fileprivate func qrec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
     ex4 = sqrt(ex3)
     ex5 = b * ( b - ex4)
     nu = y - x + ex5
-    //    nu = y - x + b * ( b - sqrt(2 * (x + y) + b * b))
     if (nu < 5) {
         if (x < 200) {
             qser(mu, x, y, &p, &q, &ierr)
@@ -4282,7 +4195,6 @@ fileprivate func qrec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
         xi = 2 * sqrt(x * y)
         cmu[0] = sqrt(y / x) * fc(mu,xi)
         for n in stride(from: 1, through: n3, by: 1) {
-            //        for(n=1; n<=n3;n++) {
             ex1 = mu - Helpers.makeFP(n)
             ex2 = ex1 + x * cmu[n-1]
             cmu[n] = y / ex2
@@ -4294,7 +4206,6 @@ fileprivate func qrec<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout T,
         MarcumPQtrap(mur,x,y,&p,&q1,&ierr)
         if (ierr == 0) {
             for n in stride(from: 1, through: n3, by: 1) {
-                //            for (n=1; n<=n3;n++) {
                 c = cmu[n3 + 1 - n]
                 q = (1 + c) * q1 - c * q0
                 q0 = q1
@@ -4338,7 +4249,6 @@ fileprivate func pqasyxy<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout
     ex3 = x + y
     ex4 = ex3 + xi
     sigmaxi = ex2 / ex4
-    //    let sigmaxi1: T = ((y - x) * (y - x)) / (x + y + xi)
     mulrho = mu * SSMath.log1(rho)
     if ((mulrho < SSMath.log1(dwarf)) || (mulrho > SSMath.log1(T.greatestFiniteMagnitude / 1000))) {
         if (s == 1) {
@@ -4370,12 +4280,10 @@ fileprivate func pqasyxy<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout
             ex2 =  Helpers.makeFP(8.0) *  Helpers.makeFP(n) * xi
             ex3 = an / ex2
             an = ex1 * ex3
-            //            an1 = (mu2 - tnm1 * tnm1) * an1 / (8 *  Helpers.makeFP(n) * xi)
             ex1 = rhom -  Helpers.makeFP(n) * rhop
             ex2 = nu +  Helpers.makeFP(2 * n)
             ex3 = rho * ex2
             bn[n] = an * ex1 / (ex3)
-            //            bn[n] = an * (rhom -  Helpers.makeFP(n) * rhop) / (rho * (nu +  Helpers.makeFP(2 * n)))
         }
         n0 = n
         nrec = Helpers.integerValue(sigmaxi) + 1
@@ -4385,20 +4293,19 @@ fileprivate func pqasyxy<T: SSFloatingPoint>(_ mu: T, _ x: T, _ y: T, _ p: inout
         let eps: T = epss()
         phin[nrec] = SSMath.exp1(( Helpers.makeFP(nrec) - T.half) * SSMath.log1(sigmaxi)) * ignega(nrec,sigmaxi,eps)
         for n in stride(from: nrec + 1, through: n0, by: 1) {
-            //        for (n=nrec+1; n<=n0; n++) {
             ex1 = -sigmaxi * phin[n-1]
             ex2 = ex1 + T.one
             ex3 =  Helpers.makeFP(n) - T.half
             phin[n] = ex2 / ex3
-            //            let check:T = (-sigmaxi * phin[n-1] + 1 ) / ( Helpers.makeFP(n) - T.half)
         }
         for n in stride(from: nrec - 1, through: 1, by: -1) {
-            //        for (n=nrec-1; n>=1;n--) {
-            phin[n] = (1 - ( Helpers.makeFP(n) + T.half) * phin[n + 1]) / sigmaxi
+            ex1 = Helpers.makeFP(n) + T.half
+            ex2 = ex1 * phin[n + 1]
+            ex3 = T.one - ex2
+            phin[n] = ex3 / sigmaxi
         }
         pq = psi0
         for n in stride(from: 1, through: n0, by: 1) {
-            //        for (n=1; n<=n0; n++) {
             c = -c
             psi = c * bn[n] * phin[n];
             pq = pq + psi
@@ -4466,7 +4373,6 @@ fileprivate func pqasymu<T: SSFloatingPoint>(_ mu0: T, _ x0: T, _ y0: T, _ p: in
             ex2 = ex1 * psik[k - 1]
             ex3 = ex2 + r * zetaj
             psik[k + 1] = ex3 / mu
-            //            let check:T = ( Helpers.makeFP(k - 1) * psik[k-1] + r * zetaj) / mu
             bk = 0; b = 1; zetaj = -zeta * zetaj
             for j in stride(from: 0, through: k, by: 1) {
                 //            for (j=0;j<=k;j++) {
@@ -4534,7 +4440,6 @@ fileprivate func MarcumPQtrap<T: SSFloatingPoint>(_ mu: T,_ x: T,_ y: T,_ p: ino
         ex3 = ex1 * ex2
         ex4 = SSMath.exp1(ex3) / T.pi
         pq = pq * ex4
-        //        pq = pq * SSMath.exp1(-mu * T.half * zeta * zeta) / T.pi
         if (zeta < 0) {
             q = pq
             p = 1 - q

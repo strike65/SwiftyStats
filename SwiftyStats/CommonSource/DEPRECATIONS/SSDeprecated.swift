@@ -25,19 +25,13 @@
 import Foundation
 import os.log
 
-/**********************************************************************
- 
- DEPRECATIONS
- 
- ***********************************************************************/
-
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.StudentT.para(_:) instead")
 public func paraStudentTDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSContProbDistParams<FPT> {
     return try SSProbDist.StudentT.para(degreesOfFreedom: df)
 }
 /// :nodoc:
-@available(*, deprecated, message: "Use SSSProbDist.StudentT.pdf(_:_:_:_:) instead")
+@available(*, deprecated, message: "Use SSSProbDist.StudentT.pdf(_:_:_:) instead")
 public func pdfStudentTDist<FPT: SSFloatingPoint & Codable>(t: FPT, degreesOfFreedom df: FPT, rlog: Bool! = false) throws -> FPT {
     return try SSProbDist.StudentT.pdf(t: t, degreesOfFreedom: df, rlog: rlog)
 }

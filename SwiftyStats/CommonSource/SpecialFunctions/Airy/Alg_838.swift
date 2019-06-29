@@ -23,10 +23,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
 
     private var iflag: Int
     private var iregion: Int
-//    private var r_global: T = T.nan
-//    private var x_global: T = T.nan
     private var vars: AiryVariables<T>!
-//    private var xi_global: T
     override init() {
         vars = AiryVariables.init()
         iflag = 0
@@ -42,9 +39,6 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         iflag = 0
         vars.r_global = abs(x)
         vars.x_global = x
-//        if vars.x_global < 0 {
-//            iflag = -1
-//        }
         bi0s = 0
         bi1s = 0
         flows()
@@ -95,15 +89,11 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                 ex2 = Sxi * SSMath.sin1(bi1s)
                 ex3 = ex1 + ex2
                 bi1s = b * ex3
-//                bi0s = a * (-Pxi * SSMath.sin1(bi1s) + Qxi * SSMath.cos1(bi1s))
-//                bi1s = b * ( Rxi * SSMath.cos1(bi1s) + Sxi * SSMath.sin1(bi1s))
             case 3:
                 nn = Helpers.integerValue(ceil( Helpers.makeFP(vars.n_parts) * vars.r_global / vars.r_min))
                 taylorr(nn: nn, x_start: 0, tsm: &tsm)
                 bi0s = tsm[0][0] * bi0zer() + tsm[0][1] * bi1zer()
                 bi1s = tsm[1][0] * bi0zer() + tsm[1][1] * bi1zer()
-    //            bi0s = SSMath.exp1(-vars.xi_global) * bi0s
-    //            bi1s = SSMath.exp1(-vars.xi_global) * bi1s
             default:
                 bi0s = T.zero
                 bi1s = T.zero
@@ -196,8 +186,6 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                 ex2 = Sxi * SSMath.cos1(ai1s)
                 ex3 = ex1 - ex2
                 ai1s = b * ex3
-//                ai0s = a * (Pxi * SSMath.cos1(ai1s) + Qxi * SSMath.sin1(ai1s))
-//                ai1s = b * (Rxi * SSMath.sin1(ai1s) - Sxi * SSMath.cos1(ai1s))
             case 3:
                 ex1 = (T.one - vars.r_global / vars.r_min)
                 ex2 =  Helpers.makeFP(vars.n_parts)
@@ -353,8 +341,6 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
                 ex2 = xm * qterm[j - 2]
                 ex3 = ex2 + qterm[j - 3]
                 qterm[j] = ex3 / ex1
-//                pterm[j] = (xm * pterm[j - 2] + pterm[j - 3]) / (jfl * jfl - jfl)
-//                qterm[j] = (xm * qterm[j - 2] + qterm[j - 3]) / (jfl * jfl - jfl)
             }
             Phi[i - 1][0][0] = pterm[vars.n_taylor]
             Phi[i - 1][1][0] = pterm[vars.n_taylor] *  Helpers.makeFP(vars.n_taylor)

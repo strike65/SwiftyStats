@@ -95,8 +95,6 @@ extension SSProbDist {
                 let ss1 = (s1 * (s2) + df1 * (s3) * (s4))
                 let ss2 = df1 * (s5) * (s6) * (s7)
                 result.kurtosis = 3 + (12 * ss1) / (ss2)
-                //            result.kurtosis = 3.0 + (12 * (pow(df2 - 2,2.0) * (df2 - 4) + df1 * (df1 + df2 - 2.0) * (5.0 * df2 - 22))) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
-                //                                      s1            s2                 s3                   s4                        s5          s6            s7
             }
             else {
                 result.kurtosis = FPT.nan
@@ -352,7 +350,6 @@ extension SSProbDist {
                 ex3 = df2 - 2
                 ex4 = ex3 * df1
                 result.mean = ex2 / ex4
-                //                    result.mean = df2 * (lambda + df1) / ((df2 - 2) * df1)
             }
             else {
                 result.mean = FPT.nan
@@ -383,20 +380,14 @@ extension SSProbDist {
                 ex3 = ex1 + ex2
                 ex4 = ex3 * lambda
                 e5 = e4 * ex4
-                //                    e5 = e4 * (2 * df1 + df2 - 2) * lambda
                 ex1 = df1 + df2 - 2
                 ex2 = 6 * ex1
                 e6 = ex2 * SSMath.pow1(lambda,2)
-                //                    e6 = 6 * (df1 + df2 - 2) * SSMath.pow1(lambda, 2)
                 ex1 = e3 + e5 + e6
                 ex2 = ex1 + 2
                 e7 = ex2 * SSMath.pow1(lambda, 3)
-                //                    e7 = e3 + e5 + e6 + 2 * SSMath.pow1(lambda, 3)
-                
                 let d1 = e1 * e7
-                
                 e1 = df2 - 6
-                
                 e2 = df1 * (df1 + df2 - 2)
                 ex1 = df1 + df2 - 2
                 ex2 = 2 * ex1
@@ -422,9 +413,7 @@ extension SSProbDist {
                 ex3 = ex1 * ex2
                 ex4 = df1 * ex3
                 e5 = e4 + ex4
-                //                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
                 let d1: FPT = e2 * e5
-                
                 e2 = 4 * (-2 + df1 + df2)
                 e3 = 4 * SSMath.pow1(-2 + df2, 2)
                 e4 = e3 + SSMath.pow1(df1, 2) * (10 + df2)
@@ -433,9 +422,7 @@ extension SSProbDist {
                 ex3 = ex1 * ex2
                 ex4 = df1 * ex3
                 e5 = e4 + ex4
-                //                    e5 = e4 + df1 * (-2 + df2) * (10 + df2)
                 let d2: FPT = e1 * e4 * lambda
-                
                 e2 = 2 * (10 + df2)
                 e3 = e2 * (-2 + df1 + df2)
                 ex1 = 3 * df1
@@ -443,9 +430,7 @@ extension SSProbDist {
                 ex3 = ex1 + ex2
                 ex4 = ex3 - 4
                 e4 = e3 * ex4
-                //                    e4 = e3 * (-4 + 3 * df1 + 2 * df2)
                 let d3: FPT = e4 * SSMath.pow1(lambda,2)
-                
                 e2 = 4 * (10 + df2)
                 ex1 = df1 + df2 - 2
                 ex2 = ex1 * SSMath.pow1(lambda, 3)
@@ -456,23 +441,16 @@ extension SSProbDist {
                 ex3 = ex2 + d4
                 ex5 = ex4 + d5
                 let A: FPT = e1 * ex5
-                //                    let A: FPT = e1 * (d1 + d2 + d3 + d4 + d5)
-                
                 let d6: FPT = (-8 + df2) * (-8 + df2)
-                
                 e1 = df1 * (-2 + df1 + df2)
                 ex1 = df1 + df2
                 ex2 = ex1 - 2
                 ex3 = ex2 * lambda
                 ex4 = 2 * ex3
                 e2 = e1 + ex4
-                //                    e2 = e1 + 2 * (-2 + df1 + df2) * lambda
                 e3 = e2 + SSMath.pow1(lambda, 2)
-                
                 let d7: FPT = SSMath.pow1(e3, 2)
-                
                 let B: FPT = d6 * d7
-                
                 result.kurtosis = A / B
             }
             else {
@@ -538,7 +516,6 @@ extension SSProbDist {
             ex3 = ex2 * ex2
             ex4 = ex1 / ex3
             let ans: FPT = ex4 * beta
-            //                let ans: FPT = (df1 / df2) / ((1 + y) * (1 + y)) * beta
             return ans
         }
         

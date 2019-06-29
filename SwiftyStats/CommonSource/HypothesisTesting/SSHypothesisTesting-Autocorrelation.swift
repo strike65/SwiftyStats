@@ -226,7 +226,6 @@ extension SSHypothesisTesting {
                 comp = comp + (SSMath.pow1(acr[l], 2) / ex1)
                 sum = comp + oldsum
                 comp = (oldsum - sum) + comp
-//                sum += sum + (SSMath.pow1(acr[l], 2) / (nn - ll))
                 l += 1
             }
             statBoxLjung.append(f * sum)

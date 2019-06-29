@@ -94,18 +94,11 @@ extension SSProbDist {
             var ex7: FPT
             var ex8: FPT
             var ex9: FPT
-            //    var ex10: FPT
-            //    var ex11: FPT
-            //    var ex12: FPT
-            //    var ex13: FPT
-            //    var ex14: FPT
-            //    let half: FPT = FPT.half
             ex1 = df + FPT.one
             ex2 = ex1 / 2
             ex3 = t * t
             ex4 = FPT.one + ex3 / df
             let expr: FPT = ex2 * SSMath.log1(ex4)
-            //    let expr: FPT = ( ( df + 1 ) / 2 * SSMath.log1( 1 + t * t / df ) )
             ex2 = FPT.half * ex1
             ex3 = SSMath.lgamma1(ex2)
             ex4 = df * FPT.pi
@@ -115,7 +108,6 @@ extension SSProbDist {
             ex8 = ex3 - ex5
             ex9 = ex8 - ex7
             let lpdf:FPT = ex9 - expr
-            //    let lpdf:FPT = SSMath.lgamma1( half * ( df + 1 ) ) - half * SSMath.log1( df * FPT.pi ) - SSMath.lgamma1( half * df )  - expr
             if rlog {
                 return lpdf
             }
@@ -140,18 +132,23 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            let half: FPT = FPT.half
-            
             var correctedDoF: FPT
             var halfDoF: FPT
             var constant: FPT
             var result: FPT
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
             halfDoF = df / 2
             correctedDoF = df / ( df + ( t * t ) )
-            constant = half
+            constant = FPT.half
             let t1: FPT = SSSpecialFunctions.betaNormalized(x: 1, a: halfDoF, b: constant)
             let t2: FPT = SSSpecialFunctions.betaNormalized(x: correctedDoF, a: halfDoF, b: constant)
-            result = half * (1 + (t1 - t2) * SSMath.sign1(t))
+            ex1 = t1 - t2
+            ex2 = ex1 * SSMath.sign1(t)
+            ex3 = FPT.one + ex2
+            result = FPT.half * ex3
+//            result = half * (1 + (t1 - t2) * SSMath.sign1(t))
             return result
         }
         
@@ -191,15 +188,8 @@ extension SSProbDist {
              * coded in Basic by Michaek Zito 2003
              * coded in C# by strike65 2005
              */
-            //    let eps: Double = 1E-15
             let half: FPT = FPT.half
             let eps: FPT = FPT.ulpOfOne
-            //    if fabs( p - 1.0 ) <= 1E-5  {
-            //        return FPT.infinity
-            //    }
-            //    if fabs(p) <= 1E-5 {
-            //        return -FPT.infinity
-            //    }
             if abs( p - 1 ) <= eps  {
                 return FPT.infinity
             }
@@ -225,7 +215,6 @@ extension SSProbDist {
                 _p = p
             }
             minT = 0
-            //        maxT = sqrt(params.variance) * 20
             maxT = 100000
             tVal = (maxT + minT) / 2
             while (maxT - minT > (4 * eps)) {

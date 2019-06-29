@@ -194,7 +194,13 @@ extension SSMath {
         
         /// inverse hyperbolic cosine of z in Complex
         internal static func acosh<T: SSComplexFloatElement>(_ z: Complex<T>) -> Complex<T> {
-            return log(z &++ sqrt(z &++ 1) &** sqrt(z &-- 1))
+            var cex1: Complex<T>
+            var cex2: Complex<T>
+            var cex3: Complex<T>
+            cex1 = sqrt(z &++ 1)
+            cex2 = sqrt(z &-- 1)
+            cex3 = cex1 &** cex2
+            return log(z &++ cex3)
         }
         
         internal static func acosh<T: SSComplexFloatElement>(_ x: T) -> Complex<T> {
@@ -212,7 +218,13 @@ extension SSMath {
         
         /// inverse hyperbolic tangent of z in Complex
         internal static func atanh<T: SSComplexFloatElement>(_ z: Complex<T>) -> Complex<T> {
-            return (log(1 &++ z) &-- log(1 &-- z)) &% 2
+            var cex1: Complex<T>
+            var cex2: Complex<T>
+            var cex3: Complex<T>
+            cex1 = log(1 &++ z)
+            cex2 = log(1 &-- z)
+            cex3 = cex1 &-- cex2
+            return cex3 &% Helpers.makeFP(2)
         }
         
         internal static func atanh<T: SSComplexFloatElement>(_ x: T) -> Complex<T> {

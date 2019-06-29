@@ -83,7 +83,6 @@ extension SSMath {
         
         let c: FPT =  Helpers.makeFP(1.0 / 2.0 ) * (b - a)
         let d: FPT =  Helpers.makeFP(1.0 / 2.0 ) * (a + b)
-        //    targetAbsoluteError *= c
         let targetAbsoluteError = targetError / c
         // Offsets to where each level's integration constants start.
         // The last element is not a beginning but an end.
@@ -371,15 +370,15 @@ fileprivate func weights<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     #endif
     switch FPT.self {
     case is Float.Type:
-        return  Helpers.makeFP(weightsF[i]) // as! FPT
+        return  Helpers.makeFP(weightsF[i])
     case is Double.Type:
-        return  Helpers.makeFP(weightsD[i]) // as! FPT
+        return  Helpers.makeFP(weightsD[i])
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return  Helpers.makeFP(weightsF80[i]) // as! FPT
+        return  Helpers.makeFP(weightsF80[i])
         #endif
     default:
-        return  Helpers.makeFP(weightsD[i]) // as! FPT
+        return  Helpers.makeFP(weightsD[i])
     }
 
 }

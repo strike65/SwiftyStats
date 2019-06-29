@@ -24,32 +24,6 @@
 import Foundation
 
 #if arch(i386) || arch(x86_64)
-//public struct CFloat80: Codable {
-//    private var value: Float80
-//
-//    private enum CodingKeys: String, CodingKey {
-//        case string = "stringValue"
-//    }
-//
-//    public func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        let stringRep: String = "\(self.value)"
-//        try container.encode(stringRep, forKey: .string)
-//    }
-//    
-//    
-//    public init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        let string = try container.decode(String.self, forKey: .string)
-//        if let f = Float80.init(string) {
-//            self.value = f
-//        }
-//        else {
-//            self.value = Float80.nan
-//        }
-//    }
-//    
-//}
 /// Add Codable protocol conformance to Float80
 extension Float80: Codable {
     private enum CodingKeys: String, CodingKey {

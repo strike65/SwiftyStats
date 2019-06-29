@@ -29,9 +29,6 @@ import os.log
 
 extension SSHypothesisTesting {
     
-    /************************************************************************************************/
-    // MARK: Equality of variances
-    
     /// Performs the Bartlett test for two or more samples
     /// - Parameter data: Array containing samples as SSExamine objects
     /// - Parameter alpha: Alpha

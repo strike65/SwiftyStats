@@ -357,7 +357,6 @@ extension SSSpecialFunctions {
                     ex1 = a1 + a2 + a3
                     ex2 = ex1 / xx
                     ex3 = FPT.half + ex2
-//                    alast *= Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx
                     alast = alast * ex3
                     break
                 case 2:
@@ -398,7 +397,6 @@ extension SSSpecialFunctions {
                     ex2 = ex1 / xx
                     ex3 = FPT.half + ex2
                     alast = alast * ex3
-//                    alast *= (  Helpers.makeFP(1.0 / 2.0 ) + ( a1 + a2 + a3 ) / xx )
                     break
                     
                 case 2:
@@ -435,38 +433,6 @@ extension SSSpecialFunctions {
         alast = a0
         sum += alast
         return( sum )
-        //
-        //    /* The following "Converging factors" are supposed to improve accuracy,
-        //     * but do not actually seem to accomplish very much. */
-        //
-        //    n -= 1.0
-        //    x = 1.0/x
-        //
-        //    switch( type )    /* "type" given as subroutine argument */
-        //    {
-        //    case 1:
-        //        alast *= ( 0.5 + (0.125 + 0.25*b - 0.5*a + 0.25*x - 0.25*n)/x )
-        //        break
-        //
-        //    case 2:
-        //        alast *= 2.0/3.0 - b + 2.0*a + x - n
-        //        break
-        //
-        //    default:
-        //        break
-        //    }
-        //
-        //    /* estimate error due to roundoff, cancellation, and nonconvergence */
-        //    err = DBL_EPSILON * (n + maxt)  +  fabs ( a0 )
-        //
-        //
-        //    sum += alast
-        //    return( sum )
-        //
-        //    /* series blew up: */
-        //    err = HUGE
-        //    mtherr( "hyperg", TLOSS )
-        //    return( sum )
     }
     
 }

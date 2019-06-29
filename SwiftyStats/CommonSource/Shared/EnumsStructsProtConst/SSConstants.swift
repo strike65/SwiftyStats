@@ -31,5 +31,5 @@
 internal let SSExamineFileExtension = "SSExamine"
 
 /// The current file version for archiving
-internal let SSStatisticsFileVersionString: String = "1.0.4"
+internal let SSStatisticsFileVersionString: String = "1.1.0"
 

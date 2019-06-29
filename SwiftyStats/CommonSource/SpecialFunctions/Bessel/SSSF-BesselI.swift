@@ -451,12 +451,10 @@ fileprivate func besselBI0<FPT:  SSFloatingPoint & Codable>() -> [FPT] {
     case is Double.Type:
         let result = BI0Double.reversed() as Array<Double>
         return result as! Array<FPT>
-        //        return BI0Double as! Array<FPT>
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
         let result = BI0Float80.reversed() as Array<Float80>
         return result as! Array<FPT>
-        //        return BI0Float80 as! Array<FPT>
         #endif
     default:
         return BI0Double as! Array<FPT>
