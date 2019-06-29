@@ -26,8 +26,8 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Gamma distribution
     public enum Gamma {
-        // MARK: Gamma
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Gamma distribution.
         /// - Parameter a: Shape parameter

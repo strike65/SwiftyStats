@@ -28,7 +28,6 @@ import os.log
 
 
 extension SSHypothesisTesting {
-    // MARK: Autocorrelation
     
     /// Autocorrelation coefficient
     ///

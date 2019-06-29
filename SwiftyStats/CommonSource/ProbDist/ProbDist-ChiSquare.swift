@@ -27,10 +27,8 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Chi square distribution
     public enum ChiSquare {
-        
-        // MARK: Chi Square
-        // MARK: Central
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
         /// - Parameter df: Degrees of freedom
@@ -195,233 +193,233 @@ extension SSProbDist {
             result = chiVal
             return result
         }
-        
-        // MARK: noncentral
-        
-        public enum NonCentral {
-            /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
-            /// - Parameter df: Degrees of freedom
-            /// - Parameter lambda: noncentrality parameter
-            /// - Throws: SSSwiftyStatsError if df <= 0
-            public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
-                var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
-                if df <= 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                result.mean = df
-                result.variance = 2 * df
-                result.skewness = sqrt(8 / df)
-                result.kurtosis = 3 + 12 / df
-                return result
-            }
-            
-            
-            /// Returns the pdf of the Chi^2 distribution.
-            /// - Parameter chi: Chi
-            /// - Parameter df: Degrees of freedom
-            /// - Parameter lambda: Noncentrality
-            /// - Throws: SSSwiftyStatsError if df <= 0
-            public static func pdf<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
-                if df <= 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda < 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("lambda is expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda.isZero {
-                    do {
-                        return try ChiSquare.pdf(chi: chi, degreesOfFreedom: df)
-                    }
-                    catch {
-                        throw error
-                    }
-                }
-                var ex1: FPT
-                var ex2: FPT
-                var ex3: FPT
-                var result: FPT = 0
-                if chi >= 0 {
-                    let bessel: FPT = SSSpecialFunctions.besselI(order: df / 2 - 1, x: sqrt(lambda * chi))
-                    ex1 = chi + lambda
-                    ex2 = ex1 * FPT.half
-                    let a = FPT.half * SSMath.exp1(-ex2)
-                    ex1 = df / 4
-                    ex2 = ex1 - FPT.half
-                    ex3 = chi / lambda
-                    let b = SSMath.pow1(ex3, ex2)
-                    result = a * b * bessel
-                }
-                else {
-                    result = 0
-                }
-                return result
-            }
-            
-            
-            private static func integrandChiSquared<FPT: SSFloatingPoint & Codable>(chi: FPT, df: FPT, lambda: FPT, p1: FPT, p2: FPT) -> FPT {
-                return try! pdf(chi: chi, degreesOfFreedom: df, lambda: lambda)
-            }
-            
-            /// Returns the cdf of the Chi^2 distribution.
-            /// - Parameter chi: Chi
-            /// - Parameter df: Degrees of freedom
-            /// - Parameter lambda: Noncentrality
-            /// - Throws: SSSwiftyStatsError if df <= 0
-            /// - Note: Uses an algorithm proposed by Gil, Segura and Temme to compute the Marcum function (2014)
-            public static func cdf<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
-                if df <= 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda < 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("lambda is expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda.isZero {
-                    do {
-                        return try ChiSquare.cdf(chi: chi, degreesOfFreedom: df)
-                    }
-                    catch {
-                        throw error
-                    }
-                }
-                if chi <= 0 {
-                    return 0
+    }
+}
+extension SSProbDist {
+    /// Non central Chi Square distribution
+    public enum NonCentralChiSquare {
+        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter lambda: noncentrality parameter
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
+            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            if df <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
                 }
                 
-                let marcumRes: (p: FPT, q: FPT, err: Int, underflow: Bool)
-                marcumRes = SSSpecialFunctions.marcum(df / 2, sqrt(lambda), sqrt(chi))
-                if marcumRes.err == 0 {
-                    return marcumRes.p
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            result.mean = df
+            result.variance = 2 * df
+            result.skewness = sqrt(8 / df)
+            result.kurtosis = 3 + 12 / df
+            return result
+        }
+        
+        
+        /// Returns the pdf of the Chi^2 distribution.
+        /// - Parameter chi: Chi
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter lambda: Noncentrality
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        public static func pdf<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
+            if df <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
                 }
-                else {
-                    var evals: Int = 0
-                    var error: FPT = 0
-                    let integral: FPT = SSMath.integrate(integrand: integrandChiSquared, parameters: [df, lambda, 0, 0], leftLimit: 0, rightLimit: chi, maxAbsError:  Helpers.makeFP(1e-15), numberOfEvaluations: &evals, estimatedError: &error)
-                    return integral
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda < 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda.isZero {
+                do {
+                    return try ChiSquare.pdf(chi: chi, degreesOfFreedom: df)
+                }
+                catch {
+                    throw error
                 }
             }
+            var ex1: FPT
+            var ex2: FPT
+            var ex3: FPT
+            var result: FPT = 0
+            if chi >= 0 {
+                let bessel: FPT = SSSpecialFunctions.besselI(order: df / 2 - 1, x: sqrt(lambda * chi))
+                ex1 = chi + lambda
+                ex2 = ex1 * FPT.half
+                let a = FPT.half * SSMath.exp1(-ex2)
+                ex1 = df / 4
+                ex2 = ex1 - FPT.half
+                ex3 = chi / lambda
+                let b = SSMath.pow1(ex3, ex2)
+                result = a * b * bessel
+            }
+            else {
+                result = 0
+            }
+            return result
+        }
+        
+        
+        private static func integrandChiSquared<FPT: SSFloatingPoint & Codable>(chi: FPT, df: FPT, lambda: FPT, p1: FPT, p2: FPT) -> FPT {
+            return try! pdf(chi: chi, degreesOfFreedom: df, lambda: lambda)
+        }
+        
+        /// Returns the cdf of the Chi^2 distribution.
+        /// - Parameter chi: Chi
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter lambda: Noncentrality
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// - Note: Uses an algorithm proposed by Gil, Segura and Temme to compute the Marcum function (2014)
+        public static func cdf<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
+            if df <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda < 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda.isZero {
+                do {
+                    return try ChiSquare.cdf(chi: chi, degreesOfFreedom: df)
+                }
+                catch {
+                    throw error
+                }
+            }
+            if chi <= 0 {
+                return 0
+            }
             
-            
-            
-            
-            /// Returns the p-quantile of the Chi^2 distribution.
-            /// - Parameter p: p
-            /// - Parameter df: Degrees of freedom
-            /// - Parameter lambda: Noncentrality
-            /// - Throws: SSSwiftyStatsError if df <= 0
-            public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
-                if df <= 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if p < 0 || p > 1 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda < 0 {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 10, *) {
-                        os_log("lambda is expected to be > 0", log: log_stat, type: .error)
-                    }
-                    
-                    #endif
-                    
-                    throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
-                }
-                if lambda.isZero {
-                    do {
-                        return try ChiSquare.quantile(p: p, degreesOfFreedom: df)
-                    }
-                    catch {
-                        throw error
-                    }
-                }
-                if p < FPT.leastNonzeroMagnitude {
-                    return 0
-                }
-                if (1 - p) < FPT.leastNonzeroMagnitude {
-                    return FPT.infinity
-                }
-                let eps: FPT =  Helpers.makeFP(1.0E-12)
-                var minChi: FPT = 0
-                var maxChi: FPT = 10000
-                var result: FPT = 0
-                var chiVal: FPT = df / sqrt(p)
-                var test: FPT
-                while (maxChi - minChi) > eps {
-                    do {
-                        test = try cdf(chi: chiVal, degreesOfFreedom: df, lambda: lambda)
-                    }
-                    catch {
-                        throw error
-                    }
-                    if test > p {
-                        maxChi = chiVal
-                    }
-                    else {
-                        minChi = chiVal
-                    }
-                    chiVal = (maxChi + minChi) / 2
-                }
-                result = chiVal
-                return result
+            let marcumRes: (p: FPT, q: FPT, err: Int, underflow: Bool)
+            marcumRes = SSSpecialFunctions.marcum(df / 2, sqrt(lambda), sqrt(chi))
+            if marcumRes.err == 0 {
+                return marcumRes.p
+            }
+            else {
+                var evals: Int = 0
+                var error: FPT = 0
+                let integral: FPT = SSMath.integrate(integrand: integrandChiSquared, parameters: [df, lambda, 0, 0], leftLimit: 0, rightLimit: chi, maxAbsError:  Helpers.makeFP(1e-15), numberOfEvaluations: &evals, estimatedError: &error)
+                return integral
             }
         }
         
+        
+        
+        
+        /// Returns the p-quantile of the Chi^2 distribution.
+        /// - Parameter p: p
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter lambda: Noncentrality
+        /// - Throws: SSSwiftyStatsError if df <= 0
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT, lambda: FPT) throws -> FPT {
+            if df <= 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda < 0 {
+                #if os(macOS) || os(iOS)
+                
+                if #available(macOS 10.12, iOS 10, *) {
+                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                }
+                
+                #endif
+                
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if lambda.isZero {
+                do {
+                    return try ChiSquare.quantile(p: p, degreesOfFreedom: df)
+                }
+                catch {
+                    throw error
+                }
+            }
+            if p < FPT.leastNonzeroMagnitude {
+                return 0
+            }
+            if (1 - p) < FPT.leastNonzeroMagnitude {
+                return FPT.infinity
+            }
+            let eps: FPT =  Helpers.makeFP(1.0E-12)
+            var minChi: FPT = 0
+            var maxChi: FPT = 10000
+            var result: FPT = 0
+            var chiVal: FPT = df / sqrt(p)
+            var test: FPT
+            while (maxChi - minChi) > eps {
+                do {
+                    test = try cdf(chi: chiVal, degreesOfFreedom: df, lambda: lambda)
+                }
+                catch {
+                    throw error
+                }
+                if test > p {
+                    maxChi = chiVal
+                }
+                else {
+                    minChi = chiVal
+                }
+                chiVal = (maxChi + minChi) / 2
+            }
+            result = chiVal
+            return result
+        }
     }
+    
 }
 

@@ -27,9 +27,9 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Triangular distribution
     public enum Triangular {
         
-        // MARK: TRIANGULAR
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
         /// - Parameter a: Lower bound

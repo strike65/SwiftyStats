@@ -27,8 +27,8 @@ import Foundation
 import os.log
 #endif
 extension SSProbDist {
+    /// Cauchy distribution
     public enum Cauchy {
-        // MARK: Cauchy
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
         /// - Parameter a: Location parameter a
         /// - Parameter b: Scale parameter b

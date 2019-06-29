@@ -27,12 +27,8 @@ import os.log
 #endif
 
 
-public enum SSHypothesisTesting {
-    
-    
-    /************************************************************************************************/
-    // MARK: Equality of means
-    
+/// Hypothesis tests.
+extension SSHypothesisTesting {
     
     /// Performs the two sample t test
     /// - Parameter sample1: Data1 as Array<Numeric>

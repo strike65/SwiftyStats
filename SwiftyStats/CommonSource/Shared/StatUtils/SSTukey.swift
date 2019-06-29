@@ -159,7 +159,7 @@ fileprivate func wprob(w: Double, rr: Double, cc: Double) throws -> Double {
     
     /* find (f(w/2) - 1) ^ cc */
     /* (first term in integral of hartley's form). */
-    pr_w = 2.0 * SSProbDist.Gaussian.Standard.cdf(u: qsqz) - 1.0 /* erf(qsqz / M_SQRT2) */
+    pr_w = 2.0 * SSProbDist.StandardNormal.cdf(u: qsqz) - 1.0 /* erf(qsqz / M_SQRT2) */
     
     /* if pr_w ^ cc < 2e-22 then set pr_w = 0 */
     if pr_w >= exp(C2 / cc) {

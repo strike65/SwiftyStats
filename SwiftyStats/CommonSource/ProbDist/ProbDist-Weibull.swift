@@ -26,8 +26,8 @@ import Foundation
 import os.log
 #endif
 extension SSProbDist {
+    /// Weibull distribution
     public enum Weibull {
-        // MARK: Weibull
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Weibull distribution.
         /// - Parameter a: Location parameter

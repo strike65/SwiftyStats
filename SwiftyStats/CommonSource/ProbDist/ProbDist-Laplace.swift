@@ -27,9 +27,9 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Laplace distribution
     public enum Laplace {
         
-        // MARK: Laplace
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Laplace distribution.
         /// - Parameter mean: mean
         /// - Parameter b: Scale parameter b

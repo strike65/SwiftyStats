@@ -28,8 +28,8 @@ import os.log
 
 
 extension SSProbDist {
+    /// Poisson distribution
     public enum Poisson {
-        // MARK: Poisson
         
         /// Returns the cdf of the Binomial Distribution
         /// - Parameter k: number of events

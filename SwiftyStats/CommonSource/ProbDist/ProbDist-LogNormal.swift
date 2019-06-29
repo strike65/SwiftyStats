@@ -28,9 +28,8 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Log normal distribution
     public enum LogNormal {
-        
-        // MARK: Log Normal
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Log Normal distribution.
         /// - Parameter mean: mean
@@ -122,7 +121,7 @@ extension SSProbDist {
             if x <= 0 {
                 return 0
             }
-            let r = SSProbDist.Gaussian.Standard.cdf(u: (SSMath.log1(x) - mean) / sqrt(v))
+            let r = SSProbDist.StandardNormal.cdf(u: (SSMath.log1(x) - mean) / sqrt(v))
             return r
         }
         
@@ -162,7 +161,7 @@ extension SSProbDist {
                 return 0
             }
             do {
-                let u = try SSProbDist.Gaussian.Standard.quantile(p: p)
+                let u = try SSProbDist.StandardNormal.quantile(p: p)
                 return SSMath.exp1( mean + u * sqrt(v))
             }
             catch {

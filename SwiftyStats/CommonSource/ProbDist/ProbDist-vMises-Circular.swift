@@ -26,9 +26,9 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// von Mises (circular) distribution
     public enum VonMises {
-        // MARK: CIRCULAR DISTRIBUTION
-        
+
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the the von Mises distribution.
         /// - Parameter x: x
         /// - Parameter m: mean

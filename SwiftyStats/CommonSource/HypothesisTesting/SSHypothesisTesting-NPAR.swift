@@ -826,7 +826,7 @@ extension SSHypothesisTesting {
 //            denom = sqrt((mn / (S * (S - 1))) * ((SSMath.pow1(S, 3) - S) / 12 - temp1))
             num = abs(U - mn / 2)
             z = num / denom
-            pasymp1 = min(1 - SSProbDist.Gaussian.Standard.cdf(u: z), SSProbDist.Gaussian.Standard.cdf(u: z))
+            pasymp1 = min(1 - SSProbDist.StandardNormal.cdf(u: z), SSProbDist.StandardNormal.cdf(u: z))
             pasymp2 = pasymp1 * 2
             pexact1 = FPT.nan
             pexact2 = FPT.nan
@@ -859,7 +859,7 @@ extension SSHypothesisTesting {
                 pexact1 = FPT.nan
                 pexact2 = FPT.nan
             }
-            pasymp1 = min(1 - SSProbDist.Gaussian.Standard.cdf(u: z), SSProbDist.Gaussian.Standard.cdf(u: z))
+            pasymp1 = min(1 - SSProbDist.StandardNormal.cdf(u: z), SSProbDist.StandardNormal.cdf(u: z))
             pasymp2 = 2 * pasymp1
         }
         let W = sumRanksSet2
@@ -1075,8 +1075,8 @@ extension SSHypothesisTesting {
 //        }
         z = (z0 - correct) / sigma
 //        z = (fabs(max(sumnegranks, sumposranks) - (Double(n) * (Double(n) + 1.0) / 4.0))) / sqrt(Double(n) * (Double(n) + 1.0) * (2.0 * Double(n) + 1.0) / 24.0 - ts)
-        let pp: FPT = SSProbDist.Gaussian.Standard.cdf(u: z)
-        let p: FPT = 1 - SSProbDist.Gaussian.Standard.cdf(u: z)
+        let pp: FPT = SSProbDist.StandardNormal.cdf(u: z)
+        let p: FPT = 1 - SSProbDist.StandardNormal.cdf(u: z)
         let cohenD: FPT = abs(z) / sqrt(2 *  Helpers.makeFP(N))
         var result = SSWilcoxonMatchedPairsTestResult<FPT>()
         result.p2Value = 2 * min(pp, p)
@@ -1225,7 +1225,7 @@ extension SSHypothesisTesting {
         }
         z = temp - FPT.half * nnpnpf - FPT.half
         z = -z / (FPT.half * sqrt(nnpnpf))
-        let pasymp = SSProbDist.Gaussian.Standard.cdf(u: z)
+        let pasymp = SSProbDist.StandardNormal.cdf(u: z)
         var result = SSSignTestRestult<FPT>()
         result.pValueExact = min(pexact1, pexact2)
         result.pValueApprox = pasymp
@@ -1841,7 +1841,7 @@ extension SSHypothesisTesting {
         var sum: FPT = 0
         dtemp = ( Helpers.makeFP(R)) - mean
         z = dtemp / sigma
-        pAsymp = 2 * min(1 - SSProbDist.Gaussian.Standard.cdf(u: z), SSProbDist.Gaussian.Standard.cdf(u: z))
+        pAsymp = 2 * min(1 - SSProbDist.StandardNormal.cdf(u: z), SSProbDist.StandardNormal.cdf(u: z))
         var RR: FPT
         if n1 + n2 <= 30 {
             if !Helpers.isOdd(Double(R)) {

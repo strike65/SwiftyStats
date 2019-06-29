@@ -1410,7 +1410,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
          */
-        para = try! SSProbDist.StudentT.NonCentral.para(degreesOfFreedom: 21, nonCentralityPara: 3)
+        para = try! SSProbDist.NonCentralSudentT.para(degreesOfFreedom: 21, nonCentralityPara: 3)
         XCTAssertEqual(para!.kurtosis, 3.61902917492752013195, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.430814083288819887296, accuracy: 1e-12)
@@ -1425,14 +1425,14 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[ntd, 25/10], 21]
          N[PDF[ntd, 10], 21]
          */
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 1.61220211703878172128e-16, accuracy: 1E-18)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00438178866867118877565, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.334601573269501746166, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.0000354931204704236583089, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 1, degreesOfFreedom: 22, nonCentralityPara: 10), 2.86089002661815955619e-18, accuracy: 1E-18)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.60768463597592483354e-23, accuracy: 1E-27)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.21515039938564508949e-11, accuracy: 1E-12)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.218713193594618197003, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: -10,  degreesOfFreedom: 22, nonCentralityPara: 3), 1.61220211703878172128e-16, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00438178866867118877565, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.334601573269501746166, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.0000354931204704236583089, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 1, degreesOfFreedom: 22, nonCentralityPara: 10), 2.86089002661815955619e-18, accuracy: 1E-18)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.60768463597592483354e-23, accuracy: 1E-27)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.21515039938564508949e-11, accuracy: 1E-12)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.pdf(x: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.218713193594618197003, accuracy: 1E-12)
         /* noncentral CDF
          R code:
          > pt(q = 10, ncp = 10, df = 22)
@@ -1458,15 +1458,15 @@ class SwiftyStatsTests: XCTestCase {
          > pt(q = 10, ncp = 10, df = 223322)
          [1] 0.4999955
         */
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 8.14079530286125822663e-17, accuracy: 1E-19)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00134989803163009452665, accuracy: 1E-9)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.310124866777693411844, accuracy: 1E-7)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.999976994489342241050, accuracy: 1E-7)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 4.39172441491830770359e-44, accuracy: 1E-48)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.61985302416052606597e-24, accuracy: 1E-27)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2, degreesOfFreedom: 22, nonCentralityPara: 10), 1.00316897649437185093e-14, accuracy: 1E-23)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.30289935752455767687e-12, accuracy: 1E-16)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.469124289769452233227, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 8.14079530286125822663e-17, accuracy: 1E-19)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00134989803163009452665, accuracy: 1E-9)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.310124866777693411844, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 3), 0.999976994489342241050, accuracy: 1E-7)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 10), 4.39172441491830770359e-44, accuracy: 1E-48)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 10), 7.61985302416052606597e-24, accuracy: 1E-27)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2, degreesOfFreedom: 22, nonCentralityPara: 10), 1.00316897649437185093e-14, accuracy: 1E-23)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 10), 1.30289935752455767687e-12, accuracy: 1E-16)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 10, degreesOfFreedom: 22, nonCentralityPara: 10), 0.469124289769452233227, accuracy: 1E-14)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: -10, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 8.14079530286125822663e-17, accuracy: 1E-19)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: 0, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.00134989803163009452665, accuracy: 1E-9)
 //        XCTAssertEqual(try! cdfNoncentralTBenton(t: 2.5, df: 22, delta: 3, errtol: Double.ulpOfOne, maxitr: 1000), 0.310124866777693411844, accuracy: 1E-7)
@@ -1491,12 +1491,12 @@ class SwiftyStatsTests: XCTestCase {
          > qt(p = 1,df = 21,ncp = 3)
          [1] Inf
         */
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
-        XCTAssertEqual(try! SSProbDist.StudentT.NonCentral.quantile(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
+        XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
         /*
          nd = NormalDistribution[3, 1/2];
          N[Kurtosis[nd], 21]
@@ -1524,8 +1524,8 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.8413447
         */
         XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
-        XCTAssertEqual(SSProbDist.Gaussian.Standard.cdf(u: 2), 0.977249868, accuracy: 1E-8)
-        XCTAssertEqual(SSProbDist.Gaussian.Standard.cdf(u: -2), 0.0227501319, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.StandardNormal.cdf(u: 2), 0.977249868, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.StandardNormal.cdf(u: -2), 0.0227501319, accuracy: 1E-8)
         XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: 3, mean: 22, standardDeviation: 3), 1.19960226E-10, accuracy: 1E-18)
         XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: -3, mean: 22, standardDeviation: 3), 3.92987343E-17, accuracy: 1E-25)
         XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: -3, mean: -3.5, standardDeviation: 0.5), 0.841344746, accuracy: 1E-9)
@@ -1544,8 +1544,8 @@ class SwiftyStatsTests: XCTestCase {
          >
         */
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
-        XCTAssertEqual(SSProbDist.Gaussian.Standard.pdf(u: 2), 0.0539909665, accuracy: 1E-8)
-        XCTAssertEqual(SSProbDist.Gaussian.Standard.pdf(u: -2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.StandardNormal.pdf(u: 2), 0.0539909665, accuracy: 1E-8)
+        XCTAssertEqual(SSProbDist.StandardNormal.pdf(u: -2), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 3, mean: 22, standardDeviation: 3), 2.59281602E-10, accuracy: 1E-18)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
@@ -1565,9 +1565,9 @@ class SwiftyStatsTests: XCTestCase {
          > qnorm(p = 5/10, mean = 2, sd = 0.5)
          [1] 2
         */
-        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
-        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
-        XCTAssertEqual(try! SSProbDist.Gaussian.Standard.quantile(p: 5.0/10.0), 0, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
+        XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
+        XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 5.0/10.0), 0, accuracy: 1E-6)
         XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 1.0/3.0, mean: 2, standardDeviation: 0.5), 1.78464, accuracy: 1E-4)
         XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 5/100.0, mean: 2, standardDeviation: 0.5), 1.17757, accuracy: 1E-4)
         XCTAssertEqual(try! SSProbDist.Gaussian.quantile(p: 5/10.0, mean: 2, standardDeviation: 0.5), 2, accuracy: 1E-6)
@@ -3168,14 +3168,14 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 20], 21]
          N[PDF[d, 120], 21]
         */
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.pdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 1.86330190212638377398e-18, accuracy: 1E-25)
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.000320827305783384301367, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0175567221203895712845, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0244526022914690298218, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.0200906234018482020788, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 1.86330190212638377398e-18, accuracy: 1E-25)
         /*
          lambda = 2;
          df = 10;
@@ -3187,14 +3187,14 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 20], 21]
          N[CDF[d, 120], 21]
          */
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-14)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.cdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-14)
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.cdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.cdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 1, degreesOfFreedom: 10, lambda: 2), 0.0000687170350978367993954, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 3.5, degreesOfFreedom: 10, lambda: 2), 0.0158988857488017761417, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 4, degreesOfFreedom: 10, lambda: 2), 0.0263683505034293909215, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 20, degreesOfFreedom: 10, lambda: 2), 0.920255991428431897124, accuracy: 1E-14)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.cdf(chi: 120, degreesOfFreedom: 10, lambda: 2), 0.999999999999999995559, accuracy: 1E-14)
         /*
          lambda = 2;
          df = 10;
@@ -3206,15 +3206,15 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 20], 21]
          N[CDF[d, 120], 21]
          */
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
-        XCTAssertThrowsError(try SSProbDist.ChiSquare.NonCentral.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
-        XCTAssert(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0, degreesOfFreedom: 10, lambda: 2) == 0)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-11)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-11)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-11)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-11)
-        XCTAssertEqual(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
-        XCTAssert(try! SSProbDist.ChiSquare.NonCentral.quantile(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
+        XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.quantile(p: -1, degreesOfFreedom: 10, lambda: 2))
+        XCTAssert(try! SSProbDist.NonCentralChiSquare.quantile(p: 0, degreesOfFreedom: 10, lambda: 2) == 0)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.25, degreesOfFreedom: 10, lambda: 2),8.13756055748165583031 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.5, degreesOfFreedom: 10, lambda: 2),11.2430133568251407182 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.75, degreesOfFreedom: 10, lambda: 2),15.0420244933699346629 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.99, degreesOfFreedom: 10, lambda: 2),27.5151340899272570682 ,accuracy: 1E-11)
+        XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
+        XCTAssert(try! SSProbDist.NonCentralChiSquare.quantile(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
     }
   
     func testAiry() {

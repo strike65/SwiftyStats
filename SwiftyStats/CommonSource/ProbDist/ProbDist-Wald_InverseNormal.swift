@@ -27,8 +27,8 @@ import os.log
 
 
 extension SSProbDist {
+    /// Wald (inverse normal) distribution
     public enum InverseNormal {
-        // MARK: Wald / Inverse Normal
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Wald (inverse normal) distribution.
         /// - Parameter a: mean
@@ -140,9 +140,9 @@ extension SSProbDist {
             ex1 = b / x
             ex2 = x / a
             ex3 = sqrt(ex1) * (ex2 - FPT.one)
-            let n1: FPT = SSProbDist.Gaussian.Standard.cdf(u: ex3)
+            let n1: FPT = SSProbDist.StandardNormal.cdf(u: ex3)
             ex4 = sqrt(ex1) * (ex2 + FPT.one)
-            let n2: FPT = SSProbDist.Gaussian.Standard.cdf(u: -ex4)
+            let n2: FPT = SSProbDist.StandardNormal.cdf(u: -ex4)
             let result: FPT = n1 + SSMath.exp1(2 * b / a) * n2
             return result
         }

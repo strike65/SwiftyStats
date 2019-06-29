@@ -24,8 +24,9 @@ import Foundation
 import Accelerate.vecLib.LinearAlgebra
 import os.log
 
-extension SSProbDist.StudentT {
-    public enum NonCentral {
+extension SSProbDist {
+    /// Non central Student T distribution
+    public enum NonCentralSudentT {
         
         
         #if arch(i386) || arch(x86_64)
@@ -297,7 +298,7 @@ extension SSProbDist.StudentT {
             }
             func q(t:FPT, ncp: FPT, df:FPT) -> FPT {
                 do {
-                    let res: FPT = try  Helpers.makeFP(SSProbDist.StudentT.NonCentral.cdf(t: t, degreesOfFreedom: df, nonCentralityPara: ncp))
+                    let res: FPT = try  Helpers.makeFP(SSProbDist.NonCentralSudentT.cdf(t: t, degreesOfFreedom: df, nonCentralityPara: ncp))
                     return res
                 }
                 catch {
@@ -319,7 +320,7 @@ extension SSProbDist.StudentT {
             }
             repeat {
                 nx =  Helpers.makeFP(1.0 / 2.0 ) * (lx + ux)
-                if try  Helpers.makeFP(SSProbDist.StudentT.NonCentral.cdf(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda)) > p {
+                if try  Helpers.makeFP(SSProbDist.NonCentralSudentT.cdf(t: nx, degreesOfFreedom: df, nonCentralityPara: lambda)) > p {
                     ux = nx
                 }
                 else {
@@ -486,10 +487,10 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
         throw error
     }
     if !isLowerGamma {
-        cdf = SSProbDist.Gaussian.Standard.cdf(u: ABC.A)
+        cdf = SSProbDist.StandardNormal.cdf(u: ABC.A)
     }
     if isLowerGamma {
-        cdf = SSProbDist.Gaussian.Standard.cdf(u: -ABC.B)
+        cdf = SSProbDist.StandardNormal.cdf(u: -ABC.B)
     }
     var SUBS: Array<FPT> = [ABC.A, ABC.MOD, ABC.MOD, ABC.B]
     let coeffs: ( XK: [FPT], WK: [FPT], WG: [FPT], G: [Int]) = GKnodes(nsubs: nSubs)
@@ -975,7 +976,7 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
 //                sum += temp
 //                j += 1
 //            }
-//            let u: Float80 = SSProbDist.Gaussian.Standard.cdf(u: -del)
+//            let u: Float80 = SSProbDist.StandardNormal.cdf(u: -del)
 //            let result: Float80 = u + 0.5 * sum
 //            if xx < 0 {
 //                return  Helpers.makeFP(1 - result)

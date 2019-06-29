@@ -30,6 +30,8 @@
 		9F51D34B217B3DCB00D1DE83 /* randoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F51D34A217B3DCB00D1DE83 /* randoms.swift */; };
 		9F5A2A2C216909DF004DA091 /* HypergeometricPFQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */; };
 		9F5A2A2D216909E0004DA091 /* HypergeometricPFQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */; };
+		9F5BF9ED22C77258000DEC25 /* Namespaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5BF9EC22C77258000DEC25 /* Namespaces.swift */; };
+		9F5BF9EE22C77258000DEC25 /* Namespaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5BF9EC22C77258000DEC25 /* Namespaces.swift */; };
 		9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F5FFE4A212D738C00047213 /* SSSHermiteH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F5FFE48212D738C00047213 /* SSSHermiteH.swift */; };
 		9F68C316212F4FF500E7CF44 /* ProbDist-NoncentralT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F371A3C212EAA6800BECC71 /* ProbDist-NoncentralT.swift */; };
@@ -220,6 +222,7 @@
 		9F51D34A217B3DCB00D1DE83 /* randoms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = randoms.swift; sourceTree = "<group>"; };
 		9F56CEF8213D20F50048A427 /* SSSF-MarcumQ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-MarcumQ.swift"; sourceTree = "<group>"; };
 		9F5A2A2E21690C1E004DA091 /* BesselJ0l.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BesselJ0l.swift; sourceTree = "<group>"; };
+		9F5BF9EC22C77258000DEC25 /* Namespaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Namespaces.swift; sourceTree = "<group>"; };
 		9F5D1B41216F442100F019CD /* SSComplex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSComplex.swift; sourceTree = "<group>"; };
 		9F5FFE48212D738C00047213 /* SSSHermiteH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSHermiteH.swift; sourceTree = "<group>"; };
 		9F6F0D702102664C006ACA13 /* r_derived_macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = r_derived_macros.swift; sourceTree = "<group>"; };
@@ -490,11 +493,11 @@
 		9FB055BA22BFF6FB00DD6170 /* Examine */ = {
 			isa = PBXGroup;
 			children = (
+				9FEA824A1F76C9F6005E4349 /* SSExamine.swift */,
 				9FEA824B1F76C9F6005E4349 /* SSFrequencyTables.swift */,
 				9FEA82481F76C9F6005E4349 /* SSExamine-FileManagement.swift */,
 				9FEA82491F76C9F6005E4349 /* SSExamine-Stats.swift */,
 				9F180B7F2110AF1B007C6C1C /* SSExamine-Sn_Qn.swift */,
-				9FEA824A1F76C9F6005E4349 /* SSExamine.swift */,
 			);
 			path = Examine;
 			sourceTree = "<group>";
@@ -657,6 +660,7 @@
 		9FEA82401F76C9F6005E4349 /* CommonSource */ = {
 			isa = PBXGroup;
 			children = (
+				9F5BF9EC22C77258000DEC25 /* Namespaces.swift */,
 				9F7EFB612101F22200F0F573 /* HypothesisTesting */,
 				9FE86EC2215D193300DD5349 /* SpecialFunctions */,
 				9F7EFB602101F17900F0F573 /* Shared */,
@@ -938,6 +942,7 @@
 				9FE86ECA215D19F000DD5349 /* SSSFGammaQCF.swift in Sources */,
 				9F5FFE49212D738C00047213 /* SSSHermiteH.swift in Sources */,
 				9FEA82801F76CAF5005E4349 /* SSLogging.swift in Sources */,
+				9F5BF9ED22C77258000DEC25 /* Namespaces.swift in Sources */,
 				9F7EFB2A2101E6BE00F0F573 /* ProbDist-Gaussian.swift in Sources */,
 				9FEA82721F76CAF5005E4349 /* SSContFrac.swift in Sources */,
 				9F9E6070210DD0B10059DF46 /* Integrator.swift in Sources */,
@@ -1030,6 +1035,7 @@
 				9FEA82931F76CB1D005E4349 /* SSHypothesisTesting-NPAR.swift in Sources */,
 				9F7EFB322101EDAC00F0F573 /* ProbDist-FRatio.swift in Sources */,
 				9F9E6071210DD0B10059DF46 /* Integrator.swift in Sources */,
+				9F5BF9EE22C77258000DEC25 /* Namespaces.swift in Sources */,
 				9FEA82941F76CB1D005E4349 /* SSHypothesisTesting-Outliers.swift in Sources */,
 				9F4DF7BF21516C010013792A /* Airy_Constants.swift in Sources */,
 				9F7EFB492101EF8F00F0F573 /* ProbDist-Exponential.swift in Sources */,

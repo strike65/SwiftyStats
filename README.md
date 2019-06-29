@@ -1,7 +1,7 @@
 ![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.0-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
 
-SwiftyStats
-===========
+![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
+
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
@@ -15,13 +15,11 @@ The attached Xcode project contains four targets:
 > * SwiftyStatsTests (Testsuite)
 > * SwiftStatsCLTest (a command line demo)
 
-*Each target must be built individually (i.e. no dependencies are defined)!*
+*Each target must be built individually (i.e. no dependencies are defined)! If you are on Linux, please use SPM.*
 
-In addition a Plaground is added to the Xcode project, so that you can "interactively" 
-> * try out the framework and 
+In addition a Plaground is added to the Xcode project to 
+> * test the framework and 
 > * do prototyping
-
-If you are on Linux, please use SPM.
 
 # The Swift Type Checker problem
 Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `z1 + z1 - w) / (z1 * w)`) had to be simplified.
@@ -32,9 +30,9 @@ SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). Th
 
 The following "namespaces"/classes are provided (among others):
 
-* SSExamine (class)
-* SSHypothesisTesting (enum)
-* SSProbDist (enum)
+* [`SSExamine`](docs/Classes/SSExamine.html) (class)
+* [`SSHypothesisTesting`](docs/Enums/SSHypothesisTesting.html) (enum)
+* [`SSProbDist`](docs/Enums/SSProbDist.html) (enum)
 * [`SSDataFrame`](docs/Classes/SSDataFrame.html) instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
 * [`SSCrossTab`](docs/Structures/SSCrossTab.html) contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
 

@@ -27,8 +27,9 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Logistic
     public enum Logistic {
-        // MARK: Logistic
+
         /// Returns the Logit for a given p
         /// - Parameter p: p
         /// - Throws: SSSwiftyStatsError if p <= 0 || p >= 1

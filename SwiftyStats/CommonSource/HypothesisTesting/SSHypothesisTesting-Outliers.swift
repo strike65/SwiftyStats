@@ -26,7 +26,6 @@ import Foundation
 import os.log
 #endif
 
-// MARK: Outliers
 
 extension SSHypothesisTesting {
     /// Performs the Grubbs outlier test

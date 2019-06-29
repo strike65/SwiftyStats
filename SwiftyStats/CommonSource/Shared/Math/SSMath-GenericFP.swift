@@ -30,7 +30,7 @@ import Foundation
 import Darwin
 import Accelerate.vecLib
 
-internal enum SSMath {
+extension SSMath {
     internal static func reciprocal<T: SSFloatingPoint>(_ x: T) -> T {
         if !x.isZero {
             return T.one / x

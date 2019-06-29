@@ -26,8 +26,8 @@ import Foundation
 import os.log
 #endif
 
-// MARK: UNIFORM
 extension SSProbDist {
+    /// Uniform distribution
     public enum Uniform {
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Uniform distribution.
         /// - Parameter a: Lower bound

@@ -27,9 +27,9 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Binomial distribution
     public enum Binomial {
         
-        // MARK: binomial
         
         /// Returns the cdf of the Binomial Distribution
         /// - Parameter k: number of successes

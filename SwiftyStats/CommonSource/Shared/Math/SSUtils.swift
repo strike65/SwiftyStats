@@ -26,7 +26,7 @@
 import Foundation
 
 
-internal enum Helpers {
+extension Helpers {
     
     
     /// Tests, if a value is an integer (i.e. has no decimal places).

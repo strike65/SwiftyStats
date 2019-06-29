@@ -28,7 +28,6 @@ import os.log
 
 
 extension SSHypothesisTesting {
-    // MARK: Randomness
     
     /// Performs the runs test for the given sample. Tests for randomness.
     /// ### Important Note ###
@@ -173,7 +172,7 @@ extension SSHypothesisTesting {
         var pAsymp: FPT = 0
         var cv: FPT
         do {
-            cv = try SSProbDist.Gaussian.Standard.quantile(p: 1 - alpha / 2)
+            cv = try SSProbDist.StandardNormal.quantile(p: 1 - alpha / 2)
         }
         catch {
             throw error
@@ -186,12 +185,12 @@ extension SSHypothesisTesting {
         //        }
         switch alternative {
         case .twoSided:
-            pAsymp = 2 * min(SSProbDist.Gaussian.Standard.cdf(u: z), 1 - SSProbDist.Gaussian.Standard.cdf(u: z))
+            pAsymp = 2 * min(SSProbDist.StandardNormal.cdf(u: z), 1 - SSProbDist.StandardNormal.cdf(u: z))
 //            pAsymp = 2.0 * Standard.cdf(u: z)
         case .less:
-            pAsymp = SSProbDist.Gaussian.Standard.cdf(u: z)
+            pAsymp = SSProbDist.StandardNormal.cdf(u: z)
         case .greater:
-            pAsymp = 1 - SSProbDist.Gaussian.Standard.cdf(u: z)
+            pAsymp = 1 - SSProbDist.StandardNormal.cdf(u: z)
         }
         //        if pAsymp > 0.5 {
         //            pAsymp = (1.0 - pAsymp) * 2.0

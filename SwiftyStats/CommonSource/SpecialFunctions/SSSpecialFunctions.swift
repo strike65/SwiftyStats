@@ -19,11 +19,5 @@
 
 import Foundation
 
-/// Provides commonly used special functions
-internal enum SSSpecialFunctions {
-    enum Helper {
-    }
-    
-}
 
 

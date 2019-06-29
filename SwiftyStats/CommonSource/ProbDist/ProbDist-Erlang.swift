@@ -27,8 +27,8 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Erlang distribution (equal to the Gamma distribution with integer shape parameter)
     public enum Erlang {
-        // MARK: Erlang
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.
         /// - Parameter a: Shape parameter

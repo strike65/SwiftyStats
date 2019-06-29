@@ -27,9 +27,8 @@ import os.log
 #endif
 
 extension SSProbDist {
+    /// Beta distribution
     public enum Beta {
-        
-        // MARK: Beta
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Beta distribution.
         /// - Parameter a: Shape parameter a

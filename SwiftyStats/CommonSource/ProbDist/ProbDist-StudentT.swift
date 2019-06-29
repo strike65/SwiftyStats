@@ -25,11 +25,10 @@ import Foundation
 import os.log
 #endif
 
-
-public enum SSProbDist {
-    
+/// Probability Distributions
+extension SSProbDist {
+    /// Student T distribution
     public enum StudentT {
-        // MARK: STUDENT's T
         
         /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
         /// - Parameter df: Degrees of freedom
