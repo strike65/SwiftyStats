@@ -42,7 +42,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                    os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -246,7 +246,7 @@ extension SSProbDist {
             if df <= 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+                    os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -263,14 +263,14 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("p is expected to be >= 0.0 and <= 1.0", log: log_stat, type: .error)
+                    os_log("p is expected to be >= 0.0 and <= 1.0", log: .log_stat, type: .error)
                 }
                 
                 #endif
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            if let test = r_q_p01_boundaries(p: p, left: -FPT.infinity, right: FPT.infinity) {
+            if let test = Helpers.r_q_p01_boundaries(p: p, left: -FPT.infinity, right: FPT.infinity) {
                 return test
             }
             if df.isInfinite {
@@ -281,7 +281,7 @@ extension SSProbDist {
                     throw error
                 }
             }
-            let p0 = r_dt_qIv(x: p, tail: .lower, log_p: rlog)
+            let p0 = Helpers.r_dt_qIv(x: p, tail: .lower, log_p: rlog)
             if p0 > (1 - FPT.ulpOfOne) {
                 return FPT.infinity
             }
@@ -341,7 +341,7 @@ fileprivate func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FP
     if df <= 0 {
         #if os(macOS) || os(iOS)
         if #available(iOS 10, *) {
-            os_log("Degrees of freedom are expected to be > 0", log: log_stat, type: .error)
+            os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
         }
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -669,7 +669,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     if info != 0 {
         #if os(macOS) || os(iOS)
         if #available(iOS 10, *) {
-            os_log("unable to compute integration limits. A singular matrix was detected", log: log_stat, type: .error)
+            os_log("unable to compute integration limits. A singular matrix was detected", log: .log_stat, type: .error)
         }
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)

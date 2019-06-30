@@ -38,7 +38,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -66,7 +66,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -91,7 +91,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -119,7 +119,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: log_stat, type: .error)
+                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -130,7 +130,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+                    os_log("p is expected to be >= 0 and <= 1 ", log: .log_stat, type: .error)
                 }
                 
                 #endif

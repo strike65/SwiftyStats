@@ -68,4 +68,3 @@ var ttest = try! SSHypothesisTesting.twoSampleTTest(sample1: examine1, sample2: 
 print("\n\(ttest)")
 ttest = try! SSHypothesisTesting.twoSampleTTest(sample1: examine1, sample2: examine3, alpha: 0.05)
 print("\n\(ttest)")
-

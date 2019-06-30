@@ -38,7 +38,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
             }
             
             #endif
@@ -55,10 +55,10 @@ extension SSHypothesisTesting {
                 
                 if #available(macOS 10.12, iOS 10, *) {
                     if examine.isEmpty {
-                        os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                        os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
                     }
                     else {
-                        os_log("Data are expected to be numeric", log: log_stat, type: .error)
+                        os_log("Data are expected to be numeric", log: .log_stat, type: .error)
                     }
                 }
                 
@@ -105,7 +105,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
             }
             
             #endif
@@ -119,10 +119,10 @@ extension SSHypothesisTesting {
                 
                 if #available(macOS 10.12, iOS 10, *) {
                     if _data.last!.isEmpty {
-                        os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                        os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
                     }
                     else {
-                        os_log("Data are expected to be numeric", log: log_stat, type: .error)
+                        os_log("Data are expected to be numeric", log: .log_stat, type: .error)
                     }
                 }
                 
@@ -143,7 +143,7 @@ extension SSHypothesisTesting {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("for at least one sample a variance is not obtainable", log: log_stat, type: .error)
+                    os_log("for at least one sample a variance is not obtainable", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -197,7 +197,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
             }
             
             #endif
@@ -213,10 +213,10 @@ extension SSHypothesisTesting {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
                     if examine.isEmpty {
-                        os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                        os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
                     }
                     else {
-                        os_log("Data are expected to be numeric", log: log_stat, type: .error)
+                        os_log("Data are expected to be numeric", log: .log_stat, type: .error)
                     }
                 }
                 #endif
@@ -269,7 +269,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of samples is expected to be > 1", log: log_stat, type: .error)
+                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
             }
             
             #endif
@@ -283,10 +283,10 @@ extension SSHypothesisTesting {
                     #if os(macOS) || os(iOS)
                     if #available(macOS 10.12, iOS 10, *) {
                         if _data.last!.isEmpty {
-                            os_log("sample size is expected to be > 2", log: log_stat, type: .error)
+                            os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
                         }
                         else {
-                            os_log("Data are expected to be numeric", log: log_stat, type: .error)
+                            os_log("Data are expected to be numeric", log: .log_stat, type: .error)
                         }
                     }
                     #endif
@@ -296,7 +296,7 @@ extension SSHypothesisTesting {
             else {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                    os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -425,7 +425,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -436,7 +436,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+                os_log("nominal variance is expected to be > 0", log: .log_stat, type: .error)
             }
             
             #endif
@@ -461,7 +461,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -471,7 +471,7 @@ extension SSHypothesisTesting {
         if !sample.isNotEmptyAndNumeric {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
-               os_log("Data are expected to be numeric", log: log_stat, type: .error)
+               os_log("Data are expected to be numeric", log: .log_stat, type: .error)
             }
             #endif
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -480,7 +480,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("nominal variance is expected to be > 0", log: log_stat, type: .error)
+                os_log("nominal variance is expected to be > 0", log: .log_stat, type: .error)
             }
             
             #endif
@@ -529,7 +529,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample1 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -540,7 +540,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample2 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -565,7 +565,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample1 size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample1 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -576,7 +576,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample2 size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample2 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -586,7 +586,7 @@ extension SSHypothesisTesting {
         if !sample1.isNotEmptyAndNumeric || !sample2.isNotEmptyAndNumeric {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("Data are expected to be numeric", log: log_stat, type: .error)
+                os_log("Data are expected to be numeric", log: .log_stat, type: .error)
             }
             #endif
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -604,7 +604,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("error in obtaining the f ratio", log: log_stat, type: .error)
+                os_log("error in obtaining the f ratio", log: .log_stat, type: .error)
             }
             
             #endif

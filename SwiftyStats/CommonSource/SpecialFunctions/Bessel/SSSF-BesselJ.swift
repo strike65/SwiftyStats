@@ -165,7 +165,7 @@ extension SSSpecialFunctions {
             {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("BesselY: not defined in that domain", log: log_stat, type: .error)
+                    os_log("BesselY: not defined in that domain", log: .log_stat, type: .error)
                 }
                 #endif
                 printError("BesselY: not defined in that domain")

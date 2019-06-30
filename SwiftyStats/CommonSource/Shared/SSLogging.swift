@@ -26,9 +26,15 @@
 import Foundation
 #if os(macOS) || os(iOS)
 import os.log
-/// Defines the logging subsystem used by the framework
-@available(iOS 10.0, macOS 10.12, *)
-let log_stat = OSLog(subsystem: "de.swiftystats.SSSwiftyStats", category: "SSSwiftyStats")
-let log_dev = OSLog(subsystem: "de.swiftystats.SSSwiftyStats.bugs", category: "SSSwiftyStats.BUGS")
-#endif
 
+
+extension OSLog {
+    private static var subsystem = Bundle.main.bundleIdentifier
+    
+    static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "functions_parameters")
+    static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "severe_bugs")
+    static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "filesystem")
+}
+/// Defines the Logsystem for SwiftyStats
+
+#endif

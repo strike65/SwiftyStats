@@ -37,7 +37,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
             }
             
             #endif
@@ -48,7 +48,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+                os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
             #endif
@@ -59,7 +59,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("expected numerical type", log: log_stat, type: .error)
+                os_log("expected numerical type", log: .log_stat, type: .error)
             }
             
             #endif
@@ -86,7 +86,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 3", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
             }
             
             #endif
@@ -97,7 +97,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("Alpha must be > 0.0 and < 1.0", log: log_stat, type: .error)
+                os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
             #endif
@@ -108,7 +108,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("expected numerical type", log: log_stat, type: .error)
+                os_log("expected numerical type", log: .log_stat, type: .error)
             }
             
             #endif
@@ -232,7 +232,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("expected numerical type", log: log_stat, type: .error)
+                os_log("expected numerical type", log: .log_stat, type: .error)
             }
             
             #endif

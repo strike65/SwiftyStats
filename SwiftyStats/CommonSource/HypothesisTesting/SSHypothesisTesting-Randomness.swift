@@ -53,7 +53,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -91,7 +91,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("sample size is expected to be >= 2", log: log_stat, type: .error)
+                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
             #endif
@@ -122,7 +122,7 @@ extension SSHypothesisTesting {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("no user defined cutting point specified", log: log_stat, type: .error)
+                    os_log("no user defined cutting point specified", log: .log_stat, type: .error)
                 }
                 
                 #endif

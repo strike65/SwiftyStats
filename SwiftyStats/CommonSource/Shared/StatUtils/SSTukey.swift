@@ -245,7 +245,7 @@ extension Helpers {
         
         
         if (q <= 0) {
-            return r_dt_0(tail: tail, log_p: returnLogP)
+            return Helpers.r_dt_0(tail: tail, log_p: returnLogP)
         }
         
         /* df must be > 1 */
@@ -256,12 +256,12 @@ extension Helpers {
         }
         
         if !q.isFinite {
-            return r_dt_1(tail: tail, log_p: returnLogP)
+            return Helpers.r_dt_1(tail: tail, log_p: returnLogP)
         }
         
         if (df > dlarg) {
             do {
-                return r_dt_val(x: try wprob(w: q, rr: nranges, cc: numberOfMeans), tail: tail, log_p: returnLogP)
+                return Helpers.r_dt_val(x: try wprob(w: q, rr: nranges, cc: numberOfMeans), tail: tail, log_p: returnLogP)
             }
             catch {
                 throw error
@@ -337,7 +337,7 @@ extension Helpers {
         if ans > 1.0 {
             ans = 1.0
         }
-        return r_dt_val(x: ans, tail: tail, log_p: returnLogP)
+        return Helpers.r_dt_val(x: ans, tail: tail, log_p: returnLogP)
     }
     
     
@@ -416,7 +416,7 @@ extension Helpers {
             }
         }
         
-        pp = r_dt_qIv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
+        pp = Helpers.r_dt_qIv(x: p, tail: tail, log_p: log_p) /* lower_tail,non-log "p" */
         
         /* Initial value */
         
@@ -483,7 +483,7 @@ extension Helpers {
         #if os(macOS) || os(iOS)
         
         if #available(macOS 10.12, iOS 10, *) {
-            os_log("qtukey didn't converge", log: log_stat, type: .info)
+            os_log("qtukey didn't converge", log: .log_stat, type: .info)
         }
         
         #endif

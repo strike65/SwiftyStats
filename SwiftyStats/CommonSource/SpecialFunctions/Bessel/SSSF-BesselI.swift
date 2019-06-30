@@ -349,7 +349,7 @@ extension SSSpecialFunctions {
             if( t != vv ) {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("BesselI: for x < 0, order must be an integer", log: log_stat, type: .error)
+                    os_log("BesselI: for x < 0, order must be an integer", log: .log_stat, type: .error)
                 }
                 #endif
                 printError("BesselI: for x < 0, order must be an integer in the real plane")
@@ -368,7 +368,7 @@ extension SSSpecialFunctions {
             if( vv < 0 ) {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("BesselI: overflow", log: log_stat, type: .error)
+                    os_log("BesselI: overflow", log: .log_stat, type: .error)
                 }
                 #endif
                 printError("BesselI: overflow")

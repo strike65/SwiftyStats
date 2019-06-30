@@ -58,7 +58,7 @@ internal class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+                os_log("number of observations is expected to be >= 2", log: .log_stat, type: .error)
             }
             #endif
             
@@ -66,7 +66,7 @@ internal class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable
         if groups.count < 2 {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of observations is expected to be >= 2", log: log_stat, type: .error)
+                os_log("number of observations is expected to be >= 2", log: .log_stat, type: .error)
             }
             #endif
             
@@ -75,7 +75,7 @@ internal class SSDataGroupSorter<T> where T: Hashable, T: Comparable, T: Codable
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("number of observations and number of groups is expected to be equal", log: log_stat, type: .error)
+                os_log("number of observations and number of groups is expected to be equal", log: .log_stat, type: .error)
             }
             
             #endif

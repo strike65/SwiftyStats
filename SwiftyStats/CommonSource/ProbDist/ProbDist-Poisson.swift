@@ -40,7 +40,7 @@ extension SSProbDist {
             if lambda <= 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                    os_log("lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -48,7 +48,7 @@ extension SSProbDist {
             if k < 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("k is expected to be > 0", log: log_stat, type: .error)
+                    os_log("k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -77,7 +77,7 @@ extension SSProbDist {
             if lambda <= 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("lambda is expected to be > 0", log: log_stat, type: .error)
+                    os_log("lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -85,7 +85,7 @@ extension SSProbDist {
             if k < 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("k is expected to be > 0", log: log_stat, type: .error)
+                    os_log("k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)

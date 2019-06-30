@@ -38,7 +38,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -49,7 +49,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -75,7 +75,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -86,7 +86,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -120,7 +120,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -131,7 +131,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -150,7 +150,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("unable to retrieve a result", log: log_stat, type: .error)
+                    os_log("unable to retrieve a result", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -169,7 +169,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -180,7 +180,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("scale parameter a is expected to be > 0", log: log_stat, type: .error)
+                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -191,7 +191,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("p is expected to be >= 0 and <= 1 ", log: log_stat, type: .error)
+                    os_log("p is expected to be >= 0 and <= 1 ", log: .log_stat, type: .error)
                 }
                 
                 #endif

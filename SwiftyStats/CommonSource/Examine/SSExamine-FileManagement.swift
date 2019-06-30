@@ -48,7 +48,7 @@ extension SSExamine {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("No writeable path found", log: log_stat ,type: .error)
+                    os_log("No writeable path found", log: .log_fs ,type: .error)
                 }
                 
                 #endif
@@ -58,7 +58,7 @@ extension SSExamine {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("File doesn't exist", log: log_stat ,type: .error)
+                os_log("File doesn't exist", log: .log_fs ,type: .error)
             }
             
             #endif
@@ -75,7 +75,7 @@ extension SSExamine {
                         #if os(macOS) || os(iOS)
                         
                         if #available(macOS 10.12, iOS 10, *) {
-                            os_log("Unable to remove file prior to saving new file: %@", log: log_stat ,type: .error, error.localizedDescription)
+                            os_log("Unable to remove file prior to saving new file: %@", log: .log_fs ,type: .error, error.localizedDescription)
                         }
                         
                         #endif
@@ -87,7 +87,7 @@ extension SSExamine {
                     #if os(macOS) || os(iOS)
                     
                     if #available(macOS 10.12, iOS 10, *) {
-                        os_log("Unable to remove file prior to saving new file", log: log_stat ,type: .error)
+                        os_log("Unable to remove file prior to saving new file", log: .log_fs ,type: .error)
                     }
                     
                     #endif
@@ -99,7 +99,7 @@ extension SSExamine {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 10, *) {
-                    os_log("File exists: %@", log: log_stat ,type: .error, fullFilename)
+                    os_log("File exists: %@", log: .log_fs ,type: .error, fullFilename)
                 }
                 
                 #endif
@@ -117,7 +117,7 @@ extension SSExamine {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("Unable to write data", log: log_stat, type: .error)
+                os_log("Unable to write data", log: .log_fs, type: .error)
             }
             
             #endif
@@ -136,7 +136,7 @@ extension SSExamine {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("File not readable", log: log_stat ,type: .error)
+                os_log("File not readable", log: .log_fs ,type: .error)
             }
             
             #endif
@@ -153,7 +153,7 @@ extension SSExamine {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 10, *) {
-                os_log("Failure", log: log_stat ,type: .error)
+                os_log("Failure", log: .log_fs ,type: .error)
             }
             
             #endif
