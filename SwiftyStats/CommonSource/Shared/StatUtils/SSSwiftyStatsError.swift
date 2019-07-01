@@ -139,7 +139,7 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
 
     /// Init
     public init(type: ErrorType, file: String, line: Int, function: String) {
-        super.init(domain: "de.swiftystats.SSSwiftyStats", code: type.rawValue, userInfo: nil)
+        super.init(domain: "de.strike65.SSSwiftyStats", code: type.rawValue, userInfo: nil)
         self.type = type
         self.line = line
         self.function = function
