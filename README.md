@@ -28,7 +28,7 @@ There are several extensions to standard Swift types (`Array`, Floating point ty
 # Using Xcode
 
 The attached Xcode project contains four targets:
-> * SwiftyStats (for macOS/Linux)
+> * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
 > * SwiftyStatsTests (Testsuite)
 > * SwiftStatsCLTest (a command line demo)
