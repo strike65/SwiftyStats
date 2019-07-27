@@ -29,13 +29,13 @@ import Foundation
 extension Helpers {
     
     
-    /// Tests, if a value is an integer (i.e. has no decimal places).
+    /// Tests whether a value is an integer (i.e. has no decimal places).
     /// - Parameter value: A Floating Point value
     internal static func isInteger<T: SSFloatingPoint>(_ value: T) -> Bool {
         return value.truncatingRemainder(dividingBy: 1).isZero
     }
     
-    /// Tests, if a value is odd.
+    /// Tests whether a value is odd.
     /// - Parameter value: A Floating Point value
     internal static func isOdd<T: SSFloatingPoint>(_ value: T) -> Bool {
         var modr: (T, T)
@@ -179,7 +179,7 @@ extension Helpers {
         return modr.1
     }
     
-    /// Tests, if alue is a numeric value
+    /// Tests whether a value is numeric
     /// - Parameter value: A value of type T
     internal static func isNumber<T>(_ value: T) -> Bool {
         let valueMirror = Mirror(reflecting: value)
@@ -413,7 +413,7 @@ extension Helpers {
         return res
     }
     
-    
+    /// Provides scanning functions (text --> numbers)
     enum NumberScanner {
         internal static func scanDouble(string: String?) -> Double? {
             guard string != nil else {

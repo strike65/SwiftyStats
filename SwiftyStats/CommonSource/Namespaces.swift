@@ -25,11 +25,14 @@ internal enum SSSpecialFunctions {
     enum Helper {
     }
 }
+
 internal enum Helpers {
 }
 internal enum SSMath {
 }
+/// Provides often used/needed statistical tests
 public enum SSHypothesisTesting {
 }
+/// Provides often used/needed probabibilty functions (cdf, pdf, quantile...)
 public enum SSProbDist {
 }
