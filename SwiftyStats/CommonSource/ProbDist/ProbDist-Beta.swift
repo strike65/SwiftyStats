@@ -245,7 +245,12 @@ extension SSProbDist {
             }
             return bVal
         }
-        
+    }
+}
+
+extension SSProbDist {
+    /// Beta distribution
+    public enum NoncentralBeta {
         
         // noncentral
         
@@ -285,7 +290,7 @@ extension SSProbDist {
             }
             if lambda.isZero {
                 do {
-                    return try cdf(x: x, shapeA: a, shapeB: b)
+                    return try SSProbDist.Beta.cdf(x: x, shapeA: a, shapeB: b)
                 }
                 catch {
                     throw error
@@ -371,7 +376,7 @@ extension SSProbDist {
             }
             if lambda.isZero {
                 do {
-                    return try pdf(x: x, shapeA: a, shapeB: b)
+                    return try SSProbDist.Beta.pdf(x: x, shapeA: a, shapeB: b)
                 }
                 catch {
                     throw error

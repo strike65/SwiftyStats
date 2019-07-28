@@ -80,7 +80,56 @@ public class SSSwiftyStatsError: NSError, LocalizedError {
         /// number to big (hypergeometricPFQ)
         case maxExponentExceeded
     }
-
+    
+    override public var description: String {
+        switch self.type {
+        case .none:
+            return "No error"
+        case .invalidArgument:
+            return "Invalid argument in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .indexOutOfRange:
+            return "Index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .rowIndexOutOfRange:
+            return "Row index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .columnIndexOutOfRange:
+            return "Column index out of range in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .unknownRowName:
+            return "Unknown row name in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .unknownColumnName:
+            return "Unknown column name in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .functionNotDefinedInDomainProvided:
+            return "Called function is not defined in that domain in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .missingData:
+            return "Missing data in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .wrongDataFormat:
+            return "Wrong data format in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .sizeMismatch:
+            return "Size mismatch in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .maxNumberOfIterationReached:
+            return "Maximum number of iterations reached in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .availableOnlyForNumbers:
+            return "Only available for numbers in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .posixError:
+            return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
+        case .fileNotWriteable:
+            return "File not writeable error in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .fileExists:
+            return "File not writeable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
+        case .directoryDoesNotExist:
+            return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+        case .fileNotFound:
+            return "File does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+        case .errorCreatingObject:
+            return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
+        case .internalError:
+            return "Fatal internal error:" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
+        case .singularity:
+            return "Argument singularity :" + self.file + " Line: \(self.line) in function: " + self.function + ". Function will return INF."
+        case .maxExponentExceeded:
+            return "Value of exponent required for summation (pFq):" + self.file + " Line: \(self.line) in function: " + self.function + ". Hints: (1) try using lnpfq = 1 or (2) use Float80."
+            
+        }
+    }
     /// A string describing the error
     override public var localizedDescription: String {
         switch self.type {

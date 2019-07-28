@@ -506,7 +506,7 @@ extension SSProbDist {
                 ex1 =  y / (FPT.one + y)
                 ex2 = df1 / 2
                 ex3 = df2 / 2
-                beta = try SSProbDist.Beta.pdf(x: ex1, shapeA: ex2, shapeB: ex3, lambda: lambda)
+                beta = try SSProbDist.NoncentralBeta.pdf(x: ex1, shapeA: ex2, shapeB: ex3, lambda: lambda)
             }
             catch {
                 throw error
@@ -562,7 +562,7 @@ extension SSProbDist {
             let y: FPT = f * df1 / (df2 + df1 * f)
             var ans: FPT = FPT.nan
             do {
-                let ncbeta: FPT = try SSProbDist.Beta.cdf(x: y, shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
+                let ncbeta: FPT = try SSProbDist.NoncentralBeta.cdf(x: y, shapeA: df1 / 2, shapeB: df2 / 2, lambda: lambda)
                 ans = ncbeta
             }
             catch {

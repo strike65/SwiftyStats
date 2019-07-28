@@ -1600,7 +1600,9 @@ fileprivate func invgam<T: SSFloatingPoint>(_ a: T, _ q: T,_ pgam: Bool) -> T {
                 fp = f * ex3
                 expr1 = 3 * f * fp
                 expr2 = 2 * y * fp
-                fpp = -f * (expr1 + f + expr2) / y
+                expr3 = expr1 + f + expr2
+                fpp = -f * expr3 / y
+//                fpp = -f * (expr1 + f + expr2) / y
                 a1 = SSMath.log1(f) / y
                 a12 = a1 * a1
                 expr1 = -a1 / y
