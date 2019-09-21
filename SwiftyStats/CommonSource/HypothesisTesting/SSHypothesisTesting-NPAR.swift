@@ -971,7 +971,7 @@ extension SSHypothesisTesting {
             }
             i += 1
         }
-        var sorted = diff.sorted(by: {abs($0) < abs($1) } )
+        let sorted = diff.sorted(by: {abs($0) < abs($1) } )
         var signs: Array<FPT> = Array<FPT>()
         var absDiffSorted:Array<FPT> = Array<FPT>()
         i = 0

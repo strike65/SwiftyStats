@@ -509,7 +509,7 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
     for i in stride(from: 0, to: T1.count, by: 1) {
         T1[i] *= F[i]
     }
-    var S1: Array<FPT> = colSums(A: T1, aRows: nk, aCols: nsub)
+    let S1: Array<FPT> = colSums(A: T1, aRows: nk, aCols: nsub)
     for i in stride(from: 0, to: S1.count, by: 1) {
         Q1[i] = halfw[i] * S1[i]
     }
@@ -518,7 +518,7 @@ fileprivate func integrate<FPT: SSFloatingPoint & Codable>(x: FPT, df: FPT, ncp:
     for i in stride(from: 0, to: F.count, by: 1) {
         T2[i] *= F[i]
     }
-    var S2: Array<FPT> = colSums(A: T2, aRows: coeffs.WG.count, aCols: nsub)
+    let S2: Array<FPT> = colSums(A: T2, aRows: coeffs.WG.count, aCols: nsub)
     for i in stride(from: 0, to: S2.count, by: 1) {
         Q2[i] = halfw[i] * S2[i]
     }
@@ -536,9 +536,9 @@ fileprivate func function<FPT: SSFloatingPoint & Codable>(z: Array<FPT>, x: FPT,
     let const: FPT = FPT.sqrt2piinv
     var FV: Array<FPT> = Array<FPT>.init(repeating: 0, count: z.count)
     ex1 = df / (2 * x * x)
-    var q: Array<FPT> = (z.map { SSMath.pow1($0 + ncp, 2) }).map { $0 * ex1 }
-    var dff: Array<FPT> = Array<FPT>.init(repeating: FPT.half * df, count: z.count)
-    var z2: Array<FPT> = z.map{ -FPT.half * $0 * $0 }
+    let q: Array<FPT> = (z.map { SSMath.pow1($0 + ncp, 2) }).map { $0 * ex1 }
+    let dff: Array<FPT> = Array<FPT>.init(repeating: FPT.half * df, count: z.count)
+    let z2: Array<FPT> = z.map{ -FPT.half * $0 * $0 }
     var c: Bool = false
     // gammainc in MATLAB is equal to the regularized Gamma function (P if isLowerGamma, or Q if !isLowerGamma
     if isLowerGamma {
@@ -615,7 +615,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     var A: Double = 0
     var B: Double = 0
     var MOD: Double = 0
-    var incpt: Array<Double> = [1.0,1.0,1.0]
+    let incpt: Array<Double> = [1.0,1.0,1.0]
     var ex1: Double
     var ex2: Double
     var ex3: Double
@@ -638,8 +638,8 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     ex7 = 2 * (ex1 + df)
     MOD = ex6 / ex7
     let dZ: Double = min(Double.half * abs(MOD + ncp), 0.01)
-    var dMOD: Array<Double> = Array<Double>.init(arrayLiteral: -dZ, 0, dZ).map { $0 + MOD }
-    var q : Array<Double> = dMOD.map { (df * ($0 + ncp)) * (($0 + ncp) / (x * x)) }
+    let dMOD: Array<Double> = Array<Double>.init(arrayLiteral: -dZ, 0, dZ).map { $0 + MOD }
+    let q : Array<Double> = dMOD.map { (df * ($0 + ncp)) * (($0 + ncp) / (x * x)) }
     var logfMOD: Array<Double> = Array<Double>.init()
     for i in stride(from: 0, through: 2, by: 1) {
         ex1 = const + 0.5 * (NUminus2 * SSMath.log1(q[i] / df) + df - q[i] - dMOD[i] * dMOD[i])

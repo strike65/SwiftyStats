@@ -279,7 +279,7 @@ extension SSExamine {
         var result: FPT = 0
         if !isEmpty && self.sampleSize >= 2 {
             let k: FPT =  Helpers.makeFP(self.sampleSize) * q
-            var a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)!
             var temp3: SSElement
             if Helpers.isInteger(k) {
                 temp3 = a [Helpers.integerValue(k) - 1]
@@ -1273,7 +1273,7 @@ extension SSExamine {
     public func autocorrelation(n: Int = 1) throws -> Double? {
         if self.isNotEmptyAndNumeric {
             do {
-                var bl: SSBoxLjungResult = try SSHypothesisTesting.autocorrelation(data: self as! SSExamine<Double, Double>)
+                let bl: SSBoxLjungResult = try SSHypothesisTesting.autocorrelation(data: self as! SSExamine<Double, Double>)
                 if let l = bl.coefficients?[n] {
                     return l
                 }

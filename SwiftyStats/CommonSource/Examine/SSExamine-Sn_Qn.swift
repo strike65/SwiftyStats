@@ -280,7 +280,7 @@ extension SSExamine {
         }
         let n: FPT =  Helpers.makeFP(self.sampleSize)
         let ni = self.sampleSize
-        var sorted_data:Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
+        let sorted_data:Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
         var a_srt: Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)
         var a_cand:Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)
         var work:Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)

@@ -615,7 +615,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         // 1. Alle Werte nach Größe sortieren
         // 2. crf(n) = crf(n-1) + rf(n)
         if !isEmpty {
-            var temp = self.uniqueElements(sortOrder: .ascending)!
+            let temp = self.uniqueElements(sortOrder: .ascending)!
             var i: Int = 0
             cumRelFrequencies.removeAll()
             for key in temp {
