@@ -1,5 +1,8 @@
 Version 1.1.1
 - semantic versioning (https://semver.org)
+- Swift 5 compatibility
+- fixed: NoncentralBeta
+- update: SSSwiftyStatsError -> description added
 
 Version 1.1.0
 - namespaces (using enums without cases)

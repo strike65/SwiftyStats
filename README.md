@@ -10,6 +10,8 @@ SwiftyStats is a framework written entirely in Swift that makes heavy use of gen
 # Important
 
 Due to many changes and improvements, it is very likely that projects created with older versions (earlier than 1.1.0) will need to be modified after an update to version 1.1.0. This is especially true for the introduction of namespaces. As a result, the calling conventions for probability distributions have changed. Legacy functions such as `pdfStudentTDist(_:_:_:)` have been declared deprecated and will be removed in a later release. The **new** calling convention looks like `SSProbDist.StudentT.pdf()`.
+# Swift 5
+Starting with version 1.1.1, SwiftyStats is compatible with Swift 5.0. If you need Swift 4.*, please use version 1.1.0.
 
 # Overview
 
