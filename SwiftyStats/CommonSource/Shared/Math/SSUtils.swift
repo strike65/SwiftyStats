@@ -181,101 +181,100 @@ extension Helpers {
     
     internal static func isNumeric<T>(_ value: T) -> Bool {
         #if arch(arm) || arch(arm64)
-
-        if let _ = value as? Double {
-            return true
-        }
-        else if let _ = value as? Int {
-            return true
-        }
-        else if let _ = value as? Int8 {
-            return true
-        }
-        else if let _ = value as? Int32 {
-            return true
-        }
-        else if let _ = value as? Int64 {
-            return true
-        }
-        else if let _ = value as? UInt {
-            return true
-        }
-        else if let _ = value as? UInt8 {
-            return true
-        }
-        else if let _ = value as? UInt32 {
-            return true
-        }
-        else if let _ = value as? UInt64 {
-            return true
-        }
-        else if let _ = value as? Float {
-            return true
-        }
-        else if let _ = value as? Float32 {
-            return true
-        }
-        else if let _ = value as? Float64 {
-            return true
-        }
-        else if let _ = value as? NSNumber {
-            return true
-        }
-        else if let _ = value as? NSDecimalNumber {
-            return true
-        }
-        else {
-            return false
-        }
+         if let _ = value as? Double {
+                return true
+            }
+            else if let _ = value as? Int {
+                return true
+            }
+            else if let _ = value as? Int8 {
+                return true
+            }
+            else if let _ = value as? Int32 {
+                return true
+            }
+            else if let _ = value as? Int64 {
+                return true
+            }
+            else if let _ = value as? UInt {
+                return true
+            }
+            else if let _ = value as? UInt8 {
+                return true
+            }
+            else if let _ = value as? UInt32 {
+                return true
+            }
+            else if let _ = value as? UInt64 {
+                return true
+            }
+            else if let _ = value as? Float {
+                return true
+            }
+            else if let _ = value as? Float32 {
+                return true
+            }
+            else if let _ = value as? Float64 {
+                return true
+            }
+            else if let _ = value as? NSNumber {
+                return true
+            }
+            else if let _ = value as? NSDecimalNumber {
+                return true
+            }
+            else {
+                return false
+            }
         #else
-        if let _ = value as? Double {
-            return true
-        }
-        else if let _ = value as? Int {
-            return true
-        }
-        else if let _ = value as? Int8 {
-            return true
-        }
-        else if let _ = value as? Int32 {
-            return true
-        }
-        else if let _ = value as? Int64 {
-            return true
-        }
-        else if let _ = value as? UInt {
-            return true
-        }
-        else if let _ = value as? UInt8 {
-            return true
-        }
-        else if let _ = value as? UInt32 {
-            return true
-        }
-        else if let _ = value as? UInt64 {
-            return true
-        }
-        else if let _ = value as? Float {
-            return true
-        }
-        else if let _ = value as? Float32 {
-            return true
-        }
-        else if let _ = value as? Float64 {
-            return true
-        }
-        else if let _ = value as? Float80 {
-            return true
-        }
-        else if let _ = value as? NSNumber {
-            return true
-        }
-        else if let _ = value as? NSDecimalNumber {
-            return true
-        }
-        else {
-            return false
-        }
+            if let _ = value as? Double {
+                return true
+            }
+            else if let _ = value as? Int {
+                return true
+            }
+            else if let _ = value as? Int8 {
+                return true
+            }
+            else if let _ = value as? Int32 {
+                return true
+            }
+            else if let _ = value as? Int64 {
+                return true
+            }
+            else if let _ = value as? UInt {
+                return true
+            }
+            else if let _ = value as? UInt8 {
+                return true
+            }
+            else if let _ = value as? UInt32 {
+                return true
+            }
+            else if let _ = value as? UInt64 {
+                return true
+            }
+            else if let _ = value as? Float {
+                return true
+            }
+            else if let _ = value as? Float32 {
+                return true
+            }
+            else if let _ = value as? Float64 {
+                return true
+            }
+            else if let _ = value as? Float80 {
+                return true
+            }
+            else if let _ = value as? NSNumber {
+                return true
+            }
+            else if let _ = value as? NSDecimalNumber {
+                return true
+            }
+            else {
+                return false
+            }
         #endif
     }
     
