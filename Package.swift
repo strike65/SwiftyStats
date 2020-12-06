@@ -50,4 +50,4 @@ let package = Package(
     swiftLanguageVersions: [4,5]
 )
 
-let version = Version("1.1.1")
+let version = Version("1.1.2")

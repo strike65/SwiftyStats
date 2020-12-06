@@ -519,7 +519,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     private func initializeWithArray(_ array: Array<SSElement>) {
         initializeSSExamine()
         if array.count > 0 {
-            if array.first is Numeric {
+            if Helpers.isNumber(array.first) {
                 isNumeric = true
             }
             else {
@@ -720,7 +720,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     public func append(contentOf array: Array<SSElement>) {
         if array.count > 0 {
             if isEmpty {
-                if array.first is Numeric {
+                if Helpers.isNumber(array.first) {
                     isNumeric = true
                 }
                 else {

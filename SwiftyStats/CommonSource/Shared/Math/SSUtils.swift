@@ -179,25 +179,61 @@ extension Helpers {
         return modr.1
     }
     
+    internal static func isNumeric<T>(_ value: T) -> Bool {
+        if let _ = value as? Double {
+            return true
+        }
+        else if let _ = value as? Int {
+            return true
+        }
+        else if let _ = value as? Int8 {
+            return true
+        }
+        else if let _ = value as? Int32 {
+            return true
+        }
+        else if let _ = value as? Int64 {
+            return true
+        }
+        else if let _ = value as? UInt {
+            return true
+        }
+        else if let _ = value as? UInt8 {
+            return true
+        }
+        else if let _ = value as? UInt32 {
+            return true
+        }
+        else if let _ = value as? UInt64 {
+            return true
+        }
+        else if let _ = value as? Float {
+            return true
+        }
+        else if let _ = value as? Float80 {
+            return true
+        }
+        else if let _ = value as? Float32 {
+            return true
+        }
+        else if let _ = value as? Float64 {
+            return true
+        }
+        else if let _ = value as? NSNumber {
+            return true
+        }
+        else if let _ = value as? NSDecimalNumber {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    
     /// Tests whether a value is numeric
     /// - Parameter value: A value of type T
     internal static func isNumber<T>(_ value: T) -> Bool {
-        let valueMirror = Mirror(reflecting: value)
-        #if arch(arm) || arch(arm64)
-        if (valueMirror.subjectType == Int.self || valueMirror.subjectType == UInt.self || valueMirror.subjectType == Double.self || valueMirror.subjectType == Int8.self || valueMirror.subjectType == Int16.self || valueMirror.subjectType == Int32.self || valueMirror.subjectType == Int64.self || valueMirror.subjectType == UInt8.self || valueMirror.subjectType == UInt16.self || valueMirror.subjectType == UInt32.self || valueMirror.subjectType == UInt64.self || valueMirror.subjectType == Float.self || valueMirror.subjectType == Float32.self || valueMirror.subjectType == NSNumber.self || valueMirror.subjectType == NSDecimalNumber.self ) {
-            return true
-        }
-        else {
-            return false
-        }
-        #else
-        if (valueMirror.subjectType == Int.self || valueMirror.subjectType == UInt.self || valueMirror.subjectType == Double.self || valueMirror.subjectType == Int8.self || valueMirror.subjectType == Int16.self || valueMirror.subjectType == Int32.self || valueMirror.subjectType == Int64.self || valueMirror.subjectType == UInt8.self || valueMirror.subjectType == UInt16.self || valueMirror.subjectType == UInt32.self || valueMirror.subjectType == UInt64.self || valueMirror.subjectType == Float.self || valueMirror.subjectType == Float32.self || valueMirror.subjectType == Float80.self || valueMirror.subjectType == NSNumber.self || valueMirror.subjectType == NSDecimalNumber.self ) {
-            return true
-        }
-        else {
-            return false
-        }
-        #endif
+       return isNumeric(value)
     }
     
     /// Tries to convert a numerical representation of value of type `FROM` to a Floating Point Type (`TO`)
