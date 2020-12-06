@@ -226,7 +226,8 @@ extension Helpers {
             else {
                 return false
             }
-        #else
+        #endif
+        #if arch(i386) || arch(x86_64)
             if let _ = value as? Double {
                 return true
             }
