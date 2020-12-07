@@ -248,6 +248,7 @@
 		9F82D3AC1F1E8F19001BFC9D /* SwiftyStatsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStatsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F8F5C4920FD026C00DC29F4 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		9F9757DA22AE6471000AC8EF /* make_doc.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = make_doc.sh; sourceTree = "<group>"; };
+		9F979B91257E82F10064F40D /* SwiftStatsCLTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftStatsCLTest.entitlements; sourceTree = "<group>"; };
 		9F9E6063210DAFE40059DF46 /* SSSF-BesselI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-BesselI.swift"; sourceTree = "<group>"; };
 		9F9E6066210DB0230059DF46 /* SSSF-BesselJ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SSSF-BesselJ.swift"; sourceTree = "<group>"; };
 		9F9E606C210DC2900059DF46 /* Polyeval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polyeval.swift; sourceTree = "<group>"; };
@@ -355,6 +356,7 @@
 		9F19FC4C22B132C40042E922 /* SwiftStatsCLTest */ = {
 			isa = PBXGroup;
 			children = (
+				9F979B91257E82F10064F40D /* SwiftStatsCLTest.entitlements */,
 				9F19FC4D22B132C40042E922 /* main.swift */,
 			);
 			path = SwiftStatsCLTest;
@@ -1094,7 +1096,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_ENTITLEMENTS = SwiftStatsCLTest/SwiftStatsCLTest.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1103,7 +1106,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1114,7 +1119,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_ENTITLEMENTS = SwiftStatsCLTest/SwiftStatsCLTest.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1122,7 +1128,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path @rpath";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.volker-thieme.-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -1311,7 +1319,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Installer: Volker Thieme (8K3X84P22H)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
@@ -1328,7 +1336,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Installer: Volker Thieme (8K3X84P22H)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8K3X84P22H;
