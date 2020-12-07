@@ -263,7 +263,6 @@
 		9FC1C9742160E84A00AE4457 /* HypergeometricPFQ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HypergeometricPFQ.swift; sourceTree = "<group>"; };
 		9FC1C9762160F9E900AE4457 /* SSMath-GenericFP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SSMath-GenericFP.swift"; sourceTree = "<group>"; };
 		9FC1FC37210A33F600F5B43B /* ProbDist-Poisson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-Poisson.swift"; sourceTree = "<group>"; };
-		9FC9081D22BE90430021C141 /* StatsPlaground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = StatsPlaground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		9FCB77EB21103884002B6738 /* ProbDist-ExtremValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProbDist-ExtremValue.swift"; sourceTree = "<group>"; };
 		9FD6663022B6BB860072FDB2 /* SSSpecialFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSSpecialFunctions.swift; sourceTree = "<group>"; };
 		9FDEEFA8210D097200AC6FB7 /* Chebyshev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chebyshev.swift; sourceTree = "<group>"; };
@@ -439,7 +438,6 @@
 		9F82D3991F1E8F19001BFC9D = {
 			isa = PBXGroup;
 			children = (
-				9FC9081C22BE902F0021C141 /* Playground */,
 				9FB18A8622B80800003D721E /* Experimental Sources */,
 				9F9757DA22AE6471000AC8EF /* make_doc.sh */,
 				9F3F485822B02E20005FAB3A /* index.md */,
@@ -543,14 +541,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9FC9081C22BE902F0021C141 /* Playground */ = {
-			isa = PBXGroup;
-			children = (
-				9FC9081D22BE90430021C141 /* StatsPlaground.playground */,
-			);
-			path = Playground;
 			sourceTree = "<group>";
 		};
 		9FE86EC2215D193300DD5349 /* SpecialFunctions */ = {
