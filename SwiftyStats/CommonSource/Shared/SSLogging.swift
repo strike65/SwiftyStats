@@ -27,13 +27,15 @@ import Foundation
 #if os(macOS) || os(iOS)
 import os.log
 
-
 extension OSLog {
+    @available(macOS 10.12, iOS 13.0, *)
     private static var subsystem = Bundle.main.bundleIdentifier
-    
-    static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "functions_parameters")
-    static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "severe_bugs")
-    static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "filesystem")
+    @available(macOS 10.12, iOS 13.0, *)
+    static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.volker-thieme.SwiftyStats", category: "functions_parameters")
+    @available(macOS 10.12, iOS 13.0, *)
+    static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.volker-thieme.SwiftyStats", category: "severe_bugs")
+    @available(macOS 10.12, iOS 13.0, *)
+    static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.volker-thieme.SwiftyStats", category: "filesystem")
 }
 /// Defines the Logsystem for SwiftyStats
 
