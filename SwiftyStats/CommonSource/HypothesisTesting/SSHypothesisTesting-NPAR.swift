@@ -50,7 +50,7 @@ extension SSHypothesisTesting {
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -80,7 +80,7 @@ extension SSHypothesisTesting {
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -120,7 +120,7 @@ extension SSHypothesisTesting {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -452,7 +452,7 @@ extension SSHypothesisTesting {
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -480,7 +480,7 @@ extension SSHypothesisTesting {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -495,7 +495,7 @@ extension SSHypothesisTesting {
         catch {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("unable to create examine object", log: .log_dev, type: .error)
             }
             
@@ -565,7 +565,7 @@ extension SSHypothesisTesting {
         if m <= 0 || n <= 0 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("m and n is expected to be > 0", log: .log_stat, type: .error)
             }
             
@@ -594,7 +594,7 @@ extension SSHypothesisTesting {
         if minmn < 1 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("m and n is expected to be > 0", log: .log_stat, type: .error)
             }
             
@@ -682,7 +682,7 @@ extension SSHypothesisTesting {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -693,7 +693,7 @@ extension SSHypothesisTesting {
         if set2.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -720,7 +720,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -731,7 +731,7 @@ extension SSHypothesisTesting {
         if set2.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -752,7 +752,7 @@ extension SSHypothesisTesting {
         guard let ties: Array<FPT> = rr.ties else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
@@ -779,7 +779,7 @@ extension SSHypothesisTesting {
         if (U1 + U2) != mn {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
@@ -878,7 +878,7 @@ extension SSHypothesisTesting {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -889,7 +889,7 @@ extension SSHypothesisTesting {
         if set2.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -900,7 +900,7 @@ extension SSHypothesisTesting {
         if set1.count != set2.count {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
@@ -926,7 +926,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -937,7 +937,7 @@ extension SSHypothesisTesting {
         if set2.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -948,7 +948,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize != set2.sampleSize {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
@@ -986,7 +986,7 @@ extension SSHypothesisTesting {
         guard let ties: Array<FPT> = ranking.ties else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
@@ -1025,7 +1025,7 @@ extension SSHypothesisTesting {
         if ex4 != ex3 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
@@ -1080,7 +1080,7 @@ extension SSHypothesisTesting {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1091,7 +1091,7 @@ extension SSHypothesisTesting {
         if set2.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1102,7 +1102,7 @@ extension SSHypothesisTesting {
         if set1.count != set2.count {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
@@ -1127,7 +1127,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1138,7 +1138,7 @@ extension SSHypothesisTesting {
         if set2.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1149,7 +1149,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize != set2.sampleSize {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
@@ -1327,7 +1327,7 @@ extension SSHypothesisTesting {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("p0 is NaN", log: .log_stat, type: .error)
             }
             
@@ -1338,7 +1338,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1350,7 +1350,7 @@ extension SSHypothesisTesting {
         if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("observations are expected to be dichotomous", log: .log_stat, type: .error)
             }
             
@@ -1383,7 +1383,7 @@ extension SSHypothesisTesting {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("p0 is NaN", log: .log_stat, type: .error)
             }
             
@@ -1394,7 +1394,7 @@ extension SSHypothesisTesting {
         if data.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1405,7 +1405,7 @@ extension SSHypothesisTesting {
         if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("observations are expected to be dichotomous", log: .log_stat, type: .error)
             }
             
@@ -1541,7 +1541,7 @@ extension SSHypothesisTesting {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1552,7 +1552,7 @@ extension SSHypothesisTesting {
         if set2.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1583,7 +1583,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1594,7 +1594,7 @@ extension SSHypothesisTesting {
         if set2.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1696,7 +1696,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1707,7 +1707,7 @@ extension SSHypothesisTesting {
         if set2.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1966,7 +1966,7 @@ extension SSHypothesisTesting {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of groups is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -1984,7 +1984,7 @@ extension SSHypothesisTesting {
             if examine.sampleSize < 2 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("sample sizes are expected to be > 2", log: .log_stat, type: .error)
                 }
                 
@@ -2012,7 +2012,7 @@ extension SSHypothesisTesting {
         if sumRanks != ex3 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub. - contact the developer", log: .log_dev, type: .error)
             }
             

@@ -482,7 +482,7 @@ extension Helpers {
         /* The process did not converge in 'maxiter' iterations */
         #if os(macOS) || os(iOS)
         
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("qtukey didn't converge", log: .log_stat, type: .info)
         }
         

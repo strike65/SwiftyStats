@@ -37,7 +37,7 @@ extension SSProbDist {
             if (b <= 0) {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -57,7 +57,7 @@ extension SSProbDist {
             if (b <= 0) {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -79,7 +79,7 @@ extension SSProbDist {
             if (b <= 0) {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -106,7 +106,7 @@ extension SSProbDist {
             if (b <= 0) {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -117,7 +117,7 @@ extension SSProbDist {
             if p < 0 || p > 1 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("p is expected to be >= 0 and <= 1.0", log: .log_stat, type: .error)
                 }
                 

@@ -64,7 +64,7 @@ DESC
 	s.author 	= { 'Volker Thieme' => 'vtping@me.com' }
 	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
 	s.swift_version = '5.0'
-	s.ios.deployment_target = '12.0'
+	s.ios.deployment_target = '13.0'
 	s.osx.deployment_target = '10.12'
   s.source_files 	= 'SwiftyStats/CommonSource/**/*.swift'
 end

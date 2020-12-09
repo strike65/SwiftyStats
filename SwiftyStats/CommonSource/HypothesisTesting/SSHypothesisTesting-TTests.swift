@@ -39,7 +39,7 @@ extension SSHypothesisTesting {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample1 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -50,7 +50,7 @@ extension SSHypothesisTesting {
         if data2.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample2 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -61,7 +61,7 @@ extension SSHypothesisTesting {
         if !Helpers.isNumber(data1.first) || !Helpers.isNumber(data2.first) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("T Test is defined for numerical data only", log: .log_stat, type: .error)
             }
             
@@ -89,7 +89,7 @@ extension SSHypothesisTesting {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample1 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -100,7 +100,7 @@ extension SSHypothesisTesting {
         if sample2.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample2 size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -111,7 +111,7 @@ extension SSHypothesisTesting {
         if !sample1.isNumeric || !sample2.isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("T Test is defined for numerical data only", log: .log_stat, type: .error)
             }
             
@@ -194,7 +194,7 @@ extension SSHypothesisTesting {
             else {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("data are not sufficient. skewness/kurtosis not obtainable", log: .log_stat, type: .error)
                 }
                 
@@ -289,7 +289,7 @@ extension SSHypothesisTesting {
         if sample.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -300,7 +300,7 @@ extension SSHypothesisTesting {
         if !sample.isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("T Test is defined for numerical data only", log: .log_stat, type: .error)
             }
             
@@ -358,7 +358,7 @@ extension SSHypothesisTesting {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -384,7 +384,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize < 2 || set2.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -395,7 +395,7 @@ extension SSHypothesisTesting {
         if set1.sampleSize != set2.sampleSize {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample sizes are expected to be equal", log: .log_stat, type: .error)
             }
             
@@ -406,7 +406,7 @@ extension SSHypothesisTesting {
         if !set1.isNumeric || !set2.isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("T Test is defined for numerical data only", log: .log_stat, type: .error)
             }
             
@@ -488,7 +488,7 @@ extension SSHypothesisTesting {
         if data1.count < 2 || data2.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -499,7 +499,7 @@ extension SSHypothesisTesting {
         if data1.count != data2.count {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample sizes are expected to be equal", log: .log_stat, type: .error)
             }
             
@@ -526,7 +526,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -550,7 +550,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -574,7 +574,7 @@ extension SSHypothesisTesting {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -603,7 +603,7 @@ extension SSHypothesisTesting {
         if dataFrame.columns <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -632,7 +632,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -661,7 +661,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -673,7 +673,7 @@ extension SSHypothesisTesting {
             if !table.isNumeric {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("ANOVA is defined for numerical data only", log: .log_stat, type: .error)
                 }
                 
@@ -717,7 +717,7 @@ extension SSHypothesisTesting {
             if examine.sampleSize == 0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("at least one sample is empty", log: .log_stat, type: .error)
                 }
                 
@@ -812,7 +812,7 @@ extension SSHypothesisTesting {
             if dataFrame.examines.count <= 2 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
                 }
                 
@@ -837,7 +837,7 @@ extension SSHypothesisTesting {
         if data.count <= 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("number of samples is expected to be > 2", log: .log_stat, type: .error)
             }
             
@@ -853,7 +853,7 @@ extension SSHypothesisTesting {
             else {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Tukey Kramer is defined for numerical data only", log: .log_stat, type: .error)
                 }
                 
@@ -933,7 +933,7 @@ extension SSHypothesisTesting {
                     catch {
                         #if os(macOS) || os(iOS)
                         
-                        if #available(macOS 10.12, iOS 10, *) {
+                        if #available(macOS 10.12, iOS 13, *) {
                             os_log("unable to compute ptukey", log: .log_stat, type: .error)
                         }
                         
@@ -955,7 +955,7 @@ extension SSHypothesisTesting {
         catch {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("unable to compute qtukey", log: .log_stat, type: .error)
             }
             

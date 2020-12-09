@@ -100,12 +100,12 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         var isDir = ObjCBool(false)
         if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
             if !isDir.boolValue || path.count == 0 {
-                if #available(macOS 10.12, iOS 10.0, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("No writeable path found", log: .log_fs ,type: .error)
                 }
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
             }
-            if #available(macOS 10.12, iOS 10.0, *) {
+            if #available(macOS 10.12, iOS 13, *) {
             os_log("File doesn't exist", log: .log_fs ,type: .error)
             }
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
@@ -117,21 +117,21 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                         try fm.removeItem(atPath: fullFilename)
                     }
                     catch {
-                        if #available(macOS 10.12, iOS 10.0, *) {
+                        if #available(macOS 10.12, iOS 13, *) {
                             os_log("Unable to remove file prior to saving new file: %@", log: .log_fs ,type: .error, error.localizedDescription)
                         }
                         throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                     }
                 }
                 else {
-                    if #available(macOS 10.12, iOS 10.0, *) {
+                    if #available(macOS 10.12, iOS 13, *) {
                         os_log("Unable to remove file prior to saving new file", log: .log_fs ,type: .error)
                     }
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
             else {
-                if #available(macOS 10.12, iOS 10.0, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("File exists: %@", log: .log_fs ,type: .error, fullFilename)
                 }
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
@@ -144,7 +144,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             return true
         }
         catch {
-            if #available(macOS 10.12, iOS 10.0, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unable to write data", log: .log_fs, type: .error)
             }
             return false
@@ -159,7 +159,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
-            if #available(macOS 10.12, iOS 10.0, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("File not readable", log: .log_fs ,type: .error)
             }
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
@@ -171,7 +171,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             return result
         }
         catch {
-            if #available(macOS 10.12, iOS 10.0, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Failure", log: .log_fs ,type: .error)
             }
             return nil
@@ -253,7 +253,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             if a.sampleSize != tempSampleSize {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Sample sizes are expected to be equal", log: .log_stat, type: .error)
                 }
                 
@@ -315,7 +315,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         if examine.sampleSize != self.rows {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Sample sizes are expected to be equal", log: .log_stat, type: .error)
             }
             
@@ -508,7 +508,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                 if !overwrite {
                     #if os(macOS) || os(iOS)
                     
-                    if #available(macOS 10.12, iOS 10, *) {
+                    if #available(macOS 10.12, iOS 13, *) {
                         os_log("File already exists", log: .log_fs, type: .error)
                     }
                     
@@ -523,7 +523,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                     catch {
                         #if os(macOS) || os(iOS)
                         
-                        if #available(macOS 10.12, iOS 10, *) {
+                        if #available(macOS 10.12, iOS 13, *) {
                             os_log("Can't remove file", log: .log_fs, type: .error)
                         }
                         
@@ -541,7 +541,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             catch {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("File could not be written", log: .log_fs, type: .error)
                 }
                 
@@ -610,7 +610,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                     else {
                         #if os(macOS) || os(iOS)
                         
-                        if #available(macOS 10.12, iOS 10, *) {
+                        if #available(macOS 10.12, iOS 13, *) {
                             os_log("Error during processing data file", log: .log_fs, type: .error)
                         }
                         
@@ -657,7 +657,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("File not found", log: .log_fs, type: .error)
             }
             
@@ -699,7 +699,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                     else {
                         #if os(macOS) || os(iOS)
                         
-                        if #available(macOS 10.12, iOS 10, *) {
+                        if #available(macOS 10.12, iOS 13, *) {
                             os_log("Error during processing data file", log: .log_fs, type: .error)
                         }
                         

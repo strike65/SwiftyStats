@@ -210,7 +210,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Error creating SSExamine instance", log: .log_dev, type: .error)
             }
             
@@ -255,7 +255,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("File not found", log: .log_fs, type: .error)
             }
             
@@ -318,7 +318,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("File not found", log: .log_fs, type: .error)
             }
             
@@ -354,7 +354,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             if !overwrite {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("File already exists", log: .log_fs, type: .error)
                 }
                 
@@ -369,7 +369,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                 catch {
                     #if os(macOS) || os(iOS)
                     
-                    if #available(macOS 10.12, iOS 10, *) {
+                    if #available(macOS 10.12, iOS 13, *) {
                         os_log("Can't remove file", log: .log_fs, type: .error)
                     }
                     
@@ -393,7 +393,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         catch {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unable to write json", log: .log_fs, type: .error)
             }
             
@@ -420,7 +420,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             if !overwrite {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("File already exists", log: .log_fs, type: .error)
                 }
                 
@@ -435,7 +435,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                 catch {
                     #if os(macOS) || os(iOS)
                     
-                    if #available(macOS 10.12, iOS 10, *) {
+                    if #available(macOS 10.12, iOS 13, *) {
                         os_log("Can't remove file", log: .log_fs, type: .error)
                     }
                     
@@ -452,7 +452,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             catch {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("File could not be written", log: .log_fs, type: .error)
                 }
                 
@@ -475,7 +475,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         catch {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Error creating SSExamine instance", log: .log_dev, type: .error)
             }
             
@@ -742,7 +742,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         if !(SSElement.self is String.Type) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Can only append strings", log: .log_stat, type: .error)
             }
             

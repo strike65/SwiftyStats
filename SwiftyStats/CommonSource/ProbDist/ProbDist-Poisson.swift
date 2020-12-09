@@ -39,7 +39,7 @@ extension SSProbDist {
         public static func cdf<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT, tail: SSCDFTail) throws -> FPT {
             if lambda <= 0 {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
@@ -47,7 +47,7 @@ extension SSProbDist {
             }
             if k < 0 {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
@@ -76,7 +76,7 @@ extension SSProbDist {
         public static func pdf<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: FPT) throws -> FPT {
             if lambda <= 0 {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
@@ -84,7 +84,7 @@ extension SSProbDist {
             }
             if k < 0 {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif

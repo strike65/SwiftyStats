@@ -39,7 +39,7 @@ extension SSProbDist {
             if c <= 0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Concentration parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -63,7 +63,7 @@ extension SSProbDist {
             if c <= 0.0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Concentration parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -93,7 +93,7 @@ extension SSProbDist {
             if y.isZero {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("d_modp: second argument expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
@@ -122,7 +122,7 @@ extension SSProbDist {
             if c <= 0.0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Concentration parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -244,7 +244,7 @@ extension SSProbDist {
             if c <= 0.0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Concentration parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -255,7 +255,7 @@ extension SSProbDist {
             if p < 0.0 || p > 1.0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("p is expected to be >= 0.0 and <= 1.0", log: .log_stat, type: .error)
                 }
                 

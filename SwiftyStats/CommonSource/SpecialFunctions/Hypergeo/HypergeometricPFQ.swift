@@ -298,7 +298,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     for i1 in stride(from: 1, to: ip, by: 1) {
         if (!a[i1 - 1].re.isZero && ar[i1 - 1].isZero && ar2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Real part was set to zero (input vector a - at least one element was too close to zero)", log: .log_stat, type: .error)
             }
             #else
@@ -307,7 +307,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         }
         if (!a[i1 - 1].isZero && ai[i1 - 1].isZero && ai2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Imaginary part was set to zero (input vector a - at least one element was too close to zero)", log: .log_stat, type: .error)
             }
             #else
@@ -318,7 +318,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     for i1 in stride(from: 1, to: iq, by: 1) {
         if (!b[i1 - 1].re.isZero && cr[i1 - 1].isZero && cr2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Real part was set to zero (input vector b - at least one element was too close to zero)", log: .log_stat, type: .error)
             }
             #else
@@ -327,7 +327,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         }
         if (!b[i1 - 1].isZero && ci[i1 - 1].isZero && ci2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Imaginary part was set to zero (input vector b - at least one element was too close to zero)", log: .log_stat, type: .error)
             }
             #else
@@ -337,7 +337,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     }
     if !z.re.isZero && xr.isZero && xr2.isZero {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Real part was set to zero (input z - at least one element was too close to zero)", log: .log_stat, type: .error)
         }
         #else
@@ -347,7 +347,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     }
     if !z.im.isZero && xi.isZero && xi2.isZero {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Imaginary part was set to zero (input z - at least one element was too close to zero)", log: .log_stat, type: .error)
         }
         #else
@@ -390,7 +390,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     for i1 in 1...iq {
         if ((cr[i1 - 1].isZero) && (cr2[i1 - 1].isZero) && (ci[i1 - 1].isZero) && (ci2[i1 - 1].isZero)) {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Abort - denominator argument was equal to zero", log: .log_stat, type: .error)
             }
             #endif
@@ -401,7 +401,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
             ex2 = SSMath.pow1(10,  Helpers.makeFP(-nmach))
             if ((ex1 < ex2) && (icount >= ifix(-round(b[i1 - 1].re)) || icount == -1)) {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Abort - denominator argument was equal to zero", log: .log_stat, type: .error)
                 }
                 #endif
@@ -486,7 +486,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     l = max(l, ix)
     if l < 0 || l > length {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Abort - error in fn hyper: l must be < 777", log: .log_stat, type: .error)
         }
         #endif
@@ -494,7 +494,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     }
     if nsigfig > nmach {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Warning--the number of significant figures requested is greate than machine precision. Result is not as accurate as requested.", log: .log_stat, type: .error)
         }
         #else
@@ -1487,7 +1487,7 @@ fileprivate func conv21<T: SSFloatingPoint>(cae: Array<Array<T>>) throws -> Comp
     let tenmax:T =  Helpers.makeFP(T.greatestFiniteMagnitude.exponent - 2) * T.ln2 / T.ln10
     if cae[0][1] > tenmax || cae[1][1] > tenmax {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("value of exponent required for summation: pFq", log: .log_stat, type: .error)
         }
         
@@ -1742,7 +1742,7 @@ fileprivate func ipremax<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comp
     }
     if ans == 0 {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Max exponent not found", log: .log_stat, type: .error)
         }
         #endif
@@ -1874,7 +1874,7 @@ fileprivate func cgamma<T: SSFloatingPoint>(_ arg: Complex<T>, lnpfq: Int) throw
             diff = abs(round(argr) - argr)
             if diff <= 2 * precis {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Argument to close to a pols, mo imaginary part", log: .log_stat, type: .error)
                 }
                 #endif

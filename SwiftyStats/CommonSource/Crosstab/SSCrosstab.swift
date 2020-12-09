@@ -180,7 +180,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     init(rows: Int, columns: Int, initialValue: N, rowID: Array<R>, columnID: Array<C>) throws {
         if rowID.count != rows {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10.0, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("You must provide as many row id's as rows", log: .log_stat, type: .error)
             }
             #endif
@@ -189,7 +189,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         if columnID.count != columns {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("You must provide as many row id's as rows", log: .log_stat, type: .error)
             }
             
@@ -199,7 +199,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         if !Helpers.isNumber(initialValue) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Cell counts must be numeric", log: .log_stat, type: .error)
             }
             
@@ -339,7 +339,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unknown Row Name", log: .log_stat, type: .error)
             }
             
@@ -368,7 +368,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unknown Column Name", log: .log_stat, type: .error)
             }
             
@@ -434,7 +434,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         if !(row.count == self.cc) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Rows to append must have self.columns columns", log: .log_stat, type: .error)
             }
             
@@ -457,7 +457,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         if !(column.count == self.rr) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Columns to append must have self.rows rows", log: .log_stat, type: .error)
             }
             
@@ -541,7 +541,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             if newRow.count != self.columnCount {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New row: wrong length", log: .log_stat, type: .error)
                 }
                 
@@ -565,7 +565,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             if newRow.count != self.columnCount {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New row: wrong length", log: .log_stat, type: .error)
                 }
                 
@@ -581,7 +581,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unknown row name", log: .log_stat, type: .error)
             }
             
@@ -598,7 +598,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             if newColumn.count != self.rowCount {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New column: wrong length", log: .log_stat, type: .error)
                 }
                 
@@ -614,7 +614,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         else {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Unknown row name", log: .log_stat, type: .error)
             }
             
@@ -631,7 +631,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             if newColumn.count != self.rowCount {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New column: wrong length", log: .log_stat, type: .error)
                 }
                 
@@ -879,7 +879,7 @@ extension SSCrosstab {
         }
         else {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("New column: wrong length", log: .log_stat, type: .error)
             }
             #endif
@@ -991,7 +991,7 @@ extension SSCrosstab {
         }
         else {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("New column: wrong length", log: .log_stat, type: .error)
             }
             #endif
@@ -1012,7 +1012,7 @@ extension SSCrosstab {
         }
         else {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("New column: wrong length", log: .log_stat, type: .error)
             }
             #endif
@@ -1107,7 +1107,7 @@ extension SSCrosstab {
             else {
 
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New column: wrong length", log: .log_stat, type: .error)
                 }
                 #endif
@@ -1117,7 +1117,7 @@ extension SSCrosstab {
         else {
 
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("New column: wrong length", log: .log_stat, type: .error)
             }
             #endif
@@ -1246,7 +1246,7 @@ extension SSCrosstab {
             }
             else {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("New column: wrong length", log: .log_stat, type: .error)
                 }
                 #endif
@@ -1255,7 +1255,7 @@ extension SSCrosstab {
         }
         else {
             #if os(macOS) || os(iOS)
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("New column: wrong length", log: .log_stat, type: .error)
             }
             #endif

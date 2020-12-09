@@ -41,7 +41,7 @@ extension SSProbDist {
             if df < 0 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
@@ -245,7 +245,7 @@ extension SSProbDist {
             }
             if df <= 0 {
                 #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 #endif
@@ -262,7 +262,7 @@ extension SSProbDist {
             if p < 0 || p > 1 {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("p is expected to be >= 0.0 and <= 1.0", log: .log_stat, type: .error)
                 }
                 
@@ -340,7 +340,7 @@ fileprivate func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FP
     // Special Cases
     if df <= 0 {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
         }
         #endif
@@ -668,7 +668,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     dgesv_(&N, &nrhs, &AA, &lda, &ipiv, &abc, &ldb, &info)
     if info != 0 {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 10, *) {
+        if #available(macOS 10.12, iOS 13, *) {
             os_log("unable to compute integration limits. A singular matrix was detected", log: .log_stat, type: .error)
         }
         #endif

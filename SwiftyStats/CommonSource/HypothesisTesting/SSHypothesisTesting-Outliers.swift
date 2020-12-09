@@ -36,7 +36,7 @@ extension SSHypothesisTesting {
         if array.count == 3 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
             }
             
@@ -47,7 +47,7 @@ extension SSHypothesisTesting {
         if alpha <= 0 || alpha >= 1 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
@@ -58,7 +58,7 @@ extension SSHypothesisTesting {
         if !Helpers.isNumber(array[0]) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("expected numerical type", log: .log_stat, type: .error)
             }
             
@@ -85,7 +85,7 @@ extension SSHypothesisTesting {
         if data.sampleSize <= 3 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
             }
             
@@ -96,7 +96,7 @@ extension SSHypothesisTesting {
         if alpha <= 0 || alpha >= 1 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
@@ -107,7 +107,7 @@ extension SSHypothesisTesting {
         if !data.isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("expected numerical type", log: .log_stat, type: .error)
             }
             
@@ -231,7 +231,7 @@ extension SSHypothesisTesting {
         if !data.isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("expected numerical type", log: .log_stat, type: .error)
             }
             

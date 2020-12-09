@@ -52,7 +52,7 @@ extension SSHypothesisTesting {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -90,7 +90,7 @@ extension SSHypothesisTesting {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
@@ -121,7 +121,7 @@ extension SSHypothesisTesting {
             else {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("no user defined cutting point specified", log: .log_stat, type: .error)
                 }
                 

@@ -257,7 +257,7 @@ extension SSExamine {
         if q.isZero || q < 0 || q >= 1 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("p has to be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
@@ -268,7 +268,7 @@ extension SSExamine {
         if !isNumeric {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("Quantile is not defined for non-numeric data.", log: .log_stat, type: .error)
             }
             
@@ -411,7 +411,7 @@ extension SSExamine {
         if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("alpha has to be greater than zero and smaller than 0.5", log: .log_stat, type: .error)
             }
             
@@ -449,7 +449,7 @@ extension SSExamine {
         if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("alpha has to be greater than zero and smaller than 0.5", log: .log_stat, type: .error)
             }
             
@@ -689,7 +689,7 @@ extension SSExamine {
         if upper.isZero || upper < 0 || upper >= 1 || lower.isZero || lower < 0 || lower >= 1 {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("lower and upper quantile has to be > 0.0 and < 1.0", log: .log_stat, type: .error)
             }
             
@@ -700,7 +700,7 @@ extension SSExamine {
         if upper < lower {
             #if os(macOS) || os(iOS)
             
-            if #available(macOS 10.12, iOS 10, *) {
+            if #available(macOS 10.12, iOS 13, *) {
                 os_log("lower quantile has to be less than upper quantile", log: .log_stat, type: .error)
             }
             
@@ -828,7 +828,7 @@ extension SSExamine {
             else {
                 #if os(macOS) || os(iOS)
                 
-                if #available(macOS 10.12, iOS 10, *) {
+                if #available(macOS 10.12, iOS 13, *) {
                     os_log("measure is not available", log: .log_stat, type: .error)
                 }
                 
