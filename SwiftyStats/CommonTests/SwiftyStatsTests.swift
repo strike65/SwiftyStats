@@ -85,9 +85,9 @@ class SwiftyStatsTests: XCTestCase {
     override func setUp() {
         super.setUp()
         #if os(macOS) || os(iOS)
-            resPath = Bundle(for: type(of: self)).resourcePath
+        resPath = Bundle(for: type(of: self)).resourcePath
         #else
-            linuxBundle = Bundle(path: (Bundle.main.resourcePath ?? ".") + "/Resources") ?? Bundle.main
+        linuxBundle = Bundle(path: (Bundle.main.resourcePath ?? ".") + "/Resources") ?? Bundle.main
         #endif
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -100,25 +100,25 @@ class SwiftyStatsTests: XCTestCase {
     
     
     func testTukeyKramer() {
-
- // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
+        
+        // Data from http://www.itl.nist.gov/div898/handbook/prc/section4/prc436.htm#example1
         #if os(macOS) || os(iOS)
-//        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", Helpers.NumberScanner.scanDouble)
+        //        let df: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_01.csv", Helpers.NumberScanner.scanDouble)
         let df1: SSDataFrame<Double, Double> = try! SSDataFrame.dataFrame(fromFile: resPath + "/TukeyKramerData_02.csv", Helpers.NumberScanner.scanDouble)
         #else
         let df: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_01String, parser: Helpers.NumberScanner.scanDouble)
         let df1: SSDataFrame<Double, Double>  = try! SSDataFrame.dataFrame(fromString: TukeyKramerData_02String, parser: Helpers.NumberScanner.scanDouble)
         print("TukeyKramerData01 read")
         #endif
-/*
+        /*
          var test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df, alpha: 0.05)!
-        XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
-        XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
-        XCTAssertEqual(test[2].testStat, 0.3101, accuracy: 1E-04)
-        XCTAssertEqual(test[3].testStat, 1.6282, accuracy: 1E-04)
-        XCTAssertEqual(test[4].testStat, 4.3032, accuracy: 1E-04)
-        XCTAssertEqual(test[5].testStat, 5.9314, accuracy: 1E-04)
- */
+         XCTAssertEqual(test[0].testStat, 4.6133, accuracy: 1E-04)
+         XCTAssertEqual(test[1].testStat, 6.2416, accuracy: 1E-04)
+         XCTAssertEqual(test[2].testStat, 0.3101, accuracy: 1E-04)
+         XCTAssertEqual(test[3].testStat, 1.6282, accuracy: 1E-04)
+         XCTAssertEqual(test[4].testStat, 4.3032, accuracy: 1E-04)
+         XCTAssertEqual(test[5].testStat, 5.9314, accuracy: 1E-04)
+         */
         /*
          A <- c(27, 27, 25, 26, 25)       # multiple Vergleiche nach Tukey-Kramer
          > B <- c(26, 25, 26, 25, 24)
@@ -128,23 +128,23 @@ class SwiftyStatsTests: XCTestCase {
          > mA <- mean(A);   mB <- mean(B);   mC <- mean(C)
          > s  <- sqrt((sum((A-mA)^2)+sum((B-mB)^2)+sum((C-mC)^2)) / f)
          > T.AB <- (mA - mB) / (s*sqrt(0.5*(1/nA + 1/nB))); T.AB
-        */
+         */
         let test = try! SSHypothesisTesting.tukeyKramerTest(dataFrame: df1, alpha: 0.05)!
         XCTAssertEqual(test[0].testStat, 2.0, accuracy: 1E-01)
         XCTAssertEqual(test[1].testStat, 13.0, accuracy: 1E-01)
         XCTAssertEqual(test[2].testStat, 11.0, accuracy: 1E-01)
-/*        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df, alpha: 0.05)!
-        XCTAssertEqual(test[0].testStat, 3.2621, accuracy: 1E-04)
-        XCTAssertEqual(test[1].testStat, 4.4134, accuracy: 1E-04)
-        XCTAssertEqual(test[2].testStat, 0.2193, accuracy: 1E-04)
-        XCTAssertEqual(test[3].testStat, 1.1513, accuracy: 1E-04)
-        XCTAssertEqual(test[4].testStat, 3.0428, accuracy: 1E-04)
-        XCTAssertEqual(test[5].testStat, 4.1941, accuracy: 1E-04)
-        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df1, alpha: 0.05)!
-        XCTAssertEqual(test[0].testStat, 1.4142, accuracy: 1E-04)
-        XCTAssertEqual(test[1].testStat, 9.1924, accuracy: 1E-04)
-        XCTAssertEqual(test[2].testStat, 7.7782, accuracy: 1E-04)
-*/
+        /*        test = try! SSHypothesisTesting.scheffeTest(dataFrame: df, alpha: 0.05)!
+         XCTAssertEqual(test[0].testStat, 3.2621, accuracy: 1E-04)
+         XCTAssertEqual(test[1].testStat, 4.4134, accuracy: 1E-04)
+         XCTAssertEqual(test[2].testStat, 0.2193, accuracy: 1E-04)
+         XCTAssertEqual(test[3].testStat, 1.1513, accuracy: 1E-04)
+         XCTAssertEqual(test[4].testStat, 3.0428, accuracy: 1E-04)
+         XCTAssertEqual(test[5].testStat, 4.1941, accuracy: 1E-04)
+         test = try! SSHypothesisTesting.scheffeTest(dataFrame: df1, alpha: 0.05)!
+         XCTAssertEqual(test[0].testStat, 1.4142, accuracy: 1E-04)
+         XCTAssertEqual(test[1].testStat, 9.1924, accuracy: 1E-04)
+         XCTAssertEqual(test[2].testStat, 7.7782, accuracy: 1E-04)
+         */
         
     }
     
@@ -154,7 +154,7 @@ class SwiftyStatsTests: XCTestCase {
         if let ac: Double = try! examineLew.autocorrelation() {
             XCTAssertEqual(ac, -0.307, accuracy: 1E-3)
         }
-
+        
         
         var examineConc1: SSExamine<Double, Double>! = nil
         var examineConc2: SSExamine<Double, Double>! = nil
@@ -294,7 +294,7 @@ class SwiftyStatsTests: XCTestCase {
         let intDataTestString = "18,15,18,16,17,15,14,14,14,15,15,14,15,14,22,18,21,21,10,10,11,9,28,25,19,16,17,19,18,14,14,14,14,12,13,13,18,22,19,18,23,26,25,20,21,13,14,15,14,17,11,13,12,13,15,13,13,14,22,28,13,14,13,14,15,12,13,13,14,13,12,13,18,16,18,18,23,11,12,13,12,18,21,19,21,15,16,15,11,20,21,19,15,26,25,16,16,18,16,13,14,14,14,28,19,18,15,15,16,15,16,14,17,16,15,18,21,20,13,23,20,23,18,19,25,26,18,16,16,15,22,22,24,23,29,25,20,18,19,18,27,13,17,13,13,13,30,26,18,17,16,15,18,21,19,19,16,16,16,16,25,26,31,34,36,20,19,20,19,21,20,25,21,19,21,21,19,18,19,18,18,18,30,31,23,24,22,20,22,20,21,17,18,17,18,17,16,19,19,36,27,23,24,34,35,28,29,27,34,32,28,26,24,19,28,24,27,27,26,24,30,39,35,34,30,22,27,20,18,28,27,34,31,29,27,24,23,38,36,25,38,26,22,36,27,27,32,28"
         
         XCTAssert(examineInt.elementsAsString(withDelimiter: ",")! == intDataTestString)
-//        print(examineInt.elementsAsString(withDelimiter: ",", asRow: false)!)
+        //        print(examineInt.elementsAsString(withDelimiter: ",", asRow: false)!)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .raw)! == intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .ascending)! != intData)
         XCTAssert(examineInt.elementsAsArray(sortOrder: .descending)! != intData)
@@ -376,7 +376,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssert(sym.skewnessType == .symmetric)
         XCTAssert(examineSmall.variance(type: .unbiased) == nil)
         XCTAssert(examineSmall.standardDeviation(type: .unbiased) == nil)
-
+        
         XCTAssert(examineSmall.standardError == nil)
         XCTAssertTrue(examineWithZeroMean.contraHarmonicMean! == -Double.infinity)
         XCTAssert(examineString.total == nil)
@@ -433,7 +433,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssert(examineDouble.mode![0] == 18.0)
         XCTAssertEqual(examineDouble!.commonest![0], 18.0, accuracy: 1e-1)
         XCTAssertEqual(examineDouble!.scarcest![0], 9.0, accuracy: 1e-1)
-//        XCTAssert(examineDouble!.scarcest![0] == 9.0)
+        //        XCTAssert(examineDouble!.scarcest![0] == 9.0)
         XCTAssert(examineDouble!.scarcest![1] == 39.0)
         XCTAssertEqual(try! examineDouble.autocorrelation()!, 0.685, accuracy: 1E-3)
         XCTAssert(!examineDouble.hasOutliers(testType: .esd)!)
@@ -587,25 +587,26 @@ class SwiftyStatsTests: XCTestCase {
         }
         XCTAssertEqual(df, df2)
         #if os(macOS) || os(iOS)
-            let filename = "test.dat"
-            let tempDir = NSTemporaryDirectory()
-            let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
-            do {
-                let s = try df2.archiveTo(filePath: url?.path, overwrite: true)
-                XCTAssert(s)
+        let filename = "test.dat"
+        let tempDir = NSTemporaryDirectory()
+        let url = NSURL.fileURL(withPathComponents: [tempDir, filename])
+        do {
+            let s = try df2.archiveTo(filePath: url?.path, overwrite: true)
+            print(url!.path)
+            XCTAssert(s)
+        }
+        catch {
+            print("error in archiveTo")
+        }
+        do {
+            if let testDataFrame = try SSDataFrame<Double, Double>.unarchiveFrom(filePath: url?.path) {
+                XCTAssert(testDataFrame.isEqual(df2))
             }
-            catch {
-                print("error in archiveTo")
-            }
-            do {
-                if let testDataFrame = try SSDataFrame<Double, Double>.unarchiveFrom(filePath: url?.path) {
-                    XCTAssert(testDataFrame.isEqual(df2))
-                }
-                try! FileManager.default.removeItem(at: url!)
-            }
-            catch {
-                print("error in unarchive")
-            }
+            try! FileManager.default.removeItem(at: url!)
+        }
+        catch {
+            print("error in unarchive")
+        }
         #endif
         var row = df2.row(at: 3)
         XCTAssertEqual(row[0], 0.51, accuracy: 1E-2)
@@ -619,7 +620,12 @@ class SwiftyStatsTests: XCTestCase {
         var exa2: SSExamine<Double, Double>! = nil
         var exa3: SSExamine<Double, Double>! = nil
         #if os(macOS) || os(iOS)
-            exa1 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        do {
+            exa1 = try SSExamine<Double, Double>.examine(fromFile: resPath + "/NormalData01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        }
+        catch {
+            print(resPath + "/NormalData01.examine")
+        }
         #else
         if let p = linuxResourcePath(resource: "NormalData01", type: "examine") {
             exa1 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
@@ -709,7 +715,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c1.chiSquareYates)
         print(c1.adjustedResidual(row: 1, column: 1))
         print(c1.expectedFrequency(row: 1, column: 1))
-//        print(c1[1, 2])
+        //        print(c1[1, 2])
         print(c1.residual(row: 1, column: 1))
         print(c1.pearsonR)
         print(c1.phi)
@@ -722,7 +728,7 @@ class SwiftyStatsTests: XCTestCase {
         print(c2.chiSquareYates)
         print(c2.adjustedResidual(row: 1, column: 1))
         print(c2.expectedFrequency(row: 1, column: 1))
-//        print(c2[Int(1), Int(2)])
+        //        print(c2[Int(1), Int(2)])
         print(c2.residual(row: 1, column: 1))
         print(c2.pearsonR)
         print(c2.phi)
@@ -802,22 +808,22 @@ class SwiftyStatsTests: XCTestCase {
         let g4 = SSExamine<Double, Double>.init(withArray: sign4, name: nil, characterSet: nil)
         res = try! SSHypothesisTesting.signTest(set1: g3, set2: g4)
         XCTAssertEqual(res.pValueExact!, 0.0384064, accuracy: 1E-6)
-//        var g5: SSExamine<Double, Double>! = nil
-//        var g6: SSExamine<Double, Double>! = nil
-//        #if os(macOS) || os(iOS)
-//        g5 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
-//        g6 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
-//        #else
-//        if let p = linuxResourcePath(resource: "largeNormal_01", type: "examine") {
-//            g5 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
-//        }
-//        if let p = linuxResourcePath(resource: "largeNormal_02", type: "examine") {
-//            g6 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
-//        }
-//        #endif
-//        res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
-//        XCTAssertEqual(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
-//        XCTAssertEqual(res.pValueExact!, 0.00295538, accuracy: 1E-6)
+        //        var g5: SSExamine<Double, Double>! = nil
+        //        var g6: SSExamine<Double, Double>! = nil
+        //        #if os(macOS) || os(iOS)
+        //        g5 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_01.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        //        g6 = try! SSExamine<Double, Double>.examine(fromFile: resPath + "/largeNormal_02.examine", separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        //        #else
+        //        if let p = linuxResourcePath(resource: "largeNormal_01", type: "examine") {
+        //            g5 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        //        }
+        //        if let p = linuxResourcePath(resource: "largeNormal_02", type: "examine") {
+        //            g6 = try! SSExamine<Double, Double>.examine(fromFile: p, separator: ",", stringEncoding: String.Encoding.utf8, Helpers.NumberScanner.scanDouble)!
+        //        }
+        //        #endif
+        //        res = try! SSHypothesisTesting.signTest(set1: g5, set2: g6)
+        //        XCTAssertEqual(res.zStat!, -2.7511815643464903, accuracy: 1E-7)
+        //        XCTAssertEqual(res.pValueExact!, 0.00295538, accuracy: 1E-6)
     }
     
     func testWilcoxonMatchedPairs() {
@@ -827,16 +833,16 @@ class SwiftyStatsTests: XCTestCase {
         let examine1 = SSExamine<Double, Double>.init(withArray: M1, name: nil, characterSet: nil)
         let examine2 = SSExamine<Double, Double>.init(withArray: M2, name: nil, characterSet: nil)
         /*
-             > M1 <- c(0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47)
-             > M2 <- c(0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51)
-             > wilcox.test(x = M1, y = M2,paired = TRUE, alternative = "two.sided")
-             
-             Wilcoxon signed rank test with continuity correction
-             
-             data:  M1 and M2
-             V = 22.5, p-value = 0.5749
-             alternative hypothesis: true location shift is not equal to 0
-        */
+         > M1 <- c(0.47, 1.02, 0.33, 0.70, 0.94, 0.85, 0.39, 0.52, 0.47)
+         > M2 <- c(0.41, 1.00, 0.46, 0.61, 0.84, 0.87, 0.36, 0.52, 0.51)
+         > wilcox.test(x = M1, y = M2,paired = TRUE, alternative = "two.sided")
+         
+         Wilcoxon signed rank test with continuity correction
+         
+         data:  M1 and M2
+         V = 22.5, p-value = 0.5749
+         alternative hypothesis: true location shift is not equal to 0
+         */
         var wilcox: SSWilcoxonMatchedPairsTestResult<Double> = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine1, set2: examine2)
         XCTAssertEqual(wilcox.p2Value!, 0.5749, accuracy: 1E-3)
         XCTAssertEqual(wilcox.zStat!, -0.5607, accuracy: 1E-3)
@@ -853,7 +859,7 @@ class SwiftyStatsTests: XCTestCase {
          data:  M3 and M4
          V = 5, p-value = 0.00859
          alternative hypothesis: true location shift is not equal to 0
-        */
+         */
         let M3 = [20.3,17,6.5,25,5.4,29.2,2.9,6.6,15.8,8.3,34.0,8]
         let M4 = [50.4,87,25.1,28.5,26.9,36.6,1.0,43.8,44.2,10.4,29.9,27.7]
         let examine3 = SSExamine<Double, Double>.init(withArray: M3, name: nil, characterSet: nil)
@@ -873,7 +879,7 @@ class SwiftyStatsTests: XCTestCase {
          data:  M5 and M6
          V = 45, p-value = 0.009091
          alternative hypothesis: true location shift is not equal to 0
-        */
+         */
         let M5 = [13.0, 11, 6, 14, 6, 15, 13, 14, 8]
         let M6 = [1.0, 2, 1, 1, 3, 3, 2, 4, 2]
         let examine5 = SSExamine<Double, Double>.init(withArray: M5, name: nil, characterSet: nil)
@@ -881,7 +887,7 @@ class SwiftyStatsTests: XCTestCase {
         wilcox = try! SSHypothesisTesting.wilcoxonMatchedPairs(set1: examine5, set2: examine6)
         XCTAssertEqual(wilcox.p2Value!, 0.009091, accuracy: 1E-4)
         XCTAssertEqual(wilcox.zStat!, -2.60862, accuracy: 1E-4)
-
+        
     }
     
     func testHTest() {
@@ -938,7 +944,7 @@ class SwiftyStatsTests: XCTestCase {
          data:  x by g (A, B)
          Z = -1.5341, p-value = 0.125
          alternative hypothesis: true mu is not equal to 0
-        */
+         */
         let M7 = [65.0,79,90,75,61,98,80,75]
         let M8 = [90.0,98,73,79,84,98,90,88]
         let setM7 = SSExamine<Double, Double>.init(withArray: M7, name: nil, characterSet: nil)
@@ -1107,7 +1113,7 @@ class SwiftyStatsTests: XCTestCase {
          sample estimates:
          mean of the differences
          1.15
-        */
+         */
         let x = [4.0, 3.5,4.1,5.5,4.6,6.0,5.1,4.3]
         let y = [3.0, 3.0,3.8,2.1,4.9,5.3,3.1,2.7]
         let xExamine = SSExamine<Double, Double>.init(withArray: x, name: "X", characterSet: nil)
@@ -1184,7 +1190,7 @@ class SwiftyStatsTests: XCTestCase {
          N[AndersonDarlingTest[normal1, NormalDistribution[Mean[normal1], StandardDeviation[normal1]]],21]
          
          ==> 0.987337
-        */
+         */
         
         var adRes = try! SSHypothesisTesting.adNormalityTest(array: normal1, alpha: 0.05)!
         XCTAssertEqual(adRes.pValue!, 0.987, accuracy: 1E-3)
@@ -1192,9 +1198,9 @@ class SwiftyStatsTests: XCTestCase {
         /*
          laplace = {-2.03679,0.518416,-1.72556,3.07248,1.58415,0.55357,1.13785,2.77352,0.692562,-0.246844,1.07308,0.676815,2.61719,0.839612,0.657608,1.60029,0.934251,1.64299,4.83994,-0.572193,0.590732,-2.30579,-3.46328,4.6823,2.65601,1.66736,0.0644071,0.561031,2.19092,1.10959,0.952764,4.28232,0.360738,3.43897,-0.122254,-3.22326,7.96229,-5.32675,1.4503,-2.94508,1.36242,1.0414,0.421444,3.61022,1.26506,-3.94449,-0.544188,2.88665,2.00745,-3.01688,1.0722,-0.327354,1.46366,1.52667,3.71474,1.24921,2.36462,2.111,-0.704057,6.7197,7.54793,2.76588,0.470362,0.467676,1.16809,2.11906,-3.79051,2.17474,4.64406,-1.69926,0.967686,-3.22085,1.72475,1.17087,1.03924,0.230923,1.4176,0.897564,-6.89486,-5.64721,1.07495,1.78927,8.24184,5.95395,0.793648,1.89169,1.25558,4.3064,-1.33544,5.67814,-6.36738,-0.372883,0.13142,0.786708,-0.0932199,-4.06743,4.07498,-0.482598,-1.49333,1.61442,-2.27068,1.55111,-2.59695,4.47164,-0.776884,0.884446,3.70967,0.858531,3.33213,-7.62385,0.0583429,-0.148588,-1.24765,8.67548,0.860613,1.36125,-9.48455,-0.831406,-1.86396,2.10917,4.551,1.064,1.97283,3.82057,2.29935,-1.74418,0.244115,-0.837016,2.53457,1.61,1.54181,-1.54528,-0.943004,-0.738644,-0.680302,0.358243,5.85945,0.920141,0.645741,0.675258,0.833122,0.0261111,0.593711,1.10065,0.956418,-0.194063,3.37702,-1.40828,0.853448,-1.26089};
          N[AndersonDarlingTest[laplace, NormalDistribution[Mean[laplace], StandardDeviation[laplace]]], 21]
-
+         
          ==> 0.0414159
-        */
+         */
         
         adRes = try! SSHypothesisTesting.adNormalityTest(array: laplaceData, alpha: 0.05)!
         XCTAssertEqual(adRes.pValue!, 0.04, accuracy: 1E-2)
@@ -1207,14 +1213,14 @@ class SwiftyStatsTests: XCTestCase {
         let x1: Array<Double> = [0.3,2.0,8.0,25.0,13.0,45.0,47.0,100.0,85.0,120.0,130.0,140.0,30.0,40.0,0.01,100.0,1.0,0.08]
         let p: Array<Double> = [0.7382308441994e-02,0.2199222796783e-04,0.9999999768807,0.1746869995977e-03,0.1483130042637,0.1748328323235e-03,0.1340769184710e-04,0.9646591215441,0.1783991673043e-04,0.9994542406431,0.1220231636641e-05,0.1757487653307e-05,0.9999894753719,0.9999968347378,0.2431297758708,0.3851423018735e-09,0.2984493152360e-04,0.4191472999694e-11]
         let q: Array<Double> = [0.9926176915580,0.9999780077720,
-        0.2311934913546e-7,0.9998253130004,
-        0.8516869957363,0.9998251671677,
-        0.9999865923082,0.3534087845586e-01,
-        0.9999821600833,0.5457593568564e-03,
-        0.9999987797684,0.9999982425123,
-        0.1052462813144e-04,0.3165262228904e-05,
-        0.7568702241292,0.9999999996149,
-        0.9999701550685,0.9999999999958]
+                                0.2311934913546e-7,0.9998253130004,
+                                0.8516869957363,0.9998251671677,
+                                0.9999865923082,0.3534087845586e-01,
+                                0.9999821600833,0.5457593568564e-03,
+                                0.9999987797684,0.9999982425123,
+                                0.1052462813144e-04,0.3165262228904e-05,
+                                0.7568702241292,0.9999999996149,
+                                0.9999701550685,0.9999999999958]
         var marcumRes: (p: Double, q: Double, err: Int, underflow: Bool)
         var err1, err2: Double
         for i in stride(from: 1, to: 18, by: 1) {
@@ -1280,69 +1286,69 @@ class SwiftyStatsTests: XCTestCase {
         print("Maximum value of the recurrence check = \(d0)")
     }
     
-
+    
     func testQuick() {
-//        let z: Complex<Double> = Complex<Double>(-3.0,4.0)
-//        let g: Complex<Double> = SSMath.tgamma1(z: z)
-//        var a: Array<Complex<Double>> = Array<Complex<Double>>.init()
-//        var b: Array<Complex<Double>> = Array<Complex<Double>>.init()
-//        a.append(Complex<Double>.init(re: 3, im: 0))
-//        a.append(Complex<Double>.init(re: 4, im: 0))
-//        b.append(Complex<Double>.init(re: 1, im: 0))
-//        z = Complex<Double>.init(re: 3, im: 0)
-//        var hg: Complex<Double> = try! hypergeometricPFQ(a: a, b: b, z: z)
-//        var i: Int = 0
-//        var maxError: Float80 = 0.0
-//        var error: Float80 = 0.0
-//        var test: Float80
-//        var test1: Float80
-//        var errX: Float80 = 0.0
-//        var errMinX: Float80 = 0.0
-//        var minErr: Float80 = 1.0
-//        var x: Float80 = 0
-//        while i < besselJ0_0_8.count {
-//            test = besselJ0l(x: x)
-//            test1 = besselJ0_0_8[i]
-//            error = abs(test - test1)
-//            if i == 0 {
-//                minErr = error
-//                errMinX = x
-//            }
-//            print(error)
-//            if error > maxError {
-//                maxError = error
-//                errX = x
-//            }
-//            else if error < minErr {
-//                minErr = error
-//                errMinX = x
-//            }
-//            x = x + 0.01
-//            i = i + 1
-//        }
-//        print("*****************************************************")
-//        print("MaxError: \(maxError) at \(errX)")
-//        print("MinError: \(minErr) at \(errMinX)")
-//        i = 0
-//        maxError = 0.0
-//        error = 0.0
-//        errX = 0.0
-//        x = -15.99
-//        while i < besselJ0_8_16.count {
-//            test = besselJ0l(x: x)
-//            test1 = besselJ0_8_16[i]
-//            error = abs(test - test1)
-//            if error > maxError {
-//                maxError = error
-//                errX = x
-//            }
-//            print(error)
-//            x = x + 0.01
-//            i = i + 1
-//        }
-//        print("*****************************************************")
-//        print("MaxError: \(maxError) at \(errX)")
-     }
+        //        let z: Complex<Double> = Complex<Double>(-3.0,4.0)
+        //        let g: Complex<Double> = SSMath.tgamma1(z: z)
+        //        var a: Array<Complex<Double>> = Array<Complex<Double>>.init()
+        //        var b: Array<Complex<Double>> = Array<Complex<Double>>.init()
+        //        a.append(Complex<Double>.init(re: 3, im: 0))
+        //        a.append(Complex<Double>.init(re: 4, im: 0))
+        //        b.append(Complex<Double>.init(re: 1, im: 0))
+        //        z = Complex<Double>.init(re: 3, im: 0)
+        //        var hg: Complex<Double> = try! hypergeometricPFQ(a: a, b: b, z: z)
+        //        var i: Int = 0
+        //        var maxError: Float80 = 0.0
+        //        var error: Float80 = 0.0
+        //        var test: Float80
+        //        var test1: Float80
+        //        var errX: Float80 = 0.0
+        //        var errMinX: Float80 = 0.0
+        //        var minErr: Float80 = 1.0
+        //        var x: Float80 = 0
+        //        while i < besselJ0_0_8.count {
+        //            test = besselJ0l(x: x)
+        //            test1 = besselJ0_0_8[i]
+        //            error = abs(test - test1)
+        //            if i == 0 {
+        //                minErr = error
+        //                errMinX = x
+        //            }
+        //            print(error)
+        //            if error > maxError {
+        //                maxError = error
+        //                errX = x
+        //            }
+        //            else if error < minErr {
+        //                minErr = error
+        //                errMinX = x
+        //            }
+        //            x = x + 0.01
+        //            i = i + 1
+        //        }
+        //        print("*****************************************************")
+        //        print("MaxError: \(maxError) at \(errX)")
+        //        print("MinError: \(minErr) at \(errMinX)")
+        //        i = 0
+        //        maxError = 0.0
+        //        error = 0.0
+        //        errX = 0.0
+        //        x = -15.99
+        //        while i < besselJ0_8_16.count {
+        //            test = besselJ0l(x: x)
+        //            test1 = besselJ0_8_16[i]
+        //            error = abs(test - test1)
+        //            if error > maxError {
+        //                maxError = error
+        //                errX = x
+        //            }
+        //            print(error)
+        //            x = x + 0.01
+        //            i = i + 1
+        //        }
+        //        print("*****************************************************")
+        //        print("MaxError: \(maxError) at \(errX)")
+    }
     
     func testDistributions() {
         var para: SSContProbDistParams<Double>?
@@ -1357,7 +1363,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[22]= 0
          Out[23]= 0
          Out[24]= 1.10526315789473684211
-        */
+         */
         para = try! SSProbDist.StudentT.para(degreesOfFreedom: 21)
         XCTAssertEqual(para!.kurtosis, 3.35294117647058823529, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 0.0, accuracy: 1e-12)
@@ -1393,7 +1399,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.9898164
          > pt(q = 10, df = 2)
          [1] 0.9950738
-        */
+         */
         XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: -10, degreesOfFreedom: 22), 6.035806e-10, accuracy: 1E-15)
         XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: 0, degreesOfFreedom: 22), 0.5)
         XCTAssertEqual(try! SSProbDist.StudentT.cdf(t: 2.5, degreesOfFreedom: 22), 0.9898164, accuracy: 1E-7)
@@ -1415,7 +1421,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.430814083288819887296, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 1.36350431840384919250, accuracy: 1e-12)
-
+        
         /* noncentral PDF
          lambda = 3;
          df = 22;
@@ -1457,7 +1463,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.3714677
          > pt(q = 10, ncp = 10, df = 223322)
          [1] 0.4999955
-        */
+         */
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: -10, degreesOfFreedom: 22, nonCentralityPara: 3), 8.14079530286125822663e-17, accuracy: 1E-19)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 0, degreesOfFreedom: 22, nonCentralityPara: 3), 0.00134989803163009452665, accuracy: 1E-9)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.cdf(t: 2.5, degreesOfFreedom: 22, nonCentralityPara: 3), 0.310124866777693411844, accuracy: 1E-7)
@@ -1481,7 +1487,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 6.238628
          > qt(p = 1,df = 21,ncp = 3)
          [1] Inf
-        */
+         */
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0, degreesOfFreedom: 21, nonCentralityPara: 3), -Double.infinity)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.25, degreesOfFreedom: 21, nonCentralityPara: 3), 2.312281, accuracy: 1e-6)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.5, degreesOfFreedom: 21, nonCentralityPara: 3), 3.038146, accuracy: 1e-6)
@@ -1500,7 +1506,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.mean, 2.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 0.25, accuracy: 1e-12)
-
+        
         /*
          R code:
          > pnorm(q = 2,mean = 0,sd = 1)
@@ -1513,7 +1519,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 3.929873e-17
          > pnorm(q = -3,mean = -3.5,sd = 0.5)
          [1] 0.8413447
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Gaussian.cdf(x: 2, mean: 0, variance: 1), 0.977249868, accuracy: 1E-8)
         XCTAssertEqual(SSProbDist.StandardNormal.cdf(u: 2), 0.977249868, accuracy: 1E-8)
         XCTAssertEqual(SSProbDist.StandardNormal.cdf(u: -2), 0.0227501319, accuracy: 1E-8)
@@ -1533,14 +1539,14 @@ class SwiftyStatsTests: XCTestCase {
          > dnorm(x = -3,mean = -3.5, sd = 0.5)
          [1] 0.4839414
          >
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 2, mean: 0, variance: 1), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(SSProbDist.StandardNormal.pdf(u: 2), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(SSProbDist.StandardNormal.pdf(u: -2), 0.0539909665, accuracy: 1E-8)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: 3, mean: 22, standardDeviation: 3), 2.59281602E-10, accuracy: 1E-18)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: 22, standardDeviation: 3), 1.10692781E-16, accuracy: 1E-23)
         XCTAssertEqual(try! SSProbDist.Gaussian.pdf(x: -3, mean: -3.5, standardDeviation: 0.5), 0.483941449, accuracy: 1E-9)
-
+        
         /*
          R code:
          > qnorm(p = 1/3, mean = 0, sd = 1)
@@ -1555,7 +1561,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 1.177573
          > qnorm(p = 5/10, mean = 2, sd = 0.5)
          [1] 2
-        */
+         */
         XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 1.0/3.0), -0.430727, accuracy: 1E-6)
         XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 5.0/100.0), -1.64485, accuracy: 1E-5)
         XCTAssertEqual(try! SSProbDist.StandardNormal.quantile(p: 5.0/10.0), 0, accuracy: 1E-6)
@@ -1575,20 +1581,20 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.mean, 11, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.852802865422441737194, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 22, accuracy: 1e-12)
-
+        
         /*
          R code:
-        > pchisq(q = 1,df = 10,ncp = 0)
-        [1] 0.0001721156
-        > pchisq(q = 1,df = 16,ncp = 0)
-        [1] 6.219691e-08
-        > pchisq(q = -1,df = 16,ncp = 0)
-        [1] 0
-        > pchisq(q = 16,df = 16,ncp = 0)
-        [1] 0.5470392
-        > pchisq(q = -16,df = 16,ncp = 0)
-        [1] 0
-        */
+         > pchisq(q = 1,df = 10,ncp = 0)
+         [1] 0.0001721156
+         > pchisq(q = 1,df = 16,ncp = 0)
+         [1] 6.219691e-08
+         > pchisq(q = -1,df = 16,ncp = 0)
+         [1] 0
+         > pchisq(q = 16,df = 16,ncp = 0)
+         [1] 0.5470392
+         > pchisq(q = -16,df = 16,ncp = 0)
+         [1] 0
+         */
         XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: 1, degreesOfFreedom: 16), 6.219691E-08, accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.ChiSquare.cdf(chi: 16, degreesOfFreedom: 16), 0.5470392, accuracy: 1E-7)
@@ -1603,7 +1609,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.06979327
          > dchisq(x = -16,df = 16,ncp = 0)
          [1] 0
-        */
+         */
         
         XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: 1, degreesOfFreedom: 16), 4.700913e-07, accuracy: 1E-13)
         XCTAssertEqual(try! SSProbDist.ChiSquare.pdf(chi: -1, degreesOfFreedom: 16), 0, accuracy: 1E-14)
@@ -1623,14 +1629,14 @@ class SwiftyStatsTests: XCTestCase {
          [1] 31.99993
          > qchisq(p = 1, df = 16)
          [1] Inf
-        */
+         */
         XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0, degreesOfFreedom: 16), 0, accuracy: 1E-13)
         XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.25, degreesOfFreedom: 16), 11.91222, accuracy: 1E-5)
         XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.5, degreesOfFreedom: 16), 15.3385, accuracy: 1E-4)
         XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.75, degreesOfFreedom: 16), 19.36886, accuracy: 1E-5)
         XCTAssertEqual(try! SSProbDist.ChiSquare.quantile(p: 0.99, degreesOfFreedom: 16), 31.99993, accuracy: 1E-5)
         XCTAssert(try! SSProbDist.ChiSquare.quantile(p: 1.0, degreesOfFreedom: 16).isInfinite)
-
+        
         
         /*
          df1 = 4;
@@ -1646,7 +1652,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.mean, 1.28571428571428571429, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 4.76731294622796157723, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 1.81836734693877551020, accuracy: 1e-12)
-
+        
         /*
          R code:
          > pf(q = 2,df1 = 2,df2 = 3)
@@ -1665,7 +1671,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 1
          > pf(q = 3,df1 = 3,df2 = 22)
          [1] 0.9475565
-        */
+         */
         XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 2, denominatorDF: 3), 0.7194341, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 22, denominatorDF: 3), 0.6861387, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.FRatio.cdf(f: 2, numeratorDF: 3, denominatorDF: 22), 0.8565898, accuracy: 1E-7)
@@ -1689,7 +1695,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 6.849943e-09
          > df(x = 3,df1 = 3,df2 = 22)
          [1] 0.05102542
-        */
+         */
         XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 2, denominatorDF: 3), 0.1202425, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 22, denominatorDF: 3), 0.1660825, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.FRatio.pdf(f: 2, numeratorDF: 3, denominatorDF: 22), 0.1486917, accuracy: 1E-7)
@@ -1719,7 +1725,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 26.63955
          > qf(p = 1,df1 = 22,df2 = 3)
          [1] Inf
-        */
+         */
         XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0, numeratorDF: 2, denominatorDF: 3), 0, accuracy: 0)
         XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.25, numeratorDF: 2, denominatorDF: 3), 0.3171206, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.FRatio.quantile(p: 0.5, numeratorDF: 2, denominatorDF: 3), 0.8811016, accuracy: 1E-7)
@@ -1744,7 +1750,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.mean, 22.7598950935267279834, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 1.75018965506971818265, accuracy: 1e-12)
         XCTAssertEqual(para!.variance, 147.128808376019814754, accuracy: 1e-12)
-
+        
         /*
          R code
          > plnorm(1,meanlog = 0,sdlog = 1)
@@ -1755,7 +1761,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.9171715
          > plnorm(2,meanlog = 3,sdlog = 0.5)
          [1] 1.977763e-06
-        */
+         */
         XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 1, mean: 0, variance: 1), 0.5, accuracy: 1E-1)
         XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 1, mean: 0, variance: 0.25), 0.5, accuracy: 1E-1)
         XCTAssertEqual(try! SSProbDist.LogNormal.cdf(x: 2, mean: 0, variance: 0.25), 0.9171715, accuracy: 1E-7)
@@ -1772,7 +1778,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.1526138
          > dlnorm(2,meanlog = 3,sdlog = 0.5)
          [1] 9.520355e-06
-        */
+         */
         XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 1, mean: 0, variance: 1), 0.3989423, accuracy: 1E-6)
         XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 1, mean: 0, variance: 0.25), 0.7978846, accuracy: 1E-6)
         XCTAssertEqual(try! SSProbDist.LogNormal.pdf(x: 2, mean: 0, variance: 0.25), 0.1526138, accuracy: 1E-6)
@@ -1790,13 +1796,13 @@ class SwiftyStatsTests: XCTestCase {
          [1] 10.24047
          > qlnorm(1,meanlog = 0,sdlog = 1)
          [1] Inf
-        */
+         */
         XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0, mean: 0, variance: 1), 0, accuracy: 0)
         XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.25, mean: 0, variance: 1), 0.5094163, accuracy: 1E-6)
         XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.5, mean: 0, variance: 1), 1, accuracy: 0)
         XCTAssertEqual(try! SSProbDist.LogNormal.quantile(p: 0.75, mean: 0, variance: 1), 1.963031, accuracy: 1E-6)
         XCTAssert(try! SSProbDist.LogNormal.quantile(p: 1.0, mean: 0, variance: 1).isInfinite)
-
+        
         /*
          shapeA = 2;
          shapeB = 25/10;
@@ -1829,7 +1835,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.5640942
          > pbeta(q = 0.6,shape1 = 0.99,shape2 = 0)
          [1] 0
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.2, shapeA: 1, shapeB: 2), 0.36, accuracy: 1e-2)
         XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.6, shapeA: 1, shapeB: 2), 0.84, accuracy: 1e-2)
         XCTAssertEqual(try! SSProbDist.Beta.cdf(x: 0.9, shapeA: 1, shapeB: 2), 0.99, accuracy: 1e-2)
@@ -1907,7 +1913,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 0.009642803
          > pcauchy(q = 2,location = 3,scale = 0.25)
          [1] 0.07797913
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 1, location: 1, scale: 0.5), 0.5, accuracy: 1E-1)
         XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: -10, location: -2, scale: 3), 0.1142003, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.Cauchy.cdf(x: 10, location: -2, scale: 3), 0.9220209, accuracy: 1E-7)
@@ -1932,7 +1938,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 10, location: -2, scale: 3), 0.00624137, accuracy: 1E-7)
         XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 0, location: 99, scale: 3), 9.734247e-05, accuracy: 1E-11)
         XCTAssertEqual(try! SSProbDist.Cauchy.pdf(x: 2, location: 3, scale: 0.25), 0.07489644, accuracy: 1E-7)
-
+        
         /*
          R code:
          > qcauchy(p = 0,location = 1, scale = 0.5)
@@ -1968,7 +1974,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 2.0, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 6.0, accuracy: 1e-12)
-
+        
         /*
          Mathematica
          loc = 0;
@@ -2013,7 +2019,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0.75, mean: 0, scale: 1), 0.6931472, accuracy: 1e-7)
         XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0.99, mean: 0, scale: 1), 3.912023, accuracy: 1e-7)
         XCTAssertEqual(try! SSProbDist.Laplace.quantile(p: 0, mean: 0, scale: 1), -Double.infinity)
-
+        
         /*
          loc = 3;
          scale = 2;
@@ -2028,7 +2034,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 13.1594725347858114918, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.0, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 4.20000000000000000000, accuracy: 1e-12)
-
+        
         /*
          R code
          > plogis(q = 1,location = 3,scale = 2)
@@ -2037,7 +2043,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 1
          > plogis(q = 3,location = -2,scale = 22)
          [1] 0.5592442
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 1, mean: 3, scale: 2), 0.2689414, accuracy: 1e-7)
         XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 55, mean: 3, scale: 2), 1.0, accuracy: 1e-1)
         XCTAssertEqual(try! SSProbDist.Logistic.cdf(x: 3, mean: -2, scale: 22), 0.5565749, accuracy: 1e-7)
@@ -2081,7 +2087,7 @@ class SwiftyStatsTests: XCTestCase {
          [1] 104.0926
          > qlogis(p = 1, location = 3,scale = 22)
          [1] Inf
-        */
+         */
         XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0, mean: 3, scale: 22), -Double.infinity)
         XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.25, mean: 3, scale: 22), -21.16947, accuracy: 1E-5)
         XCTAssertEqual(try! SSProbDist.Logistic.quantile(p: 0.5, mean: 3, scale: 22), 3.0, accuracy: 1E-1)
@@ -2102,7 +2108,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 0.00249433106575963718821, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2.30838311080511823740, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 11.7703349282296650718, accuracy: 1e-12)
-
+        
         /*
          Mathematica:
          
@@ -2123,7 +2129,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[158]= 0.999998674981398802671
          Out[159]= 0.999999761581420898438
          Out[160]= 0.999999998240781395558
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.Pareto.cdf(x: 0, minimum: 0, shape: 2))
         XCTAssertThrowsError(try SSProbDist.Pareto.cdf(x: 0, minimum: -2, shape: 1))
         XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 0, minimum: 1, shape: 22), 0)
@@ -2133,7 +2139,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 1.85, minimum: 1, shape: 22), 0.9999987, accuracy: 1e-7)
         XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 2, minimum: 1, shape: 22), 0.9999998, accuracy: 1e-7)
         XCTAssertEqual(try! SSProbDist.Pareto.cdf(x: 2.5, minimum: 1, shape: 22), 0.999999998240781395558, accuracy: 1e-12)
-
+        
         
         /*
          Mathematica:
@@ -2155,7 +2161,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[180]= 0.0000157569779601844505236
          Out[181]= 2.62260437011718750000*10^-6
          Out[182]= 1.54811237190860800000*10^-8
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.Pareto.pdf(x: 0, minimum: 0, shape: 2))
         XCTAssertThrowsError(try SSProbDist.Pareto.pdf(x: 0, minimum: -2, shape: 1))
         XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 0, minimum: 1, shape: 22), 0)
@@ -2165,7 +2171,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 1.85, minimum: 1, shape: 22), 0.0000157569779601844505236, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 2, minimum: 1, shape: 22),   2.622604e-6, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Pareto.pdf(x: 2.5, minimum: 1, shape: 22), 1.548112e-8, accuracy: 1e-14)
-
+        
         /*
          Mathematica:
          
@@ -2208,7 +2214,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 16, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 9, accuracy: 1e-12)
-
+        
         /*
          Mathematica:
          N[CDF[ed, -2], 21]
@@ -2250,7 +2256,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[253]= 0.0716261992150475250812
          Out[254]= 0.00102169285961601674837
          Out[255]= 9.31663293019667748231*10^-7
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.Exponential.pdf(x: 1, lambda: 0))
         XCTAssertThrowsError(try SSProbDist.Exponential.pdf(x: 1, lambda: -1))
         XCTAssertEqual(try! SSProbDist.Exponential.pdf(x: -2, lambda: 0.25), 0)
@@ -2276,7 +2282,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.75, lambda: 0.25), 5.54517744447956247534, accuracy: 1e-14)
         XCTAssertEqual(try! SSProbDist.Exponential.quantile(p: 0.99, lambda: 0.25), 18.4206807439523654721, accuracy: 1e-14)
         XCTAssert(try! SSProbDist.Exponential.quantile(p: 1, lambda: 0.25).isInfinite)
-
+        
         /*
          mu = 6;
          lambda = 9;
@@ -2304,7 +2310,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 10, mean: 6, lambda: 9), 0.851063810667129652088, accuracy: 1e-14)
         XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 33, mean: 6, lambda: 9), 0.997518962516710678217, accuracy: 1e-14)
         XCTAssertEqual(try! SSProbDist.InverseNormal.cdf(x: 145, mean: 6, lambda: 9), 0.999999999702767058076, accuracy: 1e-14)
-
+        
         /*
          mu = 6;
          lambda = 9;
@@ -2323,7 +2329,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[315]= 0.851063810667129652088
          Out[316]= 0.997518962516710678217
          Out[317]= 0.999999999702767058076
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.InverseNormal.pdf(x: 0, mean: 0, lambda: 2))
         XCTAssertThrowsError(try SSProbDist.InverseNormal.pdf(x: 0, mean: 2, lambda: 0))
         XCTAssertEqual(try! SSProbDist.InverseNormal.pdf(x: 0, mean: 6, lambda: 9), 0)
@@ -2352,7 +2358,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[336]= 24.5614684372629823155
          Out[337]= 38.7320805901883006582
          Out[338]= \[Infinity]
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.InverseNormal.quantile(p: 0, mean: 0, lambda: 2))
         XCTAssertThrowsError(try SSProbDist.InverseNormal.quantile(p: 0, mean: 2, lambda: 0))
         XCTAssertEqual(try! SSProbDist.InverseNormal.quantile(p: 0, mean: 6, lambda: 9), 0)
@@ -2376,7 +2382,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 24, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 2.44948974278317809820, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 13, accuracy: 1e-12)
-
+        
         /*
          shape = 2;
          scale = 3;
@@ -2388,7 +2394,7 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 10], 21]
          N[CDF[d, 33], 21]
          N[CDF[d, 145], 21]
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.Gamma.cdf(x: 0, shape: -1, scale: 1))
         XCTAssertThrowsError(try SSProbDist.Gamma.cdf(x: 0, shape: 1, scale: 0))
         XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 0, shape: 2, scale: 3), 0, accuracy: 1e-12)
@@ -2398,7 +2404,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 10, shape: 2, scale: 3), 0.845412695495239610381, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 33, shape: 2, scale: 3), 0.999799579590517052088, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Gamma.cdf(x: 145, shape: 2, scale: 3), 0.999999999999999999950, accuracy: 1e-12)
-
+        
         /*
          shape = 2;
          scale = 3;
@@ -2420,7 +2426,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 10, shape: 2, scale: 3), 0.0396377703858359973383, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 33, shape: 2, scale: 3), 0.0000612395695642340841463, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Gamma.pdf(x: 145, shape: 2, scale: 3), 1.64522588620458773000e-20, accuracy: 1e-27)
-
+        
         /*
          shape = 2;
          scale = 3;
@@ -2456,7 +2462,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 18, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 1.41421356237309504880, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 6, accuracy: 1e-12)
-
+        
         // MARK: ERLANG
         /*
          shape = 8;
@@ -2534,7 +2540,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 2.21606648199445983380, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.707106781186547524401, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 3.75000000000000000000, accuracy: 1e-12)
-
+        
         // MARK: Weibull
         /*
          shape = 3;
@@ -2560,7 +2566,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 4.5, location: 2, scale: 4, shape: 3), 0.216622535939181796504, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 7,   location: 2, scale: 4, shape: 3), 0.858169840912657470462, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Weibull.cdf(x: 22,  location: 2, scale: 4, shape: 3), 1.00000000000000000000, accuracy: 1e-12)
-
+        
         /*
          shape = 3;
          scale = 4;
@@ -2585,7 +2591,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 4.5, location: 2, scale: 4, shape: 3), 0.229505116424067833055, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 7,   location: 2, scale: 4, shape: 3), 0.166207217680479526802, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Weibull.pdf(x: 22,  location: 2, scale: 4, shape: 3), 9.68703868657098933797e-54, accuracy: 1e-60)
-
+        
         /*
          shape = 3;
          scale = 4;
@@ -2627,7 +2633,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 1.68532615789565960689, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.168102842229401082430, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 2.72946363309612067010, accuracy: 1e-12)
-
+        
         // MARK: Uniform
         /*
          min = 1;
@@ -2650,7 +2656,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 4.5, lowerBound: 1, upperBound: 10), 0.388888888888888888889, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 7,   lowerBound: 1, upperBound: 10), 0.666666666666666666667, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Uniform.cdf(x: 22,  lowerBound: 1, upperBound: 10), 1.0, accuracy: 1e-12)
-
+        
         /*
          min = 1;
          max = 10;
@@ -2673,7 +2679,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 4.5,   lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 7,     lowerBound: 1, upperBound: 10), 0.111111111111111111111, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Uniform.pdf(x: 22,    lowerBound: 1, upperBound: 10), 0, accuracy: 1e-12)
-
+        
         /*
          min = 1;
          max = 10;
@@ -2712,7 +2718,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 6.75, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 1.8, accuracy: 1e-12)
-
+        
         // MARK: Triangular - 3 Param
         
         /*
@@ -2801,7 +2807,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(para!.variance, 3.72222222222222222222, accuracy: 1e-12)
         XCTAssertEqual(para!.skewness, 0.453853262394983221953, accuracy: 1e-12)
         XCTAssertEqual(para!.kurtosis, 2.40000000000000000000, accuracy: 1e-12)
-
+        
         // MARK: Triangular - 2 Param
         
         /*
@@ -2898,7 +2904,7 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 5], 21]
          N[PDF[d, 6], 21]
          N[PDF[d, 7], 21]
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.Poisson.pdf(k: -1, rate: 1))
         XCTAssertThrowsError(try SSProbDist.Poisson.pdf(k: 1, rate: 0))
         XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 0, rate: 0.5), 0.606530659712633423604, accuracy: 1e-12)
@@ -2909,19 +2915,19 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 5, rate: 0.5), 0.000157950692633498287397, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 6, rate: 0.5), 0.0000131625577194581906164, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Poisson.pdf(k: 7, rate: 0.5), 9.40182694247013615457e-7, accuracy: 1e-15)
-
+        
         /*
          lambda = 1/2;
          d = PoissonDistribution[lambda];
-        N[CDF[d, 0], 21]
-        N[CDF[d, 1], 21]
-        N[CDF[d, 2], 21]
-        N[CDF[d, 3], 21]
-        N[CDF[d, 4], 21]
-        N[CDF[d, 5], 21]
-        N[CDF[d, 6], 21]
-        N[CDF[d, 7], 21]
-        */
+         N[CDF[d, 0], 21]
+         N[CDF[d, 1], 21]
+         N[CDF[d, 2], 21]
+         N[CDF[d, 3], 21]
+         N[CDF[d, 4], 21]
+         N[CDF[d, 5], 21]
+         N[CDF[d, 6], 21]
+         N[CDF[d, 7], 21]
+         */
         XCTAssertThrowsError(try SSProbDist.Poisson.cdf(k: -1, rate: 1, tail: .lower))
         XCTAssertThrowsError(try SSProbDist.Poisson.cdf(k: 1, rate: 0, tail: .lower))
         XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 0, rate: 0.5, tail: .lower), 0.606530659712633423604, accuracy: 1e-12)
@@ -2932,7 +2938,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 5, rate: 0.5, tail: .lower), 0.999985835062677657509, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 6, rate: 0.5, tail: .lower), 0.999998997620397115700, accuracy: 1e-12)
         XCTAssertEqual(try! SSProbDist.Poisson.cdf(k: 7, rate: 0.5, tail: .lower), 0.999999937803091362714, accuracy: 1e-12)
-
+        
         /*
          a = -3;
          b = 4;
@@ -2945,7 +2951,7 @@ class SwiftyStatsTests: XCTestCase {
          N[CDF[d, 0 - Pi/2], 21]
          N[CDF[d, 0], 21]
          N[CDF[d, a + Pi + 1], 21]
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.VonMises.cdf(x: 2, mean: -3, concentration: 0))
         XCTAssertThrowsError(try SSProbDist.VonMises.cdf(x: 2, mean: -3, concentration: -1))
         XCTAssertEqual(try! SSProbDist.VonMises.cdf(x: -3 - Double.pi - 1.0, mean: -3, concentration: 4, useExpIntegration: true),0 ,accuracy: 1E-5)
@@ -3057,7 +3063,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 1.1, scale: 1.5),0.235771834828509546987 ,accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 3, scale: 1.5),0.864664716763387308106 ,accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.Rayleigh.cdf(x: 10, scale: 1.5),0.999999999776636856380 ,accuracy: 1E-14)
-
+        
         /*
          ClearAll["Global`*"];
          s = 3/2;
@@ -3078,7 +3084,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.99, scale: 1.5),4.55228138815543905259 ,accuracy: 1E-15)
         XCTAssertEqual(try! SSProbDist.Rayleigh.quantile(p: 0.999, scale: 1.5),5.57538328327475767043 ,accuracy: 1E-15)
         XCTAssert(try! SSProbDist.Rayleigh.quantile(p: 1, scale: 1.5).isInfinite)
-
+        
         /*
          ClearAll["Global`*"];
          a = -2;
@@ -3125,7 +3131,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 0, location: -2, scale: 1),0.873423018493116642989 ,accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 2, location: -2, scale: 1),0.981851073061666482920 ,accuracy: 1E-14)
         XCTAssertEqual(try! SSProbDist.ExtremeValue.cdf(x: 5, location: -2, scale: 1),0.999088533672457833191 ,accuracy: 1E-14)
-
+        
         
         /*
          ClearAll["Global`*"];
@@ -3158,7 +3164,7 @@ class SwiftyStatsTests: XCTestCase {
          N[PDF[d, 4], 21]
          N[PDF[d, 20], 21]
          N[PDF[d, 120], 21]
-        */
+         */
         XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: 10, lambda: -1))
         XCTAssertThrowsError(try SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: -10, lambda: 0))
         XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.pdf(chi: 0, degreesOfFreedom: 10, lambda: 2), 0, accuracy: 1E-14)
@@ -3207,7 +3213,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.NonCentralChiSquare.quantile(p: 0.999, degreesOfFreedom: 10, lambda: 2),34.8900723430922940474 ,accuracy: 1E-11)
         XCTAssert(try! SSProbDist.NonCentralChiSquare.quantile(p: 1, degreesOfFreedom: 10, lambda: 2).isInfinite)
     }
-  
+    
     func testAiry() {
         // AiryAi for 100 <= x <= 100
         
@@ -5733,22 +5739,22 @@ class SwiftyStatsTests: XCTestCase {
         print("AiryAiPrime==========================================")
         print("min. abs. Error: \(minAep), max. abs. Error: \(maxAep)")
         print("min. rel. Error: \(minRep), max. rel. Error: \(maxRep)")
-
+        
     }
-
+    
     
     
     //
-//
-//    func testPerformanceExample() {
-//        // This is an example of a performance test case.
-//        self.measure {
-//        }
-//    }
- 
+    //
+    //    func testPerformanceExample() {
+    //        // This is an example of a performance test case.
+    //        self.measure {
+    //        }
+    //    }
+    
     func testBesselI0() {
         // BesselI0(x), 100 <= x <= 100, step 2
-
+        
         let besselI0Data: [Float80] = [
             1.073751707131073823519720857603494661288403193325272795401540063e42,
             1.467956067407419253935815774834718367952993875125561963795542585e41,
@@ -5868,7 +5874,7 @@ class SwiftyStatsTests: XCTestCase {
         }
         print("max. rel. Error BesselI0: \(maxRelErr)")
     }
-
+    
     func testBesselI1() {
         // BesselI0(x), 100 <= x <= 100, step 2
         
@@ -5991,7 +5997,7 @@ class SwiftyStatsTests: XCTestCase {
         }
         print("max. rel. Error BesselI1: \(maxRelErr)")
     }
-
+    
     func testBesselJ0() {
         // BesselI0(x), 100 <= x <= 100, step 2
         
@@ -6223,95 +6229,95 @@ class SwiftyStatsTests: XCTestCase {
     
     // gamma 1-150
     let gamma150: [Float80] = [1,0.886226925452758,1,1.329340388179137,2,3.3233509704478426,6,
-        11.63172839656745,24,52.34277778455352,120,287.8852778150444,720,
-        1871.2543057977884,5040,14034.407293483413,40320,119292.46199460901,362880,
-        1.1332783889487856e6,3.6288e6,1899423083962249e7,3.99168e7,1.3684336546556586e8,
-        4.790016e8,1.7105420683195732e9,6.2270208e9,2.309231792231424e10,8.71782912e10,
-        3.3483860987355646e11,1.307674368e12,5.189998453040126e12,2.0922789888e13,
-        8.563497447516208e13,3.55687428096e14,1.4986120533153358e15,6.402373705728e15,
-        2.772432298633372e16,1.21645100408832e17,5.406242982335074e17,2.43290200817664e18,
-        1.1082798113786907e19,5.109094217170944e19,2.3828015944641846e20,
-        1.1240007277776077e21,5.361303587544414e21,2.585201673888498e22,
-        1.2599063430729376e23,6.204484017332394e23,3.0867705405286977e24,
-        1.5511210043330984e25,7.87126487834818e25,4.032914611266057e26,2.085885192762268e27,
-        1.0888869450418352e28,5.736184280096233e28,3.048883446117138e29,
-        1.6348125198274267e30,8.841761993739701e30,4.822696933490907e31,2.652528598121911e32,
-        1.4709225647147272e33,8.222838654177924e33,4.633406078851391e34,
-        2.6313083693369355e35,1.5058569756267023e36,8.68331761881189e36,5.044620868349451e37,
-        2.952327990396041e38,1.7403941995805607e39,1.0333147966386144e40,6.17839940851099e40,
-        3.719933267899013e41,2.2551157841065122e42,1.3763753091226346e43,
-        8.456684190399418e43,5.23022617466601e44,3.2558234133037764e45,2.0397882081197447e46,
-        1.2860502482549919e47,8.15915283247898e47,5.208503505432716e48,3.34525266131638e49,
-        2.1615289547545774e50,1.4050061177528801e51,9.186498057706951e51,
-        6.041526306337384e52,3.996126655102524e53,2.6582715747884495e54,1.778276361520623e55,
-        1.196222208654802e56,8.091157444918834e56,5.502622159812089e57,3.762388211887258e58,
-        2.5862324151116827e59,1.7871344006464473e60,1.2413915592536068e61,
-        8.667601843135271e61,6.082818640342679e62,4.290462912352009e63,3.041409320171302e64,
-        2.166683770737728e65,1.5511187532874088e66,1.1158421419299478e67,
-        8.065817517094494e67,5.858171245132188e68,4.274883284060123e69,3.134121616145727e70,
-        2.308436973392454e71,1.7080962807994084e72,1.2696403353658648e73,
-        9.479934358436689e73,7.109985878048745e74,5.3561629125167395e75,4.052691950487695e76,
-        3.0797936746971935e77,2.3505613312829024e78,1.8016792996978842e79,
-        1.3868311854568818e80,1.0719991833202212e81,8.320987112741681e81,
-        6.485595059087443e82,5.075802138772367e83,3.988640961338736e84,3.1469973260388374e85,
-        2.492900600836691e86,1.9826083154044198e87,1.582991881531248e88,
-        1.2688693218588428e89,1.021029763587701e90,8.247650592082321e90,6.687744951499225e91,
-        5.443449390774456e92,4.447350392747054e93,3.647111091818946e94,3.0019615151042864e95,
-        2.4800355424368993e96,2.0563436378463797e97,1.7112245242814685e98,
-        1.4291588283032485e99,1.1978571669969933e100,1.0075569739537903e101,
-        8.504785885678827e101,7.204032363769699e102,6.123445837688587e103,
-        5.222923463732892e104,4.470115461512898e105,3.838848745843728e106,
-        3.307885441519273e107,2.8599423156535397e108,2.480914081139533e109,
-        2.1592564483184432e110,1.8854947016660685e111,1.6518311829636027e112,
-        1.4518309202828782e113,1.2801691667968696e114,1.1324281178206039e115,
-        1.0049327959354582e116,8.946182130782364e116,7.989215727687162e117,
-        7.156945704626677e118,6.4313186607877084e119,5.797126020747554e120,
-        5.241524708541996e121,4.753643337013109e122,4.3242578845474255e123,
-        3.945523969720651e124,3.610755333596995e125,3.314240134565287e126,
-        3.0510882568895826e127,2.8171041143804693e128,2.6086804596405247e129,
-        2.4227095383671897e130,2.2565085975891645e131,2.107757298379541e132,
-        1.9744450228903197e133,1.8548264225739444e134,1.747383845257937e135,
-        1.6507955160907309e136,1.563908541505906e137,1.485715964481721e138,
-        1.4153372300629496e139,1.352001527678445e140,1.2950335655075787e141,
-        1.2438414054641828e142,1.1979060480944617e143,1.1567725070816412e144,
-        1.1200421549683488e145,1.0873661566567185e146,1.0584398364450596e147,
-        1.0329978488238504e148,1.0108100438050355e149,9.916779348709596e149,
-        9.75431692271828e150,9.619275968248377e151,9.510458999650913e152,
-        9.426890448883062e153,9.367802114655592e154,9.332621544394404e155,
-        9.320963104082245e156,9.332621544394225e157,9.367567919602772e158,
-        9.425947759837759e159,9.508081438397022e160,9.614466715035083e161,
-        9.745783474356481e162,9.90290071648575e163,1.0086885895959537e165,
-        1.0299016745144867e166,1.0540795761277733e167,1.0813967582402365e168,
-        1.112053952814804e169,1.1462805637346311e170,1.1843374597476843e171,
-        1.2265202031960951e172,1.2731627692288067e173,1.3246418194517785e174,
-        1.381381604613249e175,1.4438595832025125e176,1.512612857051622e177,
-        1.5882455415226952e178,1.6714372070419836e179,1.7629525510901396e180,
-        1.863652485851825e181,1.9745068572211572e182,2.0966090465832415e183,
-        2.2311927486598526e184,2.3796512678720198e185,2.543559733472036e186,
-        2.7247007017132962e187,2.925093693492995e188,3.1470293104792136e189,
-        3.3931086844520334e190,3.666289146707966e191,3.9699371608087175e192,
-        4.3078897473819436e193,4.684525849754326e194,5.104849350647641e195,
-        5.574585761207238e196,6.100294974023782e197,6.689502913449011e198,
-        7.350855443698236e199,8.09429852527322e200,8.931289364094251e201,
-        9.875044200832672e202,1.094082947101551e204,1.214630436702512e205,
-        1.3511924396703375e206,1.506141741511146e207,1.6822345873896565e208,
-        1.882677176888975e209,2.11120440717395e210,2.3721732428799207e211,
-        2.6706735750752748e212,3.012660018457494e213,3.405108808220738e214,
-        3.8562048236256426e215,4.375564818563824e216,4.97450422247703e217,
-        5.6663564400402e218,6.466855489220212e219,7.39459515425189e220,8.471580690878219e221,
-        9.723892627841765e222,1.118248651196143e224,1.2884157731890654e225,
-        1.487270706090812e226,1.72003505720741e227,1.9929427461617248e228,
-        2.3134471519439806e229,2.690472707318279e230,3.134720890883894e231,
-        3.6590428819524733e232,4.278894016056746e233,5.01288874827533e234,
-        5.883479272078018e235,6.917786472619215e236,8.148618791827496e237,
-        9.615723196940553e238,1.1367323214600767e240,1.3462012475718704e241,
-        1.597108911651231e242,1.8981437590762873e243,2.259909109986492e244,
-        2.6953641378880047e245,3.2203704817311862e246,3.8543707171800166e247,
-        4.621231641284257e248,5.550293832739239e249,6.677679721655397e250,
-        8.047926057472153e251,9.71602399500863e252,1.1749972043908966e254,
-        1.423397515268675e255,1.7272458904546453e256,2.09951133502152e257,
-        2.55632391787296e258,3.117774332506824e259,3.808922637630559e260]
-
+                               11.63172839656745,24,52.34277778455352,120,287.8852778150444,720,
+                               1871.2543057977884,5040,14034.407293483413,40320,119292.46199460901,362880,
+                               1.1332783889487856e6,3.6288e6,1899423083962249e7,3.99168e7,1.3684336546556586e8,
+                               4.790016e8,1.7105420683195732e9,6.2270208e9,2.309231792231424e10,8.71782912e10,
+                               3.3483860987355646e11,1.307674368e12,5.189998453040126e12,2.0922789888e13,
+                               8.563497447516208e13,3.55687428096e14,1.4986120533153358e15,6.402373705728e15,
+                               2.772432298633372e16,1.21645100408832e17,5.406242982335074e17,2.43290200817664e18,
+                               1.1082798113786907e19,5.109094217170944e19,2.3828015944641846e20,
+                               1.1240007277776077e21,5.361303587544414e21,2.585201673888498e22,
+                               1.2599063430729376e23,6.204484017332394e23,3.0867705405286977e24,
+                               1.5511210043330984e25,7.87126487834818e25,4.032914611266057e26,2.085885192762268e27,
+                               1.0888869450418352e28,5.736184280096233e28,3.048883446117138e29,
+                               1.6348125198274267e30,8.841761993739701e30,4.822696933490907e31,2.652528598121911e32,
+                               1.4709225647147272e33,8.222838654177924e33,4.633406078851391e34,
+                               2.6313083693369355e35,1.5058569756267023e36,8.68331761881189e36,5.044620868349451e37,
+                               2.952327990396041e38,1.7403941995805607e39,1.0333147966386144e40,6.17839940851099e40,
+                               3.719933267899013e41,2.2551157841065122e42,1.3763753091226346e43,
+                               8.456684190399418e43,5.23022617466601e44,3.2558234133037764e45,2.0397882081197447e46,
+                               1.2860502482549919e47,8.15915283247898e47,5.208503505432716e48,3.34525266131638e49,
+                               2.1615289547545774e50,1.4050061177528801e51,9.186498057706951e51,
+                               6.041526306337384e52,3.996126655102524e53,2.6582715747884495e54,1.778276361520623e55,
+                               1.196222208654802e56,8.091157444918834e56,5.502622159812089e57,3.762388211887258e58,
+                               2.5862324151116827e59,1.7871344006464473e60,1.2413915592536068e61,
+                               8.667601843135271e61,6.082818640342679e62,4.290462912352009e63,3.041409320171302e64,
+                               2.166683770737728e65,1.5511187532874088e66,1.1158421419299478e67,
+                               8.065817517094494e67,5.858171245132188e68,4.274883284060123e69,3.134121616145727e70,
+                               2.308436973392454e71,1.7080962807994084e72,1.2696403353658648e73,
+                               9.479934358436689e73,7.109985878048745e74,5.3561629125167395e75,4.052691950487695e76,
+                               3.0797936746971935e77,2.3505613312829024e78,1.8016792996978842e79,
+                               1.3868311854568818e80,1.0719991833202212e81,8.320987112741681e81,
+                               6.485595059087443e82,5.075802138772367e83,3.988640961338736e84,3.1469973260388374e85,
+                               2.492900600836691e86,1.9826083154044198e87,1.582991881531248e88,
+                               1.2688693218588428e89,1.021029763587701e90,8.247650592082321e90,6.687744951499225e91,
+                               5.443449390774456e92,4.447350392747054e93,3.647111091818946e94,3.0019615151042864e95,
+                               2.4800355424368993e96,2.0563436378463797e97,1.7112245242814685e98,
+                               1.4291588283032485e99,1.1978571669969933e100,1.0075569739537903e101,
+                               8.504785885678827e101,7.204032363769699e102,6.123445837688587e103,
+                               5.222923463732892e104,4.470115461512898e105,3.838848745843728e106,
+                               3.307885441519273e107,2.8599423156535397e108,2.480914081139533e109,
+                               2.1592564483184432e110,1.8854947016660685e111,1.6518311829636027e112,
+                               1.4518309202828782e113,1.2801691667968696e114,1.1324281178206039e115,
+                               1.0049327959354582e116,8.946182130782364e116,7.989215727687162e117,
+                               7.156945704626677e118,6.4313186607877084e119,5.797126020747554e120,
+                               5.241524708541996e121,4.753643337013109e122,4.3242578845474255e123,
+                               3.945523969720651e124,3.610755333596995e125,3.314240134565287e126,
+                               3.0510882568895826e127,2.8171041143804693e128,2.6086804596405247e129,
+                               2.4227095383671897e130,2.2565085975891645e131,2.107757298379541e132,
+                               1.9744450228903197e133,1.8548264225739444e134,1.747383845257937e135,
+                               1.6507955160907309e136,1.563908541505906e137,1.485715964481721e138,
+                               1.4153372300629496e139,1.352001527678445e140,1.2950335655075787e141,
+                               1.2438414054641828e142,1.1979060480944617e143,1.1567725070816412e144,
+                               1.1200421549683488e145,1.0873661566567185e146,1.0584398364450596e147,
+                               1.0329978488238504e148,1.0108100438050355e149,9.916779348709596e149,
+                               9.75431692271828e150,9.619275968248377e151,9.510458999650913e152,
+                               9.426890448883062e153,9.367802114655592e154,9.332621544394404e155,
+                               9.320963104082245e156,9.332621544394225e157,9.367567919602772e158,
+                               9.425947759837759e159,9.508081438397022e160,9.614466715035083e161,
+                               9.745783474356481e162,9.90290071648575e163,1.0086885895959537e165,
+                               1.0299016745144867e166,1.0540795761277733e167,1.0813967582402365e168,
+                               1.112053952814804e169,1.1462805637346311e170,1.1843374597476843e171,
+                               1.2265202031960951e172,1.2731627692288067e173,1.3246418194517785e174,
+                               1.381381604613249e175,1.4438595832025125e176,1.512612857051622e177,
+                               1.5882455415226952e178,1.6714372070419836e179,1.7629525510901396e180,
+                               1.863652485851825e181,1.9745068572211572e182,2.0966090465832415e183,
+                               2.2311927486598526e184,2.3796512678720198e185,2.543559733472036e186,
+                               2.7247007017132962e187,2.925093693492995e188,3.1470293104792136e189,
+                               3.3931086844520334e190,3.666289146707966e191,3.9699371608087175e192,
+                               4.3078897473819436e193,4.684525849754326e194,5.104849350647641e195,
+                               5.574585761207238e196,6.100294974023782e197,6.689502913449011e198,
+                               7.350855443698236e199,8.09429852527322e200,8.931289364094251e201,
+                               9.875044200832672e202,1.094082947101551e204,1.214630436702512e205,
+                               1.3511924396703375e206,1.506141741511146e207,1.6822345873896565e208,
+                               1.882677176888975e209,2.11120440717395e210,2.3721732428799207e211,
+                               2.6706735750752748e212,3.012660018457494e213,3.405108808220738e214,
+                               3.8562048236256426e215,4.375564818563824e216,4.97450422247703e217,
+                               5.6663564400402e218,6.466855489220212e219,7.39459515425189e220,8.471580690878219e221,
+                               9.723892627841765e222,1.118248651196143e224,1.2884157731890654e225,
+                               1.487270706090812e226,1.72003505720741e227,1.9929427461617248e228,
+                               2.3134471519439806e229,2.690472707318279e230,3.134720890883894e231,
+                               3.6590428819524733e232,4.278894016056746e233,5.01288874827533e234,
+                               5.883479272078018e235,6.917786472619215e236,8.148618791827496e237,
+                               9.615723196940553e238,1.1367323214600767e240,1.3462012475718704e241,
+                               1.597108911651231e242,1.8981437590762873e243,2.259909109986492e244,
+                               2.6953641378880047e245,3.2203704817311862e246,3.8543707171800166e247,
+                               4.621231641284257e248,5.550293832739239e249,6.677679721655397e250,
+                               8.047926057472153e251,9.71602399500863e252,1.1749972043908966e254,
+                               1.423397515268675e255,1.7272458904546453e256,2.09951133502152e257,
+                               2.55632391787296e258,3.117774332506824e259,3.808922637630559e260]
+    
     func tesGamma1() {
         var ans: Float80
         let i: Int = 0
@@ -6350,12 +6356,12 @@ class SwiftyStatsTests: XCTestCase {
         print("min. abs. Error: \(minAeI), max. abs. Error: \(maxAeI)")
         print("min. rel. Error: \(minReI), max. rel. Error: \(maxReI)")
     }
-
+    
     func pochhammer<T: SSComplexFloatElement>(a: Complex<T>, n: Int) -> Complex<T> {
         var y: Complex<T> = a;
-//        var c: Complex<T> = Complex<T>.zero
-//        var y: Complex<T>
-//        var t: Complex<T>
+        //        var c: Complex<T> = Complex<T>.zero
+        //        var y: Complex<T>
+        //        var t: Complex<T>
         if n == 0 {
             return Complex<T>.init(re: 1, im: 0)
         }
@@ -6368,9 +6374,9 @@ class SwiftyStatsTests: XCTestCase {
     }
     func lpochhammer<T: SSComplexFloatElement>(a: Complex<T>, n: Int) -> Complex<T> {
         var y: Complex<T> = SSMath.ComplexMath.log(a);
-//        var c: Complex<T> = Complex<T>.zero
+        //        var c: Complex<T> = Complex<T>.zero
         //        var y: Complex<T>
-//        var t: Complex<T>
+        //        var t: Complex<T>
         if n == 0 {
             return Complex<T>.init(re: 1, im: 0)
         }
@@ -6381,5 +6387,5 @@ class SwiftyStatsTests: XCTestCase {
         }
         return y
     }
-
- }
+    
+}

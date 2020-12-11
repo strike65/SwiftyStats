@@ -57,7 +57,7 @@ extension SSSpecialFunctions {
     /// asymptotic expansions, and use of three-term homogeneous
     /// recurrence relations.
     /// The current algorithm is valid for Single and Double precision. The relative error is close to 10^-11 and 10^-15, if the results are larger than 10^-290.
-    /// Results for p and q smaller than 10^290 are set to zero.
+    /// Results for p and q smaller than 10^-290 are set to zero.
     /// Due to current compiler restrictions, the function fjkproc16() is divided into small parts.
     /// - TODO:
     /// Adapt the algorithm for long double (Float80) precision.

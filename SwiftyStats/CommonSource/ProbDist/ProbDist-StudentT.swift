@@ -154,7 +154,7 @@ extension SSProbDist {
         
         /// Returns the quantile function of Student's t-distribution
         ///  adapted from: http://rapidq.phatcode.net/examples/Math
-        /// - Parameter p: p
+        /// - Parameter p: Probability
         /// - Parameter df: Degrees of freedom
         /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
         ///

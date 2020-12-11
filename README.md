@@ -37,7 +37,7 @@ The attached Xcode project contains four targets:
 
 *Each target must be built individually (i.e. no dependencies are defined)!*
 
-In addition a Plaground is added to the Xcode project to 
+In addition a Playground is added to
 > * test the framework and 
 > * do prototyping
 
@@ -64,7 +64,7 @@ If you have to use a Swift version **earlier** than 4.2, replace the line `pod '
 
 ```ruby
 ...
-pod 'SwiftyStats", '0.8.14'
+pod 'SwiftyStats", '1.1.1'
 ...
 ```
 Save your changes, run:
@@ -81,10 +81,10 @@ Edit your `Package.swift` file:
 
 ```swift
 import PackageDescription
-// for Swift 4.2 or 5
-let version = "1.1.0"
+// for Swift 5
+let version = "1.1.3"
 // for earlier versions:
-// let version = "0.8.14"
+// let version = "1.1.1"
 let package = Package(
 name: "<YOUR_PACKAGE_NAME>",
 dependencies: [

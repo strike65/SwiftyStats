@@ -76,7 +76,7 @@ extension SSSpecialFunctions {
     /// Returns the modified Bessel function of order zero I0(x)
     /// - Parameter x: Argument
     ///
-    /// ###Note###
+    /// - Note
     /// adapted from Cephes with kind permission
     internal static func besselI0<FPT:  SSFloatingPoint & Codable>(x: FPT) -> FPT {
         var y: FPT
@@ -141,7 +141,7 @@ extension SSSpecialFunctions {
     /// Returns the exponentially scaled modified Bessel function of order zero I0(x) / exp(x)
     /// - Parameter x: Argument
     ///
-    /// ###Note###
+    /// - Note
     /// adapted from Cephes with kind permission
     ///
     /// ###Original Description###

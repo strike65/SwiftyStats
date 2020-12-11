@@ -1,6 +1,6 @@
 UNAME=$(shell uname)
 ifeq ($(UNAME), Darwin)
-	PLATFORM = x86_64-apple-macosx10.10
+	PLATFORM = x86_64-apple-macosx
 	LIBRARY_DIRECTORY = ./.build/${PLATFORM}/debug
 	TEST_RESOURCE_DIRECTORY = ./.build/${PLATFORM}/debug/SwiftyStatsPackageTests.xctest/Contents/Resources
 else ifeq ($(UNAME), Linux)
