@@ -35,7 +35,7 @@ The attached Xcode project contains four targets:
 
 *Each target must be built individually (i.e. no dependencies are defined)!*
 
-In addition a Plaground is added to the Xcode project to 
+In addition a Playground is added to the Xcode project to 
 > * test the framework and 
 > * do prototyping
 

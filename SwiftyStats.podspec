@@ -61,7 +61,7 @@ Probability functions
 DESC
 	s.homepage 	= 'https://github.com/strike65/SwiftyStats.git'
 	s.license 	= { :type => 'GPL 3', :file => 'LICENSE' }
-	s.author 	= { 'Volker Thieme' => 'vtping@me.com' }
+	s.author 	= { 'strike65' => 'vtping@me.com' }
 	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
 	s.swift_version = '5.0'
 	s.ios.deployment_target = '13.0'
