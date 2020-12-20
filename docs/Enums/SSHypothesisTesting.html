@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Enum/SSHypothesisTesting" class="dashAnchor"></a>
     <a title="SSHypothesisTesting Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,11 +349,12 @@
             <h1>SSHypothesisTesting</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SSHypothesisTesting</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>Provides often used/needed statistical tests</p>
 
           </section>
           <section class="section task-group-section">
@@ -353,7 +365,7 @@
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient5array3lagxSayxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/autocorrelationCoefficient(array:lag:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient5array3lagxSayxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelationCoefficient(array:lag:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient5array3lagxSayxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelationCoefficient(array:<wbr>lag:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -420,7 +432,7 @@
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient4data3lagxAA9SSExamineCyxxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/autocorrelationCoefficient(data:lag:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient4data3lagxAA9SSExamineCyxxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelationCoefficient(data:lag:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26autocorrelationCoefficient4data3lagxAA9SSExamineCyxxG_SitKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelationCoefficient(data:<wbr>lag:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -487,7 +499,7 @@
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation5arrayAA16SSBoxLjungResultVyxGSayxG_tKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/autocorrelation(array:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation5arrayAA16SSBoxLjungResultVyxGSayxG_tKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelation(array:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation5arrayAA16SSBoxLjungResultVyxGSayxG_tKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelation(array:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -546,7 +558,7 @@
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation4dataAA16SSBoxLjungResultVyxGAA9SSExamineCyxxG_tKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/autocorrelation(data:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation4dataAA16SSBoxLjungResultVyxGAA9SSExamineCyxxG_tKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelation(data:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15autocorrelation4dataAA16SSBoxLjungResultVyxGAA9SSExamineCyxxG_tKSeRzSERzAA15SSFloatingPointRzlFZ">autocorrelation(data:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -601,16 +613,12 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/kolmogorovSmirnovGoFTest(array:targetDistribution:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">kolmogorovSmirnovGoFTest(array:targetDistribution:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">kolmogorovSmirnovGoFTest(array:<wbr>targetDistribution:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -645,7 +653,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                             <tr>
                               <td>
                                 <code>
-                                <em>data</em>
+                                <em>array</em>
                                 </code>
                               </td>
                               <td>
@@ -657,7 +665,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                             <tr>
                               <td>
                                 <code>
-                                <em>target</em>
+                                <em>targetDistribution</em>
                                 </code>
                               </td>
                               <td>
@@ -681,7 +689,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/ksGoFTest(array:targetDistribution:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">ksGoFTest(array:targetDistribution:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest5array18targetDistributionAA14SSKSTestResultVyxGSgSayxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">ksGoFTest(array:<wbr>targetDistribution:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -713,7 +721,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                             <tr>
                               <td>
                                 <code>
-                                <em>data</em>
+                                <em>array</em>
                                 </code>
                               </td>
                               <td>
@@ -725,7 +733,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                             <tr>
                               <td>
                                 <code>
-                                <em>target</em>
+                                <em>targetDistribution</em>
                                 </code>
                               </td>
                               <td>
@@ -749,7 +757,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/kolmogorovSmirnovGoFTest(data:targetDistribution:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">kolmogorovSmirnovGoFTest(data:targetDistribution:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO24kolmogorovSmirnovGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">kolmogorovSmirnovGoFTest(data:<wbr>targetDistribution:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -789,14 +797,14 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                               </td>
                               <td>
                                 <div>
-                                  <p>SSExamine<Numeric, SSFloatingPoint></p>
+                                  <p>Array<FloatingPoint></p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>target</em>
+                                <em>targetDistribution</em>
                                 </code>
                               </td>
                               <td>
@@ -820,7 +828,7 @@ The K-S distribution is computed according to Richard Simard and Pierre L&#39;Ec
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/ksGoFTest(data:targetDistribution:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">ksGoFTest(data:targetDistribution:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO9ksGoFTest4data18targetDistributionAA14SSKSTestResultVyxGSgAA9SSExamineCyxxG_AA11SSGoFTargetOtKSeRzSERzAA15SSFloatingPointRzlFZ">ksGoFTest(data:<wbr>targetDistribution:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -885,7 +893,7 @@ This procedure returns exact p values when possible.</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest4data5alphaAA14SSADTestResultVyxGSgAA9SSExamineCyxxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/adNormalityTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest4data5alphaAA14SSADTestResultVyxGSgAA9SSExamineCyxxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ">adNormalityTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest4data5alphaAA14SSADTestResultVyxGSgAA9SSExamineCyxxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ">adNormalityTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -953,7 +961,7 @@ Adapts an algorithm originally developed by Marsaglia et al.:Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest5array5alphaAA14SSADTestResultVyxGSgSayxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/adNormalityTest(array:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest5array5alphaAA14SSADTestResultVyxGSgSayxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ">adNormalityTest(array:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15adNormalityTest5array5alphaAA14SSADTestResultVyxGSgSayxG_xtKSeRzSERzAA15SSFloatingPointRzlFZ">adNormalityTest(array:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1021,7 +1029,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GSayxG_AJtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/mannWhitneyUTest(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GSayxG_AJtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">mannWhitneyUTest(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GSayxG_AJtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">mannWhitneyUTest(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1091,7 +1099,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/mannWhitneyUTest(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">mannWhitneyUTest(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO16mannWhitneyUTest4set14set2AA06SSMannfG6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">mannWhitneyUTest(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1161,7 +1169,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/wilcoxonMatchedPairs(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ">wilcoxonMatchedPairs(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ">wilcoxonMatchedPairs(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1228,7 +1236,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/wilcoxonMatchedPairs(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ">wilcoxonMatchedPairs(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO20wilcoxonMatchedPairs4set14set2AA010SSWilcoxonfG10TestResultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ">wilcoxonMatchedPairs(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1295,7 +1303,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/signTest(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ">signTest(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGSayxG_AJtKSeRzSERzAA15SSFloatingPointRzlFZ">signTest(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1362,7 +1370,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/signTest(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ">signTest(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8signTest4set14set2AA06SSSignF7RestultVyxGAA9SSExamineCyxxG_ALtKSeRzSERzAA15SSFloatingPointRzlFZ">signTest(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1429,7 +1437,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO12binomialTest15numberOfSuccess0gH6Trials11probability5alpha11alternativexSiSg_AJxxAA23SSAlternativeHypothesesOtSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/binomialTest(numberOfSuccess:numberOfTrials:probability:alpha:alternative:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest15numberOfSuccess0gH6Trials11probability5alpha11alternativexSiSg_AJxxAA23SSAlternativeHypothesesOtSeRzSERzAA15SSFloatingPointRzlFZ">binomialTest(numberOfSuccess:numberOfTrials:probability:alpha:alternative:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest15numberOfSuccess0gH6Trials11probability5alpha11alternativexSiSg_AJxxAA23SSAlternativeHypothesesOtSeRzSERzAA15SSFloatingPointRzlFZ">binomialTest(numberOfSuccess:<wbr>numberOfTrials:<wbr>probability:<wbr>alpha:<wbr>alternative:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1439,11 +1447,13 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="abstract">
                         <p>Performs the binomial test</p>
 <h3 id='note' class='heading'>Note</h3>
+
+<ul>
 <li>H<sub>0</sub>: The probability of success is equal to p0</li>
 <li>H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)</li>
 <li>H<sub>a2</sub>: the probability of success is less than p0 (one sided)</li>
 <li><p>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</p></li>
-<div class="aside aside-throws">
+</ul><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <p>SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2</p>
 
@@ -1501,7 +1511,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data12characterSet15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GSayxG_10Foundation09CharacterI0VSgq_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/binomialTest(data:characterSet:testProbability:successCodedAs:alpha:alternative:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data12characterSet15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GSayxG_10Foundation09CharacterI0VSgq_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">binomialTest(data:characterSet:testProbability:successCodedAs:alpha:alternative:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data12characterSet15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GSayxG_10Foundation09CharacterI0VSgq_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">binomialTest(data:<wbr>characterSet:<wbr>testProbability:<wbr>successCodedAs:<wbr>alpha:<wbr>alternative:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1511,11 +1521,13 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="abstract">
                         <p>Performs the binomial test</p>
 <h3 id='note' class='heading'>Note</h3>
+
+<ul>
 <li>H<sub>0</sub>: The probability of success is equal to p0</li>
 <li>H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)</li>
 <li>H<sub>a2</sub>: the probability of success is less than p0 (one sided)</li>
 <li>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</li>
-<div class="aside aside-throws">
+</ul><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
 
@@ -1593,7 +1605,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GAA9SSExamineCyxq_G_q_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/binomialTest(data:testProbability:successCodedAs:alpha:alternative:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GAA9SSExamineCyxq_G_q_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">binomialTest(data:testProbability:successCodedAs:alpha:alternative:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12binomialTest4data15testProbability14successCodedAs5alpha11alternativeAA010SSBinomialF6ResultVyxq_GAA9SSExamineCyxq_G_q_xq_AA23SSAlternativeHypothesesOtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">binomialTest(data:<wbr>testProbability:<wbr>successCodedAs:<wbr>alpha:<wbr>alternative:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1603,11 +1615,13 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                       <div class="abstract">
                         <p>Performs the binomial test</p>
 <h3 id='note' class='heading'>Note</h3>
+
+<ul>
 <li>H<sub>0</sub>: The probability of success is equal to p0</li>
 <li>H<sub>a1</sub>: the probability of success is not equal to p0 (two sided)</li>
 <li>H<sub>a2</sub>: the probability of success is less than p0 (one sided)</li>
 <li>H<sub>a3</sub>: the probability of success is greater than p0 (one sided)</li>
-<div class="aside aside-throws">
+</ul><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError iff data.sampleSize &lt;= 2 || data.uniqueElements(sortOrder: .none)?.count)! &gt; 2 || p0.isNaN
 
@@ -1685,7 +1699,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kolmogorovSmirnovTwoSampleTest(set1:<wbr>set2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1755,7 +1769,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kolmogorovSmirnovTwoSampleTest(set1:set2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO30kolmogorovSmirnovTwoSampleTest4set14set25alphaAA07SSKSTwohI6ResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kolmogorovSmirnovTwoSampleTest(set1:<wbr>set2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1825,7 +1839,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO26waldWolfowitzTwoSampleTest4set14set2AA06SSWaldfghI6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/waldWolfowitzTwoSampleTest(set1:set2:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26waldWolfowitzTwoSampleTest4set14set2AA06SSWaldfghI6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">waldWolfowitzTwoSampleTest(set1:set2:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO26waldWolfowitzTwoSampleTest4set14set2AA06SSWaldfghI6ResultVyq_GAA9SSExamineCyxq_G_ALtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">waldWolfowitzTwoSampleTest(set1:<wbr>set2:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1888,7 +1902,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO18kruskalWallisHTest4data5alphaAA09SSKruskalfG6ResultVyq_GSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/kruskalWallisHTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO18kruskalWallisHTest4data5alphaAA09SSKruskalfG6ResultVyq_GSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kruskalWallisHTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO18kruskalWallisHTest4data5alphaAA09SSKruskalfG6ResultVyq_GSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">kruskalWallisHTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1950,16 +1964,12 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest5array5alphaAA08SSGrubbsF6ResultVyxq_GSayxG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/grubbsTest(array:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest5array5alphaAA08SSGrubbsF6ResultVyxq_GSayxG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">grubbsTest(array:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest5array5alphaAA08SSGrubbsF6ResultVyxq_GSayxG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">grubbsTest(array:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2021,7 +2031,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest4data5alphaAA08SSGrubbsF6ResultVyxq_GAA9SSExamineCyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/grubbsTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest4data5alphaAA08SSGrubbsF6ResultVyxq_GAA9SSExamineCyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">grubbsTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10grubbsTest4data5alphaAA08SSGrubbsF6ResultVyxq_GAA9SSExamineCyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">grubbsTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2047,7 +2057,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest5array5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgSayxG_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/esdOutlierTest(array:alpha:maxOutliers:testType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest5array5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgSayxG_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">esdOutlierTest(array:alpha:maxOutliers:testType:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest5array5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgSayxG_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">esdOutlierTest(array:<wbr>alpha:<wbr>maxOutliers:<wbr>testType:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2130,7 +2140,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest4data5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgAA9SSExamineCyxq_G_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/esdOutlierTest(data:alpha:maxOutliers:testType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest4data5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgAA9SSExamineCyxq_G_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">esdOutlierTest(data:alpha:maxOutliers:testType:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14esdOutlierTest4data5alpha11maxOutliers8testTypeAA15SSESDTestResultVyxq_GSgAA9SSExamineCyxq_G_q_SiSgAA0nM0OtKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">esdOutlierTest(data:<wbr>alpha:<wbr>maxOutliers:<wbr>testType:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2207,16 +2217,12 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO8runsTest5array5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGSayxG_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ"></a>
                     <a name="//apple_ref/swift/Method/runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8runsTest5array5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGSayxG_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ">runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8runsTest5array5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGSayxG_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ">runsTest(array:<wbr>alpha:<wbr>useCuttingPoint:<wbr>userDefinedCuttingPoint:<wbr>alternative:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2228,20 +2234,22 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <h3 id='important-note' class='heading'>Important Note</h3>
 
 <p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
-<li>Suppose the original data is a string containing only <q>H</q> and <q>L</q>: <code>HLHHLHHLHLLHLHHL</code></li>
-<li>Setting <q>H</q> = 1 and <q>L</q> = 3 results in the recoded sequence:
+
+<ul>
+<li>Suppose the original data is a string containing only &ldquo;H&rdquo; and &ldquo;L&rdquo;: <code>HLHHLHHLHLLHLHHL</code></li>
+<li>Setting &ldquo;H&rdquo; = 1 and &ldquo;L&rdquo; = 3 results in the recoded sequence:
 
 <ul>
 <li><code>1311311313313113</code></li>
 <li>In this case a cutting point of 2 must be used.</li>
 </ul></li>
-<li><p>Setting <q>H</q> = 1 and <q>L</q> = 2 results in the recoded sequence:</p>
+<li><p>Setting &ldquo;H&rdquo; = 1 and &ldquo;L&rdquo; = 2 results in the recoded sequence:</p>
 
 <ul>
 <li><code>1211211212212112</code></li>
 <li>In this case a cutting point of 1.5 must be used.</li>
 </ul></li>
-<div class="aside aside-throws">
+</ul><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
 
@@ -2319,7 +2327,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO8runsTest4data5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGAA9SSExamineCyxxGSg_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ"></a>
                     <a name="//apple_ref/swift/Method/runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8runsTest4data5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGAA9SSExamineCyxxGSg_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ">runsTest(data:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO8runsTest4data5alpha15useCuttingPoint011userDefinedjK011alternativeAA06SSRunsF6ResultVyxGAA9SSExamineCyxxGSg_xAA0ofjK0OxSgAA23SSAlternativeHypothesesOtKSeRzSERzAA010SSFloatingK0RzlFZ">runsTest(data:<wbr>alpha:<wbr>useCuttingPoint:<wbr>userDefinedCuttingPoint:<wbr>alternative:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2331,20 +2339,22 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
 <h3 id='important-note' class='heading'>Important Note</h3>
 
 <p>It is important that the data are numerical. To recode non-numerical data follow the procedure as described below.<br/></p>
-<li>Suppose the original data is a string containing only <q>H</q> and <q>L</q>: <code>HLHHLHHLHLLHLHHL</code></li>
-<li>Setting <q>H</q> = 1 and <q>L</q> = 3 results in the recoded sequence:
+
+<ul>
+<li>Suppose the original data is a string containing only &ldquo;H&rdquo; and &ldquo;L&rdquo;: <code>HLHHLHHLHLLHLHHL</code></li>
+<li>Setting &ldquo;H&rdquo; = 1 and &ldquo;L&rdquo; = 3 results in the recoded sequence:
 
 <ul>
 <li><code>1311311313313113</code></li>
 <li>In this case a cutting point of 2 must be used.</li>
 </ul></li>
-<li><p>Setting <q>H</q> = 1 and <q>L</q> = 2 results in the recoded sequence:</p>
+<li><p>Setting &ldquo;H&rdquo; = 1 and &ldquo;L&rdquo; = 2 results in the recoded sequence:</p>
 
 <ul>
 <li><code>1211211212212112</code></li>
 <li>In this case a cutting point of 1.5 must be used.</li>
 </ul></li>
-<div class="aside aside-throws">
+</ul><div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     <p>SSSwiftyStatsError iff data.sampleSize &lt; 2</p>
 
@@ -2417,16 +2427,12 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest5data15data25alphaAA03SS2fG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/twoSampleTTest(data1:data2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest5data15data25alphaAA03SS2fG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">twoSampleTTest(data1:data2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest5data15data25alphaAA03SS2fG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">twoSampleTTest(data1:<wbr>data2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2501,7 +2507,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest7sample17sample25alphaAA03SS2fG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/twoSampleTTest(sample1:sample2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest7sample17sample25alphaAA03SS2fG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">twoSampleTTest(sample1:sample2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14twoSampleTTest7sample17sample25alphaAA03SS2fG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">twoSampleTTest(sample1:<wbr>sample2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2576,7 +2582,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTest6sample4mean5alphaAA05SSOnefG6ResultVyq_GAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/oneSampleTTest(sample:mean:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTest6sample4mean5alphaAA05SSOnefG6ResultVyq_GAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneSampleTTest(sample:mean:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTest6sample4mean5alphaAA05SSOnefG6ResultVyq_GAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneSampleTTest(sample:<wbr>mean:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2651,7 +2657,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTEst4data4mean5alphaAA05SSOneF11TTestResultVyq_GSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/oneSampleTTEst(data:mean:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTEst4data4mean5alphaAA05SSOneF11TTestResultVyq_GSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneSampleTTEst(data:mean:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14oneSampleTTEst4data4mean5alphaAA05SSOneF11TTestResultVyq_GSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneSampleTTEst(data:<wbr>mean:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2726,7 +2732,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest4set14set25alphaAA09SSMatchedfG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/matchedPairsTTest(set1:set2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest4set14set25alphaAA09SSMatchedfG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">matchedPairsTTest(set1:set2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest4set14set25alphaAA09SSMatchedfG6ResultVyq_GAA9SSExamineCyxq_GSg_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">matchedPairsTTest(set1:<wbr>set2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2801,7 +2807,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest5data15data25alphaAA09SSMatchedfG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/matchedPairsTTest(data1:data2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest5data15data25alphaAA09SSMatchedfG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">matchedPairsTTest(data1:data2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17matchedPairsTTest5data15data25alphaAA09SSMatchedfG6ResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">matchedPairsTTest(data1:<wbr>data2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2876,7 +2882,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/oneWayANOVA(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2939,7 +2945,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/oneWayANOVA(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA4data5alphaAA05SSOneF15ANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3002,7 +3008,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA9dataFrame5alphaAA05SSOneF15ANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/oneWayANOVA(dataFrame:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA9dataFrame5alphaAA05SSOneF15ANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(dataFrame:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11oneWayANOVA9dataFrame5alphaAA05SSOneF15ANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">oneWayANOVA(dataFrame:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3065,7 +3071,7 @@ Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Ande
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest9dataFrame5alphaAA23SSOneWayANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/multipleMeansTest(dataFrame:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest9dataFrame5alphaAA23SSOneWayANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(dataFrame:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest9dataFrame5alphaAA23SSOneWayANOVATestResultVyq_GSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(dataFrame:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3129,7 +3135,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/multipleMeansTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSaySayxGGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3193,7 +3199,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/multipleMeansTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO17multipleMeansTest4data5alphaAA23SSOneWayANOVATestResultVyq_GSgSayAA9SSExamineCyxq_GGSg_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">multipleMeansTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3257,7 +3263,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0nS0tGSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/tukeyKramerTest(dataFrame:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0nS0tGSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">tukeyKramerTest(dataFrame:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0nS0tGSgAA06SSDataI0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">tukeyKramerTest(dataFrame:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3292,8 +3298,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
-</div>
-<div class="aside aside-precondition">
+</div><div class="aside aside-precondition">
     <p class="aside-title">Precondition</p>
     Each examine object should be named uniquely.
 
@@ -3351,7 +3356,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest4data5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0mR0tGSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/tukeyKramerTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest4data5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0mR0tGSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">tukeyKramerTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO15tukeyKramerTest4data5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocG4TypeO0mR0tGSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">tukeyKramerTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3364,8 +3369,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError.invalidArgument iff data.count &lt;= 2
 
-</div>
-<div class="aside aside-precondition">
+</div><div class="aside aside-precondition">
     <p class="aside-title">Precondition</p>
     Each examine object should be named uniquely.
 
@@ -3423,7 +3427,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO11scheffeTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0mR0tGSgAA06SSDataH0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/scheffeTest(dataFrame:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11scheffeTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0mR0tGSgAA06SSDataH0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">scheffeTest(dataFrame:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO11scheffeTest9dataFrame5alphaSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0mR0tGSgAA06SSDataH0Cyxq_G_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">scheffeTest(dataFrame:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3490,7 +3494,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO14bonferroniTest9dataFrameSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0lQ0tGSgAA06SSDataH0Cyxq_G_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/bonferroniTest(dataFrame:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14bonferroniTest9dataFrameSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0lQ0tGSgAA06SSDataH0Cyxq_G_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bonferroniTest(dataFrame:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO14bonferroniTest9dataFrameSaySS3row_q_8meanDiffq_8testStatq_6pValueAA09SSPostHocF4TypeO0lQ0tGSgAA06SSDataH0Cyxq_G_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bonferroniTest(dataFrame:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3512,16 +3516,12 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest4data5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/bartlettTest(data:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest4data5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bartlettTest(data:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest4data5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bartlettTest(data:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3584,7 +3584,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest5array5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/bartlettTest(array:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest5array5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bartlettTest(array:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO12bartlettTest5array5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGG_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">bartlettTest(array:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3647,7 +3647,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO10leveneTest4data8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/leveneTest(data:testType:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10leveneTest4data8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">leveneTest(data:testType:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10leveneTest4data8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSayAA9SSExamineCyxq_GGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">leveneTest(data:<wbr>testType:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3722,7 +3722,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO10leveneTest5array8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/leveneTest(array:testType:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10leveneTest5array8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">leveneTest(array:testType:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO10leveneTest5array8testType5alphaAA018SSVarianceEqualityF6ResultVyq_GSgSaySayxGGSg_AA08SSLevenefI0Oq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">leveneTest(array:<wbr>testType:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3797,7 +3797,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest5array07nominalG05alphaAA05SSChifgH6ResultVyq_GSgSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/chiSquareVarianceTest(array:nominalVariance:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest5array07nominalG05alphaAA05SSChifgH6ResultVyq_GSgSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">chiSquareVarianceTest(array:nominalVariance:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest5array07nominalG05alphaAA05SSChifgH6ResultVyq_GSgSayxG_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">chiSquareVarianceTest(array:<wbr>nominalVariance:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3872,7 +3872,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest6sample07nominalG05alphaAA05SSChifgH6ResultVyq_GSgAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/chiSquareVarianceTest(sample:nominalVariance:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest6sample07nominalG05alphaAA05SSChifgH6ResultVyq_GSgAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">chiSquareVarianceTest(sample:nominalVariance:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21chiSquareVarianceTest6sample07nominalG05alphaAA05SSChifgH6ResultVyq_GSgAA9SSExamineCyxq_G_q_q_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">chiSquareVarianceTest(sample:<wbr>nominalVariance:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3947,7 +3947,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality5data15data25alphaAA13SSFTestResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/fTestVarianceEquality(data1:data2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality5data15data25alphaAA13SSFTestResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">fTestVarianceEquality(data1:data2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality5data15data25alphaAA13SSFTestResultVyq_GSayxG_AKq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">fTestVarianceEquality(data1:<wbr>data2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4022,7 +4022,7 @@ same as oneWayAnova(<em>:,</em>:)</p>
                     <code>
                     <a name="/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality7sample17sample25alphaAA13SSFTestResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ"></a>
                     <a name="//apple_ref/swift/Method/fTestVarianceEquality(sample1:sample2:alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality7sample17sample25alphaAA13SSFTestResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">fTestVarianceEquality(sample1:sample2:alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats19SSHypothesisTestingO21fTestVarianceEquality7sample17sample25alphaAA13SSFTestResultVyq_GAA9SSExamineCyxq_G_AMq_tKSLRzSeRzSERzSHRzSeR_SER_AA15SSFloatingPointR_r0_lFZ">fTestVarianceEquality(sample1:<wbr>sample2:<wbr>alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4097,8 +4097,8 @@ same as oneWayAnova(<em>:,</em>:)</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

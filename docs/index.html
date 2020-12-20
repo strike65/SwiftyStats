@@ -8,12 +8,20 @@
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a title="SwiftyStats  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -105,6 +113,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -335,9 +346,9 @@
         <section>
           <section class="section">
             
-            <p><img src="https://img.shields.io/badge/Language-Swift_5-yellow.svg" alt="Language"> <img src="https://img.shields.io/badge/version-1.1.0-orange.svg" alt="Version"> <img src="https://img.shields.io/badge/Unit_Tests-passed-green.svg" alt="Unit Tests"> <img src="https://img.shields.io/badge/macOS-built-green.svg" alt="macOS"> <img src="https://img.shields.io/badge/iOS-built-green.svg" alt="iOS"> <img src="https://img.shields.io/badge/Linux-under_development-red.svg" alt="Build Linux"> <img src="https://img.shields.io/badge/Documentation-87%20%25-green.svg" alt="Documentation"></p>
+            <p><img src="https://img.shields.io/badge/Language-Swift_5-yellow.svg" alt="Language"> <img src="https://img.shields.io/badge/version-1.1.4-orange.svg" alt="Version"> <img src="https://img.shields.io/badge/Unit_Tests-passed-green.svg" alt="Unit Tests"> <img src="https://img.shields.io/badge/macOS-built-green.svg" alt="macOS"> <img src="https://img.shields.io/badge/iOS-built-green.svg" alt="iOS"> <img src="https://img.shields.io/badge/Linux-under_development-red.svg" alt="Build Linux"> <img src="https://img.shields.io/badge/Documentation-87%20%25-green.svg" alt="Documentation"></p>
 
-<p><img src="img/SwiftyStatsLogo.png" alt="SwiftyStats"></p>
+<p><img src="SwiftyStats/help/img/SwiftyStatsLogo.png" alt="SwiftyStats"></p>
 
 <p>(full documentation: <a href="https://strike65.github.io/SwiftyStats/docs/">https://strike65.github.io/SwiftyStats/docs/</a>)</p>
 
@@ -353,7 +364,7 @@
 
 <p>SwiftyStats is based on the class <a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a>. This class encapsulates the data to be processed and provides descriptive statistics. In principle, an <code><a href="Classes/SSExamine.html">SSExamine</a></code> instance can contain data of any kind. The available statistical indicators depend of course on the type of data.</p>
 
-<p>The following <q>namespaces</q>/classes are provided (among others):</p>
+<p>The following &ldquo;namespaces&rdquo;/classes are provided (among others):</p>
 
 <ul>
 <li><a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a> (class)</li>
@@ -380,7 +391,7 @@
 
 <p><em>Each target must be built individually (i.e. no dependencies are defined)!</em></p>
 
-<p>In addition a Plaground is added to the Xcode project to </p>
+<p>In addition a Playground is added to the Xcode project to </p>
 
 <blockquote>
 
@@ -391,7 +402,7 @@
 </blockquote>
 <h1 id='the-swift-type-checker-problem' class='heading'>The Swift Type Checker problem</h1>
 
-<p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look <q>nice</q> in some places, because <q>complex</q> expressions (like <code>z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
+<p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look &ldquo;nice&rdquo; in some places, because &ldquo;complex&rdquo; expressions (like <code>z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
 <h1 id='how-to-install' class='heading'>How to Install</h1>
 <h2 id='cocoapods-recommended-if-your-are-on-a-mac' class='heading'>CocoaPods (recommended if your are on a Mac)</h2>
 
@@ -483,7 +494,7 @@ print(error.localizedDescription)
 }
 </span></code></pre>
 
-<p>Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as <q>degree of freedom</q>, <q>shape</q> or <q>mean</q>. For each distribution there are the following functions defined:</p>
+<p>Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as &ldquo;degree of freedom&rdquo;, &ldquo;shape&rdquo; or &ldquo;mean&rdquo;. For each distribution there are the following functions defined:</p>
 
 <ul>
 <li>cdf: Cumulative Distribution Function</li>
@@ -701,13 +712,13 @@ print(error.localizedDescription)
 
 <p>This framework is published under the <a href="http://www.gnu.org/licenses/">GNU GPL 3</a></p>
 
-<p>Copyright 2017 - 2019 strike65</p>
+<p>Copyright 2017 - 2020 strike65</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

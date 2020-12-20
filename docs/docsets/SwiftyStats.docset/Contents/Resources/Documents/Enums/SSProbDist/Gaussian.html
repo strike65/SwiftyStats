@@ -8,13 +8,21 @@
     <script src="../../js/jquery.min.js" defer></script>
     <script src="../../js/jazzy.js" defer></script>
     
+    <script src="../../js/lunr.min.js" defer></script>
+    <script src="../../js/typeahead.jquery.js" defer></script>
+    <script src="../../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Enum/Gaussian" class="dashAnchor"></a>
     <a title="Gaussian Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>Gaussian</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Gaussian</span></code></pre>
 
                 </div>
@@ -353,7 +365,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO4para4mean17standardDeviationAA010SSContProbD6ParamsVyxGSgx_xtSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/para(mean:standardDeviation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO4para4mean17standardDeviationAA010SSContProbD6ParamsVyxGSgx_xtSeRzSERzAA15SSFloatingPointRzlFZ">para(mean:standardDeviation:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO4para4mean17standardDeviationAA010SSContProbD6ParamsVyxGSgx_xtSeRzSERzAA15SSFloatingPointRzlFZ">para(mean:<wbr>standardDeviation:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -416,7 +428,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/cdf(x:mean:standardDeviation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:mean:standardDeviation:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:<wbr>mean:<wbr>standardDeviation:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -492,7 +504,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/cdf(x:mean:variance:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:mean:variance:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3cdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:<wbr>mean:<wbr>variance:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -567,7 +579,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/pdf(x:mean:standardDeviation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:mean:standardDeviation:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:<wbr>mean:<wbr>standardDeviation:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -630,7 +642,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/pdf(x:mean:variance:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:mean:variance:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO3pdf1x4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:<wbr>mean:<wbr>variance:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -705,7 +717,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/quantile(p:mean:standardDeviation:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:mean:standardDeviation:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean17standardDeviationxx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:<wbr>mean:<wbr>standardDeviation:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -780,7 +792,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/quantile(p:mean:variance:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:mean:variance:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO8GaussianO8quantile1p4mean8variancexx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:<wbr>mean:<wbr>variance:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -855,8 +867,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

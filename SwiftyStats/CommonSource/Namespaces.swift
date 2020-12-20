@@ -25,9 +25,10 @@ internal enum SSSpecialFunctions {
     enum Helper {
     }
 }
-
+/// Internal Helper functions
 internal enum Helpers {
 }
+/// Internal math
 internal enum SSMath {
 }
 /// Provides often used/needed statistical tests

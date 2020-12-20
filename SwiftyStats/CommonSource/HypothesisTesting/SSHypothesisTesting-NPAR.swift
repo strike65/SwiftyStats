@@ -34,8 +34,8 @@ extension SSHypothesisTesting {
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
     /// Calls ksGoFTest(data: Array<FloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
-    /// - Parameter data: Array<FloatingPoint>
-    /// - Parameter target: Distribution to test for
+    /// - Parameter array: Array<FloatingPoint>
+    /// - Parameter targetDistribution: Distribution to test for
     /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
@@ -64,8 +64,8 @@ extension SSHypothesisTesting {
     
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
-    /// - Parameter data: Array<FloatingPoint>
-    /// - Parameter target: Distribution to test for
+    /// - Parameter array: Array<FloatingPoint>
+    /// - Parameter targetDistribution: Distribution to test for
     /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
@@ -96,8 +96,8 @@ extension SSHypothesisTesting {
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
     /// Calls ksGoFTest(data: SSExamine<Numeric, SSFloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
-    /// - Parameter data: SSExamine<Numeric, SSFloatingPoint>
-    /// - Parameter target: Distribution to test for
+    /// - Parameter data: Array<FloatingPoint>
+    /// - Parameter targetDistribution: Distribution to test for
     /// - Returns: SSKSTestResul struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {

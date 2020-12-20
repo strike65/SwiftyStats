@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/SSSwiftyStatsError" class="dashAnchor"></a>
     <a title="SSSwiftyStatsError Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>SSSwiftyStatsError</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSSwiftyStatsError</span> <span class="p">:</span> <span class="kt">NSError</span><span class="p">,</span> <span class="kt">LocalizedError</span></code></pre>
 
                 </div>
@@ -368,7 +380,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">SSSwiftyStatsError</span><span class="o">.</span><span class="kt"><a href="../Classes/SSSwiftyStatsError/ErrorType.html">ErrorType</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Classes/SSSwiftyStatsError/ErrorType.html">ErrorType</a></span></code></pre>
 
                         </div>
                       </div>
@@ -487,6 +499,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(py)description"></a>
+                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(py)description">description</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(py)localizedDescription"></a>
                     <a name="//apple_ref/swift/Property/localizedDescription" class="dashAnchor"></a>
                     <a class="token" href="#/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(py)localizedDescription">localizedDescription</a>
@@ -543,7 +582,7 @@
                     <code>
                     <a name="/s:11SwiftyStats08SSSwiftyB5ErrorC4type4file4line8functionA2C0D4TypeO_SSSiSStcfc"></a>
                     <a name="//apple_ref/swift/Method/init(type:file:line:function:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats08SSSwiftyB5ErrorC4type4file4line8functionA2C0D4TypeO_SSSiSStcfc">init(type:file:line:function:)</a>
+                    <a class="token" href="#/s:11SwiftyStats08SSSwiftyB5ErrorC4type4file4line8functionA2C0D4TypeO_SSSiSStcfc">init(type:<wbr>file:<wbr>line:<wbr>function:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -570,7 +609,7 @@
                     <code>
                     <a name="/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(im)initWithCoder:"></a>
                     <a name="//apple_ref/swift/Method/init(coder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(im)initWithCoder:">init(coder:)</a>
+                    <a class="token" href="#/c:@M@SwiftyStats@objc(cs)SSSwiftyStatsError(im)initWithCoder:">init(coder:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -597,8 +636,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

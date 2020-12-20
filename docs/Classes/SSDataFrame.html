@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/SSDataFrame" class="dashAnchor"></a>
     <a title="SSDataFrame Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>SSDataFrame</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSDataFrame</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt">NSMutableCopying</span><span class="p">,</span> <span class="kt">SSDataFrameContainer</span> <span class="k">where</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                 </div>
@@ -366,7 +378,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC6encode2toys7Encoder_p_tKF"></a>
                     <a name="//apple_ref/swift/Method/encode(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6encode2toys7Encoder_p_tKF">encode(to:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6encode2toys7Encoder_p_tKF">encode(to:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -393,7 +405,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC4fromACyxq_Gs7Decoder_p_tKcfc"></a>
                     <a name="//apple_ref/swift/Method/init(from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4fromACyxq_Gs7Decoder_p_tKcfc">init(from:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4fromACyxq_Gs7Decoder_p_tKcfc">init(from:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -420,7 +432,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF"></a>
                     <a name="//apple_ref/swift/Method/archiveTo(filePath:overwrite:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF">archiveTo(filePath:overwrite:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF">archiveTo(filePath:<wbr>overwrite:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -483,7 +495,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC13unarchiveFrom8filePathACyxq_GSgSSSg_tKFZ"></a>
                     <a name="//apple_ref/swift/Method/unarchiveFrom(filePath:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC13unarchiveFrom8filePathACyxq_GSgSSSg_tKFZ">unarchiveFrom(filePath:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC13unarchiveFrom8filePathACyxq_GSgSSSg_tKFZ">unarchiveFrom(filePath:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -588,7 +600,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC7isEqualySbypSgF"></a>
                     <a name="//apple_ref/swift/Method/isEqual(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC7isEqualySbypSgF">isEqual(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC7isEqualySbypSgF">isEqual(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -723,7 +735,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC6append_4nameyAA9SSExamineCyxq_G_SSSgtKF"></a>
                     <a name="//apple_ref/swift/Method/append(_:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6append_4nameyAA9SSExamineCyxq_G_SSSgtKF">append(_:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6append_4nameyAA9SSExamineCyxq_G_SSSgtKF">append(_:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -813,7 +825,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC6remove4nameAA9SSExamineCyxq_GSgSSSg_tF"></a>
                     <a name="//apple_ref/swift/Method/remove(name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6remove4nameAA9SSExamineCyxq_GSgSSSg_tF">remove(name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC6remove4nameAA9SSExamineCyxq_GSgSSSg_tF">remove(name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -863,7 +875,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC3row2atSayxGSi_tF"></a>
                     <a name="//apple_ref/swift/Method/row(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC3row2atSayxGSi_tF">row(at:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC3row2atSayxGSi_tF">row(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -890,7 +902,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSicip"></a>
                     <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSicip">subscript(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSicip">subscript(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -917,7 +929,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSScip"></a>
                     <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSScip">subscript(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameCyAA9SSExamineCyxq_GSScip">subscript(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -944,7 +956,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF"></a>
                     <a name="//apple_ref/swift/Method/copy(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -992,7 +1004,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF"></a>
                     <a name="//apple_ref/swift/Method/mutableCopy(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF">mutableCopy(with:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC11mutableCopy4withyp10ObjectiveC6NSZoneVSg_tF">mutableCopy(with:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1098,7 +1110,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC9exportCSV4path9separator9useQuotes20firstRowAsColumnName9overwrite14stringEncoding10atomicallySbSSSg_SSS3bSS10FoundationE0R0VSbtKF"></a>
                     <a name="//apple_ref/swift/Method/exportCSV(path:separator:useQuotes:firstRowAsColumnName:overwrite:stringEncoding:atomically:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9exportCSV4path9separator9useQuotes20firstRowAsColumnName9overwrite14stringEncoding10atomicallySbSSSg_SSS3bSS10FoundationE0R0VSbtKF">exportCSV(path:separator:useQuotes:firstRowAsColumnName:overwrite:stringEncoding:atomically:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC9exportCSV4path9separator9useQuotes20firstRowAsColumnName9overwrite14stringEncoding10atomicallySbSSSg_SSS3bSS10FoundationE0R0VSbtKF">exportCSV(path:<wbr>separator:<wbr>useQuotes:<wbr>firstRowAsColumnName:<wbr>overwrite:<wbr>stringEncoding:<wbr>atomically:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1213,7 +1225,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC04dataD010fromString9separator21firstRowContainsNames6parserACyxq_GSSSg_AJSbxSgSSXEtKFZ"></a>
                     <a name="//apple_ref/swift/Method/dataFrame(fromString:separator:firstRowContainsNames:parser:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD010fromString9separator21firstRowContainsNames6parserACyxq_GSSSg_AJSbxSgSSXEtKFZ">dataFrame(fromString:separator:firstRowContainsNames:parser:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD010fromString9separator21firstRowContainsNames6parserACyxq_GSSSg_AJSbxSgSSXEtKFZ">dataFrame(fromString:<wbr>separator:<wbr>firstRowContainsNames:<wbr>parser:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1272,7 +1284,7 @@ Each column contains an SSExamine object.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The separator (delimiter) used. Default = <q>,</q></p>
+                                  <p>The separator (delimiter) used. Default = &ldquo;,&rdquo;</p>
                                 </div>
                               </td>
                             </tr>
@@ -1311,7 +1323,7 @@ Each column contains an SSExamine object.</p>
                     <code>
                     <a name="/s:11SwiftyStats11SSDataFrameC04dataD08fromFile9separator21firstRowContainsNames14stringEncoding_ACyxq_GSSSg_AJSbSS10FoundationE0N0VSgxSgSSXEtKFZ"></a>
                     <a name="//apple_ref/swift/Method/dataFrame(fromFile:separator:firstRowContainsNames:stringEncoding:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD08fromFile9separator21firstRowContainsNames14stringEncoding_ACyxq_GSSSg_AJSbSS10FoundationE0N0VSgxSgSSXEtKFZ">dataFrame(fromFile:separator:firstRowContainsNames:stringEncoding:_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats11SSDataFrameC04dataD08fromFile9separator21firstRowContainsNames14stringEncoding_ACyxq_GSSSg_AJSbSS10FoundationE0N0VSgxSgSSXEtKFZ">dataFrame(fromFile:<wbr>separator:<wbr>firstRowContainsNames:<wbr>stringEncoding:<wbr>_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1410,8 +1422,8 @@ Each column contains an SSExamine object.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

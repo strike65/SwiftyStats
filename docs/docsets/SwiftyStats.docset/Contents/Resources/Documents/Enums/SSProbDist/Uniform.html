@@ -8,13 +8,21 @@
     <script src="../../js/jquery.min.js" defer></script>
     <script src="../../js/jazzy.js" defer></script>
     
+    <script src="../../js/lunr.min.js" defer></script>
+    <script src="../../js/typeahead.jquery.js" defer></script>
+    <script src="../../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Enum/Uniform" class="dashAnchor"></a>
     <a title="Uniform Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>Uniform</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Uniform</span></code></pre>
 
                 </div>
@@ -353,7 +365,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO7UniformO4para10lowerBound05upperH0AA010SSContProbD6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/para(lowerBound:upperBound:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO4para10lowerBound05upperH0AA010SSContProbD6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlFZ">para(lowerBound:upperBound:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO4para10lowerBound05upperH0AA010SSContProbD6ParamsVyxGx_xtKSeRzSERzAA15SSFloatingPointRzlFZ">para(lowerBound:<wbr>upperBound:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -416,7 +428,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO7UniformO3pdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/pdf(x:lowerBound:upperBound:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO3pdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:lowerBound:upperBound:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO3pdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">pdf(x:<wbr>lowerBound:<wbr>upperBound:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -491,7 +503,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO7UniformO3cdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/cdf(x:lowerBound:upperBound:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO3cdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:lowerBound:upperBound:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO3cdf1x10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(x:<wbr>lowerBound:<wbr>upperBound:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -566,7 +578,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSProbDistO7UniformO8quantile1p10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/quantile(p:lowerBound:upperBound:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO8quantile1p10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:lowerBound:upperBound:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7UniformO8quantile1p10lowerBound05upperH0xx_xxtKSeRzSERzAA15SSFloatingPointRzlFZ">quantile(p:<wbr>lowerBound:<wbr>upperBound:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -641,8 +653,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

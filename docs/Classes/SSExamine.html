@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/SSExamine" class="dashAnchor"></a>
     <a title="SSExamine Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>SSExamine</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSExamine</span><span class="o">&lt;</span><span class="kt">SSElement</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">SSExamineContainer</span><span class="p">,</span> <span class="kt">NSCopying</span><span class="p">,</span> <span class="kt">Codable</span> <span class="k">where</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">SSElement</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                 </div>
@@ -345,9 +357,9 @@
             <p>SSExamine
  This class contains all the data that you want to evaluate. SSExamine expects data that corresponds to the <code>Hashable</code>, <code>Comparable</code> and <code>Codable</code> protocols. Which statistics are available depends on the type of data. For nominal data, for example, an average will not be meaningful and will therefore not be calculated. If a certain statistical measure is not available, the result will be <code>nil</code>. It is therefore important that you check all results for this.</p>
 
-<p>SSExamine was primarily developed with Objective-C and had in particular the requirement to create frequency tables for the entered data and to update these tables whenever data was added or removed. Internally, the data is therefore stored in a kind of frequency table. If, for example, the element <q>A</q> occurs 100 times in the data set to be evaluated, the element is not stored 100 times, but only once. At the same time, a reference to the frequency of this element is saved.</p>
+<p>SSExamine was primarily developed with Objective-C and had in particular the requirement to create frequency tables for the entered data and to update these tables whenever data was added or removed. Internally, the data is therefore stored in a kind of frequency table. If, for example, the element &ldquo;A&rdquo; occurs 100 times in the data set to be evaluated, the element is not stored 100 times, but only once. At the same time, a reference to the frequency of this element is saved.</p>
 
-<p>If elements are added to an SSExamine instance, the order of <q>arrival</q> is also registered. This makes it possible to reconstruct the <q>original data</q> from an SSExamine instance.</p>
+<p>If elements are added to an SSExamine instance, the order of &ldquo;arrival&rdquo; is also registered. This makes it possible to reconstruct the &ldquo;original data&rdquo; from an SSExamine instance.</p>
 <div class="aside aside-important">
     <p class="aside-title">Important</p>
     <ul>
@@ -361,11 +373,13 @@
           <section class="section task-group-section">
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/OPEN/PUBLIC%20VARS"></a>
+                <a name="/OPEN%2FPUBLIC%20VARS"></a>
                 <a name="//apple_ref/swift/Section/OPEN/PUBLIC VARS" class="dashAnchor"></a>
-                <a href="#/OPEN/PUBLIC%20VARS">
-                  <h3 class="section-name">OPEN/PUBLIC VARS</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/OPEN%2FPUBLIC%20VARS"></a>
+                  <h3 class="section-name"><p>OPEN/PUBLIC VARS</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -725,7 +739,7 @@ A placeholder to specify the type of stored data.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC7isEqualySbypSgF"></a>
                     <a name="//apple_ref/swift/Method/isEqual(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7isEqualySbypSgF">isEqual(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7isEqualySbypSgF">isEqual(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -737,7 +751,7 @@ A placeholder to specify the type of stored data.</p>
 Two SSExamine objects are assumed to be equal, iff the arrays of all elements in unsorted order are equal.</p>
 <div class="aside aside-important">
     <p class="aside-title">Important</p>
-    Properties like <q>name</q> or <q>tag</q> are not included
+    Properties like &ldquo;name&rdquo; or &ldquo;tag&rdquo; are not included
 
 </div>
 
@@ -832,9 +846,11 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
               <div class="task-name-container">
                 <a name="/INITIALIZERS"></a>
                 <a name="//apple_ref/swift/Section/INITIALIZERS" class="dashAnchor"></a>
-                <a href="#/INITIALIZERS">
-                  <h3 class="section-name">INITIALIZERS</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/INITIALIZERS"></a>
+                  <h3 class="section-name"><p>INITIALIZERS</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -869,7 +885,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC10withObject18levelOfMeasurement4name12characterSetACyxq_Gyp_AA07SSLevelgH0OSSSg10Foundation09CharacterK0VSgtKcfc"></a>
                     <a name="//apple_ref/swift/Method/init(withObject:levelOfMeasurement:name:characterSet:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10withObject18levelOfMeasurement4name12characterSetACyxq_Gyp_AA07SSLevelgH0OSSSg10Foundation09CharacterK0VSgtKcfc">init(withObject:levelOfMeasurement:name:characterSet:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10withObject18levelOfMeasurement4name12characterSetACyxq_Gyp_AA07SSLevelgH0OSSSg10Foundation09CharacterK0VSgtKcfc">init(withObject:<wbr>levelOfMeasurement:<wbr>name:<wbr>characterSet:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -956,7 +972,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC9withArray4name12characterSetACyxq_GSayxG_SSSg10Foundation09CharacterH0VSgtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(withArray:name:characterSet:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9withArray4name12characterSetACyxq_GSayxG_SSSg10Foundation09CharacterH0VSgtcfc">init(withArray:name:characterSet:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9withArray4name12characterSetACyxq_GSayxG_SSSg10Foundation09CharacterH0VSgtcfc">init(withArray:<wbr>name:<wbr>characterSet:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1014,7 +1030,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC7examine8fromFile9separator18elementsEnclosedBy14stringEncoding_ACyxq_GSgSS_S2SSgSS10FoundationE0L0VxSgAKXEtKFZ"></a>
                     <a name="//apple_ref/swift/Method/examine(fromFile:separator:elementsEnclosedBy:stringEncoding:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7examine8fromFile9separator18elementsEnclosedBy14stringEncoding_ACyxq_GSgSS_S2SSgSS10FoundationE0L0VxSgAKXEtKFZ">examine(fromFile:separator:elementsEnclosedBy:stringEncoding:_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7examine8fromFile9separator18elementsEnclosedBy14stringEncoding_ACyxq_GSgSS_S2SSgSS10FoundationE0L0VxSgAKXEtKFZ">examine(fromFile:<wbr>separator:<wbr>elementsEnclosedBy:<wbr>stringEncoding:<wbr>_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1029,8 +1045,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError if the file doesn&rsquo;t exist or can&rsquo;t be accessed.
 
-</div>
-<div class="aside aside-important">
+</div><div class="aside aside-important">
     <p class="aside-title">Important</p>
     It is assumed that the elements are numeric.
 
@@ -1108,7 +1123,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC7examine12fromJSONFile14stringEncodingACyxq_GSgSS_SS10FoundationE0H0VtKFZ"></a>
                     <a name="//apple_ref/swift/Method/examine(fromJSONFile:stringEncoding:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7examine12fromJSONFile14stringEncodingACyxq_GSgSS_SS10FoundationE0H0VtKFZ">examine(fromJSONFile:stringEncoding:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC7examine12fromJSONFile14stringEncodingACyxq_GSgSS_SS10FoundationE0H0VtKFZ">examine(fromJSONFile:<wbr>stringEncoding:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1171,7 +1186,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC16exportJSONString8fileName10atomically9overwrite14stringEncodingSbSS_S2bSS10FoundationE0K0VtKF"></a>
                     <a name="//apple_ref/swift/Method/exportJSONString(fileName:atomically:overwrite:stringEncoding:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC16exportJSONString8fileName10atomically9overwrite14stringEncodingSbSS_S2bSS10FoundationE0K0VtKF">exportJSONString(fileName:atomically:overwrite:stringEncoding:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC16exportJSONString8fileName10atomically9overwrite14stringEncodingSbSS_S2bSS10FoundationE0K0VtKF">exportJSONString(fileName:<wbr>atomically:<wbr>overwrite:<wbr>stringEncoding:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1258,7 +1273,7 @@ Two SSExamine objects are assumed to be equal, iff the arrays of all elements in
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6saveTo8fileName10atomically9overwrite9separator17encloseElementsBy5asRow14stringEncodingSbSS_S2bS2SSgSbSS10FoundationE0Q0VtKF"></a>
                     <a name="//apple_ref/swift/Method/saveTo(fileName:atomically:overwrite:separator:encloseElementsBy:asRow:stringEncoding:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6saveTo8fileName10atomically9overwrite9separator17encloseElementsBy5asRow14stringEncodingSbSS_S2bS2SSgSbSS10FoundationE0Q0VtKF">saveTo(fileName:atomically:overwrite:separator:encloseElementsBy:asRow:stringEncoding:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6saveTo8fileName10atomically9overwrite9separator17encloseElementsBy5asRow14stringEncodingSbSS_S2bS2SSgSbSS10FoundationE0Q0VtKF">saveTo(fileName:<wbr>atomically:<wbr>overwrite:<wbr>separator:<wbr>encloseElementsBy:<wbr>asRow:<wbr>stringEncoding:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1370,7 +1385,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC17examineWithString_4name12characterSetACySSq_GSgSS_SSSg10Foundation09CharacterI0VSgtFZ"></a>
                     <a name="//apple_ref/swift/Method/examineWithString(_:name:characterSet:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC17examineWithString_4name12characterSetACySSq_GSgSS_SSSg10Foundation09CharacterI0VSgtFZ">examineWithString(_:name:characterSet:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC17examineWithString_4name12characterSetACySSq_GSgSS_SSSg10Foundation09CharacterI0VSgtFZ">examineWithString(_:<wbr>name:<wbr>characterSet:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1429,9 +1444,11 @@ Saves the object to the given path using the specified encoding.</p>
               <div class="task-name-container">
                 <a name="/Codable%20protocol"></a>
                 <a name="//apple_ref/swift/Section/Codable protocol" class="dashAnchor"></a>
-                <a href="#/Codable%20protocol">
-                  <h3 class="section-name">Codable protocol</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Codable%20protocol"></a>
+                  <h3 class="section-name"><p>Codable protocol</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -1439,7 +1456,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:SE6encode2toys7Encoder_p_tKF"></a>
                     <a name="//apple_ref/swift/Method/encode(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:SE6encode2toys7Encoder_p_tKF">encode(to:)</a>
+                    <a class="token" href="#/s:SE6encode2toys7Encoder_p_tKF">encode(to:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1465,7 +1482,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:Se4fromxs7Decoder_p_tKcfc"></a>
                     <a name="//apple_ref/swift/Method/init(from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:Se4fromxs7Decoder_p_tKcfc">init(from:)</a>
+                    <a class="token" href="#/s:Se4fromxs7Decoder_p_tKcfc">init(from:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1492,9 +1509,11 @@ Saves the object to the given path using the specified encoding.</p>
               <div class="task-name-container">
                 <a name="/NSCopying"></a>
                 <a name="//apple_ref/swift/Section/NSCopying" class="dashAnchor"></a>
-                <a href="#/NSCopying">
-                  <h3 class="section-name">NSCopying</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/NSCopying"></a>
+                  <h3 class="section-name"><p>NSCopying</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -1502,7 +1521,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC4copy4withyp10ObjectiveC6NSZoneVSg_tF"></a>
                     <a name="//apple_ref/swift/Method/copy(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC4copy4withyp10ObjectiveC6NSZoneVSg_tF">copy(with:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1530,9 +1549,11 @@ Saves the object to the given path using the specified encoding.</p>
               <div class="task-name-container">
                 <a name="/SSExamineContainer%20Protocol"></a>
                 <a name="//apple_ref/swift/Section/SSExamineContainer Protocol" class="dashAnchor"></a>
-                <a href="#/SSExamineContainer%20Protocol">
-                  <h3 class="section-name">SSExamineContainer Protocol</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/SSExamineContainer%20Protocol"></a>
+                  <h3 class="section-name"><p>SSExamineContainer Protocol</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -1540,7 +1561,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC8containsySbxF"></a>
                     <a name="//apple_ref/swift/Method/contains(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8containsySbxF">contains(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8containsySbxF">contains(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1586,7 +1607,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC10rFrequencyyq_xF"></a>
                     <a name="//apple_ref/swift/Method/rFrequency(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10rFrequencyyq_xF">rFrequency(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10rFrequencyyq_xF">rFrequency(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1632,7 +1653,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC9frequencyySixF"></a>
                     <a name="//apple_ref/swift/Method/frequency(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9frequencyySixF">frequency(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9frequencyySixF">frequency(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1678,7 +1699,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6appendyyxF"></a>
                     <a name="//apple_ref/swift/Method/append(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6appendyyxF">append(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6appendyyxF">append(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1724,7 +1745,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6append9repeating7elementySi_xtF"></a>
                     <a name="//apple_ref/swift/Method/append(repeating:element:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append9repeating7elementySi_xtF">append(repeating:element:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append9repeating7elementySi_xtF">append(repeating:<wbr>element:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1782,7 +1803,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6append9contentOfySayxG_tF"></a>
                     <a name="//apple_ref/swift/Method/append(contentOf:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append9contentOfySayxG_tF">append(contentOf:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append9contentOfySayxG_tF">append(contentOf:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1828,7 +1849,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6append4text12characterSetySS_10Foundation09CharacterG0VSgtKF"></a>
                     <a name="//apple_ref/swift/Method/append(text:characterSet:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append4text12characterSetySS_10Foundation09CharacterG0VSgtKF">append(text:characterSet:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6append4text12characterSetySS_10Foundation09CharacterG0VSgtKF">append(text:<wbr>characterSet:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1891,7 +1912,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6remove_13allOccurencesyx_SbtF"></a>
                     <a name="//apple_ref/swift/Method/remove(_:allOccurences:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6remove_13allOccurencesyx_SbtF">remove(_:allOccurences:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6remove_13allOccurencesyx_SbtF">remove(_:<wbr>allOccurences:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1977,9 +1998,11 @@ Saves the object to the given path using the specified encoding.</p>
               <div class="task-name-container">
                 <a name="/File%20Management"></a>
                 <a name="//apple_ref/swift/Section/File Management" class="dashAnchor"></a>
-                <a href="#/File%20Management">
-                  <h3 class="section-name">File Management</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/File%20Management"></a>
+                  <h3 class="section-name"><p>File Management</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -1987,7 +2010,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF"></a>
                     <a name="//apple_ref/swift/Method/archiveTo(filePath:overwrite:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF">archiveTo(filePath:overwrite:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC9archiveTo8filePath9overwriteSbSSSg_SbSgtKF">archiveTo(filePath:<wbr>overwrite:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2050,7 +2073,7 @@ Saves the object to the given path using the specified encoding.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC13unarchiveFrom8filePathACyxSdGSgSSSg_tKFZ"></a>
                     <a name="//apple_ref/swift/Method/unarchiveFrom(filePath:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC13unarchiveFrom8filePathACyxSdGSgSSSg_tKFZ">unarchiveFrom(filePath:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC13unarchiveFrom8filePathACyxSdGSgSSSg_tKFZ">unarchiveFrom(filePath:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2096,10 +2119,6 @@ Saves the object to the given path using the specified encoding.</p>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -2161,10 +2180,6 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -2197,7 +2212,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC12poweredTotal5powerq_Sgq__tF"></a>
                     <a name="//apple_ref/swift/Method/poweredTotal(power:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC12poweredTotal5powerq_Sgq__tF">poweredTotal(power:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC12poweredTotal5powerq_Sgq__tF">poweredTotal(power:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2297,7 +2312,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC3tss5valueq_SgAF_tF"></a>
                     <a name="//apple_ref/swift/Method/tss(value:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC3tss5valueq_SgAF_tF">tss(value:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC3tss5valueq_SgAF_tF">tss(value:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2345,11 +2360,13 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/TODO%20--%3E%20recursive%20mean/sd??"></a>
+                <a name="/TODO%20--%3E%20recursive%20mean%2Fsd%3F%3F"></a>
                 <a name="//apple_ref/swift/Section/TODO --&gt; recursive mean/sd??" class="dashAnchor"></a>
-                <a href="#/TODO%20--%3E%20recursive%20mean/sd??">
-                  <h3 class="section-name">TODO --&gt; recursive mean/sd??</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/TODO%20--%3E%20recursive%20mean%2Fsd%3F%3F"></a>
+                  <h3 class="section-name"><p>TODO &ndash;&gt; recursive mean/sd??</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2465,7 +2482,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC8quantile1qq_Sgq__tKF"></a>
                     <a name="//apple_ref/swift/Method/quantile(q:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8quantile1qq_Sgq__tKF">quantile(q:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8quantile1qq_Sgq__tKF">quantile(q:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2605,7 +2622,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC11poweredMean5orderq_Sgq__tF"></a>
                     <a name="//apple_ref/swift/Method/poweredMean(order:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11poweredMean5orderq_Sgq__tF">poweredMean(order:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11poweredMean5orderq_Sgq__tF">poweredMean(order:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2655,7 +2672,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC11trimmedMean5alphaq_Sgq__tKF"></a>
                     <a name="//apple_ref/swift/Method/trimmedMean(alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11trimmedMean5alphaq_Sgq__tKF">trimmedMean(alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11trimmedMean5alphaq_Sgq__tKF">trimmedMean(alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2706,7 +2723,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC14winsorizedMean5alphaq_Sgq__tKF"></a>
                     <a name="//apple_ref/swift/Method/winsorizedMean(alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14winsorizedMean5alphaq_Sgq__tKF">winsorizedMean(alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14winsorizedMean5alphaq_Sgq__tKF">winsorizedMean(alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2812,9 +2829,11 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
               <div class="task-name-container">
                 <a name="/Products"></a>
                 <a name="//apple_ref/swift/Section/Products" class="dashAnchor"></a>
-                <a href="#/Products">
-                  <h3 class="section-name">Products</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Products"></a>
+                  <h3 class="section-name"><p>Products</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2877,9 +2896,11 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
               <div class="task-name-container">
                 <a name="/Dispersion"></a>
                 <a name="//apple_ref/swift/Section/Dispersion" class="dashAnchor"></a>
-                <a href="#/Dispersion">
-                  <h3 class="section-name">Dispersion</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Dispersion"></a>
+                  <h3 class="section-name"><p>Dispersion</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -3076,7 +3097,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC18interquantileRange13lowerQuantile05upperG0q_Sgq__q_tKF"></a>
                     <a name="//apple_ref/swift/Method/interquantileRange(lowerQuantile:upperQuantile:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC18interquantileRange13lowerQuantile05upperG0q_Sgq__q_tKF">interquantileRange(lowerQuantile:upperQuantile:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC18interquantileRange13lowerQuantile05upperG0q_Sgq__q_tKF">interquantileRange(lowerQuantile:<wbr>upperQuantile:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3139,7 +3160,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC8variance4typeq_SgAA14SSVarianceTypeO_tF"></a>
                     <a name="//apple_ref/swift/Method/variance(type:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8variance4typeq_SgAA14SSVarianceTypeO_tF">variance(type:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8variance4typeq_SgAA14SSVarianceTypeO_tF">variance(type:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3185,7 +3206,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC17standardDeviation4typeq_SgAA010SSStandardE4TypeO_tF"></a>
                     <a name="//apple_ref/swift/Method/standardDeviation(type:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC17standardDeviation4typeq_SgAA010SSStandardE4TypeO_tF">standardDeviation(type:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC17standardDeviation4typeq_SgAA010SSStandardE4TypeO_tF">standardDeviation(type:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3420,7 +3441,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC2CRyq_SgSiF"></a>
                     <a name="//apple_ref/swift/Method/CR(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC2CRyq_SgSiF">CR(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC2CRyq_SgSiF">CR(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3447,7 +3468,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC8normalCI5alpha12populationSDAA10SSConfIntvVyq_GSgq__q_tF"></a>
                     <a name="//apple_ref/swift/Method/normalCI(alpha:populationSD:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8normalCI5alpha12populationSDAA10SSConfIntvVyq_GSgq__q_tF">normalCI(alpha:populationSD:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8normalCI5alpha12populationSDAA10SSConfIntvVyq_GSgq__q_tF">normalCI(alpha:<wbr>populationSD:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3505,7 +3526,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC10studentTCI5alphaAA10SSConfIntvVyq_GSgq__tF"></a>
                     <a name="//apple_ref/swift/Method/studentTCI(alpha:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10studentTCI5alphaAA10SSConfIntvVyq_GSgq__tF">studentTCI(alpha:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC10studentTCI5alphaAA10SSConfIntvVyq_GSgq__tF">studentTCI(alpha:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3659,7 +3680,7 @@ This Swift version was ported from a C version by Martin Maechler, <a href="mail
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC23medianAbsoluteDeviation6center11scaleFactorq_Sgq__AGtF"></a>
                     <a name="//apple_ref/swift/Method/medianAbsoluteDeviation(center:scaleFactor:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC23medianAbsoluteDeviation6center11scaleFactorq_Sgq__AGtF">medianAbsoluteDeviation(center:scaleFactor:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC23medianAbsoluteDeviation6center11scaleFactorq_Sgq__AGtF">medianAbsoluteDeviation(center:<wbr>scaleFactor:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3719,7 +3740,7 @@ The scale factor is valid for normally distributed data only.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC21meanAbsoluteDeviation6centerq_Sgq__tF"></a>
                     <a name="//apple_ref/swift/Method/meanAbsoluteDeviation(center:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC21meanAbsoluteDeviation6centerq_Sgq__tF">meanAbsoluteDeviation(center:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC21meanAbsoluteDeviation6centerq_Sgq__tF">meanAbsoluteDeviation(center:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3792,7 +3813,7 @@ The scale factor is valid for normally distributed data only.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC12semiVariance4typeq_SgAA06SSSemiE0O_tF"></a>
                     <a name="//apple_ref/swift/Method/semiVariance(type:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC12semiVariance4typeq_SgAA06SSSemiE0O_tF">semiVariance(type:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC12semiVariance4typeq_SgAA06SSSemiE0O_tF">semiVariance(type:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3839,9 +3860,11 @@ The scale factor is valid for normally distributed data only.</p>
               <div class="task-name-container">
                 <a name="/Empirical%20Moments"></a>
                 <a name="//apple_ref/swift/Section/Empirical Moments" class="dashAnchor"></a>
-                <a href="#/Empirical%20Moments">
-                  <h3 class="section-name">Empirical Moments</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Empirical%20Moments"></a>
+                  <h3 class="section-name"><p>Empirical Moments</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -3849,7 +3872,7 @@ The scale factor is valid for normally distributed data only.</p>
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC6moment1r4typeq_SgSi_AA12SSMomentTypeOtF"></a>
                     <a name="//apple_ref/swift/Method/moment(r:type:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6moment1r4typeq_SgSi_AA12SSMomentTypeOtF">moment(r:type:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC6moment1r4typeq_SgSi_AA12SSMomentTypeOtF">moment(r:<wbr>type:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3898,7 +3921,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC15autocorrelation1nSdSgSi_tKF"></a>
                     <a name="//apple_ref/swift/Method/autocorrelation(n:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC15autocorrelation1nSdSgSi_tKF">autocorrelation(n:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC15autocorrelation1nSdSgSi_tKF">autocorrelation(n:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3945,9 +3968,11 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
               <div class="task-name-container">
                 <a name="/Empirical%20distribution%20parameters"></a>
                 <a name="//apple_ref/swift/Section/Empirical distribution parameters" class="dashAnchor"></a>
-                <a href="#/Empirical%20distribution%20parameters">
-                  <h3 class="section-name">Empirical distribution parameters</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Empirical%20distribution%20parameters"></a>
+                  <h3 class="section-name"><p>Empirical distribution parameters</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -4090,7 +4115,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC11hasOutliers8testTypeSbSgAA13SSOutlierTestO_tF"></a>
                     <a name="//apple_ref/swift/Method/hasOutliers(testType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11hasOutliers8testTypeSbSgAA13SSOutlierTestO_tF">hasOutliers(testType:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC11hasOutliers8testTypeSbSgAA13SSOutlierTestO_tF">hasOutliers(testType:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4136,7 +4161,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC8outliers5alpha3max8testTypeSayxGSgq_Sg_SiSgAA09SSESDTestH0OtF"></a>
                     <a name="//apple_ref/swift/Method/outliers(alpha:max:testType:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8outliers5alpha3max8testTypeSayxGSgq_Sg_SiSgAA09SSESDTestH0OtF">outliers(alpha:max:testType:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC8outliers5alpha3max8testTypeSayxGSgq_Sg_SiSgAA09SSESDTestH0OtF">outliers(alpha:<wbr>max:<wbr>testType:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4233,7 +4258,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC19testForDistribution06targetF0AA14SSKSTestResultVyq_GSgAA11SSGoFTargetO_tKF"></a>
                     <a name="//apple_ref/swift/Method/testForDistribution(targetDistribution:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC19testForDistribution06targetF0AA14SSKSTestResultVyq_GSgAA11SSGoFTargetO_tKF">testForDistribution(targetDistribution:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC19testForDistribution06targetF0AA14SSKSTestResultVyq_GSgAA11SSGoFTargetO_tKF">testForDistribution(targetDistribution:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4292,9 +4317,11 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
               <div class="task-name-container">
                 <a name="/Elements"></a>
                 <a name="//apple_ref/swift/Section/Elements" class="dashAnchor"></a>
-                <a href="#/Elements">
-                  <h3 class="section-name">Elements</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Elements"></a>
+                  <h3 class="section-name"><p>Elements</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -4302,7 +4329,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC16elementsAsString13withDelimiter5asRow17encloseElementsBySSSgAH_SbAHtF"></a>
                     <a name="//apple_ref/swift/Method/elementsAsString(withDelimiter:asRow:encloseElementsBy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC16elementsAsString13withDelimiter5asRow17encloseElementsBySSSgAH_SbAHtF">elementsAsString(withDelimiter:asRow:encloseElementsBy:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC16elementsAsString13withDelimiter5asRow17encloseElementsBySSSgAH_SbAHtF">elementsAsString(withDelimiter:<wbr>asRow:<wbr>encloseElementsBy:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4372,7 +4399,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC15elementsAsArray9sortOrderSayxGSgAA06SSDataf4SortH0O_tF"></a>
                     <a name="//apple_ref/swift/Method/elementsAsArray(sortOrder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC15elementsAsArray9sortOrderSayxGSgAA06SSDataf4SortH0O_tF">elementsAsArray(sortOrder:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC15elementsAsArray9sortOrderSayxGSgAA06SSDataf4SortH0O_tF">elementsAsArray(sortOrder:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4422,7 +4449,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC14uniqueElements9sortOrderSayxGSgAA16SSSortUniqeItemsO_tF"></a>
                     <a name="//apple_ref/swift/Method/uniqueElements(sortOrder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14uniqueElements9sortOrderSayxGSgAA16SSSortUniqeItemsO_tF">uniqueElements(sortOrder:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14uniqueElements9sortOrderSayxGSgAA16SSSortUniqeItemsO_tF">uniqueElements(sortOrder:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4469,9 +4496,11 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
               <div class="task-name-container">
                 <a name="/Frequencies"></a>
                 <a name="//apple_ref/swift/Section/Frequencies" class="dashAnchor"></a>
-                <a href="#/Frequencies">
-                  <h3 class="section-name">Frequencies</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Frequencies"></a>
+                  <h3 class="section-name"><p>Frequencies</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -4479,7 +4508,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC14frequencyTable9sortOrderSayAA011SSFrequencyE4ItemVyxq_GGAA0he4SortG0O_tF"></a>
                     <a name="//apple_ref/swift/Method/frequencyTable(sortOrder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14frequencyTable9sortOrderSayAA011SSFrequencyE4ItemVyxq_GGAA0he4SortG0O_tF">frequencyTable(sortOrder:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC14frequencyTable9sortOrderSayAA011SSFrequencyE4ItemVyxq_GGAA0he4SortG0O_tF">frequencyTable(sortOrder:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4525,7 +4554,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC24cumulativeFrequencyTable6formatSayAA012SSCumulativeeF4ItemVyxq_GGAA0heF6FormatO_tF"></a>
                     <a name="//apple_ref/swift/Method/cumulativeFrequencyTable(format:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC24cumulativeFrequencyTable6formatSayAA012SSCumulativeeF4ItemVyxq_GGAA0heF6FormatO_tF">cumulativeFrequencyTable(format:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC24cumulativeFrequencyTable6formatSayAA012SSCumulativeeF4ItemVyxq_GGAA0heF6FormatO_tF">cumulativeFrequencyTable(format:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4571,7 +4600,7 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
                     <code>
                     <a name="/s:11SwiftyStats9SSExamineC4eCDFyq_xF"></a>
                     <a name="//apple_ref/swift/Method/eCDF(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats9SSExamineC4eCDFyq_xF">eCDF(_:)</a>
+                    <a class="token" href="#/s:11SwiftyStats9SSExamineC4eCDFyq_xF">eCDF(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4671,8 +4700,8 @@ If .standardized is specified, the r_th standardized moment will be returned.</p
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

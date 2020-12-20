@@ -340,5 +340,5 @@ Probability distributions in general are defined within relatively narrow condit
 # LICENSE
 This framework is published under the [GNU GPL 3](http://www.gnu.org/licenses/)
 
-Copyright 2017 - 2019 strike65
+Copyright 2017 - 2020 strike65
 

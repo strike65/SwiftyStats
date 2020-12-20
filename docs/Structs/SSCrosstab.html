@@ -8,13 +8,21 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Struct/SSCrosstab" class="dashAnchor"></a>
     <a title="SSCrosstab Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SwiftyStats Docs</a> (92% documented)</p>
+        <p><a href="../index.html">SwiftyStats Docs</a> (95% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -106,6 +114,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Beta.html">– Beta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SSProbDist.html#/s:11SwiftyStats10SSProbDistO14NoncentralBetaO">– NoncentralBeta</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/SSProbDist/Binomial.html">– Binomial</a>
@@ -338,6 +349,7 @@
             <h1>SSCrosstab</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SSCrosstab</span><span class="o">&lt;</span><span class="kt">N</span><span class="p">,</span> <span class="kt">R</span><span class="p">,</span> <span class="kt">C</span><span class="p">,</span> <span class="kt">FPT</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Codable</span> <span class="k">where</span> <span class="kt">N</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">N</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">N</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">N</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">R</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">R</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">R</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">R</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">C</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">C</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">C</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">C</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
 
                 </div>
@@ -655,7 +667,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6encode2toys7Encoder_p_tKF"></a>
                     <a name="//apple_ref/swift/Method/encode(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6encode2toys7Encoder_p_tKF">encode(to:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6encode2toys7Encoder_p_tKF">encode(to:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -682,7 +694,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV4fromACyxq_q0_q1_Gs7Decoder_p_tKcfc"></a>
                     <a name="//apple_ref/swift/Method/init(from:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV4fromACyxq_q0_q1_Gs7Decoder_p_tKcfc">init(from:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV4fromACyxq_q0_q1_Gs7Decoder_p_tKcfc">init(from:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -791,9 +803,11 @@
               <div class="task-name-container">
                 <a name="/Validity%20checking"></a>
                 <a name="//apple_ref/swift/Section/Validity checking" class="dashAnchor"></a>
-                <a href="#/Validity%20checking">
-                  <h3 class="section-name">Validity checking</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Validity%20checking"></a>
+                  <h3 class="section-name"><p>Validity checking</p>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -801,7 +815,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV3row2at6sortedSayxGSi_SbSgtKF"></a>
                     <a name="//apple_ref/swift/Method/row(at:sorted:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV3row2at6sortedSayxGSi_SbSgtKF">row(at:sorted:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV3row2at6sortedSayxGSi_SbSgtKF">row(at:<wbr>sorted:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -833,7 +847,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6column2at6sortedSayxGSi_SbSgtKF"></a>
                     <a name="//apple_ref/swift/Method/column(at:sorted:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6column2at6sortedSayxGSi_SbSgtKF">column(at:sorted:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6column2at6sortedSayxGSi_SbSgtKF">column(at:<wbr>sorted:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -865,7 +879,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV8rowNamed_6sortedSayxGSgq__SbSgtKF"></a>
                     <a name="//apple_ref/swift/Method/rowNamed(_:sorted:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV8rowNamed_6sortedSayxGSgq__SbSgtKF">rowNamed(_:sorted:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV8rowNamed_6sortedSayxGSgq__SbSgtKF">rowNamed(_:<wbr>sorted:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -897,7 +911,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV11columnNamed_6sortedSayxGSgq0__SbtKF"></a>
                     <a name="//apple_ref/swift/Method/columnNamed(_:sorted:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV11columnNamed_6sortedSayxGSgq0__SbtKF">columnNamed(_:sorted:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV11columnNamed_6sortedSayxGSgq0__SbtKF">columnNamed(_:<wbr>sorted:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -929,7 +943,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9appendRow_4nameySayxG_q_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/appendRow(_:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9appendRow_4nameySayxG_q_SgtKF">appendRow(_:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9appendRow_4nameySayxG_q_SgtKF">appendRow(_:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -961,7 +975,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV12appendColumn_4nameySayxG_q0_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/appendColumn(_:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12appendColumn_4nameySayxG_q0_SgtKF">appendColumn(_:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12appendColumn_4nameySayxG_q0_SgtKF">appendColumn(_:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -993,7 +1007,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9removeRow7rowNameSayxGq__tKF"></a>
                     <a name="//apple_ref/swift/Method/removeRow(rowName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9removeRow7rowNameSayxGq__tKF">removeRow(rowName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9removeRow7rowNameSayxGq__tKF">removeRow(rowName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1025,7 +1039,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV12removeColumn10columnNameSayxGq0__tKF"></a>
                     <a name="//apple_ref/swift/Method/removeColumn(columnName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12removeColumn10columnNameSayxGq0__tKF">removeColumn(columnName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12removeColumn10columnNameSayxGq0__tKF">removeColumn(columnName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1057,7 +1071,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9removeRow2atSayxGSi_tF"></a>
                     <a name="//apple_ref/swift/Method/removeRow(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9removeRow2atSayxGSi_tF">removeRow(at:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9removeRow2atSayxGSi_tF">removeRow(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1084,7 +1098,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV12removeColumn2atSayxGSi_tF"></a>
                     <a name="//apple_ref/swift/Method/removeColumn(at:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12removeColumn2atSayxGSi_tF">removeColumn(at:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12removeColumn2atSayxGSi_tF">removeColumn(at:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1111,7 +1125,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6setRow2at03newE0ySi_SayxGtKF"></a>
                     <a name="//apple_ref/swift/Method/setRow(at:newRow:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6setRow2at03newE0ySi_SayxGtKF">setRow(at:newRow:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6setRow2at03newE0ySi_SayxGtKF">setRow(at:<wbr>newRow:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1143,7 +1157,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6setRow4name03newE0yq__SayxGtKF"></a>
                     <a name="//apple_ref/swift/Method/setRow(name:newRow:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6setRow4name03newE0yq__SayxGtKF">setRow(name:newRow:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6setRow4name03newE0yq__SayxGtKF">setRow(name:<wbr>newRow:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1175,7 +1189,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9setColumn4name03newE0yq0__SayxGtKF"></a>
                     <a name="//apple_ref/swift/Method/setColumn(name:newColumn:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9setColumn4name03newE0yq0__SayxGtKF">setColumn(name:newColumn:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9setColumn4name03newE0yq0__SayxGtKF">setColumn(name:<wbr>newColumn:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1207,7 +1221,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9setColumn2at03newE0ySi_SayxGtKF"></a>
                     <a name="//apple_ref/swift/Method/setColumn(at:newColumn:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9setColumn2at03newE0ySi_SayxGtKF">setColumn(at:newColumn:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9setColumn2at03newE0ySi_SayxGtKF">setColumn(at:<wbr>newColumn:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1239,7 +1253,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9insertRow03newE02at4nameySayxG_Siq_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/insertRow(newRow:at:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9insertRow03newE02at4nameySayxG_Siq_SgtKF">insertRow(newRow:at:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9insertRow03newE02at4nameySayxG_Siq_SgtKF">insertRow(newRow:<wbr>at:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1271,7 +1285,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV12insertColumn03newE02at4nameySayxG_Siq0_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/insertColumn(newColumn:at:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12insertColumn03newE02at4nameySayxG_Siq0_SgtKF">insertColumn(newColumn:at:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12insertColumn03newE02at4nameySayxG_Siq0_SgtKF">insertColumn(newColumn:<wbr>at:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1303,7 +1317,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV10replaceRow03newE02at4nameySayxG_Siq_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/replaceRow(newRow:at:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV10replaceRow03newE02at4nameySayxG_Siq_SgtKF">replaceRow(newRow:at:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV10replaceRow03newE02at4nameySayxG_Siq_SgtKF">replaceRow(newRow:<wbr>at:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1335,7 +1349,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV13replaceColumn03newE02at4nameySayxG_Siq0_SgtKF"></a>
                     <a name="//apple_ref/swift/Method/replaceColumn(newColumn:at:name:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV13replaceColumn03newE02at4nameySayxG_Siq0_SgtKF">replaceColumn(newColumn:at:name:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV13replaceColumn03newE02at4nameySayxG_Siq0_SgtKF">replaceColumn(newColumn:<wbr>at:<wbr>name:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1367,7 +1381,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV11setRowNames03rowF0ySayq_G_tKF"></a>
                     <a name="//apple_ref/swift/Method/setRowNames(rowNames:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV11setRowNames03rowF0ySayq_G_tKF">setRowNames(rowNames:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV11setRowNames03rowF0ySayq_G_tKF">setRowNames(rowNames:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1399,7 +1413,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV14setColumnNames06columnF0ySayq0_G_tKF"></a>
                     <a name="//apple_ref/swift/Method/setColumnNames(columnNames:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV14setColumnNames06columnF0ySayq0_G_tKF">setColumnNames(columnNames:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV14setColumnNames06columnF0ySayq0_G_tKF">setColumnNames(columnNames:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1453,10 +1467,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -1516,7 +1526,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6rowSum0D0q1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/rowSum(row:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6rowSum0D0q1_Si_tF">rowSum(row:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6rowSum0D0q1_Si_tF">rowSum(row:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1543,7 +1553,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV6rowSum0D4Nameq1_q__tF"></a>
                     <a name="//apple_ref/swift/Method/rowSum(rowName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6rowSum0D4Nameq1_q__tF">rowSum(rowName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV6rowSum0D4Nameq1_q__tF">rowSum(rowName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1570,7 +1580,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9columnSum0D0q1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/columnSum(column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9columnSum0D0q1_Si_tF">columnSum(column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9columnSum0D0q1_Si_tF">columnSum(column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1597,7 +1607,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9columnSum0D4Nameq1_q0__tKF"></a>
                     <a name="//apple_ref/swift/Method/columnSum(columnName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9columnSum0D4Nameq1_q0__tKF">columnSum(columnName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9columnSum0D4Nameq1_q0__tKF">columnSum(columnName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1624,7 +1634,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV12nameOfColumn6columnq0_SgSi_tF"></a>
                     <a name="//apple_ref/swift/Method/nameOfColumn(column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12nameOfColumn6columnq0_SgSi_tF">nameOfColumn(column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV12nameOfColumn6columnq0_SgSi_tF">nameOfColumn(column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1651,7 +1661,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV9nameOfRow3rowq_SgSi_tF"></a>
                     <a name="//apple_ref/swift/Method/nameOfRow(row:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9nameOfRow3rowq_SgSi_tF">nameOfRow(row:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV9nameOfRow3rowq_SgSi_tF">nameOfRow(row:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1678,7 +1688,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV18firstIndexOfColumn10columnNameSiSgq0__tF"></a>
                     <a name="//apple_ref/swift/Method/firstIndexOfColumn(columnName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV18firstIndexOfColumn10columnNameSiSgq0__tF">firstIndexOfColumn(columnName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV18firstIndexOfColumn10columnNameSiSgq0__tF">firstIndexOfColumn(columnName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1705,7 +1715,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV15firstIndexOfRow7rowNameSiSgq__tF"></a>
                     <a name="//apple_ref/swift/Method/firstIndexOfRow(rowName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV15firstIndexOfRow7rowNameSiSgq__tF">firstIndexOfRow(rowName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV15firstIndexOfRow7rowNameSiSgq__tF">firstIndexOfRow(rowName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1849,7 +1859,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV16largestCellCount8atColumnq1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/largestCellCount(atColumn:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16largestCellCount8atColumnq1_Si_tF">largestCellCount(atColumn:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16largestCellCount8atColumnq1_Si_tF">largestCellCount(atColumn:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1876,7 +1886,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV16largestCellCount5atRowq1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/largestCellCount(atRow:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16largestCellCount5atRowq1_Si_tF">largestCellCount(atRow:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16largestCellCount5atRowq1_Si_tF">largestCellCount(atRow:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1903,7 +1913,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/relativeTotalFrequency(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency3row6columnq1_Si_SitF">relativeTotalFrequency(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency3row6columnq1_Si_SitF">relativeTotalFrequency(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1930,7 +1940,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency7rowName06columnH0q1_q__q0_tKF"></a>
                     <a name="//apple_ref/swift/Method/relativeTotalFrequency(rowName:columnName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency7rowName06columnH0q1_q__q0_tKF">relativeTotalFrequency(rowName:columnName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV22relativeTotalFrequency7rowName06columnH0q1_q__q0_tKF">relativeTotalFrequency(rowName:<wbr>columnName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1957,7 +1967,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV20relativeRowFrequency3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/relativeRowFrequency(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV20relativeRowFrequency3row6columnq1_Si_SitF">relativeRowFrequency(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV20relativeRowFrequency3row6columnq1_Si_SitF">relativeRowFrequency(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1984,7 +1994,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV23relativeColumnFrequency3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/relativeColumnFrequency(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV23relativeColumnFrequency3row6columnq1_Si_SitF">relativeColumnFrequency(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV23relativeColumnFrequency3row6columnq1_Si_SitF">relativeColumnFrequency(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2011,7 +2021,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV26relativeRowMarginFrequency3rowq1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/relativeRowMarginFrequency(row:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV26relativeRowMarginFrequency3rowq1_Si_tF">relativeRowMarginFrequency(row:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV26relativeRowMarginFrequency3rowq1_Si_tF">relativeRowMarginFrequency(row:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2038,7 +2048,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV29relativeColumnMarginFrequency6columnq1_Si_tF"></a>
                     <a name="//apple_ref/swift/Method/relativeColumnMarginFrequency(column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV29relativeColumnMarginFrequency6columnq1_Si_tF">relativeColumnMarginFrequency(column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV29relativeColumnMarginFrequency6columnq1_Si_tF">relativeColumnMarginFrequency(column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2065,7 +2075,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV17expectedFrequency3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/expectedFrequency(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV17expectedFrequency3row6columnq1_Si_SitF">expectedFrequency(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV17expectedFrequency3row6columnq1_Si_SitF">expectedFrequency(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2092,7 +2102,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV17expectedFrequency7rowName06columnG0q1_q__q0_tKF"></a>
                     <a name="//apple_ref/swift/Method/expectedFrequency(rowName:columnName:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV17expectedFrequency7rowName06columnG0q1_q__q0_tKF">expectedFrequency(rowName:columnName:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV17expectedFrequency7rowName06columnG0q1_q__q0_tKF">expectedFrequency(rowName:<wbr>columnName:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2119,7 +2129,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV8residual3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/residual(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV8residual3row6columnq1_Si_SitF">residual(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV8residual3row6columnq1_Si_SitF">residual(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2146,7 +2156,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV20standardizedResidual3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/standardizedResidual(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV20standardizedResidual3row6columnq1_Si_SitF">standardizedResidual(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV20standardizedResidual3row6columnq1_Si_SitF">standardizedResidual(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2173,7 +2183,7 @@
                     <code>
                     <a name="/s:11SwiftyStats10SSCrosstabV16adjustedResidual3row6columnq1_Si_SitF"></a>
                     <a name="//apple_ref/swift/Method/adjustedResidual(row:column:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16adjustedResidual3row6columnq1_Si_SitF">adjustedResidual(row:column:)</a>
+                    <a class="token" href="#/s:11SwiftyStats10SSCrosstabV16adjustedResidual3row6columnq1_Si_SitF">adjustedResidual(row:<wbr>column:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2530,7 +2540,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns <q>Column|Row -Lambda</q></p>
+                        <p>Returns &ldquo;Column|Row -Lambda&rdquo;</p>
 
                       </div>
                       <div class="declaration">
@@ -2557,7 +2567,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns the <q>Row|Column</q>-Lambda</p>
+                        <p>Returns the &ldquo;Row|Column&rdquo;-Lambda</p>
 
                       </div>
                       <div class="declaration">
@@ -2639,8 +2649,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2019-06-29)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
