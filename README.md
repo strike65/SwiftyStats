@@ -42,7 +42,7 @@ In addition a Playground is added to
 > * do prototyping
 
 # The Swift Type Checker problem
-Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `z1 + z1 - w) / (z1 * w)`) had to be simplified.
+Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
 
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)

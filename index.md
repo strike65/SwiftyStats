@@ -1,6 +1,6 @@
 ![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.5-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
 
-![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
+![SwiftyStats](img/SwiftyStatsLogo.png)
 
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
@@ -40,7 +40,7 @@ In addition a Playground is added to the Xcode project to
 > * do prototyping
 
 # The Swift Type Checker problem
-Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `z1 + z1 - w) / (z1 * w)`) had to be simplified.
+Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like  `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
 
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)

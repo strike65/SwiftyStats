@@ -281,20 +281,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 801,
-      "symbol": "Float80.lnsqrtpi",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
-      "line": 932,
-      "symbol": "Float80.maxgamma",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/StatUtils/SSSwiftyStatsError.swift",
       "line": 32,
       "symbol": "SSSwiftyStatsError.type",
