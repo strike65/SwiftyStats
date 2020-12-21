@@ -64,7 +64,7 @@ If you have to use a Swift version **earlier** than 4.2, replace the line `pod '
 
 ```ruby
 ...
-pod 'SwiftyStats", '1.1.1'
+pod 'SwiftyStats', '1.1.1'
 ...
 ```
 Save your changes, run:
