@@ -39,4 +39,12 @@ extension OSLog {
 }
 /// Defines the Logsystem for SwiftyStats
 
+public func wtf(truth: Bool) {
+    if truth {
+        print("There is no truth. There are only expectations and broken hearts")
+    }
+    else {
+        print("You are beautiful and smart.")
+    }
+}
 #endif
