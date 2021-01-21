@@ -27,7 +27,8 @@ import Foundation
 import os.log
 #endif
 
-
+/// Implenets some of the more often used non-parametreic test.
+/// Non-parametric tests are constructed to analyze data, which are not unederlying a speiciic ditrisbution.
 extension SSHypothesisTesting {
 
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
@@ -350,6 +351,7 @@ extension SSHypothesisTesting {
     // Marsaglia et al.: Evaluating the Anderson-Darling Distribution. Journal of
     // Statistical Software 9 (2), 1–5. February 2004. http://www.jstatsoft.org/v09/i02
     // The code is licensed under the GPL v.2 or v.3
+    // wiht kind permission
     /************************************************************************************************/
     /************************************************************************************************/
     
