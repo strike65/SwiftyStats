@@ -29,7 +29,7 @@ import os.log
 #endif
 
 /// Struct provides a matrix-like crosstable. Elements are accessible by c[row, column].
-/// - Precondition: Rows and columns must be named. Row- <R> and column- <C> names are defined es generics. The content of one cell <N> is generic too.
+/// - Precondition: Rows and columns must be named. Row- <R> and column- <C> names are defined as generics. The content of one cell <N> is generic too.
 public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable, FPT: Codable {
     /// Number of rows
     public var rowCount: Int {
