@@ -34,9 +34,24 @@ extension SSProbDist {
         /// Returns the cdf of the Binomial Distribution
         /// - Parameter k: number of successes
         /// - Parameter n: number of trials
-        /// - Parameter p0: probability fpr success
+        /// - Parameter p0: probability for success
         /// - Parameter tail: .lower, .upper
-        public static func cdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) -> FPT {
+        public static func cdf<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) throws -> FPT {
+            if (p0 <= FPT.zero) {
+                #if os(macOS) || os(iOS)
+
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                }
+
+                #endif
+
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var P0: FPT = p0
+            if (P0 > FPT.one) {
+                P0 = FPT.one
+            }
             var i: Int = 0
             var lowerSum: FPT = 0
             var upperSum: FPT = 0
@@ -48,8 +63,8 @@ extension SSProbDist {
             while i <= k {
                 ex1 = Helpers.makeFP(i)
                 ex2 = SSMath.binomial2(_N, ex1)
-                ex3 = ex2 * SSMath.pow1(p0,  ex1)
-                ex4 = ex3 * SSMath.pow1(FPT.one - p0,  _N - ex1)
+                ex3 = ex2 * SSMath.pow1(P0,  ex1)
+                ex4 = ex3 * SSMath.pow1(FPT.one - P0,  _N - ex1)
                 lowerSum += ex4
                 i += 1
             }
@@ -66,12 +81,62 @@ extension SSProbDist {
         /// Returns the pdf of the Binomial Distribution
         /// - Parameter k: number of successes
         /// - Parameter n: number of trials
-        /// - Parameter p0: probability fpr success
-        public static func pdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) -> FPT {
+        /// - Parameter p0: probability for success
+        public static func pdf<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) throws -> FPT {
+            if (p0 <= FPT.zero) {
+                #if os(macOS) || os(iOS)
+
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                }
+
+                #endif
+
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var P0: FPT = p0
+            if (P0 > FPT.one) {
+                P0 = FPT.one
+            }
             var result: FPT
-            result = SSMath.binomial2( Helpers.makeFP(n),  Helpers.makeFP(k)) * SSMath.pow1(p0,  Helpers.makeFP(k)) * SSMath.pow1(1 - p0,  Helpers.makeFP(n - k))
+            result = SSMath.binomial2( Helpers.makeFP(n),  Helpers.makeFP(k)) * SSMath.pow1(P0,  Helpers.makeFP(k)) * SSMath.pow1(1 - P0,  Helpers.makeFP(n - k))
             return result
         }
+        
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Binomial distribution.
+        /// - Parameter n: Number of trials
+        /// - Parameter p0: Probability for success
+        /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
+        public static func para<FPT: SSFloatingPoint & Codable>(numberOfTrials n: Int, probability p0: FPT) throws -> SSProbDistParams<FPT> {
+            if (p0 <= FPT.zero) {
+                #if os(macOS) || os(iOS)
+
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                }
+
+                #endif
+
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var P0: FPT = p0
+            if (P0 > FPT.one) {
+                P0 = FPT.one
+            }
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
+            let q: FPT = FPT.one - P0
+            let N: FPT = Helpers.makeFP(n)
+            var ex1: FPT = (FPT.one - Helpers.makeFP(6) * P0 * q)
+            var ex2: FPT = N * P0 * q
+            result.kurtosis = 3 + ex1 / ex2
+            ex1 = sqrt(N * P0 * q)
+            ex2 = q - P0
+            result.skewness = ex1 / ex2
+            result.mean = N * P0
+            result.variance = N * P0 * q
+            return result
+        }
+
     }
 }
 

@@ -29,13 +29,13 @@ extension SSProbDist {
     /// von Mises (circular) distribution
     public enum VonMises {
 
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the the von Mises distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the the von Mises distribution.
         /// - Parameter x: x
         /// - Parameter m: mean
         /// - Parameter c: direction
         /// - Throws: SSSwiftyStatsError if c <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, concentration c: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, concentration c: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if c <= 0 {
                 #if os(macOS) || os(iOS)
                 

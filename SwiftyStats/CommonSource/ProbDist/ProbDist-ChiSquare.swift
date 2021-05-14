@@ -30,11 +30,11 @@ extension SSProbDist {
     /// Chi square distribution
     public enum ChiSquare {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
         /// - Parameter df: Degrees of freedom
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -198,12 +198,12 @@ extension SSProbDist {
 extension SSProbDist {
     /// Non central Chi Square distribution
     public enum NonCentralChiSquare {
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
         /// - Parameter df: Degrees of freedom
         /// - Parameter lambda: noncentrality parameter
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df <= 0 {
                 #if os(macOS) || os(iOS)
                 

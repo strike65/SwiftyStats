@@ -30,12 +30,12 @@ extension SSProbDist {
     /// Extreme value distribution
     public enum ExtremeValue {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Extrem Value distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Extrem Value distribution.
         /// - Parameter a: location
         /// - Parameter b: scale
         /// - Throws: SSSwiftyStatsError if b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if b <= 0 {
                 #if os(macOS) || os(iOS)
                 

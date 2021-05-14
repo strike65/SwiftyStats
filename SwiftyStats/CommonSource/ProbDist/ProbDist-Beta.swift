@@ -30,12 +30,12 @@ extension SSProbDist {
     /// Beta distribution
     public enum Beta {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Beta distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Beta distribution.
         /// - Parameter a: Shape parameter a
         /// - Parameter b: Shape parameter b
         /// - Throws: SSSwiftyStatsError if a and/or b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(shapeA a:FPT, shapeB b: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(shapeA a:FPT, shapeB b: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if (a <= 0) {
                 #if os(macOS) || os(iOS)
                 

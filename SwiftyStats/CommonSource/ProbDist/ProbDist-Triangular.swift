@@ -31,12 +31,12 @@ extension SSProbDist {
     public enum Triangular {
         
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
         /// - Parameter a: Lower bound
         /// - Parameter b: Upper bound
         /// - Parameter c: Mode
         /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
-        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> SSProbDistParams<FPT> {
             if (a >= b) {
                 #if os(macOS) || os(iOS)
                 
@@ -70,7 +70,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = (a + b + c) / 3
             result.kurtosis =  Helpers.makeFP(2.4)
             let a2: FPT = a * a
@@ -324,11 +324,11 @@ extension SSProbDist {
         
         // MARK: TRIANGULAR with two params
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
         /// - Parameter a: Lower bound
         /// - Parameter b: Upper bound
         /// - Throws: SSSwiftyStatsError if a >= b
-        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSProbDistParams<FPT> {
             if (a >= b) {
                 #if os(macOS) || os(iOS)
                 
@@ -340,7 +340,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = (a + b) / 2
             let ex1: FPT = b - a
             let ex2: FPT = ex1 * ex1

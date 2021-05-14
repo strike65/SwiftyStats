@@ -30,11 +30,11 @@ extension SSProbDist {
     /// Wald (inverse normal) distribution
     public enum InverseNormal {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Wald (inverse normal) distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Wald (inverse normal) distribution.
         /// - Parameter a: mean
         /// - Parameter b: Scale
         /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSProbDistParams<FPT> {
             if (a <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -57,7 +57,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = a
             result.variance = (a * a * a) / b
             result.kurtosis = 3 + 15 * a / b

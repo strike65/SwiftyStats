@@ -30,11 +30,11 @@ extension SSProbDist {
     /// Student T distribution
     public enum StudentT {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Student's T distribution.
         /// - Parameter df: Degrees of freedom
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df < 0 {
                 #if os(macOS) || os(iOS)
                 

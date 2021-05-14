@@ -29,7 +29,19 @@ import Foundation
 
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.StudentT.para(_:) instead")
-public func paraStudentTDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSContProbDistParams<FPT> {
+public func cdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) throws -> FPT {
+    return try SSProbDist.Binomial.cdf(k: k, n: n, probability: p0, tail: tail)
+}
+
+/// :nodoc:
+@available(*, deprecated, message: "Use SSProbDist.StudentT.para(_:) instead")
+public func pdfBinomialDistribution<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) throws -> FPT {
+    return try SSProbDist.Binomial.pdf(k: k, n: n, probability: p0)
+}
+
+/// :nodoc:
+@available(*, deprecated, message: "Use SSProbDist.StudentT.para(_:) instead")
+public func paraStudentTDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.StudentT.para(degreesOfFreedom: df)
 }
 /// :nodoc:
@@ -50,7 +62,7 @@ public func quantileStudentTDist<FPT: SSFloatingPoint & Codable>(p: FPT, degrees
 #if arch(i386) || arch(x86_64)
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.StudentT.NonCentral.para(_:_:) instead")
-public func paraStudentTDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraStudentTDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.NonCentralSudentT.para(degreesOfFreedom: df, nonCentralityPara: lambda)
 }
 /// :nodoc:
@@ -71,7 +83,7 @@ public func quantileStudentTDist<FPT: SSFloatingPoint & Codable>(p: FPT, degrees
 #endif
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.ChiSquare.para(_:) instead")
-public func paraChiSquareDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraChiSquareDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.ChiSquare.para(degreesOfFreedom: df)
 }
 /// :nodoc:
@@ -91,7 +103,7 @@ public func quantileChiSquareDist<FPT: SSFloatingPoint & Codable>(p: FPT, degree
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.ChiSquare.NonCentral.para(_:_:) instead")
-public  func paraChiSquareDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
+public  func paraChiSquareDist<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, lambda: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.NonCentralChiSquare.para(degreesOfFreedom: df, lambda: lambda)
 }
 /// :nodoc:
@@ -112,7 +124,7 @@ public  func quantileChiSquareDist<FPT: SSFloatingPoint & Codable>(p: FPT, degre
 
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.ChiSquare.NonCentral.quantile(_:_:_:) instead")
-public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.FRatio.para(numeratorDF: df1, denominatorDF: df1)
 }
 
@@ -138,7 +150,7 @@ public func quantileFRatioDist<FPT: SSFloatingPoint & Codable>(p: FPT,numeratorD
 
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.FRatio.NonCentral.para(_:_:_:) instead")
-public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraFRatioDist<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.NonCentralFRatio.para(numeratorDF: df1, denominatorDF: df2, lambda: lambda)
 }
 
@@ -155,7 +167,7 @@ public func cdfFRatioDist<FPT: SSFloatingPoint & Codable>(f: FPT, numeratorDF df
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.LogNormal.para(_:_:) instead")
-public func paraLogNormalDist<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraLogNormalDist<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.LogNormal.para(mean: mean, variance: v)
 }
 
@@ -179,7 +191,7 @@ public func quantileLogNormal<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT,
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.Beta.para(_:_:) instead")
-public func paraBetaDist<FPT: SSFloatingPoint & Codable>(shapeA a:FPT, shapeB b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraBetaDist<FPT: SSFloatingPoint & Codable>(shapeA a:FPT, shapeB b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Beta.para(shapeA: a, shapeB: b)
 }
 /// :nodoc:
@@ -199,7 +211,7 @@ public func quantileBetaDist<FPT: SSFloatingPoint & Codable>(p: FPT, shapeA a: F
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.Cauchy.para(_:_:) instead")
-public func paraCauchyDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraCauchyDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Cauchy.para(location: a, scale: b)
 }
 /// :nodoc:
@@ -219,7 +231,7 @@ public func quantileCauchyDist<FPT: SSFloatingPoint & Codable>(p: FPT, location 
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSSProbDist.Laplace.para(_:_:) instead")
-public func paraLaplaceDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraLaplaceDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Laplace.para(mean: mean, scale: b)
 }
 /// :nodoc:
@@ -241,7 +253,7 @@ public func quantileLaplaceDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FP
 
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Logistic.quantile(_:_:) instead")
-public func paraLogisticDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraLogisticDist<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Logistic.para(mean: mean, scale: b)
 }
 
@@ -264,7 +276,7 @@ public func quantileLogisticDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean: F
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Pareto.para(_:_:) instead")
-public func paraParetoDist<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraParetoDist<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Pareto.para(minimum: a, shape: b)
 }
 /// :nodoc:
@@ -284,7 +296,7 @@ public func quantileParetoDist<FPT: SSFloatingPoint & Codable>(p: FPT, minimum a
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Exponential.para(_:) instead")
-public func paraExponentialDist<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraExponentialDist<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Exponential.para(lambda: l)
 }
 /// :nodoc:
@@ -304,7 +316,7 @@ public func quantileExponentialDist<FPT: SSFloatingPoint & Codable>(p: FPT, lamb
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.InverseNormal.para(_:_:) instead")
-public func paraWaldDist<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraWaldDist<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.InverseNormal.para(mean: a, lambda: b)
 }
 /// :nodoc:
@@ -324,7 +336,7 @@ public func quantileWaldDist<FPT: SSFloatingPoint & Codable>(p: FPT, mean a: FPT
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.InverseNormal.para(_:_:) instead")
-public func paraInversNormal<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraInversNormal<FPT: SSFloatingPoint & Codable>(mean a: FPT, lambda b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.InverseNormal.para(mean: a, lambda: b)
 }
 /// :nodoc:
@@ -344,7 +356,7 @@ public func quantileInversNormal<FPT: SSFloatingPoint & Codable>(p: FPT, mean a:
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Gamma.para(_:_:) instead")
-public func paraGammaDist<FPT: SSFloatingPoint & Codable>(shape a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraGammaDist<FPT: SSFloatingPoint & Codable>(shape a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Gamma.para(shape: a, scale: b)
 }
 /// :nodoc:
@@ -364,7 +376,7 @@ public func quantileGammaDist<FPT: SSFloatingPoint & Codable>(p: FPT, shape a: F
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Erlang.para(_:_:) instead")
-public func paraErlangDist<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraErlangDist<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Erlang.para(shape: k, rate: lambda)
 }
 /// :nodoc:
@@ -384,7 +396,7 @@ public func quantileErlangDist<FPT: SSFloatingPoint & Codable>(p: FPT, shape k: 
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Weibull.para(_:_:_:) instead")
-public func paraWeibullDist<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraWeibullDist<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Weibull.para(location: loc, scale: scale, shape: shape)
 }
 /// :nodoc:
@@ -404,7 +416,7 @@ public func quantileWeibullDist<FPT: SSFloatingPoint & Codable>(p: FPT, location
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Uniform.para(_:_:) instead")
-public func paraUniformDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraUniformDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Uniform.para(lowerBound: a, upperBound: b)
 }
 /// :nodoc:
@@ -424,7 +436,7 @@ public func quantileUniformDist<FPT: SSFloatingPoint & Codable>(p: FPT, lowerBou
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Triangular.para(_:_:_:) instead")
-public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT, mode c: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Triangular.para(lowerBound: a, upperBound: b, mode: c)
 }
 /// :nodoc:
@@ -444,7 +456,7 @@ public func quantileTriangularDist<FPT: SSFloatingPoint & Codable>(p: FPT, lower
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Triangular.para(_:_:) instead")
-public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraTriangularDist<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.Triangular.para(lowerBound: a, upperBound: b)
 }
 /// :nodoc:
@@ -464,7 +476,7 @@ public func quantileTriangularDist<FPT: SSFloatingPoint & Codable>(p: FPT, lower
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Gaussian.para(_:_:) instead")
-public func paraNormalDistribution<FPT: SSFloatingPoint & Codable>(mean m: FPT, standardDeviation s: FPT) -> SSContProbDistParams<FPT>? {
+public func paraNormalDistribution<FPT: SSFloatingPoint & Codable>(mean m: FPT, standardDeviation s: FPT) -> SSProbDistParams<FPT>? {
     return SSProbDist.Gaussian.para(mean: m, standardDeviation: s)
 }
 /// :nodoc:
@@ -524,7 +536,7 @@ public func pdfPoissonDist<FPT: SSFloatingPoint & Codable>(k: Int, rate lambda: 
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Rayleigh.para(_:) instead")
-public func paraRayleighDist<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSContProbDistParams<FPT>  {
+public func paraRayleighDist<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSProbDistParams<FPT>  {
     return try SSProbDist.Rayleigh.para(scale: s)
 }
 /// :nodoc:
@@ -544,7 +556,7 @@ public func quantileRayleighDist<FPT: SSFloatingPoint & Codable>(p: FPT, scale s
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.ExtremeValue.para(_:_:) instead")
-public func paraExtremValueDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+public func paraExtremValueDist<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
     return try SSProbDist.ExtremeValue.para(location: a, scale: b)
 }
 /// :nodoc:

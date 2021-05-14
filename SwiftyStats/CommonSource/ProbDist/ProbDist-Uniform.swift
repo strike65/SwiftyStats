@@ -29,11 +29,11 @@ import os.log
 extension SSProbDist {
     /// Uniform distribution
     public enum Uniform {
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Uniform distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Uniform distribution.
         /// - Parameter a: Lower bound
         /// - Parameter b: Upper bound
         /// - Throws: SSSwiftyStatsError if a >= b
-        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(lowerBound a: FPT, upperBound b: FPT) throws -> SSProbDistParams<FPT> {
             if (a >= b) {
                 #if os(macOS) || os(iOS)
                 
@@ -45,7 +45,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = (a + b) / 2
             let ex1: FPT = FPT.one /  Helpers.makeFP(12.0)
             let ex2: FPT = b - a

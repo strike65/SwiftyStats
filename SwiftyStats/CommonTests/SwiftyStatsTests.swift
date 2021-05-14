@@ -762,26 +762,31 @@ class SwiftyStatsTests: XCTestCase {
     
     func testBinomialTest() {
         var p: Double
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .twoSided)
-        XCTAssertEqual(p, 0.424, accuracy: 1E-3)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .less)
-        XCTAssertEqual(p, 0.9102, accuracy: 1E-4)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .greater)
-        XCTAssertEqual(p, 0.212, accuracy: 1E-3)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
-        XCTAssertEqual(0.002055, p, accuracy: 1E-6)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 35, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
-        XCTAssertEqual(p, 0.2764, accuracy: 1E-4)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
-        XCTAssertEqual(p, 0.1923, accuracy: 1E-4)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .greater)
-        XCTAssertEqual(p, 0.8715, accuracy: 1E-4)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess:15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .twoSided)
-        XCTAssertEqual(p, 0.2531, accuracy: 1E-4)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .less)
-        XCTAssertEqual(p, 0.949, accuracy: 1E-3)
-        p = SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .greater)
-        XCTAssertEqual(p, 0.1256, accuracy: 1E-4)
+        do {
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .twoSided)
+            XCTAssertEqual(p, 0.424, accuracy: 1E-3)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .less)
+            XCTAssertEqual(p, 0.9102, accuracy: 1E-4)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 9, numberOfTrials: 14, probability: 0.5, alpha: 0.05, alternative: .greater)
+            XCTAssertEqual(p, 0.212, accuracy: 1E-3)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
+            XCTAssertEqual(0.002055, p, accuracy: 1E-6)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 35, numberOfTrials: 100, probability: 0.3, alpha: 0.05, alternative: .twoSided)
+            XCTAssertEqual(p, 0.2764, accuracy: 1E-4)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .less)
+            XCTAssertEqual(p, 0.1923, accuracy: 1E-4)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 16, numberOfTrials: 100, probability: 0.2, alpha: 0.05, alternative: .greater)
+            XCTAssertEqual(p, 0.8715, accuracy: 1E-4)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess:15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .twoSided)
+            XCTAssertEqual(p, 0.2531, accuracy: 1E-4)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .less)
+            XCTAssertEqual(p, 0.949, accuracy: 1E-3)
+            p = try SSHypothesisTesting.binomialTest(numberOfSuccess: 15, numberOfTrials: 20, probability: 0.6, alpha: 0.05, alternative: .greater)
+            XCTAssertEqual(p, 0.1256, accuracy: 1E-4)
+        }
+        catch {
+            print("binomialTest throwed - omg.")
+        }
         let Data:Array<String> = ["A","A","A","A","A","B","A","A","B","B","B","B","A","A"]
         var res = try! SSHypothesisTesting.binomialTest(data: SSExamine.init(withArray: Data, name: nil, characterSet: CharacterSet.alphanumerics), testProbability: 0.5, successCodedAs: "A", alpha: 0.05, alternative: .twoSided)
         XCTAssertEqual(res.pValueExact!, 0.424, accuracy: 1E-3)
@@ -1351,7 +1356,7 @@ class SwiftyStatsTests: XCTestCase {
     }
     
     func testDistributions() {
-        var para: SSContProbDistParams<Double>?
+        var para: SSProbDistParams<Double>?
         /*
          df = 21;
          td = StudentTDistribution[df];

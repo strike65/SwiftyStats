@@ -31,12 +31,12 @@ extension SSProbDist {
     /// Log normal distribution
     public enum LogNormal {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Log Normal distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Log Normal distribution.
         /// - Parameter mean: mean
         /// - Parameter variance: variance
         /// - Throws: SSSwiftyStatsError if v <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if v <= 0 {
                 #if os(macOS) || os(iOS)
                 

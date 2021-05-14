@@ -1226,7 +1226,7 @@ extension SSHypothesisTesting {
     /// - Parameter p0: Probability
     /// - Returns: p value
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
-    public static func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) -> FPT {
+    public static func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) throws -> FPT {
         if p0.isNaN {
             return FPT.nan
         }
@@ -1236,48 +1236,53 @@ extension SSHypothesisTesting {
         var i: Int
         var ex1: FPT
         var ex2: FPT
-        switch alternative {
-        case .less:
-            pV = SSProbDist.Binomial.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
-        case .greater:
-            pV = SSProbDist.Binomial.cdfBinomialDistribution(k: trials - success, n: trials, probability: q, tail: .lower)
-        case .twoSided:
-            // algorithm adapted fropm R function binom.test
-            var c1: Int = 0
-            let d: FPT = SSProbDist.Binomial.pdfBinomialDistribution(k: success, n: trials, probability: p0)
-            let m: FPT =  Helpers.makeFP(trials) * p0
-            ex1 =  Helpers.makeFP(1.0000001)
-            ex2 = d * ex1
-            if success == Helpers.integerValue(ceil(m)) {
-                pV = 1
-            }
-            else if success < Helpers.integerValue(ceil(m)) {
-                i = Helpers.integerValue(ceil(m))
-                for j in i...trials {
-                    ex1 =  Helpers.makeFP(1.0000001)
-                    ex2 = d * ex1
-                    if SSProbDist.Binomial.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= ex2 {
-                        c1 = j - 1
-                        break
-                    }
+        do {
+            switch alternative {
+            case .less:
+                pV = try SSProbDist.Binomial.cdf(k: success, n: trials, probability: p0, tail: .lower)
+            case .greater:
+                pV = try SSProbDist.Binomial.cdf(k: trials - success, n: trials, probability: q, tail: .lower)
+            case .twoSided:
+                // algorithm adapted fropm R function binom.test
+                var c1: Int = 0
+                let d: FPT = try SSProbDist.Binomial.pdf(k: success, n: trials, probability: p0)
+                let m: FPT =  Helpers.makeFP(trials) * p0
+                ex1 =  Helpers.makeFP(1.0000001)
+                ex2 = d * ex1
+                if success == Helpers.integerValue(ceil(m)) {
+                    pV = 1
                 }
-                pV = SSProbDist.Binomial.cdfBinomialDistribution(k: success, n: trials, probability: p0, tail: .lower)
-                pV1 = SSProbDist.Binomial.cdfBinomialDistribution(k: c1, n: trials, probability: p0, tail: .upper)
-                pV = pV + pV1
-            }
-            else {
-                i = 0
-                for j in 0...Helpers.integerValue(floor(m)) {
-                    if SSProbDist.Binomial.pdfBinomialDistribution(k: j, n: trials, probability: p0) <= ex2 {
-                        c1 = j + 1
+                else if success < Helpers.integerValue(ceil(m)) {
+                    i = Helpers.integerValue(ceil(m))
+                    for j in i...trials {
+                        ex1 =  Helpers.makeFP(1.0000001)
+                        ex2 = d * ex1
+                        if try SSProbDist.Binomial.pdf(k: j, n: trials, probability: p0) <= ex2 {
+                            c1 = j - 1
+                            break
+                        }
                     }
+                    pV = try SSProbDist.Binomial.cdf(k: success, n: trials, probability: p0, tail: .lower)
+                    pV1 = try SSProbDist.Binomial.cdf(k: c1, n: trials, probability: p0, tail: .upper)
+                    pV = pV + pV1
                 }
-                pV = SSProbDist.Binomial.cdfBinomialDistribution(k: c1 - 1, n: trials, probability: p0, tail: .lower)
-                pV1 = SSProbDist.Binomial.cdfBinomialDistribution(k: success - 1, n: trials, probability: p0, tail: .upper)
-                pV = pV + pV1
+                else {
+                    i = 0
+                    for j in 0...Helpers.integerValue(floor(m)) {
+                        if try SSProbDist.Binomial.pdf(k: j, n: trials, probability: p0) <= ex2 {
+                            c1 = j + 1
+                        }
+                    }
+                    pV = try SSProbDist.Binomial.cdf(k: c1 - 1, n: trials, probability: p0, tail: .lower)
+                    pV1 = try SSProbDist.Binomial.cdf(k: success - 1, n: trials, probability: p0, tail: .upper)
+                    pV = pV + pV1
+                }
             }
+            return pV
         }
-        return pV
+        catch {
+            throw error
+        }
     }
     
     
@@ -1520,7 +1525,14 @@ extension SSHypothesisTesting {
         result.nTrials = Helpers.integerValue(n)
         result.nSuccess = Helpers.integerValue(success)
         result.nFailure = Helpers.integerValue(failure)
-        result.pValueExact = SSHypothesisTesting.binomialTest(numberOfSuccess: Helpers.integerValue(success), numberOfTrials: Helpers.integerValue(n), probability: p0,alpha: alpha,  alternative: alternative)
+        var pV: FPT = FPT.zero
+        do {
+            pV = try SSHypothesisTesting.binomialTest(numberOfSuccess: Helpers.integerValue(success), numberOfTrials: Helpers.integerValue(n), probability: p0,alpha: alpha,  alternative: alternative)
+        }
+        catch {
+            throw error
+        }
+        result.pValueExact = pV
         result.probFailure = failure / n
         result.probSuccess = probSuccess
         result.probTest = p0

@@ -1,3 +1,9 @@
+Version 1.1.7
+- rename: SSContProbDistParams -> SSProbDistParams
+- added: SSProbDist.Binomial.para
+- added: SSProbDist.Poisson.para
+- fixed: typos
+
 Version 1.1.6
 - maintenance
 

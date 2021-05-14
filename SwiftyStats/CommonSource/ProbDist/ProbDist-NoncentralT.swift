@@ -31,13 +31,13 @@ extension SSProbDist {
         
         #if arch(i386) || arch(x86_64)
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral Student's T distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral Student's T distribution.
         /// - Parameter df: Degrees of freedom
         /// - Parameter nonCentralityPara: noncentrality parameter
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSProbDistParams<FPT> {
             
-            var result:SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result:SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df < 0 {
                 #if os(macOS) || os(iOS)
                 

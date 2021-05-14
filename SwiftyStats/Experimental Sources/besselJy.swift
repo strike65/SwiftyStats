@@ -1,5 +1,5 @@
 /*
- Copyright (2017-2019) strike65
+ Copyright (2017-2021) strike65
  
  GNU GPL 3+
  

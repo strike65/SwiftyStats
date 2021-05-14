@@ -139,7 +139,7 @@ Probability distributions in general are defined within relatively narrow condit
 * cdf: Cumulative Distribution Function
 * pdf: Probability Density Function
 * quantile: Inverse CDF
-* para: returns a `SSContProbDistParams` struct (`mean`, `variance`, `skewness`, `kurtosis`)
+* para: returns a `SSProbDistParams` struct (`mean`, `variance`, `skewness`, `kurtosis`)
 
 > **Please always check if `NaN` or `nil` is returned.** 
 

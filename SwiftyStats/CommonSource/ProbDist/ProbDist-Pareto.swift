@@ -29,11 +29,11 @@ extension SSProbDist {
     /// Pareto distribution
     public enum Pareto {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Pareto distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Pareto distribution.
         /// - Parameter a: minimum
         /// - Parameter b: Shape parameter b
         /// - Throws: SSSwiftyStatsError if b <= 0 || a <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(minimum a: FPT, shape b: FPT) throws -> SSProbDistParams<FPT> {
             if (a <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -56,7 +56,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if b > 1 {
                 result.mean = (a * b) / (b - 1)
             }

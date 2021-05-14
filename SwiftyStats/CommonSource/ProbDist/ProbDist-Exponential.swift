@@ -29,10 +29,10 @@ extension SSProbDist {
     /// Exponential distribution
     public enum Exponential {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Exponential distribution.
         /// - Parameter l: Lambda
         /// - Throws: SSSwiftyStatsError if l <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(lambda l: FPT) throws -> SSProbDistParams<FPT> {
             if (l <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -44,7 +44,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = 1 / l
             result.variance = 1 / (l * l)
             result.kurtosis = 9

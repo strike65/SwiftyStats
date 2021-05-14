@@ -29,11 +29,11 @@ extension SSProbDist {
     /// Gamma distribution
     public enum Gamma {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Gamma distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Gamma distribution.
         /// - Parameter a: Shape parameter
         /// - Parameter b: Scale parameter
         /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(shape a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(shape a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
             if (a <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -56,7 +56,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = a * b
             result.variance = a * b * b
             result.kurtosis = 3 + 6 / a

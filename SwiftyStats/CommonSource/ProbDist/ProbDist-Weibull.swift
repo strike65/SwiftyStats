@@ -29,12 +29,12 @@ extension SSProbDist {
     /// Weibull distribution
     public enum Weibull {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Weibull distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Weibull distribution.
         /// - Parameter a: Location parameter
         /// - Parameter b: Scale parameter
         /// - Parameter c: Shape parameter
         /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSProbDistParams<FPT> {
             if (scale <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -63,7 +63,7 @@ extension SSProbDist {
             var ex4: FPT
             var ex5: FPT
             var ex6: FPT
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             ex1 = FPT.one + SSMath.reciprocal(shape)
             ex2 = scale * SSMath.tgamma1(ex1)
             result.mean = loc + ex2

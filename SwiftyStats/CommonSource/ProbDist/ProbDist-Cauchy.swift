@@ -29,11 +29,11 @@ import os.log
 extension SSProbDist {
     /// Cauchy distribution
     public enum Cauchy {
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Cauchy distribution.
         /// - Parameter a: Location parameter a
         /// - Parameter b: Scale parameter b
         /// - Throws: SSSwiftyStatsError if b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(location a: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
             if (b <= 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -45,7 +45,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            return SSContProbDistParams()
+            return SSProbDistParams()
         }
         
         /// Returns the pdf of the Cauchy distribution.

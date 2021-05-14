@@ -31,12 +31,12 @@ extension SSProbDist {
     /// Gaussian distribution
     public enum Gaussian {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Gaussian distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Gaussian distribution.
         /// - Parameter m: Mean
         /// - Parameter sd: Standard deviation
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, standardDeviation s: FPT) -> SSContProbDistParams<FPT>? {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, standardDeviation s: FPT) -> SSProbDistParams<FPT>? {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = m
             result.variance = SSMath.pow1(s, 2)
             result.skewness = 0

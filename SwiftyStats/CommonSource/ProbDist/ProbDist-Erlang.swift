@@ -30,11 +30,11 @@ extension SSProbDist {
     /// Erlang distribution (equal to the Gamma distribution with integer shape parameter)
     public enum Erlang {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.
         /// - Parameter a: Shape parameter
         /// - Parameter b: Scale parameter
         /// - Throws: SSSwiftyStatsError if a <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSProbDistParams<FPT> {
             if (k == 0) {
                 #if os(macOS) || os(iOS)
                 
@@ -57,7 +57,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result:SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result:SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean =  Helpers.makeFP(k) / lambda
             result.variance =  Helpers.makeFP(k) / SSMath.pow1(lambda, 2)
             result.skewness = 2 / sqrt( Helpers.makeFP(k))

@@ -30,11 +30,11 @@ extension SSProbDist {
     /// Rayleigh distribution
     public enum Rayleigh {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
         /// - Parameter df: Degrees of freedom
         /// - Throws: SSSwiftyStatsError if df <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSContProbDistParams<FPT>  {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>.init()
+        public static func para<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSProbDistParams<FPT>  {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>.init()
             if s <= 0 {
                 #if os(macOS) || os(iOS)
                 

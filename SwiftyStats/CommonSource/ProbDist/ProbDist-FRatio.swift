@@ -30,12 +30,12 @@ extension SSProbDist {
     /// F Ratio distribution
     public enum FRatio {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the F ratio distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the F ratio distribution.
         /// - Parameter df1: numerator degrees of freedom
         /// - Parameter df2: denominator degrees of freedom
         /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> SSContProbDistParams<FPT> {
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+        public static func para<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT) throws -> SSProbDistParams<FPT> {
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df1 <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -301,19 +301,19 @@ extension SSProbDist {
     /// Non central F Ratio distribution
     public enum NonCentralFRatio {
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral F ratio distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral F ratio distribution.
         /// - Parameter df1: numerator degrees of freedom
         /// - Parameter df2: denominator degrees of freedom
         /// - Parameter lambda: noncentrality
         /// - Throws: SSSwiftyStatsError if df1 <= 0 and/or df2 <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(numeratorDF df1: FPT, denominatorDF df2: FPT, lambda: FPT) throws -> SSProbDistParams<FPT> {
             var e1, e2, e3, e4, e5, e6, e7: FPT
             var ex1: FPT
             var ex2: FPT
             var ex3: FPT
             var ex4: FPT
             var ex5: FPT
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             if df1 <= 0 {
                 #if os(macOS) || os(iOS)
                 

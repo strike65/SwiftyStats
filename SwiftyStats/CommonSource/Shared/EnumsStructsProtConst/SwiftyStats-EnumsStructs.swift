@@ -112,7 +112,7 @@ public struct SSDescriptiveStats<FPT: SSFloatingPoint & Codable>: CustomStringCo
 }
 
 /// Parameters of a continuous probability distribution
-public struct SSContProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
+public struct SSProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Kurtosis
     public var kurtosis: FPT
     /// Mean

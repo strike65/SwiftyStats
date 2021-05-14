@@ -48,11 +48,11 @@ extension SSProbDist {
             return SSMath.log1p1(p / (1 - p))
         }
         
-        /// Returns a SSContProbDistParams struct containing mean, variance, kurtosis and skewness of the Logistic distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Logistic distribution.
         /// - Parameter mean: mean
         /// - Parameter b: Scale parameter b
         /// - Throws: SSSwiftyStatsError if b <= 0
-        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSContProbDistParams<FPT> {
+        public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, scale b: FPT) throws -> SSProbDistParams<FPT> {
             if b <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -64,7 +64,7 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            var result: SSContProbDistParams<FPT> = SSContProbDistParams<FPT>()
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = mean
             result.variance = SSMath.pow1(b, 2) * SSMath.pow1(FPT.pi, 2) / 3
             result.kurtosis =  Helpers.makeFP(4.2)

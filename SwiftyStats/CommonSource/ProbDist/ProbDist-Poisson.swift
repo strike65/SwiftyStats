@@ -31,7 +31,37 @@ extension SSProbDist {
     /// Poisson distribution
     public enum Poisson {
         
-        /// Returns the cdf of the Binomial Distribution
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Binomial distribution.
+        /// - Parameter n: Number of events
+        /// - Parameter lambda: rate
+        /// - Throws: SSSwiftyStatsError if lambda <= 0, n < 0
+        public static func para<FPT: SSFloatingPoint & Codable>(numberOfEvents n: Int, rate lambda: FPT) throws -> SSProbDistParams<FPT> {
+            if lambda <= 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("lambda is expected to be > 0", log: .log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            if n < 0 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("n is expected to be >= 0", log: .log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
+            result.mean = lambda
+            result.variance = lambda
+            result.kurtosis = 3 + FPT.one / lambda
+            result.skewness = FPT.one / sqrt(lambda)
+            return result
+        }
+
+        
+        /// Returns the cdf of the Poisson Distribution
         /// - Parameter k: number of events
         /// - Parameter lambda: rate
         /// - Parameter tail: .lower, .upper
@@ -69,7 +99,7 @@ extension SSProbDist {
         }
         
         
-        /// Returns the pdf of the Binomial Distribution
+        /// Returns the pdf of the Poisson Distribution
         /// - Parameter k: number of events
         /// - Parameter lambda: rate
         /// - Throws: SSSwiftyStatsError if lambda <= 0, k < 0

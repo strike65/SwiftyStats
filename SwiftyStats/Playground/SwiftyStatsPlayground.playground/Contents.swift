@@ -1,7 +1,8 @@
 import SwiftyStats
 
-print(try SSProbDist.StudentT.pdf(t: 3.0, degreesOfFreedom: 10))
-print(try SSProbDist.StudentT.cdf(t: -1.0, degreesOfFreedom: 1000))
-print(try SSProbDist.FRatio.quantile(p: 0.9999, numeratorDF: 3, denominatorDF: 2))
+print(try! SSProbDist.Binomial.cdf(k: 5, n: 10, probability: 0.5, tail: SSCDFTail.lower))
+print(try! SSProbDist.Binomial.pdf(k: 5, n: 10, probability: 0.5))
 
 
+
+-6.0 / 5.0 + 3
