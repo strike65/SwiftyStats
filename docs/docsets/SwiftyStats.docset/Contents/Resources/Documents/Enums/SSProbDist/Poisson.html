@@ -277,9 +277,6 @@
                 <a href="../../Structs/SSConfIntv.html">SSConfIntv</a>
               </li>
               <li class="nav-group-task">
-                <a href="../../Structs/SSContProbDistParams.html">SSContProbDistParams</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../../Structs/SSCrosstab.html">SSCrosstab</a>
               </li>
               <li class="nav-group-task">
@@ -320,6 +317,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../../Structs/SSOneWayANOVATestResult.html">SSOneWayANOVATestResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/SSProbDistParams.html">SSProbDistParams</a>
               </li>
               <li class="nav-group-task">
                 <a href="../../Structs/SSQuartile.html">SSQuartile</a>
@@ -371,6 +371,69 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:11SwiftyStats10SSProbDistO7PoissonO4para14numberOfEvents4rateAA0cD6ParamsVyxGSi_xtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
+                    <a name="//apple_ref/swift/Method/para(numberOfEvents:rate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftyStats10SSProbDistO7PoissonO4para14numberOfEvents4rateAA0cD6ParamsVyxGSi_xtKSeRzSERzAA15SSFloatingPointRzlFZ">para(numberOfEvents:<wbr>rate:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Binomial distribution.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    SSSwiftyStatsError if lambda &lt;= 0, n &lt; 0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="n">para</span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;</span><span class="p">(</span><span class="n">numberOfEvents</span> <span class="nv">n</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="n">rate</span> <span class="nv">lambda</span><span class="p">:</span> <span class="kt">FPT</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../../Structs/SSProbDistParams.html">SSProbDistParams</a></span><span class="o">&lt;</span><span class="kt">FPT</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt">Encodable</span><span class="p">,</span> <span class="kt">FPT</span> <span class="p">:</span> <span class="kt"><a href="../../Protocols/SSFloatingPoint.html">SSFloatingPoint</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>n</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Number of events</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lambda</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>rate</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:11SwiftyStats10SSProbDistO7PoissonO3cdf1k4rate4tailxSi_xAA9SSCDFTailOtKSeRzSERzAA15SSFloatingPointRzlFZ"></a>
                     <a name="//apple_ref/swift/Method/cdf(k:rate:tail:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:11SwiftyStats10SSProbDistO7PoissonO3cdf1k4rate4tailxSi_xAA9SSCDFTailOtKSeRzSERzAA15SSFloatingPointRzlFZ">cdf(k:<wbr>rate:<wbr>tail:<wbr>)</a>
@@ -381,7 +444,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns the cdf of the Binomial Distribution</p>
+                        <p>Returns the cdf of the Poisson Distribution</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError if lambda &lt;= 0, k &lt; 0
@@ -456,7 +519,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns the pdf of the Binomial Distribution</p>
+                        <p>Returns the pdf of the Poisson Distribution</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     SSSwiftyStatsError if lambda &lt;= 0, k &lt; 0
@@ -511,7 +574,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2020-12-27)</p>
+          <p>&copy; 2021 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2021-05-15)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

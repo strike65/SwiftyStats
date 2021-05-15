@@ -23,21 +23,21 @@
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
-      "line": 72,
+      "line": 78,
       "symbol": "SSExamine.alpha",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
-      "line": 186,
+      "line": 192,
       "symbol": "SSExamine.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Examine/SSExamine.swift",
-      "line": 595,
+      "line": 601,
       "symbol": "SSExamine.copy(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -277,6 +277,20 @@
       "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
       "line": 672,
       "symbol": "Float.maxgamma",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
+      "line": 801,
+      "symbol": "Float80.lnsqrtpi",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/volker/Documents/Develop_current/personal/SwiftyStatsGH/SwiftyStats/CommonSource/Shared/Extensions/FP-Extension.swift",
+      "line": 932,
+      "symbol": "Float80.maxgamma",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
