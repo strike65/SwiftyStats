@@ -1,4 +1,4 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.6-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.7-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
@@ -6,6 +6,11 @@
 
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
+
+# New in version 1.1.7
+* some less typos
+* parameters for Poisson and Binomial distribution
+* refactoring
 
 # Important
 
