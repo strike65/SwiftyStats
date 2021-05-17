@@ -1,4 +1,4 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.6-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-87%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.7-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](img/SwiftyStatsLogo.png)
 
@@ -7,9 +7,16 @@
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
+# New in version 1.1.7
+* some less typos
+* parameters for Poisson and Binomial distribution
+* refactoring
+
 # Important
 
 Due to many changes and improvements, it is very likely that projects created with older versions (earlier than 1.1.0) will need to be modified after an update to version 1.1.0. This is especially true for the introduction of namespaces. As a result, the calling conventions for probability distributions have changed. Legacy functions such as `pdfStudentTDist(_:_:_:)` have been declared deprecated and will be removed in a later release. The **new** calling convention looks like `SSProbDist.StudentT.pdf()`.
+# Swift 5
+Starting with version 1.1.1, SwiftyStats is compatible with Swift 5.0. If you need Swift 4.*, please use version 1.1.0.
 
 # Overview
 
@@ -28,19 +35,19 @@ There are several extensions to standard Swift types (`Array`, Floating point ty
 # Using Xcode
 
 The attached Xcode project contains four targets:
-> * SwiftyStats (for macOS/Linux)
+> * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
 > * SwiftyStatsTests (Testsuite)
 > * SwiftStatsCLTest (a command line demo)
 
 *Each target must be built individually (i.e. no dependencies are defined)!*
 
-In addition a Playground is added to the Xcode project to 
+In addition a Playground is added to
 > * test the framework and 
 > * do prototyping
 
 # The Swift Type Checker problem
-Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like  `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
+Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
 
 # How to Install
 ## CocoaPods (recommended if your are on a Mac)
@@ -62,7 +69,7 @@ If you have to use a Swift version **earlier** than 4.2, replace the line `pod '
 
 ```ruby
 ...
-pod 'SwiftyStat', '1.1.1'
+pod 'SwiftyStats', '1.1.1'
 ...
 ```
 Save your changes, run:
@@ -79,10 +86,10 @@ Edit your `Package.swift` file:
 
 ```swift
 import PackageDescription
-// for Swift 4.2 or 5
-let version = "1.1.0"
+// for Swift 5
+let version = "1.1.6"
 // for earlier versions:
-// let version = "0.8.14"
+// let version = "1.1.1"
 let package = Package(
 name: "<YOUR_PACKAGE_NAME>",
 dependencies: [
@@ -106,7 +113,6 @@ For more information about the Swift Package Manager click [here](https://github
 
 # Tests
 The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems and numerical software. 
-> Adding new tests to accomplish a code coverage of 100% is desired. This will be take some time. Any help is appreciated.
 
 # How to use
 

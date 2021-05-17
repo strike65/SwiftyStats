@@ -354,7 +354,7 @@
         <section>
           <section class="section">
             
-            <p><img src="https://img.shields.io/badge/Language-Swift_5-yellow.svg" alt="Language"> <img src="https://img.shields.io/badge/version-1.1.6-orange.svg" alt="Version"> <img src="https://img.shields.io/badge/Unit_Tests-passed-green.svg" alt="Unit Tests"> <img src="https://img.shields.io/badge/macOS-built-green.svg" alt="macOS"> <img src="https://img.shields.io/badge/iOS-built-green.svg" alt="iOS"> <img src="https://img.shields.io/badge/Linux-under_development-red.svg" alt="Build Linux"> <img src="https://img.shields.io/badge/Documentation-87%20%25-green.svg" alt="Documentation"></p>
+            <p><img src="https://img.shields.io/badge/Language-Swift_5-yellow.svg" alt="Language"> <img src="https://img.shields.io/badge/version-1.1.7-orange.svg" alt="Version"> <img src="https://img.shields.io/badge/Unit_Tests-passed-green.svg" alt="Unit Tests"> <img src="https://img.shields.io/badge/macOS-built-green.svg" alt="macOS"> <img src="https://img.shields.io/badge/iOS-built-green.svg" alt="iOS"> <img src="https://img.shields.io/badge/Linux-under_development-red.svg" alt="Build Linux"> <img src="https://img.shields.io/badge/Documentation-92%20%25-green.svg" alt="Documentation"></p>
 
 <p><img src="img/SwiftyStatsLogo.png" alt="SwiftyStats"></p>
 
@@ -365,9 +365,18 @@
 <blockquote>
 <p>It is a framework that is regularly developed and has been created out of passion rather than necessity.</p>
 </blockquote>
+<h1 id='new-in-version-1-1-7' class='heading'>New in version 1.1.7</h1>
+
+<ul>
+<li>some less typos</li>
+<li>refactoring</li>
+</ul>
 <h1 id='important' class='heading'>Important</h1>
 
 <p>Due to many changes and improvements, it is very likely that projects created with older versions (earlier than 1.1.0) will need to be modified after an update to version 1.1.0. This is especially true for the introduction of namespaces. As a result, the calling conventions for probability distributions have changed. Legacy functions such as <code>pdfStudentTDist(_:_:_:)</code> have been declared deprecated and will be removed in a later release. The <strong>new</strong> calling convention looks like <code>SSProbDist.StudentT.pdf()</code>.</p>
+<h1 id='swift-5' class='heading'>Swift 5</h1>
+
+<p>Starting with version 1.1.1, SwiftyStats is compatible with Swift 5.0. If you need Swift 4.*, please use version 1.1.0.</p>
 <h1 id='overview' class='heading'>Overview</h1>
 
 <p>SwiftyStats is based on the class <a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a>. This class encapsulates the data to be processed and provides descriptive statistics. In principle, an <code><a href="Classes/SSExamine.html">SSExamine</a></code> instance can contain data of any kind. The available statistical indicators depend of course on the type of data.</p>
@@ -390,7 +399,7 @@
 <blockquote>
 
 <ul>
-<li>SwiftyStats (for macOS/Linux)</li>
+<li>SwiftyStats (for macOS)</li>
 <li>SwiftyStatsMobile (for iOS)</li>
 <li>SwiftyStatsTests (Testsuite)</li>
 <li>SwiftStatsCLTest (a command line demo)</li>
@@ -399,7 +408,7 @@
 
 <p><em>Each target must be built individually (i.e. no dependencies are defined)!</em></p>
 
-<p>In addition a Playground is added to the Xcode project to </p>
+<p>In addition a Playground is added to</p>
 
 <blockquote>
 
@@ -410,7 +419,7 @@
 </blockquote>
 <h1 id='the-swift-type-checker-problem' class='heading'>The Swift Type Checker problem</h1>
 
-<p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look &ldquo;nice&rdquo; in some places, because &ldquo;complex&rdquo; expressions (like  <code>(z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
+<p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look &ldquo;nice&rdquo; in some places, because &ldquo;complex&rdquo; expressions (like <code>(z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
 <h1 id='how-to-install' class='heading'>How to Install</h1>
 <h2 id='cocoapods-recommended-if-your-are-on-a-mac' class='heading'>CocoaPods (recommended if your are on a Mac)</h2>
 
@@ -428,7 +437,7 @@
 
 <p>If you have to use a Swift version <strong>earlier</strong> than 4.2, replace the line <code>pod &#39;SwiftyStats&#39;</code> by:</p>
 <pre class="highlight ruby"><code><span class="o">...</span>
-<span class="n">pod</span> <span class="s1">'SwiftyStat'</span><span class="p">,</span> <span class="s1">'1.1.1'</span>
+<span class="n">pod</span> <span class="s1">'SwiftyStats'</span><span class="p">,</span> <span class="s1">'1.1.1'</span>
 <span class="o">...</span>
 </code></pre>
 
@@ -443,10 +452,10 @@
 
 <p>Edit your <code>Package.swift</code> file:</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">PackageDescription</span>
-<span class="c1">// for Swift 4.2 or 5</span>
-<span class="k">let</span> <span class="nv">version</span> <span class="o">=</span> <span class="s">"1.1.0"</span>
+<span class="c1">// for Swift 5</span>
+<span class="k">let</span> <span class="nv">version</span> <span class="o">=</span> <span class="s">"1.1.6"</span>
 <span class="c1">// for earlier versions:</span>
-<span class="c1">// let version = "0.8.14"</span>
+<span class="c1">// let version = "1.1.1"</span>
 <span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
 <span class="nv">name</span><span class="p">:</span> <span class="s">"&lt;YOUR_PACKAGE_NAME&gt;"</span><span class="p">,</span>
 <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
@@ -474,10 +483,6 @@ For more information about the Swift Package Manager click <a href="https://gith
 <h1 id='tests' class='heading'>Tests</h1>
 
 <p>The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems and numerical software. </p>
-
-<blockquote>
-<p>Adding new tests to accomplish a code coverage of 100% is desired. This will be take some time. Any help is appreciated.</p>
-</blockquote>
 <h1 id='how-to-use' class='heading'>How to use</h1>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftyStats</span>
 
@@ -725,7 +730,7 @@ print(error.localizedDescription)
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2021 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2021-05-15)</p>
+          <p>&copy; 2021 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2021-05-17)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
