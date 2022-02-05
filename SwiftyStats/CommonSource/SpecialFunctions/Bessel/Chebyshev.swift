@@ -74,7 +74,7 @@ import Foundation
 
 /*
  with kind permission
- Copyright 1985, 1987 by Stephen L. Moshier
+ Copyright 1985, 1987 by Stephen L. Moshierv
  Copyright 2018 strike65
  */
 
