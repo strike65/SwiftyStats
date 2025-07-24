@@ -3,8 +3,6 @@
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
-SwiftyStats is a framework written entirely in Swift that provides frequently used and needed statistical routines. By using generic data types almost throughout, the application of the framework is not limited to numeric data.
-> This framework is a spare time project. Maybe someone will find it useful.
 
 # New in version 1.1.7
 * some less typos
