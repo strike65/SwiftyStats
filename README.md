@@ -5,7 +5,7 @@
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
 # New in version 1.1.7
-* some less typos
+* fewer typos
 * parameters for Poisson and Binomial distribution
 * refactoring
 
@@ -24,22 +24,22 @@ The following "namespaces"/classes are provided (among others):
 * [`SSExamine`](docs/Classes/SSExamine.html) (class)
 * [`SSHypothesisTesting`](docs/Enums/SSHypothesisTesting.html) (enum)
 * [`SSProbDist`](docs/Enums/SSProbDist.html) (enum)
-* [`SSDataFrame`](docs/Classes/SSDataFrame.html) instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
+* [`SSDataFrame`](docs/Classes/SSDataFrame.html) instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual datasets and the rows correspond to their data.
 * [`SSCrossTab`](docs/Structures/SSCrossTab.html) contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
 
-There are several extensions to standard Swift types (`Array`, Floating point types, `String `).
+There are several extensions to standard Swift types (`Array`, Floating-point types, `String `).
 
 # Using Xcode
 
 The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
-> * SwiftyStatsTests (Testsuite)
+> * SwiftyStatsTests (test suite)
 > * SwiftStatsCLTest (a command line demo)
 
 *Each target must be built individually (i.e. no dependencies are defined)!*
 
-In addition a Playground is added to
+In addition a Playground is included to
 > * test the framework and 
 > * do prototyping
 
@@ -47,14 +47,14 @@ In addition a Playground is added to
 Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
 
 # How to Install
-## CocoaPods (recommended if your are on a Mac)
+## CocoaPods (recommended if you are on a Mac)
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project:
 
 ```bash
 $> cd <YOUR_PROJECT_FOLDER>
 $> vi Podfile
 ```
-Your Podfile should looks like:  
+Your Podfile should look like:  
 
 ```ruby
 target 'YOURPROJECT' do
@@ -62,7 +62,7 @@ use_frameworks!
 pod 'SwiftyStats'  
 end
 ```
-If you have to use a Swift version **earlier** than 4.2, replace the line `pod 'SwiftyStats'` by:
+If you have to use a Swift version **earlier** than 4.2, replace the line `pod 'SwiftyStats'` with:
 
 ```ruby
 ...
@@ -224,7 +224,7 @@ Probability distributions in general are defined within relatively narrow condit
 * columnSum(columnName:)
 * total
 * rowTotal()
-* colummTotal()
+* columnTotal()
 * largestRowTotal()
 * largestCellCount(atColumn:)
 * largestCellCount(atRow:)
@@ -255,7 +255,7 @@ Probability distributions in general are defined within relatively narrow condit
 * r0
 * r1 
 
-#### Probability Functions (cdf, pdf, quantile, para - see above)
+#### Probability Functions (cdf, pdf, quantile, paramneters - see above)
 
 * Beta
 * Binomial
@@ -284,12 +284,12 @@ Probability distributions in general are defined within relatively narrow condit
 
 #### SSHypothesisTesting
 
-#####Equality of means
+##### Equality of means
 
 * twoSampleTTest(data1:data2:alpha:)
 * twoSampleTTest(sample1:sample2:alpha:)
 * oneSampleTTest(sample:mean:alpha:)
-* oneSampleTTEst(data:mean:alpha:)
+* oneSampleTTest(data:mean:alpha:)
 * matchedPairsTTest(set1:set2:alpha:)
 * matchedPairsTTest(data1:data2:alpha:)
 * oneWayANOVA(data:alpha:)
@@ -303,12 +303,12 @@ Probability distributions in general are defined within relatively narrow condit
 * scheffeTest(dataFrame:alpha:)
 * bonferroniTest(dataFrame:)
 
-#####Autocorrelation
+##### Autocorrelation
 
 * autocorrelationCoefficient(array:lag:)
 * autocorrelation(array:)
 
-#####NPAR tests
+##### NPAR tests
 
 * ksGoFTest(array:targetDistribution:)
 * adNormalityTest(data:alpha:)
@@ -322,16 +322,16 @@ Probability distributions in general are defined within relatively narrow condit
 * waldWolfowitzTwoSampleTest(set1:set2:)
 * kruskalWallisHTest(data:alpha:)
 
-#####Outliers
+##### Outliers
 
 * grubbsTest(array:alpha:)
 * esdOutlierTest(array:alpha:maxOutliers:testType:)
 
-#####Randomness
+##### Randomness
 
 * runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)
 
-#####Equality of variances
+##### Equality of variances
 
 * bartlettTest(array:alpha:)
 * leveneTest(array:testType:alpha:)
