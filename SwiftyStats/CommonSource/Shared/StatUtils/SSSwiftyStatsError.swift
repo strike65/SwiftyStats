@@ -28,7 +28,7 @@ import Foundation
 
 
 /// Custom error class
-public class SSSwiftyStatsError: NSError, LocalizedError {
+public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
     public var type: ErrorType = .none
     public var line: Int = 0
     public var function: String = ""

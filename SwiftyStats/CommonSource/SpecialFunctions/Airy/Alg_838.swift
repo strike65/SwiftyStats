@@ -362,12 +362,12 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         tsm = Phi.last!
     }
     
-    private func matmul<T: FloatingPoint>(matA: Array<Array<T>>, aRows m: Int, aCols n: Int, matB: Array<Array<T>>, bRows p: Int, bCols q: Int) -> Array<Array<T>> {
+    private func matmul<internalT: FloatingPoint>(matA: Array<Array<internalT>>, aRows m: Int, aCols n: Int, matB: Array<Array<internalT>>, bRows p: Int, bCols q: Int) -> Array<Array<internalT>> {
         if n != p {
             fatalError()
         }
-        var sum: T = 0
-        var C: Array<Array<T>> = Array<Array<T>>.init(repeating: Array<T>.init(repeating: 0, count: q), count: m)
+        var sum: internalT = 0
+        var C: Array<Array<internalT>> = Array<Array<internalT>>.init(repeating: Array<internalT>.init(repeating: 0, count: q), count: m)
         for c in stride(from: 0, to: m, by: 1) {
             for d in stride(from: 0, to: q, by: 1) {
                 for k in stride(from: 0, to: p, by: 1) {

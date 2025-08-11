@@ -30,7 +30,7 @@ import os.log
 /// Implenets some of the more often used non-parametreic test.
 /// Non-parametric tests are constructed to analyze data, which are not unederlying a speiciic ditrisbution.
 extension SSHypothesisTesting {
-
+    
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// ### Note ###
@@ -49,13 +49,13 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -79,13 +79,13 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -119,13 +119,13 @@ extension SSHypothesisTesting {
     public static func ksGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         // error handling
         if data.sampleSize < 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -452,13 +452,13 @@ extension SSHypothesisTesting {
             }
         }
         else {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -480,13 +480,13 @@ extension SSHypothesisTesting {
         var tempArray: Array<FPT>
         var pValue: FPT
         if array.count < 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -495,13 +495,13 @@ extension SSHypothesisTesting {
             _data = try SSExamine<FPT, FPT>.init(withObject: array, levelOfMeasurement: .interval, name: nil, characterSet: nil)
         }
         catch {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("unable to create examine object", log: .log_dev, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -560,18 +560,18 @@ extension SSHypothesisTesting {
         result.isNormal = (pValue >= alpha)
         return result
     }
-
+    
     /// Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2 by L. C. Dinneen and B. C. Blakesley
     fileprivate static func cdfMannWhitney<FPT: SSFloatingPoint & Codable>(U: FPT, m: Int!, n: Int!) throws -> FPT {
         // Algorithm AS 62 Applied Statistics (1973) Vol 22, No. 2
         if m <= 0 || n <= 0 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("m and n is expected to be > 0", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -594,13 +594,13 @@ extension SSHypothesisTesting {
         let zero: FPT = 0
         minmn = min(m, n)
         if minmn < 1 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("m and n is expected to be > 0", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -682,24 +682,24 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public static func mannWhitneyUTest<T, FPT>(set1: Array<T>, set2: Array<T>)  throws -> SSMannWhitneyUTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -720,24 +720,24 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public static func mannWhitneyUTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>)  throws -> SSMannWhitneyUTestResult<FPT>  where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -752,13 +752,13 @@ extension SSHypothesisTesting {
         let sorted: (Array<Int>, Array<T>) = sorter.sortedArrays()
         let rr: Rank<T, FPT> = Rank.init(data: sorted.1, groups: sorted.0)
         guard let ties: Array<FPT> = rr.ties else {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
@@ -779,13 +779,13 @@ extension SSHypothesisTesting {
         ex3 = mn + ex2
         let U2 = ex3 - sumRanksSet2
         if (U1 + U2) != mn {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
@@ -878,35 +878,35 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public static func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -926,35 +926,35 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public static func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -986,13 +986,13 @@ extension SSHypothesisTesting {
         let ranking: Rank<FPT, FPT> = Rank.init(data: absDiffSorted, groups: nil)
         ranks = ranking.ranks
         guard let ties: Array<FPT> = ranking.ties else {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
@@ -1025,13 +1025,13 @@ extension SSHypothesisTesting {
         ex3 = n_n_one / 2
         ex4 = sumnegranks + sumposranks
         if ex4 != ex3 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub.", log: .log_dev, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
         }
@@ -1080,35 +1080,35 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
     public static func signTest<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.count != set2.count {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1127,35 +1127,35 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
     public static func signTest<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set1.sampleSize != set2.sampleSize {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be equal to sample size of set2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1332,36 +1332,36 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public static func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
         if p0.isNaN {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("p0 is NaN", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let examine = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: characterSet)
         if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("observations are expected to be dichotomous", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1388,35 +1388,35 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
     public static func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if p0.isNaN {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("p0 is NaN", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if data.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("observations are expected to be dichotomous", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1553,24 +1553,24 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: Array<T>, set2: Array<T>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if set1.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.count <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1595,24 +1595,24 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1708,24 +1708,24 @@ extension SSHypothesisTesting {
     /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
     public static func waldWolfowitzTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>) throws -> SSWaldWolfowitzTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 1 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if set2.sampleSize <= 2 {
-            #if os(macOS) || os(iOS)
+#if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
                 os_log("sample size of set 2 is expected to be > 2", log: .log_stat, type: .error)
             }
             
-            #endif
+#endif
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
@@ -1851,30 +1851,261 @@ extension SSHypothesisTesting {
     }
     
     /** Ranks the data
-    Groups must be identified by integers, starting with 1. The fields (as arrays) `sumOfRanks`, `meanRanks` and `sampleSizes` contain the corresponding value for each group.
-    - Important: Remember that naming groups with integers starting at 1 does not change the fact that the index of the first entry in an array is 0.
- */
+     Groups must be identified by integers, starting with 1. The fields (as arrays) `sumOfRanks`, `meanRanks` and `sampleSizes` contain the corresponding value for each group.
+     - Important: Remember that naming groups with integers starting at 1 does not change the fact that the index of the first entry in an array is 0.
+     */
+    /*    private struct Rank<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
+     /// The ranks
+     public var ranks:Array<FPT>
+     /// An Array containing "sample size"-times a group identifier
+     public var groups:Array<Int>?
+     /// An array containing the sum of all ranks for each group
+     public var sumOfRanks:Array<FPT>
+     /// An array containg all ties precomputed (pow(t, 3) - t)
+     public var ties:Array<FPT>?
+     /// The count of ties
+     public var numberOfTies: Int!
+     /// Mean ranks
+     public var meanRanks:Array<FPT>!
+     /// Count of groups
+     public var numberOfGroups:Int!
+     /// Size of sample per group
+     public var sampleSizes:Array<FPT>!
+     /// The set containing ties consecutive tie-count
+     public var tiesDictionary: Dictionary<Int, Int>
+     
+     private var data:Array<T>
+     
+     init(data array: Array<T>, groups g: Array<Int>?) {
+     ranks = Array<FPT>()
+     ties = Array<FPT>()
+     sumOfRanks = Array<FPT>()
+     if let gg = g {
+     groups = gg
+     }
+     else {
+     groups = nil
+     }
+     numberOfTies = 0
+     data = array
+     var temp = Array<FPT>()
+     var temp1 = Array<FPT>()
+     tiesDictionary = Dictionary<Int, Int>()
+     var temp3 = 0
+     rank(data: data, ranks: &temp, ties: &temp1, numberOfTies: &temp3)
+     ranks = temp
+     ties = temp1
+     numberOfTies = temp3
+     if groups != nil {
+     let uniqueGroups = Set<Int>.init(groups!).sorted(by: <)
+     numberOfGroups = uniqueGroups.count
+     meanRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
+     sumOfRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
+     sampleSizes = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
+     var k: Int
+     for group in uniqueGroups {
+     k = 0
+     for currentGroup in groups! {
+     if currentGroup == group {
+     sumOfRanks[group - 1] = sumOfRanks[group - 1] + ranks[k]
+     sampleSizes[group - 1] = sampleSizes[group - 1] + 1
+     }
+     k = k + 1
+     }
+     }
+     for group in uniqueGroups {
+     meanRanks[group - 1] = sumOfRanks[group - 1] / sampleSizes[group - 1]
+     }
+     }
+     else {
+     numberOfGroups = 1
+     meanRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
+     sumOfRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
+     sampleSizes = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
+     for i in 0..<ranks.count {
+     sumOfRanks[0] += ranks[i]
+     sampleSizes[0] += 1
+     }
+     meanRanks[0] = sumOfRanks[0] / sampleSizes[0]
+     }
+     
+     }
+     /// A more general ranking routine
+     /// - Parameter data: Array containing data to rank
+     /// - Parameter inout ranks: Upon return contains the ranks
+     /// - Parameter inout ties: Upon return contains the correction terms for ties
+     /// - Parameter inout numberOfTies: Upon return this parameter contains the number of ties
+     private func rank<T, FPT>(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
+     var pos: Int
+     let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
+     var ptemp: Int
+     var freq: Int
+     var sum: FPT = 0
+     numberOfTies = 0
+     pos = 0
+     while pos < examine.sampleSize {
+     ptemp = pos + 1
+     sum =  Helpers.makeFP(ptemp)
+     freq = examine.frequency(data[pos])
+     if freq == 1 {
+     ranks.append(sum)
+     pos += 1
+     }
+     else {
+     numberOfTies += 1
+     ties.append(SSMath.pow1( Helpers.makeFP(freq), 3) -  Helpers.makeFP(freq))
+     sum = 0
+     for i in 0...(freq - 1) {
+     sum +=  Helpers.makeFP(ptemp + i)
+     }
+     for _ in 1...freq {
+     ranks.append(sum / ( Helpers.makeFP(freq)))
+     }
+     pos = ptemp + freq - 1
+     }
+     }
+     }
+     
+     
+     }
+     
+     /// Runs the Kruskal-Wallis H test. This test is a generalization of the Mann-Whitney U-test. The test checks whether all samples passed come from the same population. The H-test is distribution-independent and, like the U-test, uses the ranks of the data.
+     ///
+     /// - Parameters:
+     ///   - data: An Array of SSExamine objects
+     ///   - alpha: Level of significance
+     /// - Returns: A SSKruskalWallisHTestResult struct
+     /// - Throws: An `SSSwiftyStatsError.invalidArgument` is thrown if less than two SSExamine objects are passed or an SSExamine object has less than two elements.
+     public static func kruskalWallisHTest<T, FPT>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSKruskalWallisHTestResult<FPT> where T: Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
+     if data.count < 2 {
+     #if os(macOS) || os(iOS)
+     
+     if #available(macOS 10.12, iOS 13, *) {
+     os_log("number of groups is expected to be > 2", log: .log_stat, type: .error)
+     }
+     
+     #endif
+     
+     throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+     }
+     var groups = Array<Int>()
+     var a1 = Array<T>()
+     // group identifier
+     var k = 1
+     // total number of mesurements
+     var N: FPT = 0
+     for examine in data {
+     if examine.sampleSize < 2 {
+     #if os(macOS) || os(iOS)
+     
+     if #available(macOS 10.12, iOS 13, *) {
+     os_log("sample sizes are expected to be > 2", log: .log_stat, type: .error)
+     }
+     
+     #endif
+     
+     throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
+     }
+     groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
+     k += 1
+     N +=  Helpers.makeFP(examine.sampleSize)
+     a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
+     }
+     // sort the data with respect to groups
+     let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
+     let sorted = sorter.sortedArrays()
+     let ranking: Rank<T, FPT> = Rank<T, FPT>.init(data: sorted.sortedData, groups: sorted.sortedGroups)
+     var sumRanks: FPT = 0
+     var ex1: FPT
+     var ex2: FPT
+     var ex3: FPT
+     sumRanks = ranking.sumOfRanks.reduce(FPT.zero, +)
+     ex1 = N + 1
+     ex2 = N * ex1
+     ex3 = ex2 / 2
+     if sumRanks != ex3 {
+     #if os(macOS) || os(iOS)
+     
+     if #available(macOS 10.12, iOS 13, *) {
+     os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub. - contact the developer", log: .log_dev, type: .error)
+     }
+     
+     #endif
+     
+     throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
+     }
+     var sum: FPT = 0
+     for i in 0..<ranking.numberOfGroups {
+     sum += SSMath.pow1(ranking.sumOfRanks[i], 2) / ranking.sampleSizes[i]
+     }
+     ex1 = N * (N + 1)
+     ex2 = 3 * (N + 1)
+     ex3 =  Helpers.makeFP(12) / ex1
+     let H: FPT = ex3 * sum - ex2
+     let df: FPT = ( Helpers.makeFP(ranking.numberOfGroups)) - 1
+     var ts: FPT = FPT.zero
+     if let t = ranking.ties {
+     ts = t.reduce(FPT.zero) { (result, e) -> FPT in
+     return result + e
+     }
+     }
+     ts = 1 - (ts / (SSMath.pow1(N, 3) - N))
+     let Hc: FPT
+     if ts != 0 {
+     Hc = H / ts
+     }
+     else {
+     Hc = FPT.nan
+     }
+     var p: FPT
+     let cv: FPT
+     do {
+     p = try SSProbDist.ChiSquare.cdf(chi: H, degreesOfFreedom: df)
+     cv = try SSProbDist.ChiSquare.quantile(p: 1 - alpha, degreesOfFreedom: df)
+     }
+     catch {
+     throw error
+     }
+     p = 1 - p
+     var result: SSKruskalWallisHTestResult<FPT> = SSKruskalWallisHTestResult<FPT>()
+     result.nTies = ranking.numberOfTies
+     result.H_value = H
+     result.H_value_corrected = Hc
+     result.pValue = p
+     result.nGroups = ranking.numberOfGroups
+     result.df = Helpers.integerValue(df)
+     result.nObservations = Helpers.integerValue(N)
+     result.meanRanks = ranking.meanRanks
+     result.sumRanks = ranking.sumOfRanks
+     result.alpha = alpha
+     result.cv = cv
+     return result
+     }
+     
+     
+     }
+     */
     private struct Rank<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         /// The ranks
-        public var ranks:Array<FPT>
+        public var ranks: Array<FPT>
         /// An Array containing "sample size"-times a group identifier
-        public var groups:Array<Int>?
+        public var groups: Array<Int>?
         /// An array containing the sum of all ranks for each group
-        public var sumOfRanks:Array<FPT>
-        /// An array containg all ties precomputed (pow(t, 3) - t)
-        public var ties:Array<FPT>?
+        public var sumOfRanks: Array<FPT>
+        /// An array containing all ties precomputed (pow(t, 3) - t)
+        public var ties: Array<FPT>?
         /// The count of ties
         public var numberOfTies: Int!
         /// Mean ranks
-        public var meanRanks:Array<FPT>!
+        public var meanRanks: Array<FPT>!
         /// Count of groups
-        public var numberOfGroups:Int!
+        public var numberOfGroups: Int!
         /// Size of sample per group
-        public var sampleSizes:Array<FPT>!
+        public var sampleSizes: Array<FPT>!
         /// The set containing ties consecutive tie-count
         public var tiesDictionary: Dictionary<Int, Int>
         
-        private var data:Array<T>
+        private var data: Array<T>
         
         init(data array: Array<T>, groups g: Array<Int>?) {
             ranks = Array<FPT>()
@@ -1899,9 +2130,9 @@ extension SSHypothesisTesting {
             if groups != nil {
                 let uniqueGroups = Set<Int>.init(groups!).sorted(by: <)
                 numberOfGroups = uniqueGroups.count
-                meanRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
-                sumOfRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
-                sampleSizes = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: uniqueGroups.count)
+                meanRanks = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: uniqueGroups.count)
+                sumOfRanks = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: uniqueGroups.count)
+                sampleSizes = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: uniqueGroups.count)
                 var k: Int
                 for group in uniqueGroups {
                     k = 0
@@ -1919,33 +2150,33 @@ extension SSHypothesisTesting {
             }
             else {
                 numberOfGroups = 1
-                meanRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
-                sumOfRanks = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
-                sampleSizes = Array<FPT>.init(repeating:  Helpers.makeFP(0.0), count: 1)
+                meanRanks = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: 1)
+                sumOfRanks = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: 1)
+                sampleSizes = Array<FPT>.init(repeating: Helpers.makeFP(0.0), count: 1)
                 for i in 0..<ranks.count {
                     sumOfRanks[0] += ranks[i]
                     sampleSizes[0] += 1
                 }
                 meanRanks[0] = sumOfRanks[0] / sampleSizes[0]
             }
-            
         }
+        
         /// A more general ranking routine
         /// - Parameter data: Array containing data to rank
         /// - Parameter inout ranks: Upon return contains the ranks
         /// - Parameter inout ties: Upon return contains the correction terms for ties
         /// - Parameter inout numberOfTies: Upon return this parameter contains the number of ties
-        private func rank<T, FPT>(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
+        private func rank<InnerT, InnerFPT>(data: Array<InnerT>, ranks: inout Array<InnerFPT>, ties: inout Array<InnerFPT>, numberOfTies: inout Int) where InnerT: Comparable, InnerT: Hashable, InnerT: Codable, InnerFPT: SSFloatingPoint & Codable {
             var pos: Int
-            let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
+            let examine: SSExamine<InnerT, InnerFPT> = SSExamine<InnerT, InnerFPT>.init(withArray: data, name: nil, characterSet: nil)
             var ptemp: Int
             var freq: Int
-            var sum: FPT = 0
+            var sum: InnerFPT = 0
             numberOfTies = 0
             pos = 0
             while pos < examine.sampleSize {
                 ptemp = pos + 1
-                sum =  Helpers.makeFP(ptemp)
+                sum = Helpers.makeFP(ptemp)
                 freq = examine.frequency(data[pos])
                 if freq == 1 {
                     ranks.append(sum)
@@ -1953,134 +2184,18 @@ extension SSHypothesisTesting {
                 }
                 else {
                     numberOfTies += 1
-                    ties.append(SSMath.pow1( Helpers.makeFP(freq), 3) -  Helpers.makeFP(freq))
+                    ties.append(SSMath.pow1(Helpers.makeFP(freq), 3) - Helpers.makeFP(freq))
                     sum = 0
                     for i in 0...(freq - 1) {
-                        sum +=  Helpers.makeFP(ptemp + i)
+                        sum += Helpers.makeFP(ptemp + i)
                     }
                     for _ in 1...freq {
-                        ranks.append(sum / ( Helpers.makeFP(freq)))
+                        ranks.append(sum / (Helpers.makeFP(freq)))
                     }
                     pos = ptemp + freq - 1
                 }
             }
         }
-        
-        
     }
-    
-    /// Runs the Kruskal-Wallis H test. This test is a generalization of the Mann-Whitney U-test. The test checks whether all samples passed come from the same population. The H-test is distribution-independent and, like the U-test, uses the ranks of the data.
-    ///
-    /// - Parameters:
-    ///   - data: An Array of SSExamine objects
-    ///   - alpha: Level of significance
-    /// - Returns: A SSKruskalWallisHTestResult struct
-    /// - Throws: An `SSSwiftyStatsError.invalidArgument` is thrown if less than two SSExamine objects are passed or an SSExamine object has less than two elements.
-    public static func kruskalWallisHTest<T, FPT>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSKruskalWallisHTestResult<FPT> where T: Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
-        if data.count < 2 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("number of groups is expected to be > 2", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
-            throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-        }
-        var groups = Array<Int>()
-        var a1 = Array<T>()
-        // group identifier
-        var k = 1
-        // total number of mesurements
-        var N: FPT = 0
-        for examine in data {
-            if examine.sampleSize < 2 {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("sample sizes are expected to be > 2", log: .log_stat, type: .error)
-                }
-                
-                #endif
-                
-                throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
-            }
-            groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
-            k += 1
-            N +=  Helpers.makeFP(examine.sampleSize)
-            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
-        }
-        // sort the data with respect to groups
-        let sorter = SSDataGroupSorter.init(data: a1, groups: groups)
-        let sorted = sorter.sortedArrays()
-        let ranking: Rank<T, FPT> = Rank<T, FPT>.init(data: sorted.sortedData, groups: sorted.sortedGroups)
-        var sumRanks: FPT = 0
-        var ex1: FPT
-        var ex2: FPT
-        var ex3: FPT
-        sumRanks = ranking.sumOfRanks.reduce(FPT.zero, +)
-        ex1 = N + 1
-        ex2 = N * ex1
-        ex3 = ex2 / 2
-        if sumRanks != ex3 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("The object is in an inconsistent state. Please try to reconstruct the process and open an issue on GitHub. - contact the developer", log: .log_dev, type: .error)
-            }
-            
-            #endif
-            
-            throw SSSwiftyStatsError.init(type: .internalError, file: #file, line: #line, function: #function)
-        }
-        var sum: FPT = 0
-        for i in 0..<ranking.numberOfGroups {
-            sum += SSMath.pow1(ranking.sumOfRanks[i], 2) / ranking.sampleSizes[i]
-        }
-        ex1 = N * (N + 1)
-        ex2 = 3 * (N + 1)
-        ex3 =  Helpers.makeFP(12) / ex1
-        let H: FPT = ex3 * sum - ex2
-        let df: FPT = ( Helpers.makeFP(ranking.numberOfGroups)) - 1
-        var ts: FPT = FPT.zero
-        if let t = ranking.ties {
-            ts = t.reduce(FPT.zero) { (result, e) -> FPT in
-                return result + e
-            }
-        }
-        ts = 1 - (ts / (SSMath.pow1(N, 3) - N))
-        let Hc: FPT
-        if ts != 0 {
-            Hc = H / ts
-        }
-        else {
-            Hc = FPT.nan
-        }
-        var p: FPT
-        let cv: FPT
-        do {
-            p = try SSProbDist.ChiSquare.cdf(chi: H, degreesOfFreedom: df)
-            cv = try SSProbDist.ChiSquare.quantile(p: 1 - alpha, degreesOfFreedom: df)
-        }
-        catch {
-            throw error
-        }
-        p = 1 - p
-        var result: SSKruskalWallisHTestResult<FPT> = SSKruskalWallisHTestResult<FPT>()
-        result.nTies = ranking.numberOfTies
-        result.H_value = H
-        result.H_value_corrected = Hc
-        result.pValue = p
-        result.nGroups = ranking.numberOfGroups
-        result.df = Helpers.integerValue(df)
-        result.nObservations = Helpers.integerValue(N)
-        result.meanRanks = ranking.meanRanks
-        result.sumRanks = ranking.sumOfRanks
-        result.alpha = alpha
-        result.cv = cv
-        return result
-    }
-    
-    
+
 }
