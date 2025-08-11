@@ -27,8 +27,8 @@ import Foundation
 import os.log
 #endif
 
-/// Implenets some of the more often used non-parametreic test.
-/// Non-parametric tests are constructed to analyze data, which are not unederlying a speiciic ditrisbution.
+/// Implements some of the more commonly used non-parametric tests.
+/// Non-parametric tests are designed to analyze data that do not follow a specific distribution.
 extension SSHypothesisTesting {
 
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov

@@ -99,20 +99,20 @@ extension SSSpecialFunctions {
      %     *     are p and q in the pFq function).                        *
      %     *  3. Double precision complex argument Z.                     *
      %     *  4. Integer LNPFQ.  This integer should be set to '1' if the *
-     %     *     result from PFQ is to be returned as the natural logaritm*
+     %     *     result from PFQ is to be returned as the natural logarithm*
      %     *     of the series, or '0' if not.  The user can generally set*
      %     *     LNPFQ = '0' and change it if required.                   *
      %     *  5. Integer IX.  This integer should be set to '0' if the    *
      %     *     user desires the program PFQ to estimate the number of   *
      %     *     array terms (in A and B) to be used, or an integer       *
      %     *     greater than zero specifying the number of integer pos-  *
-     %     *     itions to be used.  This input parameter is escpecially  *
+     %     *     itions to be used.  This input parameter is especially  *
      %     *     useful as a means to check the results of a given run.   *
-     %     *     Specificially, if the user obtains a result for a given  *
+     %     *     Specifically, if the user obtains a result for a given  *
      %     *     set of parameters, then changes IX and re-runs the eval- *
      %     *     uator, and if the number of array positions was insuffi- *
-     %     *     cient, then the two results will likely differ.  The rec-*
-     %     *     commended would be to generally set IX = '0' and then set*
+     %     *     cient, then the two results will likely differ.  It is   *
+     %     *     recommended to generally set IX = '0' and then set      *
      %     *     it to 100 or so for a second run.  Note that the LENGTH  *
      %     *     parameter currently sets the upper limit on IX to 777,   *
      %     *     but that can easily be changed (it is a single PARAMETER *
@@ -125,7 +125,7 @@ extension SSSpecialFunctions {
      %     *                                                              *
      %     *     Note: The variable NOUT is the file to which error mess- *
      %     *           ages are written (default is 6).  This can be      *
-     %     *           changed in the FUNCTION PFQ to accomodate re-      *
+     %     *           changed in the FUNCTION PFQ to accommodate re-     *
      %     *           of output to another file                          *
      %     *                                                              *
      %     *  Subprograms called: HYPER.                                  *
