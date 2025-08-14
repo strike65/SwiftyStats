@@ -17,18 +17,16 @@
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">SwiftyStats Docs</a> (95% documented)</p>
-        <p class="header-right">
+        <div class="header-right">
           <form role="search" action="search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
           </form>
-        </p>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
-        <a href="index.html">SwiftyStats Reference</a>
-        <img id="carat" src="img/carat.png" />
-        SwiftyStats  Reference
+        <a href="index.html">SwiftyStats</a>
       </p>
     </div>
     <div class="content-wrapper">
@@ -368,7 +366,7 @@
 <h1 id='new-in-version-1-1-7' class='heading'>New in version 1.1.7</h1>
 
 <ul>
-<li>some less typos</li>
+<li>fewer typos</li>
 <li>refactoring</li>
 </ul>
 <h1 id='important' class='heading'>Important</h1>
@@ -387,11 +385,11 @@
 <li><a href="docs/Classes/SSExamine.html"><code><a href="Classes/SSExamine.html">SSExamine</a></code></a> (class)</li>
 <li><a href="docs/Enums/SSHypothesisTesting.html"><code><a href="Enums/SSHypothesisTesting.html">SSHypothesisTesting</a></code></a> (enum)</li>
 <li><a href="docs/Enums/SSProbDist.html"><code><a href="Enums/SSProbDist.html">SSProbDist</a></code></a> (enum)</li>
-<li><a href="docs/Classes/SSDataFrame.html"><code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code></a> instances encapsulate datasets. You can imagine the structure of an <code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code> object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.</li>
+<li><a href="docs/Classes/SSDataFrame.html"><code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code></a> instances encapsulate datasets. You can imagine the structure of an <code><a href="Classes/SSDataFrame.html">SSDataFrame</a></code> object as a table: The columns of the table correspond to the individual datasets and the rows correspond to their data.</li>
 <li><a href="docs/Structures/SSCrossTab.html"><code>SSCrossTab</code></a> contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).</li>
 </ul>
 
-<p>There are several extensions to standard Swift types (<code>Array</code>, Floating point types, <code>String</code>).</p>
+<p>There are several extensions to standard Swift types (<code>Array</code>, Floating-point types, <code>String</code>).</p>
 <h1 id='using-xcode' class='heading'>Using Xcode</h1>
 
 <p>The attached Xcode project contains four targets:</p>
@@ -401,14 +399,14 @@
 <ul>
 <li>SwiftyStats (for macOS)</li>
 <li>SwiftyStatsMobile (for iOS)</li>
-<li>SwiftyStatsTests (Testsuite)</li>
+<li>SwiftyStatsTests (test suite)</li>
 <li>SwiftStatsCLTest (a command line demo)</li>
 </ul>
 </blockquote>
 
 <p><em>Each target must be built individually (i.e. no dependencies are defined)!</em></p>
 
-<p>In addition a Playground is added to</p>
+<p>In addition a Playground is included to</p>
 
 <blockquote>
 
@@ -421,21 +419,21 @@
 
 <p>Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn&rsquo;t look &ldquo;nice&rdquo; in some places, because &ldquo;complex&rdquo; expressions (like <code>(z1 + z1 - w) / (z1 * w)</code>) had to be simplified.</p>
 <h1 id='how-to-install' class='heading'>How to Install</h1>
-<h2 id='cocoapods-recommended-if-your-are-on-a-mac' class='heading'>CocoaPods (recommended if your are on a Mac)</h2>
+<h2 id='cocoapods-recommended-if-you-are-on-a-mac' class='heading'>CocoaPods (recommended if you are on a Mac)</h2>
 
 <p><a href="http://cocoapods.org">CocoaPods</a> is the preferred way to add SwiftyStats to your project:</p>
 <pre class="highlight shell"><code><span class="nv">$&gt;</span> <span class="nb">cd</span> &lt;YOUR_PROJECT_FOLDER&gt;
 <span class="nv">$&gt;</span> vi Podfile
 </code></pre>
 
-<p>Your Podfile should looks like:  </p>
+<p>Your Podfile should look like:  </p>
 <pre class="highlight ruby"><code><span class="n">target</span> <span class="s1">'YOURPROJECT'</span> <span class="k">do</span>
 <span class="n">use_frameworks!</span>
 <span class="n">pod</span> <span class="s1">'SwiftyStats'</span>  
 <span class="k">end</span>
 </code></pre>
 
-<p>If you have to use a Swift version <strong>earlier</strong> than 4.2, replace the line <code>pod &#39;SwiftyStats&#39;</code> by:</p>
+<p>If you have to use a Swift version <strong>earlier</strong> than 4.2, replace the line <code>pod &#39;SwiftyStats&#39;</code> with:</p>
 <pre class="highlight ruby"><code><span class="o">...</span>
 <span class="n">pod</span> <span class="s1">'SwiftyStats'</span><span class="p">,</span> <span class="s1">'1.1.1'</span>
 <span class="o">...</span>
@@ -601,7 +599,7 @@ print(error.localizedDescription)
 <li>columnSum(columnName:)</li>
 <li>total</li>
 <li>rowTotal()</li>
-<li>colummTotal()</li>
+<li>columnTotal()</li>
 <li>largestRowTotal()</li>
 <li>largestCellCount(atColumn:)</li>
 <li>largestCellCount(atRow:)</li>
@@ -632,7 +630,7 @@ print(error.localizedDescription)
 <li>r0</li>
 <li>r1</li>
 </ul>
-<h4 id='probability-functions-cdf-pdf-quantile-para-see-above' class='heading'>Probability Functions (cdf, pdf, quantile, para - see above)</h4>
+<h4 id='probability-functions-cdf-pdf-quantile-paramneters-see-above' class='heading'>Probability Functions (cdf, pdf, quantile, paramneters - see above)</h4>
 
 <ul>
 <li>Beta</li>
@@ -667,7 +665,7 @@ print(error.localizedDescription)
 <li>twoSampleTTest(data1:data2:alpha:)</li>
 <li>twoSampleTTest(sample1:sample2:alpha:)</li>
 <li>oneSampleTTest(sample:mean:alpha:)</li>
-<li>oneSampleTTEst(data:mean:alpha:)</li>
+<li>oneSampleTTest(data:mean:alpha:)</li>
 <li>matchedPairsTTest(set1:set2:alpha:)</li>
 <li>matchedPairsTTest(data1:data2:alpha:)</li>
 <li>oneWayANOVA(data:alpha:)</li>
@@ -725,16 +723,15 @@ print(error.localizedDescription)
 
 <p>This framework is published under the <a href="http://www.gnu.org/licenses/">GNU GPL 3</a></p>
 
-<p>Copyright 2017 - 2020 strike65</p>
+<p>Copyright 2017 - 2025 strike65</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2021 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external">strike65</a>. All rights reserved. (Last updated: 2021-05-17)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2025 <a class="link" href="https://github.com/strike65/SwiftyStats" target="_blank" rel="external noopener">strike65</a>. All rights reserved. (Last updated: 2025-08-14)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

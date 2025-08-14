@@ -500,7 +500,7 @@ extension Helpers {
     
     /// Provides scanning functions (text --> numbers)
     enum NumberScanner {
-        internal static func scanDouble(string: String?) -> Double? {
+/*        internal static func scanDouble(string: String?) -> Double? {
             guard string != nil else {
                 return nil
             }
@@ -513,22 +513,37 @@ extension Helpers {
                 return nil
             }
         }
-        
-        internal static func scanFloat(string: String?) -> Float? {
-            guard string != nil else {
+*/
+        internal static func scanDouble(string: String?) -> Double? {
+            guard let string = string else {
                 return nil
             }
-            var res: Float = 0.0
-            let s = Scanner.init(string: string!)
-            if s.scanFloat(&res) {
-                return res
-            }
-            else {
+
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+
+            if let number = formatter.number(from: string) {
+                return number.doubleValue
+            } else {
                 return nil
             }
         }
         
-        internal static func scanHexDouble(string: String?) -> Double? {
+        internal static func scanFloat(string: String?) -> Float? {
+            guard let string = string else {
+                return nil
+            }
+
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+
+            if let number = formatter.number(from: string) {
+                return number.floatValue
+            } else {
+                return nil
+            }      }
+        
+/*        internal static func scanHexDouble(string: String?) -> Double? {
             guard string != nil else {
                 return nil
             }
@@ -541,8 +556,54 @@ extension Helpers {
                 return nil
             }
         }
-        
+        */
+        internal static func scanHexDouble(string: String?) -> Double? {
+            guard let string = string else {
+                return nil
+            }
+
+            // Entferne führende und nachfolgende Leerzeichen
+            let trimmedString = string.trimmingCharacters(in: .whitespaces)
+
+            // Stelle sicher, dass der String mit "0x" beginnt (für Hexadezimalzahlen)
+            guard trimmedString.hasPrefix("0x") else {
+                return nil
+            }
+
+            // Entferne das "0x" Präfix und versuche den Rest als Hexadezimalwert zu parsen
+            let hexString = trimmedString.dropFirst(2)
+
+            // Versuche, die Hexadezimalzahl in eine Ganzzahl zu konvertieren
+            if let intValue = Int64(hexString, radix: 16) {
+                return Double(intValue)
+            } else {
+                return nil
+            }
+        }
         internal static func scanHexFloat(string: String?) -> Float? {
+            guard let string = string else {
+                return nil
+            }
+
+            // Entferne führende und nachfolgende Leerzeichen
+            let trimmedString = string.trimmingCharacters(in: .whitespaces)
+
+            // Stelle sicher, dass der String mit "0x" beginnt (für Hexadezimalzahlen)
+            guard trimmedString.hasPrefix("0x") else {
+                return nil
+            }
+
+            // Entferne das "0x" Präfix und versuche den Rest als Hexadezimalwert zu parsen
+            let hexString = trimmedString.dropFirst(2)
+
+            // Versuche, die Hexadezimalzahl in eine Ganzzahl zu konvertieren
+            if let intValue = Int64(hexString, radix: 16) {
+                return Float(intValue)
+            } else {
+                return nil
+            }
+        }
+/*        internal static func scanHexFloat(string: String?) -> Float? {
             guard string != nil else {
                 return nil
             }
@@ -555,6 +616,7 @@ extension Helpers {
                 return nil
             }
         }
+
         
         internal static func scanHexInt32(string: String?) -> UInt32? {
             guard string != nil else {
@@ -569,6 +631,7 @@ extension Helpers {
                 return nil
             }
         }
+ */
         
         internal static func scanHexInt64(string: String?) -> UInt64? {
             guard string != nil else {
