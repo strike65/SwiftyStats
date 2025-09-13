@@ -1,6 +1,69 @@
-*.pdf
-*.zip
+## OS
 .DS_Store
-/.build
-/Packages
+.AppleDouble
+.LSOverride
+Icon?
+AGENTS.md
+## Archives & binaries
+*.zip
+*.pdf
+*.dSYM
+*.ipa
+*.app
+*.framework
+*.xcarchive
 
+## Editors/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+## Swift Package Manager
+/.build
+/.swiftpm/
+/Packages
+Package.resolved
+
+## Xcode
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
+*.xcuserstate
+*.xcuserdatad
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+DerivedData/
+
+## Local build dirs
+/build/
+/Products/
+SwiftyStats/build/
+
+## Dependency managers
+Pods/
+Carthage/Build/
+Carthage/Checkouts/
+
+## Docs/tool outputs (regenerate locally)
+docs/docsets/**/*.tgz
+docs/docsets/**/*.docset
+docs/undocumented.json
+
+## Logs and temp files
+*.log
+*.tmp
+*.temp
+
+## Secrets (security)
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.cer
+*.mobileprovision
+*.credentials
+*.secret
+secrets/
+credentials/

@@ -1935,7 +1935,7 @@ extension SSHypothesisTesting {
         /// - Parameter inout ranks: Upon return contains the ranks
         /// - Parameter inout ties: Upon return contains the correction terms for ties
         /// - Parameter inout numberOfTies: Upon return this parameter contains the number of ties
-        private func rank<T, FPT>(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
+        private func rank(data: Array<T>, ranks: inout Array<FPT>, ties: inout Array<FPT>, numberOfTies: inout Int) where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
             var pos: Int
             let examine: SSExamine<T, FPT> = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: nil)
             var ptemp: Int

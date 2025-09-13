@@ -362,7 +362,7 @@ internal class Airy<T: SSFloatingPoint>: NSObject {
         tsm = Phi.last!
     }
     
-    private func matmul<T: FloatingPoint>(matA: Array<Array<T>>, aRows m: Int, aCols n: Int, matB: Array<Array<T>>, bRows p: Int, bCols q: Int) -> Array<Array<T>> {
+    private func matmul(matA: Array<Array<T>>, aRows m: Int, aCols n: Int, matB: Array<Array<T>>, bRows p: Int, bCols q: Int) -> Array<Array<T>> {
         if n != p {
             fatalError()
         }

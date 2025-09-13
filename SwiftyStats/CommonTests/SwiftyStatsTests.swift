@@ -1421,6 +1421,7 @@ class SwiftyStatsTests: XCTestCase {
          Out[23]= 0
          Out[24]= 1.10526315789473684211
          */
+        
         para = try! SSProbDist.NonCentralSudentT.para(degreesOfFreedom: 21, nonCentralityPara: 3)
         XCTAssertEqual(para!.kurtosis, 3.61902917492752013195, accuracy: 1e-12)
         XCTAssertEqual(para!.mean, 3.11273629794486754698, accuracy: 1e-12)
@@ -1499,6 +1500,7 @@ class SwiftyStatsTests: XCTestCase {
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.75, degreesOfFreedom: 21, nonCentralityPara: 3), 3.82973, accuracy: 1e-6)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 0.99, degreesOfFreedom: 21, nonCentralityPara: 3), 6.238628, accuracy: 1e-6)
         XCTAssertEqual(try! SSProbDist.NonCentralSudentT.quantile(p: 1, degreesOfFreedom: 21, nonCentralityPara: 3), Double.infinity)
+        
         /*
          nd = NormalDistribution[3, 1/2];
          N[Kurtosis[nd], 21]
@@ -5757,6 +5759,7 @@ class SwiftyStatsTests: XCTestCase {
     //        }
     //    }
     
+    
     func testBesselI0() {
         // BesselI0(x), 100 <= x <= 100, step 2
         
@@ -6322,6 +6325,7 @@ class SwiftyStatsTests: XCTestCase {
                                8.047926057472153e251,9.71602399500863e252,1.1749972043908966e254,
                                1.423397515268675e255,1.7272458904546453e256,2.09951133502152e257,
                                2.55632391787296e258,3.117774332506824e259,3.808922637630559e260]
+        
     
     func tesGamma1() {
         var ans: Float80
