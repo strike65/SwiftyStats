@@ -21,9 +21,21 @@
  */
 
 import Foundation
-import Accelerate.vecLib.LinearAlgebra
+import Accelerate
+    //.vecLib.LinearAlgebra
 import os.log
+public typealias LAPACKInt = __LAPACK_int
 
+ @inline(__always)
+ func lapack_dgesv(n: LAPACKInt, nrhs: LAPACKInt,
+                   a: UnsafeMutablePointer<Double>, lda: LAPACKInt,
+                   ipiv: UnsafeMutablePointer<LAPACKInt>,
+                   b: UnsafeMutablePointer<Double>, ldb: LAPACKInt) -> LAPACKInt {
+     var n = n, nrhs = nrhs, lda = lda, ldb = ldb
+     var info: LAPACKInt = 0
+     dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info)
+     return info
+ }
 extension SSProbDist {
     /// Non central Student T distribution
     public enum NonCentralSudentT {
@@ -659,12 +671,13 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     }
     var abc: [Double] = logfMOD
     // TODO: FIXME0
-    var N: __CLPK_integer = 3
-    var nrhs: __CLPK_integer = 1
-    var lda: __CLPK_integer = 3
-    var ldb: __CLPK_integer = 3
-    var info: __CLPK_integer = 0
-    var ipiv = Array<__CLPK_integer>.init(repeating: 0, count: 3)
+    var N: LAPACKInt = 3
+    var nrhs: LAPACKInt = 1
+    var lda: LAPACKInt = 3
+    var ldb: LAPACKInt = 3
+    var info: LAPACKInt = 0
+    var ipiv = Array<LAPACKInt>.init(repeating: 0, count: 3)
+    //ss_dgesv(&N,&nrhs,&AA,lda,&ipiv,&abc,ldb,&info)
     dgesv_(&N, &nrhs, &AA, &lda, &ipiv, &abc, &ldb, &info)
     if info != 0 {
         #if os(macOS) || os(iOS)

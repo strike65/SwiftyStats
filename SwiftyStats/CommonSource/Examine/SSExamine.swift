@@ -333,7 +333,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         let url = URL.init(fileURLWithPath: fullFilename)
-        if let jsonString = try? String.init(contentsOf: url), let data = jsonString.data(using: stringEncoding) {
+        if let jsonString = try? String.init(contentsOf: url, encoding: stringEncoding), let data = jsonString.data(using: stringEncoding) {
             do {
                 let result = try JSONDecoder().decode(SSExamine<SSElement, FPT>.self, from: data)
                 return result as SSExamine<SSElement, FPT>

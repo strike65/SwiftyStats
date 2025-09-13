@@ -506,12 +506,8 @@ extension Helpers {
             }
             var res: Double = 0.0
             let s = Scanner.init(string: string!)
-            if s.scanDouble(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            res = s.scanDouble() ?? Double.nan
+            return res
         }
         
         internal static func scanFloat(string: String?) -> Float? {
@@ -520,12 +516,8 @@ extension Helpers {
             }
             var res: Float = 0.0
             let s = Scanner.init(string: string!)
-            if s.scanFloat(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            res = s.scanFloat() ?? Float.nan
+            return res
         }
         
         internal static func scanHexDouble(string: String?) -> Double? {
@@ -555,21 +547,7 @@ extension Helpers {
                 return nil
             }
         }
-        
-        internal static func scanHexInt32(string: String?) -> UInt32? {
-            guard string != nil else {
-                return nil
-            }
-            var res: UInt32 = 0
-            let s = Scanner.init(string: string!)
-            if s.scanHexInt32(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
-        }
-        
+                
         internal static func scanHexInt64(string: String?) -> UInt64? {
             guard string != nil else {
                 return nil
@@ -583,21 +561,6 @@ extension Helpers {
                 return nil
             }
         }
-        
-        internal static func scanInt32(string: String?) -> Int32? {
-            guard string != nil else {
-                return nil
-            }
-            var res: Int32 = 0
-            let s = Scanner.init(string: string!)
-            if s.scanInt32(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
-        }
-        
         
         internal static func scanInt64(string: String?) -> Int64? {
             guard string != nil else {
