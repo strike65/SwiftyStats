@@ -29,20 +29,19 @@ import os.log
 #endif
 
 /** SSExamine
- This class contains all the data that you want to evaluate. SSExamine expects data that corresponds to the `Hashable`, `Comparable` and `Codable` protocols.
- Which statistics are available depends on the type of data. For nominal data, for example, an average will not be meaningful and will therefore not be calculated.
- If a certain statistical measure is not available, the result will be `nil`. It is therefore important that you check all results for this.
- 
- SSExamine was primarily developed with Objective-C and had in particular the requirement to create frequency tables for the entered data and to update these
- tables whenever data was added or removed. Internally, the data is therefore stored in a kind of frequency table. If, for example, the element "A" occurs
- a 100 times in the data set to be evaluated, the element is not stored 100 times, but only once. At the same time, a reference to the frequency of thi
- element is saved.
+ Holds the data to be analyzed. `SSExamine` expects elements that conform to the `Hashable`, `Comparable`, and `Codable` protocols.
+ Which statistics are available depends on the element type. For nominal data, for example, a mean is not meaningful and is therefore not calculated.
+ If a particular statistic is not available, the result is `nil`. Ensure you check results for `nil` where appropriate.
 
- If elements are added to an SSExamine instance, the order of "arrival" is also registered. This makes it possible to reconstruct the "original data" from 
- an SSExamine instance.
+ `SSExamine` was originally developed in Objective‑C with a focus on creating frequency tables for the provided data and keeping them up to date as
+ elements are added or removed. Internally, the data is stored in a frequency‑table–like structure. For example, if the element "A" occurs 100 times,
+ it is stored only once together with a reference to its frequency.
+
+ When elements are added to an `SSExamine` instance, their insertion order is recorded as well. This allows you to reconstruct the original data sequence
+ from an `SSExamine` instance.
  - Important:
-    - `SSElement` = The Type of data to be processed.
-    - `FPT` = The type of emitted statistics. Must conform to SSFloatingPoint
+    - `SSElement`: The type of data to be processed.
+    - `FPT`: The type used for computed statistics. Must conform to `SSFloatingPoint`.
  */
 public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying, Codable where SSElement: Hashable & Comparable & Codable, FPT: SSFloatingPoint, FPT: Codable {
     
@@ -71,7 +70,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     public var name: String?
     
     /**
-    Significance level to use, default: 0.05
+    Significance level to use. Default: 0.05
      */
     private var _alpha: FPT = FPT.zero
     
@@ -84,46 +83,37 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /** Indicates if there are changes
-    */
+    /** Indicates whether there are changes. */
     public var hasChanges: Bool! = false
     
-    /** Defines the level of measurement
-     */
+    /** Defines the level of measurement. */
     public var levelOfMeasurement: SSLevelOfMeasurement! = .interval
     
-    /** If true, the instance contains numerical data
-    */
+    /** If true, the instance contains numerical data. */
     public var isNumeric: Bool! = true
     
-    /** Returns the number of unique SSElements
-     */
+    /** Returns the number of unique elements. */
     public var length: Int {
         return items.count
     }
     
-    /** Returns true, if count == 0, i.e. there are no data
-    */
+    /** Returns true if `count == 0`, i.e., there is no data. */
     public var isEmpty: Bool {
         return count == 0
     }
     
-    /** The total number of observations (= sum of all absolute frequencies)
-    */
+    /** The total number of observations (= sum of all absolute frequencies). */
     public var sampleSize: Int {
         return count
     }
     
-    /** Returns a Dictionary<element<SSElement>,cumulative frequency<Double>>
-    */
+    /** Returns a `Dictionary<element<SSElement>, cumulative frequency<FPT>>`. */
     public var cumulativeRelativeFrequencies: Dictionary<SSElement, FPT> {
         //        updateCumulativeFrequencies()
         return cumRelFrequencies
     }
     
-    /**
-    Returns a the hash for the instance.
-    */
+    /** Returns the hash for the instance. */
     public override var hash: Int {
         if !isEmpty {
             if let a = elementsAsArray(sortOrder: .raw) {
@@ -141,10 +131,10 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Overridden
-    /// Two SSExamine objects are assumed to be equal, iff the arrays of all elements in unsorted order are equal.
+    /// Overridden.
+    /// Two `SSExamine` objects are considered equal if the arrays of all elements in unsorted order are equal.
     /// - Parameter object: The object to compare to
-    /// - Important: Properties like "name" or "tag" are not included
+    /// - Important: Properties like `name` or `tag` are not considered.
     public override func isEqual(_ object: Any?) -> Bool {
         if let o: SSExamine<SSElement, FPT> = object as? SSExamine<SSElement, FPT> {
             if !self.isEmpty && !o.isEmpty {
@@ -205,14 +195,14 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Initializes a SSExamine instance using a string or an array<SSElement>
-    /// - Parameter object: The object used
+    /// Initializes an `SSExamine` instance from a `String` or `Array<SSElement>`.
+    /// - Parameter object: The source object
     /// - Parameter name: The name of the instance.
     /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
     /// - Parameter lom: Level of Measurement
     /// - Throws: SSSwiftyStatsError.missingData if object is not a string or an Array\<SSElement\>
     public init(withObject object: Any, levelOfMeasurement lom: SSLevelOfMeasurement, name: String?, characterSet: CharacterSet?) throws {
-        // allow only arrays an strings as 'object'
+        // allow only arrays and strings as 'object'
         guard ((object is String && object is SSElement) || (object is Array<SSElement>)) else {
             #if os(macOS) || os(iOS)
             
@@ -236,9 +226,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Returns: New table by analyzing string. Taking characterSet into account, when set
-    /// - Parameter array: The array containing the elements
-    /// - Parameter characterSet: Set containing all characters to include by string analysis. If a type other than String is used, this parameter will be ignored. If a string is used to initialize the class and characterSet is nil, then all characters will be appended.
+    /// Initializes an `SSExamine` instance from an array.
+    /// - Parameter array: The array containing the elements.
+    /// - Parameter characterSet: Only used when initialized from a string; ignored here.
     public init(withArray array: Array<SSElement>, name: String?, characterSet: CharacterSet?) {
         super.init()
         createName(name: name)
@@ -246,10 +236,10 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Loads the content of a file interpreting the elements separated by `separator` as values using the specified encoding. Data are assumed to be numeric.
+    /// Loads the content of a file, interpreting elements separated by `separator` as values using the specified encoding. Data are assumed to be numeric.
     ///
-    /// The property `name`will be set to filename.
-    /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
+    /// The property `name` will be set to the filename.
+    /// - Parameter path: The path to the file (e.g., `~/data/data.dat`).
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use. Default: .utf8
     /// - Parameter elementsEnclosedBy: A string that encloses each element.
@@ -314,10 +304,10 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Imitializes a new Instance from a json file created by `exportJSONString(fileName:, atomically:, overwrite:, stringEncoding:)`
-    /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
+    /// Initializes a new instance from a JSON file created by `exportJSONString(fileName:atomically:overwrite:stringEncoding:)`.
+    /// - Parameter path: The path to the file (e.g., `~/data/data.dat`).
     /// - Parameter stringEncoding: The encoding to use.
-    /// - Throws: if the file doesn't exist or can't be accessed or a the json file is invalid
+    /// - Throws: If the file doesn't exist, can't be accessed, or the JSON is invalid.
     public class func examine(fromJSONFile path: String, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> SSExamine<SSElement, FPT>? {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
@@ -409,14 +399,14 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// TODO: enclose elements in ""
+    /// TODO: Enclose elements in quotes.
     /// Saves the object to the given path using the specified encoding.
     /// - Parameter path: Path to the file
     /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
-    /// - Parameter encloseElementsBy: Defaulf = nil
+    /// - Parameter encloseElementsBy: Default = nil
     /// - Throws: SSSwiftyStatsError if the file could not be written
     public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", encloseElementsBy: String? = nil, asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         var result = true
@@ -493,9 +483,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     
     
-    /// Initialize the table using a string. Append only characters contained in characterSet
+    /// Initializes the table using a string. Appends only characters contained in `characterSet`.
     /// - Parameter string: String
-    /// - Parameter characterSet: If characterSet is not nil, only characters contained in the set will be appended
+    /// - Parameter characterSet: If not nil, only characters contained in the set will be appended.
     private func initializeWithString(string: String, characterSet: CharacterSet?) {
         initializeSSExamine()
         isNumeric = false
@@ -520,8 +510,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Initializes a new instance using an array
-    /// - Parameter array: The array containing the elements
+    /// Initializes a new instance using an array.
+    /// - Parameter array: The array containing the elements.
     private func initializeWithArray(_ array: Array<SSElement>) {
         initializeSSExamine()
         if array.count > 0 {
@@ -538,8 +528,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// # Danger!!
-    /// Sets default values, removes all items, reset all statistics.
+    /// Danger: Resets state.
+    /// Sets default values, removes all items, and resets all statistics.
     fileprivate func initializeSSExamine() {
         sequence.removeAll()
         items.removeAll()
@@ -780,7 +770,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     /// Removes item from the table.
     /// - Parameter item: Item
-    /// - Parameter allOccurences: If false, only the first item found will be removed. Default: false
+    /// - Parameter allOccurences: If false, only the first matching item is removed. Default: false
     public func remove(_ element: SSElement, allOccurences all: Bool = false) {
         if !isEmpty {
             if contains(element) {
@@ -790,7 +780,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
                     temp = temp.filter({ $0 != element})
                 }
                 else {
-                    // remove only the first occurence
+                    // remove only the first occurrence
                     let s: Array<Int> = sequence[element]!
                     temp.remove(at:s.first! - 1)
                 }
@@ -828,7 +818,7 @@ extension SSExamine {
     
     /// Returns all elements as one string. Elements are delimited by del.
     /// - Parameter del: The delimiter. Can be nil or empty.
-    /// - Parameter asRow: If true, the parameter `del` will be omitted. The Name of the instance will ve used as header for the row
+    /// - Parameter asRow: If true, the parameter `del` is omitted. The name of the instance is used as the row header.
     /// - Parameter encloseElementsBy: Default: nil.
     public func elementsAsString(withDelimiter del: String?, asRow: Bool = true, encloseElementsBy: String? = nil) -> String? {
         let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
@@ -869,7 +859,7 @@ extension SSExamine {
         }
     }
     
-    /// Returns true, if index is valid
+    /// Returns true if index is valid.
     private func isValidIndex(index: Int) -> Bool {
         return index >= 0 && index < self.sampleSize
     }
@@ -1064,4 +1054,3 @@ extension SSExamine {
     
     
 }
-

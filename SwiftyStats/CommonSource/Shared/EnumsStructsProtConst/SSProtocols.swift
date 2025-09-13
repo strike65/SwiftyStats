@@ -24,33 +24,33 @@
  */
 
 import Foundation
-/// Defines a protocol to conform by SSExamine subclasses.
+/// Defines the protocol adopted by `SSExamine`.
 internal protocol SSExamineContainer {
     associatedtype ExamineElement
     associatedtype Frequency: SSFloatingPoint
     /// The sample size
     var sampleSize: Int { get }
-    /// The "length" of the container. I.e. the number of unique items
+    /// The "length" of the container, i.e., the number of unique items.
     var length: Int { get }
-    /// Contains the container any elements
+    /// Whether the container contains any elements.
     var isEmpty: Bool { get }
-    /// Contains the container the element?
+    /// Whether the container contains the given element.
     mutating func contains(_ element: ExamineElement) -> Bool
-    /// Frequency of element
+    /// Frequency of the given element.
     mutating func frequency(_ element: ExamineElement) -> Int
-    /// Relative frequency of element
+    /// Relative frequency of the given element.
     mutating func rFrequency(_ element: ExamineElement) -> Frequency
-    /// Appends an element
+    /// Appends an element.
     mutating func append(_ element: ExamineElement)
-    /// Appends an element <count> times
+    /// Appends an element `count` times.
     mutating func append(repeating count: Int, element: ExamineElement)
-    /// Appends items from an array
+    /// Appends the items from an array.
     mutating func append(contentOf array: Array<ExamineElement>)
-    /// Appends characters from a string. Throws, if Item is not of type string
+    /// Appends characters from a string. Throws if `ExamineElement` is not `String`.
     mutating func append(text: String, characterSet: CharacterSet?) throws
-    /// Removes the element
+    /// Removes the element.
     mutating func remove(_ element: ExamineElement, allOccurences: Bool)
-    /// Remove all items
+    /// Removes all items.
     mutating func removeAll()
 }
 

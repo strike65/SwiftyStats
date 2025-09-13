@@ -18,7 +18,9 @@
  */
 
 import Foundation
+#if canImport(Accelerate)
 import Accelerate
+#endif
 // naive implementation
 
 extension SSSpecialFunctions {

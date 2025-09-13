@@ -28,17 +28,19 @@ import Foundation
 import os.log
 
 extension OSLog {
-    @available(macOS 10.12, iOS 13.0, *)
+    @MainActor @available(macOS 10.12, iOS 13.0, *)
     private static var subsystem = Bundle.main.bundleIdentifier
     @available(macOS 10.12, iOS 13.0, *)
-    static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.stike65.SwiftyStats", category: "functions_parameters")
+    static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "functions_parameters")
     @available(macOS 10.12, iOS 13.0, *)
-    static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.stike65.SwiftyStats", category: "severe_bugs")
+    static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "severe_bugs")
     @available(macOS 10.12, iOS 13.0, *)
-    static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.stike65.SwiftyStats", category: "filesystem")
+    static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "filesystem")
 }
-/// Defines the Logsystem for SwiftyStats
+/// Defines the logging system for SwiftyStats.
 
+/// Prints a playful message to stdout depending on the `truth` flag.
+/// - Parameter truth: If true, prints a pessimistic quip; otherwise, a compliment.
 public func wtf(truth: Bool) {
     if truth {
         print("There is no truth. There are only expectations and broken hearts")

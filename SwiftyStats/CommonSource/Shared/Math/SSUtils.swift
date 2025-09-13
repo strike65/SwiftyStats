@@ -478,7 +478,7 @@ extension Helpers {
         }
     }
     
-    /// Casts the members of an Array form one numerical type to a Floating Point
+    /// Casts the members of an array from one numeric type to a floating-point type.
     internal static func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>? where T: Numeric & Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
         if array.isEmpty {
             return nil
@@ -489,16 +489,16 @@ extension Helpers {
         return result
     }
     
-    /// Returns a SSExamine object of length (i.e. number of unique elements) one and count "count"
-    /// - Parameter value: Value
-    /// - Parameter count: Number of values
+    /// Returns an `SSExamine` object containing one unique element replicated `count` times.
+    /// - Parameter value: The element value.
+    /// - Parameter count: Number of repetitions.
     internal static func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, count: Int!) -> SSExamine<T, FPT> where T: Comparable, T: Hashable, FPT: Codable {
         let array = Array<T>.init(repeating: value, count: count)
         let res = SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil)
         return res
     }
     
-    /// Provides scanning functions (text --> numbers)
+    /// Provides scanning helpers (text → numbers).
     enum NumberScanner {
         internal static func scanDouble(string: String?) -> Double? {
             guard string != nil else {
@@ -634,7 +634,6 @@ internal func printError(_ message: String) {
     var outputStream = StandardErrorOutputStream()
     print(message, to: &outputStream)
 }
-
 
 
 

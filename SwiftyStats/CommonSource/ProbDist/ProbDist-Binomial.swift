@@ -36,6 +36,7 @@ extension SSProbDist {
         /// - Parameter n: number of trials
         /// - Parameter p0: probability for success
         /// - Parameter tail: .lower, .upper
+        /// - Throws: SSSwiftyStatsError if `p0` <= 0 or other invalid arguments are detected
         public static func cdf<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT, tail: SSCDFTail) throws -> FPT {
             if (p0 <= FPT.zero) {
                 #if os(macOS) || os(iOS)
@@ -82,6 +83,7 @@ extension SSProbDist {
         /// - Parameter k: number of successes
         /// - Parameter n: number of trials
         /// - Parameter p0: probability for success
+        /// - Throws: SSSwiftyStatsError if `p0` <= 0 or other invalid arguments are detected
         public static func pdf<FPT: SSFloatingPoint & Codable>(k: Int, n: Int, probability p0: FPT) throws -> FPT {
             if (p0 <= FPT.zero) {
                 #if os(macOS) || os(iOS)
@@ -106,7 +108,7 @@ extension SSProbDist {
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Binomial distribution.
         /// - Parameter n: Number of trials
         /// - Parameter p0: Probability for success
-        /// - Throws: SSSwiftyStatsError if a >= b || c <= a || c >= b
+        /// - Throws: SSSwiftyStatsError if `p0` <= 0 or other invalid arguments are detected
         public static func para<FPT: SSFloatingPoint & Codable>(numberOfTrials n: Int, probability p0: FPT) throws -> SSProbDistParams<FPT> {
             if (p0 <= FPT.zero) {
                 #if os(macOS) || os(iOS)
@@ -139,4 +141,3 @@ extension SSProbDist {
 
     }
 }
-

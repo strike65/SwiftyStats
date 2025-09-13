@@ -1,6 +1,6 @@
 /*
  Copyright (c) 2014 John D. Cook
- Copyright (c) 2ß18 strike65 (Swift Version)
+ Copyright (c) 2018 strike65 (Swift Version)
  
  BSD License
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -41,8 +41,9 @@
 
 import Foundation
 extension SSMath {
-    /// Integrates a real function with up to three parameters. Adapted from http://www.codeproject.com/KB/recipes/FastNumericalIntegration.aspx , Implemented by John D. Cook
-    /// - Parameter integrand:The function to integrate
+    /// Integrates a real function with up to four parameters. Adapted from http://www.codeproject.com/KB/recipes/FastNumericalIntegration.aspx , implemented by John D. Cook.
+    /// - Parameter integrand: The function to integrate
+    /// - Parameter parameters: Up to four parameters passed to `integrand` alongside the integration variable
     /// - Parameter a:                   left limit
     /// - Parameter b:                   right limit
     /// - Parameter targetError: targeted absolute error
@@ -382,4 +383,3 @@ fileprivate func weights<FPT: SSFloatingPoint>(_ i: Int) -> FPT {
     }
 
 }
-

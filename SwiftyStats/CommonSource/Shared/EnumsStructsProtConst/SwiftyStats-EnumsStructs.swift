@@ -27,7 +27,7 @@ import Foundation
 
 
 
-/// Confidence interval struct
+/// Confidence interval structure.
 public struct SSConfIntv<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Lower bound of the CI
     public var lowerBound: FPT?
@@ -48,8 +48,28 @@ public struct SSConfIntv<FPT: SSFloatingPoint & Codable>: CustomStringConvertibl
     }
 }
 
+/// Pair of a floating-point value and an Int, useful where tuples (FPT, Int) would be used
+public struct SSFIntPair<FPT: SSFloatingPoint & Codable>: Codable, Hashable, CustomStringConvertible {
+    public var fp: FPT
+    public var i: Int
 
-/// Quartile struct
+    public init(fp: FPT, i: Int) {
+        self.fp = fp
+        self.i = i
+    }
+
+    public init(_ tuple: (FPT, Int)) {
+        self.fp = tuple.0
+        self.i = tuple.1
+    }
+
+    public var tuple: (FPT, Int) { (fp, i) }
+
+    public var description: String { "(\(fp), \(i))" }
+}
+
+
+/// Quartile structure.
 public struct SSQuartile<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// 25% Quartile
     public var q25: FPT
@@ -79,7 +99,7 @@ public struct SSQuartile<FPT: SSFloatingPoint & Codable>: CustomStringConvertibl
     }
 }
 
-/// Struct containing descriptive stats
+/// Structure containing descriptive statistics.
 public struct SSDescriptiveStats<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// arithmetic mean
     public var mean: FPT
@@ -111,7 +131,7 @@ public struct SSDescriptiveStats<FPT: SSFloatingPoint & Codable>: CustomStringCo
     }
 }
 
-/// Parameters of a continuous probability distribution
+/// Parameters of a continuous probability distribution.
 public struct SSProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Kurtosis
     public var kurtosis: FPT
@@ -136,7 +156,7 @@ public struct SSProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConv
     }
     public var description: String {
         var descr = String()
-        descr.append("DSITRIBUTION PARAMETERS\n")
+        descr.append("DISTRIBUTION PARAMETERS\n")
         descr.append("***********************\n")
         descr.append("mean:\(self.mean)\nvariance:\(self.variance)\nkurtosis:\(self.kurtosis)\nskewness:\(self.skewness)\n")
         return descr
@@ -146,7 +166,7 @@ public struct SSProbDistParams<FPT: SSFloatingPoint & Codable>: CustomStringConv
 
 
 public struct SSGrubbsTestResult<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
-    /// ciritcal value
+    /// critical value
     public var criticalValue: FPT?
     /// largest value
     public var largest: T?
@@ -160,9 +180,9 @@ public struct SSGrubbsTestResult<T: Codable & Comparable & Hashable, FPT: SSFloa
     public var mean: FPT?
     /// Grubbs G
     public var G: FPT?
-    /// sd
+    /// standard deviation
     public var stdDev: FPT?
-    /// true iff G > ciriticalValue
+    /// True if `G` > `criticalValue`.
     public var hasOutliers: Bool?
     /// Returns a description
     public var description: String {
@@ -178,7 +198,7 @@ public struct SSGrubbsTestResult<T: Codable & Comparable & Hashable, FPT: SSFloa
                 descr.append("mean: \(m)\n")
                 descr.append("sd: \(sd)\n")
                 descr.append("largest value: \(l)\n")
-                descr.append("smalles value: \(s)\n")
+                descr.append("smallest value: \(s)\n")
                 descr.append("sample size: \(n)\n")
             }
             return descr
@@ -194,7 +214,7 @@ public struct SSESDTestResult<T: Codable & Comparable & Hashable, FPT: SSFloatin
     public var itemsRemoved: Array<T>?
     /// test statistic
     public var testStatistics: Array<FPT>?
-    /// array of lamddas
+    /// array of lambdas
     public var lambdas: Array<FPT>?
     /// count of outliers found
     public var countOfOutliers: Int?
@@ -231,11 +251,11 @@ public struct SSESDTestResult<T: Codable & Comparable & Hashable, FPT: SSFloatin
 }
 
 
-/// Results of the KS one sample test. The fields actually used depend on the target distribution.
+/// Results of the Kolmogorov–Smirnov one-sample test. The fields actually used depend on the target distribution.
 public struct SSKSTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
-    /// emprical mean
+    /// empirical mean
     public var estimatedMean: FPT?
-    /// empirical sd
+    /// empirical standard deviation
     public var estimatedSd: FPT?
     /// empirical variance
     public var estimatedVar: FPT?
@@ -251,7 +271,7 @@ public struct SSKSTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConver
     public var estimatedScaleParam: FPT?
     /// target distribution
     public var targetDistribution: SSGoFTarget?
-    /// p value
+    /// p-value
     public var pValue: FPT?
     /// max absolute difference
     public var maxAbsDifference: FPT?
@@ -263,7 +283,7 @@ public struct SSKSTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConver
     public var zStatistics: FPT?
     /// sample size
     public var sampleSize: Int?
-    /// a string containing additional info (for certain distributions)
+    /// Additional information (for certain distributions).
     public var infoString: String?
     /// Returns a description
     public var description: String {
@@ -296,7 +316,7 @@ public struct SSKSTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConver
 
 /// Results of the Anderson Darling test
 public struct SSADTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
-    /// p value (= (1 - alpha)-quantile of testStatistic
+    /// p-value (= (1 - alpha)-quantile of test statistic)
     public var pValue: FPT?
     /// Anderson Darling statistics
     public var AD: FPT?
@@ -310,7 +330,7 @@ public struct SSADTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConver
     public var variance: FPT?
     /// mean
     public var mean: FPT?
-    /// true iff pValue >= alpha
+    /// True if pValue >= alpha
     public var isNormal: Bool?
     
     /// Returns a description
@@ -347,11 +367,11 @@ public struct SSVarianceEqualityTestResult<FPT: SSFloatingPoint & Codable>: Cust
     public var cv99Pct: FPT?
     /// critical value for alpha as set by the call
     public var cvAlpha: FPT?
-    /// p value (= (1 - alpha)-quantile of testStatistic
+    /// p-value (= (1 - alpha)-quantile of test statistic)
     public var pValue: FPT?
     /// test statistic value
     public var testStatistic: FPT?
-    /// set to true iff pValue >= alpha
+    /// Set to true if pValue >= alpha
     public var equality: Bool?
     /// Test type
     public var testType: SSVarTestType?
@@ -378,13 +398,13 @@ public struct SSVarianceEqualityTestResult<FPT: SSFloatingPoint & Codable>: Cust
 
 /// Results of the two sample t-Test
 public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable  {
-    /// one sided p value for equal variances
+    /// one sided p-value for equal variances
     public var p1EQVAR: FPT?
-    /// one sided p value for unequal variances
+    /// one sided p-value for unequal variances
     public var p1UEQVAR: FPT?
-    /// two sided p value for equal variances
+    /// two sided p-value for equal variances
     public var p2EQVAR: FPT?
-    /// two sided p value for unequal variances
+    /// two sided p-value for unequal variances
     public var p2UEQVAR: FPT?
     /// mean of sample 1
     public var mean1: FPT?
@@ -436,9 +456,9 @@ public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomString
     public var tWelch: FPT?
     /// degrees of freedom according to Welch
     public var dfWelch: FPT?
-    /// two sided p value according to Welch
+    /// two sided p-value according to Welch
     public var p2Welch: FPT?
-    /// one sided p value according to Welch
+    /// one sided p-value according to Welch
     public var p1Welch: FPT?
     /// Returns a description
     public var description: String {
@@ -451,7 +471,7 @@ public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomString
                 descr.append("mean group 2: \(m2)\n")
                 descr.append("sample size group 1: \(n1)\n")
                 descr.append("sample size group 2: \(n2)\n")
-                descr.append("p value of Levene test: \(lev)\n")
+                descr.append("p-value of Levene test: \(lev)\n")
                 descr.append("sd group 1: \(sd1)\n")
                 descr.append("sd group 2: \(sd2)\n")
                 descr.append("pooled sd: \(psd)\n")
@@ -461,9 +481,9 @@ public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomString
                 descr.append("t value Welch: \(tw)\n")
                 descr.append("critical value for equal variances: \(cveq)\n")
                 descr.append("critical value for unequal variances: \(cvue)\n")
-                descr.append("one sided p value for equal variances: \(p1ev)\n")
-                descr.append("one sided p value for unequal variances: \(p1ue)\n")
-                descr.append("one sided p value (Welch): \(p1w)\n")
+                descr.append("one sided p-value for equal variances: \(p1ev)\n")
+                descr.append("one sided p-value for unequal variances: \(p1ue)\n")
+                descr.append("one sided p-value (Welch): \(p1w)\n")
                 descr.append("effect size for equal variances*: \(req)\n")
                 descr.append("effect size for unequal variances*: \(rueq)\n")
             }
@@ -474,9 +494,9 @@ public struct SS2SampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomString
 
 /// Struct holding the results of the one sample t test
 public struct SSOneSampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible,Codable  {
-    /// one sided p value
+    /// one sided p-value
     public var p1Value: FPT?
-    /// one sided p value
+    /// one sided p-value
     public var p2Value: FPT?
     /// t Value
     public var tStat: FPT?
@@ -526,23 +546,23 @@ public struct SSOneSampleTTestResult<FPT: SSFloatingPoint & Codable>: CustomStri
                 descr.append("critical value for alpha = 0.01: \(cv99)\n")
                 descr.append("critical value for alpha = 0.05: \(cv95)\n")
                 descr.append("critical value for alpha = 0.10: \(cv90)\n")
-                descr.append("one sided p value: \(p1)\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("one sided p-value: \(p1)\n")
+                descr.append("two sided p-value: \(p2)\n")
             }
             return descr
         }
     }
 }
 
-/// Encapsulates the results of a matched pairs t test
+/// Encapsulates the results of a matched-pairs t-test.
 public struct SSMatchedPairsTTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
     /// Cov
     public var covariance: FPT?
     /// standard error of the difference
     public var stdEDiff: FPT?
-    /// correlatiopn
+    /// correlation
     public var correlation: FPT?
-    /// p value of correlation
+    /// p-value of correlation
     public var pValueCorr: FPT?
     /// effect size
     public var effectSizeR: FPT?
@@ -554,7 +574,7 @@ public struct SSMatchedPairsTTestResult<FPT: SSFloatingPoint & Codable>: CustomS
     public var stdDevDiff: FPT?
     /// sample size
     public var sampleSize: FPT?
-    /// p value for two sided test
+    /// p-value for two sided test
     public var p2Value: FPT?
     /// degrees of freedom
     public var df: FPT?
@@ -571,14 +591,14 @@ public struct SSMatchedPairsTTestResult<FPT: SSFloatingPoint & Codable>: CustomS
                 descr.append("degrees of freedom: \(sdf)\n")
                 descr.append("covariance: \(cov)\n")
                 descr.append("correlation: \(corr)\n")
-                descr.append("correlation p value: \(pcorr)\n")
+                descr.append("correlation p-value: \(pcorr)\n")
                 descr.append("standard error of the differences: \(sted)\n")
                 descr.append("effect size r: \(r)\n")
                 descr.append("t value: \(t)\n")
                 descr.append("lower bound of ci 95%: \(ci95l)\n")
                 descr.append("upper bound of ci 95%: \(ci95u)\n")
-                descr.append("sd od differences: \(sddiff)\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("sd of differences: \(sddiff)\n")
+                descr.append("two sided p-value: \(p2)\n")
             }
             return descr
         }
@@ -593,17 +613,17 @@ public struct SSChiSquareVarianceTestResult<FPT: SSFloatingPoint & Codable>: Cus
     public var ratio: FPT?
     /// chi^2
     public var testStatisticValue: FPT?
-    /// one sided p value
+    /// one sided p-value
     public var p1Value: FPT?
-    /// two sided p value
+    /// two sided p-value
     public var p2Value: FPT?
     /// sample size
     public var sampleSize: FPT?
-    /// true iff sample variance == s0
+    /// True if sample variance == s0
     public var sigmaUEQs0: Bool?
-    /// true iff sample variance <= s0
+    /// True if sample variance <= s0
     public var sigmaLTEs0: Bool?
-    /// true iff sample variance >= s0
+    /// True if sample variance >= s0
     public var sigmaGTEs0: Bool?
     /// sample standard deviation
     public var sd: FPT?
@@ -619,28 +639,28 @@ public struct SSChiSquareVarianceTestResult<FPT: SSFloatingPoint & Codable>: Cus
                 descr.append("sd: \(ssd)\n")
                 descr.append("F ratio: \(fr)\n")
                 descr.append("f: \(f)\n")
-                descr.append("one sided p value: \(p1)\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("one sided p-value: \(p1)\n")
+                descr.append("two sided p-value: \(p2)\n")
             }
             return descr
         }
     }
 }
 
-/// Holds the results of the multiple means tes
+/// Holds the results of the multiple means test
 public struct SSOneWayANOVATestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
-    /// two sided p value
+    /// two sided p-value
     public var p2Value: FPT?
     /// F ratio
     public var FStatistic: FPT?
-    /// p value of the Bartlett test
+    /// p-value of the Bartlett test
     public var pBartlett: FPT?
     /// Alpha
     public var alpha: FPT?
     public var meansEQUAL: Bool?
     /// critical value at alpha
     public var cv: FPT?
-    /// p value of the Levene test
+    /// p-value of the Levene test
     public var pLevene: FPT?
     /// total sum of square
     public var SSTotal: FPT?
@@ -666,10 +686,10 @@ public struct SSOneWayANOVATestResult<FPT: SSFloatingPoint & Codable>: CustomStr
                 descr.append("MULTIPLE MEANS TEST\n")
                 descr.append("*******************\n")
                 descr.append("f: \(f)\n")
-                descr.append("p value Bartlett test: \(pB)\n")
-                descr.append("p value Levene test: \(pL)\n")
+                descr.append("p-value Bartlett test: \(pB)\n")
+                descr.append("p-value Levene test: \(pL)\n")
                 descr.append("critical value: \(cv)\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("two sided p-value: \(p2)\n")
                 descr.append("SS_total: \(SST)\n")
                 descr.append("SS_error: \(SSE)\n")
                 descr.append("SS_Treatment: \(SSF)\n")
@@ -700,9 +720,9 @@ public struct SSFTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvert
     public var variance2: FPT?
     /// F ratio
     public var FRatio: FPT?
-    /// one sided p value
+    /// one sided p-value
     public var p1Value: FPT?
-    /// two sided p value
+    /// two sided p-value
     public var p2Value: FPT?
     /// indicates if variances are equal
     public var FRatioEQ1: Bool?
@@ -710,11 +730,11 @@ public struct SSFTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvert
     public var FRatioLTE1: Bool?
     /// indicates if var1 >= var2
     public var FRatioGTE1: Bool?
-    /// confidence intervall for var1 == var2
+    /// confidence interval for var1 == var2
     public var ciRatioEQ1: SSConfIntv<FPT>?
-    /// confidence intervall for var1 <= var2
+    /// confidence interval for var1 <= var2
     public var ciRatioLTE1: SSConfIntv<FPT>?
-    /// confidence intervall for var1 >= var2
+    /// confidence interval for var1 >= var2
     public var ciRatioGTE1: SSConfIntv<FPT>?
     /// Returns a description
     public var description: String {
@@ -730,8 +750,8 @@ public struct SSFTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvert
                 descr.append("F ratio: \(f)\n")
                 descr.append("denominator df: \(dfden)\n")
                 descr.append("numerator df: \(dfnum)\n")
-                descr.append("one sided p value: \(p1)\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("one sided p-value: \(p1)\n")
+                descr.append("two sided p-value: \(p2)\n")
                 descr.append("(1 - alpha)-CI for var1 = var2 \(cieq)\n")
                 descr.append("(1 - alpha)-CI for var1 <= var1 \(clt)\n")
                 descr.append("(1 - alpha)-CI for var1 >= var2 \(cig)\n")
@@ -764,7 +784,7 @@ public struct SSBoxLjungResult<FPT: SSFloatingPoint & Codable>: CustomStringConv
                 descr.append("Bartlett standard error: \(seB)\n")
                 descr.append("White noise standard error: \(sew)\n")
                 descr.append("Box-Ljung statistics: \(stats)\n")
-                descr.append("p values: \(p)\n")
+                descr.append("p-values: \(p)\n")
             }
             return descr
         }
@@ -784,9 +804,9 @@ public struct SSRunsTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConv
     public var zStat: FPT?
     /// critical value
     public var criticalValue: FPT?
-    /// p value
+    /// p-value
     public var pValueExact: FPT?
-    /// p value asymptotic
+    /// p-value asymptotic
     public var pValueAsymp: FPT?
     // cutting point used
     public var cp: FPT?
@@ -807,8 +827,8 @@ public struct SSRunsTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConv
                 descr.append("number of values < cutting point: \(nl)\n")
                 descr.append("number of runs: \(runs)\n")
                 descr.append("z: \(z)\n")
-                descr.append("exact p value: \(pe)\n")
-                descr.append("asymp. p value: \(pa)\n")
+                descr.append("exact p-value: \(pe)\n")
+                descr.append("asymp. p-value: \(pa)\n")
                 descr.append("differenes: \(d)\n")
             }
             return descr
@@ -836,13 +856,13 @@ public struct SSMannWhitneyUTestResult<FPT: SSFloatingPoint & Codable>: CustomSt
     public var WilcoxonW: FPT?
     /// Z
     public var zStat: FPT?
-    /// two sided approximated p value
+    /// two sided approximated p-value
     public var p2Approx: FPT?
-    /// two sided exact p value
+    /// two sided exact p-value
     public var p2Exact: FPT?
-    /// one sided approximated p value
+    /// one sided approximated p-value
     public var p1Approx: FPT?
-    /// one sided exact p value
+    /// one sided exact p-value
     public var p1Exact: FPT?
     /// effect size
     public var effectSize: FPT?
@@ -856,10 +876,10 @@ public struct SSMannWhitneyUTestResult<FPT: SSFloatingPoint & Codable>: CustomSt
                 descr.append("Mann-Whitney U: \(U)\n")
                 descr.append("Wilcoxon W: \(W)\n")
                 descr.append("z: \(z)\n")
-                descr.append("one sided exact p value: \(p1e)\n")
-                descr.append("two sided exact p value: \(p2e)\n")
-                descr.append("one sided asymp. p value: \(p1a)\n")
-                descr.append("two sided asymp. p value: \(p2a)\n")
+                descr.append("one sided exact p-value: \(p1e)\n")
+                descr.append("two sided exact p-value: \(p2e)\n")
+                descr.append("one sided asymp. p-value: \(p1a)\n")
+                descr.append("two sided asymp. p-value: \(p2a)\n")
                 descr.append("sum ranks group 1: \(sr1)\n")
                 descr.append("sum ranks group 2: \(sr2)\n")
                 descr.append("mean rank group 1: \(mr1)\n")
@@ -876,7 +896,7 @@ public struct SSMannWhitneyUTestResult<FPT: SSFloatingPoint & Codable>: CustomSt
 
 /// Holds the results of the Wilcoxon test for matched pairs
 public struct SSWilcoxonMatchedPairsTestResult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
-    /// two sided p value
+    /// two sided p-value
     public var p2Value: FPT?
     /// sample size
     public var sampleSize: FPT?
@@ -907,7 +927,7 @@ public struct SSWilcoxonMatchedPairsTestResult<FPT: SSFloatingPoint & Codable>: 
             if let p2 = self.p2Value, let n = self.sampleSize, let np = self.nPosRanks, let nn = self.nNegRanks, let nt = self.nTies, let nz = self.nZeroDiff, let snr = self.sumNegRanks, let spr = self.sumPosRanks, let mpr = self.meanPosRanks, let mnr = self.meanNegRanks, let z = self.zStat, let dc = self.dCohen {
                 descr.append("WILCOXON TEST FOR MATCHED PAIRS\n")
                 descr.append("*******************************\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("two sided p-value: \(p2)\n")
                 descr.append("z: \(z)\n")
                 descr.append("Cohen's d: \(dc)\n")
                 descr.append("sample size: \(n)\n")
@@ -927,9 +947,9 @@ public struct SSWilcoxonMatchedPairsTestResult<FPT: SSFloatingPoint & Codable>: 
 }
 /// Sign test results
 public struct SSSignTestRestult<FPT: SSFloatingPoint & Codable>: CustomStringConvertible, Codable {
-    /// exact p value
+    /// exact p-value
     public var pValueExact: FPT?
-    /// asymptotic p value
+    /// asymptotic p-value
     public var pValueApprox: FPT?
     /// number of differences > 0
     public var nPosDiff: Int?
@@ -948,8 +968,8 @@ public struct SSSignTestRestult<FPT: SSFloatingPoint & Codable>: CustomStringCon
             if let pe = self.pValueExact, let pa = self.pValueApprox, let np = self.nPosDiff, let nn = self.nNegDiff, let nt = self.nTies, let n = self.total, let z = self.zStat {
                 descr.append("SIGN TEST\n")
                 descr.append("*********\n")
-                descr.append("p value exaxt: \(pe)\n")
-                descr.append("p value asymp: \(pa)\n")
+                descr.append("p-value exact: \(pe)\n")
+                descr.append("p-value asymp: \(pa)\n")
                 descr.append("z: \(z)\n")
                 descr.append("count of \"+\": \(np)\n")
                 descr.append("count of \"-\": \(nn)\n")
@@ -970,7 +990,7 @@ public struct SSBinomialTestResult<T, FPT: SSFloatingPoint>: CustomStringConvert
     public var nSuccess: Int?
     /// number of failures
     public var nFailure: Int?
-    /// one sided p value (exact)
+    /// one-sided p-value (exact)
     public var pValueExact: FPT?
     /// probability for success
     public var probSuccess: FPT?
@@ -991,7 +1011,7 @@ public struct SSBinomialTestResult<T, FPT: SSFloatingPoint>: CustomStringConvert
             if let nt = self.nTrials, let ns = self.nSuccess, let nf = self.nFailure, let pe = self.pValueExact, let ps = self.probSuccess, let pf = self.probFailure, let pt = self.probTest, let sc = self.successCode, let jeff = self.confIntJeffreys, let clopper = self.confIntClopperPearson {
                 descr.append("BINOMIAL TEST\n")
                 descr.append("*************\n")
-                descr.append("p value exaxt: \(pe)\n")
+                descr.append("p-value exact: \(pe)\n")
                 descr.append("count of trials: \(nt)\n")
                 descr.append("count of successes: \(ns)\n")
                 descr.append("count of failures: \(nf)\n")
@@ -1030,7 +1050,7 @@ public struct SSKSTwoSampleTestResult<FPT: SSFloatingPoint & Codable>: CustomStr
             if let dmp = self.dMaxPos, let dmn = self.dMaxNeg, let dma = self.dMaxAbs, let z = self.zStatistic, let p2 = self.p2Value, let n1 = self.sampleSize1, let n2 = self.sampleSize2 {
                 descr.append("KOLMOGOROV-SMIRNOV TWO SAMPLE TEST\n")
                 descr.append("**********************************\n")
-                descr.append("two sided p value: \(p2)\n")
+                descr.append("two sided p-value: \(p2)\n")
                 descr.append("z: \(z)\n")
                 descr.append("n1: \(n1)\n")
                 descr.append("n1: \(n2)\n")
@@ -1052,9 +1072,9 @@ public struct SSWaldWolfowitzTwoSampleTestResult<FPT: SSFloatingPoint & Codable>
     public var zStat: FPT?
     // critical value
     //    public var criticalValue: FPT?
-    /// p value
+    /// p-value
     public var pValueExact: FPT?
-    /// p value asymptotic
+    /// p-value asymptotic
     public var pValueAsymp: FPT?
     /// mean
     public var mean: FPT?
@@ -1075,8 +1095,8 @@ public struct SSWaldWolfowitzTwoSampleTestResult<FPT: SSFloatingPoint & Codable>
             if let nr = self.nRuns, let z = self.zStat, let pe = self.pValueExact, let pa = self.pValueAsymp, let m = self.mean, let v = self.variance, let n1 = self.sampleSize1, let n2 = self.sampleSize2, let nt = self.nTiesIntergroup, let tc = self.nTiedCases {
                 descr.append("WALD-WOLFOWITZ TWO SAMPLE TEST\n")
                 descr.append("******************************\n")
-                descr.append("p value exact: \(pe)\n")
-                descr.append("p value asymp: \(pa)\n")
+                descr.append("p-value exact: \(pe)\n")
+                descr.append("p-value asymp: \(pa)\n")
                 descr.append("z: \(z)\n")
                 descr.append("n1: \(n1)\n")
                 descr.append("n1: \(n2)\n")
@@ -1097,7 +1117,7 @@ public struct SSKruskalWallisHTestResult<FPT: SSFloatingPoint & Codable>: Custom
     public var H_value: FPT?
     /// Chi square corrected for ties
     public var H_value_corrected: FPT?
-    /// one sided p value
+    /// one sided p-value
     public var pValue: FPT?
     /// number of Groups
     public var nGroups: Int?
@@ -1122,7 +1142,7 @@ public struct SSKruskalWallisHTestResult<FPT: SSFloatingPoint & Codable>: Custom
             if let chi = self.H_value, let chic = self.H_value_corrected, let p = self.pValue, let ng = self.nGroups, let sdf = self.df, let no = self.nObservations, let mr = self.meanRanks, let sr = self.sumRanks, let scv = self.cv, let a = self.alpha, let nt = self.nTies {
                 descr.append("KRUSKAL-WALLIS H TEST\n")
                 descr.append("***************** ***\n")
-                descr.append("p value: \(p)\n")
+                descr.append("p-value: \(p)\n")
                 descr.append("critical value: \(scv)\n")
                 descr.append("Chi square: \(chi)\n")
                 descr.append("Chi square corrected for ties: \(chic)\n")
@@ -1614,17 +1634,6 @@ public enum SSIncompleteGammaFunction: Int, Codable, CustomStringConvertible {
 
 /// A tuple containing the results of one out of multiple comparisons.
 public typealias SSPostHocTestResult<FPT: SSFloatingPoint & Codable> = (row: String, meanDiff: FPT, testStat: FPT, pValue: FPT, testType: SSPostHocTestType)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

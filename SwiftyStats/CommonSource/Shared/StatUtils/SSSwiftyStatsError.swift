@@ -37,19 +37,19 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
     public enum ErrorType: Int {
         /// No error
         case none
-        /// Invalid argments
+        /// Invalid arguments
         case invalidArgument
         /// Index out of range
         case indexOutOfRange
-        /// Row-Index out of range
+        /// Row index out of range
         case rowIndexOutOfRange
-        /// Column-Index out of range
+        /// Column index out of range
         case columnIndexOutOfRange
-        /// Row-name unknown
+        /// Row name unknown
         case unknownRowName
         /// Column name unknown
         case unknownColumnName
-        /// Function called is not available for the parameter given
+        /// Function called is not available for the parameter(s) given
         case functionNotDefinedInDomainProvided
         /// Missing data
         case missingData
@@ -57,11 +57,11 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case wrongDataFormat
         /// Size mismatch
         case sizeMismatch
-        /// Max. Iteration count reached
+        /// Maximum iteration count reached
         case maxNumberOfIterationReached
-        /// Only available for numerical elements
+        /// Only available for numeric elements
         case availableOnlyForNumbers
-        /// Posix error
+        /// POSIX error
         case posixError
         /// File not accessible
         case fileNotWriteable
@@ -73,11 +73,11 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case fileExists
         /// Can't create object
         case errorCreatingObject
-        /// internal error - contact developer
+        /// Internal error — contact the developer
         case internalError
-        /// singularity
+        /// Singularity
         case singularity
-        /// number to big (hypergeometricPFQ)
+        /// Number too big (hypergeometricPFQ)
         case maxExponentExceeded
     }
     
@@ -112,9 +112,9 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case .posixError:
             return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotWriteable:
-            return "File not writeable error in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileExists:
-            return "File not writeable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .directoryDoesNotExist:
             return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotFound:
@@ -162,9 +162,9 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case .posixError:
             return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotWriteable:
-            return "File not writeable error in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileExists:
-            return "File not writeable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .directoryDoesNotExist:
             return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotFound:

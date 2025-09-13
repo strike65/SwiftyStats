@@ -41,7 +41,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -63,7 +63,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be smaller than upper bound", log: .log_stat, type: .error)
+                    os_log("mode parameter c is expected to be less than upper bound", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -126,7 +126,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -148,7 +148,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be smaller than upper bound", log: .log_stat, type: .error)
+                    os_log("mode parameter c is expected to be less than upper bound", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -192,7 +192,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -214,7 +214,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be smaller than upper bound", log: .log_stat, type: .error)
+                    os_log("mode parameter c is expected to be less than upper bound", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -260,7 +260,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -322,7 +322,7 @@ extension SSProbDist {
             }
         }
         
-        // MARK: TRIANGULAR with two params
+        // MARK: TRIANGULAR with two parameters
         
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Triangular distribution.
         /// - Parameter a: Lower bound
@@ -333,7 +333,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -360,7 +360,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -380,7 +380,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -400,7 +400,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -423,4 +423,3 @@ extension SSProbDist {
         
     }
 }
-

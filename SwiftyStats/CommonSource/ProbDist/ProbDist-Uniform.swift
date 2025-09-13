@@ -38,7 +38,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -66,7 +66,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -91,7 +91,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -109,7 +109,7 @@ extension SSProbDist {
             }
         }
         
-        /// Returns the cdf of the Uniform distribution.
+        /// Returns the quantile of the Uniform distribution.
         /// - Parameter x: x
         /// - Parameter a: Lower bound
         /// - Parameter b: Upper bound
@@ -119,7 +119,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be greater than upper bound b", log: .log_stat, type: .error)
+                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -142,4 +142,3 @@ extension SSProbDist {
         
     }
 }
-

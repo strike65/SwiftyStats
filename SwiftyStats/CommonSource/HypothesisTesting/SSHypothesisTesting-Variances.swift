@@ -523,7 +523,7 @@ extension SSHypothesisTesting {
     /// - Parameter data1: Data as Array<Numeric>
     /// - Parameter data1: Data as Array<Numeric>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff data1.sampleSize < 2 || data1.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError if data1.sampleSize < 2 or data1.sampleSize < 2
     public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
@@ -559,7 +559,7 @@ extension SSHypothesisTesting {
     /// - Parameter sample1: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter sample2: Data as SSExamine<Numeric, SSFloatingPoint>
     /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError iff sample1.sampleSize < 2 || sample1.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError if sample1.sampleSize < 2 or sample1.sampleSize < 2
     public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)

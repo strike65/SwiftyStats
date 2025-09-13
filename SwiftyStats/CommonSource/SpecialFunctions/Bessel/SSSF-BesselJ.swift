@@ -31,7 +31,9 @@
  * except YP, YQ which are designed for absolute error. */
 
 import Foundation
+#if os(macOS) || os(iOS)
 import os.log
+#endif
 
 
 extension SSSpecialFunctions {

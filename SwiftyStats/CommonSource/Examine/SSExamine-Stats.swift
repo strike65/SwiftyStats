@@ -38,7 +38,7 @@ extension SSExamine {
         }
     }
     
-    /// Sum over all squared elements. Returns Double.nan iff data are non-numeric.
+    /// Sum over all squared elements. Returns `Double.nan` if data are non-numeric.
     public var squareTotal: FPT  {
         if isNotEmptyAndNumeric {
             var s: FPT = 0
@@ -81,7 +81,7 @@ extension SSExamine {
         }
     }
     
-    /// Total of all elements. Returns Double.nan iff data are non-numeric.
+    /// Total of all elements. Returns `Double.nan` if data are non-numeric.
     public var total: FPT? {
         if isNotEmptyAndNumeric {
             var s: FPT = 0
@@ -191,7 +191,7 @@ extension SSExamine {
     }
     
     
-    /// Arithemtic mean. Will be Double.nan for non-numeric data.
+    /// Arithmetic mean. Returns `Double.nan` for non-numeric data.
     public var arithmeticMean: FPT? {
         if isNotEmptyAndNumeric {
             return self.total! /  Helpers.makeFP(self.sampleSize)
@@ -224,7 +224,7 @@ extension SSExamine {
         }
     }
     
-    /// An arrayof the most common item(s). Same as mode. nil for empty tables.
+    /// An array of the most common item(s). Same as `mode`. Nil for empty tables.
     public var commonest: Array<SSElement>? {
         return mode
     }
@@ -252,7 +252,7 @@ extension SSExamine {
     }
     
     /// Returns the q-quantile.
-    /// - Throws: SSSwiftyStatsError.invalidArgument if data are non-numeric and/or if 0 < q >=1
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if data are non-numeric or if `q` is not in (0, 1).
     public func quantile(q: FPT) throws -> FPT? {
         if q.isZero || q < 0 || q >= 1 {
             #if os(macOS) || os(iOS)
@@ -1043,7 +1043,7 @@ extension SSExamine {
         }
     }
     
-    /// Returns the median absolute deviation around the reference point given (`rp`). If you would like to know the median absoulute deviation from the median, you can do so by setting the reference point to the median
+    /// Returns the median absolute deviation around the reference point given (`rp`). If you would like to know the median absolute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     /// - Parameter scaleFactor: Used for consistency reasons. If nil, the default value will be used.
     /// ### Note ###
@@ -1082,7 +1082,7 @@ extension SSExamine {
         return cf * result
     }
     
-    /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absoulute deviation from the median, you can do so by setting the reference point to the median
+    /// Returns the mean absolute deviation around the reference point given. If you would like to know the mean absolute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
     public func meanAbsoluteDeviation(center rp: FPT) -> FPT? {
         if !isNotEmptyAndNumeric || rp.isNaN {

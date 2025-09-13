@@ -1,3 +1,11 @@
+Version 1.2.0
+- update: thread-safe lgamma1-function
+- update: Swift 6
+- update: standardized "p-value" wording across descriptions and docs
+- update: improved public API doc comments (SpecialFunctions, Integrator, distributions)
+- update: README and index with docs generation steps and corrected examples
+- fixed: minor typos and formatting
+
 Version 1.1.8
 - fixed: typos
 
@@ -64,7 +72,7 @@ Version 1.0.0
 - added: Rayleigh distribution
 - added: Extreme Value distribution
 - added: Gastwirth's robust location estimator
-- added: Sn statistiscs according Christophe Croux and Peter Rousseeuw
+- added: Sn statistics according Christophe Croux and Peter Rousseeuw
 - added: tss (Total Sum of Squares about the mean)
 - added: SSExamine.autocorrelation
 - added: Marcum Functions (parameters behave like Mathematica MarcumQ)
@@ -96,11 +104,11 @@ Version 0.8.12
 - FIXED: normalized gamma P setting converged.pointee
 - FIXED: kurtosis gamma distribution
 - FIXED: Erlang distribution
-- FIXED: Weibull dustribution
+- FIXED: Weibull distribution
 - FIXED: 3 Param Triangular CDF
 
 Version 0.8.11
-- uodate README.md
+- update README.md
 - FIXED: quantileChiSquare (edge cases)
 - added: more tests
 - fixed: Beta Distribution (edge cases)
@@ -128,4 +136,3 @@ Version 0.8.7
 -- added support for Linux
 - probability functions now "free" functions
 - added: noncentral T Distribution
-

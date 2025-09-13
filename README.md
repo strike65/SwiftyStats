@@ -1,16 +1,30 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.1.7-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.0-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
+To regenerate the API documentation with DocC (xcodebuild):
+
+```bash
+bash SwiftyStats/make_doc.sh             # for GitHub Pages (base path 'SwiftyStats')
+# or for local preview without a base path prefix
+bash SwiftyStats/make_doc.sh local
+```
+Requires Xcode 13.3+ with DocC support. The script builds a .doccarchive via `xcodebuild docbuild` and converts it for static hosting using `xcrun docc`, emitting static docs into `./docs`.
+
+Local preview tips:
+- If you used `make_doc.sh local`, serve `./docs` and open http://localhost:8000/documentation/swiftystats
+- If you used the default base path, serve `./docs` and open http://localhost:8000/SwiftyStats/documentation/swiftystats
+
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
-# New in version 1.1.7
-* some less typos
-* parameters for Poisson and Binomial distribution
-* refactoring
+# New in version 1.2.0
+* Standardized terminology: use “p-value” consistently across runtime descriptions and docs
+* Improved public API doc comments (SpecialFunctions, Integrator, distributions)
+* README and index updates: docs generation instructions, corrected examples, clarified `make test`
+* General refactoring and minor typo fixes
 
 # Important
 
@@ -37,12 +51,12 @@ There are several extensions to standard Swift types (`Array`, Floating point ty
 The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
-> * SwiftyStatsTests (Testsuite)
+> * SwiftyStatsTests (Test suite)
 > * SwiftStatsCLTest (a command line demo)
 
 *Each target must be built individually (i.e. no dependencies are defined)!*
 
-In addition a Playground is added to
+In addition, a Playground is added to
 > * test the framework and 
 > * do prototyping
 
@@ -57,7 +71,7 @@ Due to the extensive support of generic types, the type checker runs hot and tak
 $> cd <YOUR_PROJECT_FOLDER>
 $> vi Podfile
 ```
-Your Podfile should looks like:  
+Your Podfile should look like:
 
 ```ruby
 target 'YOURPROJECT' do
@@ -87,7 +101,7 @@ Edit your `Package.swift` file:
 ```swift
 import PackageDescription
 // for Swift 5
-let version = "1.1.6"
+let version = "1.2.0"
 // for earlier versions:
 // let version = "1.1.1"
 let package = Package(
@@ -108,7 +122,7 @@ For more information about the Swift Package Manager click [here](https://github
 
 * `make` or `make debug` builds the module in debug-configuration
 * `make release` builds the module in release-configuration
-* `make test` builds the module and performs some tests
+* `make test` builds the module, copies test resources, and runs the test suite
 * `make clean` resets the build-process
 
 # Tests
@@ -120,16 +134,16 @@ The integrated test suite uses numerical data for comparison with the results ca
 import SwiftyStats
 
 // example data
-let data: Array<Double> = [3.14,1.21,5.6]
+let data: [Double] = [3.14, 1.21, 5.6]
 // because our data are double valued items, the parameter "characterSet" is ignored
-let test = SSExamine<Double, Double>.init(withObject: data, levelOfMeasurement: .interval, characterSet: nil)
+let test = try! SSExamine<Double, Double>(withObject: data, levelOfMeasurement: .interval, name: nil, characterSet: nil)
 // prints out the arithmetic mean
 print("\(test.arithmeticMean)")
 // you can use the class to analyze strings too:
 let testString = "This string must be analyzed!"
 // in this case, only characters contained in CharacterSet.alphanumerics are added
-let stringAnalyze = VTExamine<String>(withObject: data, levelOfMeasurement: .nominal, characterSet: CharacterSet.alphanumerics)
-print("\(stringAnalyze.frequency("i")")
+let stringAnalyze = try! SSExamine<String, Double>(withObject: testString, levelOfMeasurement: .nominal, name: nil, characterSet: CharacterSet.alphanumerics)
+print("\(stringAnalyze.frequency("i"))")
 // print out the 95% quantile of the Student T distribution
 do {
 let q = try SSProbDist.StudentT.quantile(p: 0.95, degreesOfFreedom: 21)
@@ -147,6 +161,11 @@ Probability distributions in general are defined within relatively narrow condit
 * para: returns a `SSProbDistParams` struct (`mean`, `variance`, `skewness`, `kurtosis`)
 
 > **Please always check if `NaN` or `nil` is returned.** 
+
+### Conventions
+
+- Public probability distribution APIs follow a consistent naming scheme: `cdf`, `pdf`, `quantile`, and `para` (parameters).
+- Statistical terminology follows common usage. For example, we consistently use the hyphenated form “p-value” in logs, result descriptions, and docs.
 
 ### Obtainable Statistics (more to come)
 
@@ -279,7 +298,7 @@ Probability distributions in general are defined within relatively narrow condit
 * STUDENT's T
 * NON-CENTRAL T-DISTRIBUTION
 * TRIANGULAR
-* TRIANGULAR with two params
+* TRIANGULAR with two parameters
 * UNIFORM
 * Wald / Inverse Normal
 * Weibull
@@ -345,5 +364,4 @@ Probability distributions in general are defined within relatively narrow condit
 # LICENSE
 This framework is published under the [GNU GPL 3](http://www.gnu.org/licenses/)
 
-Copyright 2017 - 2020 strike65
-
+Copyright 2017 - 2025 strike65

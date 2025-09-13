@@ -24,12 +24,11 @@
  */
 
  /*
- Some numerical constants computed by Mathematica (R). Originaly defined for ObjC version of the framework
+ Some numerical constants computed by Mathematica (and R). Originally defined for the Objective‑C version of the framework.
  */
 
-/// The extension for archives
+/// The filename extension used for archives.
 internal let SSExamineFileExtension = "SSExamine"
 
-/// The current file version for archiving
+/// The current archive file version string.
 internal let SSStatisticsFileVersionString: String = "1.1.6"
-

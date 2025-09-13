@@ -51,7 +51,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("denominator degrees of freedom expected to be > 0", log: .log_stat, type: .error)
+                    os_log("denominator degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -237,7 +237,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("denominator degrees of freedom expected to be > 0", log: .log_stat, type: .error)
+                    os_log("denominator degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -329,7 +329,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("denominator degrees of freedom expected to be > 0", log: .log_stat, type: .error)
+                    os_log("denominator degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -485,7 +485,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("denominator degrees of freedom expected to be > 0", log: .log_stat, type: .error)
+                    os_log("denominator degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -572,5 +572,4 @@ extension SSProbDist {
         }
     }
 }
-
 

@@ -31,15 +31,15 @@ extension SSProbDist {
     public enum Erlang {
         
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Erlang distribution.
-        /// - Parameter a: Shape parameter
-        /// - Parameter b: Scale parameter
-        /// - Throws: SSSwiftyStatsError if a <= 0
+        /// - Parameter k: Shape parameter (integer)
+        /// - Parameter lambda: Rate parameter (> 0)
+        /// - Throws: SSSwiftyStatsError if k == 0 or lambda <= 0
         public static func para<FPT: SSFloatingPoint & Codable>(shape k: UInt, rate lambda: FPT) throws -> SSProbDistParams<FPT> {
             if (k == 0) {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("shape parameter k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -50,7 +50,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("rate parameter lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -67,16 +67,16 @@ extension SSProbDist {
         
         
         /// Returns the pdf of the Erlang distribution.
-        /// - Parameter x: x
-        /// - Parameter a: Shape parameter
-        /// - Parameter b: Scale parameter
-        /// - Throws: SSSwiftyStatsError if a <= 0
+        /// - Parameter x: Value at which to evaluate the pdf
+        /// - Parameter k: Shape parameter (integer)
+        /// - Parameter lambda: Rate parameter (> 0)
+        /// - Throws: SSSwiftyStatsError if k == 0 or lambda <= 0
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, shape k: UInt, rate lambda: FPT) throws -> FPT {
             if (k == 0) {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("shape parameter k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -87,7 +87,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("rate parameter lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -108,16 +108,16 @@ extension SSProbDist {
         }
         
         /// Returns the cdf of the Erlang distribution.
-        /// - Parameter x: x
-        /// - Parameter a: Shape parameter
-        /// - Parameter b: Scale parameter
-        /// - Throws: SSSwiftyStatsError if a <= 0
+        /// - Parameter x: Value at which to evaluate the cdf
+        /// - Parameter k: Shape parameter (integer)
+        /// - Parameter lambda: Rate parameter (> 0)
+        /// - Throws: SSSwiftyStatsError if k == 0 or lambda <= 0
         public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, shape k: UInt, rate lambda: FPT) throws -> FPT {
             if (k == 0) {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("shape parameter k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -128,7 +128,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("rate parameter lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -157,16 +157,16 @@ extension SSProbDist {
         }
         
         /// Returns the quantile of the Erlang distribution.
-        /// - Parameter p: p
-        /// - Parameter a: Shape parameter
-        /// - Parameter b: Scale parameter
-        /// - Throws: SSSwiftyStatsError if a <= 0 || p < 0 || p > 1
+        /// - Parameter p: Probability in [0, 1]
+        /// - Parameter k: Shape parameter (integer)
+        /// - Parameter lambda: Rate parameter (> 0)
+        /// - Throws: SSSwiftyStatsError if k == 0 or lambda <= 0, or if p is outside [0, 1]
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, shape k: UInt!, rate lambda: FPT) throws -> FPT {
             if (k == 0) {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("shape parameter k is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -177,7 +177,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    os_log("rate parameter lambda is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -243,5 +243,3 @@ extension SSProbDist {
         }
     }
 }
-
-

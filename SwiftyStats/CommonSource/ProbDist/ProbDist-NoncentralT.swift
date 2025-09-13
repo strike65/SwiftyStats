@@ -21,8 +21,14 @@
  */
 
 import Foundation
+#if canImport(Accelerate)
 import Accelerate.vecLib.LinearAlgebra
+#endif
+#if os(macOS) || os(iOS)
 import os.log
+#endif
+// LAPACK integer type is available when Accelerate is present
+#if canImport(Accelerate)
 public typealias LAPACKInt = __LAPACK_int
 /*
 #if ACCELERATE_LAPACK_ILP64
@@ -41,6 +47,7 @@ public typealias LAPACKInt = Int32    // LP64  (32-bit Indizes)
      dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info)
      return info
  }
+#endif
 extension SSProbDist {
     /// Non central Student T distribution
     public enum NonCentralSudentT {
@@ -921,5 +928,4 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
         return ([FPT.nan],[FPT.nan],[FPT.nan],[])
     }
 }
-
 

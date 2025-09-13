@@ -20,20 +20,20 @@
 import Foundation
 
 
-/// Provides commonly used special functions
+/// Provides commonly used special functions.
 internal enum SSSpecialFunctions {
     enum Helper {
     }
 }
-/// Internal Helper functions
+/// Internal helper functions.
 internal enum Helpers {
 }
-/// Internal math
+/// Internal math utilities.
 internal enum SSMath {
 }
-/// Provides often used/needed statistical tests
+/// Provides commonly used statistical tests.
 public enum SSHypothesisTesting {
 }
-/// Provides often used/needed probabibilty functions (cdf, pdf, quantile...)
+/// Provides commonly used probability functions (CDF, PDF, quantile, etc.).
 public enum SSProbDist {
 }

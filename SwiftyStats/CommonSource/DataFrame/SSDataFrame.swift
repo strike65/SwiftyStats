@@ -89,10 +89,10 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     }
     #if os(macOS) || os(iOS)
 //    @available(macOS 10.12, iOS 10, *)
-    /// Saves the dataframe to filePath using JSONEncoder
-    /// - Parameter path: The full qualified filename.
-    /// - Parameter overwrite: If true, file will be overwritten.
-    /// - Throws: SSSwiftyStatsError.posixError (file can't be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
+    /// Saves the dataframe to `filePath` using `JSONEncoder`.
+    /// - Parameter path: The fully qualified filename.
+    /// - Parameter overwrite: If true, the file will be overwritten.
+    /// - Throws: `SSSwiftyStatsError.posixError` (file can't be removed), `SSSwiftyStatsError.directoryDoesNotExist`, `SSSwiftyStatsError.fileNotReadable`.
     public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
@@ -102,7 +102,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             if !isDir.boolValue || path.count == 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("No writeable path found", log: .log_fs ,type: .error)
+                    os_log("No writable path found", log: .log_fs ,type: .error)
                 }
                 #endif
                 throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
@@ -165,9 +165,9 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     }
 
 //    @available(macOS 10.10, iOS 10, *)
-    /// Initializes a new dataframe from an archive saved by archiveTo(filePath path:overwrite:).
-    /// - Parameter path: The full qualified filename.
-    /// - Throws: SSSwiftyStatError.fileNotReadable
+    /// Initializes a new dataframe from an archive saved by `archiveTo(filePath:overwrite:)`.
+    /// - Parameter path: The fully qualified filename.
+    /// - Throws: `SSSwiftyStatsError.fileNotReadable`.
     public class func unarchiveFrom(filePath path: String!) throws -> SSDataFrame<SSElement, FPT>? {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath

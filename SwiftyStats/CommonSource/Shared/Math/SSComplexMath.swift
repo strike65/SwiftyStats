@@ -20,17 +20,21 @@ GNU General Public License for more details.
 import Foundation
 
 extension SSMath {
+    /// Complex-valued elementary functions.
     internal enum ComplexMath {
+        /// Rounds the real and imaginary parts to the nearest integral value.
         internal static func round<T: SSComplexFloatElement>(_ z: Complex<T>) -> Complex<T> {
             return Complex<T>.init(re: Darwin.round(z.re), im: Darwin.round(z.im))
         }
         
+        /// Complex exponential eᶻ.
         internal static func exp<T: SSComplexFloatElement>(_ z: Complex<T>) -> Complex<T> {
             let r = SSMath.exp1(z.re)
             let a = z.im
             return Complex<T>.init(re: r * SSMath.cos1(a), im: r * SSMath.sin1(a))
         }
         
+        /// Real exponential embedded as a complex with zero imaginary part.
         internal static func exp<T: SSComplexFloatElement>(_ x: T) -> Complex<T> {
             return  Complex<T>.init(SSMath.exp1(x))
         }

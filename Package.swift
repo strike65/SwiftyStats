@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,6 +6,10 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftyStats",
+    platforms: [
+        .iOS(.v13),
+        .macOS(.v10_15)
+    ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -13,8 +17,8 @@ let package = Package(
             targets: ["SwiftyStats"]),
         ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        // DocC plugin for documentation generation
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
     ],
     
     targets: [
@@ -30,7 +34,7 @@ let package = Package(
             path: "./SwiftyStats/CommonTests")
     ]
     ,
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v6]
 )
 
-let version = Version("1.1.7")
+let version = Version("1.2.0")

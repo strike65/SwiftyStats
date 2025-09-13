@@ -27,8 +27,8 @@ import Foundation
 import os.log
 #endif
 
-/// Implenets some of the more often used non-parametreic test.
-/// Non-parametric tests are constructed to analyze data, which are not unederlying a speiciic ditrisbution.
+/// Implements commonly used non‑parametric tests.
+/// Non‑parametric tests analyze data without assuming a specific underlying distribution.
 extension SSHypothesisTesting {
 
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
@@ -37,7 +37,7 @@ extension SSHypothesisTesting {
     /// Calls ksGoFTest(data: Array<FloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter array: Array<FloatingPoint>
     /// - Parameter targetDistribution: Distribution to test for
-    /// - Returns: SSKSTestResul struct
+    /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
@@ -67,7 +67,7 @@ extension SSHypothesisTesting {
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter array: Array<FloatingPoint>
     /// - Parameter targetDistribution: Distribution to test for
-    /// - Returns: SSKSTestResul struct
+    /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         if array.count >= 2 {
@@ -99,7 +99,7 @@ extension SSHypothesisTesting {
     /// Calls ksGoFTest(data: SSExamine<Numeric, SSFloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter data: Array<FloatingPoint>
     /// - Parameter targetDistribution: Distribution to test for
-    /// - Returns: SSKSTestResul struct
+    /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
         do {
@@ -679,7 +679,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1 as Array<T>
     /// - Parameter set2: Observations of group2 as Array<T>
     /// - Returns: SSMannWhitneyUTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func mannWhitneyUTest<T, FPT>(set1: Array<T>, set2: Array<T>)  throws -> SSMannWhitneyUTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -717,7 +717,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations of group1
     /// - Parameter set2: Observations of group2
     /// - Returns: SSMannWhitneyUTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func mannWhitneyUTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>)  throws -> SSMannWhitneyUTestResult<FPT>  where T: Comparable, T: Hashable, T: Codable, FPT: Codable, FPT: SSFloatingPoint {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -875,7 +875,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1 as Array<FloatingPoint>
     /// - Parameter set2: Observations 2 as Array<FloatingPoint>
     /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    /// - Throws: SSSwiftyStatsError if set1.count <= 2, set2.count <= 2, or set1.count != set2.count
     public static func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -923,7 +923,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSWilcoxonMatchedPairsTestResult struct.
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2, set2.sampleSize <= 2, or set1.sampleSize != set2.sampleSize
     public static func wilcoxonMatchedPairs<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSWilcoxonMatchedPairsTestResult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1077,7 +1077,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSSignTestRestult struct
-    /// - Throws: SSSwiftyStatsError iff set1.count <= 2 || set1.count <= 2 || set1.count != set2.count
+    /// - Throws: SSSwiftyStatsError if set1.count <= 2, set2.count <= 2, or set1.count != set2.count
     public static func signTest<FPT: SSFloatingPoint & Codable>(set1: Array<FPT>, set2: Array<FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -1124,7 +1124,7 @@ extension SSHypothesisTesting {
     /// - Parameter set1: Observations 1
     /// - Parameter set2: Observations 2
     /// - Returns: SSSignTestRestult struct
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set1.sampleSize <= 2 || set1.sampleSize != set2.sampleSize
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2, set2.sampleSize <= 2, or set1.sampleSize != set2.sampleSize
     public static func signTest<FPT: SSFloatingPoint & Codable>(set1: SSExamine<FPT, FPT>, set2: SSExamine<FPT, FPT>) throws -> SSSignTestRestult<FPT> {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1225,7 +1225,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: Dichotomous data
     /// - Parameter p0: Probability
     /// - Returns: p value
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2
+    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2 or data.uniqueElements(sortOrder: .none)?.count)! > 2
     public static func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) throws -> FPT {
         if p0.isNaN {
             return FPT.nan
@@ -1329,7 +1329,7 @@ extension SSHypothesisTesting {
     /// - Parameter p0: Probability
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1385,7 +1385,7 @@ extension SSHypothesisTesting {
     /// - Parameter p0: Probability
     /// - Parameter alpha: alpha
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize <= 2 || data.uniqueElements(sortOrder: .none)?.count)! > 2 || p0.isNaN
+    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1550,7 +1550,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A Array object containg data for set 1
     /// - Parameter set2: A Array object containg data for set 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: Array<T>, set2: Array<T>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if set1.count <= 2 {
             #if os(macOS) || os(iOS)
@@ -1592,7 +1592,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A SSExamine object containg data for set 1
     /// - Parameter set2: A SSExamine object containg data for set 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)
@@ -1705,7 +1705,7 @@ extension SSHypothesisTesting {
     /// Performs the two-sided Wald Wolfowitz test for two samples
     /// - Parameter set1: Observations in group 1
     /// - Parameter set2: Observations in group 2
-    /// - Throws: SSSwiftyStatsError iff set1.sampleSize <= 2 || set2.sampleSize <= 2
+    /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func waldWolfowitzTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>) throws -> SSWaldWolfowitzTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {
             #if os(macOS) || os(iOS)

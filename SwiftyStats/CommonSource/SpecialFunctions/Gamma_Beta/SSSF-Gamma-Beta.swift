@@ -82,12 +82,12 @@ extension SSSpecialFunctions {
             }
         }
         else {
-            g1 = SSMath.lgamma1(a)
-            sign = Int(signgam)
-            g2 = SSMath.lgamma1(b)
-            sign = sign * Int(signgam)
-            g3 = SSMath.lgamma1(a + b)
-            sign = sign * Int(signgam)
+            (g1, sign) = SSMath.lgamma1_r(a)
+//            sign = Int(signgam)
+            (g2, sign) = SSMath.lgamma1_r(b)
+//            sign = sign * Int(signgam)
+            (g3, sign) = SSMath.lgamma1_r(a + b)
+//            sign = sign * Int(signgam)
             ans =  Helpers.makeFP(sign) * SSMath.exp1(g1 + g2 - g3)
             return ans
         }
@@ -117,7 +117,7 @@ extension SSSpecialFunctions {
         _a = a
         _b = b
         _x = x
-        // compt test value for else if
+        // computed test value for else-if condition
         if _a.isNaN || _b.isNaN || x.isNaN {
             return T.nan
         }
@@ -371,4 +371,3 @@ fileprivate func expSum<T: SSFloatingPoint>(n: T, z: T) -> T {
     }
     return sum
 }
-

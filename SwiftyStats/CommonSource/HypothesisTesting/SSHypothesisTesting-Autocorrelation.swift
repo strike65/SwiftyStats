@@ -58,7 +58,7 @@ extension SSHypothesisTesting {
     /// - Parameter data: SSExamine object
     /// - Parameter lag: Lag
     /// - Returns: Autocorrelation coefficient for Lag `lag`
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
     public static func autocorrelationCoefficient<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, lag: Int) throws -> FPT {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -101,7 +101,7 @@ extension SSHypothesisTesting {
     ///
     /// - Parameter data: Array<Double>
     /// - Returns: SSBoxLjungResult struct
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
     public static func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
@@ -133,7 +133,7 @@ extension SSHypothesisTesting {
     ///
     /// - Parameter data: SSExamine object
     /// - Returns: SSBoxLjungResult struct
-    /// - Throws: SSSwiftyStatsError iff data.sampleSize < 2
+    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
     public static func autocorrelation<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>) throws -> SSBoxLjungResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)

@@ -27,10 +27,19 @@
  */
 
 import Foundation
+#if os(Linux)
+import Glibc
+#else
 import Darwin
+#endif
+#if canImport(Accelerate)
 import Accelerate.vecLib
+#endif
 
 extension SSMath {
+    /// Returns the reciprocal `1/x`.
+    /// - Parameter x: The value.
+    /// - Returns: `1/x` if `x != 0`; terminates with a fatal error if `x == 0`.
     internal static func reciprocal<T: SSFloatingPoint>(_ x: T) -> T {
         if !x.isZero {
             return T.one / x
@@ -40,6 +49,11 @@ extension SSMath {
         }
     }
     
+    /// Hypotenuse length `sqrt(x*x + y*y)` computed in a type-aware manner.
+    /// - Parameters:
+    ///   - x: First leg.
+    ///   - y: Second leg.
+    /// - Returns: The hypotenuse as `T`.
     internal static func hypot1<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
         switch x {
         case let d as Double:
@@ -56,6 +70,7 @@ extension SSMath {
     }
     
     
+    /// Gamma function Γ(x) for floating-point `T`.
     internal static func tgamma1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -71,21 +86,40 @@ extension SSMath {
         }
     }
     
-    internal static func lgamma1<T: SSFloatingPoint>(_ x: T) -> T {
+    /// Thread-safe log-gamma using *_r variants.
+    /// - Parameter x: Argument.
+    /// - Returns: A tuple of `(log |Γ(x)|, sign)`.
+    internal static func lgamma1_r<T: SSFloatingPoint>(_ x: T) -> (T, Int) {
         switch x {
         case let d as Double:
-            return lgamma(d) as Double as! T
+            var sign: Int32 = 0
+            let val = lgamma_r(d, &sign)
+            let res: T = Helpers.makeFP(val)
+            return (res, Int(sign))
         case let f as Float:
-            return lgammaf(f) as Float as! T
+            var sign: Int32 = 0
+            let val = lgammaf_r(f, &sign)
+            let res: T = Helpers.makeFP(val)
+            return (res, Int(sign))
             #if arch(x86_64)
         case let f80 as Float80:
-            return lgammal(f80) as Float80 as! T
+            var sign: Int32 = 0
+            let val = lgammal_r(f80, &sign)
+            let res: T = Helpers.makeFP(val)
+            return (res, Int(sign))
             #endif
         default:
-            return T.nan
+            return (T.nan, 0)
         }
     }
+
+    /// Backwards-compatible wrapper for `lgamma1_r` returning only the log-gamma value.
+    internal static func lgamma1<T: SSFloatingPoint>(_ x: T) -> T {
+        let (val, _) = lgamma1_r(x)
+        return val
+    }
     
+    /// Exponential function eˣ.
     internal static func exp1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -101,6 +135,7 @@ extension SSMath {
         }
     }
     
+    /// Natural logarithm ln(x).
     internal static func log1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -178,6 +213,7 @@ extension SSMath {
         }
     }
     
+    /// Power function xᵉ.
     internal static func pow1<T: SSFloatingPoint>(_ x: T, _ e: T) -> T {
         switch x {
         case let d as Double:
@@ -193,6 +229,7 @@ extension SSMath {
         }
     }
     
+    /// Complementary error function erfc(x).
     internal static func erfc1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -208,6 +245,7 @@ extension SSMath {
         }
     }
     
+    /// Error function erf(x).
     internal static func erf1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -224,10 +262,12 @@ extension SSMath {
     }
     
     
+    /// Returns `-1` if `x < 0`, otherwise `1`.
     internal static func sign1<T: SSFloatingPoint>(_ x: T) -> T {
         return x < 0 ? -1 : 1
     }
     
+    /// Sine function sin(x) with exact zeros at multiples of π.
     internal static func sin1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -258,6 +298,7 @@ extension SSMath {
         }
     }
     
+    /// Hyperbolic sine sinh(x).
     internal static func sinh1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -274,6 +315,7 @@ extension SSMath {
     }
     
     
+    /// Hyperbolic cosine cosh(x).
     internal static func cosh1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -289,6 +331,7 @@ extension SSMath {
         }
     }
     
+    /// Cosine function cos(x).
     internal static func cos1<T: SSFloatingPoint>(_ x: T) -> T {
         switch x {
         case let d as Double:
@@ -424,6 +467,7 @@ extension SSMath {
         }
     }
     
+    /// Returns the sign of `x` as `-1` or `+1`.
     internal static func sign<T: SSFloatingPoint>(_ x: T) -> T {
         var ans: T
         if x.sign == .minus {
@@ -436,11 +480,13 @@ extension SSMath {
     }
     
     
+    /// Returns the sign of an integer `n` as `FPT` (−1, 0, or +1).
     internal static func sign<T: SignedInteger, FPT: SSFloatingPoint>(_ n: T) -> FPT {
         let ans: FPT =  Helpers.makeFP(n.signum())
         return ans
     }
     
+    /// Minimum of two values, honoring IEEE-754 rules for NaN where possible.
     internal static func fmin1<T: SSFloatingPoint>(_ x: T, _ y: T) -> T {
         switch x {
         case let d as Double:
@@ -474,6 +520,7 @@ extension SSMath {
     
     // Matrix
     
+    /// Element-wise sum of two same-sized vectors.
     internal static func matAdd<FPT: SSFloatingPoint & Codable>(a: Array<FPT>, b: Array<FPT>) -> Array<FPT> {
         if a.count !=  b.count {
             fatalError()
@@ -491,6 +538,7 @@ extension SSMath {
     // ROW3 = [Item1, Item2, Item2, Item4 ... ItemN]
     // ROW4 = [Item1, Item2, Item2, Item4 ... ItemN]
     // MATRIX = [ROW1, ROW2, ROW3, ROW4]
+    /// In-place scalar multiplication of a vector `A` by `alpha`.
     internal static func matMulScalar<FPT: SSFloatingPoint & Codable>(A: inout Array<FPT>, alpha: FPT) {
         for i in stride(from: 0, to: A.count, by: 1) {
             A[i] = alpha * A[i]
@@ -499,10 +547,11 @@ extension SSMath {
     
     
     
-    enum CgemmError: Error {
-        case unknownOperation
-    }
+    /// Errors thrown by GEMM helpers.
+    enum CgemmError: Error { case unknownOperation }
     
+    /// Double-precision GEMM helper operating on row-major or column-major buffers.
+    /// Mirrors BLAS `dgemm` semantics generalized over `SSFloatingPoint`.
     internal static func ddgemm<FPT: SSFloatingPoint>(Order: CBLAS_ORDER, TransA: CBLAS_TRANSPOSE, TransB: CBLAS_TRANSPOSE, M: Int, N: Int, K: Int, alpha: FPT, A: Array<FPT>, lda: Int, B: Array<FPT>, ldb: Int, beta: FPT, C: inout Array<FPT>, ldc: Int) throws {
         if alpha.isZero && beta.isZero {
             return

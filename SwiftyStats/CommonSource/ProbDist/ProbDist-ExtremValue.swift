@@ -30,7 +30,7 @@ extension SSProbDist {
     /// Extreme value distribution
     public enum ExtremeValue {
         
-        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Extrem Value distribution.
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Extreme Value distribution.
         /// - Parameter a: location
         /// - Parameter b: scale
         /// - Throws: SSSwiftyStatsError if b <= 0
@@ -40,7 +40,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -56,7 +56,7 @@ extension SSProbDist {
         }
         
         
-        /// Returns the pdf of the Extrem Value distribution.
+        /// Returns the pdf of the Extreme Value distribution.
         /// - Parameter a: location
         /// - Parameter b: scale
         /// - Parameter x: x
@@ -66,7 +66,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -86,7 +86,7 @@ extension SSProbDist {
             return result
         }
         
-        /// Returns the cdf of the Extrem Value distribution.
+        /// Returns the cdf of the Extreme Value distribution.
         /// - Parameter a: location
         /// - Parameter b: scale
         /// - Parameter x: x
@@ -96,7 +96,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -115,7 +115,7 @@ extension SSProbDist {
         }
         
         
-        /// Returns the p-quantile of the Extrem Value distribution.
+        /// Returns the p-quantile of the Extreme Value distribution.
         /// - Parameter a: location
         /// - Parameter b: scale
         /// - Parameter p: p
@@ -125,7 +125,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -155,4 +155,3 @@ extension SSProbDist {
         }
     }
 }
-

@@ -29,10 +29,9 @@ extension SSProbDist {
     /// von Mises (circular) distribution
     public enum VonMises {
 
-        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the the von Mises distribution.
-        /// - Parameter x: x
-        /// - Parameter m: mean
-        /// - Parameter c: direction
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the von Mises distribution.
+        /// - Parameter m: Mean direction
+        /// - Parameter c: Concentration parameter (κ)
         /// - Throws: SSSwiftyStatsError if c <= 0
         public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, concentration c: FPT) throws -> SSProbDistParams<FPT> {
             var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
@@ -56,8 +55,8 @@ extension SSProbDist {
         
         /// Returns the pdf of the von Mises distribution
         /// - Parameter x: x
-        /// - Parameter m: mean
-        /// - Parameter c: direction
+        /// - Parameter m: Mean direction
+        /// - Parameter c: Concentration parameter (κ)
         /// - Throws: SSSwiftyStatsError if c <= 0
         public static func pdf(x: Double!, mean m: Double!, concentration c: Double!) throws -> Double {
             if c <= 0.0 {
@@ -114,8 +113,8 @@ extension SSProbDist {
         
         /// Returns the cdf of the von Mises distribution
         /// - Parameter x: x
-        /// - Parameter m: mean
-        /// - Parameter c: direction
+        /// - Parameter m: Mean direction
+        /// - Parameter c: Concentration parameter (κ)
         /// - Parameter useExpIntegration: If true, use the double exponential rule to integrate the pdf
         /// - Throws: SSSwiftyStatsError if c <= 0
         public static func cdf(x: Double!, mean m: Double!, concentration c: Double!, useExpIntegration: Bool = false) throws -> Double {
@@ -237,8 +236,8 @@ extension SSProbDist {
         /// Returns the quantile function of the von Mises distribution
         ///  adapted from: http://rapidq.phatcode.net/examples/Math
         /// - Parameter p: p
-        /// - Parameter m: Mean
-        /// - Parameter c: concentration
+        /// - Parameter m: Mean direction
+        /// - Parameter c: Concentration parameter (κ)
         /// - Throws: SSSwiftyStatsError if c <= 0 or/and p < 0 or p > 1.0
         public static func quantile(p: Double!, mean m: Double!, concentration c: Double!) throws -> Double {
             if c <= 0.0 {

@@ -30,16 +30,16 @@ extension SSProbDist {
     /// Rayleigh distribution
     public enum Rayleigh {
         
-        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Chi^2 distribution.
-        /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Rayleigh distribution.
+        /// - Parameter s: Scale parameter
+        /// - Throws: SSSwiftyStatsError if s <= 0
         public static func para<FPT: SSFloatingPoint & Codable>(scale s: FPT) throws -> SSProbDistParams<FPT>  {
             var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>.init()
             if s <= 0 {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -69,16 +69,16 @@ extension SSProbDist {
         }
         
         
-        /// Returns the pdf of the Chi^2 distribution.
-        /// - Parameter chi: Chi
-        /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// Returns the pdf of the Rayleigh distribution.
+        /// - Parameter x: Value at which to evaluate the pdf
+        /// - Parameter s: Scale parameter
+        /// - Throws: SSSwiftyStatsError if s <= 0
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, scale s: FPT) throws -> FPT {
             if s <= 0 {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -97,16 +97,16 @@ extension SSProbDist {
             return result
         }
         
-        /// Returns the cdf of the Chi^2 distribution.
-        /// - Parameter chi: Chi
-        /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// Returns the cdf of the Rayleigh distribution.
+        /// - Parameter x: Value at which to evaluate the cdf
+        /// - Parameter s: Scale parameter
+        /// - Throws: SSSwiftyStatsError if s <= 0
         public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, scale s: FPT) throws -> FPT  {
             if s <= 0 {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -127,16 +127,16 @@ extension SSProbDist {
         }
         
         
-        /// Returns the p-quantile of the Chi^2 distribution.
-        /// - Parameter p: p
-        /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// Returns the quantile of the Rayleigh distribution.
+        /// - Parameter p: Probability in [0, 1]
+        /// - Parameter s: Scale parameter
+        /// - Throws: SSSwiftyStatsError if s <= 0 or p is outside [0, 1]
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, scale s: FPT) throws -> FPT {
             if s <= 0 {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("scale parameter are expected to be > 0", log: .log_stat, type: .error)
+                    os_log("scale parameter is expected to be > 0", log: .log_stat, type: .error)
                 }
                 
                 #endif
@@ -164,4 +164,3 @@ extension SSProbDist {
         }
     }
 }
-

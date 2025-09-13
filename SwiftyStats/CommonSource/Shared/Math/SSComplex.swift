@@ -24,13 +24,14 @@ import Glibc
 import Darwin
 #endif
 
+/// Precedence group for custom complex operators.
 precedencegroup ComplexAdditionPrecedence {
     associativity: left
     higherThan: AssignmentPrecedence
     lowerThan: MultiplicationPrecedence
 }
 
-/// Complex operators 
+/// Complex operators
 infix operator &++: AdditionPrecedence
 infix operator &+=: AssignmentPrecedence
 infix operator &--: AdditionPrecedence
@@ -44,14 +45,16 @@ prefix operator &---
 // adapted from https://github.com/dankogai/swift-complex
 
 
-/// A complex numeric protocol , inspired by https://github.com/dankogai/swift-complex
-/// Unfortunately by using generic types, the Swift 4.2 compiler has difficulities to typecheck some
-/// more ore less complex expressions. Therefore, the additive, subtractive, multiplicative operator must be defined in some exotic notation.
-/// All complex mathematical functions are defined at the top level.
+/// A protocol representing complex numbers, inspired by https://github.com/dankogai/swift-complex.
+/// The generic design requires alternative operator spellings (`&++`, `&--`, `&**`, `&%`) to help the compiler type-check expressions reliably.
+/// Complex mathematical functions are defined via `SSMath.ComplexMath`.
 internal protocol SSComplexNumeric : Hashable {
     associatedtype Element: SignedNumeric
+    /// Real part
     var re: Element { get set }
+    /// Imaginary part
     var im: Element { get set }
+    /// Designated initializer
     init(re r: Element, im i: Element)
 }
 
@@ -63,6 +66,7 @@ internal extension SSComplexNumeric {
     init(_ re: Element) {
         self.init(re, 0)
     }
+    /// Multiplication by the imaginary unit (rotate by +90°): returns `i * self`.
     var i: Self {
         return Self(-im, re)
     }
@@ -117,6 +121,7 @@ internal extension SSComplexNumeric {
     static func &**=(_ lhs: inout Self, _ rhs: Element) {
         lhs = lhs &** rhs
     }
+    /// Complex conjugate `re - i·im`.
     var conj: Self {
         return Self(self.re, -self.im)
     }
@@ -124,8 +129,8 @@ internal extension SSComplexNumeric {
 
 internal typealias SSComplexFloatElement = SSFloatingPoint
 
-internal protocol SSComplexFloat : SSComplexNumeric & CustomStringConvertible where Element: SSFloatingPoint {
-}
+/// Complex numbers whose components conform to `SSFloatingPoint`.
+internal protocol SSComplexFloat : SSComplexNumeric & CustomStringConvertible where Element: SSFloatingPoint { }
 internal extension SSComplexFloat {
 
     
@@ -137,6 +142,7 @@ internal extension SSComplexFloat {
         self.init(re: real, im: 0)
     }
 
+    /// The complex argument (phase) in radians, range (−π, π]. Returns 0 for 0 + 0i.
     var arg: Element {
         if self.re.isZero && self.im.isZero {
             return 0
@@ -146,10 +152,12 @@ internal extension SSComplexFloat {
         }
     }
 
+    /// The complex modulus |z|.
     var abs: Element {
         return self.norm
     }
     
+    /// The Euclidean norm of the vector (re, im).
     var norm: Element {
         if !self.re.isZero && !self.im.isZero {
             return SSMath.hypot1(self.re, self.im)
@@ -192,36 +200,44 @@ internal extension SSComplexFloat {
         lhs = lhs &% rhs
     }
 
+    /// A complex NaN value.
     static var nan: Self {
         return Self(Element.nan, Element.nan)
     }
     
+    /// True if either component is NaN.
     var isNan: Bool {
         return re.isNaN || im.isNaN
     }
     
+    /// A complex infinity value.
     static var infinity: Self {
         return Self(Element.infinity, Element.infinity)
     }
     
+    /// True if either component is infinite.
     var isInfinite: Bool {
         return re.isInfinite || im.isInfinite
     }
     
+    /// True if both components are finite.
     var isFinite: Bool {
         return !self.isInfinite
     }
     
+    /// The complex zero 0 + 0i.
     static var zero: Self {
         return Self(0,0)
     }
     
+    /// True if both components are exactly zero.
     var isZero: Bool {
         return re.isZero && im.isZero
     }
 }
 
-/// Provides an Complex type which conforms to SSComplexFloat. Real an Imaginary part comforms to SSFloatingPoint
+/// Complex number with `SSFloatingPoint` components.
+/// The real and imaginary parts conform to `SSFloatingPoint`.
 internal struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
     
     public typealias Element = T
@@ -246,7 +262,7 @@ internal struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
             real = newValue
         }
     }
-    /// Imaginary Part
+    /// Imaginary part
     public var im: Element {
         get {
             return imag
@@ -272,6 +288,15 @@ internal struct Complex<T: SSComplexFloatElement> : SSComplexFloat {
         real = r
         imag = i
     }
+
+    /// Convenience init from a tuple (re, im)
+    public init(_ tuple: (T, T)) {
+        self.real = tuple.0
+        self.imag = tuple.1
+    }
+
+    /// Expose as a tuple (re, im)
+    public var tuple: (T, T) { (real, imag) }
 }
 
 

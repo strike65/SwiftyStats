@@ -34,10 +34,10 @@ extension SSExamine {
     
     // MARK: File Management
     
-    /// Saves the table to filePath using NSKeyedArchiver.
-    /// - Parameter path: The full qualified filename.
-    /// - Parameter overwrite: If yes an existing file will be overwritten.
-    /// - Throws: SSSwiftyStatsError.posixError (file can'r be removed), SSSwiftyStatsError.directoryDoesNotExist, SSSwiftyStatsError.fileNotReadable
+    /// Saves the table to `filePath` using `JSONEncoder`.
+    /// - Parameter path: The fully qualified filename.
+    /// - Parameter overwrite: If true, an existing file will be overwritten.
+    /// - Throws: `SSSwiftyStatsError.posixError` (file can't be removed), `SSSwiftyStatsError.directoryDoesNotExist`, `SSSwiftyStatsError.fileNotReadable`.
     public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
@@ -48,7 +48,7 @@ extension SSExamine {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("No writeable path found", log: .log_fs ,type: .error)
+                    os_log("No writable path found", log: .log_fs ,type: .error)
                 }
                 
                 #endif
@@ -126,9 +126,9 @@ extension SSExamine {
         }
     }
     
-    /// Initializes a new table from an archive saved by archiveTo(filePath path:overwrite:).
-    /// - Parameter path: The full qualified filename.
-    /// - Throws: SSSwiftyStatError.fileNotReadable
+    /// Initializes a new table from an archive saved by `archiveTo(filePath:overwrite:)`.
+    /// - Parameter path: The fully qualified filename.
+    /// - Throws: `SSSwiftyStatsError.fileNotReadable`.
     public class func unarchiveFrom(filePath path: String!) throws -> SSExamine<SSElement, Double>? {
         let fm: FileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
