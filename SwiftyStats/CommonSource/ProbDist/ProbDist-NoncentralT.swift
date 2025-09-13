@@ -21,11 +21,16 @@
  */
 
 import Foundation
-import Accelerate
-    //.vecLib.LinearAlgebra
+import Accelerate.vecLib.LinearAlgebra
 import os.log
 public typealias LAPACKInt = __LAPACK_int
-
+/*
+#if ACCELERATE_LAPACK_ILP64
+public typealias LAPACKInt = Int      // ILP64 (64-bit Indizes)
+#else
+public typealias LAPACKInt = Int32    // LP64  (32-bit Indizes)
+#endif
+*/
  @inline(__always)
  func lapack_dgesv(n: LAPACKInt, nrhs: LAPACKInt,
                    a: UnsafeMutablePointer<Double>, lda: LAPACKInt,
@@ -678,10 +683,11 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     var info: LAPACKInt = 0
     var ipiv = Array<LAPACKInt>.init(repeating: 0, count: 3)
     //ss_dgesv(&N,&nrhs,&AA,lda,&ipiv,&abc,ldb,&info)
-    dgesv_(&N, &nrhs, &AA, &lda, &ipiv, &abc, &ldb, &info)
+    info = lapack_dgesv(n: N, nrhs: nrhs, a: &AA, lda: lda, ipiv: &ipiv, b: &abc, ldb: ldb)
+//    dgesv_(&N, &nrhs, &AA, &lda, &ipiv, &abc, &ldb, &info)
     if info != 0 {
         #if os(macOS) || os(iOS)
-        if #available(macOS 10.12, iOS 13, *) {
+        if #available(macOS 15, iOS 16, *) {
             os_log("unable to compute integration limits. A singular matrix was detected", log: .log_stat, type: .error)
         }
         #endif
