@@ -63,7 +63,7 @@ DESC
 	s.documentation_url = 'https://strike65.github.io/SwiftyStats/documentation/swiftystats/'
 	s.license 	= { :type => 'GPL-3.0', :file => 'LICENSE' }
 	s.author 	= { 'strike65' => 'vtping@me.com' }
-	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => 'v' + s.version.to_s }
+	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
 	s.swift_version = '6.0'
 	s.ios.deployment_target = '15.0'
 	s.osx.deployment_target = '15.0'
