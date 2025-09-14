@@ -28,7 +28,7 @@ Version 1.2.0
 - update: thread-safe lgamma1-function
 - update: Swift 6
 - update: standardized "p-value" wording across descriptions and docs
-- update: improved public API doc comments (SpecialFunctions, Integrator, distributions)
+- update: improved public API doc comments (SpecialFunctions, Integrator, digit stributions)
 - update: README and index with docs generation steps and corrected examples
 - move: `make_doc.sh` to repo root; generate docs via `swift-docc-plugin`; emit static site into `./docs`
 - fixed: minor typos and formatting
