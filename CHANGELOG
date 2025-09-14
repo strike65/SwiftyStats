@@ -1,3 +1,12 @@
+Version 1.2.2
+- chore: bump version to 1.2.2
+- cocoapods: update podspec for better metadata and compatibility
+  - documentation_url points to DocC site
+  - homepage/license string normalized; frameworks include Accelerate
+  - iOS/macOS deployment targets set to 15 to match SwiftPM
+  - source tag uses `v#{version}`
+- docs: update README/index badges and SPM snippet to 1.2.2
+
 Version 1.2.1
 - feat: public API name corrections with deprecation shims
   - SSCrosstab.colummTotal() → SSCrosstab.columnTotal() (old kept as deprecated alias)

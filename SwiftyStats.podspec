@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 	s.name 		= 'SwiftyStats'
-s.version 	= '1.2.1'
+	s.version 	= '1.2.2'
 	s.summary 	= 'Descriptive statistics, probability functions (PDF, CDF, inverse CDF), parametric and nonparametric tests'
 	s.description 	= <<-DESC
 Includes (list is not exhaustive):
@@ -59,12 +59,14 @@ Probability functions
 - Rayleigh distribution
 - Extreme value distribution
 DESC
-	s.homepage 	= 'https://github.com/strike65/SwiftyStats.git'
-	s.license 	= { :type => 'GPL 3', :file => 'LICENSE' }
+	s.homepage 	= 'https://github.com/strike65/SwiftyStats'
+	s.documentation_url = 'https://strike65.github.io/SwiftyStats/documentation/swiftystats/'
+	s.license 	= { :type => 'GPL-3.0', :file => 'LICENSE' }
 	s.author 	= { 'strike65' => 'vtping@me.com' }
-	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => s.version.to_s }
+	s.source 	= { :git => 'https://github.com/strike65/SwiftyStats.git', :tag => 'v' + s.version.to_s }
 	s.swift_version = '6.0'
-	s.ios.deployment_target = '13.0'
-	s.osx.deployment_target = '10.14'
+	s.ios.deployment_target = '15.0'
+	s.osx.deployment_target = '15.0'
   s.source_files 	= 'SwiftyStats/CommonSource/**/*.swift'
+	s.frameworks	= 'Accelerate'
 end
