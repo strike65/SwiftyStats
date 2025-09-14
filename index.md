@@ -2,7 +2,7 @@
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
-(full documentation: [https://strike65.github.io/SwiftyStats/](https://strike65.github.io/SwiftyStats/))
+(full documentation: [https://strike65.github.io/SwiftyStats/documentation/swiftystats/](https://strike65.github.io/SwiftyStats/documentation/swiftystats/))
 
 To regenerate the API documentation with DocC:
 
