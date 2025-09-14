@@ -36,7 +36,7 @@ extension SSHypothesisTesting {
     /// ### Note ###
     /// Calls ksGoFTest(data: Array<FloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter array: Array<FloatingPoint>
-    /// - Parameter targetDistribution: Distribution to test for
+    /// - Parameter target: Distribution to test for
     /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
@@ -66,7 +66,7 @@ extension SSHypothesisTesting {
     /// Performs the goodness of fit test according to Kolmogorov and Smirnov
     /// The K-S distribution is computed according to Richard Simard and Pierre L'Ecuyer (Journal of Statistical Software March 2011, Volume 39, Issue 11.)
     /// - Parameter array: Array<FloatingPoint>
-    /// - Parameter targetDistribution: Distribution to test for
+    /// - Parameter target: Distribution to test for
     /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func ksGoFTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
@@ -98,7 +98,7 @@ extension SSHypothesisTesting {
     /// ### Note ###
     /// Calls ksGoFTest(data: SSExamine<Numeric, SSFloatingPoint>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult?
     /// - Parameter data: Array<FloatingPoint>
-    /// - Parameter targetDistribution: Distribution to test for
+    ///- Parameter target: distribution to test for
     /// - Returns: `SSKSTestResult` struct
     /// - Throws: SSSwiftyStatsError if data.count < 2
     public static func kolmogorovSmirnovGoFTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, targetDistribution target: SSGoFTarget) throws -> SSKSTestResult<FPT>? {
@@ -436,8 +436,8 @@ extension SSHypothesisTesting {
         return x + v * (0.04213 + 0.01365 / Double(n)) / Double(n)
     }
     
-    /// Performs the Anderson Darling test for normality.
-    /// Adapts an algorithm originally developed by Marsaglia et al.:Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004
+    /// Performs the Anderson–Darling test for normality.
+    /// Adapts an algorithm originally developed by Marsaglia et al.: Evaluating the Anderson–Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004
     /// - Parameter data: Data as SSExamine object
     /// - Parameter alpha: Alpha
     /// - Returns: SSADTestResult struct.
@@ -465,9 +465,9 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs the Anderson Darling test for normality.
-    /// Adapts an algorithm originally developed by Marsaglia et al.(Evaluating the Anderson-Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
-    /// - Parameter data: Data
+    /// Performs the Anderson–Darling test for normality.
+    /// Adapts an algorithm originally developed by Marsaglia et al. (Evaluating the Anderson–Darling Distribution. Journal of Statistical Software 9 (2), 1–5. February 2004)
+    /// - Parameter array: Data
     /// - Parameter alpha: Alpha
     /// - Returns: SSADTestResult struct.
     /// - Throws: SSSwiftyStatsError if data.count < 2
@@ -1222,10 +1222,13 @@ extension SSHypothesisTesting {
     /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
     /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
     ///
-    /// - Parameter data: Dichotomous data
-    /// - Parameter p0: Probability
-    /// - Returns: p value
-    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2 or data.uniqueElements(sortOrder: .none)?.count)! > 2
+    /// - Parameter success: Number of observed successes
+    /// - Parameter trials: Total number of trials
+    /// - Parameter p0: Test probability for success
+    /// - Parameter alpha: Significance level (not used in this overload)
+    /// - Parameter alternative: SSAlternativeHypotheses (.less, .greater, .twoSided)
+    /// - Returns: Exact or asymptotic p-value, depending on inputs
+    /// - Throws: `SSSwiftyStatsError` on invalid arguments or internal errors
     public static func binomialTest<FPT: SSFloatingPoint & Codable>(numberOfSuccess success: Int!, numberOfTrials trials: Int!, probability p0: FPT, alpha: FPT, alternative: SSAlternativeHypotheses) throws -> FPT {
         if p0.isNaN {
             return FPT.nan
@@ -1243,7 +1246,7 @@ extension SSHypothesisTesting {
             case .greater:
                 pV = try SSProbDist.Binomial.cdf(k: trials - success, n: trials, probability: q, tail: .lower)
             case .twoSided:
-                // algorithm adapted fropm R function binom.test
+                // algorithm adapted from the R function binom.test
                 var c1: Int = 0
                 let d: FPT = try SSProbDist.Binomial.pdf(k: success, n: trials, probability: p0)
                 let m: FPT =  Helpers.makeFP(trials) * p0
@@ -1326,8 +1329,10 @@ extension SSHypothesisTesting {
     /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
     /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
     /// - Parameter data: Dichotomous data
-    /// - Parameter p0: Probability
-    /// - Parameter alpha: alpha
+    /// - Parameter characterSet: Optional CharacterSet to normalize/categorize input
+    /// - Parameter p0: Test probability for success
+    /// - Parameter successID: Value that encodes a success in `data`
+    /// - Parameter alpha: Significance level for confidence intervals
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
@@ -1382,8 +1387,9 @@ extension SSHypothesisTesting {
     /// - H<sub>a2</sub>: the probability of success is less than p0 (one sided)
     /// - H<sub>a3</sub>: the probability of success is greater than p0 (one sided)
     /// - Parameter data: Dichotomous data
-    /// - Parameter p0: Probability
-    /// - Parameter alpha: alpha
+    /// - Parameter p0: Test probability for success
+    /// - Parameter successID: Value that encodes a success in `data`
+    /// - Parameter alpha: Significance level for confidence intervals
     /// - Parameter alternative: .less, .greater or .twoSided
     /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
@@ -1550,6 +1556,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A Array object containg data for set 1
     /// - Parameter set2: A Array object containg data for set 2
+    /// - Parameter alpha: Level of significance
     /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: Array<T>, set2: Array<T>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if set1.count <= 2 {
@@ -1592,6 +1599,7 @@ extension SSHypothesisTesting {
     /// H<sub>a2</sub>:(F<sub>1</sub>(x) < F<sub>2</sub>(x))
     /// - Parameter set1: A SSExamine object containg data for set 1
     /// - Parameter set2: A SSExamine object containg data for set 2
+    /// - Parameter alpha: Level of significance
     /// - Throws: SSSwiftyStatsError if set1.sampleSize <= 2 or set2.sampleSize <= 2
     public static func kolmogorovSmirnovTwoSampleTest<T, FPT>(set1: SSExamine<T, FPT>, set2: SSExamine<T, FPT>, alpha: FPT) throws -> SSKSTwoSampleTestResult<FPT> where FPT: SSFloatingPoint & Codable {
         if set1.sampleSize <= 2 {

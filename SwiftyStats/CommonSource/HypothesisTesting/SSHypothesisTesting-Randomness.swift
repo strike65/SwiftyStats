@@ -43,11 +43,13 @@ extension SSHypothesisTesting {
     ///   * In this case a cutting point of 1.5 must be used.
     ///
     ///
-    /// - Parameter data: Array<Double>
-    /// - Parameter alpha: Alpha
-    /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
-    /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
+    /// - Parameter array: Array of numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Parameter useCP: Cutting point selection: `.median`, `.mean`, `.mode`, or `.userDefined`
+    /// - Parameter cuttingPoint: User-defined cutting point; required if `useCP == .userDefined`
+    /// - Parameter alternative: Alternative hypothesis for z-test of runs (`.twoSided`, `.less`, `.greater`)
+    /// - Returns: `SSRunsTestResult` with run count, z-statistic, p-values and decision
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `array.count < 2` or missing `cuttingPoint` when required
     public static func runsTest<FPT: SSFloatingPoint & Codable>(array: Array<FPT>, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
@@ -81,11 +83,13 @@ extension SSHypothesisTesting {
     ///   * `1211211212212112`
     ///   * In this case a cutting point of 1.5 must be used.
     ///
-    /// - Parameter data: Array<Double>
-    /// - Parameter alpha: Alpha
-    /// - Parameter useCuttingPoint: SSRunsTestCuttingPoint.median || SSRunsTestCuttingPoint.mean || SSRunsTestCuttingPoint.mode || SSRunsTestCuttingPoint.userDefined
-    /// - Parameter cP: A user defined cutting point. Must not be nil if SSRunsTestCuttingPoint.userDefined is set
-    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
+    /// - Parameter data: SSExamine wrapper containing numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Parameter useCP: Cutting point selection: `.median`, `.mean`, `.mode`, or `.userDefined`
+    /// - Parameter cuttingPoint: User-defined cutting point; required if `useCP == .userDefined`
+    /// - Parameter alternative: Alternative hypothesis for z-test of runs (`.twoSided`, `.less`, `.greater`)
+    /// - Returns: `SSRunsTestResult` with run count, z-statistic, p-values and decision
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `data.sampleSize < 2` or missing `cuttingPoint` when required
     public static func runsTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>!, alpha: FPT, useCuttingPoint useCP: SSRunsTestCuttingPoint, userDefinedCuttingPoint cuttingPoint: FPT?, alternative: SSAlternativeHypotheses) throws -> SSRunsTestResult<FPT> {
         if data.sampleSize < 2 {
             #if os(macOS) || os(iOS)

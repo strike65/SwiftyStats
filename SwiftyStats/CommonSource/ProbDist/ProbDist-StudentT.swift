@@ -156,7 +156,7 @@ extension SSProbDist {
         ///  adapted from: http://rapidq.phatcode.net/examples/Math
         /// - Parameter p: Probability
         /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+        /// - Throws: SSSwiftyStatsError if df <= 0 and/or p < 0 or p > 1.0
         ///
         /// ### Note ###
         /// Bisection
@@ -185,8 +185,8 @@ extension SSProbDist {
             }
             /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
              * coded in C by Gary Perlman
-             * coded in Basic by Michaek Zito 2003
-             * coded in C# by strike65 2005
+             * coded in Basic by Michael Zito (2003)
+             * coded in C# by strike65 (2005)
              */
             let half: FPT = FPT.half
             let eps: FPT = FPT.ulpOfOne

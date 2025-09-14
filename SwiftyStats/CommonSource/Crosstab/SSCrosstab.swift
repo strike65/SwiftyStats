@@ -29,7 +29,7 @@ import os.log
 #endif
 
 /// Struct provides a matrix-like crosstable. Elements are accessible by c[row, column].
-/// - Precondition: Rows and columns must be named. Row- <R> and column- <C> names are defined as generics. The content of one cell <N> is generic too.
+/// - Precondition: Rows and columns must be named. Row <R> and column <C> names are defined as generics. The content of one cell <N> is generic too.
 public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparable,N: Codable, N: Hashable, R: Comparable,R: Codable, R: Hashable, C: Comparable, C: Hashable, C: Codable, FPT: Codable {
     /// Number of rows
     public var rowCount: Int {
@@ -81,21 +81,21 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         }
     }
     
-    /// Returns the row-names or nil
+    /// Returns the row names or nil
     public var rowNames: Array<R>? {
         get {
             return rnames
         }
     }
     
-    /// Returns the column-names or nil
+    /// Returns the column names or nil
     public var columnNames: Array<C>? {
         get {
             return cnames
         }
     }
     
-    /// Defines the level od measurement of the column variable
+    /// Defines the level of measurement of the column variable
     public var columnLevelOfMeasurement: SSLevelOfMeasurement {
         get {
             return self.levelRows
@@ -129,9 +129,9 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     
     
     
-    /// the row-names
+    /// the row names
     private var rnames: Array<R>?
-    /// the column-names
+    /// the column names
     private var cnames: Array<C>?
     /// the level of measurement for rows
     private var levelRows: SSLevelOfMeasurement
@@ -181,7 +181,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         if rowID.count != rows {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("You must provide as many row id's as rows", log: .log_stat, type: .error)
+                os_log("You must provide as many row IDs as rows", log: .log_stat, type: .error)
             }
             #endif
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
@@ -190,7 +190,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("You must provide as many row id's as rows", log: .log_stat, type: .error)
+                os_log("You must provide as many row IDs as rows", log: .log_stat, type: .error)
             }
             
             #endif
@@ -253,7 +253,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
     
     // MARK: Validity checking
     
-    /// Returns `true` if name is a valid row-name
+    /// Returns `true` if name is a valid row name
     func isValidRowName(name: R) -> Bool {
         if let _ = firstIndexOfRow(rowName: name) {
             return true
@@ -263,7 +263,7 @@ public struct SSCrosstab<N,R,C, FPT: SSFloatingPoint>: Codable where N: Comparab
         }
     }
     
-    /// Returns  `true`  if name is a valid column-name
+    /// Returns `true` if name is a valid column name
     func isValidColumnName(name: C) -> Bool {
         if let _ = firstIndexOfColumn(columnName: name) {
             return true
@@ -961,7 +961,7 @@ extension SSCrosstab {
     }
     
     /// Returns the sum of all columns
-    public func colummTotal() -> FPT {
+    public func columnTotal() -> FPT {
         if let cs = self.columnSums {
             var t: FPT = 0
             for s in cs {
@@ -972,6 +972,12 @@ extension SSCrosstab {
         else {
             return FPT.nan
         }
+    }
+
+    /// Returns the sum of all columns
+    @available(*, deprecated, renamed: "columnTotal()")
+    public func colummTotal() -> FPT {
+        return columnTotal()
     }
     
     
@@ -1001,7 +1007,7 @@ extension SSCrosstab {
     }
     
     /// Returns the largest column total
-    func largestColumTotal() throws -> FPT {
+    func largestColumnTotal() throws -> FPT {
         if self.rowCount > 0 {
             if let c = self.columnSums?.sorted(by: {$0 > $1}) {
                 return c.first!
@@ -1018,6 +1024,12 @@ extension SSCrosstab {
             #endif
             throw SSSwiftyStatsError.init(type: .missingData, file: #file, line: #line, function: #function)
         }
+    }
+
+    /// Returns the largest column total
+    @available(*, deprecated, renamed: "largestColumnTotal()")
+    func largestColumTotal() throws -> FPT {
+        return try largestColumnTotal()
     }
     
     /// Returns the largest cell count for column
@@ -1564,7 +1576,7 @@ extension SSCrosstab {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let cm: FPT
             do {
-                cm = try self.largestColumTotal()
+            cm = try self.largestColumnTotal()
             }
             catch {
                 throw error
@@ -1585,7 +1597,7 @@ extension SSCrosstab {
         if self.isNumeric && self.rowLevelOfMeasurement == .nominal && self.columnLevelOfMeasurement == .nominal {
             let rm: FPT
             do {
-                rm = try self.largestColumTotal()
+            rm = try self.largestColumnTotal()
             }
             catch {
                 throw error
@@ -1655,4 +1667,3 @@ extension SSCrosstab {
         }
     }
 }
-

@@ -28,10 +28,11 @@ import os.log
 
 
 extension SSHypothesisTesting {
-    /// Performs the Grubbs outlier test
-    /// - Parameter data: An Array<Double> containing the data
-    /// - Parameter alpha: Alpha
-    /// - Returns: SSGrubbsTestResult
+    /// Performs the Grubbs outlier test.
+    /// - Parameter array: Array of numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSGrubbsTestResult` with statistics and decision
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data, alpha out of range, or too few observations)
     public static func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if array.count == 3 {
             #if os(macOS) || os(iOS)
@@ -77,10 +78,11 @@ extension SSHypothesisTesting {
     
     /************************************************************************************************/
     
-    /// Performs the Grubbs outlier test
-    /// - Parameter data: An Array<Double> containing the data
-    /// - Parameter alpha: Alpha
-    /// - Returns: SSGrubbsTestResult
+    /// Performs the Grubbs outlier test.
+    /// - Parameter data: SSExamine wrapper containing numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSGrubbsTestResult` with statistics and decision
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data, alpha out of range, or too few observations)
     public static func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if data.sampleSize <= 3 {
             #if os(macOS) || os(iOS)
@@ -196,12 +198,14 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
+    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD) to detect up to `maxOutliers` outliers.
     /// <img src="../img/esd.png" alt="">
-    /// - Parameter data: Array<Double>
-    /// - Parameter alpha: Alpha
-    /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
-    /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
+    /// - Parameter array: Array of numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Parameter maxOutliers: Maximum number of outliers to detect (upper bound)
+    /// - Parameter testType: `.lowerTail`, `.upperTail`, or `.bothTails`
+    /// - Returns: `SSESDTestResult` with per-iteration statistics and detected outliers, or `nil` for empty input or `maxOutliers >= array.count`
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data)
     public static func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(array: Array<T>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if array.count == 0 {
             return nil
@@ -219,11 +223,13 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD test) to detect up to maxOutliers outliers. This test is more accurate than the Grubbs test (for Grubbs test the suspected number of outliers must be specified exactly.)
-    /// - Parameter data: Array<Double>
-    /// - Parameter alpha: Alpha
-    /// - Parameter maxOutliers: Upper bound for the number of outliers to detect
-    /// - Parameter testType: SSESDTestType.lowerTail or SSESDTestType.upperTail or SSESDTestType.bothTailes (This should be default.)
+    /// Uses the Rosner test (generalized extreme Studentized deviate = ESD) to detect up to `maxOutliers` outliers.
+    /// - Parameter data: SSExamine wrapper containing numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Parameter maxOutliers: Maximum number of outliers to detect (upper bound)
+    /// - Parameter testType: `.lowerTail`, `.upperTail`, or `.bothTails`
+    /// - Returns: `SSESDTestResult` with per-iteration statistics and detected outliers, or `nil` for empty input or `maxOutliers >= data.sampleSize`
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data)
     public static func esdOutlierTest<T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable>(data: SSExamine<T, FPT>, alpha: FPT, maxOutliers: Int!, testType: SSESDTestType) throws -> SSESDTestResult<T, FPT>? {
         if data.sampleSize == 0 {
             return nil

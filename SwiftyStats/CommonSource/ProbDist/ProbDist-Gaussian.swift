@@ -33,7 +33,7 @@ extension SSProbDist {
         
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Gaussian distribution.
         /// - Parameter m: Mean
-        /// - Parameter sd: Standard deviation
+        /// - Parameter s: Standard deviation
         public static func para<FPT: SSFloatingPoint & Codable>(mean m: FPT, standardDeviation s: FPT) -> SSProbDistParams<FPT>? {
             var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
             result.mean = m
@@ -93,7 +93,8 @@ extension SSProbDist {
         }
         
         /// Returns the PDF of a Gaussian distribution
-        /// - Parameter m: Mean
+        /// - Parameter x: random variable
+        ///- Parameter m: Mean
         /// - Parameter sd: Standard deviation
         /// - Throws: SSSwiftyStatsError if sd <= 0.0
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean m: FPT, standardDeviation sd: FPT) throws -> FPT  {

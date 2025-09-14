@@ -486,15 +486,16 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     /// - Parameter path: The full path
     /// - Parameter atomically: Write atomically
     /// - Parameter firstRowAsColumnName: If true, the row name is equal to the exported SSExamine object. If this object hasn't a name, an auto incremented integer is used.
-    /// - Parameter useQuotes: If true all fields will be enclosed by quotation marks
+    /// - Parameter sep: separator
+    ///- Parameter useQuotes: If true all fields will be enclosed by quotation marks
     /// - Parameter overwrite: If true an existing file will be overwritten
-    /// - Parameter stringEncoding: Encoding
+    /// - Parameter enc: stringEncoding
     /// - Returns: True if the file was successfully written.
     /// - Throws: SSSwiftyStatsError
-    public func exportCSV(path: String!, separator sep: String = ",", useQuotes: Bool = false, firstRowAsColumnName cn: Bool = true, overwrite: Bool = false, stringEncoding enc: String.Encoding = String.Encoding.utf8, atomically: Bool = true) throws -> Bool {
+    public func exportCSV(path: String!, separator sep: String = ",", useQuotes: Bool = false, firstRowAsColumnName: Bool = true, overwrite: Bool = false, stringEncoding enc: String.Encoding = String.Encoding.utf8, atomically: Bool = true) throws -> Bool {
         if !self.isEmpty {
             var string = String()
-            if cn {
+            if firstRowAsColumnName {
                 for c in 0..<cols {
                     if useQuotes {
                         string = string + "\"" + cNames[c] + "\"" + sep
@@ -575,7 +576,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     
     /// Initializes a new DataFrame instance.
     /// - Parameter fromString: A string of objects (mostly numbers) separated by `separator`
-    /// - Parameter separator: The separator (delimiter) used. Default = ","
+    /// - Parameter sep: The separator (delimiter) used. Default = ","
     /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
@@ -590,7 +591,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     ///     catch {
     ///         ...
     ///     }
-    public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
+    public class func dataFrame(fromString: String!, separator sep: String! = ",", firstRowContainsNames: Bool = true, parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         do {
             var importedString = fromString
             
@@ -606,7 +607,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             var columns: Array<Array<SSElement>> = Array<Array<SSElement>>()
             var k: Int = 0
             var startRow: Int
-            if cn {
+            if firstRowContainsNames {
                 startRow = 1
             }
             else {
@@ -636,7 +637,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                     }
                 }
             }
-            if cn {
+            if firstRowContainsNames {
                 let names = lines[0].components(separatedBy: sep)
                 for name in names {
                     curString = name.replacingOccurrences(of: "\"", with: "")
@@ -647,7 +648,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             for k in 0..<columns.count {
                 examineArray.append(SSExamine<SSElement, FPT>.init(withArray: columns[k], name: nil, characterSet: nil))
             }
-            if cn {
+            if firstRowContainsNames {
                 k = 0
                 for e in examineArray {
                     e.name = cnames[k]
@@ -663,12 +664,12 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
     
     /// Loads the content of a file using the specified encoding.
     /// - Parameter path: The path to the file (e.g. ~/data/data.dat)
-    /// - Parameter separator: The separator used in the file
+    /// - Parameter sep: The separator used in the file
     /// - Parameter firstRowContainsNames: Indicates, that the first line contains Column Identifiers.
     /// - Parameter stringEncoding: The encoding to use.
     /// - Parameter parser: A function to convert a string to the expected generic type
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed
-    public class func dataFrame(fromFile path: String!, separator sep: String! = ",", firstRowContainsNames cn: Bool = true, stringEncoding: String.Encoding! = String.Encoding.utf8, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
+    public class func dataFrame(fromFile path: String!, separator sep: String! = ",", firstRowContainsNames: Bool = true, stringEncoding: String.Encoding! = String.Encoding.utf8, _ parser: (String) -> SSElement?) throws -> SSDataFrame<SSElement, FPT> {
         let fileManager = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fileManager.fileExists(atPath: fullFilename) || !fileManager.isReadableFile(atPath: fullFilename) {
@@ -695,7 +696,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             var columns: Array<Array<SSElement>> = Array<Array<SSElement>>()
             var k: Int = 0
             var startRow: Int
-            if cn {
+            if firstRowContainsNames {
                 startRow = 1
             }
             else {
@@ -726,7 +727,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
                     }
                 }
             }
-            if cn {
+            if firstRowContainsNames {
                 let names = lines[0].components(separatedBy: sep)
                 for name in names {
                     curString = name.replacingOccurrences(of: "\"", with: "")
@@ -737,7 +738,7 @@ public class SSDataFrame<SSElement, FPT: SSFloatingPoint>: NSObject, NSCopying, 
             for k in 0..<columns.count {
                 examineArray.append(SSExamine<SSElement, FPT>.init(withArray: columns[k], name: nil, characterSet: nil))
             }
-            if cn {
+            if firstRowContainsNames {
                 k = 0
                 for e in examineArray {
                     e.name = cnames[k]

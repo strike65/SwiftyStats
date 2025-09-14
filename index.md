@@ -1,17 +1,22 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.0-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.1-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
 (full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
 
-To regenerate the API documentation with DocC (xcodebuild):
+To regenerate the API documentation with DocC:
 
 ```bash
-bash SwiftyStats/make_doc.sh             # for GitHub Pages (base path 'SwiftyStats')
-# or for local preview without a base path prefix
-bash SwiftyStats/make_doc.sh local
+# GitHub Pages (base path = repo name by default)
+bash make_doc.sh
+
+# Override base path (if the repo name differs)
+bash make_doc.sh --base-path SwiftyStats
+
+# Local preview without a base path prefix
+bash make_doc.sh local   # or: bash make_doc.sh --local
 ```
-Requires Xcode 13.3+ with DocC support. The script builds a .doccarchive via `xcodebuild docbuild` and converts it for static hosting using `xcrun docc`, emitting static docs into `./docs`.
+Requires Xcode 13.3+ with DocC support. The script uses the `swift-docc-plugin` to generate a static DocC site into `./docs` (transformed for static hosting; with base path `SwiftyStats` for GitHub Pages or none for local preview).
 
 Local preview tips:
 - If you used `make_doc.sh local`, serve `./docs` and open http://localhost:8000/documentation/swiftystats
@@ -20,11 +25,11 @@ Local preview tips:
 SwiftyStats is a framework written entirely in Swift that makes heavy use of generic types. SwiftyStats contains frequently used statistical procedures. 
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
-# New in version 1.2.0
-* Standardized terminology: use “p-value” consistently across runtime descriptions and docs
-* Improved public API doc comments (SpecialFunctions, Integrator, distributions)
-* README and index updates: docs generation instructions, corrected examples, clarified `make test`
-* General refactoring and minor typo fixes
+# New in version 1.2.1
+* Public API name corrections with deprecated aliases for backward compatibility
+* Documentation: switched to DocC static site; added `make_doc.sh` at repo root with `--base-path`/`--local` support
+* Spellings/grammar cleaned up across comments and user-facing docs
+* Includes 1.2.0 improvements: consistent “p-value”, improved API doc comments, README/index clarifications
 
 # Important
 
@@ -42,9 +47,9 @@ The following "namespaces"/classes are provided (among others):
 * [`SSHypothesisTesting`](docs/Enums/SSHypothesisTesting.html) (enum)
 * [`SSProbDist`](docs/Enums/SSProbDist.html) (enum)
 * [`SSDataFrame`](docs/Classes/SSDataFrame.html) instances encapsulate datasets. You can imagine the structure of an `SSDataFrame` object as a table: The columns of the table correspond to the individual dataset and the rows correspond to the data of the dataset.
-* [`SSCrossTab`](docs/Structures/SSCrossTab.html) contains a cross table with the usual structure (like a n x m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals etc.).
+* [`SSCrossTab`](docs/Structures/SSCrossTab.html) contains a cross table with the usual structure (like an n × m matrix) and provides the statistics needed for frequency comparisons (Chi-square, Phi, residuals, etc.).
 
-There are several extensions to standard Swift types (`Array`, Floating point types, `String `).
+There are several extensions to standard Swift types (`Array`, floating-point types, `String`).
 
 # Using Xcode
 
@@ -54,7 +59,7 @@ The attached Xcode project contains four targets:
 > * SwiftyStatsTests (Test suite)
 > * SwiftStatsCLTest (a command line demo)
 
-*Each target must be built individually (i.e. no dependencies are defined)!*
+*Each target must be built individually (i.e., no dependencies are defined)!*
 
 In addition, a Playground is added to
 > * test the framework and 
@@ -64,7 +69,7 @@ In addition, a Playground is added to
 Due to the extensive support of generic types, the type checker runs hot and takes a long time to compile. Therefore the code doesn't look "nice" in some places, because "complex" expressions (like `(z1 + z1 - w) / (z1 * w)`) had to be simplified.
 
 # How to Install
-## CocoaPods (recommended if your are on a Mac)
+## CocoaPods (recommended if you are on a Mac)
 [CocoaPods](http://cocoapods.org) is the preferred way to add SwiftyStats to your project:
 
 ```bash
@@ -101,7 +106,7 @@ Edit your `Package.swift` file:
 ```swift
 import PackageDescription
 // for Swift 5
-let version = "1.2.0"
+let version = "1.2.1"
 // for earlier versions:
 // let version = "1.1.1"
 let package = Package(
@@ -123,7 +128,7 @@ For more information about the Swift Package Manager click [here](https://github
 * `make` or `make debug` builds the module in debug-configuration
 * `make release` builds the module in release-configuration
 * `make test` builds the module, copies test resources, and runs the test suite
-* `make clean` resets the build-process
+* `make clean` resets the build process
 
 # Tests
 The integrated test suite uses numerical data for comparison with the results calculated by SwiftyStats. The comparison data were generated using common computer algebra systems and numerical software. 
@@ -246,7 +251,7 @@ Probability distributions in general are defined within relatively narrow condit
 * columnSum(columnName:)
 * total
 * rowTotal()
-* colummTotal()
+* columnTotal()
 * largestRowTotal()
 * largestCellCount(atColumn:)
 * largestCellCount(atRow:)
@@ -285,7 +290,7 @@ Probability distributions in general are defined within relatively narrow condit
 * Erlang
 * Exponential
 * Chi Square (central, non-central)
-* F-RATIO (central, non central)
+* F-RATIO (central, non-central)
 * Gamma
 * GAUSSIAN
 * Laplace
@@ -306,7 +311,7 @@ Probability distributions in general are defined within relatively narrow condit
 
 #### SSHypothesisTesting
 
-#####Equality of means
+##### Equality of means
 
 * twoSampleTTest(data1:data2:alpha:)
 * twoSampleTTest(sample1:sample2:alpha:)
@@ -325,12 +330,12 @@ Probability distributions in general are defined within relatively narrow condit
 * scheffeTest(dataFrame:alpha:)
 * bonferroniTest(dataFrame:)
 
-#####Autocorrelation
+##### Autocorrelation
 
 * autocorrelationCoefficient(array:lag:)
 * autocorrelation(array:)
 
-#####NPAR tests
+##### NPAR tests
 
 * ksGoFTest(array:targetDistribution:)
 * adNormalityTest(data:alpha:)
@@ -344,16 +349,16 @@ Probability distributions in general are defined within relatively narrow condit
 * waldWolfowitzTwoSampleTest(set1:set2:)
 * kruskalWallisHTest(data:alpha:)
 
-#####Outliers
+##### Outliers
 
 * grubbsTest(array:alpha:)
 * esdOutlierTest(array:alpha:maxOutliers:testType:)
 
-#####Randomness
+##### Randomness
 
 * runsTest(array:alpha:useCuttingPoint:userDefinedCuttingPoint:alternative:)
 
-#####Equality of variances
+##### Equality of variances
 
 * bartlettTest(array:alpha:)
 * leveneTest(array:testType:alpha:)

@@ -29,10 +29,11 @@ import os.log
 
 extension SSHypothesisTesting {
     
-    /// Performs the Bartlett test for two or more samples
-    /// - Parameter data: Array containing samples as SSExamine objects
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    /// Performs the Bartlett test for two or more samples.
+    /// - Parameter data: Array of samples as `SSExamine` objects
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSVarianceEqualityTestResult` or `nil` if inputs are inconsistent
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `data.count < 2`, data non-numeric, or variances not obtainable
     public static func bartlettTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
@@ -76,10 +77,11 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs the Bartlett test for two or more samples
-    /// - Parameter data: Array containing samples
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    /// Performs the Bartlett test for two or more samples.
+    /// - Parameter array: Array of samples; each sample is an `Array<T>` of numeric data
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSVarianceEqualityTestResult` or `nil` if inputs are inconsistent
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `array.count < 2`, data non-numeric, or variances not obtainable
     public static func bartlettTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         var _N: FPT = 0
         var _pS: FPT = 0
@@ -187,11 +189,12 @@ extension SSHypothesisTesting {
         }
     }
     
-    /// Performs the Levene / Brown-Forsythe test for two or more samples
-    /// - Parameter data: Array containing SSExamine objects
-    /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    /// Performs the Levene / Brown-Forsythe test for two or more samples.
+    /// - Parameter data: Array of `SSExamine` samples
+    /// - Parameter testType: `.median` (Brown–Forsythe), `.mean` (Levene), or `.trimmedMean` (10% trimmed)
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSVarianceEqualityTestResult` or `nil` if inputs are inconsistent
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `data.count < 2`, data non-numeric, or variances not obtainable
     public static func leveneTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable  {
         if data.count < 2 {
             #if os(macOS) || os(iOS)
@@ -232,11 +235,12 @@ extension SSHypothesisTesting {
     }
     
     
-    /// Performs the Levene / Brown-Forsythe test for two or more samples
-    /// - Parameter data: Array containing samples
-    /// - Parameter testType: .median (Brown-Forsythe test), .mean (Levene test), .trimmedMean (10% trimmed mean)
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data.count < 2 or no variances are obtainable
+    /// Performs the Levene / Brown-Forsythe test for two or more samples.
+    /// - Parameter array: Array of samples; each sample is an `Array<T>` of numeric data
+    /// - Parameter testType: `.median` (Brown–Forsythe), `.mean` (Levene), or `.trimmedMean` (10% trimmed)
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSVarianceEqualityTestResult` or `nil` if inputs are inconsistent
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `array.count < 2`, data non-numeric, or variances not obtainable
     public static func leveneTest<T, FPT: SSFloatingPoint & Codable>(array: Array<Array<T>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         var _N: FPT = 0
         var _s1: FPT = 0
@@ -415,11 +419,12 @@ extension SSHypothesisTesting {
         }
     }
     
-    /// Performs the Chi^2 variance equality test
-    /// - Parameter data: Data as Array<Numeric>
-    /// - Parameter s0: nominal variance
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data.sampleSize < 2 || s0 <= 0
+    /// Performs the Chi-square variance test for a single sample.
+    /// - Parameter array: Array of numeric observations
+    /// - Parameter s0: Nominal variance to test against
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSChiSquareVarianceTestResult` with test statistics
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `array.count < 2` or `s0 <= 0`
     public static func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(array: Array<T>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if array.count < 2 {
             #if os(macOS) || os(iOS)
@@ -451,11 +456,12 @@ extension SSHypothesisTesting {
         }
     }
     
-    /// Performs the Chi^2 variance equality test
-    /// - Parameter sample: Data as SSExamine<Numeric, SSFloatingPoint>
-    /// - Parameter s0: nominal variance
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if sample.sampleSize < 2 || s0 <= 0
+    /// Performs the Chi-square variance test for a single sample.
+    /// - Parameter sample: `SSExamine` wrapper with numeric observations
+    /// - Parameter s0: Nominal variance to test against
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSChiSquareVarianceTestResult` with test statistics
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if `sample.sampleSize < 2` or `s0 <= 0`
     public static func chiSquareVarianceTest<T, FPT: SSFloatingPoint & Codable>(sample: SSExamine<T, FPT>, nominalVariance s0: FPT, alpha: FPT) throws -> SSChiSquareVarianceTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if sample.sampleSize < 2 {
             #if os(macOS) || os(iOS)
@@ -519,11 +525,12 @@ extension SSHypothesisTesting {
         }
     }
     
-    /// Performs the F ratio test for variance equality
-    /// - Parameter data1: Data as Array<Numeric>
-    /// - Parameter data1: Data as Array<Numeric>
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if data1.sampleSize < 2 or data1.sampleSize < 2
+    /// Performs the F-ratio test for equality of two variances.
+    /// - Parameter data1: First sample as array of numeric observations
+    /// - Parameter data2: Second sample as array of numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSFTestResult` with F-statistic, p-values, confidence intervals and decisions
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if either sample has fewer than two observations
     public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(data1: Array<T>, data2: Array<T>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if data1.count < 2 {
             #if os(macOS) || os(iOS)
@@ -555,11 +562,12 @@ extension SSHypothesisTesting {
         }
     }
     
-    /// Performs the F ratio test for variance equality
-    /// - Parameter sample1: Data as SSExamine<Numeric, SSFloatingPoint>
-    /// - Parameter sample2: Data as SSExamine<Numeric, SSFloatingPoint>
-    /// - Parameter alpha: Alpha
-    /// - Throws: SSSwiftyStatsError if sample1.sampleSize < 2 or sample1.sampleSize < 2
+    /// Performs the F-ratio test for equality of two variances.
+    /// - Parameter sample1: First sample as `SSExamine` with numeric observations
+    /// - Parameter sample2: Second sample as `SSExamine` with numeric observations
+    /// - Parameter alpha: Significance level (0 < alpha < 1)
+    /// - Returns: `SSFTestResult` with F-statistic, p-values, confidence intervals and decisions
+    /// - Throws: `SSSwiftyStatsError.invalidArgument` if either sample has fewer than two observations or non-numeric data
     public static func fTestVarianceEquality<T, FPT: SSFloatingPoint & Codable>(sample1: SSExamine<T, FPT>, sample2: SSExamine<T, FPT>, alpha: FPT) throws -> SSFTestResult<FPT> where T: Hashable & Comparable & Codable {
         if sample1.sampleSize < 2 {
             #if os(macOS) || os(iOS)

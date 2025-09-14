@@ -110,7 +110,7 @@ extension SSProbDist {
         }
         
         /// Returns the quantile of the Uniform distribution.
-        /// - Parameter x: x
+        /// - Parameter p: p
         /// - Parameter a: Lower bound
         /// - Parameter b: Upper bound
         /// - Throws: SSSwiftyStatsError if a >= b

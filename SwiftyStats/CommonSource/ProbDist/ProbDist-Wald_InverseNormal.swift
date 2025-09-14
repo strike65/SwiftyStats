@@ -151,7 +151,7 @@ extension SSProbDist {
         /// - Parameter p: p
         /// - Parameter a: mean
         /// - Parameter b: Scale
-        /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 0
+        /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0 || p < 0 || p > 1
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean a: FPT, lambda b: FPT) throws -> FPT {
             if (a <= 0) {
                 #if os(macOS) || os(iOS)

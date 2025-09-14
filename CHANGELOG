@@ -1,10 +1,26 @@
+Version 1.2.1
+- feat: public API name corrections with deprecation shims
+  - SSCrosstab.colummTotal() → SSCrosstab.columnTotal() (old kept as deprecated alias)
+  - SSCrosstab.largestColumTotal() → SSCrosstab.largestColumnTotal() (old kept as deprecated alias)
+  - SSCumulativeFrequencyTableItem.cumulativefrequency → SSCumulativeFrequencyTableItem.cumulativeFrequency (old kept as deprecated alias)
+- docs: migrate docs generation to DocC static site
+  - add make_doc.sh to repo root (supports --base-path/--local)
+  - emit static site in ./docs with correct hosting base path
+  - module root page restored so all public symbols are listed
+  - README/index/AGENTS updated with new instructions
+- fix: spelling/grammar in comments and user-facing texts across Swift and docs (typos, hyphenation, punctuation)
+- fix: various doc comment issues (stray HTML tags, wording like “supposed by” → “proposed”, “Indizes” → “indices”, “and/or” phrasing)
+
 Version 1.2.0
 - update: thread-safe lgamma1-function
 - update: Swift 6
 - update: standardized "p-value" wording across descriptions and docs
 - update: improved public API doc comments (SpecialFunctions, Integrator, distributions)
 - update: README and index with docs generation steps and corrected examples
+- move: `make_doc.sh` to repo root; generate docs via `swift-docc-plugin`; emit static site into `./docs`
 - fixed: minor typos and formatting
+- rename: SSCrosstab.colummTotal() -> SSCrosstab.columnTotal() (old name kept as deprecated alias)
+- rename: SSCumulativeFrequencyTableItem.cumulativefrequency -> SSCumulativeFrequencyTableItem.cumulativeFrequency (old name kept as deprecated alias)
 
 Version 1.1.8
 - fixed: typos
@@ -19,10 +35,10 @@ Version 1.1.6
 - maintenance
 
 Version 1.1.5
-- should compile on linux
+- should compile on Linux
 
 Version 1.1.4
-- fixed: PackageManager
+- fixed: Package Manager
 
 Version 1.1.2
 - fixed: isNumeric(:)
@@ -35,8 +51,8 @@ Version 1.1.1
 
 Version 1.1.0
 - namespaces (using enums without cases)
-- split "complex" expression into smaller pieces to optimize time needed to build
-- Probability distributions: SSProbStat.[DISTRIBUTION].[cdf|pdf|para|quantile]
+- split "complex" expressions into smaller pieces to optimize the time needed to build
+- Probability distributions: SSProbDist.[DISTRIBUTION].[cdf|pdf|para|quantile]
 - Special functions: SSSpecialFunctions.[FUNCTION]
 - Helpers
 - SSMath.[FUNCTION]
@@ -59,7 +75,7 @@ Version 1.0.4
 
 Version 1.0.3
 - added support for Swift 5
-- some face lifting
+- some facelifting
 
 Version 1.0.1
 - fixed: BesselI1
@@ -72,7 +88,7 @@ Version 1.0.0
 - added: Rayleigh distribution
 - added: Extreme Value distribution
 - added: Gastwirth's robust location estimator
-- added: Sn statistics according Christophe Croux and Peter Rousseeuw
+- added: Sn statistics according to Christophe Croux and Peter Rousseeuw
 - added: tss (Total Sum of Squares about the mean)
 - added: SSExamine.autocorrelation
 - added: Marcum Functions (parameters behave like Mathematica MarcumQ)
@@ -98,14 +114,14 @@ Version 0.8.13
 
 
 Version 0.8.12
-- added: Pochhammer and LogPochhammer (pochammer(double:,double:), lpochhammer(double:,double:))
+- added: Pochhammer and LogPochhammer (pochhammer(double:,double:), lpochhammer(double:,double:))
 - added: parameters of noncentral Student's T Distr.
 - FIXED: parameters of beta distribution
 - FIXED: normalized gamma P setting converged.pointee
 - FIXED: kurtosis gamma distribution
 - FIXED: Erlang distribution
 - FIXED: Weibull distribution
-- FIXED: 3 Param Triangular CDF
+- FIXED: 3-parameter Triangular CDF
 
 Version 0.8.11
 - update README.md

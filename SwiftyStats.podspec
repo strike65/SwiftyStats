@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 	s.name 		= 'SwiftyStats'
-s.version 	= '1.2.0'
-	s.summary 	= 'Descriptive Statistics, Probability Functions (PDF, CDF, iCDF), parametric and nonparametric tests'
+s.version 	= '1.2.1'
+	s.summary 	= 'Descriptive statistics, probability functions (PDF, CDF, inverse CDF), parametric and nonparametric tests'
 	s.description 	= <<-DESC
 Includes (list is not exhaustive):
 Descriptive Statistics
@@ -10,28 +10,28 @@ Descriptive Statistics
 - frequencies (absolute, relative, cumulative)
 - empirical cdf
 - means (arithmetic, geometric, harmonic, contraharmonic)
-- empirical dispersion measures (variance, semi variance, standard deviation, standard error)
+- empirical dispersion measures (variance, semivariance, standard deviation, standard error)
 - empirical moments (central, about the origin, standardized)
-- entropy based measures
+- entropy-based measures
 - mode
 - maximum, minimum
 - quantiles
-- Box-and-Whisker statistics
+- box-and-whisker statistics
 - outliers
 - ...
 
 Hypothesis Testing
-- Kolmogorov Smirnov test (one/two sample))
+- Kolmogorov–Smirnov test (one-/two-sample)
 - Anderson Darling test
 - Bartlett test
 - Levene test (with variants)
 - Grubbs test
 - ESD test (Rosner test)
-- t test (matched, 2-sample)
+- t-test (matched, two-sample)
 - Mann Whitney U-test
 - Wilcoxon matched pairs test
 - sign test
-- one factor ANOVA
+- one-factor ANOVA
 - Tukey-Kramer post hoc test
 - Scheffé test
 - Chi^2 test

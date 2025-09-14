@@ -259,7 +259,7 @@ extension SSProbDist {
         /// - Parameter a: Shape parameter a
         /// - Parameter b: Shape parameter b
         /// - Parameter lambda: Noncentrality
-        /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
+        /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function, The American Statistician, Volume 47, Number 2, May 1993, pages 129–131.
         ///
         /// C version by John Burkardt
         /// Swift port by strike65
@@ -345,7 +345,7 @@ extension SSProbDist {
         /// - Parameter a: Shape parameter a
         /// - Parameter b: Shape parameter b
         /// - Parameter lambda: Noncentrality
-        /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function,The American Statistician,Volume 47, Number 2, May 1993, pages 129-131.
+        /// - Note: Uses an algorithm described in Harry Posten, An Effective Algorithm for the Noncentral Beta Distribution Function, The American Statistician, Volume 47, Number 2, May 1993, pages 129–131.
         ///
         /// C version by John Burkardt
         /// Swift port by strike65
@@ -408,4 +408,3 @@ extension SSProbDist {
     }
     
 }
-

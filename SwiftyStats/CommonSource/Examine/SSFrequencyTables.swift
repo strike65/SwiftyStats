@@ -77,6 +77,17 @@ public struct SSCumulativeFrequencyTableItem<SSElement, FPT> where SSElement: Ha
         }
     }
     /// Cumulative frequency.
+    public var cumulativeFrequency: Int {
+        get {
+            return privateCumAbs
+        }
+        set {
+            privateCumAbs = newValue
+        }
+    }
+
+    /// Cumulative frequency.
+    @available(*, deprecated, renamed: "cumulativeFrequency")
     public var cumulativefrequency: Int {
         get {
             return privateCumAbs

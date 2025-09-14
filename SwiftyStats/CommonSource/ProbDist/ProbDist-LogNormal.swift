@@ -33,7 +33,7 @@ extension SSProbDist {
         
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Log Normal distribution.
         /// - Parameter mean: mean
-        /// - Parameter variance: variance
+        /// - Parameter v: variance
         /// - Throws: SSSwiftyStatsError if v <= 0
         public static func para<FPT: SSFloatingPoint & Codable>(mean: FPT, variance v: FPT) throws -> SSProbDistParams<FPT> {
             var result: SSProbDistParams<FPT> = SSProbDistParams<FPT>()
@@ -63,10 +63,10 @@ extension SSProbDist {
             return result
         }
         
-        /// Returns the cdf of the Logarithmic Normal distribution
+        /// Returns the pdf of the Log-normal distribution
         /// - Parameter x: x
         /// - Parameter mean: mean
-        /// - Parameter variance: variance
+        /// - Parameter v: variance
         /// - Throws: SSSwiftyStatsError if v <= 0
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, variance v: FPT) throws -> FPT {
             if v <= 0 {
@@ -98,10 +98,10 @@ extension SSProbDist {
             }
         }
         
-        /// Returns the pdf of the Logarithmic Normal distribution
+        /// Returns the cdf of the Log-normal distribution
         /// - Parameter x: x
         /// - Parameter mean: mean
-        /// - Parameter variance: variance
+        /// - Parameter v: variance
         /// - Throws: SSSwiftyStatsError if v <= 0
         public static func cdf<FPT: SSFloatingPoint & Codable>(x: FPT, mean: FPT, variance v: FPT) throws -> FPT {
             if v <= 0 {
@@ -123,10 +123,10 @@ extension SSProbDist {
         }
         
         
-        /// Returns the pdf of the Logarithmic Normal distribution
+        /// Returns the quantile of the Log-normal distribution
         /// - Parameter p: p
         /// - Parameter mean: mean
-        /// - Parameter variance: variance
+        /// - Parameter v: variance
         /// - Throws: SSSwiftyStatsError if v <= 0 and/or p < 0 and/or p > 1
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean: FPT, variance v: FPT) throws -> FPT {
             if v <= 0 {
@@ -168,4 +168,3 @@ extension SSProbDist {
         
     }
 }
-

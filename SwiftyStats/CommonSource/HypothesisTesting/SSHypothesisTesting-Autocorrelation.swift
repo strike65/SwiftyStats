@@ -99,7 +99,7 @@ extension SSHypothesisTesting {
     ///     let lew1: Array<Double> = [-213,-564,-35,-15,141,115,-420]
     ///     let result: SSBoxLjungResult = try! SSHypothesisTesting.autocorrelation(data:lew1)
     ///
-    /// - Parameter data: Array<Double>
+    ///- Parameter array: Array<FPT>
     /// - Returns: SSBoxLjungResult struct
     /// - Throws: SSSwiftyStatsError if data.sampleSize < 2
     public static func autocorrelation<FPT: SSFloatingPoint & Codable>(array: Array<FPT>) throws -> SSBoxLjungResult<FPT> {

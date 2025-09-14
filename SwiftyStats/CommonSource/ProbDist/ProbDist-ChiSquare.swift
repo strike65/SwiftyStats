@@ -91,6 +91,8 @@ extension SSProbDist {
         /// Returns the cdf of the Chi^2 distribution.
         /// - Parameter chi: Chi
         /// - Parameter df: Degrees of freedom
+        /// - Parameter tail: Whether to return the lower or upper tail (default: `.lower`)
+        /// - Parameter rlog: If true, return `log(cdf)` instead of `cdf` (default: false)
         /// - Throws: SSSwiftyStatsError if df <= 0
         public static func cdf<FPT: SSFloatingPoint & Codable>(chi: FPT, degreesOfFreedom df: FPT, tail: SSCDFTail = .lower, rlog: Bool = false) throws -> FPT {
             if df <= 0 {
@@ -422,4 +424,3 @@ extension SSProbDist {
     }
     
 }
-

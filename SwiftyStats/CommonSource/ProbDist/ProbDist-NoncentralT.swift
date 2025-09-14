@@ -32,9 +32,9 @@ import os.log
 public typealias LAPACKInt = __LAPACK_int
 /*
 #if ACCELERATE_LAPACK_ILP64
-public typealias LAPACKInt = Int      // ILP64 (64-bit Indizes)
+public typealias LAPACKInt = Int      // ILP64 (64-bit indices)
 #else
-public typealias LAPACKInt = Int32    // LP64  (32-bit Indizes)
+public typealias LAPACKInt = Int32    // LP64  (32-bit indices)
 #endif
 */
  @inline(__always)
@@ -188,23 +188,22 @@ extension SSProbDist {
          *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
          */
         /// Returns the cdf of the noncentral Student t distribution.
-        /// - Parameter x: x
-        /// - Parameter df: degrees of freedom
-        /// - Parameter ncp: noncentrality parameter
-        /// - Parameter tail: tail
-        /// - Parameter nSubIntervals: Number of subintervals. Possible values: 32,16,12,10,8,6,4,2. Default is set to 16.
-        /// - Returns: The tuple (cdf:, error:)
+        /// - Parameter t: t
+        /// - Parameter df: Degrees of freedom
+        /// - Parameter lambda: Noncentrality parameter
+        /// - Parameter rlog: If true, return `log(cdf)` instead of `cdf` (default: false)
+        /// - Returns: The cdf value
         ///
         /// ### NOTE ###
-        /// This functions uses an algorithm supposed by Viktor Witkovsky (witkovsky@savba.sk):
-        /// Witkovsky V. (2013). A Note on Computing Extreme Tail</p>
-        /// Probabilities of the Noncentral T Distribution with Large</p>
-        /// Noncentrality Parameter. Working Paper, Institute of Measurement</p>
+        /// This function uses an algorithm proposed by Viktor Witkovsky (witkovsky@savba.sk):
+        /// Witkovsky V. (2013). A Note on Computing Extreme Tail
+        /// Probabilities of the Noncentral T Distribution with Large
+        /// Noncentrality Parameter. Working Paper, Institute of Measurement
         /// Science, Slovak Academy of Sciences, Bratislava.
         ///
-        /// The algorithm uses a Gauss-Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
+        /// The algorithm uses a Gauss–Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
         /// error (in case of extreme parameters) the number of subintervals can be adjusted.
-        /// Swift Version (C) strike65 2018
+        /// Swift version (c) strike65, 2018
         public static func cdf<T: SSFloatingPoint & Codable>(t: T, degreesOfFreedom df: T, nonCentralityPara lambda: T, rlog: Bool! = false) throws -> T {
             
             var result: (cdf: T, error: T)
@@ -257,9 +256,10 @@ extension SSProbDist {
         
         /// Returns the quantile function of the noncentral Student's t-distribution
         /// - Parameter p: p
-        /// - Parameter nonCentralityPara: noncentrality parameter
         /// - Parameter df: Degrees of freedom
-        /// - Throws: SSSwiftyStatsError if df <= 0 or/and p < 0 or p > 1.0
+        /// - Parameter nonCentralityPara: Noncentrality parameter
+        /// - Parameter rlog: If true, interpret `p` in log space
+        /// - Throws: SSSwiftyStatsError if df <= 0 and/or p < 0 or p > 1.0
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT, rlog: Bool! = false) throws -> FPT {
             let accu: FPT =  Helpers.makeFP(1E-13)
             let eps: FPT = 10 * FPT.ulpOfOne
@@ -928,4 +928,3 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
         return ([FPT.nan],[FPT.nan],[FPT.nan],[])
     }
 }
-

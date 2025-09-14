@@ -383,7 +383,7 @@ extension SSExamine {
     }
     
     /// Returns the powered mean of order n
-    /// - Parameter n: The order of the powered mean
+    /// - Parameter order: The order of the powered mean
     /// - Returns: The powered mean, nil if the receiver contains non-numerical data.
     public func poweredMean(order: FPT) -> FPT? {
         if order <= 0 {
@@ -1045,7 +1045,7 @@ extension SSExamine {
     
     /// Returns the median absolute deviation around the reference point given (`rp`). If you would like to know the median absolute deviation from the median, you can do so by setting the reference point to the median
     /// - Parameter rp: Reference point
-    /// - Parameter scaleFactor: Used for consistency reasons. If nil, the default value will be used.
+    /// - Parameter c: Used for consistency reasons. If nil, the default value will be used.
     /// ### Note ###
     /// The scale factor is valid for normally distributed data only.
     public func medianAbsoluteDeviation(center rp: FPT, scaleFactor c: FPT?) -> FPT? {
@@ -1179,6 +1179,7 @@ extension SSExamine {
     /// If .origin is specified, the r_th moment about the origin will be returned.
     /// If .standardized is specified, the r_th standardized moment will be returned.
     /// - Parameter r: r
+    /// - Parameter type: moment type
     public func moment(r: Int, type: SSMomentType) -> FPT? {
         switch type {
         case .central:
@@ -1419,7 +1420,7 @@ extension SSExamine {
     /// Returns an Array containing outliers if those exist. Uses the ESD statistics,
     /// - Parameter alpha: Alpha
     /// - Parameter max: Maximum number of outliers to return
-    /// - Parameter testType: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
+    /// - Parameter t: SSOutlierTest.grubbs or SSOutlierTest.esd (Rosner Test)
     public func outliers(alpha: FPT!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if isNotEmptyAndNumeric {
             var tempArray = Array<Double>()

@@ -82,6 +82,7 @@ import Foundation
  Cehbyshev.swift
  */
 
+
 extension SSSpecialFunctions.Helper {
     internal static func chebyshevEval<FPT: SSFloatingPoint & Codable>(x: FPT, array: [FPT], n: Int) -> FPT {
         var b0, b1, b2: FPT

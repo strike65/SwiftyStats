@@ -97,8 +97,8 @@ extension SSProbDist {
             return result
         }
         
-        /// Returns the pdf of the Cauchy distribution.
-        /// - Parameter x: x
+        /// Returns the quantile of the Cauchy distribution.
+        /// - Parameter p: p
         /// - Parameter a: Location parameter a
         /// - Parameter b: Scale parameter b
         /// - Throws: SSSwiftyStatsError if (b <= 0 || p < 0 || p > 1)

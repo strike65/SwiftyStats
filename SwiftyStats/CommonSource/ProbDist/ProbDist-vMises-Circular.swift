@@ -238,7 +238,7 @@ extension SSProbDist {
         /// - Parameter p: p
         /// - Parameter m: Mean direction
         /// - Parameter c: Concentration parameter (κ)
-        /// - Throws: SSSwiftyStatsError if c <= 0 or/and p < 0 or p > 1.0
+        /// - Throws: SSSwiftyStatsError if c <= 0 and/or p < 0 or p > 1.0
         public static func quantile(p: Double!, mean m: Double!, concentration c: Double!) throws -> Double {
             if c <= 0.0 {
                 #if os(macOS) || os(iOS)
@@ -264,8 +264,8 @@ extension SSProbDist {
             }
             /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
              * coded in C by Gary Perlman
-             * coded in Basic by Michaek Zito 2003
-             * coded in C# by strike65 2005
+             * coded in Basic by Michael Zito (2003)
+             * coded in C# by strike65 (2005)
              */
             let eps: Double = 2.0 * Double.ulpOfOne
             var mVal, MaxM, MinM, _test: Double

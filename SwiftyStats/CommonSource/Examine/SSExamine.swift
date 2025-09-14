@@ -228,7 +228,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     /// Initializes an `SSExamine` instance from an array.
     /// - Parameter array: The array containing the elements.
-    /// - Parameter characterSet: Only used when initialized from a string; ignored here.
+    /// - Parameter name: Name of the instance
+    ///- Parameter characterSet: Only used when initialized from a string; ignored here.
     public init(withArray array: Array<SSElement>, name: String?, characterSet: CharacterSet?) {
         super.init()
         createName(name: name)
@@ -243,6 +244,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter separator: The separator used in the file
     /// - Parameter stringEncoding: The encoding to use. Default: .utf8
     /// - Parameter elementsEnclosedBy: A string that encloses each element.
+    /// - Parameter parser: Closure that converts each extracted String token into an `SSElement` (return `nil` to skip/abort)
     /// - Throws: SSSwiftyStatsError if the file doesn't exist or can't be accessed.
     /// - Important: It is assumed that the elements are numeric.
     public class func examine(fromFile path: String, separator: String, elementsEnclosedBy: String? = nil, stringEncoding: String.Encoding = String.Encoding.utf8, _ parser: (String?) -> SSElement?) throws -> SSExamine<SSElement, FPT>? {
@@ -407,6 +409,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter separator: Separator to use.
     /// - Parameter stringEncoding: String encoding
     /// - Parameter encloseElementsBy: Default = nil
+    /// - Parameter asRow: If true, writes elements on a single line; otherwise includes a header row with `name` and line breaks
     /// - Throws: SSSwiftyStatsError if the file could not be written
     public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", encloseElementsBy: String? = nil, asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         var result = true
@@ -461,8 +464,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     /// Returns a SSExamine instance initialized using the string provided. Level of measurement will be set to .nominal.
-    /// - Parameter string: String
-    /// - Parameter characterSet: If characterSet is not nil, only characters contained in the set will be appended
+    /// - Parameter string: Input string
+    /// - Parameter name: Optional name for the created instance
+    /// - Parameter characterSet: If not nil, only characters contained in the set will be appended
     public class func examineWithString(_ string: String, name: String?, characterSet: CharacterSet?) -> SSExamine<String, FPT>? {
         do {
             let result:SSExamine<String, FPT> = try SSExamine<String, FPT>(withObject: string, levelOfMeasurement: .nominal, name: name,  characterSet: characterSet)
@@ -556,6 +560,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         case data
     }
     
+    /// Encodes the receiver into the given encoder.
+    /// - Parameter encoder: The encoder to write data to
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.name, forKey: CodingKeys.name)
@@ -569,6 +575,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     
     
+    /// Creates a new instance by decoding from the given decoder.
+    /// - Parameter decoder: The decoder to read data from
     required public init(from decoder: Decoder) throws {
         super.init()
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -588,6 +596,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     
     // MARK: NSCopying
+    /// Returns a copy of the instance.
+    /// - Parameter zone: Memory zone to use (ignored)
     public func copy(with zone: NSZone? = nil) -> Any {
         let res: SSExamine = SSExamine()
         if !isEmpty {
@@ -629,8 +639,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     
     // MARK: SSExamineContainer Protocol
     
-    /// Returns true, if the table contains the item
-    /// - Parameter item: Item to search
+    /// Returns true if the table contains the given element.
+    /// - Parameter element: Element to search for
     public func contains(_ element: SSElement) -> Bool {
         if !isEmpty {
             let test = items.contains(where: { (key: SSElement, value: Int) -> Bool in
@@ -649,8 +659,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     }
     
     
-    /// Returns the relative Frequency of item
-    /// - Parameter element: Item
+    /// Returns the relative frequency of the given element.
+    /// - Parameter element: Element
     public func rFrequency(_ element: SSElement) -> FPT {
         //
         if let rf = self.elements[element] {
@@ -661,8 +671,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Returns the absolute frequency of item
-    /// - Parameter element: Item
+    /// Returns the absolute frequency of the given element.
+    /// - Parameter element: Element
     public func frequency(_ element: SSElement) -> Int {
         if contains(element) {
             return items[element]!
@@ -672,8 +682,8 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Appends <item> and updates frequencies
-    /// - Parameter element: Item
+    /// Appends the given element and updates frequencies.
+    /// - Parameter element: Element to append
     public func append(_ element: SSElement) {
         var tempPos: Array<Int>
         let test = items.contains(where: { (key: SSElement, value: Int) in
@@ -701,9 +711,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         updateCumulativeFrequencies()
     }
     
-    /// Appends n elements
-    /// - Parameter n: Count of elements to append
-    /// - Parameter elements: Item to append
+    /// Appends the given element `n` times and updates frequencies.
+    /// - Parameter n: Number of times to append
+    /// - Parameter element: Element to append repeatedly
     public func append(repeating n: Int, element: SSElement) {
         for _ in 1...n {
             append(element)
@@ -711,7 +721,7 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         updateCumulativeFrequencies()
     }
     
-    /// Appends elements from an array
+    /// Appends elements from an array.
     /// - Parameter array: Array containing elements to add
     public func append(contentOf array: Array<SSElement>) {
         if array.count > 0 {
@@ -768,9 +778,9 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
         }
     }
     
-    /// Removes item from the table.
-    /// - Parameter item: Item
-    /// - Parameter allOccurences: If false, only the first matching item is removed. Default: false
+    /// Removes an element from the table.
+    /// - Parameter element: Element to remove
+    /// - Parameter all: If true, remove all occurrences; if false, remove only the first match (default: false)
     public func remove(_ element: SSElement, allOccurences all: Bool = false) {
         if !isEmpty {
             if contains(element) {
@@ -816,10 +826,10 @@ extension SSExamine {
     
     // MARK: Elements
     
-    /// Returns all elements as one string. Elements are delimited by del.
+    /// Returns all elements as one string. Elements are delimited by `del`.
     /// - Parameter del: The delimiter. Can be nil or empty.
-    /// - Parameter asRow: If true, the parameter `del` is omitted. The name of the instance is used as the row header.
-    /// - Parameter encloseElementsBy: Default: nil.
+    /// - Parameter asRow: If true, writes a single line; otherwise a header line with `name` is included and elements are written on separate lines.
+    /// - Parameter encloseElementsBy: Optional string used to enclose every element (default: nil)
     public func elementsAsString(withDelimiter del: String?, asRow: Bool = true, encloseElementsBy: String? = nil) -> String? {
         let a: Array<SSElement> = elementsAsArray(sortOrder: .raw)!
         var res: String = String()

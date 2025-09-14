@@ -110,21 +110,21 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case .availableOnlyForNumbers:
             return "Only available for numbers in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .posixError:
-            return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
+            return "POSIX error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotWriteable:
             return "File not writable error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileExists:
-            return "File not writable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable because the file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .directoryDoesNotExist:
-            return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "Directory does not exist in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotFound:
-            return "File does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "File does not exist in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .errorCreatingObject:
-            return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "Unable to create examine object: " + self.file + " Line: \(self.line) in function: " + self.function
         case .internalError:
-            return "Fatal internal error:" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
+            return "Fatal internal error: " + self.file + " Line: \(self.line) in function: " + self.function + ". Contact the developer."
         case .singularity:
-            return "Argument singularity :" + self.file + " Line: \(self.line) in function: " + self.function + ". Function will return INF."
+            return "Argument singularity: " + self.file + " Line: \(self.line) in function: " + self.function + ". Function returns INF."
         case .maxExponentExceeded:
             return "Value of exponent required for summation (pFq):" + self.file + " Line: \(self.line) in function: " + self.function + ". Hints: (1) try using lnpfq = 1 or (2) use Float80."
             
@@ -160,21 +160,21 @@ public class SSSwiftyStatsError: NSError, LocalizedError, @unchecked Sendable {
         case .availableOnlyForNumbers:
             return "Only available for numbers in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .posixError:
-            return "POSIX error in:" + self.file + " Line: \(self.line) in function: " + self.function
+            return "POSIX error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotWriteable:
             return "File not writable error in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileExists:
-            return "File not writable because file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
+            return "File not writable because the file already exists in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .directoryDoesNotExist:
-            return "Directory does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "Directory does not exist in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .fileNotFound:
-            return "File does not exist in :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "File does not exist in: " + self.file + " Line: \(self.line) in function: " + self.function
         case .errorCreatingObject:
-            return "Unable to create examine object :" + self.file + " Line: \(self.line) in function: " + self.function
+            return "Unable to create examine object: " + self.file + " Line: \(self.line) in function: " + self.function
         case .internalError:
-            return "Fatal internal error:" + self.file + " Line: \(self.line) in function: " + self.function + ". Contact developer."
+            return "Fatal internal error: " + self.file + " Line: \(self.line) in function: " + self.function + ". Contact the developer."
         case .singularity:
-            return "Argument singularity :" + self.file + " Line: \(self.line) in function: " + self.function + ". Function will return INF."
+            return "Argument singularity: " + self.file + " Line: \(self.line) in function: " + self.function + ". Function returns INF."
         case .maxExponentExceeded:
             return "Value of exponent required for summation (pFq):" + self.file + " Line: \(self.line) in function: " + self.function + ". Hints: (1) try using lnpfq = 1 or (2) use Float80."
 

@@ -1489,7 +1489,7 @@ public enum SSSkewness: Int, Codable, CustomStringConvertible {
 
 }
 
-/// Type of semi variance
+/// Type of semivariance
 public enum SSSemiVariance: Int, Codable, CustomStringConvertible {
     /// lower semi-variance
     case lower
@@ -1634,6 +1634,5 @@ public enum SSIncompleteGammaFunction: Int, Codable, CustomStringConvertible {
 
 /// A tuple containing the results of one out of multiple comparisons.
 public typealias SSPostHocTestResult<FPT: SSFloatingPoint & Codable> = (row: String, meanDiff: FPT, testStat: FPT, pValue: FPT, testType: SSPostHocTestType)
-
 
 

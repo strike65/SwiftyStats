@@ -30,9 +30,9 @@ extension SSProbDist {
     public enum Weibull {
         
         /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the Weibull distribution.
-        /// - Parameter a: Location parameter
-        /// - Parameter b: Scale parameter
-        /// - Parameter c: Shape parameter
+        /// - Parameter loc: Location parameter
+        /// - Parameter scale: Scale parameter
+        /// - Parameter shape: Shape parameter
         /// - Throws: SSSwiftyStatsError if a <= 0 || b <= 0
         public static func para<FPT: SSFloatingPoint & Codable>(location loc: FPT, scale: FPT, shape: FPT) throws -> SSProbDistParams<FPT> {
             if (scale <= 0) {
