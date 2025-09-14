@@ -32,8 +32,8 @@ import Glibc
 #else
 import Darwin
 #endif
-#if canImport(Accelerate)
-import Accelerate.vecLib
+ #if canImport(Accelerate)
+import Accelerate
 #endif
 
 extension SSMath {

@@ -18,8 +18,13 @@
  */
 
 import Foundation
+/*
 #if canImport(Accelerate)
 import Accelerate
+#endif
+ */
+#if os(macOS) || os(iOS)
+import os.log
 #endif
 // naive implementation
 

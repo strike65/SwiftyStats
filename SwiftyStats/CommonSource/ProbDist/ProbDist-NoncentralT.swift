@@ -21,44 +21,92 @@
  */
 
 import Foundation
-#if canImport(Accelerate)
-import Accelerate.vecLib.LinearAlgebra
-#endif
 #if os(macOS) || os(iOS)
 import os.log
 #endif
-// LAPACK integer type is available when Accelerate is present
-#if canImport(Accelerate)
-public typealias LAPACKInt = __LAPACK_int
-/*
-#if ACCELERATE_LAPACK_ILP64
-public typealias LAPACKInt = Int      // ILP64 (64-bit indices)
-#else
-public typealias LAPACKInt = Int32    // LP64  (32-bit indices)
-#endif
-*/
+// Internal integer type for small linear solves in this file.
+public typealias LAPACKInt = Int
  @inline(__always)
  func lapack_dgesv(n: LAPACKInt, nrhs: LAPACKInt,
                    a: UnsafeMutablePointer<Double>, lda: LAPACKInt,
                    ipiv: UnsafeMutablePointer<LAPACKInt>,
                    b: UnsafeMutablePointer<Double>, ldb: LAPACKInt) -> LAPACKInt {
-     var n = n, nrhs = nrhs, lda = lda, ldb = ldb
-     var info: LAPACKInt = 0
-     dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, &info)
-     return info
+     // Minimal in-Swift Gaussian elimination with partial pivoting for nrhs == 1.
+     // Operates in-place on column-major A (lda rows) and vector b. Returns 0 on success, >0 if singular.
+     let nI = Int(n)
+     let ldaI = Int(lda)
+     let ldbI = Int(ldb)
+     if nI <= 0 || Int(nrhs) != 1 || ldaI < nI || ldbI < nI {
+         return LAPACKInt( -1 )
+     }
+     // Helper to index column-major storage
+     @inline(__always)
+     func idx(_ row: Int, _ col: Int) -> Int { row + col * ldaI }
+     // Initialize pivot indices (1-based like LAPACK)
+     for i in 0..<nI { ipiv[i] = LAPACKInt(i + 1) }
+     // Forward elimination with partial pivoting
+     for k in 0..<nI {
+         // Find pivot row k..n-1 maximizing |A[row,k]|
+         var pivotRow = k
+         var maxVal = abs(a[idx(k, k)])
+         if k + 1 < nI {
+             for r in (k+1)..<nI {
+                 let v = abs(a[idx(r, k)])
+                 if v > maxVal { maxVal = v; pivotRow = r }
+             }
+         }
+         if maxVal == 0 || !maxVal.isFinite {
+             return LAPACKInt(k + 1) // singular
+         }
+         if pivotRow != k {
+             // swap rows in A across all columns
+             for j in 0..<nI {
+                 let i1 = idx(k, j), i2 = idx(pivotRow, j)
+                 let tmp = a[i1]; a[i1] = a[i2]; a[i2] = tmp
+             }
+             // swap rows in b
+             let tmpb = b[k]; b[k] = b[pivotRow]; b[pivotRow] = tmpb
+             ipiv[k] = LAPACKInt(pivotRow + 1)
+         }
+         // Eliminate below pivot
+         let akk = a[idx(k, k)]
+         for i in (k+1)..<nI {
+             let factor = a[idx(i, k)] / akk
+             a[idx(i, k)] = 0.0
+             if k + 1 < nI {
+                 for j in (k+1)..<nI { a[idx(i, j)] -= factor * a[idx(k, j)] }
+             }
+             b[i] -= factor * b[k]
+         }
+     }
+     // Back substitution: solve Ux = b; write solution back into b
+     for i in stride(from: nI - 1, through: 0, by: -1) {
+         var sum = 0.0
+         if i + 1 < nI {
+             for j in (i+1)..<nI { sum += a[idx(i, j)] * b[j] }
+         }
+         b[i] = (b[i] - sum) / a[idx(i, i)]
+     }
+     return LAPACKInt(0)
  }
-#endif
 extension SSProbDist {
-    /// Non central Student T distribution
+    /// Noncentral Student's t distribution utilities (CDF, PDF, quantile, parameters).
+    ///
+    /// Implements numeric routines for the noncentral t distribution with
+    /// degrees of freedom `df > 0` and noncentrality parameter `lambda`.
+    /// The API mirrors other distributions: `para`, `cdf`, `pdf`, and `quantile`.
+    @available(*, deprecated, message: "Use SSProbDist.NonCentralStudentT instead")
     public enum NonCentralSudentT {
         
         
         #if arch(i386) || arch(x86_64)
         
-        /// Returns a SSProbDistParams struct containing mean, variance, kurtosis and skewness of the noncentral Student's T distribution.
-        /// - Parameter df: Degrees of freedom
-        /// - Parameter nonCentralityPara: noncentrality parameter
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// Returns distribution parameters (mean, variance, skewness, kurtosis).
+        /// - Parameters:
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - nonCentralityPara: Noncentrality parameter λ.
+        /// - Returns: `SSProbDistParams` with moments (some may be NaN if undefined for given `df`).
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
         public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT) throws -> SSProbDistParams<FPT> {
             
             var result:SSProbDistParams<FPT> = SSProbDistParams<FPT>()
@@ -187,29 +235,29 @@ extension SSProbDist {
          *    M_SQRT_2dPI  = 1/ {gamma(1.5) * sqrt(2)} = sqrt(2 / pi)
          *    M_LN_SQRT_PI = ln(sqrt(pi)) = ln(pi)/2
          */
-        /// Returns the cdf of the noncentral Student t distribution.
-        /// - Parameter t: t
-        /// - Parameter df: Degrees of freedom
-        /// - Parameter lambda: Noncentrality parameter
-        /// - Parameter rlog: If true, return `log(cdf)` instead of `cdf` (default: false)
-        /// - Returns: The cdf value
+        /// Returns the CDF of the noncentral Student's t distribution.
+        /// - Parameters:
+        ///   - t: Evaluation point.
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - nonCentralityPara: Noncentrality parameter λ.
+        ///   - rlog: If `true`, returns `log(CDF)`; otherwise returns `CDF` (default: `false`).
+        /// - Returns: The CDF at `t` for (`df`, `λ`).
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
         ///
-        /// ### NOTE ###
-        /// This function uses an algorithm proposed by Viktor Witkovsky (witkovsky@savba.sk):
+        /// Notes
+        /// Uses an algorithm proposed by Viktor Witkovsky (witkovsky@savba.sk):
         /// Witkovsky V. (2013). A Note on Computing Extreme Tail
         /// Probabilities of the Noncentral T Distribution with Large
         /// Noncentrality Parameter. Working Paper, Institute of Measurement
         /// Science, Slovak Academy of Sciences, Bratislava.
-        ///
-        /// The algorithm uses a Gauss–Kronrod quadrature with an error less than 1e-12 over a wide range of parameters. To reduce the
-        /// error (in case of extreme parameters) the number of subintervals can be adjusted.
-        /// Swift version (c) strike65, 2018
+        /// The algorithm uses Gauss–Kronrod quadrature; typical absolute error is < 1e-12
+        /// across a wide parameter range. For extreme tails, internal subintervals are adjusted.
+        /// Swift version (c) strike65, 2018.
         public static func cdf<T: SSFloatingPoint & Codable>(t: T, degreesOfFreedom df: T, nonCentralityPara lambda: T, rlog: Bool! = false) throws -> T {
-            
             var result: (cdf: T, error: T)
             do {
                 result = try cdfNonCentralTVW(x: t, df: df, ncp: lambda, tail: .lower, nSubIntervals: 16)
-                return result.cdf
+                return rlog ? SSMath.log1(result.cdf) : result.cdf
             }
             catch {
                 throw error
@@ -218,14 +266,16 @@ extension SSProbDist {
             
         }
         
-        /// Returns the pdf of the non-central Student's t-distribution
+        /// Returns the PDF of the noncentral Student's t distribution.
         /// <img src="../img/nctpdf.png" alt="">
-        /// where H is the Hermite polynomial
-        /// - Parameter x: x
-        /// - Parameter nonCentralityPara: noncentrality parameter
-        /// - Parameter df: Degrees of freedom
-        /// - Parameter rlog: Return log(pdf)
-        /// - Throws: SSSwiftyStatsError if df <= 0
+        /// where H is the Hermite polynomial.
+        /// - Parameters:
+        ///   - x: Evaluation point.
+        ///   - degreesOfFreedom: Degrees of freedom (must be > 0).
+        ///   - nonCentralityPara: Noncentrality parameter λ.
+        ///   - rlog: If `true`, returns `log(PDF)`; otherwise returns `PDF`.
+        /// - Returns: The PDF (or log-PDF if `rlog == true`).
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
         public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT, degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT, rlog: Bool! = false) throws -> FPT {
             var ex1: Float80
             var ex2: Float80
@@ -250,16 +300,18 @@ extension SSProbDist {
             let p2: Float80 = powl(dff, (1 + dff / 2))
             let p3: Float80 = powl(2, dff)
             let f: Float80 = (hermite * gamma * p1 * p2 * p3 * e1) / Float80.pi
-            let result: Float80 = f
-            return  Helpers.makeFP(result)
+            let value: FPT = Helpers.makeFP(f)
+            return rlog ? SSMath.log1(value) : value
         }
         
-        /// Returns the quantile function of the noncentral Student's t-distribution
-        /// - Parameter p: p
-        /// - Parameter df: Degrees of freedom
-        /// - Parameter nonCentralityPara: Noncentrality parameter
-        /// - Parameter rlog: If true, interpret `p` in log space
-        /// - Throws: SSSwiftyStatsError if df <= 0 and/or p < 0 or p > 1.0
+        /// Returns the quantile function (inverse CDF).
+        /// - Parameters:
+        ///   - p: Probability in `[0, 1]` (or log-probability if `rlog == true`).
+        ///   - degreesOfFreedom: Degrees of freedom (must be > 0).
+        ///   - nonCentralityPara: Noncentrality parameter λ.
+        ///   - rlog: If `true`, interpret `p` in log space.
+        /// - Returns: The quantile x such that `CDF(x) = p`.
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0` or if `p` is outside `[0, 1]` (when `rlog == false`).
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT, nonCentralityPara lambda: FPT, rlog: Bool! = false) throws -> FPT {
             let accu: FPT =  Helpers.makeFP(1E-13)
             let eps: FPT = 10 * FPT.ulpOfOne
@@ -349,6 +401,68 @@ extension SSProbDist {
         
     }
     
+}
+
+// MARK: - Correctly named alias API
+
+extension SSProbDist {
+    /// Noncentral Student's t distribution (preferred API).
+    ///
+    /// Cleanly named wrapper around the legacy `NonCentralSudentT` to avoid a
+    /// source-breaking rename. New code should use `SSProbDist.NonCentralStudentT`.
+    public enum NonCentralStudentT {
+        /// Returns parameters (mean, variance, skewness, kurtosis).
+        /// - Parameters:
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - lambda: Noncentrality parameter λ.
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
+        public static func para<FPT: SSFloatingPoint & Codable>(degreesOfFreedom df: FPT,
+                                                                nonCentralityPara lambda: FPT) throws -> SSProbDistParams<FPT> {
+            return try SSProbDist.NonCentralT.para(degreesOfFreedom: df, nonCentralityPara: lambda)
+        }
+
+        /// Returns the CDF (or log-CDF if `rlog == true`).
+        /// - Parameters:
+        ///   - t: Evaluation point.
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - lambda: Noncentrality parameter λ.
+        ///   - rlog: If `true`, returns `log(CDF)`.
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
+        public static func cdf<T: SSFloatingPoint & Codable>(t: T,
+                                                             degreesOfFreedom df: T,
+                                                             nonCentralityPara lambda: T,
+                                                             rlog: Bool! = false) throws -> T {
+            return try SSProbDist.NonCentralT.cdf(t: t, degreesOfFreedom: df, nonCentralityPara: lambda, rlog: rlog)
+        }
+
+        /// Returns the PDF (or log-PDF if `rlog == true`).
+        /// - Parameters:
+        ///   - x: Evaluation point.
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - lambda: Noncentrality parameter λ.
+        ///   - rlog: If `true`, returns `log(PDF)`.
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0`.
+        public static func pdf<FPT: SSFloatingPoint & Codable>(x: FPT,
+                                                               degreesOfFreedom df: FPT,
+                                                               nonCentralityPara lambda: FPT,
+                                                               rlog: Bool! = false) throws -> FPT {
+            return try SSProbDist.NonCentralT.pdf(x: x, degreesOfFreedom: df, nonCentralityPara: lambda, rlog: rlog)
+        }
+
+        /// Returns the quantile (inverse CDF).
+        /// - Parameters:
+        ///   - p: Probability in `[0, 1]` (or log-probability if `rlog == true`).
+        ///   - df: Degrees of freedom (must be > 0).
+        ///   - lambda: Noncentrality parameter λ.
+        ///   - rlog: If `true`, interpret `p` in log space.
+        /// - Throws: `SSSwiftyStatsError.functionNotDefinedInDomainProvided` if `df <= 0` or invalid `p`.
+        public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT,
+                                                                    degreesOfFreedom df: FPT,
+                                                                    nonCentralityPara lambda: FPT,
+                                                                    rlog: Bool! = false) throws -> FPT {
+            return try SSProbDist.NonCentralT.quantile(p: p, degreesOfFreedom: df, nonCentralityPara: lambda, rlog: rlog)
+        }
+    }
 }
 
 // matlab Witkovsky
@@ -683,10 +797,10 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     }
     var abc: [Double] = logfMOD
     // TODO: FIXME0
-    var N: LAPACKInt = 3
-    var nrhs: LAPACKInt = 1
-    var lda: LAPACKInt = 3
-    var ldb: LAPACKInt = 3
+    let N: LAPACKInt = 3
+    let nrhs: LAPACKInt = 1
+    let lda: LAPACKInt = 3
+    let ldb: LAPACKInt = 3
     var info: LAPACKInt = 0
     var ipiv = Array<LAPACKInt>.init(repeating: 0, count: 3)
     //ss_dgesv(&N,&nrhs,&AA,lda,&ipiv,&abc,ldb,&info)

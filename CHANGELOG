@@ -6,6 +6,10 @@ Version 1.2.2
   - iOS/macOS deployment targets set to 15 to match SwiftPM
   - source tag uses `v#{version}`
 - docs: update README/index badges and SPM snippet to 1.2.2
+- fix: replace direct LAPACK dgesv_ call with a small in-Swift Gaussian elimination (3×3) to avoid ILP64/LP64 type mismatches under CocoaPods lint
+- feat: add alternative Double-based noncentral t implementation as `SSProbDist.NonCentralT` (CDF/PDF/quantile/para; stable integration; no Accelerate; works on arm64)
+- feat: add clean alias `SSProbDist.NonCentralStudentT` and deprecate misspelled `SSProbDist.NonCentralSudentT`
+- docs: expand doc comments for noncentral t (parameters, usage, references) and implement `rlog` semantics for CDF/PDF
 
 Version 1.2.1
 - feat: public API name corrections with deprecation shims
