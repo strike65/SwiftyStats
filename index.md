@@ -1,8 +1,8 @@
-![Language](https://img.shields.io/badge/Language-Swift_5-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.1-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
+![Language](https://img.shields.io/badge/Language-Swift_6-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.1-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
 
-(full documentation: [https://strike65.github.io/SwiftyStats/docs/](https://strike65.github.io/SwiftyStats/docs/))
+(full documentation: [https://strike65.github.io/SwiftyStats/](https://strike65.github.io/SwiftyStats/))
 
 To regenerate the API documentation with DocC:
 
