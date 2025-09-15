@@ -129,7 +129,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let sortedData = data.uniqueElements(sortOrder: .ascending)!
+        let sortedData = data.uniqueElements(sortOrder: .ascending)
         var dD: FPT = 0
         var dz: FPT
         var dtestCDF: FPT = 0
@@ -445,7 +445,7 @@ extension SSHypothesisTesting {
     public static func adNormalityTest<FPT: SSFloatingPoint & Codable>(data: SSExamine<FPT, FPT>, alpha: FPT) throws -> SSADTestResult<FPT>? {
         if !data.isEmpty {
             do {
-                return try adNormalityTest(array: data.elementsAsArray(sortOrder: .raw)!, alpha: alpha)
+                return try adNormalityTest(array: data.elementsAsArray(sortOrder: .raw), alpha: alpha)
             }
             catch {
                 throw error
@@ -508,7 +508,7 @@ extension SSHypothesisTesting {
         estMean = _data.arithmeticMean!
         estSd = _data.standardDeviation(type: .unbiased)!
         n = _data.sampleSize
-        tempArray = _data.elementsAsArray(sortOrder: .ascending)! as Array<FPT>
+        tempArray = _data.elementsAsArray(sortOrder: .ascending) as Array<FPT>
         var i = 0
         var val: FPT
         var val1: FPT
@@ -746,8 +746,8 @@ extension SSHypothesisTesting {
         var sumRanksSet2: FPT = 0
         groups.append(contentsOf: Array<Int>.init(repeating: 1, count: set1.sampleSize))
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
-        var tempData = set1.elementsAsArray(sortOrder: .raw)!
-        tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .raw)!)
+        var tempData = set1.elementsAsArray(sortOrder: .raw)
+        tempData.append(contentsOf: set2.elementsAsArray(sortOrder: .raw))
         let sorter = SSDataGroupSorter.init(data: tempData, groups: groups)
         let sorted: (Array<Int>, Array<T>) = sorter.sortedArrays()
         let rr: Rank<T, FPT> = Rank.init(data: sorted.1, groups: sorted.0)
@@ -962,8 +962,8 @@ extension SSHypothesisTesting {
         var nties: Int = 0
         var temp: FPT = 0
         var diff:Array<FPT> = Array<FPT>()
-        let a1: Array<FPT> = set1.elementsAsArray(sortOrder: .raw)!
-        let a2: Array<FPT> = set2.elementsAsArray(sortOrder: .raw)!
+        let a1: Array<FPT> = set1.elementsAsArray(sortOrder: .raw)
+        let a2: Array<FPT> = set2.elementsAsArray(sortOrder: .raw)
         let N = set1.sampleSize
         i = 0
         while i < N {
@@ -1159,8 +1159,8 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        let a1 = set1.elementsAsArray(sortOrder: .raw)!
-        let a2 = set2.elementsAsArray(sortOrder: .raw)!
+        let a1 = set1.elementsAsArray(sortOrder: .raw)
+        let a2 = set2.elementsAsArray(sortOrder: .raw)
         var np: Int = 0
         var nn: Int = 0
         var nties: Int = 0
@@ -1334,7 +1334,7 @@ extension SSHypothesisTesting {
     /// - Parameter successID: Value that encodes a success in `data`
     /// - Parameter alpha: Significance level for confidence intervals
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
+    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none).count > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: Array<T>, characterSet: CharacterSet?, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint, FPT: Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1359,7 +1359,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         let examine = SSExamine<T, FPT>.init(withArray: data, name: nil, characterSet: characterSet)
-        if (examine.uniqueElements(sortOrder: .none)?.count)! > 2 {
+        if examine.uniqueElements(sortOrder: .none).count > 2 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
@@ -1391,7 +1391,7 @@ extension SSHypothesisTesting {
     /// - Parameter successID: Value that encodes a success in `data`
     /// - Parameter alpha: Significance level for confidence intervals
     /// - Parameter alternative: .less, .greater or .twoSided
-    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none)?.count)! > 2, or p0.isNaN
+    /// - Throws: SSSwiftyStatsError if data.sampleSize <= 2, data.uniqueElements(sortOrder: .none).count > 2, or p0.isNaN
     public static func binomialTest<T, FPT>(data: SSExamine<T, FPT>, testProbability p0: FPT, successCodedAs successID: T,alpha: FPT,  alternative: SSAlternativeHypotheses) throws -> SSBinomialTestResult<T, FPT> where  T: Comparable, T: Hashable, T: Codable, FPT: SSFloatingPoint & Codable {
         if p0.isNaN {
             #if os(macOS) || os(iOS)
@@ -1415,7 +1415,7 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        if (data.uniqueElements(sortOrder: .none)?.count)! > 2 {
+        if data.uniqueElements(sortOrder: .none).count > 2 {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
@@ -1624,8 +1624,8 @@ extension SSHypothesisTesting {
             
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
-        var a1 = set1.elementsAsArray(sortOrder: .ascending)!
-        a1.append(contentsOf: set2.elementsAsArray(sortOrder: .ascending)!)
+        var a1 = set1.elementsAsArray(sortOrder: .ascending)
+        a1.append(contentsOf: set2.elementsAsArray(sortOrder: .ascending))
         let n1: FPT =  Helpers.makeFP(set1.sampleSize)
         let n2: FPT =  Helpers.makeFP(set2.sampleSize)
         var dcdf: FPT
@@ -1740,8 +1740,8 @@ extension SSHypothesisTesting {
         var groups = Array<Int>.init(repeating: 1, count: set1.sampleSize)
         groups.append(contentsOf: Array<Int>.init(repeating: 2, count: set2.sampleSize))
         var sortedData: Array<T> = Array<T>()
-        var data = set1.elementsAsArray(sortOrder: .raw)!
-        data.append(contentsOf: set2.elementsAsArray(sortOrder: .raw)!)
+        var data = set1.elementsAsArray(sortOrder: .raw)
+        data.append(contentsOf: set2.elementsAsArray(sortOrder: .raw))
         let sorter = SSDataGroupSorter.init(data: data, groups: groups)
         let sorted = sorter.sortedArrays()
         groups = sorted.sortedGroups
@@ -2017,7 +2017,7 @@ extension SSHypothesisTesting {
             groups.append(contentsOf: Array<Int>.init(repeating: k, count: examine.sampleSize))
             k += 1
             N +=  Helpers.makeFP(examine.sampleSize)
-            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw)!)
+            a1.append(contentsOf: examine.elementsAsArray(sortOrder: .raw))
         }
         // sort the data with respect to groups
         let sorter = SSDataGroupSorter.init(data: a1, groups: groups)

@@ -38,7 +38,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("minimum parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("minimum parameter a is expected to be > 0")
                 }
                 
                 #endif
@@ -49,7 +49,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("shape parameter b is expected to be > 0")
                 }
                 
                 #endif
@@ -105,7 +105,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("minimum parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("minimum parameter a is expected to be > 0")
                 }
                 
                 #endif
@@ -116,7 +116,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("shape parameter b is expected to be > 0")
                 }
                 
                 #endif
@@ -142,7 +142,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("minimum parameter a is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("minimum parameter a is expected to be > 0")
                 }
                 
                 #endif
@@ -153,7 +153,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("shape parameter b is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("shape parameter b is expected to be > 0")
                 }
                 
                 #endif
@@ -201,7 +201,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("p is expected to be >= 0 and <= 1 ", log: .log_stat, type: .error)
+                    SSLog.statError("p is expected to be >= 0 and <= 1 ")
                 }
                 
                 #endif
@@ -220,4 +220,3 @@ extension SSProbDist {
         }
     }
 }
-

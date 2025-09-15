@@ -35,36 +35,15 @@ extension SSHypothesisTesting {
     /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data, alpha out of range, or too few observations)
     public static func grubbsTest<T, FPT>(array: Array<T>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT> where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if array.count == 3 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("sample size is expected to be >= 3")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if alpha <= 0 || alpha >= 1 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("Alpha must be > 0.0 and < 1.0")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !Helpers.isNumber(array[0]) {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("expected numerical type", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("expected numerical type")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         do {
@@ -85,36 +64,15 @@ extension SSHypothesisTesting {
     /// - Throws: `SSSwiftyStatsError.invalidArgument` for invalid input (non-numeric data, alpha out of range, or too few observations)
     public static func grubbsTest<T, FPT>(data: SSExamine<T, FPT>, alpha: FPT) throws -> SSGrubbsTestResult<T, FPT>  where T: Codable & Comparable & Hashable, FPT: SSFloatingPoint & Codable {
         if data.sampleSize <= 3 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("sample size is expected to be >= 3", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("sample size is expected to be >= 3")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if alpha <= 0 || alpha >= 1 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("Alpha must be > 0.0 and < 1.0", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("Alpha must be > 0.0 and < 1.0")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !data.isNumeric {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("expected numerical type", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("expected numerical type")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var g: FPT
@@ -249,7 +207,7 @@ extension SSHypothesisTesting {
             return nil
         }
         let examine = data
-        var sortedData = examine.elementsAsArray(sortOrder: .ascending)!
+        var sortedData = examine.elementsAsArray(sortOrder: .ascending)
         let orgMean: FPT = examine.arithmeticMean!
         let sd: FPT = examine.standardDeviation(type: .unbiased)!
         var maxDiff: FPT = 0

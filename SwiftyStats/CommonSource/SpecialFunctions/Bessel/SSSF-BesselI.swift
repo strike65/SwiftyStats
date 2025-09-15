@@ -411,18 +411,18 @@ fileprivate func besselAI0<FPT:  SSFloatingPoint & Codable>() -> [FPT] {
     switch FPT.self {
     case is Float.Type:
         let result = AI0Float.reversed() as Array<Float>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     case is Double.Type:
         let result = AI0Double.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
         let result = AI0Float80.reversed() as Array<Float80>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #endif
     default:
         let result = AI0Double.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     }
 }
 
@@ -447,17 +447,17 @@ fileprivate func besselBI0<FPT:  SSFloatingPoint & Codable>() -> [FPT] {
     switch FPT.self {
     case is Float.Type:
         let result = BI0Float.reversed() as Array<Float>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     case is Double.Type:
         let result = BI0Double.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
         let result = BI0Float80.reversed() as Array<Float80>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #endif
     default:
-        return BI0Double as! Array<FPT>
+        return BI0Double.map { Helpers.makeFP($0) }
     }
 }
 
@@ -485,18 +485,18 @@ fileprivate func besselAJ<FPT: SSFloatingPoint & Codable>() -> [FPT]  {
     switch FPT.self {
     case is Float.Type:
         let result = AJFloat.reversed() as Array<Float>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     case is Double.Type:
         let result = AJDouble.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
         let result = AJFloat80.reversed() as Array<Float80>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #endif
     default:
         let result = AJDouble.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     }
 }
 /*                            i1.c    */
@@ -523,18 +523,17 @@ fileprivate func besselBJ<FPT: SSFloatingPoint & Codable>() -> [FPT] {
     switch FPT.self {
     case is Float.Type:
         let result = BJFloat.reversed() as Array<Float>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     case is Double.Type:
         let result = BJDouble.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
         let result = BJFloat80.reversed() as Array<Float80>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
         #endif
     default:
         let result = BJDouble.reversed() as Array<Double>
-        return result as! Array<FPT>
+        return result.map { Helpers.makeFP($0) }
     }
 }
-

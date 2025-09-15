@@ -4,6 +4,7 @@
 .LSOverride
 Icon?
 AGENTS.md
+CLAUDE.md
 sratch
 TODO
 ## Archives & binaries
@@ -14,6 +15,7 @@ TODO
 *.app
 *.framework
 *.xcarchive
+session.log
 
 ## Editors/IDE
 .vscode/

@@ -114,7 +114,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("Degrees of freedom are expected to be > 0")
                 }
                 
                 #endif
@@ -322,7 +322,7 @@ extension SSProbDist {
             if df <= 0 {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("Degrees of freedom are expected to be > 0")
                 }
                 #endif
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -339,7 +339,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("p is expected to be >= 0.0 and <= 1.0", log: .log_stat, type: .error)
+                    SSLog.statError("p is expected to be >= 0.0 and <= 1.0")
                 }
                 
                 #endif
@@ -479,7 +479,7 @@ fileprivate func cdfNonCentralTVW<FPT: SSFloatingPoint & Codable>(x: FPT, df: FP
     if df <= 0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 13, *) {
-            os_log("Degrees of freedom are expected to be > 0", log: .log_stat, type: .error)
+            SSLog.statError("Degrees of freedom are expected to be > 0")
         }
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -809,7 +809,7 @@ fileprivate func limits<FPT: SSFloatingPoint & Codable>(x: Double, df: Double, n
     if info != 0 {
         #if os(macOS) || os(iOS)
         if #available(macOS 15, iOS 16, *) {
-            os_log("unable to compute integration limits. A singular matrix was detected", log: .log_stat, type: .error)
+            SSLog.statError("unable to compute integration limits. A singular matrix was detected")
         }
         #endif
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
@@ -1032,12 +1032,12 @@ fileprivate func GKnodes<FPT: SSFloatingPoint & Codable>(nsubs: Int) -> ( XK: Ar
     switch FPT.self {
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        return (XK: nodesl as Array<Float80> as! Array<FPT>, WK: wtl as Array<Float80> as! Array<FPT>, WG: wt7l as Array<Float80> as! Array<FPT>, G: g)
+        return (XK: nodesl.map { Helpers.makeFP($0) }, WK: wtl.map { Helpers.makeFP($0) }, WG: wt7l.map { Helpers.makeFP($0) }, G: g)
         #endif
     case is Float.Type:
-        return (nodesf as Array<Float> as! Array<FPT>, wtf as Array<Float> as! Array<FPT>, wt7f as Array<Float> as! Array<FPT>, G: g)
+        return (nodesf.map { Helpers.makeFP($0) }, wtf.map { Helpers.makeFP($0) }, wt7f.map { Helpers.makeFP($0) }, G: g)
     case is Double.Type:
-        return (nodes as Array<Double> as! Array<FPT>, wt as Array<Double> as! Array<FPT>, wt7 as Array<Double> as! Array<FPT>, G: g)
+        return (nodes.map { Helpers.makeFP($0) }, wt.map { Helpers.makeFP($0) }, wt7.map { Helpers.makeFP($0) }, G: g)
     default:
         return ([FPT.nan],[FPT.nan],[FPT.nan],[])
     }

@@ -77,7 +77,7 @@ extension SSHypothesisTesting {
         let mean: FPT = data.arithmeticMean!
         var i: Int = 0
         let n = data.sampleSize
-        let elements = data.elementsAsArray(sortOrder: .raw)!
+        let elements = data.elementsAsArray(sortOrder: .raw)
         while i < n - 1 {
             num += (elements[i] - mean) * (elements[i + 1] - mean)
             i += 1
@@ -159,7 +159,7 @@ extension SSHypothesisTesting {
         var k: Int = 0
         let n = data.sampleSize
         let nn: FPT =  Helpers.makeFP(n)
-        let elements = data.elementsAsArray(sortOrder: .raw)!
+        let elements = data.elementsAsArray(sortOrder: .raw)
         while i < n {
             den += SSMath.pow1(elements[i] - mean, 2)
             i += 1

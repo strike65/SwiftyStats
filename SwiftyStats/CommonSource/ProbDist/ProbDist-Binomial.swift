@@ -42,7 +42,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                    SSLog.statError("probability for success is expected to be greater than zero")
                 }
 
                 #endif
@@ -89,7 +89,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                    SSLog.statError("probability for success is expected to be greater than zero")
                 }
 
                 #endif
@@ -114,7 +114,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("probability for success is expected to be greater than zero", log: .log_stat, type: .error)
+                    SSLog.statError("probability for success is expected to be greater than zero")
                 }
 
                 #endif

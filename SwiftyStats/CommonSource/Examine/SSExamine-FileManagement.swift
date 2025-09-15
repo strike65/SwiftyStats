@@ -25,7 +25,7 @@
 
 import Foundation
 #if os(macOS) || os(iOS)
-import os.log
+import OSLog
 #endif
 
 
@@ -38,90 +38,42 @@ extension SSExamine {
     /// - Parameter path: The fully qualified filename.
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Throws: `SSSwiftyStatsError.posixError` (file can't be removed), `SSSwiftyStatsError.directoryDoesNotExist`, `SSSwiftyStatsError.fileNotReadable`.
-    public func archiveTo(filePath path: String!, overwrite: Bool!) throws -> Bool {
-        let fm: FileManager = FileManager.default
+    public func archiveTo(filePath path: String, overwrite: Bool) throws -> Bool {
+        let fm = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
-        let dir: String = NSString(string: fullFilename).deletingLastPathComponent
+        let dirPath: String = NSString(string: fullFilename).deletingLastPathComponent
         var isDir = ObjCBool(false)
-        if !fm.fileExists(atPath: dir, isDirectory: &isDir) {
-            if !isDir.boolValue || path.count == 0 {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("No writable path found", log: .log_fs ,type: .error)
-                }
-                
-                #endif
-                
-                throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
-            }
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("File doesn't exist", log: .log_fs ,type: .error)
-            }
-            
-            #endif
-            
-            throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
+        guard fm.fileExists(atPath: dirPath, isDirectory: &isDir), isDir.boolValue else {
+            SSLog.fsError("No writable path found")
+            throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
         }
+
         if fm.fileExists(atPath: fullFilename) {
             if overwrite {
                 if fm.isWritableFile(atPath: fullFilename) {
                     do {
                         try fm.removeItem(atPath: fullFilename)
-                    }
-                    catch {
-                        #if os(macOS) || os(iOS)
-                        
-                        if #available(macOS 10.12, iOS 13, *) {
-                            os_log("Unable to remove file prior to saving new file: %@", log: .log_fs ,type: .error, error.localizedDescription)
-                        }
-                        
-                        #endif
-                        
+                    } catch {
+                        SSLog.fsError("Unable to remove file prior to saving new file: \(error.localizedDescription)")
                         throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                     }
-                }
-                else {
-                    #if os(macOS) || os(iOS)
-                    
-                    if #available(macOS 10.12, iOS 13, *) {
-                        os_log("Unable to remove file prior to saving new file", log: .log_fs ,type: .error)
-                    }
-                    
-                    #endif
-                    
+                } else {
+                    SSLog.fsError("Unable to remove file prior to saving new file")
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
-            }
-            else {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("File exists: %@", log: .log_fs ,type: .error, fullFilename)
-                }
-                
-                #endif
-                
+            } else {
+                SSLog.fsError("File exists: \(fullFilename)")
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
             }
         }
+
         let jsonEncode = JSONEncoder()
         let data = try jsonEncode.encode(self)
         do {
-            try data.write(to: URL.init(fileURLWithPath: fullFilename), options: Data.WritingOptions.atomic)
+            try data.write(to: URL(fileURLWithPath: fullFilename), options: .atomic)
             return true
-        }
-        catch {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("Unable to write data", log: .log_fs, type: .error)
-            }
-            
-            #endif
-            
+        } catch {
+            SSLog.fsError("Unable to write data")
             return false
         }
     }
@@ -129,35 +81,21 @@ extension SSExamine {
     /// Initializes a new table from an archive saved by `archiveTo(filePath:overwrite:)`.
     /// - Parameter path: The fully qualified filename.
     /// - Throws: `SSSwiftyStatsError.fileNotReadable`.
-    public class func unarchiveFrom(filePath path: String!) throws -> SSExamine<SSElement, Double>? {
-        let fm: FileManager = FileManager.default
+    public class func unarchiveFrom(filePath path: String) throws -> SSExamine<SSElement, Double>? {
+        let fm = FileManager.default
         let fullFilename: String = NSString(string: path).expandingTildeInPath
         if !fm.isReadableFile(atPath: fullFilename) {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("File not readable", log: .log_fs ,type: .error)
-            }
-            
-            #endif
-            
+            SSLog.fsError("File not readable")
             throw SSSwiftyStatsError(type: .fileNotFound, file: #file, line: #line, function: #function)
         }
         do {
-            let data: Data = try Data.init(contentsOf: URL.init(fileURLWithPath: fullFilename))
+            let data = try Data(contentsOf: URL(fileURLWithPath: fullFilename))
             let jsonDecoder = JSONDecoder()
             let result = try jsonDecoder.decode(SSExamine<SSElement, Double>.self, from: data)
             return result
         }
         catch {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("Failure", log: .log_fs ,type: .error)
-            }
-            
-            #endif
-            
+            SSLog.fsError("Failure")
             return nil
         }
     }

@@ -81,7 +81,7 @@ extension SSExamine {
         let n = self.sampleSize
         let np1_2: Int = (n + 1) / 2
         var work: [FPT] = Array<FPT>.init(repeating: 0, count: n)
-        let sorted_data: Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
+        let sorted_data: Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)
         var val1: FPT =  Helpers.makeFP( sorted_data[n / 2])
         var val2: FPT =  Helpers.makeFP(sorted_data[0])
         
@@ -280,7 +280,7 @@ extension SSExamine {
         }
         let n: FPT =  Helpers.makeFP(self.sampleSize)
         let ni = self.sampleSize
-        let sorted_data:Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)!
+        let sorted_data:Array<SSElement> = self.elementsAsArray(sortOrder: .ascending)
         var a_srt: Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)
         var a_cand:Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)
         var work:Array<FPT> = Array<FPT>.init(repeating: 0, count: ni)

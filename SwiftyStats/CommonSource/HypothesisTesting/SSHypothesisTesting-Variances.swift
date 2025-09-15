@@ -36,35 +36,20 @@ extension SSHypothesisTesting {
     /// - Throws: `SSSwiftyStatsError.invalidArgument` if `data.count < 2`, data non-numeric, or variances not obtainable
     public static func bartlettTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable {
         if data.count < 2 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("number of samples is expected to be > 1")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<T>> = Array<Array<T>>()
         for examine in data {
             if examine.isNotEmptyAndNumeric {
-                array.append(examine.elementsAsArray(sortOrder: .raw)!)
+                array.append(examine.elementsAsArray(sortOrder: .raw))
             }
             else {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    if examine.isEmpty {
-                        os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
-                    }
-                    else {
-                        os_log("Data are expected to be numeric", log: .log_stat, type: .error)
-                    }
+                if examine.isEmpty {
+                    SSLog.statError("sample size is expected to be > 2")
+                } else {
+                    SSLog.statError("Data are expected to be numeric")
                 }
-                
-                #endif
-                
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -104,14 +89,7 @@ extension SSHypothesisTesting {
         var ex3: FPT
         var ex4: FPT
         if array.count < 2 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("number of samples is expected to be > 1")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         for a in array {
@@ -142,14 +120,7 @@ extension SSHypothesisTesting {
                 _s1 += ( Helpers.makeFP(examine.sampleSize) - 1) * SSMath.log1(v)
             }
             else {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("for at least one sample a variance is not obtainable", log: .log_stat, type: .error)
-                }
-                
-                #endif
-                
+                SSLog.statError("for at least one sample a variance is not obtainable")
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -197,32 +168,20 @@ extension SSHypothesisTesting {
     /// - Throws: `SSSwiftyStatsError.invalidArgument` if `data.count < 2`, data non-numeric, or variances not obtainable
     public static func leveneTest<T, FPT: SSFloatingPoint & Codable>(data: Array<SSExamine<T, FPT>>!, testType: SSLeveneTestType, alpha: FPT) throws -> SSVarianceEqualityTestResult<FPT>? where T: Hashable & Comparable & Codable  {
         if data.count < 2 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("number of samples is expected to be > 1", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("number of samples is expected to be > 1")
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var array: Array<Array<T>> = Array<Array<T>>()
         for examine in data {
             if examine.isNotEmptyAndNumeric {
-                array.append(examine.elementsAsArray(sortOrder: .raw)!)
+                array.append(examine.elementsAsArray(sortOrder: .raw))
             }
             else {
-                #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 13, *) {
-                    if examine.isEmpty {
-                        os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
-                    }
-                    else {
-                        os_log("Data are expected to be numeric", log: .log_stat, type: .error)
-                    }
+                if examine.isEmpty {
+                    SSLog.statError("sample size is expected to be > 2")
+                } else {
+                    SSLog.statError("Data are expected to be numeric")
                 }
-                #endif
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -284,25 +243,16 @@ extension SSHypothesisTesting {
             if array.count >= 2 {
                 _data.append(SSExamine<T, FPT>.init(withArray: a, name: nil, characterSet: nil))
                 if !_data.last!.isNotEmptyAndNumeric {
-                    #if os(macOS) || os(iOS)
-                    if #available(macOS 10.12, iOS 13, *) {
-                        if _data.last!.isEmpty {
-                            os_log("sample size is expected to be > 2", log: .log_stat, type: .error)
-                        }
-                        else {
-                            os_log("Data are expected to be numeric", log: .log_stat, type: .error)
-                        }
+                    if _data.last!.isEmpty {
+                        SSLog.statError("sample size is expected to be > 2")
+                    } else {
+                        SSLog.statError("Data are expected to be numeric")
                     }
-                    #endif
                     throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
                 }
             }
             else {
-                #if os(macOS) || os(iOS)
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
-                }
-                #endif
+                SSLog.statError("sample size is expected to be >= 2")
                 throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
             }
         }
@@ -315,7 +265,7 @@ extension SSHypothesisTesting {
                 _ntemp =  Helpers.makeFP(examine.sampleSize)
                 _N += _ntemp
                 _ni.append(_ntemp)
-                _y.append(examine.elementsAsArray(sortOrder: .raw)!)
+                _y.append(examine.elementsAsArray(sortOrder: .raw))
                 switch testType {
                 case .mean:
                     if let m = examine.arithmeticMean {

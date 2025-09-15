@@ -32,11 +32,7 @@ import os.log
 // Definition of statistics
 extension SSExamine {
     
-    internal var isNotEmptyAndNumeric: Bool {
-        get {
-            return (!self.isEmpty && self.isNumeric)
-        }
-    }
+    internal var isNotEmptyAndNumeric: Bool { !self.isEmpty && self.isNumeric }
     
     /// Sum over all squared elements. Returns `Double.nan` if data are non-numeric.
     public var squareTotal: FPT  {
@@ -177,14 +173,8 @@ extension SSExamine {
     
     internal func updateDescriptives(withElement x: FPT) {
         if self.isNotEmptyAndNumeric {
-            var currMean: FPT = FPT.zero
-            if let m = aMean {
-                currMean = m
-            }
-            else {
-                currMean = FPT.zero
-            }
-            let n =  Helpers.makeFP(self.sampleSize) + FPT.one
+            let currMean = aMean ?? FPT.zero
+            let n = Helpers.makeFP(self.sampleSize) + FPT.one
             let newMean = currMean + (x - currMean) / n
             aMean = newMean
         }
@@ -204,23 +194,19 @@ extension SSExamine {
     /// The mode. Can contain more than one item. Can be nil for empty tables.
     public var mode: Array<SSElement>? {
         get {
-            if !isEmpty {
-                var result: Array<SSElement> = Array<SSElement>()
-                let ft = self.frequencyTable(sortOrder: .frequencyDescending)
-                let freq = ft.first?.frequency
-                for tableItem in ft {
-                    if tableItem.frequency >= freq! {
-                        result.append(tableItem.item)
-                    }
-                    else {
-                        break
-                    }
+            if isEmpty { return nil }
+            var result: [SSElement] = []
+            let ft = self.frequencyTable(sortOrder: .frequencyDescending)
+            guard let top = ft.first else { return nil }
+            let maxFreq = top.frequency
+            for tableItem in ft {
+                if tableItem.frequency >= maxFreq {
+                    result.append(tableItem.item)
+                } else {
+                    break
                 }
-                return result
             }
-            else {
-                return nil
-            }
+            return result
         }
     }
     
@@ -232,54 +218,38 @@ extension SSExamine {
     
     /// An array containing scarcest element(s). nil for empty tables.
     public var scarcest: Array<SSElement>? {
-        if !isEmpty {
-            var result: Array<SSElement> = Array<SSElement>()
-            let ft = self.frequencyTable(sortOrder: .frequencyAscending)
-            let freq = ft.first?.frequency
-            for tableItem in ft {
-                if tableItem.frequency <= freq! {
-                    result.append(tableItem.item)
-                }
-                else {
-                    break
-                }
+        if isEmpty { return nil }
+        var result: [SSElement] = []
+        let ft = self.frequencyTable(sortOrder: .frequencyAscending)
+        guard let low = ft.first else { return nil }
+        let minFreq = low.frequency
+        for tableItem in ft {
+            if tableItem.frequency <= minFreq {
+                result.append(tableItem.item)
+            } else {
+                break
             }
-            return result.sorted(by: <)
         }
-        else {
-            return nil
-        }
+        return result.sorted(by: <)
     }
     
     /// Returns the q-quantile.
     /// - Throws: `SSSwiftyStatsError.invalidArgument` if data are non-numeric or if `q` is not in (0, 1).
     public func quantile(q: FPT) throws -> FPT? {
         if q.isZero || q < 0 || q >= 1 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("p has to be > 0.0 and < 1.0", log: .log_stat, type: .error)
-            }
-            
-            #endif
+            SSLog.statError("p has to be > 0.0 and < 1.0")
             
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isNumeric {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("Quantile is not defined for non-numeric data.", log: .log_stat, type: .error)
-            }
-            
-            #endif
+            SSLog.statError("Quantile is not defined for non-numeric data.")
             
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var result: FPT = 0
         if !isEmpty && self.sampleSize >= 2 {
             let k: FPT =  Helpers.makeFP(self.sampleSize) * q
-            let a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)
             var temp3: SSElement
             if Helpers.isInteger(k) {
                 temp3 = a [Helpers.integerValue(k) - 1]
@@ -409,18 +379,11 @@ extension SSExamine {
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func trimmedMean(alpha: FPT) throws -> FPT? {
         if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("alpha has to be greater than zero and smaller than 0.5", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("alpha has to be greater than zero and smaller than 0.5")
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if isNotEmptyAndNumeric {
-            let a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)
             let l = a.count
             let v: FPT = floor( Helpers.makeFP(l) * alpha)
             var s: FPT = 0
@@ -447,18 +410,11 @@ extension SSExamine {
     /// - Throws: Throws an error if alpha <= 0 or alpha >= 0.5
     public func winsorizedMean(alpha: FPT) throws -> FPT? {
         if alpha <= 0 || alpha >=  Helpers.makeFP(0.5 ) {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("alpha has to be greater than zero and smaller than 0.5", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("alpha has to be greater than zero and smaller than 0.5")
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if isNotEmptyAndNumeric {
-            let a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)
             let l = a.count
             let ll: FPT =  Helpers.makeFP(l)
             let v: FPT = floor( Helpers.makeFP(l) * alpha)
@@ -584,7 +540,7 @@ extension SSExamine {
     public var maximum: SSElement? {
         get {
             if !isEmpty {
-                let a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)
                 return a.last
             }
             else {
@@ -597,7 +553,7 @@ extension SSExamine {
     public var minimum: SSElement? {
         get {
             if !isEmpty {
-                let a = self.elementsAsArray(sortOrder: .ascending)!
+            let a = self.elementsAsArray(sortOrder: .ascending)
                 return a.first
             }
             else {
@@ -687,25 +643,11 @@ extension SSExamine {
     /// - Throws: SSSwiftyStatsError.invalidArgument if upper.isZero || upper < 0.0 || upper >= 1.0 || lower.isZero || lower < 0.0 || lower >= 1.0 || upper < lower
     public func interquantileRange(lowerQuantile lower: FPT, upperQuantile upper: FPT) throws -> FPT? {
         if upper.isZero || upper < 0 || upper >= 1 || lower.isZero || lower < 0 || lower >= 1 {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("lower and upper quantile has to be > 0.0 and < 1.0", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("lower and upper quantile has to be > 0.0 and < 1.0")
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if upper < lower {
-            #if os(macOS) || os(iOS)
-            
-            if #available(macOS 10.12, iOS 13, *) {
-                os_log("lower quantile has to be less than upper quantile", log: .log_stat, type: .error)
-            }
-            
-            #endif
-            
+            SSLog.statError("lower quantile has to be less than upper quantile")
             throw SSSwiftyStatsError(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         if !isNumeric {
@@ -790,7 +732,7 @@ extension SSExamine {
     public var entropy: FPT? {
         if !isEmpty {
             var s: FPT = 0
-            for item in self.uniqueElements(sortOrder: .none)! {
+            for item in self.uniqueElements(sortOrder: .none) {
                 s += self.rFrequency(item) * SSMath.log21(self.rFrequency(item))
             }
             return -s
@@ -816,7 +758,7 @@ extension SSExamine {
             var s: FPT = 0
             var p: FPT = 0
             if let tot = self.total {
-                for item in self.elementsAsArray(sortOrder: .raw)! {
+                for item in self.elementsAsArray(sortOrder: .raw) {
                     let x: FPT =  Helpers.makeFP(item)
                     if !x.isNaN {
                         p = x / tot
@@ -826,13 +768,7 @@ extension SSExamine {
                 return s
             }
             else {
-                #if os(macOS) || os(iOS)
-                
-                if #available(macOS 10.12, iOS 13, *) {
-                    os_log("measure is not available", log: .log_stat, type: .error)
-                }
-                
-                #endif
+                    SSLog.statError("measure is not available")
                 
                 return nil
             }
@@ -857,7 +793,7 @@ extension SSExamine {
             if self.sampleSize < 2 {
                 return nil
             }
-            let sorted = self.elementsAsArray(sortOrder: .ascending)!
+            let sorted = self.elementsAsArray(sortOrder: .ascending)
             var s: FPT = 0
             let N: FPT =  Helpers.makeFP(self.sampleSize)
             let m = self.arithmeticMean!
@@ -898,7 +834,7 @@ extension SSExamine {
     public func CR(_ g: Int) -> FPT? {
         if isNotEmptyAndNumeric {
             if g > 0 && g <= self.sampleSize {
-                let a = self.elementsAsArray(sortOrder: .descending)!
+                let a = self.elementsAsArray(sortOrder: .descending)
                 var sum: FPT = 0
                 for i in 0..<g {
                     let x: FPT =  Helpers.makeFP(a[i])
@@ -1053,7 +989,7 @@ extension SSExamine {
             return nil
         }
         var diffArray:Array<FPT> = Array<FPT>()
-        let values = self.elementsAsArray(sortOrder: .ascending)!
+        let values = self.elementsAsArray(sortOrder: .ascending)
         let result: FPT
         for item in values  {
             let t1: FPT =  Helpers.makeFP(item)
@@ -1123,7 +1059,7 @@ extension SSExamine {
         if isNotEmptyAndNumeric {
             switch type {
             case .lower:
-                let a = self.elementsAsArray(sortOrder: .ascending)!
+                let a = self.elementsAsArray(sortOrder: .ascending)
                 let m: FPT = self.arithmeticMean!
                 var s: FPT = 0
                 var k: FPT = 0
@@ -1144,7 +1080,7 @@ extension SSExamine {
                 }
                 return s / k
             case .upper:
-                let a = self.elementsAsArray(sortOrder: .descending)!
+                let a = self.elementsAsArray(sortOrder: .descending)
                 let m: FPT = self.arithmeticMean!
                 var s: FPT = 0
                 var k: FPT = 0
@@ -1389,7 +1325,7 @@ extension SSExamine {
                 }
             case .esd:
                 var tempArray = Array<Double>()
-                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
+                let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)
                 for itm in a {
                     let t: Double =  Helpers.makeFP(itm)
                     if !t.isNaN {
@@ -1424,7 +1360,7 @@ extension SSExamine {
     public func outliers(alpha: FPT!, max: Int!, testType t: SSESDTestType) -> Array<SSElement>? {
         if isNotEmptyAndNumeric {
             var tempArray = Array<Double>()
-            let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)!
+            let a:Array<SSElement> = self.elementsAsArray(sortOrder: .raw)
             for itm in a {
                 let temp: Double =  Helpers.makeFP(itm)
                 if !temp.isNaN {
@@ -1458,16 +1394,15 @@ extension SSExamine {
         }
         else {
             do {
-                if let r = try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: .gaussian) {
+                let raw = self.elementsAsArray(sortOrder: .ascending)
+                let arr: [FPT] = raw.map { Helpers.makeFP($0) }
+                if let r = try SSHypothesisTesting.ksGoFTest(array: arr, targetDistribution: .gaussian) {
                     if let p = r.pValue {
-                        let test = p > self.alpha
-                        return test
-                    }
-                    else {
+                        return p > self.alpha
+                    } else {
                         return nil
                     }
-                }
-                else {
+                } else {
                     return nil
                 }
             }
@@ -1485,7 +1420,9 @@ extension SSExamine {
         }
         else {
             do {
-                return try SSHypothesisTesting.ksGoFTest(array: self.elementsAsArray(sortOrder: .ascending)! as! Array<FPT>, targetDistribution: target)
+                let raw = self.elementsAsArray(sortOrder: .ascending)
+                let arr: [FPT] = raw.map { Helpers.makeFP($0) }
+                return try SSHypothesisTesting.ksGoFTest(array: arr, targetDistribution: target)
             }
             catch {
                 throw error
@@ -1504,7 +1441,7 @@ extension SSExamine {
                     res.q25 = try self.quantile(q:  Helpers.makeFP(0.25))
                     res.q75 = try self.quantile(q:  Helpers.makeFP(0.75))
                     res.iqr = self.interquartileRange
-                    let a = self.elementsAsArray(sortOrder: .descending)!
+                    let a = self.elementsAsArray(sortOrder: .descending)
                     var iqr3h: FPT
                     var iqr3t: FPT
                     var notchCoeff: FPT

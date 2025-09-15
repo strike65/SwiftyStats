@@ -25,17 +25,26 @@
 
 import Foundation
 #if os(macOS) || os(iOS)
-import os.log
+import OSLog
 
+// Keep existing OSLog categories for backward compatibility elsewhere
 extension OSLog {
-    @MainActor @available(macOS 10.12, iOS 13.0, *)
-    private static var subsystem = Bundle.main.bundleIdentifier
     @available(macOS 10.12, iOS 13.0, *)
     static let log_stat = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "functions_parameters")
     @available(macOS 10.12, iOS 13.0, *)
     static let log_dev = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "severe_bugs")
     @available(macOS 10.12, iOS 13.0, *)
     static let log_fs = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "filesystem")
+}
+
+// New Logger-based API for Swift 6+
+struct SSLogger {
+    @available(macOS 11.0, iOS 14.0, *)
+    static let stat = Logger(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "functions_parameters")
+    @available(macOS 11.0, iOS 14.0, *)
+    static let dev = Logger(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "severe_bugs")
+    @available(macOS 11.0, iOS 14.0, *)
+    static let fs = Logger(subsystem: Bundle.main.bundleIdentifier ?? "de.strike65.SwiftyStats", category: "filesystem")
 }
 /// Defines the logging system for SwiftyStats.
 
@@ -50,3 +59,28 @@ public func wtf(truth: Bool) {
     }
 }
 #endif
+
+// Cross-platform wrapper with no-op fallback on older platforms
+public enum SSLog {
+    public static func statError(_ message: String) {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 11.0, iOS 14.0, *) {
+            SSLogger.stat.error("\(message, privacy: .public)")
+        }
+        #endif
+    }
+    public static func devError(_ message: String) {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 11.0, iOS 14.0, *) {
+            SSLogger.dev.error("\(message, privacy: .public)")
+        }
+        #endif
+    }
+    public static func fsError(_ message: String) {
+        #if os(macOS) || os(iOS)
+        if #available(macOS 11.0, iOS 14.0, *) {
+            SSLogger.fs.error("\(message, privacy: .public)")
+        }
+        #endif
+    }
+}

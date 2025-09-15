@@ -41,7 +41,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("variance is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("variance is expected to be > 0")
                 }
                 
                 #endif
@@ -73,7 +73,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("variance is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("variance is expected to be > 0")
                 }
                 
                 #endif
@@ -108,7 +108,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("variance is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("variance is expected to be > 0")
                 }
                 
                 #endif
@@ -133,7 +133,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("variance is expected to be > 0", log: .log_stat, type: .error)
+                    SSLog.statError("variance is expected to be > 0")
                 }
                 
                 #endif
@@ -144,7 +144,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("p is expected to be >= 0 and <= 1.0", log: .log_stat, type: .error)
+                    SSLog.statError("p is expected to be >= 0 and <= 1.0")
                 }
                 
                 #endif

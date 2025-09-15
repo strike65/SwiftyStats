@@ -41,7 +41,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
+                    SSLog.statError("lower bound a is expected to be less than upper bound b")
                 }
                 
                 #endif
@@ -52,7 +52,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be greater than lower bound", log: .log_stat, type: .error)
+                    SSLog.statError("mode parameter c is expected to be greater than lower bound")
                 }
                 
                 #endif
@@ -63,7 +63,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be less than upper bound", log: .log_stat, type: .error)
+                    SSLog.statError("mode parameter c is expected to be less than upper bound")
                 }
                 
                 #endif
@@ -126,7 +126,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
+                    SSLog.statError("lower bound a is expected to be less than upper bound b")
                 }
                 
                 #endif
@@ -137,7 +137,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be greater than lower bound", log: .log_stat, type: .error)
+                    SSLog.statError("mode parameter c is expected to be greater than lower bound")
                 }
                 
                 #endif
@@ -148,7 +148,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("mode parameter c is expected to be less than upper bound", log: .log_stat, type: .error)
+                    SSLog.statError("mode parameter c is expected to be less than upper bound")
                 }
                 
                 #endif
@@ -192,7 +192,7 @@ extension SSProbDist {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("lower bound a is expected to be less than upper bound b", log: .log_stat, type: .error)
+                    SSLog.statError("lower bound a is expected to be less than upper bound b")
                 }
                 
                 #endif

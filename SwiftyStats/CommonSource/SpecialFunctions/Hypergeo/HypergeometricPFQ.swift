@@ -306,7 +306,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         if (!a[i1 - 1].re.isZero && ar[i1 - 1].isZero && ar2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("Real part was set to zero (input vector a - at least one element was too close to zero)", log: .log_stat, type: .error)
+                SSLog.statError("Real part was set to zero (input vector a - at least one element was too close to zero)")
             }
             #else
             print("Real part was set to zero (input vector a - at least one element was too close to zero)")
@@ -315,7 +315,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         if (!a[i1 - 1].isZero && ai[i1 - 1].isZero && ai2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("Imaginary part was set to zero (input vector a - at least one element was too close to zero)", log: .log_stat, type: .error)
+                SSLog.statError("Imaginary part was set to zero (input vector a - at least one element was too close to zero)")
             }
             #else
             print("Imaginary part was set to zero (input vector a - at least one element was too close to zero)")
@@ -326,7 +326,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         if (!b[i1 - 1].re.isZero && cr[i1 - 1].isZero && cr2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("Real part was set to zero (input vector b - at least one element was too close to zero)", log: .log_stat, type: .error)
+                SSLog.statError("Real part was set to zero (input vector b - at least one element was too close to zero)")
             }
             #else
             print("Real part was set to zero (input vector b - at least one element was too close to zero)")
@@ -335,7 +335,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
         if (!b[i1 - 1].isZero && ci[i1 - 1].isZero && ci2[i1 - 1].isZero) {
             #if os(macOS) || os(iOS)
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("Imaginary part was set to zero (input vector b - at least one element was too close to zero)", log: .log_stat, type: .error)
+                SSLog.statError("Imaginary part was set to zero (input vector b - at least one element was too close to zero)")
             }
             #else
             print("Imaginary part was set to zero (input vector b - at least one element was too close to zero)")
@@ -345,7 +345,7 @@ fileprivate func hyper<T: SSFloatingPoint>(a: Array<Complex<T>>, b: Array<Comple
     if !z.re.isZero && xr.isZero && xr2.isZero {
         #if os(macOS) || os(iOS)
         if #available(macOS 10.12, iOS 13, *) {
-            os_log("Real part was set to zero (input z - at least one element was too close to zero)", log: .log_stat, type: .error)
+            SSLog.statError("Real part was set to zero (input z - at least one element was too close to zero)")
         }
         #else
         print("Real part was set to zero (input z - at least one element was too close to zero)")

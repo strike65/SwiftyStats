@@ -167,7 +167,7 @@ extension SSSpecialFunctions {
             {
                 #if os(macOS) || os(iOS)
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("BesselY: not defined in that domain", log: .log_stat, type: .error)
+                    SSLog.statError("BesselY: not defined in that domain")
                 }
                 #endif
                 printError("BesselY: not defined in that domain")
@@ -435,119 +435,43 @@ fileprivate func coeff<FPT: SSFloatingPoint >(_ name: String) -> [FPT] {
     #endif
     switch FPT.self {
     case is Float.Type:
-        if name == "PP" {
-            return PPFloat as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQFloat as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQFloat as! Array<FPT>
-        }
-        else if name == "QP" {
-            return QPFloat as! Array<FPT>
-        }
-        else if name == "QQ" {
-            return QQFloat as! Array<FPT>
-        }
-        else if name == "YP" {
-            return YPFloat as! Array<FPT>
-        }
-        else if name == "YQ" {
-            return YQFloat as! Array<FPT>
-        }
-        else if name == "RP" {
-            return RPFloat as! Array<FPT>
-        }
-        else if name == "RQ" {
-            return RQFloat as! Array<FPT>
-        }
+        if name == "PP" { return PPFloat.map { Helpers.makeFP($0) } }
+        else if name == "PQ" { return PQFloat.map { Helpers.makeFP($0) } }
+        else if name == "QP" { return QPFloat.map { Helpers.makeFP($0) } }
+        else if name == "QQ" { return QQFloat.map { Helpers.makeFP($0) } }
+        else if name == "YP" { return YPFloat.map { Helpers.makeFP($0) } }
+        else if name == "YQ" { return YQFloat.map { Helpers.makeFP($0) } }
+        else if name == "RP" { return RPFloat.map { Helpers.makeFP($0) } }
+        else if name == "RQ" { return RQFloat.map { Helpers.makeFP($0) } }
     case is Double.Type:
-        if name == "PP" {
-            return PPDouble as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQDouble as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQDouble as! Array<FPT>
-        }
-        else if name == "QP" {
-            return QPDouble as! Array<FPT>
-        }
-        else if name == "QQ" {
-            return QQDouble as! Array<FPT>
-        }
-        else if name == "YP" {
-            return YPDouble as! Array<FPT>
-        }
-        else if name == "YQ" {
-            return YQDouble as! Array<FPT>
-        }
-        else if name == "RP" {
-            return RPDouble as! Array<FPT>
-        }
-        else if name == "RQ" {
-            return RQDouble as! Array<FPT>
-        }
+        if name == "PP" { return PPDouble.map { Helpers.makeFP($0) } }
+        else if name == "PQ" { return PQDouble.map { Helpers.makeFP($0) } }
+        else if name == "QP" { return QPDouble.map { Helpers.makeFP($0) } }
+        else if name == "QQ" { return QQDouble.map { Helpers.makeFP($0) } }
+        else if name == "YP" { return YPDouble.map { Helpers.makeFP($0) } }
+        else if name == "YQ" { return YQDouble.map { Helpers.makeFP($0) } }
+        else if name == "RP" { return RPDouble.map { Helpers.makeFP($0) } }
+        else if name == "RQ" { return RQDouble.map { Helpers.makeFP($0) } }
         #if arch(i386) || arch(x86_64)
     case is Float80.Type:
-        if name == "PP" {
-            return PPFloat80 as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQFloat80 as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQFloat80 as! Array<FPT>
-        }
-        else if name == "QP" {
-            return QPFloat80 as! Array<FPT>
-        }
-        else if name == "QQ" {
-            return QQFloat80 as! Array<FPT>
-        }
-        else if name == "YP" {
-            return YPFloat80 as! Array<FPT>
-        }
-        else if name == "YQ" {
-            return YQFloat80 as! Array<FPT>
-        }
-        else if name == "RP" {
-            return RPFloat80 as! Array<FPT>
-        }
-        else if name == "RQ" {
-            return RQFloat80 as! Array<FPT>
-        }
+        if name == "PP" { return PPFloat80.map { Helpers.makeFP($0) } }
+        else if name == "PQ" { return PQFloat80.map { Helpers.makeFP($0) } }
+        else if name == "QP" { return QPFloat80.map { Helpers.makeFP($0) } }
+        else if name == "QQ" { return QQFloat80.map { Helpers.makeFP($0) } }
+        else if name == "YP" { return YPFloat80.map { Helpers.makeFP($0) } }
+        else if name == "YQ" { return YQFloat80.map { Helpers.makeFP($0) } }
+        else if name == "RP" { return RPFloat80.map { Helpers.makeFP($0) } }
+        else if name == "RQ" { return RQFloat80.map { Helpers.makeFP($0) } }
         #endif
     default:
-        if name == "PP" {
-            return PPDouble as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQDouble as! Array<FPT>
-        }
-        else if name == "PQ" {
-            return PQDouble as! Array<FPT>
-        }
-        else if name == "QP" {
-            return QPDouble as! Array<FPT>
-        }
-        else if name == "QQ" {
-            return QQDouble as! Array<FPT>
-        }
-        else if name == "YP" {
-            return YPDouble as! Array<FPT>
-        }
-        else if name == "YQ" {
-            return YQDouble as! Array<FPT>
-        }
-        else if name == "RP" {
-            return RPDouble as! Array<FPT>
-        }
-        else if name == "RQ" {
-            return RQDouble as! Array<FPT>
-        }
+        if name == "PP" { return PPDouble.map { Helpers.makeFP($0) } }
+        else if name == "PQ" { return PQDouble.map { Helpers.makeFP($0) } }
+        else if name == "QP" { return QPDouble.map { Helpers.makeFP($0) } }
+        else if name == "QQ" { return QQDouble.map { Helpers.makeFP($0) } }
+        else if name == "YP" { return YPDouble.map { Helpers.makeFP($0) } }
+        else if name == "YQ" { return YQDouble.map { Helpers.makeFP($0) } }
+        else if name == "RP" { return RPDouble.map { Helpers.makeFP($0) } }
+        else if name == "RQ" { return RQDouble.map { Helpers.makeFP($0) } }
     }
-    return Array<Double>() as! Array<FPT>
+    return []
 }

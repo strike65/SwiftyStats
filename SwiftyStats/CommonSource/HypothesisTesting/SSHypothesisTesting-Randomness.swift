@@ -55,7 +55,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
+                SSLog.statError("sample size is expected to be >= 2")
             }
             
             #endif
@@ -95,7 +95,7 @@ extension SSHypothesisTesting {
             #if os(macOS) || os(iOS)
             
             if #available(macOS 10.12, iOS 13, *) {
-                os_log("sample size is expected to be >= 2", log: .log_stat, type: .error)
+                SSLog.statError("sample size is expected to be >= 2")
             }
             
             #endif
@@ -103,7 +103,7 @@ extension SSHypothesisTesting {
             throw SSSwiftyStatsError.init(type: .invalidArgument, file: #file, line: #line, function: #function)
         }
         var diff = Array<FPT>()
-        let elements = data.elementsAsArray(sortOrder: .raw)!
+        let elements = data.elementsAsArray(sortOrder: .raw)
         var dtemp: FPT = 0
         var n2: FPT = 0
         var n1: FPT = 0
@@ -126,7 +126,7 @@ extension SSHypothesisTesting {
                 #if os(macOS) || os(iOS)
                 
                 if #available(macOS 10.12, iOS 13, *) {
-                    os_log("no user defined cutting point specified", log: .log_stat, type: .error)
+                    SSLog.statError("no user defined cutting point specified")
                 }
                 
                 #endif
