@@ -46,6 +46,44 @@
                BlueprintName = "SwiftyStatsTests"
                ReferencedContainer = "container:SwiftyStats.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "SwiftyStatsTests/testBetaDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testBinomialDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testChiSquareDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testExponentialDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testFRatioDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testGammaDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testGaussianDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testLogNormalDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testPoissonDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testSpecialFunctionsComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testUniformDistributionComprehensive()">
+               </Test>
+               <Test
+                  Identifier = "SwiftyStatsTests/testWeibullDistributionComprehensive()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

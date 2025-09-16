@@ -26,15 +26,18 @@ SwiftyStats is a framework written entirely in Swift that makes heavy use of gen
 > It is a framework that is regularly developed and has been created out of passion rather than necessity.
 
 # New in version 1.2.2
-* CocoaPods: podspec now links documentation_url to DocC site, homepage/license normalized, `Accelerate` framework declared, and tag uses `v#{version}`
-* Deployment targets (CocoaPods): iOS 15 / macOS 15 to match SwiftPM
-* Version badges and SPM snippet updated to 1.2.2
+* CocoaPods: update podspec to point documentation_url to DocC site, align homepage/license, include Accelerate framework, set source tag to `v#{version}`
+* Raise CocoaPods deployment targets to iOS 15 / macOS 15 to match SwiftPM
+* Bump README/index badges and SPM snippet to 1.2.2
 
 # New in version 1.2.1
-* Public API name corrections with deprecated aliases for backward compatibility
+* Public API name corrections with deprecated aliases for backward compatibility:
+  * `SSCrosstab.colummTotal()` → `SSCrosstab.columnTotal()`
+  * `SSCrosstab.largestColumTotal()` → `SSCrosstab.largestColumnTotal()`
+  * `SSCumulativeFrequencyTableItem.cumulativefrequency` → `SSCumulativeFrequencyTableItem.cumulativeFrequency`
 * Documentation: switched to DocC static site; added `make_doc.sh` at repo root with `--base-path`/`--local` support
 * Spellings/grammar cleaned up across comments and user-facing docs
-* Includes 1.2.0 improvements: consistent “p-value”, improved API doc comments, README/index clarifications
+* Kept 1.2.0 improvements: consistent “p-value”, improved API doc comments, README/index clarifications
 
 # Important
 
@@ -44,7 +47,7 @@ Starting with version 1.1.1, SwiftyStats is compatible with Swift 5.0. If you ne
 
 # Overview
 
-SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). This class encapsulates the data to be processed and provides descriptive statistics. In principle, an `SSExamine` instance can contain data of any kind. The available statistical indicators depend of course on the type of data.
+SwiftyStats is based on the class [`SSExamine`](docs/Classes/SSExamine.html). This class encapsulates the data to be processed and provides descriptive statistics. In principle, an `SSExamine` instance can contain data of any kind. The available statistical indicators depend on the type of data.
 
 The following "namespaces"/classes are provided (among others):
 
@@ -62,7 +65,7 @@ The attached Xcode project contains four targets:
 > * SwiftyStats (for macOS)
 > * SwiftyStatsMobile (for iOS)
 > * SwiftyStatsTests (Test suite)
-> * SwiftStatsCLTest (a command line demo)
+> * SwiftyStatsCLTest (a command line demo)
 
 *Each target must be built individually (i.e., no dependencies are defined)!*
 
@@ -145,7 +148,7 @@ import SwiftyStats
 
 // example data
 let data: [Double] = [3.14, 1.21, 5.6]
-// because our data are double valued items, the parameter "characterSet" is ignored
+// because our data are double-valued items, the parameter "characterSet" is ignored
 let test = try! SSExamine<Double, Double>(withObject: data, levelOfMeasurement: .interval, name: nil, characterSet: nil)
 // prints out the arithmetic mean
 print("\(test.arithmeticMean)")
@@ -154,7 +157,7 @@ let testString = "This string must be analyzed!"
 // in this case, only characters contained in CharacterSet.alphanumerics are added
 let stringAnalyze = try! SSExamine<String, Double>(withObject: testString, levelOfMeasurement: .nominal, name: nil, characterSet: CharacterSet.alphanumerics)
 print("\(stringAnalyze.frequency("i"))")
-// print out the 95% quantile of the Student T distribution
+// print out the 95% quantile of the Student's t distribution
 do {
 let q = try SSProbDist.StudentT.quantile(p: 0.95, degreesOfFreedom: 21)
 print("\(q)")
@@ -163,7 +166,7 @@ catch {
 print(error.localizedDescription)
 }
 ```
-Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degree of freedom", "shape" or "mean". For each distribution there are the following functions defined:
+Probability distributions in general are defined within relatively narrow conditions expressed in terms of certain parameters such as "degrees of freedom", "shape" or "mean". For each distribution there are the following functions defined:
 
 * cdf: Cumulative Distribution Function
 * pdf: Probability Density Function
@@ -243,7 +246,7 @@ Probability distributions in general are defined within relatively narrow condit
 * cumulativeFrequencyTable(format:)
 * eCDF(_:)
 * smallestFrequency
-* largestFrequency 
+* largestFrequency
 
 #### SSCrossTab
 * rowCount
@@ -285,34 +288,33 @@ Probability distributions in general are defined within relatively narrow condit
 * lambda_C_R()
 * lambda_R_C()
 * r0
-* r1 
+* r1
 
 #### Probability Functions (cdf, pdf, quantile, para - see above)
 
 * Beta
-* Binomial
 * Cauchy
 * Erlang
 * Exponential
-* Chi Square (central, non-central)
-* F-RATIO (central, non-central)
+* Chi-square (central, noncentral)
+* F-ratio (central, noncentral)
 * Gamma
-* GAUSSIAN
+* Gaussian
 * Laplace
-* Log Normal
+* Log-normal
 * Logistic
 * Pareto
 * Binomial
 * Poisson
 * Rayleigh
-* STUDENT's T
-* NON-CENTRAL T-DISTRIBUTION
-* TRIANGULAR
-* TRIANGULAR with two parameters
-* UNIFORM
-* Wald / Inverse Normal
+* Student's t
+* Noncentral t distribution
+* Triangular
+* Triangular with two parameters
+* Uniform
+* Wald / inverse normal
 * Weibull
-* CIRCULAR DISTRIBUTION
+* Circular distribution
 
 #### SSHypothesisTesting
 
@@ -321,14 +323,12 @@ Probability distributions in general are defined within relatively narrow condit
 * twoSampleTTest(data1:data2:alpha:)
 * twoSampleTTest(sample1:sample2:alpha:)
 * oneSampleTTest(sample:mean:alpha:)
-* oneSampleTTEst(data:mean:alpha:)
+* oneSampleTTest(data:mean:alpha:)
 * matchedPairsTTest(set1:set2:alpha:)
 * matchedPairsTTest(data1:data2:alpha:)
 * oneWayANOVA(data:alpha:)
-* oneWayANOVA(data:alpha:)
 * oneWayANOVA(dataFrame:alpha:)
 * multipleMeansTest(dataFrame:alpha:)
-* multipleMeansTest(data:alpha:)
 * multipleMeansTest(data:alpha:)
 * tukeyKramerTest(dataFrame:alpha:)
 * tukeyKramerTest(data:alpha:)
@@ -340,7 +340,7 @@ Probability distributions in general are defined within relatively narrow condit
 * autocorrelationCoefficient(array:lag:)
 * autocorrelation(array:)
 
-##### NPAR tests
+##### Nonparametric tests
 
 * ksGoFTest(array:targetDistribution:)
 * adNormalityTest(data:alpha:)
