@@ -38,6 +38,8 @@ Package.resolved
 *.xcworkspace/xcuserdata/
 *.xcodeproj/project.xcworkspace/xcuserdata/
 DerivedData/
+.clang-module-cache/
+changelog.temp.txt
 
 ## Local build dirs
 /build/
