@@ -24,11 +24,14 @@ copyTestResources:
 		cp SwiftyStats/Resources/* ${TEST_RESOURCE_DIRECTORY}
 
 test: copyTestResources
-		swift test
+		SWIFT_MODULECACHE_PATH=.build/swift-modulecache CLANG_MODULE_CACHE_PATH=.build/clang-modulecache swift test
+
+numerics-test: copyTestResources
+		@mkdir -p TestArtifacts
+		@echo "[$$(date -u +'%Y-%m-%dT%H:%M:%SZ')] make numerics-test --filter SwiftyStatsTests.SSFloatingPointTests/.* --attachments-path TestArtifacts" >> session.log
+		SWIFT_MODULECACHE_PATH=.build/swift-modulecache CLANG_MODULE_CACHE_PATH=.build/clang-modulecache swift test --filter "SwiftyStatsTests.SSFloatingPointTests/.*" --attachments-path TestArtifacts
 
 clean:
 		rm -rf .build
 
-.PHONY: build test copyTestResources clean
-
-
+.PHONY: build test numerics-test copyTestResources clean

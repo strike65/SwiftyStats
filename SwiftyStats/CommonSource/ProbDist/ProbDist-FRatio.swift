@@ -262,37 +262,14 @@ extension SSProbDist {
             if abs(p) <= eps {
                 return 0
             }
-            var fVal: FPT
-            var maxF: FPT
-            var minF: FPT
-            maxF = 9999
-            minF = 0
-            fVal = 1 / p
-            var it: Int = 0
-            var temp_p: FPT
-            let lower: FPT =  Helpers.makeFP(1E-12)
-            let half: FPT = FPT.half
-            while((maxF - minF) > lower)
-            {
-                if it == 1000 {
-                    break
-                }
-                do {
-                    temp_p = try cdf(f: fVal, numeratorDF: df1, denominatorDF: df2)
-                }
-                catch {
-                    return FPT.nan
-                }
-                if temp_p > p {
-                    maxF = fVal
-                }
-                else {
-                    minF = fVal
-                }
-                fVal = (maxF + minF) * half
-                it = it + 1
-            }
-            return fVal
+            let seed = FPT(1)
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: seed,
+                target: p,
+                cdf: { try cdf(f: $0, numeratorDF: df1, denominatorDF: df2) }
+            )
+            return q
         }
     }
 }

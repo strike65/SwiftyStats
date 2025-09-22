@@ -1,3 +1,16 @@
+Version 1.2.3
+- feat: replace legacy Tukey studentized range implementation with a clean Swift 6 version
+  - SSPtukey now defaults to `ptukey_new` (with legacy fallback), and a thin shim preserves the `ptukey` API
+  - added `qtukey` via robust bracketing + bisection
+- fix: correct outer Gauss–Legendre scaling in Tukey CDF (multiply by segment length) to resolve SciPy parity mismatches
+- test: broaden Tukey coverage (SSptukey core tests, SciPy parity audit, targeted debug cases)
+- feat: modernize SSFloatingPoint protocol
+  - add default implementations for common fractions and π‑based constants; retain precise per‑type constants where needed
+  - add comprehensive numerics tests (Double/Float/Float80) and a make target `numerics-test`
+- refactor: rewrite quantile functions previously adapted from rapidq.phatcode.net to clean, documented bisection methods
+  - Student’s t quantile and von Mises quantile now invert their CDFs via monotone bracketing + bisection
+- chore: improve Makefile test targets to use local module caches; ignore temporary changelog file
+
 Version 1.2.2
 - chore: bump version to 1.2.2
 - cocoapods: update podspec for better metadata and compatibility

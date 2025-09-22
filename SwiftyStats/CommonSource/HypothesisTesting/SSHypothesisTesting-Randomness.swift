@@ -175,7 +175,7 @@ extension SSHypothesisTesting {
         var pAsymp: FPT = 0
         var cv: FPT
         do {
-            cv = try SSProbDist.StandardNormal.quantile(p: 1 - alpha / 2)
+            cv = try SSProbDist.StandardNormal.quantileClean(p: 1 - alpha / 2)
         }
         catch {
             throw error

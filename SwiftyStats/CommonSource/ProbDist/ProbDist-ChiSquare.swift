@@ -171,29 +171,14 @@ extension SSProbDist {
             if (1 - p) < FPT.leastNonzeroMagnitude {
                 return FPT.infinity
             }
-            let eps: FPT =  Helpers.makeFP(1.0E-12)
-            var minChi: FPT = 0
-            var maxChi: FPT = 9999
-            var result: FPT = 0
-            var chiVal: FPT = df / sqrt(p)
-            var test: FPT
-            while (maxChi - minChi) > eps {
-                do {
-                    test = try cdf(chi: chiVal, degreesOfFreedom: df)
-                }
-                catch {
-                    throw error
-                }
-                if test > p {
-                    maxChi = chiVal
-                }
-                else {
-                    minChi = chiVal
-                }
-                chiVal = (maxChi + minChi) / 2
-            }
-            result = chiVal
-            return result
+            let seed = max(FPT(1), df)
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: seed,
+                target: p,
+                cdf: { try cdf(chi: $0, degreesOfFreedom: df) }
+            )
+            return q
         }
     }
 }

@@ -314,41 +314,48 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter atomically: If true, the object will be written to a temporary file first. This file will be renamed upon completion.
     /// - Parameter overwrite: If true, an existing file will be overwritten.
     /// - Parameter stringEncoding: String encoding
-    /// - Throws: SSSwiftyStatsError if the file could not be written
+    /// - Throws: `SSSwiftyStatsError` if the file could not be written or directory is invalid/unwritable
     public func exportJSONString(fileName path: String, atomically: Bool = true, overwrite: Bool, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath
+        let dir = NSString(string: fullName).deletingLastPathComponent
+        // Ensure parent directory exists (failsafe)
+        var isDir = ObjCBool(false)
+        if !fileManager.fileExists(atPath: dir, isDirectory: &isDir) {
+            do {
+                try fileManager.createDirectory(atPath: dir, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                SSLog.fsError("Unable to create directory for export: \(dir)")
+                throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
+            }
+        } else if !isDir.boolValue {
+            SSLog.fsError("Parent path is not a directory: \(dir)")
+            throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
+        }
+
         if fileManager.fileExists(atPath: fullName) {
             if !overwrite {
                 SSLog.fsError("File already exists")
-                
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
-            }
-            else {
+            } else {
                 do {
                     try fileManager.removeItem(atPath: fullName)
-                }
-                catch {
-                    SSLog.fsError("Can't remove file")
+                } catch {
+                    SSLog.fsError("Can't remove file before writing")
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
         }
+
         let jsonEncode = JSONEncoder()
+        let data = try jsonEncode.encode(self)
+        guard let jsonString = String(data: data, encoding: stringEncoding) else { return false }
         do {
-            let data = try jsonEncode.encode(self)
-            if let jsonString = String.init(data: data, encoding: stringEncoding) {
-                try jsonString.write(to: URL.init(fileURLWithPath: fullName), atomically: true, encoding: stringEncoding)
-                return true
-            }
-            else {
-                return false
-            }
-        }
-        catch {
-            SSLog.fsError("Unable to write json")
-            
-            return false
+            try jsonString.write(to: URL(fileURLWithPath: fullName), atomically: atomically, encoding: stringEncoding)
+            return true
+        } catch {
+            SSLog.fsError("Unable to write JSON: \(error.localizedDescription)")
+            throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
         }
     }
     
@@ -363,35 +370,45 @@ public class SSExamine<SSElement, FPT>:  NSObject, SSExamineContainer, NSCopying
     /// - Parameter asRow: If true, writes elements on a single line; otherwise includes a header row with `name` and line breaks
     /// - Throws: SSSwiftyStatsError if the file could not be written
     public func saveTo(fileName path: String, atomically: Bool = true, overwrite: Bool, separator: String = ",", encloseElementsBy: String? = nil, asRow: Bool = true, stringEncoding: String.Encoding = String.Encoding.utf8) throws -> Bool {
-        var result = true
         let fileManager = FileManager.default
         let fullName = NSString(string: path).expandingTildeInPath
+        let dir = NSString(string: fullName).deletingLastPathComponent
+        // Ensure parent directory exists (failsafe)
+        var isDir = ObjCBool(false)
+        if !fileManager.fileExists(atPath: dir, isDirectory: &isDir) {
+            do {
+                try fileManager.createDirectory(atPath: dir, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                SSLog.fsError("Unable to create directory for export: \(dir)")
+                throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
+            }
+        } else if !isDir.boolValue {
+            SSLog.fsError("Parent path is not a directory: \(dir)")
+            throw SSSwiftyStatsError(type: .directoryDoesNotExist, file: #file, line: #line, function: #function)
+        }
+
         if fileManager.fileExists(atPath: fullName) {
             if !overwrite {
                 SSLog.fsError("File already exists")
-                
                 throw SSSwiftyStatsError(type: .fileExists, file: #file, line: #line, function: #function)
-            }
-            else {
+            } else {
                 do {
                     try fileManager.removeItem(atPath: fullName)
-                }
-                catch {
-                    SSLog.fsError("Can't remove file")
+                } catch {
+                    SSLog.fsError("Can't remove file before writing")
                     throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
                 }
             }
         }
-        if let s = elementsAsString(withDelimiter: separator, asRow: asRow, encloseElementsBy: encloseElementsBy) {
-            do {
-                try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
-            }
-            catch {
-                SSLog.fsError("File could not be written")
-                result = false
-            }
+
+        guard let s = elementsAsString(withDelimiter: separator, asRow: asRow, encloseElementsBy: encloseElementsBy) else { return false }
+        do {
+            try s.write(toFile: fullName, atomically: atomically, encoding: stringEncoding)
+            return true
+        } catch {
+            SSLog.fsError("File could not be written: \(error.localizedDescription)")
+            throw SSSwiftyStatsError(type: .fileNotWriteable, file: #file, line: #line, function: #function)
         }
-        return result
     }
     
     /// Returns a SSExamine instance initialized using the string provided. Level of measurement will be set to .nominal.
@@ -713,10 +730,13 @@ extension SSExamine {
     public func elementsAsString(withDelimiter del: String?, asRow: Bool = true, encloseElementsBy: String? = nil) -> String? {
         let a = elementsAsArray(sortOrder: .raw)
         let parts: [String] = a.map { item in
-            if let e = encloseElementsBy {
-                return e + "\(item)" + e
+            let itemString = "\(item)"
+            if let e = encloseElementsBy, !e.isEmpty {
+                // Escape any enclosure characters inside the element by doubling them (CSV-style)
+                let escaped = itemString.replacingOccurrences(of: e, with: e + e)
+                return e + escaped + e
             } else {
-                return "\(item)"
+                return itemString
             }
         }
         var res: String

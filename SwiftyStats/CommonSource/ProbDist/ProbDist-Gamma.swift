@@ -204,37 +204,14 @@ extension SSProbDist {
             if p == 1 {
                 return FPT.infinity
             }
-            var gVal: FPT = 0
-            var maxG: FPT = 0
-            var minG: FPT = 0
-            maxG = a * b + 4000
-            minG = 0
-            gVal = a * b
-            var test: FPT
-            var i = 1
-            while((maxG - minG) >  Helpers.makeFP(1.0E-14)) {
-                test = try! cdf(x: gVal, shape: a, scale: b)
-                if test > p {
-                    maxG = gVal
-                }
-                else {
-                    minG = gVal
-                }
-                gVal = (maxG + minG) *  Helpers.makeFP(0.5 )
-                i = i + 1
-                if i >= 7500 {
-                    break
-                }
-            }
-            if((a * b) > 10000) {
-                let t1: FPT = gVal *  Helpers.makeFP(1E07)
-                let ri: FPT = floor(t1)
-                let rd: FPT = ri /  Helpers.makeFP(1E07)
-                return rd
-            }
-            else {
-                return gVal
-            }
+            let seed = max(FPT(1), a * b)
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: seed,
+                target: p,
+                cdf: { try cdf(x: $0, shape: a, scale: b) }
+            )
+            return q
         }
         
     }

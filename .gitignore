@@ -16,6 +16,7 @@ TODO
 *.framework
 *.xcarchive
 session.log
+changelog.temp.txt
 
 ## Editors/IDE
 .vscode/
@@ -45,6 +46,9 @@ changelog.temp.txt
 /build/
 /Products/
 SwiftyStats/build/
+.build
+.clang-module-cache/
+ModuleCache.noindex/
 
 ## Dependency managers
 Pods/

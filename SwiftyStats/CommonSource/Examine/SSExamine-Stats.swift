@@ -873,7 +873,7 @@ extension SSExamine {
             do {
                 let m = self.arithmeticMean!
                 let pp: FPT =  Helpers.makeFP(alpha)
-                u = try SSProbDist.StandardNormal.quantile(p: 1 - ( pp / 2))
+                u = try SSProbDist.StandardNormal.quantileClean(p: 1 - ( pp / 2))
                 let n: FPT =  Helpers.makeFP(self.sampleSize)
                 t1 = sd / n.squareRoot()
                 width = u * t1

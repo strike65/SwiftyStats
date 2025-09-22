@@ -522,7 +522,7 @@ public func pdfStandardNormalDist<FPT: SSFloatingPoint & Codable>(u: FPT!) -> FP
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.StandardNormal.quantile(_:) instead")
 public func quantileStandardNormalDist<T: SSFloatingPoint & Codable>(p: T) throws -> T {
-    return try SSProbDist.StandardNormal.quantile(p: p)
+    return try SSProbDist.StandardNormal.quantileClean(p: p)
 }
 /// :nodoc:
 @available(*, deprecated, message: "Use SSProbDist.Poisson.cdf(_:_:_:) instead")

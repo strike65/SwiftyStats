@@ -233,8 +233,12 @@ extension SSProbDist {
             return _result
         }
         
-        /// Returns the quantile function of the von Mises distribution
-        ///  adapted from: http://rapidq.phatcode.net/examples/Math
+        /// Returns the quantile (inverse CDF) of the von Mises distribution.
+        ///
+        /// Implementation: monotone bisection on the interval [m - π, m + π]
+        /// using the lower-tail CDF defined above. The CDF is strictly
+        /// increasing in x on this interval, so bracketing and bisection
+        /// converge reliably.
         /// - Parameter p: p
         /// - Parameter m: Mean direction
         /// - Parameter c: Concentration parameter (κ)
@@ -262,42 +266,22 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
-             * coded in C by Gary Perlman
-             * coded in Basic by Michael Zito (2003)
-             * coded in C# by strike65 (2005)
-             */
-            let eps: Double = 2.0 * Double.ulpOfOne
-            var mVal, MaxM, MinM, _test: Double
-            MaxM = Double.twopi
-            MinM = 0
-            if(p < 0) {
-                return(0.0)
-            }
-            if (p == 0) {
-                return m - Double.pi
-            }
-            if(p == 1.0) {
-                return m + Double.pi
-            }
-            mVal = m - Double.pi
-            while((MaxM - MinM) > eps)
-            {
-                do {
-                    _test = try cdf(x: mVal, mean: m, concentration: c)
-                }
-                catch {
-                    throw error
-                }
-                if(_test > p) {
-                    MaxM = mVal
-                }
-                else {
-                    MinM = mVal
-                }
-                mVal = (MaxM + MinM) * 0.5
-            }
-            return(mVal);
+            let p0 = p!
+            let m0 = m!
+            let c0 = c!
+            if p0 <= 0 { return m0 - Double.pi }
+            if p0 >= 1 { return m0 + Double.pi }
+            // Monotone bisection on [m - π, m + π]
+            let lo = m0 - Double.pi
+            let seed = m0 // mid-seed; helper will expand if needed (not needed here)
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: lo,
+                upperSeed: seed,
+                target: p0,
+                cdf: { try cdf(x: $0, mean: m0, concentration: c0) },
+                maxExpandIters: 1 // domain is finite; no expansion required
+            )
+            return q
         }
     }
     

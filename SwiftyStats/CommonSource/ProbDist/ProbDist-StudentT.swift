@@ -152,14 +152,15 @@ extension SSProbDist {
             return result
         }
         
-        /// Returns the quantile function of Student's t-distribution
-        ///  adapted from: http://rapidq.phatcode.net/examples/Math
+        /// Returns the quantile (inverse CDF) of Student's t-distribution.
+        ///
+        /// Implementation: monotone bracketing + bisection on the lower-tail CDF,
+        /// leveraging symmetry to reduce search to t >= 0 and reflecting the sign
+        /// when `p < 0.5`. The bracket is expanded geometrically until it contains
+        /// the target probability, then bisected to a tight tolerance.
         /// - Parameter p: Probability
         /// - Parameter df: Degrees of freedom
         /// - Throws: SSSwiftyStatsError if df <= 0 and/or p < 0 or p > 1.0
-        ///
-        /// ### Note ###
-        /// Bisection
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, degreesOfFreedom df: FPT) throws -> FPT {
             if df < 0 {
                 #if os(macOS) || os(iOS)
@@ -183,60 +184,20 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            /* adapted from: http://rapidq.phatcode.net/examples/Math/ProbDists.rqb
-             * coded in C by Gary Perlman
-             * coded in Basic by Michael Zito (2003)
-             * coded in C# by strike65 (2005)
-             */
-            let half: FPT = FPT.half
-            let eps: FPT = FPT.ulpOfOne
-            if abs( p - 1 ) <= eps  {
-                return FPT.infinity
-            }
-            if abs(p) <= eps {
-                return -FPT.infinity
-            }
-            
-            if abs(p - half) <= eps {
-                return 0
-            }
-            var minT: FPT
-            var maxT: FPT
-            var result: FPT
-            var tVal: FPT
-            var b1: Bool = false
-            var pp: FPT
-            var _p: FPT
-            if p < half {
-                _p = 1 - p
-                b1 = true
-            }
-            else {
-                _p = p
-            }
-            minT = 0
-            maxT = 100000
-            tVal = (maxT + minT) / 2
-            while (maxT - minT > (4 * eps)) {
-                do {
-                    pp = try cdf(t: tVal, degreesOfFreedom: df)
-                }
-                catch {
-                    return FPT.nan
-                }
-                if pp > _p {
-                    maxT = tVal
-                }
-                else {
-                    minT = tVal
-                }
-                tVal = (maxT + minT) * half
-            }
-            result = tVal
-            if b1 {
-                result = result * -1
-            }
-            return result
+            // Boundary handling
+            if p <= 0 { return -FPT.infinity }
+            if p >= 1 { return FPT.infinity }
+
+            // Use symmetry: solve for lower-tail p' >= 0.5, then apply sign
+            let lower = p <= FPT.half
+            let target = lower ? (FPT.one - p) : p
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: FPT(1),
+                target: target,
+                cdf: { try cdf(t: $0, degreesOfFreedom: df) }
+            )
+            return lower ? (-q) : q
         }
         
     }

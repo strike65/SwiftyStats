@@ -42,6 +42,30 @@ extension SSProbDist {
             result.kurtosis = 3
             return result
         }
+
+        /// Clean inversion-based quantile for the standard Gaussian distribution.
+        /// - Parameter p: lower-tail probability in [0, 1]
+        public static func quantileClean<T: SSFloatingPoint & Codable>(p: T) throws -> T {
+            if p <= 0 { return -T.infinity }
+            if p >= 1 { return T.infinity }
+            if p < 0 || p > 1 {
+                #if os(macOS) || os(iOS)
+                if #available(macOS 10.12, iOS 13, *) {
+                    os_log("p is expected to be > 0.0 and < 1.0", log: .log_stat, type: .error)
+                }
+                #endif
+                throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+            }
+            let lower = p <= T.half
+            let target = lower ? (T.one - p) : p
+            let z = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: T(1),
+                target: target,
+                cdf: { (u: T) throws -> T in SSProbDist.StandardNormal.cdf(u: u) }
+            )
+            return lower ? (-z) : z
+        }
         
         /// Returns the CDF of a Gaussian distribution
         /// <img src="../img/Gaussian_def.png" alt="">
@@ -153,10 +177,6 @@ extension SSProbDist {
         /// - Parameter sd: Standard deviation
         /// - Throws: SSSwiftyStatsError if sd <= 0.0
         public static func quantile<FPT: SSFloatingPoint & Codable>(p: FPT, mean m: FPT, standardDeviation sd: FPT) throws -> FPT {
-            var ex1: FPT
-            var ex2: FPT
-            var ex3: FPT
-            var ex4: FPT
             if sd <= 0 {
                 #if os(macOS) || os(iOS)
                 
@@ -168,22 +188,10 @@ extension SSProbDist {
                 
                 throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
             }
-            if p < 0 {
-                return -FPT.infinity
-            }
-            if p > 1 {
-                return FPT.infinity
-            }
-            do {
-                ex1 = 2 * p
-                ex2 = FPT.minusOne + ex1
-                ex3 = try sd * inverf(z: ex2)
-                ex4 = FPT.sqrt2 * ex3
-                return m + ex4
-            }
-            catch {
-                return FPT.nan
-            }
+            if p <= 0 { return -FPT.infinity }
+            if p >= 1 { return FPT.infinity }
+            let z = try SSProbDist.StandardNormal.quantileClean(p: p)
+            return m + sd * z
         }
         
         /// Returns the quantile function of a Gaussian distribution
@@ -443,12 +451,34 @@ fileprivate func inverf<FPT: SSFloatingPoint & Codable>(z: FPT) throws -> FPT {
         throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
     }
     let x:FPT = (z + 1) / 2
-    do {
-        let invCDF = try SSProbDist.StandardNormal.quantile(p: x)
-        let result = invCDF / FPT.sqrt2
-        return result
-    }
-    catch {
-        return FPT.nan
+    // Use clean inversion-based quantile to avoid licensed approximations
+    let invCDF = try SSProbDist.StandardNormal.quantileClean(p: x)
+    let result = invCDF / FPT.sqrt2
+    return result
+}
+
+// Clean inversion-based quantile for StandardNormal, provided as an extension to avoid
+// reliance on legacy approximation code.
+extension SSProbDist.StandardNormal {
+    public static func quantileClean<T: SSFloatingPoint & Codable>(p: T) throws -> T {
+        if p <= 0 { return -T.infinity }
+        if p >= 1 { return T.infinity }
+        if p < 0 || p > 1 {
+            #if os(macOS) || os(iOS)
+            if #available(macOS 10.12, iOS 13, *) {
+                os_log("p is expected to be > 0.0 and < 1.0", log: .log_stat, type: .error)
+            }
+            #endif
+            throw SSSwiftyStatsError.init(type: .functionNotDefinedInDomainProvided, file: #file, line: #line, function: #function)
+        }
+        let lower = p <= T.half
+        let target = lower ? (T.one - p) : p
+        let z = try Helpers.invertCDFMonotone(
+            lowerBound: .zero,
+            upperSeed: T(1),
+            target: target,
+            cdf: { (u: T) throws -> T in SSProbDist.StandardNormal.cdf(u: u) }
+        )
+        return lower ? (-z) : z
     }
 }

@@ -38,245 +38,45 @@ extension Helpers {
     /// Tests whether a value is odd.
     /// - Parameter value: A Floating Point value
     internal static func isOdd<T: SSFloatingPoint>(_ value: T) -> Bool {
-        var modr: (T, T)
-        modr = modf(value)
-        if !modr.1.isZero {
-            return false;
-        }
-        else if modr.0.truncatingRemainder(dividingBy: 2).isZero {
-            return false
-        }
-        else {
-            return true
-        }
+        let (ip, frac) = Darwin.modf(value)
+        guard frac.isZero else { return false }
+        return !ip.truncatingRemainder(dividingBy: 2).isZero
     }
     
     /// Returns the integer value of x.
     /// - Parameter x: Floating Point value
     internal static func integerValue<T: SSFloatingPoint, I: BinaryInteger>(_ x: T) -> I {
-        switch x {
-        case let d as Double:
-            switch I.self {
-            case is Int32.Type:
-                let r = Int32(d)
-                return r as! I
-            case is Int16.Type:
-                let r = Int16(d)
-                return r as! I
-            case is Int64.Type:
-                let r = Int64(d)
-                return r as! I
-            case is Int8.Type:
-                let r = Int8(d)
-                return r as! I
-            case is UInt.Type:
-                let r = UInt(d)
-                return r as! I
-            case is UInt32.Type:
-                let r = UInt32(d)
-                return r as! I
-            case is UInt16.Type:
-                let r = UInt16(d)
-                return r as! I
-            case is UInt8.Type:
-                let r = UInt8(d)
-                return r as! I
-            case is UInt64.Type:
-                let r = UInt64(d)
-                return r as! I
-            default:
-                let r = Int(d)
-                return r as! I
-            }
-        case let d as Float:
-            switch I.self {
-            case is Int32.Type:
-                let r = Int32(d)
-                return r as! I
-            case is Int16.Type:
-                let r = Int16(d)
-                return r as! I
-            case is Int64.Type:
-                let r = Int64(d)
-                return r as! I
-            case is Int8.Type:
-                let r = Int8(d)
-                return r as! I
-            case is UInt.Type:
-                let r = UInt(d)
-                return r as! I
-            case is UInt32.Type:
-                let r = UInt32(d)
-                return r as! I
-            case is UInt16.Type:
-                let r = UInt16(d)
-                return r as! I
-            case is UInt8.Type:
-                let r = UInt8(d)
-                return r as! I
-            case is UInt64.Type:
-                let r = Int64(d)
-                return r as! I
-            default:
-                let r = Int(d)
-                return r as! I
-            }
-            #if arch(x86_64)
-        case let d as Float80:
-            switch I.self {
-            case is Int32.Type:
-                let r = Int32(d)
-                return r as! I
-            case is Int16.Type:
-                let r = Int16(d)
-                return r as! I
-            case is Int64.Type:
-                let r = Int64(d)
-                return r as! I
-            case is Int8.Type:
-                let r = Int8(d)
-                return r as! I
-            case is UInt.Type:
-                let r = UInt(d)
-                return r as! I
-            case is UInt32.Type:
-                let r = UInt32(d)
-                return r as! I
-            case is UInt16.Type:
-                let r = UInt16(d)
-                return r as! I
-            case is UInt8.Type:
-                let r = UInt8(d)
-                return r as! I
-            case is UInt64.Type:
-                let r = Int64(d)
-                return r as! I
-            default:
-                let r = Int(d)
-                return r as! I
-            }
-            #endif
-        default:
-            return 0
-        }
+        #if arch(x86_64)
+        if let v = x as? Float80 { return I(v) }
+        #endif
+        if let v = x as? Double { return I(v) }
+        if let v = x as? Float { return I(v) }
+        // Unreachable for current SSFloatingPoint conformers
+        return 0
     }
     
     
     /// Returns the integer part of a floating point number
     /// - Parameter x: Floating Point value
     internal static func integerPart<T: SSFloatingPoint>(_ x: T) -> T {
-        var modr: (T, T)
-        modr = Darwin.modf(x)
-        return modr.0
+        let (ip, _) = Darwin.modf(x)
+        return ip
     }
     
     
     /// Returns the fractional part of a double-value
     /// - Parameter value: Floating Point value
     internal static func fractionalPart<T: SSFloatingPoint>(_ value: T) -> T {
-        var modr: (T, T)
-        modr = Darwin.modf(value)
-        return modr.1
+        let (_, frac) = Darwin.modf(value)
+        return frac
     }
     
     internal static func isNumeric<T>(_ value: T) -> Bool {
-        #if arch(arm) || arch(arm64)
-         if let _ = value as? Double {
-                return true
-            }
-            else if let _ = value as? Int {
-                return true
-            }
-            else if let _ = value as? Int8 {
-                return true
-            }
-            else if let _ = value as? Int32 {
-                return true
-            }
-            else if let _ = value as? Int64 {
-                return true
-            }
-            else if let _ = value as? UInt {
-                return true
-            }
-            else if let _ = value as? UInt8 {
-                return true
-            }
-            else if let _ = value as? UInt32 {
-                return true
-            }
-            else if let _ = value as? UInt64 {
-                return true
-            }
-            else if let _ = value as? Float {
-                return true
-            }
-            else if let _ = value as? Float32 {
-                return true
-            }
-            else if let _ = value as? Float64 {
-                return true
-            }
-            else if let _ = value as? NSNumber {
-                return true
-            }
-            else if let _ = value as? NSDecimalNumber {
-                return true
-            }
-            else {
-                return false
-            }
-        #endif
-        #if arch(i386) || arch(x86_64)
-            if let _ = value as? Double {
-                return true
-            }
-            else if let _ = value as? Int {
-                return true
-            }
-            else if let _ = value as? Int8 {
-                return true
-            }
-            else if let _ = value as? Int32 {
-                return true
-            }
-            else if let _ = value as? Int64 {
-                return true
-            }
-            else if let _ = value as? UInt {
-                return true
-            }
-            else if let _ = value as? UInt8 {
-                return true
-            }
-            else if let _ = value as? UInt32 {
-                return true
-            }
-            else if let _ = value as? UInt64 {
-                return true
-            }
-            else if let _ = value as? Float {
-                return true
-            }
-            else if let _ = value as? Float32 {
-                return true
-            }
-            else if let _ = value as? Float64 {
-                return true
-            }
-            else if let _ = value as? Float80 {
-                return true
-            }
-            else if let _ = value as? NSNumber {
-                return true
-            }
-            else if let _ = value as? NSDecimalNumber {
-                return true
-            }
-            else {
-                return false
-            }
-        #endif
+        if value is any BinaryInteger { return true }
+        if value is any BinaryFloatingPoint { return true }
+        if value is NSNumber { return true }
+        if value is NSDecimalNumber { return true }
+        return false
     }
     
     /// Tests whether a value is numeric
@@ -290,6 +90,67 @@ extension Helpers {
     /// - Parameter value: Value
     /// - Returns: The numerical value as a FloatingPoint if possible, TO.nan otherwise.
     internal static func makeFP<FROM, TO: SSFloatingPoint>(_ value: FROM) -> TO {
+        // Swift 6 fast-path: normalize to Double and cast to TO
+        do {
+            let toDouble: Double? = {
+                switch value {
+                case let s as String:
+                    return Double(s)
+                case let s as NSString:
+                    return Double(s as String)
+                case let v as Double:
+                    return v
+                case let v as Float:
+                    return Double(v)
+                #if arch(i386) || arch(x86_64)
+                case let v as Float80:
+                    return Double(v)
+                #endif
+                case let v as Int:
+                    return Double(v)
+                case let v as Int8:
+                    return Double(v)
+                case let v as Int16:
+                    return Double(v)
+                case let v as Int32:
+                    return Double(v)
+                case let v as Int64:
+                    return Double(v)
+                case let v as UInt:
+                    return Double(v)
+                case let v as UInt8:
+                    return Double(v)
+                case let v as UInt16:
+                    return Double(v)
+                case let v as UInt32:
+                    return Double(v)
+                case let v as UInt64:
+                    return Double(v)
+                case let v as NSNumber:
+                    return v.doubleValue
+                case let v as NSDecimalNumber:
+                    return v.doubleValue
+                case let v as Decimal:
+                    return NSDecimalNumber(decimal: v).doubleValue
+                default:
+                    return nil
+                }
+            }()
+            if let d = toDouble {
+                switch TO.self {
+                case is Double.Type:
+                    return d as! TO
+                case is Float.Type:
+                    return Float(d) as! TO
+                #if arch(i386) || arch(x86_64)
+                case is Float80.Type:
+                    return Float80(d) as! TO
+                #endif
+                default:
+                    break
+                }
+            }
+        }
         switch value {
         case let s as String:
             switch TO.self {
@@ -479,13 +340,9 @@ extension Helpers {
     }
     
     /// Casts the members of an array from one numeric type to a floating-point type.
-    internal static func castArrayToFloatingPoint<T, FPT>(_ array: Array<T>) -> Array<FPT>? where T: Numeric & Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
-        if array.isEmpty {
-            return nil
-        }
-        let result: Array<FPT> = array.map( {(value: T) in
-            return  Helpers.makeFP(value)
-        })
+    internal static func castArrayToFloatingPoint<T, FPT>(_ array: [T]) -> [FPT]? where T: Numeric & Codable & Hashable & Comparable, FPT: SSFloatingPoint & Codable {
+        if array.isEmpty { return nil }
+        let result: [FPT] = array.map { Helpers.makeFP($0) }
         return result
     }
     
@@ -493,123 +350,77 @@ extension Helpers {
     /// - Parameter value: The element value.
     /// - Parameter count: Number of repetitions.
     internal static func replicateExamine<T, FPT: SSFloatingPoint & Codable>(value: T!, count: Int!) -> SSExamine<T, FPT> where T: Comparable, T: Hashable, FPT: Codable {
-        let array = Array<T>.init(repeating: value, count: count)
-        let res = SSExamine<T, FPT>.init(withArray: array, name: nil, characterSet: nil)
+        let array = Array<T>(repeating: value, count: count)
+        let res = SSExamine<T, FPT>(withArray: array, name: nil, characterSet: nil)
         return res
     }
     
     /// Provides scanning helpers (text → numbers).
     enum NumberScanner {
         internal static func scanDouble(string: String?) -> Double? {
-            guard string != nil else {
-                return nil
-            }
-            var res: Double = 0.0
-            let s = Scanner.init(string: string!)
-            res = s.scanDouble() ?? Double.nan
-            return res
+            guard let string else { return nil }
+            let s = Scanner(string: string)
+            return s.scanDouble() ?? Double.nan
         }
         
         internal static func scanFloat(string: String?) -> Float? {
-            guard string != nil else {
-                return nil
-            }
-            var res: Float = 0.0
-            let s = Scanner.init(string: string!)
-            res = s.scanFloat() ?? Float.nan
-            return res
+            guard let string else { return nil }
+            let s = Scanner(string: string)
+            return s.scanFloat() ?? Float.nan
         }
         
         internal static func scanHexDouble(string: String?) -> Double? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: Double = 0.0
-            let s = Scanner.init(string: string!)
-            if s.scanHexDouble(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanHexDouble(&res) { return res }
+            return nil
         }
         
         internal static func scanHexFloat(string: String?) -> Float? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: Float = 0.0
-            let s = Scanner.init(string: string!)
-            if s.scanHexFloat(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanHexFloat(&res) { return res }
+            return nil
         }
                 
         internal static func scanHexInt64(string: String?) -> UInt64? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: UInt64 = 0
-            let s = Scanner.init(string: string!)
-            if s.scanHexInt64(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanHexInt64(&res) { return res }
+            return nil
         }
         
         internal static func scanInt64(string: String?) -> Int64? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: Int64 = 0
-            let s = Scanner.init(string: string!)
-            if s.scanInt64(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanInt64(&res) { return res }
+            return nil
         }
         
         internal static func scanUInt64(string: String?) -> UInt64? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: UInt64 = 0
-            let s = Scanner.init(string: string!)
-            if s.scanUnsignedLongLong(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanUnsignedLongLong(&res) { return res }
+            return nil
         }
         
         
         internal static func scanInt(string: String?) -> Int? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             var res: Int = 0
-            let s = Scanner.init(string: string!)
-            if s.scanInt(&res) {
-                return res
-            }
-            else {
-                return nil
-            }
+            let s = Scanner(string: string)
+            if s.scanInt(&res) { return res }
+            return nil
         }
         
         
         internal static func scanString(string: String?) -> String? {
-            guard string != nil else {
-                return nil
-            }
+            guard let string else { return nil }
             return string
         }
         
@@ -634,9 +445,3 @@ internal func printError(_ message: String) {
     var outputStream = StandardErrorOutputStream()
     print(message, to: &outputStream)
 }
-
-
-
-
-
-

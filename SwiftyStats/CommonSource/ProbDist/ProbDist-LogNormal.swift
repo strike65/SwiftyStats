@@ -157,13 +157,8 @@ extension SSProbDist {
             else if p.isZero {
                 return 0
             }
-            do {
-                let u = try SSProbDist.StandardNormal.quantile(p: p)
-                return SSMath.exp1( mean + u * sqrt(v))
-            }
-            catch {
-                return FPT.nan
-            }
+            let u = try SSProbDist.StandardNormal.quantileClean(p: p)
+            return SSMath.exp1( mean + u * sqrt(v))
         }
         
     }

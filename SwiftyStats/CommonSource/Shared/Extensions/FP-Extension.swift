@@ -24,7 +24,16 @@
 import Foundation
 
 /// Extends the FloatingPoint Protocol by adding important constants
-public protocol SSFloatingPoint: FloatingPoint {
+/// Extends `FloatingPoint` with a curated set of numerics constants used
+/// across SwiftyStats. Conforming types should be standard binary
+/// floating-point types (e.g. `Float`, `Double`, `Float80`).
+///
+/// Modernization notes:
+/// - The protocol now ships default implementations for basic constants via a
+///   protocol extension (see below). Conformers can rely on the defaults and
+///   only override what is type-specific (e.g. `maxgamma`).
+/// - API remains source-compatible: names and types are unchanged.
+public protocol SSFloatingPoint: FloatingPoint, Sendable {
     /// 0
     static var zero: Self { get }
     
@@ -150,6 +159,36 @@ public protocol SSFloatingPoint: FloatingPoint {
 
 }
 
+// MARK: - Default implementations for basic constants
+// These provide sensible defaults using float literals, reducing boilerplate
+// in conforming types while preserving the API surface.
+extension SSFloatingPoint {
+    @inlinable public static var zero: Self { 0 }
+    @inlinable public static var minusOne: Self { -1 }
+    @inlinable public static var one: Self { 1 }
+    @inlinable public static var half: Self { Self(1) / Self(2) }
+    @inlinable public static var fourth: Self { Self(1) / Self(4) }
+    @inlinable public static var third: Self { Self(1) / Self(3) }
+    @inlinable public static var twothirds: Self { Self(2) / Self(3) }
+    @inlinable public static var oo3: Self { Self(1) / Self(3) }
+    @inlinable public static var oo6: Self { Self(1) / Self(6) }
+    @inlinable public static var twoo3: Self { Self(2) / Self(3) }
+
+    // Pi-based ratios (generic, rely on stdlib `Self.pi`).
+    // Conformers may override with higher-precision literals if desired.
+    @inlinable public static var pihalf: Self { Self.pi / Self(2) }
+    @inlinable public static var pifourth: Self { Self.pi / Self(4) }
+    @inlinable public static var pithirds: Self { Self.pi / Self(3) }
+    @inlinable public static var twopithird: Self { (Self(2) * Self.pi) / Self(3) }
+    @inlinable public static var threepifourth: Self { (Self(3) * Self.pi) / Self(4) }
+    @inlinable public static var twopi: Self { Self(2) * Self.pi }
+    @inlinable public static var pisquared: Self { Self.pi * Self.pi }
+    @inlinable public static var twoopi: Self { Self(2) / Self.pi }
+    @inlinable public static var oopi: Self { Self(1) / Self.pi }
+    @inlinable public static var oo2pi: Self { Self(1) / (Self(2) * Self.pi) }
+    @inlinable public static var threepiate: Self { (Self(3) * Self.pi) / Self(8) }
+}
+
 extension Double: SSFloatingPoint {
     
     
@@ -166,52 +205,7 @@ extension Double: SSFloatingPoint {
     }
     
 
-    // 0
-    public static var zero: Double {
-        get {
-            return 0
-        }
-    }
-    // -1
-    public static var minusOne: Double {
-        get {
-            return -1
-        }
-    }
-    
-    // 1
-    public static var one: Double {
-        get {
-            return 1
-        }
-    }
-    
-
-    // 1 / 2
-    public static var half: Double {
-        get {
-            return 5.0000000000000000000000000000000000000000e-01
-        }
-    }
-    // 1 / 3
-    public static var third: Double {
-        get {
-            return 3.3333333333333333333333333333333333333333e-01
-        }
-    }
-    // 1 / 4
-    public static var fourth: Double {
-        get {
-            return 0.2500000000000000000000000000000000000000
-        }
-    }
-
-    // 2 / 3
-    public static var twothirds: Double {
-        get {
-            return 0.6666666666666666666666666666666666666666
-        }
-    }
+    // basic constants come from SSFloatingPoint defaults
 
     /// 2 / pi
     public static var twoopi: Double {
@@ -376,24 +370,7 @@ extension Double: SSFloatingPoint {
             return 0.5641895835477562869480794515607725858441
         }
     }
-    /// 1 / 3
-    public static var oo3: Double {
-        get {
-            return 0.3333333333333333333333333333333333333333
-        }
-    }
-    /// 1 / 6
-    public static var oo6: Double {
-        get {
-            return 0.1666666666666666666666666666666666666667
-        }
-    }
-    /// 2 / 3
-    public static var twoo3: Double {
-        get {
-            return 0.6666666666666666666666666666666666666667
-        }
-    }
+    // fractional shortcuts (oo3, oo6, twoo3) provided by defaults
     /// pow(2, 1/4)
     public static var twoexpfourth : Double {
         get {
@@ -428,52 +405,7 @@ extension Float: SSFloatingPoint {
         return 2.0943951023931954923084289221863352561314
     }
     
-    
-    // 0
-    public static var zero: Float {
-        get {
-            return 0
-        }
-    }
-    
-    // -1
-    public static var minusOne: Float {
-        get {
-            return -1
-        }
-    }
-
-    // 1
-    public static var one: Float {
-        get {
-            return 1
-        }
-    }
-
-    // 1 / 2
-    public static var half: Float {
-        get {
-            return 5.0000000000000000000000000000000000000000e-01
-        }
-    }
-    // 1 / 3
-    public static var third: Float {
-        get {
-            return 3.3333333333333333333333333333333333333333e-01
-        }
-    }
-    // 1 / 4
-    public static var fourth: Float {
-        get {
-            return 0.2500000000000000000000000000000000000000
-        }
-    }
-    // 2 / 3
-    public static var twothirds: Float {
-        get {
-            return 0.6666666666666666666666666666666666666666
-        }
-    }
+    // basic constants come from SSFloatingPoint defaults
 
     /// 2 / pi
     public static var twoopi: Float {
@@ -638,24 +570,7 @@ extension Float: SSFloatingPoint {
             return 0.5641895835477562869480794515607725858441
         }
     }
-    /// 1 / 3
-    public static var oo3: Float {
-        get {
-            return 0.3333333333333333333333333333333333333333
-        }
-    }
-    /// 1 / 6
-    public static var oo6: Float {
-        get {
-            return 0.1666666666666666666666666666666666666667
-        }
-    }
-    /// 2 / 3
-    public static var twoo3: Float {
-        get {
-            return 0.6666666666666666666666666666666666666667
-        }
-    }
+    // fractional shortcuts (oo3, oo6, twoo3) provided by defaults
     /// pow(2, 1/4)
     public static var twoexpfourth : Float {
         get {
@@ -690,52 +605,7 @@ extension Float80: SSFloatingPoint {
     public static var twopithird: Float80 {
         return 2.0943951023931954923084289221863352561314
     }
-    
-
-    // 0
-    public static var zero: Float80 {
-        get {
-            return 0.0000000000000000000000000000000000000000
-        }
-    }
-    // -1
-    public static var minusOne: Float80 {
-        get {
-            return -1
-        }
-    }
-
-    // 1
-    public static var one: Float80 {
-        get {
-            return 1.0000000000000000000000000000000000000000
-        }
-    }
-
-    // 1 / 2
-    public static var half: Float80 {
-        get {
-            return 5.0000000000000000000000000000000000000000e-01
-        }
-    }
-    // 1 / 3
-    public static var third: Float80 {
-        get {
-            return 3.3333333333333333333333333333333333333333e-01
-        }
-    }
-    // 1 / 4
-    public static var fourth: Float80 {
-        get {
-            return 0.2500000000000000000000000000000000000000
-        }
-    }
-    // 2 / 3
-    public static var twothirds: Float80 {
-        get {
-            return 0.6666666666666666666666666666666666666666
-        }
-    }
+    // basic constants come from SSFloatingPoint defaults
     /// 2 / pi
     public static var twoopi: Float80 {
         get {
@@ -899,24 +769,7 @@ extension Float80: SSFloatingPoint {
             return 0.5641895835477562869480794515607725858441
         }
     }
-    /// 1 / 3
-    public static var oo3: Float80 {
-        get {
-            return 0.3333333333333333333333333333333333333333
-        }
-    }
-    /// 1 / 6
-    public static var oo6: Float80 {
-        get {
-            return 0.1666666666666666666666666666666666666667
-        }
-    }
-    /// 2 / 3
-    public static var twoo3: Float80 {
-        get {
-            return 0.6666666666666666666666666666666666666667
-        }
-    }
+    // fractional shortcuts (oo3, oo6, twoo3) provided by defaults
     /// pow(2, 1/4)
     public static var twoexpfourth : Float80 {
         get {
@@ -935,5 +788,4 @@ extension Float80: SSFloatingPoint {
         }
     }
 }
-
 #endif

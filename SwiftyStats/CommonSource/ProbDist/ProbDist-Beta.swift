@@ -216,34 +216,15 @@ extension SSProbDist {
             else if p.isZero {
                 return 0
             }
-            var bVal: FPT
-            var maxB: FPT
-            var minB: FPT
-            var it: Int = 0
-            maxB = 1
-            minB = 0
-            bVal =  Helpers.makeFP(1.0 / 2.0 )
-            var pVal: FPT
-            while (maxB - minB) > FPT.ulpOfOne {
-                if it > 500 {
-                    break
-                }
-                do {
-                    pVal = try cdf(x: bVal, shapeA: a, shapeB: b)
-                }
-                catch {
-                    return FPT.nan
-                }
-                if  pVal > p {
-                    maxB = bVal
-                }
-                else {
-                    minB = bVal
-                }
-                bVal = (maxB + minB) / 2
-                it = it + 1
-            }
-            return bVal
+            // Use generic inverter on [0,1]
+            let q = try Helpers.invertCDFMonotone(
+                lowerBound: .zero,
+                upperSeed: FPT.half,
+                target: p,
+                cdf: { try cdf(x: $0, shapeA: a, shapeB: b) },
+                maxExpandIters: 1 // domain finite
+            )
+            return q
         }
     }
 }
