@@ -5,7 +5,13 @@
 Icon?
 AGENTS.md
 sratch
-TODO
+TODO*
+.clang-module-cache/
+.swift-module-cache/
+Boost/*
+Modernized/
+TODOAGENT.md
+changelog.temp.txt
 ## Archives & binaries
 *.zip
 *.pdf
