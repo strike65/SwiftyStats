@@ -1,3 +1,5 @@
+***This repository is being archived and is no longer actively maintained. The successor project is SwiftyStats2. Please migrate new development and issue reports to SwiftyStats2.***
+
 ![Language](https://img.shields.io/badge/Language-Swift_6-yellow.svg) ![Version](https://img.shields.io/badge/version-1.2.2-orange.svg) ![Unit Tests](https://img.shields.io/badge/Unit_Tests-passed-green.svg) ![macOS](https://img.shields.io/badge/macOS-built-green.svg) ![iOS](https://img.shields.io/badge/iOS-built-green.svg) ![Build Linux](https://img.shields.io/badge/Linux-under_development-red.svg) ![Documentation](https://img.shields.io/badge/Documentation-92%20%25-green.svg)
 
 ![SwiftyStats](SwiftyStats/help/img/SwiftyStatsLogo.png)
